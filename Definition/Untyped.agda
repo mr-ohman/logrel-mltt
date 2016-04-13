@@ -1,11 +1,9 @@
 module Definition.Untyped where
 
-postulate TODO : ∀{a}{A : Set a} → A
-
 open import Data.Nat renaming (ℕ to Nat)
 open import Data.Bool using (Bool; true; false; if_then_else_)
 open import Data.List as List
-open import Data.Unit using (⊤)
+open import Data.Unit using (⊤; tt)
 
 open import Relation.Nullary.Decidable using (⌊_⌋)
 
@@ -42,25 +40,37 @@ m == n =  ⌊ m ≟ n ⌋
 -- suc m == zero = false
 -- suc m == suc n = m == n
 
+-- Possibly a bit too generous, but it should not cause any harm
+size : Term → Nat
+size U = zero
+size (Π t ▹ t₁) = suc (size t) ⊔ size t₁
+size ℕ = zero
+size (var x) = suc x
+size (lam t) = suc (size t)
+size (t ∘ t₁) = size t ⊔ size t₁
+size zero = zero
+size (suc t) = size t
+size (natrec t t₁ t₂) = suc (size t) ⊔ size t₁ ⊔ size t₂
+
 wkNat : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
 wkNat base n = n
 wkNat (step ρ) n = suc (wkNat ρ n)
-wkNat (pop! ρ) zero = zero
-wkNat (pop! ρ) (suc n) = suc (wkNat ρ n)
+wkNat (lift ρ) zero = zero
+wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
 
 wk : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (t : Term) → Term
 wk ρ U = U
-wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (pop! ρ) t₁
-wk ρ ℕ = TODO
+wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
+wk ρ ℕ = ℕ
 wk ρ (var x) = var (wkNat ρ x)
-wk ρ (lam t) = TODO
-wk ρ (t ∘ t₁) = TODO
-wk ρ zero = TODO
-wk ρ (suc t) = TODO
-wk ρ (natrec t t₁ t₂) = TODO
+wk ρ (lam t) = lam (wk (lift ρ) t)
+wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
+wk ρ zero = zero
+wk ρ (suc t) = suc (wk ρ t)
+wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
 
-wk1 : Term → Term
-wk1 = TODO
+wk1 : (Γ : Con ⊤) → Term → Term
+wk1 Γ = wk (step (⊆-refl Γ))
 
 ↑ : (Nat → Nat) → Nat → Term → Term
 ↑ d c U = U
@@ -75,27 +85,39 @@ wk1 = TODO
 
 Subst = List Term
 
+fromCon : ∀ {A} → Con A → Nat
+fromCon ε = zero
+fromCon (Γ ∙ x) = suc (fromCon Γ)
+
+toCon : Nat → Con ⊤
+toCon zero = ε
+toCon (suc n) = toCon n ∙ tt
+
 substVar : (σ : Subst) (x : Nat) → Term
 substVar [] x = var x  -- garbage case, should not happen
 substVar (t ∷ σ) zero = t
 substVar (t ∷ σ) (suc x) = substVar σ x
 
 wk1Subst : Nat → Subst → Subst
-wk1Subst n = List.map TODO -- (wk (step (⊆-refl {! n !})))
+wk1Subst n = List.map (wk1 (toCon n))
 
-liftSubst : (σ : Subst) → Subst
-liftSubst σ = var 0 ∷ wk1Subst TODO σ
+idSubst : (n : Nat) → Subst
+idSubst zero = []
+idSubst (suc n) = var zero ∷ wk1Subst n (idSubst n)
+
+liftSubst : Nat → (σ : Subst) → Subst
+liftSubst n σ = var 0 ∷ wk1Subst n σ
 
 subst : (σ : Subst) (t : Term) → Term
-subst σ U = TODO
-subst σ (Π t ▹ t₁) = TODO
-subst σ ℕ = TODO
-subst σ (var x) = TODO
-subst σ (lam t) = lam (subst (liftSubst σ) t)
-subst σ (t ∘ t₁) = TODO
-subst σ zero = TODO
-subst σ (suc t) = TODO
-subst σ (natrec t t₁ t₂) = TODO
+subst σ U = U
+subst σ (Π t ▹ t₁) = Π subst σ t ▹ subst (liftSubst (size t) σ) t₁
+subst σ ℕ = ℕ
+subst σ (var x) = substVar σ x
+subst σ (lam t) = lam (subst (liftSubst (size t) σ) t)
+subst σ (t ∘ t₁) = (subst σ t) ∘ (subst σ t₁)
+subst σ zero = zero
+subst σ (suc t) = suc (subst σ t)
+subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst (size t) σ) t) (subst σ t₁) (subst σ t₂)
 
 _↦_ : Nat → Term → Term → Term
 _↦_ j s U = U
@@ -109,4 +131,4 @@ _↦_ j s (suc t) = suc ((j ↦ s) t)
 _↦_ j s (natrec t t₁ t₂) = natrec ((j ↦ s) t) ((j ↦ s) t₁) ((j ↦ s) t₂)
 
 _[_] : (t : Term) (s : Term) → Term
-t [ s ] = ↑ pred 0 ((0 ↦ s) t)
+t [ s ] = subst (s ∷ idSubst (size t)) t
