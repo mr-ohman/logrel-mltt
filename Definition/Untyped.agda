@@ -26,20 +26,6 @@ data Neutral : Term → Set where
   suc : ∀ {k} → Neutral k → Neutral (suc k)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g ∘ k)
 
-_<?_ : Nat → Nat → Bool
-m <? n = ⌊ suc m ≤? n ⌋
--- zero <? zero = false
--- zero <? suc n = true
--- suc m <? zero = false
--- suc m <? suc n = m <? n
-
-_==_ : (m n : Nat) → Bool
-m == n =  ⌊ m ≟ n ⌋
--- zero == zero = true
--- zero == suc n = false
--- suc m == zero = false
--- suc m == suc n = m == n
-
 -- Possibly a bit too generous, but it should not cause any harm
 size : Term → Nat
 size U = zero
@@ -69,29 +55,10 @@ wk ρ zero = zero
 wk ρ (suc t) = suc (wk ρ t)
 wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
 
-wk1 : (Γ : Con ⊤) → Term → Term
-wk1 Γ = wk (step (⊆-refl Γ))
-
-↑ : (Nat → Nat) → Nat → Term → Term
-↑ d c U = U
-↑ d c (Π t ▹ t₁) = Π ↑ d c t ▹ ↑ d (suc c) t₁
-↑ d c ℕ = ℕ
-↑ d c (var x) = if x <? c then var x else var (d x)
-↑ d c (lam t) = lam (↑ d (suc c) t)
-↑ d c (t ∘ t₁) = ↑ d c t ∘ ↑ d c t₁
-↑ d c zero = zero
-↑ d c (suc t) = suc (↑ d c t)
-↑ d c (natrec t t₁ t₂) = natrec (↑ d c t) (↑ d c t₁) (↑ d c t₂)
+wk1 : Nat → Term → Term
+wk1 n = wk (step (⊆-refl (fromNat n)))
 
 Subst = List Term
-
-fromCon : ∀ {A} → Con A → Nat
-fromCon ε = zero
-fromCon (Γ ∙ x) = suc (fromCon Γ)
-
-toCon : Nat → Con ⊤
-toCon zero = ε
-toCon (suc n) = toCon n ∙ tt
 
 substVar : (σ : Subst) (x : Nat) → Term
 substVar [] x = var x  -- garbage case, should not happen
@@ -99,7 +66,7 @@ substVar (t ∷ σ) zero = t
 substVar (t ∷ σ) (suc x) = substVar σ x
 
 wk1Subst : Nat → Subst → Subst
-wk1Subst n = List.map (wk1 (toCon n))
+wk1Subst n = List.map (wk1 n)
 
 idSubst : (n : Nat) → Subst
 idSubst zero = []
@@ -119,6 +86,37 @@ subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
 subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst (size t) σ) t) (subst σ t₁) (subst σ t₂)
 
+_[_] : (t : Term) (s : Term) → Term
+t [ s ] = subst (s ∷ idSubst (size t)) t
+
+-- Alternative substitution, based on implementation from
+-- Benjamin C. Pierce's Types and Programming Languages.
+
+_<?_ : Nat → Nat → Bool
+m <? n = ⌊ suc m ≤? n ⌋
+-- zero <? zero = false
+-- zero <? suc n = true
+-- suc m <? zero = false
+-- suc m <? suc n = m <? n
+
+_==_ : (m n : Nat) → Bool
+m == n =  ⌊ m ≟ n ⌋
+-- zero == zero = true
+-- zero == suc n = false
+-- suc m == zero = false
+-- suc m == suc n = m == n
+
+↑ : (Nat → Nat) → Nat → Term → Term
+↑ d c U = U
+↑ d c (Π t ▹ t₁) = Π ↑ d c t ▹ ↑ d (suc c) t₁
+↑ d c ℕ = ℕ
+↑ d c (var x) = if x <? c then var x else var (d x)
+↑ d c (lam t) = lam (↑ d (suc c) t)
+↑ d c (t ∘ t₁) = ↑ d c t ∘ ↑ d c t₁
+↑ d c zero = zero
+↑ d c (suc t) = suc (↑ d c t)
+↑ d c (natrec t t₁ t₂) = natrec (↑ d c t) (↑ d c t₁) (↑ d c t₂)
+
 _↦_ : Nat → Term → Term → Term
 _↦_ j s U = U
 _↦_ j s (Π t ▹ t₁) = Π (j ↦ s) t ▹ (suc j ↦ ↑ suc 0 s) t₁
@@ -129,6 +127,3 @@ _↦_ j s (t ∘ t₁) = ((j ↦ s) t) ∘ ((j ↦ s) t₁)
 _↦_ j s zero = zero
 _↦_ j s (suc t) = suc ((j ↦ s) t)
 _↦_ j s (natrec t t₁ t₂) = natrec ((j ↦ s) t) ((j ↦ s) t₁) ((j ↦ s) t₂)
-
-_[_] : (t : Term) (s : Term) → Term
-t [ s ] = subst (s ∷ idSubst (size t)) t

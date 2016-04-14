@@ -8,8 +8,8 @@ open import Definition.Untyped
 infixl 30 _∙_
 
 data _∷_∈_ : (x : Nat) (A : Term) (Γ : Con Term) → Set where
-  here  : ∀{Γ A}                     →     0 ∷ (wk1 (toCon (size A)) A) ∈ (Γ ∙ A)
-  there : ∀{Γ A B n} (h : n ∷ A ∈ Γ) → suc n ∷ (wk1 (toCon (size A)) A) ∈ (Γ ∙ B)
+  here  : ∀{Γ A}                     →     0 ∷ (wk1 (size A) A) ∈ (Γ ∙ A)
+  there : ∀{Γ A B n} (h : n ∷ A ∈ Γ) → suc n ∷ (wk1 (size A) A) ∈ (Γ ∙ B)
 
 mutual
   data ⊢_ : Con Term → Set where

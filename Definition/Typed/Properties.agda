@@ -23,24 +23,23 @@ open import Data.Nat renaming (ℕ to Nat)
 --   weaken-Γ⊢t∷A : ∀ {Γ Δ A t} → Γ ⊆ Δ → Δ ⊢ t ∷ A → Γ ⊢ t ∷ A
 --   weaken-Γ⊢t∷A x t = {!!}
 
-wellformed-Γ⊢t∷A : ∀ {Γ a A} → Γ ⊢ a ∷ A → ⊢ Γ
-wellformed-Γ⊢t∷A (var-i x x₁) = x
-wellformed-Γ⊢t∷A (univ-ℕ-i x) = x
-wellformed-Γ⊢t∷A (univ-Π-i x x₁) = wellformed-Γ⊢t∷A x
-wellformed-Γ⊢t∷A (λ-i x) with wellformed-Γ⊢t∷A x
-wellformed-Γ⊢t∷A (λ-i x₁) | q ∙ x = q
-  -- wellformed-Γ⊢t∷A (weaken-Γ⊢t∷A (step (⊆-refl _)) x)
-wellformed-Γ⊢t∷A (fun-e x x₁) = wellformed-Γ⊢t∷A x₁
-wellformed-Γ⊢t∷A (zero x) = x
-wellformed-Γ⊢t∷A (suc x) = wellformed-Γ⊢t∷A x
-wellformed-Γ⊢t∷A (natrec-i x x₁ x₂) = wellformed-Γ⊢t∷A x₁
-wellformed-Γ⊢t∷A (eq-type-term x x₁) = wellformed-Γ⊢t∷A x
+wfTerm : ∀ {Γ a A} → Γ ⊢ a ∷ A → ⊢ Γ
+wfTerm (var-i x x₁) = x
+wfTerm (univ-ℕ-i x) = x
+wfTerm (univ-Π-i x x₁) = wfTerm x
+wfTerm (λ-i x) with wfTerm x
+wfTerm (λ-i x₁) | q ∙ x = q
+wfTerm (fun-e x x₁) = wfTerm x₁
+wfTerm (zero x) = x
+wfTerm (suc x) = wfTerm x
+wfTerm (natrec-i x x₁ x₂) = wfTerm x₁
+wfTerm (eq-type-term x x₁) = wfTerm x
 
-wellformed-Γ⊢A : ∀ {Γ A} → Γ ⊢ A → ⊢ Γ
-wellformed-Γ⊢A (ℕ-i x) = x
-wellformed-Γ⊢A (U-i x) = x
-wellformed-Γ⊢A (Π-i x x₁) = wellformed-Γ⊢A x
-wellformed-Γ⊢A (univ-refl-term x) = wellformed-Γ⊢t∷A x
+wf : ∀ {Γ A} → Γ ⊢ A → ⊢ Γ
+wf (ℕ-i x) = x
+wf (U-i x) = x
+wf (Π-i x x₁) = wf x
+wf (univ-refl-term x) = wfTerm x
 
 mutual
   wkIndex : ∀ {Γ Δ x A} → Γ ⊆ Δ → ⊢ Δ → x ∷ A ∈ Γ → ∃ λ y → y ∷ A ∈ Δ
@@ -51,12 +50,13 @@ mutual
   wkIndex (lift pr) (⊢Δ ∙ x) (there i) = let y = wkIndex pr ⊢Δ i
                                          in suc (proj₁ y) , there (proj₂ y)
 
-  wk : ∀ {Γ Δ A} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ A → Δ ⊢ A
+  wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) → ⊢ Δ → Γ ⊢ A → Δ ⊢ U.wk (untype-⊆ pr) A
+  -- wk : ∀ {Γ Δ A} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ A → Δ ⊢ A
   wk pr ⊢Δ (ℕ-i x) = ℕ-i ⊢Δ
   wk pr ⊢Δ (U-i x) = U-i ⊢Δ
   wk pr ⊢Δ (Π-i A A₁) = let x = wk pr ⊢Δ A
-                        in  Π-i x (wk (lift pr) (⊢Δ ∙ x) A₁)
-  wk pr ⊢Δ (univ-refl-term x) = univ-refl-term (wkTerm pr ⊢Δ x)
+                        in  Π-i x (wk (lift pr) (⊢Δ ∙ x) {!A₁!})
+  wk pr ⊢Δ (univ-refl-term x) = {!!} --univ-refl-term (wkTerm pr ⊢Δ x)
 
   -- To weaken typed terms, we need to weaken untyped terms most likely
   wkTerm : ∀ {Γ Δ A t} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ t ∷ A → Δ ⊢ t ∷ A
@@ -73,8 +73,7 @@ mutual
   wkTerm pr ⊢Δ (eq-type-term t₁ x) = {!!}
 
 inversion-natrec :  ∀ {Γ c g A C} → Γ ⊢ natrec C c g ∷ A → Γ ⊢ A ≡ Π ℕ ▹ C
-inversion-natrec (natrec-i x d d₁) =
-  Π-eq (refl (ℕ-i (wellformed-Γ⊢t∷A d))) (refl x)
+inversion-natrec (natrec-i x d d₁) = Π-eq (refl (ℕ-i (wfTerm d))) (refl x)
 inversion-natrec (eq-type-term d x) = trans (sym x) (inversion-natrec d)
 
 inversion-app :  ∀ {Γ f a A} → Γ ⊢ (f ∘ a) ∷ A →
@@ -92,7 +91,7 @@ lemmaℕ0 (zero x) = refl (ℕ-i x)
 lemmaℕ0 (eq-type-term x x₁) = trans (sym x₁) (lemmaℕ0 x)
 
 lemmaℕ : ∀ {Γ t C} → Γ ⊢ suc t ∷ C → Γ ⊢ C ≡ ℕ
-lemmaℕ (suc x) = refl (ℕ-i (wellformed-Γ⊢t∷A x))
+lemmaℕ (suc x) = refl (ℕ-i (wfTerm x))
 lemmaℕ (eq-type-term x x₁) = trans (sym x₁) (lemmaℕ x)
 
 subsetTerm : ∀ {Γ A t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ≡ u ∷ A
