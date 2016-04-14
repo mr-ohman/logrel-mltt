@@ -73,6 +73,7 @@ mutual
                → Γ ⊢ natrec F z s ∘ suc n
                  ≡ (s ∘ n) ∘ (natrec F z s ∘ n) ∷ F [ suc n ]
     -- congruence rule for suc
+    suc-cong : ∀ {m n} → Γ ⊢ m ≡ n ∷ ℕ → Γ ⊢ suc m ≡ suc n ∷ ℕ
 
 data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   natrec-subst : ∀ {C c g m n} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
@@ -82,7 +83,7 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   natrec-zero : ∀ {C c g} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] ▹ C [ suc (var (suc zero)) ]
               → Γ ⊢ natrec C c g ∘ zero ⇒ c ∷ C [ zero ]
-  natrec-suc : ∀ {C c g n} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
+  natrec-suc : ∀ {C c g n} → Γ ⊢ n ∷ ℕ → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
              → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] ▹ C [ suc (var (suc zero)) ]
              → Γ ⊢ natrec C c g ∘ suc n
                ⇒ (g ∘ n) ∘ (natrec C c g ∘ n) ∷ C [ suc n ]
