@@ -23,7 +23,7 @@ open import Data.Nat renaming (ℕ to Nat)
 --   weaken-Γ⊢t∷A : ∀ {Γ Δ A t} → Γ ⊆ Δ → Δ ⊢ t ∷ A → Γ ⊢ t ∷ A
 --   weaken-Γ⊢t∷A x t = {!!}
 
-wfTerm : ∀ {Γ a A} → Γ ⊢ a ∷ A → ⊢ Γ
+wfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → ⊢ Γ
 wfTerm (var-i x x₁) = x
 wfTerm (univ-ℕ-i x) = x
 wfTerm (univ-Π-i x x₁) = wfTerm x
@@ -40,6 +40,60 @@ wf (ℕ-i x) = x
 wf (U-i x) = x
 wf (Π-i x x₁) = wf x
 wf (univ-refl-term x) = wfTerm x
+
+wfHead : ∀ {Γ A} → ⊢ Γ ∙ A → Γ ⊢ A
+wfHead (Γ₁ ∙ x) = x
+
+eqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A × Γ ⊢ u ∷ A
+eqTerm (refl x) = x , x
+eqTerm (sym t₂) = swap (eqTerm t₂)
+eqTerm (trans t₁ t₂) = let a , b = eqTerm t₁
+                           c , d = eqTerm t₂
+                       in a , d
+eqTerm (eq-type-term t₁ x) = let a , b = eqTerm t₁
+                             in  eq-type-term a x , eq-type-term b x
+eqTerm (Π-eq-univ t t₁) = let a , b = eqTerm t
+                              c , d = eqTerm t₁
+                          in  univ-Π-i a c , univ-Π-i b {!d!}
+eqTerm (fun-eq t t₁) = let a , b = eqTerm t
+                           c , d = eqTerm t₁
+                       in  fun-e a c , fun-e {!b!} d
+eqTerm (β-red x x₁) = fun-e (λ-i x) x₁ , {!!}
+eqTerm (fun-ext x x₁ t) = x , x₁
+eqTerm (natrec-eq x t t₁) = let a , b = eqTerm t
+                                c , d = eqTerm t₁
+                            in  (natrec-i {!!} a c) , {!!}
+eqTerm (natrec-zero x x₁ x₂) = (fun-e (natrec-i x x₁ x₂) (zero (wfTerm x₁))) , x₁
+eqTerm (natrec-suc x x₁ x₂ x₃) = fun-e (natrec-i x₁ x₂ x₃) (suc x)
+                               , fun-e (fun-e {!x₃!} x) (fun-e (natrec-i x₁ x₂ x₃) x)
+eqTerm (suc-cong t) = let a , b = eqTerm t
+                      in  suc a , suc b
+
+eq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B
+eq (univ-refl x) = let a , b = eqTerm x
+                   in univ-refl-term a , univ-refl-term b
+eq (refl x) = x , x
+eq (sym e) = swap (eq e)
+eq (trans e e₁) = let a , b = eq e
+                      c , d = eq e₁
+                  in a , d
+eq (Π-eq e e₁) = let a , b = eq e
+                     c , d = eq e₁
+                 in  Π-i a c , Π-i b {!d!}
+
+substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
+substEq e _ = proj₂ (eq e)
+
+typeOfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ A
+typeOfTerm (var-i x₁ x₂) = {!!}
+typeOfTerm (univ-ℕ-i x) = U-i x
+typeOfTerm (univ-Π-i t t₁) = U-i (wfTerm t)
+typeOfTerm (λ-i t₁) = Π-i (wfHead (wfTerm t₁)) (typeOfTerm t₁)
+typeOfTerm (fun-e t t₁) = {!!}
+typeOfTerm (zero x) = ℕ-i x
+typeOfTerm (suc t) = typeOfTerm t
+typeOfTerm (natrec-i x t t₁) = Π-i (ℕ-i (wfTerm t)) x
+typeOfTerm (eq-type-term t₁ x) = substEq x (typeOfTerm t₁)
 
 mutual
   wkIndex : ∀ {Γ Δ x A} → Γ ⊆ Δ → ⊢ Δ → x ∷ A ∈ Γ → ∃ λ y → y ∷ A ∈ Δ
@@ -78,8 +132,9 @@ inversion-natrec (eq-type-term d x) = trans (sym x) (inversion-natrec d)
 
 inversion-app :  ∀ {Γ f a A} → Γ ⊢ (f ∘ a) ∷ A →
   ∃₂ λ F G → Γ ⊢ f ∷ Π F ▹ G × Γ ⊢ a ∷ F × Γ ⊢ A ≡ G [ a ]
-inversion-app (fun-e d d₁) = _ , _ , d , d₁ , refl {!!}
-inversion-app (eq-type-term d x) = {!!}
+inversion-app (fun-e d d₁) = _ , _ , d , d₁ , refl (typeOfTerm (fun-e d d₁))
+inversion-app (eq-type-term d x) = let a , b , c , d , e = inversion-app d
+                                   in  a , b , c , d , trans (sym x) e
 
 -- inverse typing lemmas
 lemma1 : ∀ {Γ c g m A C} → Γ ⊢ natrec C c g ∘ m ∷ A → Γ ⊢ A ≡ C [ m ]
@@ -96,7 +151,8 @@ lemmaℕ (eq-type-term x x₁) = trans (sym x₁) (lemmaℕ x)
 
 subsetTerm : ∀ {Γ A t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ≡ u ∷ A
 subsetTerm (natrec-subst x x₁ x₂ x₃) =
-  fun-eq (refl (eq-type-term (natrec-i x x₁ x₂) {!!})) (subsetTerm x₃)
+  fun-eq (refl (eq-type-term (natrec-i x x₁ x₂) (Π-eq (refl (ℕ-i (wfTerm x₁))) {!!})))
+               (subsetTerm x₃)
 subsetTerm (natrec-zero x x₁ x₂) = natrec-zero x x₁ x₂
 subsetTerm (natrec-suc x x₁ x₂ x₃) = natrec-suc x x₁ x₂ x₃
 subsetTerm (app-subst x x₁) = fun-eq (subsetTerm x) (refl x₁)
