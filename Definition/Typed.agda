@@ -59,8 +59,8 @@ mutual
     --     → Γ ⊢ f ∘ a ≡ f ∘ b ∷ G [ a ]
     β-red : ∀ {a b F G} → Γ ∙ F ⊢ b ∷ G → Γ ⊢ a ∷ F
           → Γ ⊢ (lam b) ∘ a ≡ b [ a ] ∷ G [ a ]
-    fun-ext : ∀ {f g F G A} → Γ ⊢ f ∷ Π F ▹ G → Γ ⊢ g ∷ Π F ▹ G
-            → Γ ∙ A ⊢ f ∘ var zero ≡ g ∘ var zero ∷ G [ var zero ]
+    fun-ext : ∀ {f g F G} → Γ ⊢ f ∷ Π F ▹ G → Γ ⊢ g ∷ Π F ▹ G
+            → Γ ∙ F ⊢ f ∘ var zero ≡ g ∘ var zero ∷ G [ var zero ]
             → Γ ⊢ f ≡ g ∷ Π F ▹ G
     natrec-eq : ∀ {z z' s s' F F'} → Γ ∙ ℕ ⊢ F ≡ F' → Γ ⊢ z ≡ z' ∷ F [ zero ]
               → Γ ⊢ s ≡ s' ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ]
