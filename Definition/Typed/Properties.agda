@@ -117,7 +117,7 @@ mutual
                                          in suc (proj₁ y) , there (proj₂ y)
 
   -- To weaken typed terms, we need to weaken untyped terms most likely
-  wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) → ⊢ Δ → Γ ⊢ A → Δ ⊢ U.wk (untype-⊆ pr) A
+  wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) → ⊢ Δ → Γ ⊢ A → Δ ⊢ U.wk (toWk pr) A
   -- wk : ∀ {Γ Δ A} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ A → Δ ⊢ A
   wk pr ⊢Δ (ℕ x) = ℕ ⊢Δ
   wk pr ⊢Δ (U x) = U ⊢Δ
