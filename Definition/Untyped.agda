@@ -9,6 +9,7 @@ open import Relation.Nullary.Decidable using (⌊_⌋)
 
 open import Tools.Context
 
+infix 30 Π_▹_
 data Term : Set where
   U : Term
   Π_▹_ : Term → Term → Term  -- second argument is a binder
@@ -26,25 +27,43 @@ data Neutral : Term → Set where
   suc : ∀ {k} → Neutral k → Neutral (suc k)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g ∘ k)
 
--- Possibly a bit too generous, but it should not cause any harm
-size : Term → Nat
-size U = zero
-size (Π t ▹ t₁) = suc (size t) ⊔ size t₁
-size ℕ = zero
-size (var x) = suc x
-size (lam t) = suc (size t)
-size (t ∘ t₁) = size t ⊔ size t₁
-size zero = zero
-size (suc t) = size t
-size (natrec t t₁ t₂) = suc (size t) ⊔ size t₁ ⊔ size t₂
+data Wk : Set where
+  id    : Wk
+  step  : Wk  → Wk
+  lift  : Wk  → Wk
 
-wkNat : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
-wkNat base n = n
+module WellScoped where
+  wkNat : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
+  wkNat base n = n
+  wkNat (step ρ) n = suc (wkNat ρ n)
+  wkNat (lift ρ) zero = zero
+  wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
+
+  wk : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (t : Term) → Term
+  wk ρ U = U
+  wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
+  wk ρ ℕ = ℕ
+  wk ρ (var x) = var (wkNat ρ x)
+  wk ρ (lam t) = lam (wk (lift ρ) t)
+  wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
+  wk ρ zero = zero
+  wk ρ (suc t) = suc (wk ρ t)
+  wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
+
+
+-- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
+toWk : ∀ {A} {Γ Δ : Con A} (ρ : Γ ⊆ Δ) → Wk
+toWk base = id
+toWk (step ρ) = step (toWk ρ)
+toWk (lift ρ) = lift (toWk ρ)
+
+wkNat : (ρ : Wk) (n : Nat) → Nat
+wkNat id n = n
 wkNat (step ρ) n = suc (wkNat ρ n)
 wkNat (lift ρ) zero = zero
 wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
 
-wk : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (t : Term) → Term
+wk : (ρ : Wk) (t : Term) → Term
 wk ρ U = U
 wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
 wk ρ ℕ = ℕ
@@ -55,39 +74,43 @@ wk ρ zero = zero
 wk ρ (suc t) = suc (wk ρ t)
 wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
 
-wk1 : Nat → Term → Term
-wk1 n = wk (step (⊆-refl (fromNat n)))
+wk1 : Term → Term
+wk1 = wk (step id)
 
 Subst = List Term
 
+-- The empty subsitution "[] : Subst [] Γ" shouldn't happen here, because we shouldn't have variables.
+-- However later for _[_] we need an identity substitution, so we consider "[] : Subst Γ Γ".
+-- This is quite experimental, and we might need a more complex type for substitutions instead.
 substVar : (σ : Subst) (x : Nat) → Term
-substVar [] x = var x  -- garbage case, should not happen
-substVar (t ∷ σ) zero = t
+substVar []      x       = var x
+substVar (t ∷ σ) zero    = t
 substVar (t ∷ σ) (suc x) = substVar σ x
 
-wk1Subst : Nat → Subst → Subst
-wk1Subst n = List.map (wk1 n)
+wk1Subst : Subst → Subst
+wk1Subst = List.map wk1
 
 idSubst : (n : Nat) → Subst
 idSubst zero = []
-idSubst (suc n) = var zero ∷ wk1Subst n (idSubst n)
+idSubst (suc n) = var zero ∷ wk1Subst (idSubst n)
 
-liftSubst : Nat → (σ : Subst) → Subst
-liftSubst n σ = var 0 ∷ wk1Subst n σ
+liftSubst : (σ : Subst) → Subst
+liftSubst σ = var 0 ∷ wk1Subst σ
 
 subst : (σ : Subst) (t : Term) → Term
 subst σ U = U
-subst σ (Π t ▹ t₁) = Π subst σ t ▹ subst (liftSubst (size t) σ) t₁
+subst σ (Π t ▹ t₁) = Π subst σ t ▹ subst (liftSubst σ) t₁
 subst σ ℕ = ℕ
 subst σ (var x) = substVar σ x
-subst σ (lam t) = lam (subst (liftSubst (size t) σ) t)
+subst σ (lam t) = lam (subst (liftSubst σ) t)
 subst σ (t ∘ t₁) = (subst σ t) ∘ (subst σ t₁)
 subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
-subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst (size t) σ) t) (subst σ t₁) (subst σ t₂)
+subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂)
 
+infix 25 _[_]
 _[_] : (t : Term) (s : Term) → Term
-t [ s ] = subst (s ∷ idSubst (size t)) t
+t [ s ] = subst (s ∷ []) t
 
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
