@@ -28,6 +28,27 @@ wf (U x) = x
 wf (Π x ▹ x₁) = wf x
 wf (univ x) = wfTerm x
 
+wfEqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → ⊢ Γ
+wfEqTerm (refl x) = wfTerm x
+wfEqTerm (sym x) = wfEqTerm x
+wfEqTerm (trans x x₁) = wfEqTerm x
+wfEqTerm (conv x x₁) = wfEqTerm x
+wfEqTerm (Π-cong x x₁) = wfEqTerm x
+wfEqTerm (app-cong x x₁) = wfEqTerm x
+wfEqTerm (β-red x x₁) = wfTerm x₁
+wfEqTerm (fun-ext x x₁ x₂) = wfTerm x
+wfEqTerm (suc-cong x) = wfEqTerm x
+wfEqTerm (natrec-cong x x₁ x₂) = wfEqTerm x₂
+wfEqTerm (natrec-zero x x₁ x₂) = wfTerm x₁
+wfEqTerm (natrec-suc x x₁ x₂ x₃) = wfTerm x
+
+wfEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → ⊢ Γ
+wfEq (univ x) = wfEqTerm x
+wfEq (refl x) = wf x
+wfEq (sym x) = wfEq x
+wfEq (trans x x₁) = wfEq x
+wfEq (Π-cong x x₁) = wfEq x
+
 -- Conversion to type/term arrows
 
 eqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A × Γ ⊢ u ∷ A
