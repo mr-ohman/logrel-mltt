@@ -77,25 +77,20 @@ wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
 wk1 : Term → Term
 wk1 = wk (step id)
 
-Subst = List Term
+Subst = Nat → Term
 
--- The empty subsitution "[] : Subst [] Γ" shouldn't happen here, because we shouldn't have variables.
--- However later for _[_] we need an identity substitution, so we consider "[] : Subst Γ Γ".
--- This is quite experimental, and we might need a more complex type for substitutions instead.
 substVar : (σ : Subst) (x : Nat) → Term
-substVar []      x       = var x
-substVar (t ∷ σ) zero    = t
-substVar (t ∷ σ) (suc x) = substVar σ x
+substVar σ x = σ x
 
 wk1Subst : Subst → Subst
-wk1Subst = List.map wk1
+wk1Subst σ x = wk1 (σ x)
 
-idSubst : (n : Nat) → Subst
-idSubst zero = []
-idSubst (suc n) = var zero ∷ wk1Subst (idSubst n)
+idSubst : Subst
+idSubst = var
 
 liftSubst : (σ : Subst) → Subst
-liftSubst σ = var 0 ∷ wk1Subst σ
+liftSubst σ zero = var zero
+liftSubst σ (suc x) = wk1Subst σ x
 
 subst : (σ : Subst) (t : Term) → Term
 subst σ U = U
@@ -108,9 +103,13 @@ subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
 subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂)
 
+unitSubst : Term → Subst
+unitSubst t zero = t
+unitSubst t (suc x) = idSubst x
+
 infix 25 _[_]
 _[_] : (t : Term) (s : Term) → Term
-t [ s ] = subst (s ∷ []) t
+t [ s ] = subst (unitSubst s) t
 
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
