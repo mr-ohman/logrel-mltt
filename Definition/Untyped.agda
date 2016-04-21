@@ -111,6 +111,11 @@ infix 25 _[_]
 _[_] : (t : Term) (s : Term) → Term
 t [ s ] = subst (unitSubst s) t
 
+wkCon : Wk → Con Term → Con Term
+wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
+wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x
+wkCon pr Γ = Γ
+
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
 

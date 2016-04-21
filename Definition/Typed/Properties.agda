@@ -4,8 +4,10 @@ open import Data.Product
 
 open import Tools.Context
 open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped.Properties using (subst-wk-dist₀)
 open import Definition.Typed
 open import Data.Nat renaming (ℕ to Nat)
+import Relation.Binary.PropositionalEquality as PE
 
 
 -- Wellformed context extraction
@@ -107,36 +109,93 @@ typeOfTerm (conv t₁ x) = substEq x (typeOfTerm t₁)
 
 -- Weakening
 
-mutual
-  wkIndex : ∀ {Γ Δ x A} → Γ ⊆ Δ → ⊢ Δ → x ∷ A ∈ Γ → ∃ λ y → y ∷ A ∈ Δ
-  wkIndex base ⊢Δ ()
-  wkIndex (step pr) (⊢Δ ∙ x) i = let y = wkIndex pr ⊢Δ i
-                                 in suc (proj₁ y) , there {!proj₂ y!}
-  wkIndex (lift pr) ⊢Δ here = zero , here
-  wkIndex (lift pr) (⊢Δ ∙ x) (there i) = let y = wkIndex pr ⊢Δ i
-                                         in suc (proj₁ y) , there (proj₂ y)
+wkIndex : ∀ {Γ Δ x A} → (pr : Γ ⊆ Δ) →
+        let Δ' = wkCon (toWk pr) Δ
+            A' = U.wk (toWk pr) A
+            x' = wkNat (toWk pr) x
+        in  ⊢ Δ' → x ∷ A ∈ Γ → x' ∷ A' ∈ Δ'
+wkIndex base ⊢Δ ()
+wkIndex (step pr) (⊢Δ ∙ x) i = {!there ?!}
+wkIndex (lift pr) (⊢Δ ∙ x) here = {!here!}
+wkIndex (lift pr) (⊢Δ ∙ x) (there i) = {!there ?!}
 
-  -- To weaken typed terms, we need to weaken untyped terms most likely
-  wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) → ⊢ Δ → Γ ⊢ A → Δ ⊢ U.wk (toWk pr) A
-  -- wk : ∀ {Γ Δ A} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ A → Δ ⊢ A
+mutual
+
+  wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) →
+     let Δ' = wkCon (toWk pr) Δ
+         A' = U.wk (toWk pr) A
+     in  ⊢ Δ' → Γ ⊢ A → Δ' ⊢ A'
   wk pr ⊢Δ (ℕ x) = ℕ ⊢Δ
   wk pr ⊢Δ (U x) = U ⊢Δ
   wk pr ⊢Δ (Π A ▹ A₁) = let x = wk pr ⊢Δ A
-                         in  Π x ▹ wk (lift pr) (⊢Δ ∙ x) {!A₁!}
-  wk pr ⊢Δ (univ x) = {!!} --univ (wkTerm pr ⊢Δ x)
+                        in  Π x ▹ (wk (lift pr) (⊢Δ ∙ x) A₁)
+  wk pr ⊢Δ (univ x) = univ (wkTerm pr ⊢Δ x)
 
-  wkTerm : ∀ {Γ Δ A t} → Γ ⊆ Δ → ⊢ Δ → Γ ⊢ t ∷ A → Δ ⊢ t ∷ A
-  wkTerm pr ⊢Δ (var x₁ x₂) = var ⊢Δ {!!}  --(wkIndex pr ⊢Δ x₂)
+  wkTerm : ∀ {Γ Δ A t} → (pr : Γ ⊆ Δ) →
+         let Δ' = wkCon (toWk pr) Δ
+             A' = U.wk (toWk pr) A
+             t' = U.wk (toWk pr) t
+         in ⊢ Δ' → Γ ⊢ t ∷ A → Δ' ⊢ t' ∷ A'
   wkTerm pr ⊢Δ (ℕ x) = ℕ ⊢Δ
-  wkTerm pr ⊢Δ (Π t ▹ t₁) =
-    let x = wkTerm pr ⊢Δ t
-    in  Π x ▹ wkTerm (lift pr) (⊢Δ ∙ univ x) t₁
+  wkTerm pr ⊢Δ (Π t ▹ t₁) = let x = wkTerm pr ⊢Δ t
+                            in  Π x ▹ (wkTerm (lift pr) (⊢Δ ∙ univ x) t₁)
+  wkTerm pr ⊢Δ (var x₁ x₂) = var ⊢Δ (wkIndex pr ⊢Δ x₂)
   wkTerm pr ⊢Δ (lam t₁) = lam (wkTerm (lift pr) (⊢Δ ∙ {!!}) t₁)
-  wkTerm pr ⊢Δ (t ∘ t₁) = wkTerm pr ⊢Δ t ∘ wkTerm pr ⊢Δ t₁
+  wkTerm pr ⊢Δ (_∘_ {G = G} t t₁) = PE.subst (λ x → _ ⊢ _ ∷ x)
+                                             (PE.sym (subst-wk-dist₀ G))
+                                             (wkTerm pr ⊢Δ t ∘ wkTerm pr ⊢Δ t₁)
   wkTerm pr ⊢Δ (zero x) = zero ⊢Δ
   wkTerm pr ⊢Δ (suc t) = suc (wkTerm pr ⊢Δ t)
-  wkTerm pr ⊢Δ (natrec x t t₁) = {!!}
-  wkTerm pr ⊢Δ (conv t₁ x) = {!!}
+  wkTerm pr ⊢Δ (natrec {G = G} x t t₁) =
+    natrec (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x)
+           (PE.subst (λ x → _ ⊢ _ ∷ x) (subst-wk-dist₀ G) (wkTerm pr ⊢Δ t))
+           (wkTerm pr ⊢Δ {!t₁!})
+  wkTerm pr ⊢Δ (conv t₁ x) = conv (wkTerm pr ⊢Δ t₁) (wkEq pr ⊢Δ x)
+
+  wkEq : ∀ {Γ Δ A B} → (pr : Γ ⊆ Δ) →
+       let Δ' = wkCon (toWk pr) Δ
+           A' = U.wk (toWk pr) A
+           B' = U.wk (toWk pr) B
+       in ⊢ Δ' → Γ ⊢ A ≡ B → Δ' ⊢ A' ≡ B'
+  wkEq pr ⊢Δ (univ x) = univ (wkEqTerm pr ⊢Δ x)
+  wkEq pr ⊢Δ (refl x) = refl (wk pr ⊢Δ x)
+  wkEq pr ⊢Δ (sym x) = sym (wkEq pr ⊢Δ x)
+  wkEq pr ⊢Δ (trans x x₁) = trans (wkEq pr ⊢Δ x) (wkEq pr ⊢Δ x₁)
+  wkEq pr ⊢Δ (Π-cong x x₁) = Π-cong (wkEq pr ⊢Δ x) (wkEq (lift pr) (⊢Δ ∙ {!!}) x₁)
+
+  wkEqTerm : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
+           let Δ' = wkCon (toWk pr) Δ
+               A' = U.wk (toWk pr) A
+               t' = U.wk (toWk pr) t
+               u' = U.wk (toWk pr) u
+           in ⊢ Δ' → Γ ⊢ t ≡ u ∷ A → Δ' ⊢ t' ≡ u' ∷ A'
+  wkEqTerm pr ⊢Δ (refl x) = refl (wkTerm pr ⊢Δ x)
+  wkEqTerm pr ⊢Δ (sym x) = sym (wkEqTerm pr ⊢Δ x)
+  wkEqTerm pr ⊢Δ (trans x x₁) = trans (wkEqTerm pr ⊢Δ x) (wkEqTerm pr ⊢Δ x₁)
+  wkEqTerm pr ⊢Δ (conv x x₁) = conv (wkEqTerm pr ⊢Δ x) (wkEq pr ⊢Δ x₁)
+  wkEqTerm pr ⊢Δ (Π-cong x x₁) = Π-cong (wkEqTerm pr ⊢Δ x)
+                                        (wkEqTerm (lift pr) (⊢Δ ∙ {!!}) x₁)
+  wkEqTerm pr ⊢Δ (app-cong {G = G} x x₁) =
+    PE.subst (λ x₂ → _ ⊢ _ ≡ _ ∷ x₂)
+             (PE.sym (subst-wk-dist₀ G))
+             (app-cong (wkEqTerm pr ⊢Δ x) (wkEqTerm pr ⊢Δ x₁))
+  wkEqTerm pr ⊢Δ (β-red {a = a} {b = b} {G = G} x x₁) =
+    PE.subst (λ x₂ → _ ⊢ _ ≡ _ ∷ x₂)
+             (PE.sym (subst-wk-dist₀ G))
+             (PE.subst (λ x₂ → _ ⊢ U.wk (toWk pr) ((lam b) ∘ a) ≡ x₂ ∷ _)
+                       (PE.sym (subst-wk-dist₀ b))
+                       (β-red (wkTerm (lift pr) (⊢Δ ∙ {!!}) x) (wkTerm pr ⊢Δ x₁)))
+  wkEqTerm pr ⊢Δ (fun-ext x x₁ x₂) =
+    fun-ext (wkTerm pr ⊢Δ x) (wkTerm pr ⊢Δ x₁) {!wkEqTerm ? ? x₂!}
+  wkEqTerm pr ⊢Δ (suc-cong x) = suc-cong (wkEqTerm pr ⊢Δ x)
+  wkEqTerm pr ⊢Δ (natrec-cong {F = F} x x₁ x₂) =
+    natrec-cong (wkEq (lift pr) (⊢Δ ∙ (ℕ ⊢Δ)) x)
+                (PE.subst (λ y → _ ⊢ _ ≡ _ ∷ y)
+                          (subst-wk-dist₀ F)
+                          (wkEqTerm pr ⊢Δ x₁))
+                {!!}
+  wkEqTerm pr ⊢Δ (natrec-zero x x₁ x₂) = {!!}
+  wkEqTerm pr ⊢Δ (natrec-suc x x₁ x₂ x₃) = {!!}
 
 -- Inverse typing lemmas
 

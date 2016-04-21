@@ -18,9 +18,12 @@ cong₃ : ∀ {a b c d} {A : Set a} {B : Set b} {C : Set c} {D : Set d}
         → f x u a ≡ f y v b
 cong₃ f refl refl refl = refl
 
+iterate : {A : Set} → (A → A) → A → Nat → A
+iterate s z zero = z
+iterate s z (suc n) = s (iterate s z n)
+
 arbLifts : (n : Nat) → Subst
-arbLifts zero = idSubst
-arbLifts (suc n) = liftSubst (arbLifts n)
+arbLifts = iterate liftSubst idSubst
 
 idSubst-lemma-var : (m n : Nat) → substVar (arbLifts n) m ≡ var m
 idSubst-lemma-var m zero = refl
@@ -60,3 +63,27 @@ wellscoped-lemma ρ zero = refl
 wellscoped-lemma ρ (suc t) = cong suc (wellscoped-lemma ρ t)
 wellscoped-lemma ρ (natrec t t₁ t₂) =
   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
+
+postulate TODO : ∀ {a} {A : Set a} → A
+
+subst-wk-var : ∀ {pr a} x n → wk (iterate lift pr n) (iterate liftSubst (unitSubst a) n x)
+  ≡ iterate liftSubst (unitSubst (wk pr a)) n (wkNat (iterate lift (lift pr) n) x)
+subst-wk-var zero zero = refl
+subst-wk-var (suc x) zero = refl
+subst-wk-var zero (suc n) = refl
+subst-wk-var (suc x) (suc n) = TODO
+
+subst-wk-dist : ∀ {pr a} t n → wk (iterate lift pr n) (subst (iterate liftSubst (unitSubst a) n) t)
+  ≡ subst (iterate liftSubst (unitSubst (wk pr a)) n) (wk (iterate lift (lift pr) n) t)
+subst-wk-dist U n = refl
+subst-wk-dist (Π t ▹ t₁) n = cong₂ Π_▹_ (subst-wk-dist t n) (subst-wk-dist t₁ (suc n))
+subst-wk-dist ℕ n = refl
+subst-wk-dist (var x) n = subst-wk-var x n
+subst-wk-dist (lam t) n = cong lam (subst-wk-dist t (suc n))
+subst-wk-dist (t ∘ t₁) n = cong₂ _∘_ (subst-wk-dist t n) (subst-wk-dist t₁ n)
+subst-wk-dist zero n = refl
+subst-wk-dist (suc t) n = cong suc (subst-wk-dist t n)
+subst-wk-dist (natrec t t₁ t₂) n = cong₃ natrec (subst-wk-dist t (suc n)) (subst-wk-dist t₁ n) (subst-wk-dist t₂ n)
+
+subst-wk-dist₀ : ∀ {pr a} t → wk pr (subst (unitSubst a) t) ≡ subst (unitSubst (wk pr a)) (wk (lift pr) t)
+subst-wk-dist₀ t = subst-wk-dist t zero
