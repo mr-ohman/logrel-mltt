@@ -82,6 +82,9 @@ Subst = Nat → Term
 substVar : (σ : Subst) (x : Nat) → Term
 substVar σ x = σ x
 
+wkSubst : Wk → Subst → Subst
+wkSubst pr σ x = wk pr (σ x)
+
 wk1Subst : Subst → Subst
 wk1Subst σ x = wk1 (σ x)
 

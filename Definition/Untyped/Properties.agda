@@ -25,6 +25,22 @@ iterate s z (suc n) = s (iterate s z n)
 arbLifts : (n : Nat) → Subst
 arbLifts = iterate liftSubst idSubst
 
+wkNat-id : (x : Nat) (n : Nat) → wkNat (iterate lift id n) x ≡ x
+wkNat-id x zero = refl
+wkNat-id zero (suc n) = refl
+wkNat-id (suc x) (suc n) = cong suc (wkNat-id x n)
+
+wk-id : (x : Term) (n : Nat) → wk (iterate lift id n) x ≡ x
+wk-id U n = refl
+wk-id (Π x ▹ x₁) n = cong₂ Π_▹_ (wk-id x n) (wk-id x₁ (suc n))
+wk-id ℕ n = refl
+wk-id (var x) n = cong var (wkNat-id x n)
+wk-id (lam x) n = cong lam (wk-id x (suc n))
+wk-id (x ∘ x₁) n = cong₂ _∘_ (wk-id x n) (wk-id x₁ n)
+wk-id zero n = refl
+wk-id (suc x) n = cong suc (wk-id x n)
+wk-id (natrec x x₁ x₂) n = cong₃ natrec (wk-id x (suc n)) (wk-id x₁ n) (wk-id x₂ n)
+
 idSubst-lemma-var : (m n : Nat) → substVar (arbLifts n) m ≡ var m
 idSubst-lemma-var m zero = refl
 idSubst-lemma-var zero (suc n) = refl
@@ -85,5 +101,15 @@ subst-wk-dist zero n = refl
 subst-wk-dist (suc t) n = cong suc (subst-wk-dist t n)
 subst-wk-dist (natrec t t₁ t₂) n = cong₃ natrec (subst-wk-dist t (suc n)) (subst-wk-dist t₁ n) (subst-wk-dist t₂ n)
 
-subst-wk-dist₀ : ∀ {pr a} t → wk pr (subst (unitSubst a) t) ≡ subst (unitSubst (wk pr a)) (wk (lift pr) t)
-subst-wk-dist₀ t = subst-wk-dist t zero
+wk-β : ∀ {pr a} t → wk pr (t [ a ]) ≡ wk (lift pr) t [ wk pr a ]
+wk-β t = subst-wk-dist t zero
+
+wk-β-natrec : ∀ {pr} G →
+      Π ℕ ▹
+      (Π wk (lift pr) (G [ var zero ]) ▹
+       wk (lift (lift pr)) (G [ suc (var (suc zero)) ]))
+      ≡
+      Π ℕ ▹
+        (Π wk (lift pr) G [ var zero ] ▹
+       (wk (lift pr) G [ suc (var (suc zero)) ]))
+wk-β-natrec G = TODO

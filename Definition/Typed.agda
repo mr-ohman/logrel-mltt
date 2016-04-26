@@ -6,6 +6,7 @@ open import Data.Product
 open import Definition.Untyped
 
 infixl 30 _∙_
+infix 10 Π_▹_
 
 data _∷_∈_ : (x : Nat) (A : Term) (Γ : Con Term) → Set where
   here  : ∀{Γ A}                     →     0 ∷ wk1 A ∈ (Γ ∙ A)
