@@ -7,7 +7,7 @@ open import Data.Unit using (⊤; tt)
 
 open import Relation.Nullary.Decidable using (⌊_⌋)
 
-open import Tools.Context hiding (_⊆_)
+open import Tools.Context
 
 infix 30 Π_▹_
 data Term : Set where

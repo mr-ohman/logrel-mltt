@@ -4,7 +4,7 @@ open import Data.Nat renaming (ℕ to Nat)
 open import Definition.Untyped
 open import Data.List using (List; []; _∷_)
 open import Relation.Binary.PropositionalEquality hiding ([_]; subst)
-open import Tools.Context hiding (_⊆_)
+open import Tools.Context
 open import Data.Unit
 
 subst-test₁ : {x : Term} → lam (var 0) [ x ] ≡ lam (var 0)

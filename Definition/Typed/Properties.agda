@@ -2,7 +2,7 @@ module Definition.Typed.Properties where
 
 open import Data.Product
 
-open import Tools.Context hiding (_⊆_)
+open import Tools.Context
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties using (wk-β; wk-β-natrec)
 open import Definition.Typed

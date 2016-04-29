@@ -2,7 +2,8 @@ module Definition.Untyped.Indexed where
 
 open import Data.Unit
 open import Data.Product
-open import Tools.Context
+open import Tools.Context as Context
+open Context.NonDependent
 
 data Term (Γ : Con ⊤) : Set where
   U : Term Γ
