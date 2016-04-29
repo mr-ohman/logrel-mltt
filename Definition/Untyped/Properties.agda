@@ -80,6 +80,41 @@ idSubst-lemma₀ t = idSubst-lemma t zero
 -- wellscoped-lemma ρ (natrec t t₁ t₂) =
 --   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
 
+-- Composition properties
+
+lift-step-comp : (p : Wk) → step id • p ≡ lift p • step id
+lift-step-comp id = refl
+lift-step-comp (step p) = cong step (lift-step-comp p)
+lift-step-comp (lift p) = refl
+
+wkNat-comp-comm : ∀ p q x → wkNat p (wkNat q x) ≡ wkNat (p • q) x
+wkNat-comp-comm id q x = refl
+wkNat-comp-comm (step p) q x = cong suc (wkNat-comp-comm p q x)
+wkNat-comp-comm (lift p) id x = refl
+wkNat-comp-comm (lift p) (step q) x = cong suc (wkNat-comp-comm p q x)
+wkNat-comp-comm (lift p) (lift q) zero = refl
+wkNat-comp-comm (lift p) (lift q) (suc x) = cong suc (wkNat-comp-comm p q x)
+
+wk-comp-comm : ∀ p q t → wk p (wk q t) ≡ wk (p • q) t
+wk-comp-comm p q U = refl
+wk-comp-comm p q (Π t ▹ t₁) = cong₂ Π_▹_ (wk-comp-comm p q t) (wk-comp-comm (lift p) (lift q) t₁)
+wk-comp-comm p q ℕ = refl
+wk-comp-comm p q (var x) = cong var (wkNat-comp-comm p q x)
+wk-comp-comm p q (lam t) = cong lam (wk-comp-comm (lift p) (lift q) t)
+wk-comp-comm p q (t ∘ t₁) = cong₂ _∘_ (wk-comp-comm p q t) (wk-comp-comm p q t₁)
+wk-comp-comm p q zero = refl
+wk-comp-comm p q (suc t) = cong suc (wk-comp-comm p q t)
+wk-comp-comm p q (natrec t t₁ t₂) = cong₃ natrec (wk-comp-comm (lift p) (lift q) t)
+                                                 (wk-comp-comm p q t₁) (wk-comp-comm p q t₂)
+
+wkIndex-step : ∀ {A} pr → wk1 (wk pr A) ≡ wk (step pr) A
+wkIndex-step pr = wk-comp-comm (step id) pr _
+
+wkIndex-lift : ∀ {A} pr → wk1 (wk pr A) ≡ wk (lift pr) (wk (step id) A)
+wkIndex-lift {A} pr = trans (wk-comp-comm (step id) pr A)
+                            (trans (cong (λ x → wk x A) (lift-step-comp pr))
+                                   (sym (wk-comp-comm (lift pr) (step id) A)))
+
 postulate TODO : ∀ {a} {A : Set a} → A
 
 subst-wk-var : ∀ {pr a} x n → wk (iterate lift pr n) (iterate liftSubst (unitSubst a) n x)

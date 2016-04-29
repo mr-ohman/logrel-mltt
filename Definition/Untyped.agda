@@ -32,6 +32,13 @@ data Wk : Set where
   step  : Wk  → Wk
   lift  : Wk  → Wk
 
+_•_                :  Wk → Wk → Wk
+id      • η′       =  η′
+step η  • η′       =  step  (η • η′)
+lift η  • id       =  lift  η
+lift η  • step η′  =  step  (η • η′)
+lift η  • lift η′  =  lift  (η • η′)
+
 wkNat : (ρ : Wk) (n : Nat) → Nat
 wkNat id n = n
 wkNat (step ρ) n = suc (wkNat ρ n)
