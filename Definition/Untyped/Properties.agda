@@ -4,7 +4,7 @@ open import Data.Nat renaming (ℕ to Nat)
 open import Definition.Untyped
 open import Data.List using (List; []; _∷_)
 open import Relation.Binary.PropositionalEquality hiding ([_]; subst)
-open import Tools.Context
+open import Tools.Context hiding (_⊆_)
 open import Data.Unit
 
 subst-test₁ : {x : Term} → lam (var 0) [ x ] ≡ lam (var 0)
@@ -61,24 +61,24 @@ idSubst-lemma (natrec t t₁ t₂) n =
 idSubst-lemma₀ : (t : Term) → subst idSubst t ≡ t
 idSubst-lemma₀ t = idSubst-lemma t zero
 
-wellscoped-lemma-var : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (x : Nat)
-                     → WellScoped.wkNat ρ x ≡ wkNat (toWk ρ) x
-wellscoped-lemma-var base x = refl
-wellscoped-lemma-var (step ρ) x = cong suc (wellscoped-lemma-var ρ x)
-wellscoped-lemma-var (lift ρ) zero = refl
-wellscoped-lemma-var (lift ρ) (suc x) = cong suc (wellscoped-lemma-var ρ x)
+-- wellscoped-lemma-var : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (x : Nat)
+--                      → WellScoped.wkNat ρ x ≡ wkNat (toWk ρ) x
+-- wellscoped-lemma-var base x = refl
+-- wellscoped-lemma-var (step ρ) x = cong suc (wellscoped-lemma-var ρ x)
+-- wellscoped-lemma-var (lift ρ) zero = refl
+-- wellscoped-lemma-var (lift ρ) (suc x) = cong suc (wellscoped-lemma-var ρ x)
 
-wellscoped-lemma : ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
-wellscoped-lemma ρ U = refl
-wellscoped-lemma ρ (Π t ▹ t₁) = cong₂ Π_▹_ (wellscoped-lemma ρ t) (wellscoped-lemma (lift ρ) t₁)
-wellscoped-lemma ρ ℕ = refl
-wellscoped-lemma ρ (var x) = cong var (wellscoped-lemma-var ρ x)
-wellscoped-lemma ρ (lam t) = cong lam (wellscoped-lemma (lift ρ) t)
-wellscoped-lemma ρ (t ∘ t₁) = cong₂ _∘_ (wellscoped-lemma ρ t) (wellscoped-lemma ρ t₁)
-wellscoped-lemma ρ zero = refl
-wellscoped-lemma ρ (suc t) = cong suc (wellscoped-lemma ρ t)
-wellscoped-lemma ρ (natrec t t₁ t₂) =
-  cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
+-- wellscoped-lemma : ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
+-- wellscoped-lemma ρ U = refl
+-- wellscoped-lemma ρ (Π t ▹ t₁) = cong₂ Π_▹_ (wellscoped-lemma ρ t) (wellscoped-lemma (lift ρ) t₁)
+-- wellscoped-lemma ρ ℕ = refl
+-- wellscoped-lemma ρ (var x) = cong var (wellscoped-lemma-var ρ x)
+-- wellscoped-lemma ρ (lam t) = cong lam (wellscoped-lemma (lift ρ) t)
+-- wellscoped-lemma ρ (t ∘ t₁) = cong₂ _∘_ (wellscoped-lemma ρ t) (wellscoped-lemma ρ t₁)
+-- wellscoped-lemma ρ zero = refl
+-- wellscoped-lemma ρ (suc t) = cong suc (wellscoped-lemma ρ t)
+-- wellscoped-lemma ρ (natrec t t₁ t₂) =
+--   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
 
 postulate TODO : ∀ {a} {A : Set a} → A
 

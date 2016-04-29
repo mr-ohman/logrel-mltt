@@ -7,7 +7,7 @@ open import Data.Unit using (⊤; tt)
 
 open import Relation.Nullary.Decidable using (⌊_⌋)
 
-open import Tools.Context
+open import Tools.Context hiding (_⊆_)
 
 infix 30 Π_▹_
 data Term : Set where
@@ -32,31 +32,6 @@ data Wk : Set where
   step  : Wk  → Wk
   lift  : Wk  → Wk
 
-module WellScoped where
-  wkNat : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
-  wkNat base n = n
-  wkNat (step ρ) n = suc (wkNat ρ n)
-  wkNat (lift ρ) zero = zero
-  wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
-
-  wk : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (t : Term) → Term
-  wk ρ U = U
-  wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
-  wk ρ ℕ = ℕ
-  wk ρ (var x) = var (wkNat ρ x)
-  wk ρ (lam t) = lam (wk (lift ρ) t)
-  wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
-  wk ρ zero = zero
-  wk ρ (suc t) = suc (wk ρ t)
-  wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
-
-
--- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
-toWk : ∀ {A} {Γ Δ : Con A} (ρ : Γ ⊆ Δ) → Wk
-toWk base = id
-toWk (step ρ) = step (toWk ρ)
-toWk (lift ρ) = lift (toWk ρ)
-
 wkNat : (ρ : Wk) (n : Nat) → Nat
 wkNat id n = n
 wkNat (step ρ) n = suc (wkNat ρ n)
@@ -73,6 +48,41 @@ wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
 wk ρ zero = zero
 wk ρ (suc t) = suc (wk ρ t)
 wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
+
+
+
+mutual
+  data _⊆_ : Con Term → Con Term → Set where
+    base : ε ⊆ ε
+    step : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) →  Γ      ⊆ (Δ ∙ σ)
+    lift : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) → (Γ ∙ σ) ⊆ (Δ ∙ wk (toWk inc) σ)
+
+
+  toWk : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Wk
+  toWk base = id
+  toWk (step ρ) = step (toWk ρ)
+  toWk (lift ρ) = lift (toWk ρ)
+
+-- module WellScoped where
+--   wkNat : {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
+--   wkNat base n = n
+--   wkNat (step ρ) n = suc (wkNat ρ n)
+--   wkNat (lift ρ) zero = zero
+--   wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
+
+--   wk : {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) (t : Term) → Term
+--   wk ρ U = U
+--   wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
+--   wk ρ ℕ = ℕ
+--   wk ρ (var x) = var (wkNat ρ x)
+--   wk ρ (lam t) = lam (wk (lift ρ) t)
+--   wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
+--   wk ρ zero = zero
+--   wk ρ (suc t) = suc (wk ρ t)
+--   wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
+
+
+-- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
 
 wk1 : Term → Term
 wk1 = wk (step id)
