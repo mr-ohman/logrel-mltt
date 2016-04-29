@@ -27,7 +27,7 @@ mutual
     ℕ      : ⊢ Γ → Γ ⊢ ℕ ∷ U
     Π_▹_   : ∀ {F G} → Γ ⊢ F ∷ U → Γ ∙ F ⊢ G ∷ U → Γ ⊢ Π F ▹ G ∷ U
     var    : ∀ {A x} → ⊢ Γ → x ∷ A ∈ Γ → Γ ⊢ var x ∷ A
-    lam    : ∀ {F G t} → Γ ∙ F ⊢ t ∷ G → Γ ⊢ lam t ∷ Π F ▹ G
+    lam    : ∀ {F G t} → {- Γ ⊢ F → -} Γ ∙ F ⊢ t ∷ G → Γ ⊢ lam t ∷ Π F ▹ G
     _∘_    : ∀ {g a F G} → Γ ⊢ g ∷ Π F ▹ G → Γ ⊢ a ∷ F → Γ ⊢ g ∘ a ∷ G [ a ]
     zero   : ⊢ Γ → Γ ⊢ zero ∷ ℕ
     suc    : ∀ {n} → Γ ⊢ n ∷ ℕ → Γ ⊢ suc n ∷ ℕ
