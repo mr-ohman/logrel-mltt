@@ -131,6 +131,14 @@ infix 25 _[_]
 _[_] : (t : Term) (s : Term) → Term
 t [ s ] = subst (unitSubst s) t
 
+consSubst : Subst → Term → Subst
+consSubst s t zero = t
+consSubst s t (suc n) = s n
+
+infixr 22 _arr_
+_arr_ : Term → Term → Term
+A arr B = Π A ▹ wk1 B
+
 wkCon : Wk → Con Term → Con Term
 wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
 wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x

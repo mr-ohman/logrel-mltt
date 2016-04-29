@@ -215,17 +215,18 @@ mutual
                        (PE.sym (wk-β b))
                        (β-red (wkTerm (lift pr) (⊢Δ ∙ wk pr ⊢Δ y₁) x) (wkTerm pr ⊢Δ x₁)))
   wkEqTerm pr ⊢Δ (fun-ext x x₁ x₂) =
-    fun-ext (wkTerm pr ⊢Δ x) (wkTerm pr ⊢Δ x₁) {!wkEqTerm (lift pr) (⊢Δ ∙ ?) x₂!}
+    fun-ext (wkTerm pr ⊢Δ x) (wkTerm pr ⊢Δ x₁) {!wkEqTerm (lift pr) ? x₂!}
   wkEqTerm pr ⊢Δ (suc-cong x) = suc-cong (wkEqTerm pr ⊢Δ x)
-  wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F} x x₁ x₂) = {!!}
-    -- natrec-cong (wkEq (lift pr) (⊢Δ ∙ (ℕ ⊢Δ)) x)
-    --             (PE.subst (λ y → _ ⊢ _ ≡ _ ∷ y)
-    --                       (wk-β F)
-    --                       (wkEqTerm pr ⊢Δ x₁))
-    --             (PE.subst (λ y → wkCon (toWk pr) Δ ⊢ U.wk (toWk pr) s
-    --                                                ≡ U.wk (toWk pr) s' ∷ y)
-    --                       (wk-β-natrec F)
-    --                       (wkEqTerm pr ⊢Δ x₂))
+  wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F} x x₁ x₂) =
+    natrec-cong (wkEq (lift pr) (⊢Δ ∙ (ℕ ⊢Δ)) x)
+                (PE.subst (λ y → _ ⊢ _ ≡ _ ∷ y)
+                          (wk-β F)
+                          (wkEqTerm pr ⊢Δ x₁))
+                (let r = (wkEqTerm pr ⊢Δ x₂) in {!!})
+                 -- (PE.subst (λ y → wkCon (toWk pr) Δ ⊢ U.wk (toWk pr) s
+                 --                                   ≡ U.wk (toWk pr) s' ∷ y)
+                 --          (wk-β-natrec F)
+                 --          (wkEqTerm pr ⊢Δ x₂))
   wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-zero {s = s} {F = F} x x₁ x₂) = {!!}
     -- PE.subst (λ y → _ ⊢ U.wk (toWk pr) (natrec _ _ _ ∘ _)  ≡ _ ∷ y)
     --          (PE.sym (wk-β F))
@@ -275,17 +276,17 @@ mutual
 -- inversion-app-natrec (x ∘ x₁) = {!!}
 -- inversion-app-natrec (conv x x₁) = trans (sym x₁) (inversion-app-natrec x)
 
--- -- Reduction is a subset of conversion
+-- Reduction is a subset of conversion
 
--- subsetTerm : ∀ {Γ A t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ≡ u ∷ A
--- subsetTerm (natrec-subst x x₁ x₂ x₃) =
---   app-cong (refl (conv (natrec x x₁ x₂) (Π-cong (refl (ℕ (wfTerm x₁))) {!!})))
---                (subsetTerm x₃)
--- subsetTerm (natrec-zero x x₁ x₂) = natrec-zero x x₁ x₂
--- subsetTerm (natrec-suc x x₁ x₂ x₃) = natrec-suc x x₁ x₂ x₃
--- subsetTerm (app-subst x x₁) = app-cong (subsetTerm x) (refl x₁)
--- subsetTerm (β-red x x₁) = β-red x x₁
--- subsetTerm (conv x x₁) = conv (subsetTerm x) x₁
+subsetTerm : ∀ {Γ A t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ≡ u ∷ A
+subsetTerm (natrec-subst x x₁ x₂ x₃) =
+  app-cong (refl (conv (natrec x x₁ x₂) (Π-cong (refl (ℕ (wfTerm x₁))) {!!})))
+               (subsetTerm x₃)
+subsetTerm (natrec-zero x x₁ x₂) = natrec-zero x x₁ x₂
+subsetTerm (natrec-suc x x₁ x₂ x₃) = natrec-suc x x₁ x₂ x₃
+subsetTerm (app-subst x x₁) = app-cong (subsetTerm x) (refl x₁)
+subsetTerm (β-red x x₁) = β-red x x₁
+subsetTerm (conv x x₁) = conv (subsetTerm x) x₁
 
--- subset : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
--- subset (univ x) = univ (subsetTerm x)
+subset : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
+subset (univ x) = univ (subsetTerm x)

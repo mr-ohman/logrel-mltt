@@ -56,17 +56,18 @@ mutual
     β-red    : ∀ {a b F G} → Γ ∙ F ⊢ b ∷ G → Γ ⊢ a ∷ F
              → Γ ⊢ (lam b) ∘ a ≡ b [ a ] ∷ G [ a ]
     fun-ext  : ∀ {f g F G} → Γ ⊢ f ∷ Π F ▹ G → Γ ⊢ g ∷ Π F ▹ G
-             → Γ ∙ F ⊢ f ∘ var zero ≡ g ∘ var zero ∷ G [ var zero ]
+             → Γ ∙ F ⊢ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
              → Γ ⊢ f ≡ g ∷ Π F ▹ G
     suc-cong : ∀ {m n} → Γ ⊢ m ≡ n ∷ ℕ → Γ ⊢ suc m ≡ suc n ∷ ℕ
+    -- make the natural number the 4th argument of natrec instead of using _∘_
     natrec-cong : ∀ {z z' s s' F F'} → Γ ∙ ℕ ⊢ F ≡ F' → Γ ⊢ z ≡ z' ∷ F [ zero ]
-                → Γ ⊢ s ≡ s' ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ]
+                → Γ ⊢ s ≡ s' ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
                 → Γ ⊢ natrec F z s ≡ natrec F' z' s' ∷ Π ℕ ▹ F
     natrec-zero : ∀ {z s F} → Γ ∙ ℕ ⊢ F → Γ ⊢ z ∷ F [ zero ]
-                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ]
+                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
                 → Γ ⊢ natrec F z s ∘ zero ≡ z ∷ F [ zero ]
     natrec-suc  : ∀ {n z s F} → Γ ⊢ n ∷ ℕ → Γ ∙ ℕ ⊢ F → Γ ⊢ z ∷ F [ zero ]
-                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ]
+                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
                 → Γ ⊢ natrec F z s ∘ suc n ≡ (s ∘ n) ∘ (natrec F z s ∘ n)
                     ∷ F [ suc n ]
 
@@ -77,14 +78,15 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   β-red     : ∀ {A B a t} → Γ ∙ A ⊢ t ∷ B → Γ ⊢ a ∷ A
             → Γ ⊢ (lam t) ∘ a ⇒ t [ a ] ∷ B [ a ]
   natrec-subst : ∀ {C c g m n} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] ▹ C [ suc (var (suc zero)) ]
+               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
                → Γ ⊢ m ⇒ n ∷ ℕ
                → Γ ⊢ natrec C c g ∘ m ⇒ natrec C c g ∘ n ∷ C [ n ]
   natrec-zero  : ∀ {C c g} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] ▹ C [ suc (var (suc zero)) ]
+               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
                → Γ ⊢ natrec C c g ∘ zero ⇒ c ∷ C [ zero ]
   natrec-suc   : ∀ {C c g n} → Γ ⊢ n ∷ ℕ → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] ▹ C [ suc (var (suc zero)) ]
+               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
+                        {- Π ℕ ▹ (C arr C [ suc (var zero) ]) -}
                → Γ ⊢ natrec C c g ∘ suc n ⇒ (g ∘ n) ∘ (natrec C c g ∘ n)
                    ∷ C [ suc n ]
 
