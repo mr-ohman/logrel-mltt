@@ -21,7 +21,7 @@ wfTerm (lam x₁) | q ∙ x = q
 wfTerm (x ∘ x₁) = wfTerm x₁
 wfTerm (zero x) = x
 wfTerm (suc x) = wfTerm x
-wfTerm (natrec x x₁ x₂) = wfTerm x₁
+wfTerm (natrec x x₁ x₂ x₃) = wfTerm x₁
 wfTerm (conv x x₁) = wfTerm x
 
 wf : ∀ {Γ A} → Γ ⊢ A → ⊢ Γ
@@ -40,7 +40,7 @@ wfEqTerm (app-cong x x₁) = wfEqTerm x
 wfEqTerm (β-red x x₁) = wfTerm x₁
 wfEqTerm (fun-ext x x₁ x₂) = wfTerm x
 wfEqTerm (suc-cong x) = wfEqTerm x
-wfEqTerm (natrec-cong x x₁ x₂) = wfEqTerm x₂
+wfEqTerm (natrec-cong x x₁ x₂ x₃) = wfEqTerm x₂
 wfEqTerm (natrec-zero x x₁ x₂) = wfTerm x₁
 wfEqTerm (natrec-suc x x₁ x₂ x₃) = wfTerm x
 
@@ -51,61 +51,61 @@ wfEq (sym x) = wfEq x
 wfEq (trans x x₁) = wfEq x
 wfEq (Π-cong x x₁) = wfEq x
 
--- Conversion to type/term arrows
+-- -- Conversion to type/term arrows
 
-eqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A × Γ ⊢ u ∷ A
-eqTerm (refl x) = x , x
-eqTerm (sym t₂) = swap (eqTerm t₂)
-eqTerm (trans t₁ t₂) = let a , b = eqTerm t₁
-                           c , d = eqTerm t₂
-                       in a , d
-eqTerm (conv t₁ x) = let a , b = eqTerm t₁
-                     in  conv a x , conv b x
-eqTerm (Π-cong t t₁) = let a , b = eqTerm t
-                           c , d = eqTerm t₁
-                       in  Π a ▹ c , Π b ▹ {!d!}
-eqTerm (app-cong t t₁) = let a , b = eqTerm t
-                             c , d = eqTerm t₁
-                         in  a ∘ c , {!b!} ∘ d
-eqTerm (β-red x x₁) = lam x ∘ x₁ , {!!}
-eqTerm (fun-ext x x₁ t) = x , x₁
-eqTerm (natrec-cong x t t₁) = let a , b = eqTerm t
-                                  c , d = eqTerm t₁
-                              in  (natrec {!!} a c) , {!!}
-eqTerm (natrec-zero x x₁ x₂) = natrec x x₁ x₂ ∘ zero (wfTerm x₁) , x₁
-eqTerm (natrec-suc x x₁ x₂ x₃) = natrec x₁ x₂ x₃ ∘ suc x
-                               , ({!x₃!} ∘ x) ∘ (natrec x₁ x₂ x₃ ∘ x)
-eqTerm (suc-cong t) = let a , b = eqTerm t
-                      in  suc a , suc b
+-- eqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A × Γ ⊢ u ∷ A
+-- eqTerm (refl x) = x , x
+-- eqTerm (sym t₂) = swap (eqTerm t₂)
+-- eqTerm (trans t₁ t₂) = let a , b = eqTerm t₁
+--                            c , d = eqTerm t₂
+--                        in a , d
+-- eqTerm (conv t₁ x) = let a , b = eqTerm t₁
+--                      in  conv a x , conv b x
+-- eqTerm (Π-cong t t₁) = let a , b = eqTerm t
+--                            c , d = eqTerm t₁
+--                        in  Π a ▹ c , Π b ▹ {!d!}
+-- eqTerm (app-cong t t₁) = let a , b = eqTerm t
+--                              c , d = eqTerm t₁
+--                          in  a ∘ c , {!b!} ∘ d
+-- eqTerm (β-red x x₁) = lam x ∘ x₁ , {!!}
+-- eqTerm (fun-ext x x₁ t) = x , x₁
+-- eqTerm (natrec-cong x t t₁) = let a , b = eqTerm t
+--                                   c , d = eqTerm t₁
+--                               in  (natrec {!!} a c) , {!!}
+-- eqTerm (natrec-zero x x₁ x₂) = natrec x x₁ x₂ ∘ zero (wfTerm x₁) , x₁
+-- eqTerm (natrec-suc x x₁ x₂ x₃) = natrec x₁ x₂ x₃ ∘ suc x
+--                                , ({!x₃!} ∘ x) ∘ (natrec x₁ x₂ x₃ ∘ x)
+-- eqTerm (suc-cong t) = let a , b = eqTerm t
+--                       in  suc a , suc b
 
-eq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B
-eq (univ x) = let a , b = eqTerm x
-              in univ a , univ b
-eq (refl x) = x , x
-eq (sym e) = swap (eq e)
-eq (trans e e₁) = let a , b = eq e
-                      c , d = eq e₁
-                  in  a , d
-eq (Π-cong e e₁) = let a , b = eq e
-                       c , d = eq e₁
-                   in  Π a ▹ c , Π b ▹ {!d!}
+-- eq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B
+-- eq (univ x) = let a , b = eqTerm x
+--               in univ a , univ b
+-- eq (refl x) = x , x
+-- eq (sym e) = swap (eq e)
+-- eq (trans e e₁) = let a , b = eq e
+--                       c , d = eq e₁
+--                   in  a , d
+-- eq (Π-cong e e₁) = let a , b = eq e
+--                        c , d = eq e₁
+--                    in  Π a ▹ c , Π b ▹ {!d!}
 
-substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
-substEq e _ = proj₂ (eq e)
+-- substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
+-- substEq e _ = proj₂ (eq e)
 
--- Term to type arrow
+-- -- Term to type arrow
 
-typeOfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ A
-typeOfTerm (var x₁ x₂) = {!!}
-typeOfTerm (ℕ x) = U x
-typeOfTerm (Π t ▹ t₁) = U (wfTerm t)
-typeOfTerm (lam t₁) with wfTerm t₁
-typeOfTerm (lam t₁) | x ∙ x₁ = Π x₁ ▹ typeOfTerm t₁
-typeOfTerm (t ∘ t₁) = {!!}
-typeOfTerm (zero x) = ℕ x
-typeOfTerm (suc t) = typeOfTerm t
-typeOfTerm (natrec x t t₁) = Π ℕ (wfTerm t) ▹ x
-typeOfTerm (conv t₁ x) = substEq x (typeOfTerm t₁)
+-- typeOfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ A
+-- typeOfTerm (var x₁ x₂) = {!!}
+-- typeOfTerm (ℕ x) = U x
+-- typeOfTerm (Π t ▹ t₁) = U (wfTerm t)
+-- typeOfTerm (lam t₁) with wfTerm t₁
+-- typeOfTerm (lam t₁) | x ∙ x₁ = Π x₁ ▹ typeOfTerm t₁
+-- typeOfTerm (t ∘ t₁) = {!!}
+-- typeOfTerm (zero x) = ℕ x
+-- typeOfTerm (suc t) = typeOfTerm t
+-- typeOfTerm (natrec x t t₁) = Π ℕ (wfTerm t) ▹ x
+-- typeOfTerm (conv t₁ x) = substEq x (typeOfTerm t₁)
 
 -- Weakening
 -- The definition of _⊆_ in Tools.Context is not correct for dependent types
@@ -170,7 +170,7 @@ mutual
                                              (wkTerm pr ⊢Δ t ∘ wkTerm pr ⊢Δ t₁)
   wkTerm pr ⊢Δ (zero x) = zero ⊢Δ
   wkTerm pr ⊢Δ (suc t) = suc (wkTerm pr ⊢Δ t)
-  wkTerm {Δ = Δ} pr ⊢Δ (natrec {G = G} {s = s} x t t₁) = {!!}
+  wkTerm {Δ = Δ} pr ⊢Δ (natrec {G = G} {s = s} x t t₁ t₂) = {!!}
     -- natrec (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x)
     --        (PE.subst (λ x → _ ⊢ _ ∷ x) (wk-β G) (wkTerm pr ⊢Δ t))
     --        (PE.subst (λ x → wkCon (toWk pr) Δ ⊢ U.wk (toWk pr) s ∷ x)
@@ -217,12 +217,12 @@ mutual
   wkEqTerm pr ⊢Δ (fun-ext x x₁ x₂) =
     fun-ext (wkTerm pr ⊢Δ x) (wkTerm pr ⊢Δ x₁) {!wkEqTerm (lift pr) ? x₂!}
   wkEqTerm pr ⊢Δ (suc-cong x) = suc-cong (wkEqTerm pr ⊢Δ x)
-  wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F} x x₁ x₂) =
-    natrec-cong (wkEq (lift pr) (⊢Δ ∙ (ℕ ⊢Δ)) x)
-                (PE.subst (λ y → _ ⊢ _ ≡ _ ∷ y)
-                          (wk-β F)
-                          (wkEqTerm pr ⊢Δ x₁))
-                (let r = (wkEqTerm pr ⊢Δ x₂) in {!!})
+  wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F} x x₁ x₂ x₃) = {!!}
+    -- natrec-cong (wkEq (lift pr) (⊢Δ ∙ (ℕ ⊢Δ)) x)
+    --             (PE.subst (λ y → _ ⊢ _ ≡ _ ∷ y)
+    --                       (wk-β F)
+    --                       (wkEqTerm pr ⊢Δ x₁))
+    --             (let r = (wkEqTerm pr ⊢Δ x₂) in {!!})
                  -- (PE.subst (λ y → wkCon (toWk pr) Δ ⊢ U.wk (toWk pr) s
                  --                                   ≡ U.wk (toWk pr) s' ∷ y)
                  --          (wk-β-natrec F)
@@ -279,9 +279,7 @@ mutual
 -- Reduction is a subset of conversion
 
 subsetTerm : ∀ {Γ A t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ≡ u ∷ A
-subsetTerm (natrec-subst x x₁ x₂ x₃) =
-  app-cong (refl (conv (natrec x x₁ x₂) (Π-cong (refl (ℕ (wfTerm x₁))) {!!})))
-               (subsetTerm x₃)
+subsetTerm (natrec-subst x x₁ x₂ x₃) = natrec-cong (refl x) (refl x₁) (refl x₂) (subsetTerm x₃)
 subsetTerm (natrec-zero x x₁ x₂) = natrec-zero x x₁ x₂
 subsetTerm (natrec-suc x x₁ x₂ x₃) = natrec-suc x x₁ x₂ x₃
 subsetTerm (app-subst x x₁) = app-cong (subsetTerm x) (refl x₁)

@@ -18,6 +18,11 @@ cong₃ : ∀ {a b c d} {A : Set a} {B : Set b} {C : Set c} {D : Set d}
         → f x u a ≡ f y v b
 cong₃ f refl refl refl = refl
 
+cong₄ : ∀ {a b c d e} {A : Set a} {B : Set b} {C : Set c} {D : Set d} {E : Set e}
+        (f : A → B → C → D → E) {x y u v s t q r} → x ≡ y → u ≡ v → s ≡ t → q ≡ r
+        → f x u s q ≡ f y v t r
+cong₄ f refl refl refl refl = refl
+
 iterate : {A : Set} → (A → A) → A → Nat → A
 iterate s z zero = z
 iterate s z (suc n) = s (iterate s z n)
@@ -39,7 +44,7 @@ wk-id (lam x) n = cong lam (wk-id x (suc n))
 wk-id (x ∘ x₁) n = cong₂ _∘_ (wk-id x n) (wk-id x₁ n)
 wk-id zero n = refl
 wk-id (suc x) n = cong suc (wk-id x n)
-wk-id (natrec x x₁ x₂) n = cong₃ natrec (wk-id x (suc n)) (wk-id x₁ n) (wk-id x₂ n)
+wk-id (natrec x x₁ x₂ x₃) n = cong₄ natrec (wk-id x (suc n)) (wk-id x₁ n) (wk-id x₂ n) (wk-id x₃ n)
 
 idSubst-lemma-var : (m n : Nat) → substVar (arbLifts n) m ≡ var m
 idSubst-lemma-var m zero = refl
@@ -55,8 +60,8 @@ idSubst-lemma (lam t) n = cong lam (idSubst-lemma t (suc n))
 idSubst-lemma (t ∘ t₁) n = cong₂ _∘_ (idSubst-lemma t n) (idSubst-lemma t₁ n)
 idSubst-lemma zero n = refl
 idSubst-lemma (suc t) n = cong suc (idSubst-lemma t n)
-idSubst-lemma (natrec t t₁ t₂) n =
-  cong₃ natrec (idSubst-lemma t (suc n)) (idSubst-lemma t₁ n) (idSubst-lemma t₂ n)
+idSubst-lemma (natrec t t₁ t₂ t₃) n =
+  cong₄ natrec (idSubst-lemma t (suc n)) (idSubst-lemma t₁ n) (idSubst-lemma t₂ n) (idSubst-lemma t₃ n)
 
 idSubst-lemma₀ : (t : Term) → subst idSubst t ≡ t
 idSubst-lemma₀ t = idSubst-lemma t zero
@@ -104,8 +109,10 @@ wk-comp-comm p q (lam t) = cong lam (wk-comp-comm (lift p) (lift q) t)
 wk-comp-comm p q (t ∘ t₁) = cong₂ _∘_ (wk-comp-comm p q t) (wk-comp-comm p q t₁)
 wk-comp-comm p q zero = refl
 wk-comp-comm p q (suc t) = cong suc (wk-comp-comm p q t)
-wk-comp-comm p q (natrec t t₁ t₂) = cong₃ natrec (wk-comp-comm (lift p) (lift q) t)
-                                                 (wk-comp-comm p q t₁) (wk-comp-comm p q t₂)
+wk-comp-comm p q (natrec t t₁ t₂ t₃) = cong₄ natrec (wk-comp-comm (lift p) (lift q) t)
+                                                    (wk-comp-comm p q t₁)
+                                                    (wk-comp-comm p q t₂)
+                                                    (wk-comp-comm p q t₃)
 
 wkIndex-step : ∀ {A} pr → wk1 (wk pr A) ≡ wk (step pr) A
 wkIndex-step pr = wk-comp-comm (step id) pr _
@@ -134,7 +141,7 @@ subst-wk-dist (lam t) n = cong lam (subst-wk-dist t (suc n))
 subst-wk-dist (t ∘ t₁) n = cong₂ _∘_ (subst-wk-dist t n) (subst-wk-dist t₁ n)
 subst-wk-dist zero n = refl
 subst-wk-dist (suc t) n = cong suc (subst-wk-dist t n)
-subst-wk-dist (natrec t t₁ t₂) n = cong₃ natrec (subst-wk-dist t (suc n)) (subst-wk-dist t₁ n) (subst-wk-dist t₂ n)
+subst-wk-dist (natrec t t₁ t₂ t₃) n = cong₄ natrec (subst-wk-dist t (suc n)) (subst-wk-dist t₁ n) (subst-wk-dist t₂ n) (subst-wk-dist t₃ n)
 
 wk-β : ∀ {pr a} t → wk pr (t [ a ]) ≡ wk (lift pr) t [ wk pr a ]
 wk-β t = subst-wk-dist t zero

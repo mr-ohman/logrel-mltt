@@ -19,13 +19,13 @@ data Term : Set where
   _∘_ : Term → Term → Term
   zero : Term
   suc : Term → Term
-  natrec : Term → Term → Term → Term -- first argument is a binder
+  natrec : Term → Term → Term → Term → Term -- first argument is a binder
 
 data Neutral : Term → Set where
   var : ∀ n → Neutral (var n)
   _∘_ : ∀ {k u} → Neutral u → Neutral (k ∘ u)
   suc : ∀ {k} → Neutral k → Neutral (suc k)
-  natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g ∘ k)
+  natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 data Wk : Set where
   id    : Wk
@@ -54,7 +54,7 @@ wk ρ (lam t) = lam (wk (lift ρ) t)
 wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
 wk ρ zero = zero
 wk ρ (suc t) = suc (wk ρ t)
-wk ρ (natrec t t₁ t₂) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂)
+wk ρ (natrec t t₁ t₂ t₃) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂) (wk ρ t₃)
 
 
 
@@ -121,7 +121,7 @@ subst σ (lam t) = lam (subst (liftSubst σ) t)
 subst σ (t ∘ t₁) = (subst σ t) ∘ (subst σ t₁)
 subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
-subst σ (natrec t t₁ t₂) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂)
+subst σ (natrec t t₁ t₂ t₃) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂) (subst σ t₃)
 
 unitSubst : Term → Subst
 unitSubst t zero = t
@@ -170,7 +170,7 @@ m == n =  ⌊ m ≟ n ⌋
 ↑ d c (t ∘ t₁) = ↑ d c t ∘ ↑ d c t₁
 ↑ d c zero = zero
 ↑ d c (suc t) = suc (↑ d c t)
-↑ d c (natrec t t₁ t₂) = natrec (↑ d c t) (↑ d c t₁) (↑ d c t₂)
+↑ d c (natrec t t₁ t₂ t₃) = natrec (↑ d c t) (↑ d c t₁) (↑ d c t₂) (↑ d c t₃)
 
 _↦_ : Nat → Term → Term → Term
 _↦_ j s U = U
@@ -181,4 +181,4 @@ _↦_ j s (lam t) = lam ((suc j ↦ ↑ suc 0 s) t)
 _↦_ j s (t ∘ t₁) = ((j ↦ s) t) ∘ ((j ↦ s) t₁)
 _↦_ j s zero = zero
 _↦_ j s (suc t) = suc ((j ↦ s) t)
-_↦_ j s (natrec t t₁ t₂) = natrec ((j ↦ s) t) ((j ↦ s) t₁) ((j ↦ s) t₂)
+_↦_ j s (natrec t t₁ t₂ t₃) = natrec ((j ↦ s) t) ((j ↦ s) t₁) ((j ↦ s) t₂) ((j ↦ s) t₃)
