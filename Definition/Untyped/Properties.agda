@@ -117,41 +117,167 @@ wk-comp-comm p q (natrec t t₁ t₂ t₃) = cong₄ natrec (wk-comp-comm (lift 
 wkIndex-step : ∀ {A} pr → wk1 (wk pr A) ≡ wk (step pr) A
 wkIndex-step pr = wk-comp-comm (step id) pr _
 
-wkIndex-lift : ∀ {A} pr → wk1 (wk pr A) ≡ wk (lift pr) (wk (step id) A)
+wkIndex-lift : ∀ {A} pr → wk1 (wk pr A) ≡ wk (lift pr) (wk1 A)
 wkIndex-lift {A} pr = trans (wk-comp-comm (step id) pr A)
                             (trans (cong (λ x → wk x A) (lift-step-comp pr))
                                    (sym (wk-comp-comm (lift pr) (step id) A)))
 
-postulate TODO : ∀ {a} {A : Set a} → A
+-- Weakening and substitution
 
-subst-wk-var : ∀ {pr a} x n → wk (iterate lift pr n) (iterate liftSubst (unitSubst a) n x)
-  ≡ iterate liftSubst (unitSubst (wk pr a)) n (wkNat (iterate lift (lift pr) n) x)
-subst-wk-var zero zero = refl
-subst-wk-var (suc x) zero = refl
-subst-wk-var zero (suc n) = refl
-subst-wk-var (suc x) (suc n) = TODO
+substVar-liftSubst : ∀ {ρ ρ'} → (∀ m → substVar ρ m ≡ substVar ρ' m)
+      → (n : Nat) → substVar (liftSubst ρ) n ≡ substVar (liftSubst ρ') n
+substVar-liftSubst prf zero = refl
+substVar-liftSubst prf (suc n) = cong wk1 (prf n)
 
-subst-wk-dist : ∀ {pr a} t n → wk (iterate lift pr n) (subst (iterate liftSubst (unitSubst a) n) t)
-  ≡ subst (iterate liftSubst (unitSubst (wk pr a)) n) (wk (iterate lift (lift pr) n) t)
-subst-wk-dist U n = refl
-subst-wk-dist (Π t ▹ t₁) n = cong₂ Π_▹_ (subst-wk-dist t n) (subst-wk-dist t₁ (suc n))
-subst-wk-dist ℕ n = refl
-subst-wk-dist (var x) n = subst-wk-var x n
-subst-wk-dist (lam t) n = cong lam (subst-wk-dist t (suc n))
-subst-wk-dist (t ∘ t₁) n = cong₂ _∘_ (subst-wk-dist t n) (subst-wk-dist t₁ n)
-subst-wk-dist zero n = refl
-subst-wk-dist (suc t) n = cong suc (subst-wk-dist t n)
-subst-wk-dist (natrec t t₁ t₂ t₃) n = cong₄ natrec (subst-wk-dist t (suc n)) (subst-wk-dist t₁ n) (subst-wk-dist t₂ n) (subst-wk-dist t₃ n)
+subst-liftSubst : ∀ {ρ ρ'} t → (∀ n → ρ n ≡ ρ' n) → subst (liftSubst ρ) t ≡ subst (liftSubst ρ') t
+subst-liftSubst U prf = refl
+subst-liftSubst (Π t ▹ t₁) prf = cong₂ Π_▹_ (subst-liftSubst t prf) (subst-liftSubst t₁ (substVar-liftSubst prf))
+subst-liftSubst ℕ prf = refl
+subst-liftSubst (var x) prf = substVar-liftSubst prf x
+subst-liftSubst (lam t) prf = cong lam (subst-liftSubst t (substVar-liftSubst prf))
+subst-liftSubst (t ∘ t₁) prf = cong₂ _∘_ (subst-liftSubst t prf) (subst-liftSubst t₁ prf)
+subst-liftSubst zero prf = refl
+subst-liftSubst (suc t) prf = cong suc (subst-liftSubst t prf)
+subst-liftSubst (natrec t t₁ t₂ t₃) prf = cong₄ natrec (subst-liftSubst t (substVar-liftSubst prf)) (subst-liftSubst t₁ prf) (subst-liftSubst t₂ prf) (subst-liftSubst t₃ prf)
+
+substVar-wkSubst-liftSubst : ∀ {pr ρ} n → substVar (wkSubst (lift pr) (liftSubst ρ)) n ≡ substVar (liftSubst (wkSubst pr ρ)) n
+substVar-wkSubst-liftSubst zero = refl
+substVar-wkSubst-liftSubst (suc n) = sym (wkIndex-lift _)
+
+wkSubst-liftSubst : ∀ {pr ρ} t → subst (wkSubst (lift pr) (liftSubst ρ)) t ≡
+      subst (liftSubst (wkSubst pr ρ)) t
+wkSubst-liftSubst U = refl
+wkSubst-liftSubst (Π t ▹ t₁) = cong₂ Π_▹_ (wkSubst-liftSubst t) ((subst-liftSubst t₁ substVar-wkSubst-liftSubst))
+wkSubst-liftSubst ℕ = refl
+wkSubst-liftSubst (var x) = substVar-wkSubst-liftSubst x
+wkSubst-liftSubst (lam t) = cong lam (subst-liftSubst t substVar-wkSubst-liftSubst)
+wkSubst-liftSubst (t ∘ t₁) = cong₂ _∘_ (wkSubst-liftSubst t) (wkSubst-liftSubst t₁)
+wkSubst-liftSubst zero = refl
+wkSubst-liftSubst (suc t) = cong suc (wkSubst-liftSubst t)
+wkSubst-liftSubst (natrec t t₁ t₂ t₃) = cong₄ natrec (subst-liftSubst t substVar-wkSubst-liftSubst) (wkSubst-liftSubst t₁) (wkSubst-liftSubst t₂) (wkSubst-liftSubst t₃)
+
+substVar-purge-liftSubst : ∀ {pr ρ} (n : Nat) →
+      substVar (purge (lift pr) (liftSubst ρ)) n ≡ substVar (liftSubst (purge pr ρ)) n
+substVar-purge-liftSubst zero = refl
+substVar-purge-liftSubst (suc n) = refl
+
+purge-liftSubst : ∀ {pr ρ} t → subst (purge (lift pr) (liftSubst ρ)) t ≡
+      subst (liftSubst (purge pr ρ)) t
+purge-liftSubst U = refl
+purge-liftSubst (Π t ▹ t₁) = cong₂ Π_▹_ (purge-liftSubst t) (subst-liftSubst t₁ substVar-purge-liftSubst)
+purge-liftSubst ℕ = refl
+purge-liftSubst (var x) = substVar-purge-liftSubst x
+purge-liftSubst (lam t) = cong lam (subst-liftSubst t substVar-purge-liftSubst)
+purge-liftSubst (t ∘ t₁) = cong₂ _∘_ (purge-liftSubst t) (purge-liftSubst t₁)
+purge-liftSubst zero = refl
+purge-liftSubst (suc t) = cong suc (purge-liftSubst t)
+purge-liftSubst (natrec t t₁ t₂ t₃) = cong₄ natrec (subst-liftSubst t substVar-purge-liftSubst) (purge-liftSubst t₁) (purge-liftSubst t₂) (purge-liftSubst t₃)
+
+wk-subst : ∀ {pr ρ} t → wk pr (subst ρ t) ≡ subst (wkSubst pr ρ) t
+wk-subst U = refl
+wk-subst (Π t ▹ t₁) = cong₂ Π_▹_ (wk-subst t) (trans (wk-subst t₁) (wkSubst-liftSubst t₁))
+wk-subst ℕ = refl
+wk-subst (var x) = refl
+wk-subst (lam t) = cong lam (trans (wk-subst t) (wkSubst-liftSubst t))
+wk-subst (t ∘ t₁) = cong₂ _∘_ (wk-subst t) (wk-subst t₁)
+wk-subst zero = refl
+wk-subst (suc t) = cong suc (wk-subst t)
+wk-subst (natrec t t₁ t₂ t₃) = cong₄ natrec (trans (wk-subst t) (wkSubst-liftSubst t)) (wk-subst t₁) (wk-subst t₂) (wk-subst t₃)
+
+subst-wk : ∀ {pr ρ} t → subst ρ (wk pr t) ≡ subst (purge pr ρ) t
+subst-wk U = refl
+subst-wk (Π t ▹ t₁) = cong₂ Π_▹_ (subst-wk t) (trans (subst-wk t₁) (purge-liftSubst t₁))
+subst-wk ℕ = refl
+subst-wk (var x) = refl
+subst-wk (lam t) = cong lam (trans (subst-wk t) (purge-liftSubst t))
+subst-wk (t ∘ t₁) = cong₂ _∘_ (subst-wk t) (subst-wk t₁)
+subst-wk zero = refl
+subst-wk (suc t) = cong suc (subst-wk t)
+subst-wk (natrec t t₁ t₂ t₃) = cong₄ natrec (trans (subst-wk t) (purge-liftSubst t)) (subst-wk t₁) (subst-wk t₂) (subst-wk t₃)
+
+-- Beta reduction weakening
+
+substVar-wk-β-lemma : ∀ {pr a} (n : Nat) →
+      purge (lift pr) (consSubst idSubst (wk pr a)) n ≡
+      wkSubst pr (consSubst idSubst a) n
+substVar-wk-β-lemma zero = refl
+substVar-wk-β-lemma (suc n) = refl
+
+wk-β-lemma : ∀ {pr a} t → subst (purge (lift pr) (consSubst idSubst (wk pr a))) t ≡
+      subst (wkSubst pr (consSubst idSubst a)) t
+wk-β-lemma U = refl
+wk-β-lemma (Π t ▹ t₁) = cong₂ Π_▹_ (wk-β-lemma t) (subst-liftSubst t₁ substVar-wk-β-lemma)
+wk-β-lemma ℕ = refl
+wk-β-lemma (var x) = substVar-wk-β-lemma x
+wk-β-lemma (lam t) = cong lam (subst-liftSubst t substVar-wk-β-lemma)
+wk-β-lemma (t ∘ t₁) = cong₂ _∘_ (wk-β-lemma t) (wk-β-lemma t₁)
+wk-β-lemma zero = refl
+wk-β-lemma (suc t) = cong suc (wk-β-lemma t)
+wk-β-lemma (natrec t t₁ t₂ t₃) = cong₄ natrec (subst-liftSubst t substVar-wk-β-lemma) (wk-β-lemma t₁) (wk-β-lemma t₂) (wk-β-lemma t₃)
 
 wk-β : ∀ {pr a} t → wk pr (t [ a ]) ≡ wk (lift pr) t [ wk pr a ]
-wk-β t = subst-wk-dist t zero
+wk-β t = trans (wk-subst t) (sym (trans (subst-wk t) (wk-β-lemma t)))
 
-wk-β-natrec : ∀ {pr} G →
+substVar-wk-β-lemma↑ : ∀ {pr a} (n : Nat) →
+      purge (lift pr) (consSubst (wk1Subst idSubst) (wk (lift pr) a)) n ≡
+      wkSubst (lift pr) (consSubst (wk1Subst idSubst) a) n
+substVar-wk-β-lemma↑ zero = refl
+substVar-wk-β-lemma↑ (suc n) = refl
+
+wk-β-lemma↑ : ∀ {pr a} t → subst (purge (lift pr) (consSubst (wk1Subst idSubst) (wk (lift pr) a)))
+      t
+      ≡ subst (wkSubst (lift pr) (consSubst (wk1Subst idSubst) a)) t
+wk-β-lemma↑ U = refl
+wk-β-lemma↑ (Π t ▹ t₁) = cong₂ Π_▹_ (wk-β-lemma↑ t) (subst-liftSubst t₁ substVar-wk-β-lemma↑)
+wk-β-lemma↑ ℕ = refl
+wk-β-lemma↑ (var x) = substVar-wk-β-lemma↑ x
+wk-β-lemma↑ (lam t) = cong lam (subst-liftSubst t substVar-wk-β-lemma↑)
+wk-β-lemma↑ (t ∘ t₁) = cong₂ _∘_ (wk-β-lemma↑ t) (wk-β-lemma↑ t₁)
+wk-β-lemma↑ zero = refl
+wk-β-lemma↑ (suc t) = cong suc (wk-β-lemma↑ t)
+wk-β-lemma↑ (natrec t t₁ t₂ t₃) = cong₄ natrec (subst-liftSubst t substVar-wk-β-lemma↑) (wk-β-lemma↑ t₁) (wk-β-lemma↑ t₂) (wk-β-lemma↑ t₃)
+
+wk-β↑ : ∀ {pr a} t → wk (lift pr) (t [ a ]↑) ≡ wk (lift pr) t [ wk (lift pr) a ]↑
+wk-β↑ t = trans (wk-subst t) (sym (trans (subst-wk t) (wk-β-lemma↑ t)))
+
+-- Natrec beta-reduction weakening
+
+substVar-natrec-lemma : ∀ {pr} → (n : Nat) →
+      purge (lift pr)
+      (wkSubst (step id) (consSubst (wk1Subst idSubst) (suc (var zero))))
+      n
+      ≡
+      wkSubst (step (lift pr))
+      (consSubst (wk1Subst var) (suc (var zero))) n
+substVar-natrec-lemma zero = refl
+substVar-natrec-lemma (suc n) = refl
+
+natrec-lemma : ∀ {pr} G → subst
+      (purge (lift pr)
+       (wkSubst (step id)
+        (consSubst (wk1Subst idSubst) (suc (var zero)))))
+      G
+      ≡
+      subst
+      (wkSubst (step (lift pr))
+       (consSubst (wk1Subst var) (suc (var zero))))
+      G
+natrec-lemma U = refl
+natrec-lemma (Π G ▹ G₁) = cong₂ Π_▹_ (natrec-lemma G) (subst-liftSubst G₁ substVar-natrec-lemma)
+natrec-lemma ℕ = refl
+natrec-lemma (var x) = substVar-natrec-lemma x
+natrec-lemma (lam G) = cong lam (subst-liftSubst G substVar-natrec-lemma)
+natrec-lemma (G ∘ G₁) = cong₂ _∘_ (natrec-lemma G) (natrec-lemma G₁)
+natrec-lemma zero = refl
+natrec-lemma (suc G) = cong suc (natrec-lemma G)
+natrec-lemma (natrec G G₁ G₂ G₃) = cong₄ natrec (subst-liftSubst G substVar-natrec-lemma) (natrec-lemma G₁) (natrec-lemma G₂) (natrec-lemma G₃)
+
+wk-β-natrec : ∀ pr G →
       Π ℕ ▹
-      (Π wk (lift pr) (G [ var zero ]) ▹
-       wk (lift (lift pr)) (G [ suc (var (suc zero)) ]))
+      (Π wk (lift pr) G ▹
+       wk (lift (lift pr)) (wk1 (G [ suc (var zero) ]↑)))
       ≡
       Π ℕ ▹
-        (Π wk (lift pr) G [ var zero ] ▹
-       (wk (lift pr) G [ suc (var (suc zero)) ]))
-wk-β-natrec G = TODO
+      (wk (lift pr) G ▹▹
+       wk (lift pr) G [ suc (var zero) ]↑)
+wk-β-natrec pr G = cong₂ Π_▹_ refl (cong₂ Π_▹_ refl (trans (wk-comp-comm (lift (lift pr)) (step id) (subst (consSubst (wk1Subst var) (suc (var zero))) G)) (trans (wk-subst G) (sym (trans (wk-subst (wk (lift pr) G)) (trans (subst-wk G) (natrec-lemma G)))))))
