@@ -27,12 +27,12 @@ mutual
     ℕ      : ⊢ Γ → Γ ⊢ ℕ ∷ U
     Π_▹_   : ∀ {F G} → Γ ⊢ F ∷ U → Γ ∙ F ⊢ G ∷ U → Γ ⊢ Π F ▹ G ∷ U
     var    : ∀ {A x} → ⊢ Γ → x ∷ A ∈ Γ → Γ ⊢ var x ∷ A
-    lam    : ∀ {F G t} → {- Γ ⊢ F → -} Γ ∙ F ⊢ t ∷ G → Γ ⊢ lam t ∷ Π F ▹ G
+    lam    : ∀ {F G t} → Γ ⊢ F → Γ ∙ F ⊢ t ∷ G → Γ ⊢ lam t ∷ Π F ▹ G
     _∘_    : ∀ {g a F G} → Γ ⊢ g ∷ Π F ▹ G → Γ ⊢ a ∷ F → Γ ⊢ g ∘ a ∷ G [ a ]
     zero   : ⊢ Γ → Γ ⊢ zero ∷ ℕ
     suc    : ∀ {n} → Γ ⊢ n ∷ ℕ → Γ ⊢ suc n ∷ ℕ
     natrec : ∀ {G s z n} → Γ ∙ ℕ ⊢ G → Γ ⊢ z ∷ G [ zero ]
-           → Γ ⊢ s ∷ Π ℕ ▹ Π G [ var zero ] ▹ G [ suc (var (suc zero)) ]
+           → Γ ⊢ s ∷ Π ℕ ▹ (G ▹▹ G [ suc (var zero) ]↑)
            → Γ ⊢ n ∷ ℕ
            → Γ ⊢ natrec G z s n ∷ G [ n ]
     conv   : ∀ {t A B} → Γ ⊢ t ∷ A → Γ ⊢ A ≡ B → Γ ⊢ t ∷ B
@@ -42,7 +42,7 @@ mutual
     refl   : ∀ {A} → Γ ⊢ A → Γ ⊢ A ≡ A
     sym    : ∀ {A B} → Γ ⊢ A ≡ B → Γ ⊢ B ≡ A
     trans  : ∀ {A B C} → Γ ⊢ A ≡ B → Γ ⊢ B ≡ C → Γ ⊢ A ≡ C
-    Π-cong : ∀ {E F G H} → Γ ⊢ F ≡ H → Γ ∙ F ⊢ G ≡ E
+    Π-cong : ∀ {E F G H} → Γ ⊢ F → Γ ⊢ F ≡ H → Γ ∙ F ⊢ G ≡ E
            → Γ ⊢ Π F ▹ G ≡ Π H ▹ E
 
   data _⊢_≡_∷_ (Γ : Con Term) : Term → Term → Term → Set where
@@ -50,26 +50,25 @@ mutual
     sym      : ∀ {t u A} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ u ≡ t ∷ A
     trans    : ∀ {t u r A} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ u ≡ r ∷ A → Γ ⊢ t ≡ r ∷ A
     conv     : ∀ {A B t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ A ≡ B → Γ ⊢ t ≡ u ∷ B
-    Π-cong   : ∀ {E F G H} → Γ ⊢ F ≡ H ∷ U → Γ ∙ F ⊢ G ≡ E ∷ U
+    Π-cong   : ∀ {E F G H} → Γ ⊢ F → Γ ⊢ F ≡ H ∷ U → Γ ∙ F ⊢ G ≡ E ∷ U
              → Γ ⊢ Π F ▹ G ≡ Π H ▹ E ∷ U
     app-cong : ∀ {a b f g F G} → Γ ⊢ f ≡ g ∷ Π F ▹ G → Γ ⊢ a ≡ b ∷ F
              → Γ ⊢ f ∘ a ≡ g ∘ b ∷ G [ a ]
-    β-red    : ∀ {a b F G} → Γ ∙ F ⊢ b ∷ G → Γ ⊢ a ∷ F
+    β-red    : ∀ {a b F G} → Γ ⊢ F → Γ ∙ F ⊢ b ∷ G → Γ ⊢ a ∷ F
              → Γ ⊢ (lam b) ∘ a ≡ b [ a ] ∷ G [ a ]
-    fun-ext  : ∀ {f g F G} → Γ ⊢ f ∷ Π F ▹ G → Γ ⊢ g ∷ Π F ▹ G
+    fun-ext  : ∀ {f g F G} → Γ ⊢ F → Γ ⊢ f ∷ Π F ▹ G → Γ ⊢ g ∷ Π F ▹ G
              → Γ ∙ F ⊢ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
              → Γ ⊢ f ≡ g ∷ Π F ▹ G
     suc-cong : ∀ {m n} → Γ ⊢ m ≡ n ∷ ℕ → Γ ⊢ suc m ≡ suc n ∷ ℕ
-    -- make the natural number the 4th argument of natrec instead of using _∘_
     natrec-cong : ∀ {z z' s s' n n' F F'} → Γ ∙ ℕ ⊢ F ≡ F' → Γ ⊢ z ≡ z' ∷ F [ zero ]
-                → Γ ⊢ s ≡ s' ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
+                → Γ ⊢ s ≡ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
                 → Γ ⊢ n ≡ n' ∷ ℕ
                 → Γ ⊢ natrec F z s n ≡ natrec F' z' s' n' ∷ F [ n ]
     natrec-zero : ∀ {z s F} → Γ ∙ ℕ ⊢ F → Γ ⊢ z ∷ F [ zero ]
-                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
+                → Γ ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
                 → Γ ⊢ natrec F z s zero ≡ z ∷ F [ zero ]
     natrec-suc  : ∀ {n z s F} → Γ ⊢ n ∷ ℕ → Γ ∙ ℕ ⊢ F → Γ ⊢ z ∷ F [ zero ]
-                → Γ ⊢ s ∷ Π ℕ ▹ Π F [ var zero ] ▹ F [ suc (var (suc zero)) ] -- fix substitutions like below
+                → Γ ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
                 → Γ ⊢ natrec F z s (suc n) ≡ (s ∘ n) ∘ (natrec F z s n)
                     ∷ F [ suc n ]
 
@@ -77,18 +76,17 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   conv      : ∀ {A B t u} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ A ≡ B → Γ ⊢ t ⇒ u ∷ B
   app-subst : ∀ {A B t t' a} → Γ ⊢ t ⇒ t' ∷ Π A ▹ B → Γ ⊢ a ∷ A
             → Γ ⊢ t ∘ a ⇒ t' ∘ a ∷ B [ a ]
-  β-red     : ∀ {A B a t} → Γ ∙ A ⊢ t ∷ B → Γ ⊢ a ∷ A
+  β-red     : ∀ {A B a t} → Γ ⊢ A → Γ ∙ A ⊢ t ∷ B → Γ ⊢ a ∷ A
             → Γ ⊢ (lam t) ∘ a ⇒ t [ a ] ∷ B [ a ]
   natrec-subst : ∀ {C c g n n'} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
+               → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
                → Γ ⊢ n ⇒ n' ∷ ℕ
                → Γ ⊢ natrec C c g n ⇒ natrec C c g n' ∷ C [ n ]
   natrec-zero  : ∀ {C c g} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
+               → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
                → Γ ⊢ natrec C c g zero ⇒ c ∷ C [ zero ]
   natrec-suc   : ∀ {C c g n} → Γ ⊢ n ∷ ℕ → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-               → Γ ⊢ g ∷ Π ℕ ▹ Π C [ var zero ] {- C -} ▹ C [ suc (var (suc zero)) ] {- wk1 (C [ suc (var zero) ]) -}
-                        {- Π ℕ ▹ (C arr C [ suc (var zero) ]) -}
+               → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
                → Γ ⊢ natrec C c g (suc n) ⇒ (g ∘ n) ∘ (natrec C c g n)
                    ∷ C [ suc n ]
 

@@ -27,6 +27,10 @@ data Neutral : Term → Set where
   suc : ∀ {k} → Neutral k → Neutral (suc k)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
+data Natural : Term → Set where
+  suc : ∀ {n} → Natural n → Natural (suc n)
+  zero : Natural zero
+
 data Wk : Set where
   id    : Wk
   step  : Wk  → Wk
@@ -91,6 +95,9 @@ mutual
 
 -- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
 
+wkU : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
+wkU ρ = wk (toWk ρ)
+
 wk1 : Term → Term
 wk1 = wk (step id)
 
@@ -112,6 +119,9 @@ liftSubst : (σ : Subst) → Subst
 liftSubst σ zero = var zero
 liftSubst σ (suc x) = wk1Subst σ x
 
+purge : Wk → Subst → Subst
+purge pr σ x = σ (wkNat pr x)
+
 subst : (σ : Subst) (t : Term) → Term
 subst σ U = U
 subst σ (Π t ▹ t₁) = Π subst σ t ▹ subst (liftSubst σ) t₁
@@ -123,21 +133,21 @@ subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
 subst σ (natrec t t₁ t₂ t₃) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂) (subst σ t₃)
 
-unitSubst : Term → Subst
-unitSubst t zero = t
-unitSubst t (suc x) = idSubst x
-
-infix 25 _[_]
-_[_] : (t : Term) (s : Term) → Term
-t [ s ] = subst (unitSubst s) t
-
 consSubst : Subst → Term → Subst
 consSubst s t zero = t
 consSubst s t (suc n) = s n
 
-infixr 22 _arr_
-_arr_ : Term → Term → Term
-A arr B = Π A ▹ wk1 B
+infix 25 _[_]
+_[_] : (t : Term) (s : Term) → Term
+t [ s ] = subst (consSubst idSubst s) t
+
+infix 25 _[_]↑
+_[_]↑ : (t : Term) (s : Term) → Term
+t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
+
+infixr 22 _▹▹_
+_▹▹_ : Term → Term → Term
+A ▹▹ B = Π A ▹ wk1 B
 
 wkCon : Wk → Con Term → Con Term
 wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
