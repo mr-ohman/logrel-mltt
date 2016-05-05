@@ -17,7 +17,7 @@ infix 20 _⊩⁰_
 infix 22 _⊩⁰_≡_/_ _⊩⁰_∷_/_ _⊩⁰_≡_∷_/_
 
 mutual
-  -- split into small and big types ⊩⁰, ⊩¹
+  -- split into small and big types ⊩⁰, ⊩
   -- toSubst : Wk -> Subst
   -- maybe define something like [_,_] : Subst -> Term -> Term; [ s , t ] = subst (consSubst s t)
 
@@ -35,6 +35,8 @@ mutual
                       Δ ⊩⁰ a ≡ b ∷ wk (toWk ρ) F / [F] ρ → Δ ⊩⁰ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G [ b ] / [G] ρ [a])
        → Γ ⊩⁰ A
 
+
+
   _⊩⁰_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩⁰ A → Set
   Γ ⊩⁰ A ≡ B / ℕ  A⇒*ℕ = Γ ⊢ B ⇒* ℕ
   Γ ⊩⁰ A ≡ B / ne A⇒*K neK ⊢K = ∃ λ M → Γ ⊢ B ⇒* M × Neutral M × Γ ⊢ M
@@ -43,12 +45,12 @@ mutual
     → Γ ⊢ A ≡ B
     × Γ ⊩⁰ A
     × Γ ⊩⁰ B
-    × (Γ ⊩⁰ F ≡ F' / {![F] ⊆-refl!})
+    × (∀ {Δ} → (ρ : Γ ⊆ Δ) → Δ ⊩⁰ wk (toWk ρ) F ≡ wk (toWk ρ) F' / [F] ρ)
     × (∀ {Δ a} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ)
                → Δ ⊩⁰ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G' [ a ] / [G] ρ [a])
 
   _⊩⁰_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩⁰ A → Set
-  Γ ⊩⁰ t ∷ A / ℕ x = (∃ λ n → Γ ⊢ t ⇒* n ∷ ℕ × Natural n) ⊎ (∃ λ k → Γ ⊢ t ⇒* k ∷ ℕ × Neutral k)
+  Γ ⊩⁰ t ∷ A / ℕ x = (∃ λ n → Γ ⊢ t ⇒* n ∷ ℕ × Natural n) -- ⊎ (∃ λ k → Γ ⊢ t ⇒* k ∷ ℕ × Neutral k)
   Γ ⊩⁰ t ∷ A / ne x x₁ x₂ = Γ ⊢ t ∷ A
   Γ ⊩⁰ f ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = Γ ⊢ f ∷ A
     × (∀ {Δ a b} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ)
@@ -56,8 +58,7 @@ mutual
                  → Δ ⊩⁰ wk (toWk ρ) f ∘ a ≡ wk (toWk ρ) f ∘ b ∷ wk (lift (toWk ρ)) G [ a ] / [G] ρ [a])
 
   _⊩⁰_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩⁰ A → Set
-  Γ ⊩⁰ t ≡ u ∷ A / ℕ x = (∃ λ n → Natural n × Γ ⊢ t ⇒* n ∷ ℕ × Γ ⊢ u ⇒* n ∷ ℕ)
-                       ⊎ (∃₂ λ k k' → Neutral k × Neutral k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ)
+  Γ ⊩⁰ t ≡ u ∷ A / ℕ x = (∃₂ λ k k' → [Natural] (\ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ)
   Γ ⊩⁰ t ≡ u ∷ A / ne x x₁ x₂ = Γ ⊢ t ≡ u ∷ A
   Γ ⊩⁰ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ =
     let [A] = Π x x₁ x₂ [F] [G] x₃
@@ -142,3 +143,6 @@ mutual
   --   Π    : ∀ {A F G f g} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊩ f ∷ A → Γ ⊩ g ∷ A → Γ ⊢ f ≡ g ∷ A
   --        → (∀ {Δ a} → Γ ⊆ Δ → Δ ⊩ a ∷ F → Δ ⊩ f ∘ a ≡ g ∘ a ∷ G [ a ])
   --        → Γ ⊩ f ≡ g ∷ A
+
+
+  --  (p q : Γ ⊩⁰ A) → Γ ⊩⁰ A ≡ B / p → Γ ⊩⁰ A ≡ B / q

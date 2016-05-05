@@ -24,12 +24,17 @@ data Term : Set where
 data Neutral : Term → Set where
   var : ∀ n → Neutral (var n)
   _∘_ : ∀ {k u} → Neutral u → Neutral (k ∘ u)
-  suc : ∀ {k} → Neutral k → Neutral (suc k)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 data Natural : Term → Set where
   suc : ∀ {n} → Natural n → Natural (suc n)
   zero : Natural zero
+  ne : ∀ {n} → Neutral n → Natural n
+
+data [Natural] (R : Term → Term → Set) : Term → Term → Set where
+  suc : ∀ {n n'} → [Natural] R n n' → [Natural] R (suc n) (suc n')
+  zero : [Natural] R zero zero
+  ne : ∀ {n n'} → Neutral n → Neutral n' → R n n' → [Natural] R n n'
 
 data Wk : Set where
   id    : Wk
