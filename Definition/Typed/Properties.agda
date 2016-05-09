@@ -132,16 +132,6 @@ wkIndex (step pr) (⊢Δ ∙ x) i = let r = (wkIndex pr ⊢Δ i) in PE.subst (\ 
 wkIndex (lift pr) (⊢Δ ∙ x) (there i) = PE.subst (\ x → _ ∷ x ∈ _) (wkIndex-lift (toWk pr)) (there (wkIndex pr ⊢Δ i))
 wkIndex (lift pr) ⊢Δ here = PE.subst (let G = _; n = _ in \ x → n ∷ x ∈ G) (wkIndex-lift (toWk pr)) here
 
--- wkIndex : ∀ {Γ Δ x A} → (pr : Γ ⊆ Δ) →
---         let Δ' = wkCon (toWk pr) Δ
---             A' = U.wk (toWk pr) A
---             x' = wkNat (toWk pr) x
---         in  ⊢ Δ' → x ∷ A ∈ Γ → x' ∷ A' ∈ Δ'
--- wkIndex base ⊢Δ ()
--- wkIndex (step pr) (⊢Δ ∙ x) i = {!there (wkIndex pr ⊢Δ i)!}
--- wkIndex (lift pr) (⊢Δ ∙ x) here = {!here!}
--- wkIndex (lift pr) (⊢Δ ∙ x) (there i) = {!there (wkIndex pr ⊢Δ i)!}
-
 mutual
   wk : ∀ {Γ Δ A} → (pr : Γ ⊆ Δ) →
      let Δ' = Δ
@@ -214,7 +204,14 @@ mutual
                            (PE.sym (wk-β b))
                            (β-red y (wkTerm (lift pr) (⊢Δ ∙ y) x₁) (wkTerm pr ⊢Δ x₂)))
   wkEqTerm pr ⊢Δ (fun-ext x x₁ x₂ x₃) =
-    let y = wk pr ⊢Δ x in fun-ext y (wkTerm pr ⊢Δ x₁) (wkTerm pr ⊢Δ x₂) (PE.subst (λ t → _ ⊢ t ∘ _ ≡ _ ∷ _) (PE.sym (wkIndex-lift (toWk pr))) (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _) (PE.sym (wkIndex-lift (toWk pr))) (wkEqTerm (lift pr) (⊢Δ ∙ y) x₃)))
+    let y = wk pr ⊢Δ x
+    in fun-ext y (wkTerm pr ⊢Δ x₁)
+                 (wkTerm pr ⊢Δ x₂)
+                 (PE.subst (λ t → _ ⊢ t ∘ _ ≡ _ ∷ _)
+                           (PE.sym (wkIndex-lift (toWk pr)))
+                           (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
+                                     (PE.sym (wkIndex-lift (toWk pr)))
+                                     (wkEqTerm (lift pr) (⊢Δ ∙ y) x₃)))
   wkEqTerm pr ⊢Δ (suc-cong x) = suc-cong (wkEqTerm pr ⊢Δ x)
   wkEqTerm {Δ = Δ} pr ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F} x x₁ x₂ x₃) =
     PE.subst (λ x₄ → Δ ⊢ natrec _ _ _ _ ≡ _ ∷ x₄) (PE.sym (wk-β F))
@@ -233,6 +230,67 @@ mutual
                          (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x₁)
                          (PE.subst (λ y → Δ ⊢ U.wk (toWk pr) z ∷ y) (wk-β F) (wkTerm pr ⊢Δ x₂))
                          (PE.subst (λ y → Δ ⊢ U.wk (toWk pr) s ∷ y) (wk-β-natrec (toWk pr) F) (wkTerm pr ⊢Δ x₃)))
+
+mutual
+  wkRed : ∀ {Γ Δ A B} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               B' = U.wk (toWk pr) B
+           in ⊢ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A' ⇒ B'
+  wkRed pr ⊢Δ (univ x) = univ (wkRedTerm pr ⊢Δ x)
+
+  wkRedTerm : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               t' = U.wk (toWk pr) t
+               u' = U.wk (toWk pr) u
+           in ⊢ Δ → Γ ⊢ t ⇒ u ∷ A → Δ ⊢ t' ⇒ u' ∷ A'
+  wkRedTerm pr ⊢Δ (conv r x) = conv (wkRedTerm pr ⊢Δ r) (wkEq pr ⊢Δ x)
+  wkRedTerm pr ⊢Δ (app-subst {B = B} r x) =
+    PE.subst (λ x₁ → _ ⊢ _ ⇒ _ ∷ x₁) (PE.sym (wk-β B))
+             (app-subst (wkRedTerm pr ⊢Δ r) (wkTerm pr ⊢Δ x))
+  wkRedTerm pr ⊢Δ (β-red {A} {B} {a} {t} x x₁ x₂) =
+    PE.subst (λ x₃ → _ ⊢ _ ⇒ _ ∷ x₃) (PE.sym (wk-β B))
+             ((PE.subst (λ x₂ → _ ⊢ U.wk (toWk pr) ((lam t) ∘ a) ⇒ x₂ ∷ _) (PE.sym (wk-β t))
+                        (let y = wk pr ⊢Δ x
+                         in  β-red y (wkTerm (lift pr) (⊢Δ ∙ y) x₁) (wkTerm pr ⊢Δ x₂))))
+  wkRedTerm {Δ = Δ} pr ⊢Δ (natrec-subst {C} {g = g} x x₁ x₂ r) =
+    PE.subst (λ x₃ → _ ⊢ natrec _ _ _ _ ⇒ _ ∷ x₃) (PE.sym (wk-β C))
+             (natrec-subst (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x)
+                           (PE.subst (λ x₃ → _ ⊢ _ ∷ x₃) (wk-β C)
+                                     (wkTerm pr ⊢Δ x₁))
+                           (PE.subst (λ x₃ → Δ ⊢ U.wk (toWk pr) g ∷ x₃)
+                                     (wk-β-natrec (toWk pr) C)
+                                     (wkTerm pr ⊢Δ x₂))
+                           (wkRedTerm pr ⊢Δ r))
+  wkRedTerm {Δ = Δ} pr ⊢Δ (natrec-zero {C} {g = g} x x₁ x₂) =
+    PE.subst (λ x₃ → _ ⊢ natrec (U.wk (lift (toWk pr)) C) _ _ _ ⇒ _ ∷ x₃) (PE.sym (wk-β C))
+             (natrec-zero (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x)
+                          (PE.subst (λ x₃ → _ ⊢ _ ∷ x₃) (wk-β C)
+                                    (wkTerm pr ⊢Δ x₁))
+                          (PE.subst (λ x₃ → Δ ⊢ U.wk (toWk pr) g ∷ x₃) (wk-β-natrec (toWk pr) C)
+                                    (wkTerm pr ⊢Δ x₂)))
+  wkRedTerm {Δ = Δ} pr ⊢Δ (natrec-suc {C} {g = g} x x₁ x₂ x₃) =
+    PE.subst (λ x₄ → _ ⊢ natrec _ _ _ _ ⇒ _ ∘ natrec _ _ _ _ ∷ x₄) (PE.sym (wk-β C))
+             (natrec-suc (wkTerm pr ⊢Δ x)
+                         (wk (lift pr) (⊢Δ ∙ ℕ ⊢Δ) x₁)
+                         (PE.subst (λ x₃ → _ ⊢ _ ∷ x₃) (wk-β C)
+                                   (wkTerm pr ⊢Δ x₂))
+                         (PE.subst (λ x₃ → Δ ⊢ U.wk (toWk pr) g ∷ x₃) (wk-β-natrec (toWk pr) C)
+                                   (wkTerm pr ⊢Δ x₃)))
+
+wkRed* : ∀ {Γ Δ A B} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               B' = U.wk (toWk pr) B
+           in ⊢ Δ → Γ ⊢ A ⇒* B → Δ ⊢ A' ⇒* B'
+wkRed* pr ⊢Δ (id A) = id (wk pr ⊢Δ A)
+wkRed* pr ⊢Δ (x ⇨ r) = (wkRed pr ⊢Δ x) ⇨ (wkRed* pr ⊢Δ r)
+
+wkRed*Term : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               t' = U.wk (toWk pr) t
+               u' = U.wk (toWk pr) u
+           in ⊢ Δ → Γ ⊢ t ⇒* u ∷ A → Δ ⊢ t' ⇒* u' ∷ A'
+wkRed*Term pr ⊢Δ (id t) = id (wkTerm pr ⊢Δ t)
+wkRed*Term pr ⊢Δ (x ⇨ r) = (wkRedTerm pr ⊢Δ x) ⇨ (wkRed*Term pr ⊢Δ r)
 
 -- -- Inverse typing lemmas
 
@@ -272,3 +330,33 @@ subsetTerm (conv x x₁) = conv (subsetTerm x) x₁
 
 subset : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
 subset (univ x) = univ (subsetTerm x)
+
+subset*Term : ∀ {Γ A t u} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ t ≡ u ∷ A
+subset*Term (id t) = refl t
+subset*Term (x ⇨ x₁) = trans (subsetTerm x) (subset*Term x₁)
+
+subset* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A ≡ B
+subset* (id A) = refl A
+subset* (x ⇨ x₁) = trans (subset x) (subset* x₁)
+
+-- mutual
+--   substEqTerm : ∀ {Γ t u A} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A
+--   substEqTerm (refl x) A = A
+--   substEqTerm (sym x) A = {!!}
+--   substEqTerm (trans x x₁) A = substEqTerm x₁ (substEqTerm x A)
+--   substEqTerm (conv x x₁) A₁ = {!!}
+--   substEqTerm (Π-cong x x₁ x₂) A = {!!}
+--   substEqTerm (app-cong x x₁) A = {!!}
+--   substEqTerm (β-red x x₁ x₂) A = {!!}
+--   substEqTerm (fun-ext x x₁ x₂ x₃) A = {!!}
+--   substEqTerm (suc-cong x) A = suc {!!}
+--   substEqTerm (natrec-cong x x₁ x₂ x₃) A = {!!}
+--   substEqTerm (natrec-zero x x₁ x₂) A = {!!}
+--   substEqTerm (natrec-suc x x₁ x₂ x₃) A = {!!}
+
+--   substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
+--   substEq (univ x) A = {!!}
+--   substEq (refl x) A = A
+--   substEq (sym eq) A = {!!}
+--   substEq (trans eq eq₁) A = substEq eq₁ (substEq eq A)
+--   substEq (Π-cong x eq eq₁) A = {!!}

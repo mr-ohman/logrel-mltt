@@ -94,11 +94,11 @@ data _⊢_⇒_ (Γ : Con Term) : Term → Term → Set where
   univ : ∀ {A B} → Γ ⊢ A ⇒ B ∷ U → Γ ⊢ A ⇒ B
 
 data _⊢_⇒*_∷_ (Γ : Con Term) : Term → Term → Term → Set where
-  id  : ∀ {A t} → Γ ⊢ t ⇒* t ∷ A
+  id  : ∀ {A t} → Γ ⊢ t ∷ A → Γ ⊢ t ⇒* t ∷ A
   _⇨_ : ∀ {A t t' u} → Γ ⊢ t ⇒ t' ∷ A → Γ ⊢ t' ⇒* u ∷ A → Γ ⊢ t ⇒* u ∷ A
 
 data _⊢_⇒*_ (Γ : Con Term) : Term → Term → Set where
-  id  : ∀ {A} → Γ ⊢ A ⇒* A
+  id  : ∀ {A} → Γ ⊢ A → Γ ⊢ A ⇒* A
   _⇨_ : ∀ {A A' B} → Γ ⊢ A ⇒ A' → Γ ⊢ A' ⇒* B → Γ ⊢ A ⇒* B
 
 _⊢_⇒⁺_∷_ : (Γ : Con Term) → Term → Term → Term → Set
