@@ -1,6 +1,3 @@
---{-# OPTIONS --no-positivity-check #-}
--- Temporary, should not be used with a final solution
-
 module Definition.LogicalRelation where
 
 open import Tools.Context
@@ -17,7 +14,7 @@ infix 20 _⊩⁰_
 infix 22 _⊩⁰_≡_/_ _⊩⁰_∷_/_ _⊩⁰_≡_∷_/_
 
 mutual
-  -- split into small and big types ⊩⁰, ⊩
+  -- split into small and big types ⊩⁰, ⊩¹
   -- toSubst : Wk -> Subst
   -- maybe define something like [_,_] : Subst -> Term -> Term; [ s , t ] = subst (consSubst s t)
 
@@ -29,10 +26,10 @@ mutual
     Π  : ∀ {F G A} → Γ ⊢ A ⇒* Π F ▹ G
        → Γ ⊢ F
        → Γ ∙ F ⊢ G
-       → ([F] : (∀ {Δ} → (ρ : Γ ⊆ Δ) → Δ ⊩⁰ wk (toWk ρ) F))
-       → ([G] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) → Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ → Δ ⊩⁰ wk (lift (toWk ρ)) G [ a ])
-       → (∀ {Δ a b} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ) →
-                      Δ ⊩⁰ a ≡ b ∷ wk (toWk ρ) F / [F] ρ → Δ ⊩⁰ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G [ b ] / [G] ρ [a])
+       → ([F] : (∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ wkₜ ρ F))
+       → ([G] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩⁰ wkLiftₜ ρ G [ a ])
+       → (∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ) →
+                      Δ ⊩⁰ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a])
        → Γ ⊩⁰ A
 
 
@@ -45,72 +42,93 @@ mutual
     → Γ ⊢ A ≡ B
     × Γ ⊩⁰ A
     × Γ ⊩⁰ B
-    × (∀ {Δ} → (ρ : Γ ⊆ Δ) → Δ ⊩⁰ wk (toWk ρ) F ≡ wk (toWk ρ) F' / [F] ρ)
-    × (∀ {Δ a} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ)
-               → Δ ⊩⁰ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G' [ a ] / [G] ρ [a])
+    × (∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ)
+    × (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+               → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a])
 
   _⊩⁰_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩⁰ A → Set
-  Γ ⊩⁰ t ∷ A / ℕ x = (∃ λ n → Γ ⊢ t ⇒* n ∷ ℕ × Natural n) -- ⊎ (∃ λ k → Γ ⊢ t ⇒* k ∷ ℕ × Neutral k)
+  Γ ⊩⁰ t ∷ A / ℕ x = ∃ λ n → Γ ⊢ t ⇒* n ∷ ℕ × Natural n
   Γ ⊩⁰ t ∷ A / ne x x₁ x₂ = Γ ⊢ t ∷ A
   Γ ⊩⁰ f ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = Γ ⊢ f ∷ A
-    × (∀ {Δ a b} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ)
-                 → Δ ⊩⁰ a ≡ b ∷ wk (toWk ρ) F / [F] ρ
-                 → Δ ⊩⁰ wk (toWk ρ) f ∘ a ≡ wk (toWk ρ) f ∘ b ∷ wk (lift (toWk ρ)) G [ a ] / [G] ρ [a])
+    × (∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                 → Δ ⊩⁰ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ
+                 → Δ ⊩⁰ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
 
   _⊩⁰_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩⁰ A → Set
-  Γ ⊩⁰ t ≡ u ∷ A / ℕ x = (∃₂ λ k k' → [Natural] (\ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ)
+  Γ ⊩⁰ t ≡ u ∷ A / ℕ x = ∃₂ λ k k' → [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ
   Γ ⊩⁰ t ≡ u ∷ A / ne x x₁ x₂ = Γ ⊢ t ≡ u ∷ A
   Γ ⊩⁰ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ =
     let [A] = Π x x₁ x₂ [F] [G] x₃
     in  Γ ⊩⁰ t ∷ A / [A]
     ×   Γ ⊩⁰ u ∷ A / [A]
     ×   Γ ⊢ t ≡ u ∷ A
-    ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩⁰ a ∷ wk (toWk ρ) F / [F] ρ)
-                 → Δ ⊩⁰ wk (toWk ρ) t ∘ a ≡ wk (toWk ρ) u ∘ a ∷ wk (lift (toWk ρ)) G [ a ] / [G] ρ [a])
+    ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                 → Δ ⊩⁰ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
 
 mutual
-  data _⊩_ (Γ : Con Term) : Term → Set where
-    U  : Γ ⊩ U
-    ℕ  : Γ ⊩ ℕ
+  data _⊩¹_ (Γ : Con Term) : Term → Set where
+    U  : Γ ⊩¹ U
+    ℕ  : Γ ⊩¹ ℕ
     Π  : ∀ {F G}
-       → Γ ⊢ F → Γ ∙ F ⊢ G → Γ ⊩ F
-       → ([F] : (∀ {Δ} → (ρ : Γ ⊆ Δ) → Δ ⊩ wk (toWk ρ) F))
-       → ([G] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) → Δ ⊩ a ∷ wk (toWk ρ) F / [F] ρ → Δ ⊩ wk (lift (toWk ρ)) G [ a ])
-       → (∀ {Δ a b} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩ a ∷ wk (toWk ρ) F / [F] ρ)
-                    → Δ ⊩ a ≡ b ∷ wk (toWk ρ) F / [F] ρ → Δ ⊩ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G [ b ] / [G] ρ [a])
-       → Γ ⊩ Π F ▹ G
-    emb : ∀ {A} → Γ ⊩⁰ A → Γ ⊩ A
+       → Γ ⊢ F → Γ ∙ F ⊢ G → Γ ⊩¹ F
+       → ([F] : (∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F))
+       → ([G] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ])
+       → (∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                    → Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a])
+       → Γ ⊩¹ Π F ▹ G
+    emb : ∀ {A} → Γ ⊩⁰ A → Γ ⊩¹ A
 
-  _⊩_≡_/_ : (Γ : Con Term) (B : Term) → Term → Γ ⊩ B → Set
-  Γ ⊩ .U ≡ t / U = t PE.≡ U
-  Γ ⊩ .ℕ ≡ t / ℕ = t PE.≡ ℕ
-  Γ ⊩ .(Π F ▹ G) ≡ t / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext = ∃₂ λ F' G' → Term.Π F ▹ G PE.≡ Π F' ▹ G' ×
-              (∀ {Δ} (ρ : Γ ⊆ Δ) → Δ ⊩ wk (toWk ρ) F ≡ wk (toWk ρ)  F' / [F] ρ) ×
-              ((∀ {Δ a} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩ a ∷ wk (toWk ρ) F / [F] ρ) →
-                          Δ ⊩ wk (lift (toWk ρ)) G [ a ] ≡ wk (lift (toWk ρ)) G' [ a ] / [G] ρ [a]))
-  Γ ⊩ A ≡ B / emb x = Γ ⊩⁰ A ≡ B / x
+  _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
+  Γ ⊩¹ .U ≡ t / U = t PE.≡ U
+  Γ ⊩¹ .ℕ ≡ t / ℕ = t PE.≡ ℕ
+  Γ ⊩¹ .(Π F ▹ G) ≡ t / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext = ∃₂ λ F' G'
+    → Term.Π F ▹ G PE.≡ Π F' ▹ G'
+    × t PE.≡ Π F' ▹ G'
+    × (∀ {Δ} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ)
+    × ((∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]))
+  Γ ⊩¹ A ≡ B / emb x = Γ ⊩⁰ A ≡ B / x
 
-  _⊩_∷_/_ : (Γ : Con Term) (t A : Term) →  Γ ⊩ A → Set
-  Γ ⊩ A ∷ .U / U = Γ ⊢ A ∷ U × Γ ⊩⁰ A
-  Γ ⊩ a ∷ .ℕ / ℕ = (∃ λ n → Γ ⊢ a ⇒* n ∷ ℕ × Natural n) ⊎ (∃ λ k → Γ ⊢ a ⇒* k ∷ ℕ × Neutral k)
-  Γ ⊩ f ∷ .(Π F ▹ G) / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext = Γ ⊢ f ∷ Π F ▹ G
-    × (∀ {Δ a b} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩ a ∷ wk (toWk ρ) F / [F] ρ)
-                 → Δ ⊩ a ≡ b ∷ wk (toWk ρ) F / [F] ρ
-                 → Δ ⊩ wk (toWk ρ) f ∘ a ≡ wk (toWk ρ) f ∘ b ∷ wk (lift (toWk ρ)) G [ a ] / [G] ρ [a])
-  Γ ⊩ t ∷ A / emb x = Γ ⊩⁰ t ∷ A / x
+  _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
+  Γ ⊩¹ A ∷ .U / U = Γ ⊢ A ∷ U × Γ ⊩⁰ A
+  Γ ⊩¹ a ∷ .ℕ / ℕ = ∃ λ n → Γ ⊢ a ⇒* n ∷ ℕ × Natural n
+  Γ ⊩¹ f ∷ .(Π F ▹ G) / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext = Γ ⊢ f ∷ Π F ▹ G
+    × (∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                 → Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ
+                 → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+  Γ ⊩¹ t ∷ A / emb x = Γ ⊩⁰ t ∷ A / x
 
-  _⊩_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩ A → Set
-  Γ ⊩ t ≡ u ∷ .U / U = Γ ⊢ t ∷ U × Γ ⊢ u ∷ U × Γ ⊩⁰ u × Σ (Γ ⊩⁰ t) (λ t₀ → Γ ⊩⁰ t ≡ u / t₀)
-  Γ ⊩ t ≡ u ∷ .ℕ / ℕ = (∃ λ n → Natural n × Γ ⊢ t ⇒* n ∷ ℕ × Γ ⊢ u ⇒* n ∷ ℕ)
-                       ⊎ (∃₂ λ k k' → Neutral k × Neutral k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ)
-  Γ ⊩ t ≡ u ∷ .(Π F ▹ G) / Π {F} {G} x x₁ x₂ [F] [G] x₃ =
+  _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
+  Γ ⊩¹ t ≡ u ∷ .U / U = Γ ⊢ t ∷ U × Γ ⊢ u ∷ U × Γ ⊩⁰ u × Σ (Γ ⊩⁰ t) (λ t₀ → Γ ⊩⁰ t ≡ u / t₀)
+  Γ ⊩¹ t ≡ u ∷ .ℕ / ℕ = ∃₂ λ k k' → [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ
+  Γ ⊩¹ t ≡ u ∷ .(Π F ▹ G) / Π {F} {G} x x₁ x₂ [F] [G] x₃ =
     let [A] = Π x x₁ x₂ [F] [G] x₃
-    in  Γ ⊩ t ∷ Π F ▹ G / [A]
-    ×   Γ ⊩ u ∷ Π F ▹ G / [A]
+    in  Γ ⊩¹ t ∷ Π F ▹ G / [A]
+    ×   Γ ⊩¹ u ∷ Π F ▹ G / [A]
     ×   Γ ⊢ t ≡ u ∷ Π F ▹ G
-    ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) → ([a] : Δ ⊩ a ∷ wk (toWk ρ) F / [F] ρ)
-                 → Δ ⊩ wk (toWk ρ) t ∘ a ≡ wk (toWk ρ) u ∘ a ∷ wk (lift (toWk ρ)) G [ a ] / [G] ρ [a])
-  Γ ⊩ t ≡ u ∷ A / emb x = Γ ⊩⁰ t ≡ u ∷ A / x
+    ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                 → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+  Γ ⊩¹ t ≡ u ∷ A / emb x = Γ ⊩⁰ t ≡ u ∷ A / x
+
+data TypeLevel : Set where
+  ⁰ : TypeLevel
+  ¹ : TypeLevel
+
+_⊩⟨_⟩_ : (Γ : Con Term) (T : TypeLevel) → Term → Set
+Γ ⊩⟨ ⁰ ⟩ A = Γ ⊩⁰ A
+Γ ⊩⟨ ¹ ⟩ A = Γ ⊩¹ A
+
+_⊩⟨_⟩_≡_/_ : (Γ : Con Term) (T : TypeLevel) (A B : Term) → Γ ⊩⟨ T ⟩ A → Set
+Γ ⊩⟨ ⁰ ⟩ A ≡ B / [A] = Γ ⊩⁰ A ≡ B / [A]
+Γ ⊩⟨ ¹ ⟩ A ≡ B / [A] = Γ ⊩¹ A ≡ B / [A]
+
+_⊩⟨_⟩_∷_/_ : (Γ : Con Term) (T : TypeLevel) (t A : Term) → Γ ⊩⟨ T ⟩ A → Set
+Γ ⊩⟨ ⁰ ⟩ t ∷ A / [A] = Γ ⊩⁰ t ∷ A / [A]
+Γ ⊩⟨ ¹ ⟩ t ∷ A / [A] = Γ ⊩¹ t ∷ A / [A]
+
+_⊩⟨_⟩_≡_∷_/_ : (Γ : Con Term) (T : TypeLevel) (t u A : Term) → Γ ⊩⟨ T ⟩ A → Set
+Γ ⊩⟨ ⁰ ⟩ t ≡ u ∷ A / [A] = Γ ⊩⁰ t ≡ u ∷ A / [A]
+Γ ⊩⟨ ¹ ⟩ t ≡ u ∷ A / [A] = Γ ⊩¹ t ≡ u ∷ A / [A]
 
   -- data _⊩_≡_ (Γ : Con Term) : (B : Term) → Term → Set where
   --   U  : Γ ⊩ U ≡ U

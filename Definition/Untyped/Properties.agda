@@ -3,7 +3,7 @@ module Definition.Untyped.Properties where
 open import Data.Nat renaming (ℕ to Nat)
 open import Definition.Untyped
 open import Data.List using (List; []; _∷_)
-open import Relation.Binary.PropositionalEquality hiding ([_]; subst)
+open import Relation.Binary.PropositionalEquality as PE hiding ([_]; subst)
 open import Tools.Context
 open import Data.Unit
 
@@ -34,6 +34,9 @@ wkNat-id : (x : Nat) (n : Nat) → wkNat (iterate lift id n) x ≡ x
 wkNat-id x zero = refl
 wkNat-id zero (suc n) = refl
 wkNat-id (suc x) (suc n) = cong suc (wkNat-id x n)
+
+-- wk-lift-id : ∀ t → wk (lift id) t ≡ wk id t
+-- wk-lift-id t = {!!}
 
 wk-id : (x : Term) (n : Nat) → wk (iterate lift id n) x ≡ x
 wk-id U n = refl
@@ -84,6 +87,28 @@ idSubst-lemma₀ t = idSubst-lemma t zero
 -- wellscoped-lemma ρ (suc t) = cong suc (wellscoped-lemma ρ t)
 -- wellscoped-lemma ρ (natrec t t₁ t₂) =
 --   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
+
+-- Context subset properties
+
+-- mutual
+--   ⊆-refl : (Γ : Con Term) → Γ ⊆ Γ
+--   ⊆-refl ε = base
+--   ⊆-refl (Γ ∙ x) = PE.subst (λ x₁ → Γ ∙ x ⊆ Γ ∙ x₁) (wk-⊆-refl Γ x) (lift (⊆-refl Γ))
+
+--   wk-⊆-refl-lift : ∀ Γ t → wk (lift (toWk (⊆-refl Γ))) t ≡ wk (toWk (⊆-refl Γ)) t
+--   wk-⊆-refl-lift ε t = wk-lift-id t
+--   wk-⊆-refl-lift (Γ ∙ x) t = {!!}
+
+--   wk-⊆-refl : ∀ Γ t → wk (toWk (⊆-refl Γ)) t ≡ t
+--   wk-⊆-refl Γ U = refl
+--   wk-⊆-refl Γ (Π t ▹ t₁) = {!!}
+--   wk-⊆-refl Γ ℕ = refl
+--   wk-⊆-refl Γ (var x) = {!!}
+--   wk-⊆-refl Γ (lam t) = cong lam (trans (wk-⊆-refl-lift Γ t) (wk-⊆-refl Γ t))
+--   wk-⊆-refl Γ (t ∘ t₁) = {!!}
+--   wk-⊆-refl Γ zero = refl
+--   wk-⊆-refl Γ (suc t) = {!!}
+--   wk-⊆-refl Γ (natrec t t₁ t₂ t₃) = {!!}
 
 -- Composition properties
 

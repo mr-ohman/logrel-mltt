@@ -100,8 +100,11 @@ mutual
 
 -- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
 
-wkU : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
-wkU ρ = wk (toWk ρ)
+wkₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
+wkₜ ρ = wk (toWk ρ)
+
+wkLiftₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
+wkLiftₜ ρ = wk (lift (toWk ρ))
 
 wk1 : Term → Term
 wk1 = wk (step id)
@@ -123,6 +126,9 @@ idSubst = var
 liftSubst : (σ : Subst) → Subst
 liftSubst σ zero = var zero
 liftSubst σ (suc x) = wk1Subst σ x
+
+toSubst : Wk → Subst
+toSubst pr x = var (wkNat pr x)
 
 purge : Wk → Subst → Subst
 purge pr σ x = σ (wkNat pr x)
@@ -158,6 +164,16 @@ wkCon : Wk → Con Term → Con Term
 wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
 wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x
 wkCon pr Γ = Γ
+
+wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
+wkNeutral ρ (var n) = var (wkNat ρ n)
+wkNeutral ρ (_∘_ n) = _∘_ (wkNeutral ρ n)
+wkNeutral ρ (natrec n) = natrec (wkNeutral ρ n)
+
+wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
+wkNatural ρ (suc n₁) = suc (wkNatural ρ n₁)
+wkNatural ρ zero = zero
+wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
