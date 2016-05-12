@@ -175,6 +175,14 @@ wkNatural ρ (suc n₁) = suc (wkNatural ρ n₁)
 wkNatural ρ zero = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
+wk[Natural] : ∀ {t u R R'} ρ
+            → (∀ {t' u'} → R t' u' → R' (wk ρ t') (wk ρ u'))
+            → [Natural] R t u
+            → [Natural] R' (wk ρ t) (wk ρ u)
+wk[Natural] ρ wkR (suc [n]) = suc (wk[Natural] ρ wkR [n])
+wk[Natural] ρ wkR zero = zero
+wk[Natural] ρ wkR (ne x x₁ x₂) = ne (wkNeutral ρ x) (wkNeutral ρ x₁) (wkR x₂)
+
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
 

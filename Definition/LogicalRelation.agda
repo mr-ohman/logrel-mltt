@@ -36,7 +36,7 @@ mutual
 
   _⊩⁰_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩⁰ A → Set
   Γ ⊩⁰ A ≡ B / ℕ  A⇒*ℕ = Γ ⊢ B ⇒* ℕ
-  Γ ⊩⁰ A ≡ B / ne A⇒*K neK ⊢K = ∃ λ M → Γ ⊢ B ⇒* M × Neutral M × Γ ⊢ M
+  Γ ⊩⁰ A ≡ B / ne {K = K} A⇒*K neK ⊢K = ∃ λ M → Γ ⊢ B ⇒* M × Neutral M × Γ ⊢ M × (Γ ⊢ K ≡ M)
   Γ ⊩⁰ A ≡ B / Π  {F} {G} D ⊢F ⊢G [F] [G] G-ext =
     ∃₂ λ F' G'
     → Γ ⊢ A ≡ B
@@ -99,7 +99,7 @@ mutual
   Γ ⊩¹ t ∷ A / emb x = Γ ⊩⁰ t ∷ A / x
 
   _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
-  Γ ⊩¹ t ≡ u ∷ .U / U = Γ ⊢ t ∷ U × Γ ⊢ u ∷ U × Γ ⊩⁰ u × Σ (Γ ⊩⁰ t) (λ t₀ → Γ ⊩⁰ t ≡ u / t₀)
+  Γ ⊩¹ t ≡ u ∷ .U / U = Γ ⊢ t ∷ U × Γ ⊢ u ∷ U × Γ ⊢ t ≡ u ∷ U × Γ ⊩⁰ u × Σ (Γ ⊩⁰ t) (λ t₀ → Γ ⊩⁰ t ≡ u / t₀)
   Γ ⊩¹ t ≡ u ∷ .ℕ / ℕ = ∃₂ λ k k' → [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k' × Γ ⊢ t ⇒* k ∷ ℕ × Γ ⊢ u ⇒* k' ∷ ℕ × Γ ⊢ t ≡ u ∷ ℕ
   Γ ⊩¹ t ≡ u ∷ .(Π F ▹ G) / Π {F} {G} x x₁ x₂ [F] [G] x₃ =
     let [A] = Π x x₁ x₂ [F] [G] x₃
