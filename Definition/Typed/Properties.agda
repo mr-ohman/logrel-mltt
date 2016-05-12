@@ -277,3 +277,20 @@ whnfRed* (id x) suc = PE.refl
 whnfRed* (id x) (ne x₁) = PE.refl
 whnfRed* (conv x x₁ ⇨ d) w = ⊥-elim (whnfRed x w)
 whnfRed* (x ⇨ d) (ne x₁) = ⊥-elim (neRed x x₁)
+
+-- Whr is deterministic
+
+whrDet : ∀{Γ t u A u' A'} (d : Γ ⊢ t ⇒ u ∷ A) (d' : Γ ⊢ t ⇒ u' ∷ A') → u PE.≡ u'
+whrDet (conv d x) d' = whrDet d d'
+whrDet d (conv d' x₁) = whrDet d d'
+whrDet (app-subst d x) (app-subst d' x₁) rewrite whrDet d d' = PE.refl
+whrDet (app-subst d x) (β-red x₁ x₂ x₃) = ⊥-elim (whnfRed d lam)
+whrDet (β-red x x₁ x₂) (app-subst d x₃) = ⊥-elim (whnfRed d lam)
+whrDet (β-red x x₁ x₂) (β-red x₃ x₄ x₅) = PE.refl
+whrDet (natrec-subst x x₁ x₂ d) (natrec-subst x₃ x₄ x₅ d') rewrite whrDet d d' = PE.refl
+whrDet (natrec-subst x x₁ x₂ d) (natrec-zero x₃ x₄ x₅) = ⊥-elim (whnfRed d zero)
+whrDet (natrec-subst x x₁ x₂ d) (natrec-suc x₃ x₄ x₅ x₆) = ⊥-elim (whnfRed d suc)
+whrDet (natrec-zero x x₁ x₂) (natrec-subst x₃ x₄ x₅ d') = ⊥-elim (whnfRed d' zero)
+whrDet (natrec-zero x x₁ x₂) (natrec-zero x₃ x₄ x₅) = PE.refl
+whrDet (natrec-suc x x₁ x₂ x₃) (natrec-subst x₄ x₅ x₆ d') = ⊥-elim (whnfRed d' suc)
+whrDet (natrec-suc x x₁ x₂ x₃) (natrec-suc x₄ x₅ x₆ x₇) = PE.refl
