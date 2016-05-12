@@ -51,77 +51,9 @@ wfEq (sym x) = wfEq x
 wfEq (trans x x₁) = wfEq x
 wfEq (Π-cong x x₁ x₂) = wfEq x₁
 
--- -- Conversion to type/term arrows
-
--- eqTerm : ∀ {Γ A t u} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A × Γ ⊢ u ∷ A
--- eqTerm (refl x) = x , x
--- eqTerm (sym t₂) = swap (eqTerm t₂)
--- eqTerm (trans t₁ t₂) = let a , b = eqTerm t₁
---                            c , d = eqTerm t₂
---                        in a , d
--- eqTerm (conv t₁ x) = let a , b = eqTerm t₁
---                      in  conv a x , conv b x
--- eqTerm (Π-cong t t₁) = let a , b = eqTerm t
---                            c , d = eqTerm t₁
---                        in  Π a ▹ c , Π b ▹ {!d!}
--- eqTerm (app-cong t t₁) = let a , b = eqTerm t
---                              c , d = eqTerm t₁
---                          in  a ∘ c , {!b!} ∘ d
--- eqTerm (β-red x x₁) = lam x ∘ x₁ , {!!}
--- eqTerm (fun-ext x x₁ t) = x , x₁
--- eqTerm (natrec-cong x t t₁) = let a , b = eqTerm t
---                                   c , d = eqTerm t₁
---                               in  (natrec {!!} a c) , {!!}
--- eqTerm (natrec-zero x x₁ x₂) = natrec x x₁ x₂ ∘ zero (wfTerm x₁) , x₁
--- eqTerm (natrec-suc x x₁ x₂ x₃) = natrec x₁ x₂ x₃ ∘ suc x
---                                , ({!x₃!} ∘ x) ∘ (natrec x₁ x₂ x₃ ∘ x)
--- eqTerm (suc-cong t) = let a , b = eqTerm t
---                       in  suc a , suc b
-
--- eq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B
--- eq (univ x) = let a , b = eqTerm x
---               in univ a , univ b
--- eq (refl x) = x , x
--- eq (sym e) = swap (eq e)
--- eq (trans e e₁) = let a , b = eq e
---                       c , d = eq e₁
---                   in  a , d
--- eq (Π-cong e e₁) = let a , b = eq e
---                        c , d = eq e₁
---                    in  Π a ▹ c , Π b ▹ {!d!}
-
--- substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
--- substEq e _ = proj₂ (eq e)
-
--- -- Term to type arrow
-
--- typeOfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ A
--- typeOfTerm (var x₁ x₂) = {!!}
--- typeOfTerm (ℕ x) = U x
--- typeOfTerm (Π t ▹ t₁) = U (wfTerm t)
--- typeOfTerm (lam t₁) with wfTerm t₁
--- typeOfTerm (lam t₁) | x ∙ x₁ = Π x₁ ▹ typeOfTerm t₁
--- typeOfTerm (t ∘ t₁) = {!!}
--- typeOfTerm (zero x) = ℕ x
--- typeOfTerm (suc t) = typeOfTerm t
--- typeOfTerm (natrec x t t₁) = Π ℕ (wfTerm t) ▹ x
--- typeOfTerm (conv t₁ x) = substEq x (typeOfTerm t₁)
 
 -- Weakening
--- The definition of _⊆_ in Tools.Context is not correct for dependent types
--- There's a new correct one in Untyped.
--- The remaining goals here in wkIndex are provable.
--- It's commond to define
--- _•_                :  Wk → Wk → Wk
--- id      • η′       =  η′
--- step η  • η′       =  step  (η • η′)
--- lift η  • id       =  lift  η
--- lift η  • step η′  =  step  (η • η′)
--- lift η  • lift η′  =  lift  (η • η′)
--- then prove composition commutes with wk
--- U.wk p (U.wk q t) ≡ W.wk (p ∙ q) t
--- and then prove things like
--- step id ∙ p ≡ lift p ∙ step id
+
 wkIndex : ∀ {Γ Δ x A} → (pr : Γ ⊆ Δ) →
         let Δ' = Δ
             A' = U.wk (toWk pr) A
@@ -292,31 +224,6 @@ wkRed*Term : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
 wkRed*Term pr ⊢Δ (id t) = id (wkTerm pr ⊢Δ t)
 wkRed*Term pr ⊢Δ (x ⇨ r) = (wkRedTerm pr ⊢Δ x) ⇨ (wkRed*Term pr ⊢Δ r)
 
--- -- Inverse typing lemmas
-
--- inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
--- inversion-zero (zero x) = refl (ℕ x)
--- inversion-zero (conv x x₁) = trans (sym x₁) (inversion-zero x)
-
--- inversion-suc : ∀ {Γ t C} → Γ ⊢ suc t ∷ C → Γ ⊢ C ≡ ℕ
--- inversion-suc (suc x) = refl (ℕ (wfTerm x))
--- inversion-suc (conv x x₁) = trans (sym x₁) (inversion-suc x)
-
--- inversion-natrec : ∀ {Γ c g A C} → Γ ⊢ natrec C c g ∷ A → Γ ⊢ A ≡ Π ℕ ▹ C
--- inversion-natrec (natrec x d d₁) = Π-cong (refl (ℕ (wfTerm d))) (refl x)
--- inversion-natrec (conv d x) = trans (sym x) (inversion-natrec d)
-
--- inversion-app :  ∀ {Γ f a A} → Γ ⊢ (f ∘ a) ∷ A →
---   ∃₂ λ F G → Γ ⊢ f ∷ Π F ▹ G × Γ ⊢ a ∷ F × Γ ⊢ A ≡ G [ a ]
--- inversion-app (d ∘ d₁) = _ , _ , d , d₁ , refl (typeOfTerm (d ∘ d₁))
--- inversion-app (conv d x) = let a , b , c , d , e = inversion-app d
---                            in  a , b , c , d , trans (sym x) e
-
--- -- Π-injectivity needed to prove this?
--- inversion-app-natrec : ∀ {Γ c g m A C} → Γ ⊢ natrec C c g ∘ m ∷ A
---                      → Γ ⊢ A ≡ C [ m ]
--- inversion-app-natrec (x ∘ x₁) = {!!}
--- inversion-app-natrec (conv x x₁) = trans (sym x₁) (inversion-app-natrec x)
 
 -- Reduction is a subset of conversion
 
@@ -338,25 +245,3 @@ subset*Term (x ⇨ x₁) = trans (subsetTerm x) (subset*Term x₁)
 subset* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A ≡ B
 subset* (id A) = refl A
 subset* (x ⇨ x₁) = trans (subset x) (subset* x₁)
-
--- mutual
---   substEqTerm : ∀ {Γ t u A} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A
---   substEqTerm (refl x) A = A
---   substEqTerm (sym x) A = {!!}
---   substEqTerm (trans x x₁) A = substEqTerm x₁ (substEqTerm x A)
---   substEqTerm (conv x x₁) A₁ = {!!}
---   substEqTerm (Π-cong x x₁ x₂) A = {!!}
---   substEqTerm (app-cong x x₁) A = {!!}
---   substEqTerm (β-red x x₁ x₂) A = {!!}
---   substEqTerm (fun-ext x x₁ x₂ x₃) A = {!!}
---   substEqTerm (suc-cong x) A = suc {!!}
---   substEqTerm (natrec-cong x x₁ x₂ x₃) A = {!!}
---   substEqTerm (natrec-zero x x₁ x₂) A = {!!}
---   substEqTerm (natrec-suc x x₁ x₂ x₃) A = {!!}
-
---   substEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → Γ ⊢ A → Γ ⊢ B
---   substEq (univ x) A = {!!}
---   substEq (refl x) A = A
---   substEq (sym eq) A = {!!}
---   substEq (trans eq eq₁) A = substEq eq₁ (substEq eq A)
---   substEq (Π-cong x eq eq₁) A = {!!}
