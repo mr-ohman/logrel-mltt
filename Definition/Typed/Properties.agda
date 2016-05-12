@@ -1,5 +1,6 @@
 module Definition.Typed.Properties where
 
+open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Product
 
 open import Tools.Context
@@ -245,3 +246,34 @@ subset*Term (x ⇨ x₁) = trans (subsetTerm x) (subset*Term x₁)
 subset* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A ≡ B
 subset* (id A) = refl A
 subset* (x ⇨ x₁) = trans (subset x) (subset* x₁)
+
+-- Neutrals do not weak head reduce
+
+neRed :   ∀{Γ t u A} (d : Γ ⊢ t ⇒ u ∷ A) (n : Neutral t) → ⊥
+neRed (conv d x) n = neRed d n
+neRed (app-subst d x) (_∘_ n) = neRed d n
+neRed (β-red x x₁ x₂) (_∘_ ())
+neRed (natrec-subst x x₁ x₂ d) (natrec n₁) = neRed d n₁
+neRed (natrec-zero x x₁ x₂) (natrec ())
+neRed (natrec-suc x x₁ x₂ x₃) (natrec ())
+
+-- Whnfs do not weak head reduce
+
+whnfRed :  ∀{Γ t u A} (d : Γ ⊢ t ⇒ u ∷ A) (w : Whnf t) → ⊥
+whnfRed (conv d x) w = whnfRed d w
+whnfRed (app-subst d x) (ne (_∘_ x₁)) = neRed d x₁
+whnfRed (β-red x x₁ x₂) (ne (_∘_ ()))
+whnfRed (natrec-subst x x₁ x₂ d) (ne (natrec x₃)) = neRed d x₃
+whnfRed (natrec-zero x x₁ x₂) (ne (natrec ()))
+whnfRed (natrec-suc x x₁ x₂ x₃) (ne (natrec ()))
+
+whnfRed* : ∀{Γ t u A} (d : Γ ⊢ t ⇒* u ∷ A) (w : Whnf t) → t PE.≡ u
+whnfRed* (id x) U = PE.refl
+whnfRed* (id x) Π = PE.refl
+whnfRed* (id x) ℕ = PE.refl
+whnfRed* (id x) lam = PE.refl
+whnfRed* (id x) zero = PE.refl
+whnfRed* (id x) suc = PE.refl
+whnfRed* (id x) (ne x₁) = PE.refl
+whnfRed* (conv x x₁ ⇨ d) w = ⊥-elim (whnfRed x w)
+whnfRed* (x ⇨ d) (ne x₁) = ⊥-elim (neRed x x₁)

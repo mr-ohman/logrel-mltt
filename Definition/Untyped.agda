@@ -23,7 +23,7 @@ data Term : Set where
 
 data Neutral : Term → Set where
   var : ∀ n → Neutral (var n)
-  _∘_ : ∀ {k u} → Neutral u → Neutral (k ∘ u)
+  _∘_ : ∀ {k u} → Neutral k → Neutral (k ∘ u)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 data Natural : Term → Set where
@@ -35,6 +35,18 @@ data [Natural] (R : Term → Term → Set) : Term → Term → Set where
   suc : ∀ {n n'} → [Natural] R n n' → [Natural] R (suc n) (suc n')
   zero : [Natural] R zero zero
   ne : ∀ {n n'} → Neutral n → Neutral n' → R n n' → [Natural] R n n'
+
+-- Weak head normal forms
+
+data Whnf : Term → Set where
+  U : Whnf U
+  Π : ∀ {A B} → Whnf (Π A ▹ B)
+  ℕ : Whnf ℕ
+  lam : ∀{t} → Whnf (lam t)
+  zero : Whnf zero
+  suc  : ∀{t} → Whnf (suc t)
+  ne : ∀{n} → Neutral n → Whnf n
+
 
 data Wk : Set where
   id    : Wk
