@@ -20,8 +20,8 @@ reflEq ⁰ (Π {F} {G} [ ⊢A , ⊢B , D ] ⊢F ⊢G [F] [G] G-ext) =
   let ⊩A = Π [ ⊢A , ⊢B , D ] ⊢F ⊢G [F] [G] G-ext
   in  Π⁰[ F , G , D , refl ⊢A , ⊩A , ⊩A , (λ ρ ⊢Δ → reflEq ⁰ ([F] ρ ⊢Δ)) , (λ ρ ⊢Δ [a] → reflEq ⁰ ([G] ρ ⊢Δ [a])) ]
 reflEq ¹ U = PE.refl
-reflEq ¹ ℕ = PE.refl
-reflEq ¹ (Π ⊢F ⊢G ⊩F [F] [G] G-ext) = Π¹[ _ , _ , PE.refl , PE.refl , (λ ρ ⊢Δ → reflEq ¹ ([F] ρ ⊢Δ)) , (λ ρ ⊢Δ [a] → reflEq ¹ ([G] ρ ⊢Δ [a])) ]
+reflEq ¹ ℕ = {!PE.refl!}
+reflEq ¹ (Π ⊢F ⊢G ⊩F [F] [G] G-ext) = Π¹[ _ , _ , {!PE.refl!} , PE.refl , (λ ρ ⊢Δ → reflEq ¹ ([F] ρ ⊢Δ)) , (λ ρ ⊢Δ [a] → reflEq ¹ ([G] ρ ⊢Δ [a])) ]
 reflEq ¹ (emb x) = reflEq ⁰ x
 
 symEq : ∀ {Γ A B} T ([A] : Γ ⊩⟨ T ⟩ A) ([B] : Γ ⊩⟨ T ⟩ B) → Γ ⊩⟨ T ⟩ A ≡ B / [A] → Γ ⊩⟨ T ⟩ B ≡ A / [B]
@@ -52,152 +52,170 @@ symEq ¹ (emb x) [B] A≡B = {!!}
 
 
 mutual
-  proof-irrelevanceEq' : ∀ {Γ A A' B} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ A ≡ B / p → Γ ⊩⟨ T ⟩ A' ≡ B / q
-  proof-irrelevanceEq' T PE.refl p q A≡B = proof-irrelevanceEq T p q A≡B
+  proof-irrelevanceEq : ∀ {Γ A B} l l' (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A)
+                      → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
+  proof-irrelevanceEq = {!!}
 
-  proof-irrelevanceEq : ∀ {Γ A B} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ A ≡ B / p → Γ ⊩⟨ T ⟩ A ≡ B / q
-  proof-irrelevanceEq ⁰ (ℕ x) (ℕ x₁) A≡B = A≡B
-  proof-irrelevanceEq ⁰ (ℕ x) (ne x₁ x₂) A≡B = ⊥-elim (ℕ≢ne x₂ (whrDet*' (red x , ℕ) (red x₁ , (ne x₂))))
-  proof-irrelevanceEq ⁰ (ℕ x) (Π x₁ x₂ x₃ [F] [G] x₄) A≡B = ⊥-elim (ℕ≢Π (whrDet*' (red x , ℕ) (red x₁ , Π)))
+  proof-irrelevanceTerm : ∀ {Γ A t} l l' (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A)
+                        → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
+  proof-irrelevanceTerm = {!!}
 
-  proof-irrelevanceEq ⁰ (ne x x₁) (ℕ x₃) A≡B = ⊥-elim (ℕ≢ne x₁ (whrDet*' (red x₃ , ℕ) (red x , ne x₁)))
-  proof-irrelevanceEq ⁰ (ne x x₁) (ne x₃ x₄) ne[ M , D' , neM , K≡M ] = ne[ M , D' , neM , trans (sym (subset* (red x₃))) (trans (subset* (red x)) K≡M) ]
-  proof-irrelevanceEq ⁰ (ne x x₁) (Π x₃ x₄ x₅ [F] [G] x₆) A≡B = ⊥-elim (Π≢ne x₁ (whrDet*' (red x₃ , Π) (red x , (ne x₁))))
+  proof-irrelevanceEqTerm : ∀ {Γ A t u} l l' (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A)
+                          → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l' ⟩ t ≡ u ∷ A / q
+  proof-irrelevanceEqTerm = {!!}
 
-  proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (ℕ x₄) A≡B = ⊥-elim (ℕ≢Π (whrDet*' (red x₄ , ℕ) (red x , Π)))
-  proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (ne x₄ x₅) A≡B = ⊥-elim (Π≢ne x₅ (whrDet*' (red x , Π) (red x₄ , (ne x₅))))
-  proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (Π x₄ x₅ x₆ [F]₁ [G]₁ x₇) Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B , [F≡F'] , [G≡G'] ] =
-    let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red x , Π) (red x₄ , Π))
-    in Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B
-         , (λ ρ ⊢Δ → proof-irrelevanceEq' ⁰ (PE.cong (wkₜ ρ) F≡F₁) ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
-         , ((λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
-                           in  proof-irrelevanceEq' ⁰ (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]))) ]
-
-  proof-irrelevanceEq ¹ U U A≡B = A≡B
-  proof-irrelevanceEq ¹ U (emb (ℕ x)) A≡B = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
-  proof-irrelevanceEq ¹ U (emb (ne x x₁)) A≡B = ⊥-elim (U≢ne x₁ (whnfRed*' (red x) U))
-  proof-irrelevanceEq ¹ U (emb (Π x x₁ x₂ [F] [G] x₃)) A≡B = ⊥-elim (U≢Π (whnfRed*' (red x) U))
-
-  proof-irrelevanceEq ¹ ℕ ℕ A≡B = A≡B
-  proof-irrelevanceEq ¹ ℕ (emb x) A≡B = PE.subst (λ x₁ → _ ⊩⁰ ℕ ≡ x₁ / x) (PE.sym A≡B) (reflEq ⁰ x)
-
-  proof-irrelevanceEq ¹ (Π x x₁ p [F] [G] x₂) (Π x₃ x₄ q [F]₁ [G]₁ x₅) Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G' , [F≡F'] , [G≡G'] ] =
-    Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G'
-      , ((λ ρ ⊢Δ → proof-irrelevanceEq ¹ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)))
-      , ((λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm ¹ ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
-                        in  proof-irrelevanceEq ¹ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]))) ]
-  proof-irrelevanceEq ¹ (Π x x₁ p [F] [G] x₂) (emb x₃) Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G' , [F≡F'] , [G≡G'] ] =
-    PE.subst (λ x₁ → _ ⊩⁰ _ ≡ x₁ / x₃) (PE.trans ΠFG≡ΠF'G' (PE.sym t≡ΠF'G')) (reflEq ⁰ x₃)
-
-  proof-irrelevanceEq ¹ (emb (ℕ x)) U A≡B = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
-  proof-irrelevanceEq ¹ (emb (ne x x₁)) U A≡B = ⊥-elim (U≢ne x₁ (whnfRed*' (red x) U))
-  proof-irrelevanceEq ¹ (emb (Π x x₁ x₂ [F] [G] x₃)) U A≡B = ⊥-elim (U≢Π (whnfRed*' (red x) U))
-
-  proof-irrelevanceEq ¹ (emb (ℕ x)) ℕ A≡B = {!!}
-  proof-irrelevanceEq ¹ (emb (ne x x₁)) ℕ A≡B = ⊥-elim (ℕ≢ne x₁ (whnfRed*' (red x) ℕ))
-  proof-irrelevanceEq ¹ (emb (Π x x₁ x₂ [F] [G] x₃)) ℕ A≡B = ⊥-elim (ℕ≢Π (whnfRed*' (red x) ℕ))
-
-  proof-irrelevanceEq ¹ (emb (ℕ x)) (Π x₁ x₂ q [F] [G] x₃) A≡B = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red x) Π)))
-  proof-irrelevanceEq ¹ (emb (ne x₂ x)) (Π x₃ x₄ q [F] [G] x₅) A≡B = ⊥-elim (Π≢ne x (whnfRed*' (red x₂) Π))
-  proof-irrelevanceEq ¹ (emb (Π x₃ x x₁ [F] [G] x₂)) (Π x₄ x₅ q [F]₁ [G]₁ x₆) Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B , [F≡F'] , [G≡G'] ] =
-    Π¹[ _ , _ , PE.refl , {!!} , (λ ρ ⊢Δ → reflEq ¹ ([F]₁ ρ ⊢Δ)) , (λ ρ ⊢Δ [a] → reflEq ¹ ([G]₁ ρ ⊢Δ [a])) ]
-
-  proof-irrelevanceEq ¹ (emb x) (emb x₁) A≡B = proof-irrelevanceEq ⁰ x x₁ A≡B
+  -- proof-irrelevanceEq' : ∀ {Γ A A' B} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ A ≡ B / p → Γ ⊩⟨ T ⟩ A' ≡ B / q
+  -- proof-irrelevanceEq' T PE.refl p q A≡B = proof-irrelevanceEq T p q A≡B
 
 
-  proof-irrelevanceTerm' : ∀ {Γ A A' t} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ t ∷ A / p → Γ ⊩⟨ T ⟩ t ∷ A' / q
-  proof-irrelevanceTerm' T PE.refl p q t = proof-irrelevanceTerm T p q t
+  -- proof-irrelevanceEq : ∀ {Γ A B} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ A ≡ B / p → Γ ⊩⟨ T ⟩ A ≡ B / q
+  -- proof-irrelevanceEq ⁰ (ℕ x) (ℕ x₁) A≡B = A≡B
+  -- proof-irrelevanceEq ⁰ (ℕ x) (ne x₁ x₂) A≡B = ⊥-elim (ℕ≢ne x₂ (whrDet*' (red x , ℕ) (red x₁ , (ne x₂))))
+  -- proof-irrelevanceEq ⁰ (ℕ x) (Π x₁ x₂ x₃ [F] [G] x₄) A≡B = ⊥-elim (ℕ≢Π (whrDet*' (red x , ℕ) (red x₁ , Π)))
 
-  proof-irrelevanceTerm : ∀ {Γ A t} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ t ∷ A / p → Γ ⊩⟨ T ⟩ t ∷ A / q
-  proof-irrelevanceTerm ⁰ (ℕ x) (ℕ x₁) t₁ = t₁
-  proof-irrelevanceTerm ⁰ (ℕ x) (ne x₁ neK) t₁ = ⊥-elim (ℕ≢ne neK (whrDet*' (red x , ℕ) (red x₁ , (ne neK))))
-  proof-irrelevanceTerm ⁰ (ℕ x) (Π x₁ x₂ x₃ [F] [G] x₄) t₁ = ⊥-elim (ℕ≢Π (whrDet*' (red x , ℕ) (red x₁ , Π)))
+  -- proof-irrelevanceEq ⁰ (ne x x₁) (ℕ x₃) A≡B = ⊥-elim (ℕ≢ne x₁ (whrDet*' (red x₃ , ℕ) (red x , ne x₁)))
+  -- proof-irrelevanceEq ⁰ (ne x x₁) (ne x₃ x₄) ne[ M , D' , neM , K≡M ] = ne[ M , D' , neM , trans (sym (subset* (red x₃))) (trans (subset* (red x)) K≡M) ]
+  -- proof-irrelevanceEq ⁰ (ne x x₁) (Π x₃ x₄ x₅ [F] [G] x₆) A≡B = ⊥-elim (Π≢ne x₁ (whrDet*' (red x₃ , Π) (red x , (ne x₁))))
 
-  proof-irrelevanceTerm ⁰ (ne x neK) (ℕ x₁) t₁ = ⊥-elim (ℕ≢ne neK (whrDet*' (red x₁ , ℕ) (red x , ne neK)))
-  proof-irrelevanceTerm ⁰ (ne x neK) (ne x₁ neK₁) t₁ = t₁
-  proof-irrelevanceTerm ⁰ (ne x neK) (Π x₁ x₂ x₃ [F] [G] x₄) t₁ = ⊥-elim (Π≢ne neK (whrDet*' (red x₁ , Π) (red x , (ne neK))))
+  -- proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (ℕ x₄) A≡B = ⊥-elim (ℕ≢Π (whrDet*' (red x₄ , ℕ) (red x , Π)))
+  -- proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (ne x₄ x₅) A≡B = ⊥-elim (Π≢ne x₅ (whrDet*' (red x , Π) (red x₄ , (ne x₅))))
+  -- proof-irrelevanceEq ⁰ (Π x x₁ x₂ [F] [G] x₃) (Π x₄ x₅ x₆ [F]₁ [G]₁ x₇) Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B , [F≡F'] , [G≡G'] ] =
+  --   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red x , Π) (red x₄ , Π))
+  --   in Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B
+  --        , (λ ρ ⊢Δ → proof-irrelevanceEq' ⁰ (PE.cong (wkₜ ρ) F≡F₁) ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
+  --        , ((λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+  --                          in  proof-irrelevanceEq' ⁰ (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]))) ]
 
-  proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (ℕ x₄) t₁ = ⊥-elim (ℕ≢Π (whrDet*' (red x₄ , ℕ) (red x , Π)))
-  proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (ne x₄ neK) t₁ = ⊥-elim (Π≢ne neK (whrDet*' (red x , Π) (red x₄ , (ne neK))))
-  proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (Π x₄ x₅ x₆ [F]₁ [G]₁ x₇) (proj₁ , proj₂) =
-    proj₁ , (λ ρ ⊢Δ [a]₁ [a≡b]₁ → let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red x , Π) (red x₄ , Π))
-                                      [a]         = proof-irrelevanceTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
-                                      [a≡b]       = proof-irrelevanceEqTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
-                                  in proof-irrelevanceEqTerm' ⁰ (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) (proj₂ ρ ⊢Δ [a] [a≡b]))
+  -- proof-irrelevanceEq ¹ U U A≡B = A≡B
+  -- proof-irrelevanceEq ¹ U (emb (ℕ x)) A≡B = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
+  -- proof-irrelevanceEq ¹ U (emb (ne x x₁)) A≡B = ⊥-elim (U≢ne x₁ (whnfRed*' (red x) U))
+  -- proof-irrelevanceEq ¹ U (emb (Π x x₁ x₂ [F] [G] x₃)) A≡B = ⊥-elim (U≢Π (whnfRed*' (red x) U))
 
-  proof-irrelevanceTerm ¹ U U t = t
-  proof-irrelevanceTerm ¹ U (emb (ℕ x)) t₁ = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
-  proof-irrelevanceTerm ¹ U (emb (ne x neK)) t₁ = ⊥-elim (U≢ne neK (whnfRed*' (red x) U))
-  proof-irrelevanceTerm ¹ U (emb (Π x x₁ x₂ [F] [G] x₃)) t₁ = ⊥-elim (U≢Π (whnfRed*' (red x) U))
+  -- proof-irrelevanceEq ¹ ℕ ℕ A≡B = A≡B
+  -- proof-irrelevanceEq ¹ ℕ (emb x) A≡B = PE.subst (λ x₁ → _ ⊩⁰ ℕ ≡ x₁ / x) (PE.sym A≡B) (reflEq ⁰ x)
 
-  proof-irrelevanceTerm ¹ ℕ ℕ t = t
-  proof-irrelevanceTerm ¹ ℕ (emb (ℕ D)) t = t
-  proof-irrelevanceTerm ¹ ℕ (emb (ne D neK)) t₁ = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-  proof-irrelevanceTerm ¹ ℕ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t₁ = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceEq ¹ (Π x x₁ p [F] [G] x₂) (Π x₃ x₄ q [F]₁ [G]₁ x₅) Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G' , [F≡F'] , [G≡G'] ] =
+  --   Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G'
+  --     , ((λ ρ ⊢Δ → proof-irrelevanceEq ¹ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)))
+  --     , ((λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm ¹ ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+  --                       in  proof-irrelevanceEq ¹ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]))) ]
+  -- proof-irrelevanceEq ¹ (Π x x₁ p [F] [G] x₂) (emb x₃) Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G' , [F≡F'] , [G≡G'] ] =
+  --   PE.subst (λ x₁ → _ ⊩⁰ _ ≡ x₁ / x₃) (PE.trans ΠFG≡ΠF'G' (PE.sym t≡ΠF'G')) (reflEq ⁰ x₃)
 
-  proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (Π x₃ x₄ q [F]₁ [G]₁ x₅) (proj₁ , proj₂) = proj₁ , {!!}
-  proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (ℕ D)) t₁ = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-  proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (ne D neK)) t₁ = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-  proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (Π D ⊢F ⊢G [F]₁ [G]₁ G-ext)) t₁ = {!!}
+  -- proof-irrelevanceEq ¹ (emb (ℕ x)) U A≡B = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
+  -- proof-irrelevanceEq ¹ (emb (ne x x₁)) U A≡B = ⊥-elim (U≢ne x₁ (whnfRed*' (red x) U))
+  -- proof-irrelevanceEq ¹ (emb (Π x x₁ x₂ [F] [G] x₃)) U A≡B = ⊥-elim (U≢Π (whnfRed*' (red x) U))
 
-  proof-irrelevanceTerm ¹ (emb (ℕ D)) U t₁ = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
-  proof-irrelevanceTerm ¹ (emb (ne D neK)) U t₁ = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
-  proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) U t₁ = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+  -- proof-irrelevanceEq ¹ (emb (ℕ x)) ℕ A≡B = {!!}
+  -- proof-irrelevanceEq ¹ (emb (ne x x₁)) ℕ A≡B = ⊥-elim (ℕ≢ne x₁ (whnfRed*' (red x) ℕ))
+  -- proof-irrelevanceEq ¹ (emb (Π x x₁ x₂ [F] [G] x₃)) ℕ A≡B = ⊥-elim (ℕ≢Π (whnfRed*' (red x) ℕ))
 
-  proof-irrelevanceTerm ¹ (emb (ℕ D)) ℕ t₁ = t₁
-  proof-irrelevanceTerm ¹ (emb (ne D neK)) ℕ t₁ = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-  proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) ℕ t₁ = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceEq ¹ (emb (ℕ x)) (Π x₁ x₂ q [F] [G] x₃) A≡B = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red x) Π)))
+  -- proof-irrelevanceEq ¹ (emb (ne x₂ x)) (Π x₃ x₄ q [F] [G] x₅) A≡B = ⊥-elim (Π≢ne x (whnfRed*' (red x₂) Π))
+  -- proof-irrelevanceEq ¹ (emb (Π x₃ x x₁ [F] [G] x₂)) (Π x₄ x₅ q [F]₁ [G]₁ x₆) Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B , [F≡F'] , [G≡G'] ] =
+  --   Π¹[ _ , _ , PE.refl , {!!} , (λ ρ ⊢Δ → reflEq ¹ ([F]₁ ρ ⊢Δ)) , (λ ρ ⊢Δ [a] → reflEq ¹ ([G]₁ ρ ⊢Δ [a])) ]
 
-  proof-irrelevanceTerm ¹ (emb (ℕ D)) (Π ⊢F ⊢G q [F] [G] G-ext) t₁ = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-  proof-irrelevanceTerm ¹ (emb (ne D neK)) (Π ⊢F ⊢G q [F] [G] G-ext) t₁ = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-  proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) (proj₁ , proj₂) = proj₁ , {!!}
+  -- proof-irrelevanceEq ¹ (emb x) (emb x₁) A≡B = proof-irrelevanceEq ⁰ x x₁ A≡B
 
-  proof-irrelevanceTerm ¹ (emb x) (emb x₁) t₁ = proof-irrelevanceTerm ⁰ x x₁ t₁
 
-  proof-irrelevanceEqTerm' : ∀ {Γ A A' t u} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ T ⟩ t ≡ u ∷ A' / q
-  proof-irrelevanceEqTerm' T PE.refl p q t≡u = proof-irrelevanceEqTerm T p q t≡u
+  -- proof-irrelevanceTerm' : ∀ {Γ A A' t} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ t ∷ A / p → Γ ⊩⟨ T ⟩ t ∷ A' / q
+  -- proof-irrelevanceTerm' T PE.refl p q t = proof-irrelevanceTerm T p q t
 
-  proof-irrelevanceEqTerm : ∀ {Γ A t u} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / q
-  proof-irrelevanceEqTerm ⁰ (ℕ D) (ℕ D₁) t≡u = t≡u
-  proof-irrelevanceEqTerm ⁰ (ℕ D) (ne D₁ neK) t≡u = ⊥-elim (ℕ≢ne neK (whrDet*' (red D , ℕ) (red D₁ , (ne neK))))
-  proof-irrelevanceEqTerm ⁰ (ℕ D) (Π D₁ ⊢F ⊢G [F] [G] G-ext) t≡u = ⊥-elim (ℕ≢Π (whrDet*' (red D , ℕ) (red D₁ , Π)))
+  -- proof-irrelevanceTerm : ∀ {Γ A t} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ t ∷ A / p → Γ ⊩⟨ T ⟩ t ∷ A / q
+  -- proof-irrelevanceTerm ⁰ (ℕ x) (ℕ x₁) t₁ = t₁
+  -- proof-irrelevanceTerm ⁰ (ℕ x) (ne x₁ neK) t₁ = ⊥-elim (ℕ≢ne neK (whrDet*' (red x , ℕ) (red x₁ , (ne neK))))
+  -- proof-irrelevanceTerm ⁰ (ℕ x) (Π x₁ x₂ x₃ [F] [G] x₄) t₁ = ⊥-elim (ℕ≢Π (whrDet*' (red x , ℕ) (red x₁ , Π)))
 
-  proof-irrelevanceEqTerm ⁰ (ne D neK) (ℕ D₁) t≡u = ⊥-elim (ℕ≢ne neK (whrDet*' (red D₁ , ℕ) (red D , ne neK)))
-  proof-irrelevanceEqTerm ⁰ (ne D neK) (ne D₁ neK₁) t≡u = t≡u
-  proof-irrelevanceEqTerm ⁰ (ne D neK) (Π D₁ ⊢F ⊢G [F] [G] G-ext) t≡u = ⊥-elim (Π≢ne neK (whrDet*' (red D₁ , Π) (red D , (ne neK))))
+  -- proof-irrelevanceTerm ⁰ (ne x neK) (ℕ x₁) t₁ = ⊥-elim (ℕ≢ne neK (whrDet*' (red x₁ , ℕ) (red x , ne neK)))
+  -- proof-irrelevanceTerm ⁰ (ne x neK) (ne x₁ neK₁) t₁ = t₁
+  -- proof-irrelevanceTerm ⁰ (ne x neK) (Π x₁ x₂ x₃ [F] [G] x₄) t₁ = ⊥-elim (Π≢ne neK (whrDet*' (red x₁ , Π) (red x , (ne neK))))
 
-  proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (ℕ D₁) t≡u = ⊥-elim (ℕ≢Π (whrDet*' (red D₁ , ℕ) (red D , Π)))
-  proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (ne D₁ neK) t≡u = ⊥-elim (Π≢ne neK (whrDet*' (red D , Π) (red D₁ , (ne neK))))
-  proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (Π D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) t≡u = {!!}
+  -- proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (ℕ x₄) t₁ = ⊥-elim (ℕ≢Π (whrDet*' (red x₄ , ℕ) (red x , Π)))
+  -- proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (ne x₄ neK) t₁ = ⊥-elim (Π≢ne neK (whrDet*' (red x , Π) (red x₄ , (ne neK))))
+  -- proof-irrelevanceTerm ⁰ (Π x x₁ x₂ [F] [G] x₃) (Π x₄ x₅ x₆ [F]₁ [G]₁ x₇) (proj₁ , proj₂) =
+  --   proj₁ , (λ ρ ⊢Δ [a]₁ [a≡b]₁ → let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red x , Π) (red x₄ , Π))
+  --                                     [a]         = proof-irrelevanceTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+  --                                     [a≡b]       = proof-irrelevanceEqTerm' ⁰ (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
+  --                                 in proof-irrelevanceEqTerm' ⁰ (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) (proj₂ ρ ⊢Δ [a] [a≡b]))
 
-  proof-irrelevanceEqTerm ¹ U U t≡u = t≡u
-  proof-irrelevanceEqTerm ¹ U (emb (ℕ D)) t≡u = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
-  proof-irrelevanceEqTerm ¹ U (emb (ne D neK)) t≡u = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
-  proof-irrelevanceEqTerm ¹ U (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t≡u = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+  -- proof-irrelevanceTerm ¹ U U t = t
+  -- proof-irrelevanceTerm ¹ U (emb (ℕ x)) t₁ = ⊥-elim (U≢ℕ (whnfRed*' (red x) U))
+  -- proof-irrelevanceTerm ¹ U (emb (ne x neK)) t₁ = ⊥-elim (U≢ne neK (whnfRed*' (red x) U))
+  -- proof-irrelevanceTerm ¹ U (emb (Π x x₁ x₂ [F] [G] x₃)) t₁ = ⊥-elim (U≢Π (whnfRed*' (red x) U))
 
-  proof-irrelevanceEqTerm ¹ ℕ ℕ t≡u = t≡u
-  proof-irrelevanceEqTerm ¹ ℕ (emb (ℕ D)) t≡u = t≡u
-  proof-irrelevanceEqTerm ¹ ℕ (emb (ne D neK)) t≡u = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-  proof-irrelevanceEqTerm ¹ ℕ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t≡u = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceTerm ¹ ℕ ℕ t = t
+  -- proof-irrelevanceTerm ¹ ℕ (emb (ℕ D)) t = t
+  -- proof-irrelevanceTerm ¹ ℕ (emb (ne D neK)) t₁ = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceTerm ¹ ℕ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t₁ = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
 
-  proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) t≡u = {!!}
-  proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (ℕ D)) t≡u = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-  proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (ne D neK)) t≡u = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-  proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (Π D ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)) t≡u = {!!}
+  -- proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (Π x₃ x₄ q [F]₁ [G]₁ x₅) (proj₁ , proj₂) =
+  --   proj₁ , (λ ρ ⊢Δ [a]₁ [a≡b]₁ → let [a]   = proof-irrelevanceTerm ¹ ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+  --                                     [a≡b] = proof-irrelevanceEqTerm ¹ ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
+  --                                 in  proof-irrelevanceEqTerm ¹ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) (proj₂ ρ ⊢Δ [a] [a≡b]))
 
-  proof-irrelevanceEqTerm ¹ (emb (ℕ D)) U t≡u = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
-  proof-irrelevanceEqTerm ¹ (emb (ne D neK)) U t≡u = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
-  proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) U t≡u = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+  -- proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (ℕ D)) t₁ = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+  -- proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (ne D neK)) t₁ = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+  -- proof-irrelevanceTerm ¹ (Π x x₁ p [F] [G] x₂) (emb (Π D ⊢F ⊢G [F]₁ [G]₁ G-ext)) (proj₁ , proj₂) =
+  --   proj₁ , (λ ρ ⊢Δ [a] [a≡b] → {!!})
 
-  proof-irrelevanceEqTerm ¹ (emb (ℕ D)) ℕ t≡u = t≡u
-  proof-irrelevanceEqTerm ¹ (emb (ne D neK)) ℕ t≡u = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-  proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) ℕ t≡u = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceTerm ¹ (emb (ℕ D)) U t₁ = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
+  -- proof-irrelevanceTerm ¹ (emb (ne D neK)) U t₁ = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+  -- proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) U t₁ = ⊥-elim (U≢Π (whnfRed*' (red D) U))
 
-  proof-irrelevanceEqTerm ¹ (emb (ℕ D)) (Π ⊢F ⊢G q [F] [G] G-ext) t≡u = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-  proof-irrelevanceEqTerm ¹ (emb (ne D neK)) (Π ⊢F ⊢G q [F] [G] G-ext) t≡u = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-  proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) t≡u = {!!}
+  -- proof-irrelevanceTerm ¹ (emb (ℕ D)) ℕ t₁ = t₁
+  -- proof-irrelevanceTerm ¹ (emb (ne D neK)) ℕ t₁ = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) ℕ t₁ = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
 
-  proof-irrelevanceEqTerm ¹ (emb x) (emb x₁) t≡u = proof-irrelevanceEqTerm ⁰ x x₁ t≡u
+  -- proof-irrelevanceTerm ¹ (emb (ℕ D)) (Π ⊢F ⊢G q [F] [G] G-ext) t₁ = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+  -- proof-irrelevanceTerm ¹ (emb (ne D neK)) (Π ⊢F ⊢G q [F] [G] G-ext) t₁ = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+  -- proof-irrelevanceTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) (proj₁ , proj₂) = proj₁ , {!!}
+
+  -- proof-irrelevanceTerm ¹ (emb x) (emb x₁) t₁ = proof-irrelevanceTerm ⁰ x x₁ t₁
+
+  -- proof-irrelevanceEqTerm' : ∀ {Γ A A' t u} T (eq : A PE.≡ A') (p : Γ ⊩⟨ T ⟩ A) (q : Γ ⊩⟨ T ⟩ A') → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ T ⟩ t ≡ u ∷ A' / q
+  -- proof-irrelevanceEqTerm' T PE.refl p q t≡u = proof-irrelevanceEqTerm T p q t≡u
+
+  -- proof-irrelevanceEqTerm : ∀ {Γ A t u} T (p q : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ T ⟩ t ≡ u ∷ A / q
+  -- proof-irrelevanceEqTerm ⁰ (ℕ D) (ℕ D₁) t≡u = t≡u
+  -- proof-irrelevanceEqTerm ⁰ (ℕ D) (ne D₁ neK) t≡u = ⊥-elim (ℕ≢ne neK (whrDet*' (red D , ℕ) (red D₁ , (ne neK))))
+  -- proof-irrelevanceEqTerm ⁰ (ℕ D) (Π D₁ ⊢F ⊢G [F] [G] G-ext) t≡u = ⊥-elim (ℕ≢Π (whrDet*' (red D , ℕ) (red D₁ , Π)))
+
+  -- proof-irrelevanceEqTerm ⁰ (ne D neK) (ℕ D₁) t≡u = ⊥-elim (ℕ≢ne neK (whrDet*' (red D₁ , ℕ) (red D , ne neK)))
+  -- proof-irrelevanceEqTerm ⁰ (ne D neK) (ne D₁ neK₁) t≡u = t≡u
+  -- proof-irrelevanceEqTerm ⁰ (ne D neK) (Π D₁ ⊢F ⊢G [F] [G] G-ext) t≡u = ⊥-elim (Π≢ne neK (whrDet*' (red D₁ , Π) (red D , (ne neK))))
+
+  -- proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (ℕ D₁) t≡u = ⊥-elim (ℕ≢Π (whrDet*' (red D₁ , ℕ) (red D , Π)))
+  -- proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (ne D₁ neK) t≡u = ⊥-elim (Π≢ne neK (whrDet*' (red D , Π) (red D₁ , (ne neK))))
+  -- proof-irrelevanceEqTerm ⁰ (Π D ⊢F ⊢G [F] [G] G-ext) (Π D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) t≡u = {!!}
+
+  -- proof-irrelevanceEqTerm ¹ U U t≡u = t≡u
+  -- proof-irrelevanceEqTerm ¹ U (emb (ℕ D)) t≡u = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
+  -- proof-irrelevanceEqTerm ¹ U (emb (ne D neK)) t≡u = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+  -- proof-irrelevanceEqTerm ¹ U (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t≡u = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+
+  -- proof-irrelevanceEqTerm ¹ ℕ ℕ t≡u = t≡u
+  -- proof-irrelevanceEqTerm ¹ ℕ (emb (ℕ D)) t≡u = t≡u
+  -- proof-irrelevanceEqTerm ¹ ℕ (emb (ne D neK)) t≡u = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceEqTerm ¹ ℕ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) t≡u = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+
+  -- proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) t≡u = {!!}
+  -- proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (ℕ D)) t≡u = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+  -- proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (ne D neK)) t≡u = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+  -- proof-irrelevanceEqTerm ¹ (Π ⊢F ⊢G p [F] [G] G-ext) (emb (Π D ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)) t≡u = {!!}
+
+  -- proof-irrelevanceEqTerm ¹ (emb (ℕ D)) U t≡u = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
+  -- proof-irrelevanceEqTerm ¹ (emb (ne D neK)) U t≡u = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+  -- proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) U t≡u = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+
+  -- proof-irrelevanceEqTerm ¹ (emb (ℕ D)) ℕ t≡u = t≡u
+  -- proof-irrelevanceEqTerm ¹ (emb (ne D neK)) ℕ t≡u = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
+  -- proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) ℕ t≡u = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+
+  -- proof-irrelevanceEqTerm ¹ (emb (ℕ D)) (Π ⊢F ⊢G q [F] [G] G-ext) t≡u = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+  -- proof-irrelevanceEqTerm ¹ (emb (ne D neK)) (Π ⊢F ⊢G q [F] [G] G-ext) t≡u = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+  -- proof-irrelevanceEqTerm ¹ (emb (Π D ⊢F ⊢G [F] [G] G-ext)) (Π ⊢F₁ ⊢G₁ q [F]₁ [G]₁ G-ext₁) t≡u = {!!}
+
+  -- proof-irrelevanceEqTerm ¹ (emb x) (emb x₁) t≡u = proof-irrelevanceEqTerm ⁰ x x₁ t≡u
 
 
 mutual
@@ -220,9 +238,9 @@ mutual
   wkEq ⁰ ρ ⊢Δ (Π x x₁ x₂ [F] [G] x₃) Π⁰[ F' , G' , D' , A≡B , ⊩A , ⊩B , [F≡F'] , [G≡G'] ] =
     Π⁰[ wkₜ ρ F' , wkLiftₜ ρ G' , T.wkRed* ρ ⊢Δ D' , T.wkEq ρ ⊢Δ A≡B , wk ⁰ ρ ⊢Δ ⊩A , wk ⁰ ρ ⊢Δ ⊩B , {!!} , {!!} ]
   wkEq ¹ ρ ⊢Δ U A≡B = PE.cong (wkₜ ρ) A≡B
-  wkEq ¹ ρ ⊢Δ ℕ A≡B = PE.cong (wkₜ ρ) A≡B
-  wkEq ¹ ρ ⊢Δ (Π x x₁ [A] [F] [G] x₂) Π¹[ F' , G' , ΠFG≡ΠF'G' , t≡ΠF'G' , [F≡F'] , [G≡G'] ] =
-    Π¹[ wkₜ ρ F' , wkLiftₜ ρ G' , PE.cong (wkₜ ρ) ΠFG≡ΠF'G' , PE.cong (wkₜ ρ) t≡ΠF'G' , {!!} , {!!} ]
+  wkEq ¹ ρ ⊢Δ ℕ A≡B = {!PE.cong (wkₜ ρ) A≡B!}
+  wkEq ¹ ρ ⊢Δ (Π x x₁ [A] [F] [G] x₂) Π¹[ F' , G' , D' , ΠFG≡ΠF'G' , [F≡F'] , [G≡G'] ] =
+    Π¹[ wkₜ ρ F' , wkLiftₜ ρ G' , {!!} , PE.cong (wkₜ ρ) ΠFG≡ΠF'G' , {!!} , {!!} ]
   wkEq ¹ ρ ⊢Δ (emb x) A≡B = wkEq ⁰ ρ ⊢Δ x A≡B
 
   wkTerm : ∀ {Γ Δ A t} T → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([A] : Γ ⊩⟨ T ⟩ A) → Γ ⊩⟨ T ⟩ t ∷ A / [A]

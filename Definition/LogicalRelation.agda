@@ -114,7 +114,7 @@ mutual
                        → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
 
   -- Issue: Agda complains about record use not being strictly positive
-  record Π⁰[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩⁰ A)
+  record Π⁰ₜ[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩⁰ A)
                               ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F]) : Set where
     inductive
     constructor Π⁰ₜ[_,_,_,_]
@@ -171,7 +171,7 @@ mutual
 
   _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
   Γ ⊩¹ .U ≡ t / U = t PE.≡ U
-  Γ ⊩¹ .ℕ ≡ t / ℕ = t PE.≡ ℕ
+  Γ ⊩¹ .ℕ ≡ t / ℕ = Γ ⊢ t ⇒* ℕ
   Γ ⊩¹ .(Π F ▹ G) ≡ t / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext =
     Π¹[ Γ ] Π F ▹ G ≡ t [ F , G , [F] , [G] ]
   Γ ⊩¹ A ≡ B / emb x = Γ ⊩⁰ A ≡ B / x
@@ -204,14 +204,14 @@ mutual
     field
       F'        : Term
       G'        : Term
+      D'        : Γ ⊢ B ⇒* Π F' ▹ G'
       ΠFG≡ΠF'G' : Term.Π F ▹ G PE.≡ Π F' ▹ G'
-      t≡ΠF'G'   : B PE.≡ Π F' ▹ G'
       [F≡F']    : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
       [G≡G']    : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                           → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
 
   -- Issue: Agda complains about record use not being strictly positive
-  record Π¹[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩¹ A)
+  record Π¹ₜ[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩¹ A)
                               ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) : Set where
     inductive
     constructor Π¹ₜ[_,_,_,_]
