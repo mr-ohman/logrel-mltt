@@ -225,6 +225,18 @@ wkRed*Term : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
 wkRed*Term pr ⊢Δ (id t) = id (wkTerm pr ⊢Δ t)
 wkRed*Term pr ⊢Δ (x ⇨ r) = (wkRedTerm pr ⊢Δ x) ⇨ (wkRed*Term pr ⊢Δ r)
 
+wkRed:*: : ∀ {Γ Δ A B} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               B' = U.wk (toWk pr) B
+           in ⊢ Δ → Γ ⊢ A :⇒*: B → Δ ⊢ A' :⇒*: B'
+wkRed:*: pr ⊢Δ [ Γ⊢A , Γ⊢B , A⇒*B ] = [ wk pr ⊢Δ Γ⊢A , wk pr ⊢Δ Γ⊢B , wkRed* pr ⊢Δ A⇒*B ]
+
+wkRed:*:Term : ∀ {Γ Δ A t u} → (pr : Γ ⊆ Δ) →
+           let A' = U.wk (toWk pr) A
+               t' = U.wk (toWk pr) t
+               u' = U.wk (toWk pr) u
+           in ⊢ Δ → Γ ⊢ t :⇒*: u ∷ A → Δ ⊢ t' :⇒*: u' ∷ A'
+wkRed:*:Term pr ⊢Δ [ Γ⊢t , Γ⊢u , t⇒*u ] = [ wkTerm pr ⊢Δ Γ⊢t , wkTerm pr ⊢Δ Γ⊢u , wkRed*Term pr ⊢Δ t⇒*u ]
 
 -- Reduction is a subset of conversion
 
@@ -267,6 +279,9 @@ whnfRed (natrec-subst x x₁ x₂ d) (ne (natrec x₃)) = neRed d x₃
 whnfRed (natrec-zero x x₁ x₂) (ne (natrec ()))
 whnfRed (natrec-suc x x₁ x₂ x₃) (ne (natrec ()))
 
+whnfRed' : ∀{Γ A B} (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
+whnfRed' (univ x) w = whnfRed x w
+
 whnfRed* : ∀{Γ t u A} (d : Γ ⊢ t ⇒* u ∷ A) (w : Whnf t) → t PE.≡ u
 whnfRed* (id x) U = PE.refl
 whnfRed* (id x) Π = PE.refl
@@ -277,6 +292,10 @@ whnfRed* (id x) suc = PE.refl
 whnfRed* (id x) (ne x₁) = PE.refl
 whnfRed* (conv x x₁ ⇨ d) w = ⊥-elim (whnfRed x w)
 whnfRed* (x ⇨ d) (ne x₁) = ⊥-elim (neRed x x₁)
+
+whnfRed*' : ∀{Γ A B} (d : Γ ⊢ A ⇒* B) (w : Whnf A) → A PE.≡ B
+whnfRed*' (id x) w = PE.refl
+whnfRed*' (x ⇨ d) w = ⊥-elim (whnfRed' x w)
 
 -- Whr is deterministic
 
@@ -294,3 +313,44 @@ whrDet (natrec-zero x x₁ x₂) (natrec-subst x₃ x₄ x₅ d') = ⊥-elim (wh
 whrDet (natrec-zero x x₁ x₂) (natrec-zero x₃ x₄ x₅) = PE.refl
 whrDet (natrec-suc x x₁ x₂ x₃) (natrec-subst x₄ x₅ x₆ d') = ⊥-elim (whnfRed d' suc)
 whrDet (natrec-suc x x₁ x₂ x₃) (natrec-suc x₄ x₅ x₆ x₇) = PE.refl
+
+whrDet' : ∀{Γ A B B'} (d : Γ ⊢ A ⇒ B) (d' : Γ ⊢ A ⇒ B') → B PE.≡ B'
+whrDet' (univ x) (univ x₁) = whrDet x x₁
+
+whrDet↘ : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ⇒* u' ∷ A) → Γ ⊢ u' ⇒* u ∷ A
+whrDet↘ (proj₁ , proj₂) (id x) = proj₁
+whrDet↘ (id x , proj₂) (x₁ ⇨ d') = ⊥-elim (whnfRed x₁ proj₂)
+whrDet↘ (x ⇨ proj₁ , proj₂) (x₁ ⇨ d') = whrDet↘ (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x x₁) (proj₁ , proj₂)) d'
+
+whrDet* : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ↘ u' ∷ A) → u PE.≡ u'
+whrDet* (id x , proj₂) (id x₁ , proj₄) = PE.refl
+whrDet* (id x , proj₂) (x₁ ⇨ proj₃ , proj₄) = ⊥-elim (whnfRed x₁ proj₂)
+whrDet* (x ⇨ proj₁ , proj₂) (id x₁ , proj₄) = ⊥-elim (whnfRed x proj₄)
+whrDet* (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) = whrDet* (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x₁ x) (proj₃ , proj₄))
+
+whrDet*' : ∀{Γ A B B'} (d : Γ ⊢ A ↘ B) (d' : Γ ⊢ A ↘ B') → B PE.≡ B'
+whrDet*' (id x , proj₂) (id x₁ , proj₄) = PE.refl
+whrDet*' (id x , proj₂) (x₁ ⇨ proj₃ , proj₄) = ⊥-elim (whnfRed' x₁ proj₂)
+whrDet*' (x ⇨ proj₁ , proj₂) (id x₁ , proj₄) = ⊥-elim (whnfRed' x proj₄)
+whrDet*' (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) = whrDet*' (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _) (whrDet' x₁ x) (proj₃ , proj₄))
+
+U≢ℕ : Term.U PE.≢ ℕ
+U≢ℕ ()
+
+U≢Π : ∀ {F G} → Term.U PE.≢ Π F ▹ G
+U≢Π ()
+
+U≢ne : ∀ {K} → Neutral K → U PE.≢ K
+U≢ne () PE.refl
+
+ℕ≢Π : ∀ {F G} → Term.ℕ PE.≢ Π F ▹ G
+ℕ≢Π ()
+
+ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
+ℕ≢ne () PE.refl
+
+Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
+Π≢ne () PE.refl
+
+Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
+Π-PE-injectivity PE.refl = PE.refl , PE.refl

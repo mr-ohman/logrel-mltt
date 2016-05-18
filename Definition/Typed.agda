@@ -106,3 +106,33 @@ _⊢_⇒⁺_∷_ : (Γ : Con Term) → Term → Term → Term → Set
 
 _⊢_⇒⁺_ : (Γ : Con Term) → Term → Term → Set
 Γ ⊢ A ⇒⁺ B = ∀ {A'} → Γ ⊢ A ⇒ A' × Γ ⊢ A' ⇒* B
+
+_⊢_↘_ : (Γ : Con Term) → Term → Term → Set
+Γ ⊢ A ↘ B = Γ ⊢ A ⇒* B × Whnf B
+
+_⊢_↘_∷_ : (Γ : Con Term) → Term → Term → Term → Set
+Γ ⊢ t ↘ u ∷ A = Γ ⊢ t ⇒* u ∷ A × Whnf u
+
+_⊢_:≡:_ : (Γ : Con Term) → Term → Term → Set
+Γ ⊢ A :≡: B = Γ ⊢ A × Γ ⊢ B × (Γ ⊢ A ≡ B)
+
+_⊢_:≡:_∷_ : (Γ : Con Term) → Term → Term → Term → Set
+Γ ⊢ t :≡: u ∷ A = Γ ⊢ t ∷ A × Γ ⊢ u ∷ A × (Γ ⊢ t ≡ u ∷ A)
+
+record _⊢_:⇒*:_ (Γ : Con Term) (A B : Term) : Set where
+  constructor [_,_,_]
+  field
+    ⊢A : Γ ⊢ A
+    ⊢B : Γ ⊢ B
+    D  : Γ ⊢ A ⇒* B
+
+open _⊢_:⇒*:_ using () renaming (D to red) public
+
+record _⊢_:⇒*:_∷_ (Γ : Con Term) (t u A : Term) : Set where
+  constructor [_,_,_]
+  field
+    ⊢t : Γ ⊢ t ∷ A
+    ⊢u : Γ ⊢ u ∷ A
+    d  : Γ ⊢ t ⇒* u ∷ A
+
+open _⊢_:⇒*:_∷_ using () renaming (d to redₜ) public
