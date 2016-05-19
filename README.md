@@ -4,4 +4,4 @@ This is a project to formalize a proof of the decidability of conversion of a de
 
 ### Dependencies ###
 
-This project is written in Agda and uses agda-stdlib. It has been tested to be working with Agda version 2.4.2.5 and agda-stdlib version 0.11.
+This project is written in Agda and uses agda-stdlib. It has been tested to be working with Agda version 2.5.1 and agda-stdlib version 0.12.
