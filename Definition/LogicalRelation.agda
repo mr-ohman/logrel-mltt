@@ -90,9 +90,9 @@ mutual
   Γ ⊩⁰ t ≡ u ∷ A / ne x x₁ = Γ ⊢ t ≡ u ∷ A
   Γ ⊩⁰ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π⁰ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
     let [A] = Π x x₁ x₂ [F] [G] x₃
-    in  Γ ⊩⁰ t ∷ A / [A]
+    in  Γ ⊢ t ≡ u ∷ A
+    ×   Γ ⊩⁰ t ∷ A / [A]
     ×   Γ ⊩⁰ u ∷ A / [A]
-    ×   Γ ⊢ t ≡ u ∷ A
     ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                  → Δ ⊩⁰ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
 
@@ -101,14 +101,14 @@ mutual
   record Π⁰[_]_≡_[_,_,_,_] (Γ : Con Term) (A B F G : Term) ([F] : wk-prop⁰ Γ F)
                           ([G] : wk-subst-prop⁰ Γ F G [F]) : Set where
     inductive
-    constructor Π⁰[_,_,_,_,_,_,_,_]
+    constructor Π⁰[_,_,_,_,_,_]
     field
       F'     : Term
       G'     : Term
       D'     : Γ ⊢ B ⇒* Π F' ▹ G'
       A≡B    : Γ ⊢ A ≡ B
-      ⊩A     : Γ ⊩⁰ A
-      ⊩B     : Γ ⊩⁰ B
+      -- ⊩A     : Γ ⊩⁰ A
+      -- ⊩B     : Γ ⊩⁰ B
       [F≡F'] : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
       [G≡G'] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                        → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
@@ -188,9 +188,9 @@ mutual
   Γ ⊩¹ t ≡ u ∷ .ℕ / ℕ = ℕ[ Γ ] t ≡ u ∷ ℕ
   Γ ⊩¹ t ≡ u ∷ .(Π F ▹ G) / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π¹ₜ[ Γ ] t ≡ u ∷ Π F ▹ G [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
     let [A] = Π x x₁ x₂ [F] [G] x₃
-    in  Γ ⊩¹ t ∷ Π F ▹ G / [A]
+    in  Γ ⊢ t ≡ u ∷ Π F ▹ G
+    ×   Γ ⊩¹ t ∷ Π F ▹ G / [A]
     ×   Γ ⊩¹ u ∷ Π F ▹ G / [A]
-    ×   Γ ⊢ t ≡ u ∷ Π F ▹ G
     ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                  → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
   Γ ⊩¹ t ≡ u ∷ A / emb x = Γ ⊩⁰ t ≡ u ∷ A / x
@@ -202,13 +202,13 @@ mutual
     inductive
     constructor Π¹[_,_,_,_,_,_]
     field
-      F'        : Term
-      G'        : Term
-      D'        : Γ ⊢ B ⇒* Π F' ▹ G'
-      ΠFG≡ΠF'G' : Term.Π F ▹ G PE.≡ Π F' ▹ G'
-      [F≡F']    : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
-      [G≡G']    : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                          → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
+      F'     : Term
+      G'     : Term
+      D'     : Γ ⊢ B ⇒* Π F' ▹ G'
+      A≡B    : Γ ⊢ Term.Π F ▹ G ≡ B
+      [F≡F'] : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
+      [G≡G'] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                       → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
 
   -- Issue: Agda complains about record use not being strictly positive
   record Π¹ₜ[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩¹ A)
