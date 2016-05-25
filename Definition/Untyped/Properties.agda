@@ -149,16 +149,14 @@ wkIndex-lift {A} pr = trans (wk-comp-comm (step id) pr A)
 
 import Relation.Binary.HeterogeneousEquality as HE
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 -- mutual
 --   _•ₜ_                : ∀ {Γ Δ E} → Δ ⊆ E → Γ ⊆ Δ → Γ ⊆ E
 --   base •ₜ η′ = η′
 --   step η •ₜ η′ = step (η •ₜ η′)
 --   lift η •ₜ step η′ = step (η •ₜ η′)
---   lift η •ₜ lift η′ = PE.subst (λ x → _ ∙ _ ⊆ _ ∙ x)
---                                (trans (cong (λ x → wk x _) (comp-eq η η′))
---                                       (sym (wk-comp-comm (toWk η) (toWk η′) _)))
+--   lift η •ₜ lift η′ =  PE.subst (λ x → _ ∙ _ ⊆ _ ∙ x)
+--                                ( (trans (cong (λ x → wk x _) (comp-eq η η′))
+--                                       (sym (wk-comp-comm (toWk η) (toWk η′) _))) )
 --                                (lift (η •ₜ η′))
 
 --   -- comp-prf : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
@@ -173,43 +171,13 @@ import Relation.Binary.HeterogeneousEquality as HE
 --   comp-eq base η′ = refl
 --   comp-eq (step η) η′ = cong step (comp-eq η η′)
 --   comp-eq (lift η) (step η′) = cong step (comp-eq η η′)
---   comp-eq (lift η) (lift η′) = HE.≅-to-≡ (HE.trans (HE.cong toWk {!help-lemma η η′!}) {!HE.sym (HE.cong lift (HE.≡-to-≅ (comp-eq η η′)))!})
+--   comp-eq (lift η) (lift η′) =  HE.≅-to-≡ (HE.trans (HE.cong₂ (\ X → toWk {_} {X}) {!!} (help-lemma η η′))
+--              ( ((HE.cong Wk.lift (HE.≡-to-≅ (comp-eq η η′)))) ) )
 
---   help-lemma : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) → HE._≅_ (PE.subst (λ x → (Γ ∙ σ) ⊆ (E ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′))) {B = (Γ ∙ σ) ⊆ _} (lift (η •ₜ η′))
+--   help-lemma : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) → HE._≅_ {A = (Γ ∙ σ) ⊆ (E ∙ wk (toWk η) (wk (toWk η′) σ))}
+--          (PE.subst (λ x → (Γ ∙ σ) ⊆ (E ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′)))
+--           {B = (Γ ∙ σ) ⊆ (E ∙ wk (toWk (η •ₜ η′)) σ)} (lift (η •ₜ η′))
 --   help-lemma η η′ = HE.≡-subst-removable (λ x → (_ ∙ _) ⊆ (_ ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′))
-=======
-=======
->>>>>>> d972339... Typed composition of weakenings (outcommented)
-mutual
-  _•ₜ_                : ∀ {Γ Δ E} → Δ ⊆ E → Γ ⊆ Δ → Γ ⊆ E
-  base •ₜ η′ = η′
-  step η •ₜ η′ = step (η •ₜ η′)
-  lift η •ₜ step η′ = step (η •ₜ η′)
-  lift η •ₜ lift η′ = PE.subst (λ x → _ ∙ _ ⊆ _ ∙ x)
-                               (trans (cong (λ x → wk x _) (comp-eq η η′))
-                                      (sym (wk-comp-comm (toWk η) (toWk η′) _)))
-                               (lift (η •ₜ η′))
-
-  -- comp-prf : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
-  --          → wk (toWk (η •ₜ η′)) σ ≡ wk (toWk η) (wk (toWk η′) σ)
-  -- comp-prf base η′ = sym (wk-id _ zero)
-  -- comp-prf (step η) η′ = sym (trans (wk-comp-comm (step (toWk η)) (toWk η′) _) (cong (λ x → wk (step x) _) (comp-eq η η′)))
-  -- comp-prf (lift η) (step η′) = sym (trans (wk-comp-comm (lift (toWk η)) (step (toWk η′)) _) (cong (λ x → wk (step x) _) (comp-eq η η′)))
-  -- comp-prf (lift η) (lift η′) = HE.≅-to-≡ (HE.trans (HE.cong (λ x → wk (toWk x) _) {!help-lemma η η′!}) {!HE.sym (HE.cong lift (HE.≡-to-≅ (comp-eq η η′)))!})
-
-  comp-eq : ∀ {Γ Δ E} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
-          → toWk (η •ₜ η′) ≡ toWk η • toWk η′
-  comp-eq base η′ = refl
-  comp-eq (step η) η′ = cong step (comp-eq η η′)
-  comp-eq (lift η) (step η′) = cong step (comp-eq η η′)
-  comp-eq (lift η) (lift η′) = HE.≅-to-≡ (HE.trans (HE.cong toWk {!help-lemma η η′!}) {!HE.sym (HE.cong lift (HE.≡-to-≅ (comp-eq η η′)))!})
-
-  help-lemma : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) → HE._≅_ (PE.subst (λ x → (Γ ∙ σ) ⊆ (E ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′))) {B = (Γ ∙ σ) ⊆ _} (lift (η •ₜ η′))
-  help-lemma η η′ = HE.≡-subst-removable (λ x → (_ ∙ _) ⊆ (_ ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′))
-<<<<<<< HEAD
->>>>>>> d972339... Typed composition of weakenings (outcommented)
-=======
->>>>>>> d972339... Typed composition of weakenings (outcommented)
 
 -- lift (toWk η • toWk η′) ≡
 --       toWk
