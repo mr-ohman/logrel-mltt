@@ -3,7 +3,8 @@ module Definition.LogicalRelation.Irrelevance where
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Properties as T hiding (wk; wkEq; wkTerm; wkEqTerm)
+open import Definition.Typed.Properties
+open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
 
 open import Data.Product

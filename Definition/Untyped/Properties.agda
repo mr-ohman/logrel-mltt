@@ -147,38 +147,6 @@ wkIndex-lift {A} pr = trans (wk-comp-comm (step id) pr A)
                             (trans (cong (λ x → wk x A) (lift-step-comp pr))
                                    (sym (wk-comp-comm (lift pr) (step id) A)))
 
-import Relation.Binary.HeterogeneousEquality as HE
-
-mutual
-  _•ₜ_                : ∀ {Γ Δ E} → Δ ⊆ E → Γ ⊆ Δ → Γ ⊆ E
-  base •ₜ η′ = η′
-  step η •ₜ η′ = step (η •ₜ η′)
-  lift η •ₜ step η′ = step (η •ₜ η′)
-  lift η •ₜ lift η′ =  PE.subst (λ x → _ ∙ _ ⊆ _ ∙ x)
-                               (comp-prf η η′)
-                               (lift (η •ₜ η′))
-
-  comp-prf : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) → wkₜ (η •ₜ η′) σ PE.≡ wkₜ η (wkₜ η′ σ)
-  comp-prf {σ = σ} η η′ = trans (cong (λ x → wk x σ) (comp-eq η η′))
-                                (sym (wk-comp-comm (toWk η) (toWk η′) σ))
-
-  comp-eq : ∀ {Γ Δ E} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
-          → toWk (η •ₜ η′) ≡ toWk η • toWk η′
-  comp-eq base η′ = refl
-  comp-eq (step η) η′ = cong step (comp-eq η η′)
-  comp-eq (lift η) (step η′) = cong step (comp-eq η η′)
-  comp-eq (lift {Δ} {E} {.(wkₜ η′ σ)} η) (lift {Γ} {.Δ} {σ} η′) =
-    HE.≅-to-≡
-      (HE.trans
-        (HE.cong₂ (λ X → toWk {Γ ∙ σ} {X})
-                  (HE.≡-to-≅ (cong (λ x → E ∙ x) (sym (comp-prf η η′))))
-                  (help-lemma η η′))
-        (HE.≡-to-≅ (cong lift (comp-eq η η′))) )
-
-  help-lemma : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) → HE._≅_ {A = (Γ ∙ σ) ⊆ (E ∙ wk (toWk η) (wk (toWk η′) σ))}
-         (PE.subst (λ x → (Γ ∙ σ) ⊆ (E ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′)))
-          {B = (Γ ∙ σ) ⊆ (E ∙ wk (toWk (η •ₜ η′)) σ)} (lift (η •ₜ η′))
-  help-lemma η η′ = HE.≡-subst-removable (λ x → (_ ∙ _) ⊆ (_ ∙ x)) (trans (cong (λ x → wk x _) (comp-eq η η′)) (sym (wk-comp-comm (toWk η) (toWk η′) _))) (lift (η •ₜ η′))
 
 
 -- Weakening and substitution

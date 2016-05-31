@@ -78,19 +78,6 @@ wk ρ (suc t) = suc (wk ρ t)
 wk ρ (natrec t t₁ t₂ t₃) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂) (wk ρ t₃)
 
 
-
-mutual
-  data _⊆_ : Con Term → Con Term → Set where
-    base : ε ⊆ ε
-    step : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) →  Γ      ⊆ (Δ ∙ σ)
-    lift : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) → (Γ ∙ σ) ⊆ (Δ ∙ wk (toWk inc) σ)
-
-
-  toWk : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Wk
-  toWk base = id
-  toWk (step ρ) = step (toWk ρ)
-  toWk (lift ρ) = lift (toWk ρ)
-
 -- module WellScoped where
 --   wkNat : {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) (n : Nat) → Nat
 --   wkNat base n = n
@@ -111,12 +98,6 @@ mutual
 
 
 -- TODO prove ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
-
-wkₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
-wkₜ ρ = wk (toWk ρ)
-
-wkLiftₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
-wkLiftₜ ρ = wk (lift (toWk ρ))
 
 wk1 : Term → Term
 wk1 = wk (step id)

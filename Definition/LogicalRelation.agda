@@ -3,8 +3,9 @@ module Definition.LogicalRelation where
 open import Tools.Context
 
 open import Definition.Untyped
-open import Definition.Untyped.Properties
+--open import Definition.Untyped.Properties
 open import Definition.Typed
+open import Definition.Typed.Weakening
 
 open import Data.Product
 open import Data.Sum
