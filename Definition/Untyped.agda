@@ -104,6 +104,12 @@ wk1 = wk (step id)
 
 Subst = Nat → Term
 
+head : Subst → Term
+head σ = σ 0
+
+tail : Subst → Subst
+tail σ n = σ (suc n)
+
 substVar : (σ : Subst) (x : Nat) → Term
 substVar σ x = σ x
 
