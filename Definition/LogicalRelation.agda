@@ -164,7 +164,7 @@ mutual
 
   data _⊩¹_ (Γ : Con Term) : Term → Set where
     U  : Γ ⊩¹ U
-    ℕ  : Γ ⊩¹ ℕ
+    ℕ  : (⊢Γ : ⊢ Γ) → Γ ⊩¹ ℕ
     Π  : ∀ {F G} (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G) (⊩F : Γ ⊩¹ F)
                  ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F])
                  (G-ext : wk-substEq-prop¹ Γ F G [F] [G]) → Γ ⊩¹ Π F ▹ G
@@ -172,21 +172,21 @@ mutual
 
   _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
   Γ ⊩¹ .U ≡ t / U = t PE.≡ U
-  Γ ⊩¹ .ℕ ≡ t / ℕ = Γ ⊢ t ⇒* ℕ
+  Γ ⊩¹ .ℕ ≡ t / (ℕ ⊢Γ) = Γ ⊢ t ⇒* ℕ
   Γ ⊩¹ .(Π F ▹ G) ≡ t / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext =
     Π¹[ Γ ] Π F ▹ G ≡ t [ F , G , [F] , [G] ]
   Γ ⊩¹ A ≡ B / emb x = Γ ⊩⁰ A ≡ B / x
 
   _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
   Γ ⊩¹ A ∷ .U / U = Γ ⊢ A ∷ U × Γ ⊩⁰ A
-  Γ ⊩¹ a ∷ .ℕ / ℕ = ℕ[ Γ ] a ∷ ℕ
+  Γ ⊩¹ a ∷ .ℕ / (ℕ ⊢Γ) = ℕ[ Γ ] a ∷ ℕ
   Γ ⊩¹ f ∷ .(Π F ▹ G) / Π {F} {G} ⊢F ⊢G D [F] [G] G-ext =
     Γ ⊢ f ∷ Π F ▹ G × wk-fun-ext-prop¹ Γ F G f [F] [G]
   Γ ⊩¹ t ∷ A / emb x = Γ ⊩⁰ t ∷ A / x
 
   _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
   Γ ⊩¹ t ≡ u ∷ .U / U = U[ Γ ] t ≡ u ∷ U
-  Γ ⊩¹ t ≡ u ∷ .ℕ / ℕ = ℕ[ Γ ] t ≡ u ∷ ℕ
+  Γ ⊩¹ t ≡ u ∷ .ℕ / (ℕ ⊢Γ) = ℕ[ Γ ] t ≡ u ∷ ℕ
   Γ ⊩¹ t ≡ u ∷ .(Π F ▹ G) / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π¹ₜ[ Γ ] t ≡ u ∷ Π F ▹ G [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
     let [A] = Π x x₁ x₂ [F] [G] x₃
     in  Γ ⊢ t ≡ u ∷ Π F ▹ G
