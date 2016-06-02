@@ -27,16 +27,16 @@ mutual
 
   _⊨⟨_⟩_∷_/_ : (Δ : Con Term) (l : TypeLevel) (σ : Subst) (Γ : Con Term) ([Γ] : ⊨⟨ l ⟩ Γ) → Set
   Δ ⊨⟨ l ⟩ σ ∷ .ε        / ε                  = ⊤
-  Δ ⊨⟨ l ⟩ σ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} [Γ] x) =
-    Σ (Δ ⊨⟨ l ⟩ tail σ ∷ Γ / [Γ]) \ [σ] →
-    (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ (x [σ]))
+  Δ ⊨⟨ l ⟩ σ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} [Γ] [A]) =
+    Σ (Δ ⊨⟨ l ⟩ tail σ ∷ Γ / [Γ]) λ [σ] →
+    (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ ([A] [σ]))
 
   _⊨⟨_⟩_≡_∷_/_ : (Δ : Con Term) (l : TypeLevel) (σ σ' : Subst) (Γ : Con Term) ([Γ] : ⊨⟨ l ⟩ Γ) → Set
   Δ ⊨⟨ l ⟩ σ ≡ σ' ∷ .ε       / ε                   = ⊤
-  Δ ⊨⟨ l ⟩ σ ≡ σ' ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} [Γ] x) =
-    Σ (Δ ⊨⟨ l ⟩ tail σ ∷ Γ / [Γ]) \ [σ] →
+  Δ ⊨⟨ l ⟩ σ ≡ σ' ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} [Γ] [A]) =
+    Σ (Δ ⊨⟨ l ⟩ tail σ ∷ Γ / [Γ]) λ [σ] →
     (Δ ⊨⟨ l ⟩ tail σ ≡ tail σ' ∷ Γ / [Γ]) ×
-    (Δ ⊩⟨ l ⟩ head σ ≡ head σ' ∷ subst (tail σ) A / proj₁ (x [σ]))
+    (Δ ⊩⟨ l ⟩ head σ ≡ head σ' ∷ subst (tail σ) A / proj₁ ([A] [σ]))
 
 
 _⊨⟨_⟩t_∷_/_ : (Γ : Con Term) (l : TypeLevel) (t A : Term) → ⊨⟨ l ⟩ Γ -> Set
