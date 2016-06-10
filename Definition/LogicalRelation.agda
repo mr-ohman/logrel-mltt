@@ -68,10 +68,10 @@ mutual
                    ([a≡b] : Δ ⊩⁰ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                  → Δ ⊩⁰ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
-  data _⊩⁰_ (Γ : Con Term) : Term → Set where
-    ℕ  : ∀ {A} (D : Γ ⊢ A :⇒*: ℕ) → Γ ⊩⁰ A
-    ne : ∀ {A K} (D : Γ ⊢ A :⇒*: K) (neK : Neutral K) → Γ ⊩⁰ A
-    Π  : ∀ {F G A} (D : Γ ⊢ A :⇒*: Π F ▹ G) (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G)
+  data _⊩⁰_ (Γ : Con Term) (A : Term) : Set where
+    ℕ  : ∀ (D : Γ ⊢ A :⇒*: ℕ) → Γ ⊩⁰ A
+    ne : ∀ {K} (D : Γ ⊢ A :⇒*: K) (neK : Neutral K) → Γ ⊩⁰ A
+    Π  : ∀ {F G} (D : Γ ⊢ A :⇒*: Π F ▹ G) (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G)
                    ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F])
                    (G-ext : wk-substEq-prop⁰ Γ F G [F] [G]) → Γ ⊩⁰ A
 
