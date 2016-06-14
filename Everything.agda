@@ -13,6 +13,7 @@ import Definition.Typed.Weakening
 -- import Definition.Typed.Inversion  -- unsolved metas
 
 import Definition.LogicalRelation
+import Definition.LogicalRelation.Reflexivity
 import Definition.LogicalRelation.Tactic
 import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Substitution
