@@ -5,6 +5,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
+open import Definition.LogicalRelation.Reflexivity
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 
