@@ -4,6 +4,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
+open import Definition.LogicalRelation.Reflexivity
 -- open import Definition.LogicalRelation.Properties -- unsolved metas
 open import Definition.LogicalRelation.Substitution
 
@@ -29,6 +30,15 @@ mutual
   fundamental ⊢Γ (U x) x₁ = U {!!} , λ x₂ → PE.refl
   fundamental ⊢Γ (Π A ▹ A₁) x = {!!}
   fundamental ⊢Γ (univ x) x₁ = {!!}
+
+  fundamentalEq : ∀{Γ A B}  (⊢Γ : ⊢ Γ) → Γ ⊢ A ≡ B →
+    ∃ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ) → Γ ⊨⟨ ¹ ⟩ A ≡ B / valid ⊢Γ / [A]
+  fundamentalEq ⊢Γ (univ x) = {!!}
+  fundamentalEq ⊢Γ (refl D) = let [B] = fundamental ⊢Γ D
+                              in  [B] , (λ [σ] → reflEq (proj₁ ([B] [σ])))
+  fundamentalEq ⊢Γ (sym A≡B) = {!!}
+  fundamentalEq ⊢Γ (trans A≡B A≡B₁) = {!!}
+  fundamentalEq ⊢Γ (Π-cong x A≡B A≡B₁) = {!!}
 
   fundamentalTerm : ∀{Γ A t}  (⊢Γ : ⊢ Γ) → Γ ⊢ t ∷ A →
     ∃ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ) → Γ ⊨⟨ ¹ ⟩t t ∷ A / valid ⊢Γ / [A]
