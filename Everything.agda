@@ -17,6 +17,7 @@ import Definition.LogicalRelation.Reflexivity
 import Definition.LogicalRelation.Tactic
 import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Substitution
+import Definition.LogicalRelation.Weakening
 -- import Definition.LogicalRelation.Properties -- unsolved metas
 
 import Lemma.Soundness
