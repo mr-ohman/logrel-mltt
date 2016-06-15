@@ -39,7 +39,7 @@ mutual
           , (λ ρ ⊢Δ → proof-irrelevanceEq' (PE.cong (wkₜ ρ) F≡F₁) ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
           , (λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
                            in  proof-irrelevanceEq' (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a])) ]
-  proof-irrelevanceEqT U A≡B = A≡B
+  proof-irrelevanceEqT (U ⊢Γ ⊢Γ₁) A≡B = A≡B
   proof-irrelevanceEqT (emb⁰¹ x) A≡B = proof-irrelevanceEqT x A≡B
   proof-irrelevanceEqT (emb¹⁰ x) A≡B = proof-irrelevanceEqT x A≡B
 
@@ -63,7 +63,7 @@ mutual
                                    [a]         = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
                                    [a≡b]       = proof-irrelevanceEqTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
                                in  proof-irrelevanceEqTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t] ρ ⊢Δ [a] [a≡b]))
-  proof-irrelevanceTermT U t = t
+  proof-irrelevanceTermT (U ⊢Γ ⊢Γ₁) t = t
   proof-irrelevanceTermT (emb⁰¹ x) t = proof-irrelevanceTermT x t
   proof-irrelevanceTermT (emb¹⁰ x) t = proof-irrelevanceTermT x t
 
@@ -94,7 +94,7 @@ mutual
     in  t≡u , proof-irrelevanceTerm [A] [A]₁ ⊩t , proof-irrelevanceTerm [A] [A]₁ ⊩u
      ,  (λ ρ ⊢Δ [a]₁ → let [a] = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
                        in  proof-irrelevanceEqTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t≡u] ρ ⊢Δ [a]))
-  proof-irrelevanceEqTermT U t≡u = t≡u
+  proof-irrelevanceEqTermT (U ⊢Γ ⊢Γ₁) t≡u = t≡u
   proof-irrelevanceEqTermT (emb⁰¹ x) t≡u = proof-irrelevanceEqTermT x t≡u
   proof-irrelevanceEqTermT (emb¹⁰ x) t≡u = proof-irrelevanceEqTermT x t≡u
 

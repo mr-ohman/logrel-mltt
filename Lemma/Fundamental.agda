@@ -26,7 +26,7 @@ mutual
 
   fundamental : ∀ {Γ A} (⊢Γ : ⊢ Γ) (⊢A : Γ ⊢ A) → Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ
   fundamental ⊢Γ (ℕ x) x₁ = ℕ {!!} , λ x₂ → id (ℕ {!!})
-  fundamental ⊢Γ (U x) x₁ = U , λ x₂ → PE.refl
+  fundamental ⊢Γ (U x) x₁ = U {!!} , λ x₂ → PE.refl
   fundamental ⊢Γ (Π A ▹ A₁) x = {!!}
   fundamental ⊢Γ (univ x) x₁ = {!!}
 

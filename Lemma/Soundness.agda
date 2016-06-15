@@ -9,37 +9,37 @@ open import Data.Product
 import Relation.Binary.PropositionalEquality as PE
 
 
-soundness : ∀ {l Γ A} → ⊢ Γ → Γ ⊩⟨ l ⟩ A → Γ ⊢ A
-soundness ⊢Γ U = U ⊢Γ
-soundness ⊢Γ (ℕ [ ⊢A , ⊢B , D ]) = ⊢A
-soundness ⊢Γ (ne [ ⊢A , ⊢B , D ] neK) = ⊢A
-soundness ⊢Γ (Π [ ⊢A , ⊢B , D ] ⊢F ⊢G [F] [G] G-ext) = ⊢A
-soundness {⁰} ⊢Γ (emb {l< = ()} x)
-soundness {¹} ⊢Γ (emb {l< = 0<1} x) = soundness ⊢Γ x
+soundness : ∀ {l Γ A} → Γ ⊩⟨ l ⟩ A → Γ ⊢ A
+soundness (U ⊢Γ) = U ⊢Γ
+soundness (ℕ [ ⊢A , ⊢B , D ]) = ⊢A
+soundness (ne [ ⊢A , ⊢B , D ] neK) = ⊢A
+soundness (Π [ ⊢A , ⊢B , D ] ⊢F ⊢G [F] [G] G-ext) = ⊢A
+soundness {⁰} (emb {l< = ()} x)
+soundness {¹} (emb {l< = 0<1} x) = soundness x
 
-soundnessEq : ∀ {l Γ A B} → ⊢ Γ → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊢ A ≡ B
-soundnessEq ⊢Γ U PE.refl = refl (U ⊢Γ)
-soundnessEq ⊢Γ (ℕ D) A≡B = trans (subset* (red D)) (sym (subset* A≡B))
-soundnessEq ⊢Γ (ne D neK) ne[ M , D' , neM , K≡M ] = trans (subset* (red D)) (trans K≡M (sym (subset* (red D'))))
-soundnessEq ⊢Γ (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] = A≡B
-soundnessEq {⁰} ⊢Γ (emb {l< = ()} x) A≡B
-soundnessEq {¹} ⊢Γ (emb {l< = 0<1} x) A≡B = soundnessEq ⊢Γ x A≡B
+soundnessEq : ∀ {l Γ A B} → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊢ A ≡ B
+soundnessEq (U ⊢Γ) PE.refl = refl (U ⊢Γ)
+soundnessEq (ℕ D) A≡B = trans (subset* (red D)) (sym (subset* A≡B))
+soundnessEq (ne D neK) ne[ M , D' , neM , K≡M ] = trans (subset* (red D)) (trans K≡M (sym (subset* (red D'))))
+soundnessEq (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] = A≡B
+soundnessEq {⁰} (emb {l< = ()} x) A≡B
+soundnessEq {¹} (emb {l< = 0<1} x) A≡B = soundnessEq x A≡B
 
-soundnessTerm : ∀ {l Γ A t} → ⊢ Γ → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊢ t ∷ A
-soundnessTerm ⊢Γ U (⊢t , ⊩t) = ⊢t
-soundnessTerm ⊢Γ (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN ] = conv ⊢t (sym (subset* (red D)))
-soundnessTerm ⊢Γ (ne D neK) t = t
-soundnessTerm ⊢Γ (Π D ⊢F ⊢G [F] [G] G-ext) (⊢t , [t]) = ⊢t
-soundnessTerm {⁰} ⊢Γ (emb {l< = ()} x) t
-soundnessTerm {¹} ⊢Γ (emb {l< = 0<1} x) t = soundnessTerm ⊢Γ x t
+soundnessTerm : ∀ {l Γ A t} → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊢ t ∷ A
+soundnessTerm (U ⊢Γ) (⊢t , ⊩t) = ⊢t
+soundnessTerm (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN ] = conv ⊢t (sym (subset* (red D)))
+soundnessTerm (ne D neK) t = t
+soundnessTerm (Π D ⊢F ⊢G [F] [G] G-ext) (⊢t , [t]) = ⊢t
+soundnessTerm {⁰} (emb {l< = ()} x) t
+soundnessTerm {¹} (emb {l< = 0<1} x) t = soundnessTerm x t
 
-soundnessTermEq : ∀ {l Γ A t u} → ⊢ Γ → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊢ t ≡ u ∷ A
-soundnessTermEq ⊢Γ U U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = t≡u
-soundnessTermEq ⊢Γ (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] = conv t≡u (sym (subset* (red D)))
-soundnessTermEq ⊢Γ (ne D neK) t≡u = t≡u
-soundnessTermEq ⊢Γ (Π D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) = t≡u
-soundnessTermEq {⁰} ⊢Γ (emb {l< = ()} x) t≡u
-soundnessTermEq {¹} ⊢Γ (emb {l< = 0<1} x) t≡u = soundnessTermEq ⊢Γ x t≡u
+soundnessTermEq : ∀ {l Γ A t u} → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊢ t ≡ u ∷ A
+soundnessTermEq (U ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = t≡u
+soundnessTermEq (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] = conv t≡u (sym (subset* (red D)))
+soundnessTermEq (ne D neK) t≡u = t≡u
+soundnessTermEq (Π D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) = t≡u
+soundnessTermEq {⁰} (emb {l< = ()} x) t≡u
+soundnessTermEq {¹} (emb {l< = 0<1} x) t≡u = soundnessTermEq x t≡u
 
 -- soundness : ∀ {Γ A} T → ⊢ Γ → Γ ⊩⟨ T ⟩ A → Γ ⊢ A
 -- soundness ⁰ ⊢Γ (ℕ [ Γ⊢A , Γ⊢B , A⇒*B ]) = Γ⊢A

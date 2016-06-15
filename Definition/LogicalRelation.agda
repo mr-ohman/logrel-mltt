@@ -185,7 +185,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                    → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
     data _⊩¹_ (Γ : Con Term) : Term → Set where
-      U  : ∀ {l'} → {l< : l' < l} → Γ ⊩¹ U
+      U  : ∀ {l'} {l< : l' < l} (⊢Γ : ⊢ Γ) → Γ ⊩¹ U
       ℕ  : ∀ {A} (D : Γ ⊢ A :⇒*: ℕ) → Γ ⊩¹ A
       ne : ∀ {A K} (D : Γ ⊢ A :⇒*: K) (neK : Neutral K) → Γ ⊩¹ A
       Π  : ∀ {F G A} (D : Γ ⊢ A :⇒*: Π F ▹ G) (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G)
@@ -195,14 +195,14 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                      → Γ ⊩ A  → Γ ⊩¹ A
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ .U ≡ t / U {l< = l<} = t PE.≡ U
+    Γ ⊩¹ .U ≡ t / U {l< = l<} ⊢Γ = t PE.≡ U
     Γ ⊩¹ A ≡ B / ℕ  D = Γ ⊢ B ⇒* ℕ
     Γ ⊩¹ A ≡ B / ne {K = K} D neK = ne[ Γ ] A ≡ B [ K ]
     Γ ⊩¹ A ≡ B / Π  {F} {G} D ⊢F ⊢G [F] [G] G-ext = Π¹[ Γ ] A ≡ B [ F , G , [F] , [G] ]
     Γ ⊩¹ A ≡ B / emb x = Γ Lower.⊩ A ≡ B / x
 
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ A ∷ .U / U {l< = l<} = Γ ⊢ A ∷ U × Γ ⊩ A where open Lower {l< = l<}
+    Γ ⊩¹ A ∷ .U / U {l< = l<} ⊢Γ = Γ ⊢ A ∷ U × Γ ⊩ A where open Lower {l< = l<}
     Γ ⊩¹ t ∷ A / ℕ x = ℕ[ Γ ] t ∷ A
     Γ ⊩¹ t ∷ A / ne x x₁ = Γ ⊢ t ∷ A
     Γ ⊩¹ f ∷ A / Π {F} {G} D ⊢F ⊢G [F] [G] G-ext =
@@ -210,7 +210,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     Γ ⊩¹ t ∷ A / emb x = Γ Lower.⊩ t ∷ A / x
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ≡ u ∷ .U / U {l< = l<} = U[ l< ][ Γ ] t ≡ u ∷ U
+    Γ ⊩¹ t ≡ u ∷ .U / U {l< = l<} ⊢Γ = U[ l< ][ Γ ] t ≡ u ∷ U
     Γ ⊩¹ t ≡ u ∷ A / ℕ x = ℕ[ Γ ] t ≡ u ∷ A
     Γ ⊩¹ t ≡ u ∷ A / ne x x₁ = Γ ⊢ t ≡ u ∷ A
     Γ ⊩¹ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π¹ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
