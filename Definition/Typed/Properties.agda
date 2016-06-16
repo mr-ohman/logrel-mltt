@@ -169,3 +169,6 @@ U≢ne () PE.refl
 
 Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
 Π-PE-injectivity PE.refl = PE.refl , PE.refl
+
+idRed:*: : ∀ {Γ A} → Γ ⊢ A → Γ ⊢ A :⇒*: A
+idRed:*: A = [ A , A , id A ]

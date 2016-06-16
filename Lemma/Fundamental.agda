@@ -16,7 +16,7 @@ import Relation.Binary.PropositionalEquality as PE
 
 postulate
   reflTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t} → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ t ∷  A / [A]
-  symEq : ∀ {Γ A B} l l' ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
+  symEq : ∀ {Γ A B l l'} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t u} → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ t ∷  A / [A]
 
 
@@ -26,17 +26,20 @@ mutual
   valid (⊢Γ ∙ x) = valid ⊢Γ ∙ fundamental ⊢Γ x
 
   fundamental : ∀ {Γ A} (⊢Γ : ⊢ Γ) (⊢A : Γ ⊢ A) → Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ
-  fundamental ⊢Γ (ℕ x) x₁ = ℕ {!!} , λ x₂ → id (ℕ {!!})
-  fundamental ⊢Γ (U x) x₁ = U {!!} , λ x₂ → PE.refl
-  fundamental ⊢Γ (Π A ▹ A₁) x = {!!}
-  fundamental ⊢Γ (univ x) x₁ = {!!}
+  fundamental ⊢Γ (ℕ x) ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ x₂ → id (ℕ ⊢Δ)
+  fundamental ⊢Γ (U x) ⊢Δ [σ] = U {l< = 0<1} ⊢Δ , λ x₂ → PE.refl
+  fundamental ⊢Γ (Π A ▹ A₁) ⊢Δ [σ] = {!!}
+  fundamental ⊢Γ (univ x) ⊢Δ [σ] = {!!}
 
   fundamentalEq : ∀{Γ A B}  (⊢Γ : ⊢ Γ) → Γ ⊢ A ≡ B →
     ∃ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ) → Γ ⊨⟨ ¹ ⟩ A ≡ B / valid ⊢Γ / [A]
   fundamentalEq ⊢Γ (univ x) = {!!}
   fundamentalEq ⊢Γ (refl D) = let [B] = fundamental ⊢Γ D
-                              in  [B] , (λ [σ] → reflEq (proj₁ ([B] [σ])))
-  fundamentalEq ⊢Γ (sym A≡B) = {!!}
+                              in  [B] , (λ ⊢Δ [σ] → reflEq (proj₁ ([B] ⊢Δ [σ])))
+  fundamentalEq ⊢Γ (sym A≡B) with fundamentalEq ⊢Γ A≡B
+  fundamentalEq ⊢Γ (sym A≡B) | [B] , [B≡A] = (λ ⊢Δ [σ] → {!!} , (λ x → {![B]!}))
+                                           , (λ ⊢Δ [σ] → symEq (proj₁ ([B] ⊢Δ [σ])) {!!} ([B≡A] ⊢Δ [σ]))
+                                           -- [A] is necessary above
   fundamentalEq ⊢Γ (trans A≡B A≡B₁) = {!!}
   fundamentalEq ⊢Γ (Π-cong x A≡B A≡B₁) = {!!}
 
@@ -47,7 +50,7 @@ mutual
   fundamentalTerm ⊢Γ (var x₁ x₂) = {!!}
   fundamentalTerm ⊢Γ (lam x x₁) = {!!}
   fundamentalTerm ⊢Γ (Dt ∘ Du) with fundamentalTerm ⊢Γ Dt | fundamentalTerm ⊢Γ Du
-  ... | [ΠAB] , [t] | [A] , [u] = (λ [σ] → {!!} , {!!}) , {!!}
+  ... | [ΠAB] , [t] | [A] , [u] = (λ ⊢Δ [σ] → {!!} , {!!}) , {!!}
   fundamentalTerm ⊢Γ (zero x) = {!!}
   fundamentalTerm ⊢Γ (suc x) = {!!}
   fundamentalTerm ⊢Γ (natrec x x₁ x₂ x₃) = {!!}
@@ -55,10 +58,10 @@ mutual
 
   fundamentalTermEq : ∀{Γ A t t'}  (⊢Γ : ⊢ Γ) → Γ ⊢ t ≡ t' ∷ A → Γ ⊨⟨ ¹ ⟩t t ≡ t' ∷ A / valid ⊢Γ
   fundamentalTermEq ⊢Γ (refl D) with fundamentalTerm ⊢Γ D
-  ... | [A] , [t] = modelsTermEq [A] [t] [t] λ [σ] → reflTermEq ¹ (proj₁ ([A] [σ])) (proj₁ ([t] [σ]))
+  ... | [A] , [t] = modelsTermEq [A] [t] [t] λ ⊢Δ [σ] → reflTermEq ¹ (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
   fundamentalTermEq ⊢Γ (sym D) with fundamentalTermEq ⊢Γ D
-  fundamentalTermEq ⊢Γ (sym D) | modelsTermEq [A] [t'] [t] [t'≡t] = modelsTermEq [A] [t] [t'] λ [σ] →
-      symTermEq ¹ (proj₁ ([A] [σ])) ([t'≡t] [σ])
+  fundamentalTermEq ⊢Γ (sym D) | modelsTermEq [A] [t'] [t] [t'≡t] = modelsTermEq [A] [t] [t'] λ ⊢Δ [σ] →
+      symTermEq ¹ (proj₁ ([A] ⊢Δ [σ])) ([t'≡t] ⊢Δ [σ])
   fundamentalTermEq ⊢Γ (trans x x₁) = {!!}
   fundamentalTermEq ⊢Γ (conv x x₁) = {!!}
   fundamentalTermEq ⊢Γ (Π-cong x x₁ x₂) = {!!}
