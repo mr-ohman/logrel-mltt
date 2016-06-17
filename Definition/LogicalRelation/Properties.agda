@@ -129,6 +129,19 @@ mutual
   symEq : ∀ {Γ A B l l'} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEq [A] [B] A≡B = symEqT (goodCases [A] [B] A≡B) A≡B
 
+substEq : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l ⟩ B
+substEq (U {l< = l<} ⊢Γ) PE.refl = U {l< = l<} ⊢Γ
+substEq (ℕ D) A≡B = ℕ {!D!}
+substEq (ne D neK) ne[ M , D' , neM , K≡M ] = ne D' neM
+substEq (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+  Π {F = F'} {G = G'} {!D'!} {!!} {!!}
+    (λ ρ ⊢Δ → substEq ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
+    (λ ρ ⊢Δ [a] → let [a]₁ = convTerm₂ ([F] ρ ⊢Δ) (substEq ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)) ([F≡F'] ρ ⊢Δ) [a]
+                  in  substEq ([G] ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]₁))
+    (λ ρ ⊢Δ [a] [a≡b] → {!!})
+substEq {⁰} (emb {l< = ()} x) A≡B
+substEq {¹} (emb {l< = 0<1} x) A≡B = emb {l< = 0<1} (substEq x A≡B)
+
 reflNatural : ∀ {Γ n} → Natural n → Γ ⊢ n ≡ n ∷ ℕ → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n n
 reflNatural (suc natN) eq = suc (reflNatural natN {!!})
 reflNatural zero eq = zero
