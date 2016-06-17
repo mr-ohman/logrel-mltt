@@ -31,15 +31,16 @@ mutual
   fundamental ⊢Γ (Π A ▹ A₁) ⊢Δ [σ] = {!!}
   fundamental ⊢Γ (univ x) ⊢Δ [σ] = {!!}
 
-  fundamentalEq : ∀{Γ A B}  (⊢Γ : ⊢ Γ) → Γ ⊢ A ≡ B →
-    ∃ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ) → Γ ⊨⟨ ¹ ⟩ A ≡ B / valid ⊢Γ / [A]
+  fundamentalEq : ∀{Γ A B}  (⊢Γ : ⊢ Γ) → Γ ⊢ A ≡ B
+    → ∃₂ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / valid ⊢Γ) ([B] : Γ ⊨⟨ ¹ ⟩ B / valid ⊢Γ)
+    → Γ ⊨⟨ ¹ ⟩ A ≡ B / valid ⊢Γ / [A]
   fundamentalEq ⊢Γ (univ x) = {!!}
   fundamentalEq ⊢Γ (refl D) = let [B] = fundamental ⊢Γ D
-                              in  [B] , (λ ⊢Δ [σ] → reflEq (proj₁ ([B] ⊢Δ [σ])))
+                              in  [B] , [B] , (λ ⊢Δ [σ] → reflEq (proj₁ ([B] ⊢Δ [σ])))
   fundamentalEq ⊢Γ (sym A≡B) with fundamentalEq ⊢Γ A≡B
-  fundamentalEq ⊢Γ (sym A≡B) | [B] , [B≡A] = (λ ⊢Δ [σ] → {!!} , (λ x → {![B]!}))
-                                           , (λ ⊢Δ [σ] → symEq (proj₁ ([B] ⊢Δ [σ])) {!!} ([B≡A] ⊢Δ [σ]))
-                                           -- [A] is necessary above
+  fundamentalEq ⊢Γ (sym A≡B) | [B] , [A] , [B≡A] = (λ ⊢Δ [σ] → [A] ⊢Δ [σ])
+                                                 , (λ ⊢Δ [σ] → [B] ⊢Δ [σ])
+                                                 , (λ ⊢Δ [σ] → symEq (proj₁ ([B] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([B≡A] ⊢Δ [σ]))
   fundamentalEq ⊢Γ (trans A≡B A≡B₁) = {!!}
   fundamentalEq ⊢Γ (Π-cong x A≡B A≡B₁) = {!!}
 
