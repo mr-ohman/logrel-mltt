@@ -9,6 +9,7 @@ open import Definition.Typed.Weakening
 
 open import Data.Product
 open import Data.Sum
+open import Data.Unit
 import Relation.Binary.PropositionalEquality as PE
 
 -- infix 20 _⊩⁰_
@@ -22,15 +23,29 @@ record ne[_]_≡_[_] (Γ : Con Term) (A B K : Term) : Set where
     neM : Neutral M
     K≡M : Γ ⊢ K ≡ M
 
+natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
+natural-prop Γ .(suc n) (suc {n} natN) = natural-prop Γ n natN × Γ ⊢ n ∷ ℕ
+natural-prop Γ .zero zero = ⊤
+natural-prop Γ n (ne x) = ⊤
+
+naturalEq-prop : (Γ : Con Term) (m n : Term) → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) m n
+               → Set
+naturalEq-prop Γ .(suc m) .(suc n) (suc {m} {n} [m≡n]) = naturalEq-prop Γ m n [m≡n] × Γ ⊢ m ≡ n ∷ ℕ
+naturalEq-prop Γ .zero .zero zero = ⊤
+naturalEq-prop Γ m n (ne x x₁ x₂) = ⊤
+
+-- Records for logical relation cases
+
 record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
-  constructor ℕ[_,_,_]
+  constructor ℕ[_,_,_,_]
   field
     n    : Term
     d    : Γ ⊢ t :⇒*: n ∷ ℕ
     natN : Natural n
+    prop : natural-prop Γ n natN
 
 record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
-  constructor ℕ≡[_,_,_,_,_,_]
+  constructor ℕ≡[_,_,_,_,_,_,_]
   field
     k      : Term
     k'     : Term
@@ -38,6 +53,7 @@ record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
     d'     : Γ ⊢ u ⇒* k' ∷ ℕ
     t≡u    : Γ ⊢ t ≡ u ∷ ℕ
     [k≡k'] : [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k'
+    prop   : naturalEq-prop Γ k k' [k≡k']
 
 -- mutual
   -- split into small and big types ⊩⁰, ⊩¹
@@ -221,8 +237,6 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                  → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
     Γ ⊩¹ t ≡ u ∷ A / emb x = Γ Lower.⊩ t ≡ u ∷ A / x
-
-    -- Records for logical relation cases
 
     record Π¹[_]_≡_[_,_,_,_] (Γ : Con Term) (A B F G : Term) ([F] : wk-prop¹ Γ F)
                             ([G] : wk-subst-prop¹ Γ F G [F]) : Set where
