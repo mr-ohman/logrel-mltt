@@ -4,8 +4,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Reflexivity
--- open import Definition.LogicalRelation.Properties -- unsolved metas
+open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
 open import Tools.Context
@@ -16,7 +15,6 @@ import Relation.Binary.PropositionalEquality as PE
 
 postulate
   reflTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t} → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ t ∷  A / [A]
-  symEq : ∀ {Γ A B l l'} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t u} → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ t ∷  A / [A]
 
 

@@ -6,13 +6,11 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
+open import Definition.LogicalRelation.Tactic
 
 open import Data.Product
 open import Data.Empty using (⊥; ⊥-elim)
 import Relation.Binary.PropositionalEquality as PE
-
-
-open import Definition.LogicalRelation.Tactic
 
 
 mutual

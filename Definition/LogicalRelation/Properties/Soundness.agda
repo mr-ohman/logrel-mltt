@@ -1,4 +1,4 @@
-module Lemma.Soundness where
+module Definition.LogicalRelation.Properties.Soundness where
 
 open import Definition.Untyped
 open import Definition.Typed

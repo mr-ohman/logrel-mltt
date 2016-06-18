@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Reflexivity where
+module Definition.LogicalRelation.Properties.Reflexivity where
 
 open import Definition.Untyped
 open import Definition.Typed

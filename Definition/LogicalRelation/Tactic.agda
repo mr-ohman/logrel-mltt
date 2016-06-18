@@ -4,7 +4,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Reflexivity
+open import Definition.LogicalRelation.Properties.Reflexivity
 
 open import Tools.Context
 
