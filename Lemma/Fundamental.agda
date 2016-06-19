@@ -14,10 +14,6 @@ open import Data.Product
 
 import Relation.Binary.PropositionalEquality as PE
 
-postulate
-  reflTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t} → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ t ∷  A / [A]
-  symTermEq : ∀ {Γ A} l ([A] : Γ ⊩⟨ l ⟩ A) {t u} → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ t ∷  A / [A]
-
 
 mutual
   valid : ∀ {Γ} → ⊢ Γ → ⊨⟨ ¹ ⟩ Γ
@@ -63,10 +59,10 @@ mutual
 
   fundamentalTermEq : ∀{Γ A t t'}  (⊢Γ : ⊢ Γ) → Γ ⊢ t ≡ t' ∷ A → Γ ⊨⟨ ¹ ⟩t t ≡ t' ∷ A / valid ⊢Γ
   fundamentalTermEq ⊢Γ (refl D) with fundamentalTerm ⊢Γ D
-  ... | [A] , [t] = modelsTermEq [A] [t] [t] λ ⊢Δ [σ] → reflTermEq ¹ (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
+  ... | [A] , [t] = modelsTermEq [A] [t] [t] λ ⊢Δ [σ] → reflEqTerm (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
   fundamentalTermEq ⊢Γ (sym D) with fundamentalTermEq ⊢Γ D
   fundamentalTermEq ⊢Γ (sym D) | modelsTermEq [A] [t'] [t] [t'≡t] = modelsTermEq [A] [t] [t'] λ ⊢Δ [σ] →
-      symTermEq ¹ (proj₁ ([A] ⊢Δ [σ])) ([t'≡t] ⊢Δ [σ])
+      symEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t'≡t] ⊢Δ [σ])
   fundamentalTermEq ⊢Γ (trans x x₁) = {!!}
   fundamentalTermEq ⊢Γ (conv t≡u A'≡A) with fundamentalTermEq ⊢Γ t≡u | fundamentalEq ⊢Γ A'≡A
   fundamentalTermEq ⊢Γ (conv t≡u A'≡A) | modelsTermEq [A'] [t] [u] [t≡u] | [A']₁ , [A] , [A'≡A] =

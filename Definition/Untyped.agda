@@ -5,6 +5,7 @@ open import Data.Bool using (Bool; true; false; if_then_else_)
 open import Data.List as List
 open import Data.Unit using (⊤; tt)
 
+open import Data.Product
 open import Relation.Nullary.Decidable using (⌊_⌋)
 
 open import Tools.Context
@@ -36,6 +37,12 @@ data [Natural] (R : Term → Term → Set) : Term → Term → Set where
   zero : [Natural] R zero zero
   ne : ∀ {n n'} → Neutral n → Neutral n' → R n n' → [Natural] R n n'
 
+split : ∀ {R t u} → [Natural] R t u → Natural t × Natural u
+split (suc n) with split n
+... | n₁ , n₂ = suc n₁ , suc n₂
+split zero = zero , zero
+split (ne x x₁ x₂) = ne x , ne x₁
+
 -- Weak head normal forms
 
 data Whnf : Term → Set where
@@ -47,6 +54,10 @@ data Whnf : Term → Set where
   suc  : ∀{t} → Whnf (suc t)
   ne : ∀{n} → Neutral n → Whnf n
 
+naturalWhnf : ∀ {n} → Natural n → Whnf n
+naturalWhnf (suc n₁) = suc
+naturalWhnf zero = zero
+naturalWhnf (ne x) = ne x
 
 data Wk : Set where
   id    : Wk
