@@ -172,3 +172,6 @@ U≢ne () PE.refl
 
 idRed:*: : ∀ {Γ A} → Γ ⊢ A → Γ ⊢ A :⇒*: A
 idRed:*: A = [ A , A , id A ]
+
+idRedTerm:*: : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ t :⇒*: t ∷ A
+idRedTerm:*: t = [ t , t , id t ]
