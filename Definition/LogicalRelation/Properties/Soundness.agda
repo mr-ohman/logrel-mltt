@@ -35,7 +35,7 @@ soundnessTerm {¹} (emb {l< = 0<1} x) t = soundnessTerm x t
 
 soundnessTermEq : ∀ {l Γ A t u} → ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊢ t ≡ u ∷ A
 soundnessTermEq (U ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = t≡u
-soundnessTermEq (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] = conv t≡u (sym (subset* (red D)))
+soundnessTermEq (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] = conv t≡u (sym (subset* (red D)))
 soundnessTermEq (ne D neK) t≡u = t≡u
 soundnessTermEq (Π D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) = t≡u
 soundnessTermEq {⁰} (emb {l< = ()} x) t≡u

@@ -61,7 +61,7 @@ mutual
   convEqTermT₁ : ∀ {l l' Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
                → Tactic Γ l l' A B [A] [B] → Γ ⊩⟨ l ⟩ A ≡ B / [A]
                → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
-  convEqTermT₁ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] = ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
+  convEqTermT₁ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] = ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ]
   convEqTermT₁ {l} (ne D neK D₁ neK₁) A≡B t≡u = conv t≡u (soundnessEq {l} (ne D neK) A≡B)
   convEqTermT₁ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (t≡u , ⊩t , ⊩u , [t≡u]) =
     let [A] = Π D ⊢F ⊢G [F] [G] G-ext
@@ -80,7 +80,7 @@ mutual
   convEqTermT₂ : ∀ {l l' Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
              → Tactic Γ l l' A B [A] [B] → Γ ⊩⟨ l ⟩ A ≡ B / [A]
              → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B] → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
-  convEqTermT₂ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] = ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
+  convEqTermT₂ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] = ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ]
   convEqTermT₂ {l} (ne D neK D₁ neK₁) A≡B t≡u = conv t≡u (sym (soundnessEq {l} (ne D neK) A≡B))
   convEqTermT₂ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (t≡u , ⊩t , ⊩u , [t≡u]) =
     let [A] = Π D ⊢F ⊢G [F] [G] G-ext

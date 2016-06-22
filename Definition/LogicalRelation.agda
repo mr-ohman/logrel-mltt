@@ -24,15 +24,15 @@ record ne[_]_≡_[_] (Γ : Con Term) (A B K : Term) : Set where
     K≡M : Γ ⊢ K ≡ M
 
 natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
-natural-prop Γ .(suc n) (suc {n} natN) = natural-prop Γ n natN × Γ ⊢ n ∷ ℕ
+natural-prop Γ .(suc n) (suc {n}) = Γ ⊢ n ∷ ℕ
 natural-prop Γ .zero zero = ⊤
-natural-prop Γ n (ne x) = ⊤
+natural-prop Γ n (ne x) = Γ ⊢ n ∷ ℕ
 
-naturalEq-prop : (Γ : Con Term) (m n : Term) → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) m n
-               → Set
-naturalEq-prop Γ .(suc m) .(suc n) (suc {m} {n} [m≡n]) = naturalEq-prop Γ m n [m≡n] × Γ ⊢ m ≡ n ∷ ℕ
-naturalEq-prop Γ .zero .zero zero = ⊤
-naturalEq-prop Γ m n (ne x x₁ x₂) = ⊤
+-- naturalEq-prop : (Γ : Con Term) (m n : Term) → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) m n
+--                → Set
+-- naturalEq-prop Γ .(suc m) .(suc n) (suc {m} {n} [m≡n]) = naturalEq-prop Γ m n [m≡n] × Γ ⊢ m ≡ n ∷ ℕ
+-- naturalEq-prop Γ .zero .zero zero = ⊤
+-- naturalEq-prop Γ m n (ne x x₁ x₂) = ⊤
 
 -- Records for logical relation cases
 
@@ -45,15 +45,15 @@ record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
     prop : natural-prop Γ n natN
 
 record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
-  constructor ℕ≡[_,_,_,_,_,_,_]
+  constructor ℕ≡[_,_,_,_,_,_]
   field
     k      : Term
     k'     : Term
-    d      : Γ ⊢ t ⇒* k  ∷ ℕ
-    d'     : Γ ⊢ u ⇒* k' ∷ ℕ
+    d      : Γ ⊢ t :⇒*: k  ∷ ℕ
+    d'     : Γ ⊢ u :⇒*: k' ∷ ℕ
     t≡u    : Γ ⊢ t ≡ u ∷ ℕ
     [k≡k'] : [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k'
-    prop   : naturalEq-prop Γ k k' [k≡k']
+    -- prop   : naturalEq-prop Γ k k' [k≡k']
 
 -- mutual
   -- split into small and big types ⊩⁰, ⊩¹

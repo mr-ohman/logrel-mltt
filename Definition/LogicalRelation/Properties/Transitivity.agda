@@ -61,56 +61,56 @@ transNatural : ∀ {Γ n n' n''}
              → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n  n'
              → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n' n''
              → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n  n''
-transNatural (suc a) (suc b) = suc (transNatural a b)
+transNatural (suc a) (suc b) = suc (trans a b)
 transNatural (suc a) (ne () x₁ x₂)
 transNatural zero b = b
 transNatural (ne x () x₂) (suc b)
 transNatural (ne x x₁ x₂) zero = ne x x₁ x₂
 transNatural (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (trans x₂ x₅)
 
-transNaturalProp : ∀ {Γ n n' n''}
-                 → ([n≡n'] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n n')
-                 → ([n'≡n''] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n' n'')
-                 → naturalEq-prop Γ n n' [n≡n']
-                 → naturalEq-prop Γ n' n'' [n'≡n'']
-                 → naturalEq-prop Γ n n'' (transNatural [n≡n'] [n'≡n''])
-transNaturalProp (suc [n≡n']) (suc [n'≡n'']) (proj₁ , proj₂) (proj₃ , proj₄) = transNaturalProp [n≡n'] [n'≡n''] proj₁ proj₃ , trans proj₂ proj₄
-transNaturalProp (suc [n≡n']) (ne () x₁ x₂) prop₁ prop₂
-transNaturalProp zero [n'≡n''] prop₁ prop₂ = prop₂
-transNaturalProp (ne x () x₂) (suc [n'≡n'']) prop₁ prop₂
-transNaturalProp (ne x () x₂) zero prop₁ prop₂
-transNaturalProp (ne x x₁ x₂) (ne x₃ x₄ x₅) prop₁ prop₂ = prop₁
+-- transNaturalProp : ∀ {Γ n n' n''}
+--                  → ([n≡n'] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n n')
+--                  → ([n'≡n''] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n' n'')
+--                  → naturalEq-prop Γ n n' [n≡n']
+--                  → naturalEq-prop Γ n' n'' [n'≡n'']
+--                  → naturalEq-prop Γ n n'' (transNatural [n≡n'] [n'≡n''])
+-- transNaturalProp (suc [n≡n']) (suc [n'≡n'']) (proj₁ , proj₂) (proj₃ , proj₄) = transNaturalProp [n≡n'] [n'≡n''] proj₁ proj₃ , trans proj₂ proj₄
+-- transNaturalProp (suc [n≡n']) (ne () x₁ x₂) prop₁ prop₂
+-- transNaturalProp zero [n'≡n''] prop₁ prop₂ = prop₂
+-- transNaturalProp (ne x () x₂) (suc [n'≡n'']) prop₁ prop₂
+-- transNaturalProp (ne x () x₂) zero prop₁ prop₂
+-- transNaturalProp (ne x x₁ x₂) (ne x₃ x₄ x₅) prop₁ prop₂ = prop₁
 
-naturalProp-irrelavence : ∀ {Γ t u}
-                        → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
-                        → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
-                        → naturalEq-prop Γ t u [t≡u]₁
-                        → naturalEq-prop Γ t u [t≡u]₂
-naturalProp-irrelavence (suc [t≡u]₁) (suc [t≡u]₂) (proj₁ , proj₂) = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ proj₁ , proj₂
-naturalProp-irrelavence (suc [t≡u]₁) (ne () x₁ x₂) prop
-naturalProp-irrelavence zero zero prop = prop
-naturalProp-irrelavence zero (ne () x₁ x₂) prop
-naturalProp-irrelavence (ne x () x₂) (suc [t≡u]₂) prop
-naturalProp-irrelavence (ne x () x₂) zero prop
-naturalProp-irrelavence (ne x x₁ x₂) (ne x₃ x₄ x₅) prop = prop
+-- naturalProp-irrelavence : ∀ {Γ t u}
+--                         → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
+--                         → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
+--                         → naturalEq-prop Γ t u [t≡u]₁
+--                         → naturalEq-prop Γ t u [t≡u]₂
+-- naturalProp-irrelavence (suc [t≡u]₁) (suc [t≡u]₂) (proj₁ , proj₂) = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ proj₁ , proj₂
+-- naturalProp-irrelavence (suc [t≡u]₁) (ne () x₁ x₂) prop
+-- naturalProp-irrelavence zero zero prop = prop
+-- naturalProp-irrelavence zero (ne () x₁ x₂) prop
+-- naturalProp-irrelavence (ne x () x₂) (suc [t≡u]₂) prop
+-- naturalProp-irrelavence (ne x () x₂) zero prop
+-- naturalProp-irrelavence (ne x x₁ x₂) (ne x₃ x₄ x₅) prop = prop
 
-naturalProp-irrelavence' : ∀ {Γ t t' u}
-                         → t PE.≡ t'
-                         → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
-                         → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t' u)
-                         → naturalEq-prop Γ t u [t≡u]₁
-                         → naturalEq-prop Γ t' u [t≡u]₂
-naturalProp-irrelavence' PE.refl [t≡u]₁ [t≡u]₂ prop = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ prop
+-- naturalProp-irrelavence' : ∀ {Γ t t' u}
+--                          → t PE.≡ t'
+--                          → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
+--                          → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t' u)
+--                          → naturalEq-prop Γ t u [t≡u]₁
+--                          → naturalEq-prop Γ t' u [t≡u]₂
+-- naturalProp-irrelavence' PE.refl [t≡u]₁ [t≡u]₂ prop = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ prop
 
 transEqTerm : ∀ {l Γ A t u v} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ v ∷ A / [A]
 transEqTerm {⁰} (U {l< = ()} ⊢Γ) t≡u u≡v
 transEqTerm {¹} (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] = U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁ , transEq ⊩t ⊩u ⊩u₁ [t≡u] (proof-irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
-transEqTerm (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] ℕ≡[ k₁ , k'' , d₁ , d'' , t≡u₁ , [k≡k']₁ , prop₁ ] =
+transEqTerm (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] ℕ≡[ k₁ , k'' , d₁ , d'' , t≡u₁ , [k≡k']₁ ] =
   let k₁Whnf = naturalWhnf (proj₁ (split [k≡k']₁))
       k'Whnf = naturalWhnf (proj₂ (split [k≡k']))
-      k₁≡k' = whrDet* (d₁ , k₁Whnf) (d' , k'Whnf)
+      k₁≡k' = whrDet* (redₜ d₁ , k₁Whnf) (redₜ d' , k'Whnf)
       [k'≡k''] = PE.subst (λ x → [Natural] _ x _) k₁≡k' [k≡k']₁
-  in  ℕ≡[ k , k'' , d , d'' , trans t≡u t≡u₁ , transNatural [k≡k'] [k'≡k''] , transNaturalProp [k≡k'] [k'≡k''] prop (naturalProp-irrelavence' k₁≡k' [k≡k']₁ [k'≡k''] prop₁) ]
+  in  ℕ≡[ k , k'' , d , d'' , trans t≡u t≡u₁ , transNatural [k≡k'] [k'≡k''] ]
 transEqTerm (ne D neK) t≡u u≡v = trans t≡u u≡v
 transEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) = trans t≡u t≡u₁ , ⊩t , ⊩u₁ , (λ ρ ⊢Δ [a] → transEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]) ([t≡u]₁ ρ ⊢Δ [a]))
 transEqTerm {⁰} (emb {l< = ()} x) t≡u u≡v

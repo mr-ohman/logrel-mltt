@@ -28,18 +28,17 @@ data Neutral : Term → Set where
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 data Natural : Term → Set where
-  suc : ∀ {n} → Natural n → Natural (suc n)
+  suc : ∀ {n} → Natural (suc n)
   zero : Natural zero
   ne : ∀ {n} → Neutral n → Natural n
 
 data [Natural] (R : Term → Term → Set) : Term → Term → Set where
-  suc : ∀ {n n'} → [Natural] R n n' → [Natural] R (suc n) (suc n')
+  suc : ∀ {n n'} → R n n' → [Natural] R (suc n) (suc n')
   zero : [Natural] R zero zero
   ne : ∀ {n n'} → Neutral n → Neutral n' → R n n' → [Natural] R n n'
 
 split : ∀ {R t u} → [Natural] R t u → Natural t × Natural u
-split (suc n) with split n
-... | n₁ , n₂ = suc n₁ , suc n₂
+split (suc n) = suc , suc
 split zero = zero , zero
 split (ne x x₁ x₂) = ne x , ne x₁
 
@@ -55,7 +54,7 @@ data Whnf : Term → Set where
   ne : ∀{n} → Neutral n → Whnf n
 
 naturalWhnf : ∀ {n} → Natural n → Whnf n
-naturalWhnf (suc n₁) = suc
+naturalWhnf suc = suc
 naturalWhnf zero = zero
 naturalWhnf (ne x) = ne x
 
@@ -181,7 +180,7 @@ wkNeutral ρ (_∘_ n) = _∘_ (wkNeutral ρ n)
 wkNeutral ρ (natrec n) = natrec (wkNeutral ρ n)
 
 wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
-wkNatural ρ (suc n₁) = suc (wkNatural ρ n₁)
+wkNatural ρ suc = suc
 wkNatural ρ zero = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
@@ -189,7 +188,7 @@ wk[Natural] : ∀ {t u R R'} ρ
             → (∀ {t' u'} → R t' u' → R' (wk ρ t') (wk ρ u'))
             → [Natural] R t u
             → [Natural] R' (wk ρ t) (wk ρ u)
-wk[Natural] ρ wkR (suc [n]) = suc (wk[Natural] ρ wkR [n])
+wk[Natural] ρ wkR (suc [n]) = suc (wkR [n])
 wk[Natural] ρ wkR zero = zero
 wk[Natural] ρ wkR (ne x x₁ x₂) = ne (wkNeutral ρ x) (wkNeutral ρ x₁) (wkR x₂)
 

@@ -19,13 +19,13 @@ import Relation.Binary.PropositionalEquality as PE
 
 -- TODO: Move to Properties
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ) → Γ ⊩⟨ l ⟩ n ∷ ℕ / [ℕ] → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / [ℕ]
-sucTerm (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] = ℕ[ suc n , [ suc ⊢t , suc ⊢u , {!!} ] , suc natN , (prop , ⊢u) ]
+sucTerm (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] = ℕ[ _ , [ suc ⊢t , suc ⊢t , id (suc ⊢t) ] , suc , ⊢t ]
 sucTerm (ne D neK) [n] = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
 sucTerm (Π D ⊢F ⊢G [F] [G] G-ext) [n] = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
 sucTerm (emb {l< = 0<1} x) [n] = sucTerm x [n]
 
 sucEqTerm : ∀ {l Γ n n'} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ) → Γ ⊩⟨ l ⟩ n ≡ n' ∷ ℕ / [ℕ] → Γ ⊩⟨ l ⟩ suc n ≡ suc n' ∷ ℕ / [ℕ]
-sucEqTerm (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] = ℕ≡[ suc k , suc k' , {!!} , {!!} , suc-cong t≡u , suc [k≡k'] , (prop , {!!}) ]
+sucEqTerm (ℕ D) ℕ≡[ k , k' , [ ⊢t , ⊢u , d ] , [ ⊢t₁ , ⊢u₁ , d₁ ] , t≡u , [k≡k'] ] = ℕ≡[ _ , _ , idRedTerm:*: (suc ⊢t) , idRedTerm:*: (suc ⊢t₁) , suc-cong t≡u , suc t≡u ]
 sucEqTerm (ne D neK) [n≡n'] = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
 sucEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) [n≡n'] = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
 sucEqTerm (emb {l< = 0<1} x) [n≡n'] = sucEqTerm x [n≡n']
@@ -94,7 +94,7 @@ mutual
   fundamentalTerm ⊢Γ (lam x x₁) = {!!}
   fundamentalTerm ⊢Γ (Dt ∘ Du) with fundamentalTerm ⊢Γ Dt | fundamentalTerm ⊢Γ Du
   ... | [ΠAB] , [t] | [A] , [u] = (λ ⊢Δ [σ] → {!!} , {!!}) , {!!}
-  fundamentalTerm ⊢Γ (zero x) = fundamentalℕ ⊢Γ , (λ ⊢Δ [σ] → ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ] , (λ x₁ → ℕ≡[ zero , zero , id (zero ⊢Δ) , id (zero ⊢Δ) , refl (zero ⊢Δ) , zero , tt ]))
+  fundamentalTerm ⊢Γ (zero x) = fundamentalℕ ⊢Γ , (λ ⊢Δ [σ] → ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ] , (λ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ) , refl (zero ⊢Δ) , zero ]))
   fundamentalTerm ⊢Γ (suc {n} t) with fundamentalTerm ⊢Γ t
   fundamentalTerm ⊢Γ (suc {n} t) | [ℕ] , [n] = [ℕ] , fundamentalSuc {n = n} ⊢Γ [ℕ] [n]
   fundamentalTerm ⊢Γ (natrec x x₁ x₂ x₃) = {!!}
