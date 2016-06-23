@@ -42,7 +42,7 @@ mutual
     refl   : ∀ {A} → Γ ⊢ A → Γ ⊢ A ≡ A
     sym    : ∀ {A B} → Γ ⊢ A ≡ B → Γ ⊢ B ≡ A
     trans  : ∀ {A B C} → Γ ⊢ A ≡ B → Γ ⊢ B ≡ C → Γ ⊢ A ≡ C
-    Π-cong : ∀ {E F G H} → Γ ⊢ F → Γ ⊢ F ≡ H → Γ ∙ F ⊢ G ≡ E
+    Π-cong : ∀ {F H G E} → Γ ⊢ F → Γ ⊢ F ≡ H → Γ ∙ F ⊢ G ≡ E
            → Γ ⊢ Π F ▹ G ≡ Π H ▹ E
 
   data _⊢_≡_∷_ (Γ : Con Term) : Term → Term → Term → Set where
