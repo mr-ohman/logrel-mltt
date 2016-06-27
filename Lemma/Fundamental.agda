@@ -135,10 +135,10 @@ mutual
       symEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t'≡t] ⊢Δ [σ])
   fundamentalTermEq ⊢Γ (trans {t} {u} {r} {A} t≡u u≡t') with fundamentalTermEq ⊢Γ t≡u | fundamentalTermEq ⊢Γ u≡t'
   fundamentalTermEq ⊢Γ (trans {t} {u} {r} {A} t≡u u≡t') | modelsTermEq [A] [t] [u] [t≡u] | modelsTermEq [A]₁ [t]₁ [u]₁ [t≡u]₁ =
-  modelsTermEq [A] [t]
-               (proof-irrelevanceTermS {A} {r} ⊢Γ [A]₁ [A] [u]₁)
-               (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
-                                       (proof-irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ [σ])))
+    modelsTermEq [A] [t]
+                 (proof-irrelevanceTermS {A} {r} ⊢Γ [A]₁ [A] [u]₁)
+                 (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
+                                         (proof-irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ [σ])))
   fundamentalTermEq ⊢Γ (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq ⊢Γ t≡u | fundamentalEq ⊢Γ A'≡A
   fundamentalTermEq ⊢Γ (conv {A} {B} {t} {u} t≡u A'≡A) | modelsTermEq [A'] [t] [u] [t≡u] | [A']₁ , [A] , [A'≡A] =
     modelsTermEq [A] (fundamentalConv {t} {A} {B} ⊢Γ [A'] [A']₁ [A] [A'≡A] [t])
