@@ -21,12 +21,13 @@ mutual
   convTermT₁ {l} (ne D neK D₁ neK₁) A≡B t = conv t (soundnessEq {l} (ne D neK) A≡B)
   convTermT₁ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t) =
     conv ⊢t A≡B
-    , (λ ρ ⊢Δ [a] [a≡b] → let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
-                              [F≡F₁] = proof-irrelevanceEq'' PE.refl (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F] ρ ⊢Δ) ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)
-                              [a]₁ = convTerm₂ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a]
-                              [a≡b]₁ = convEqTerm₂ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a≡b]
-                              [G≡G₁] = proof-irrelevanceEq'' PE.refl (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')) ([G] ρ ⊢Δ [a]₁) ([G] ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]₁)
-                          in  convEqTerm₁ ([G] ρ ⊢Δ [a]₁) ([G]₁ ρ ⊢Δ [a]) [G≡G₁] (⊩t ρ ⊢Δ [a]₁ [a≡b]₁))
+    , (λ ρ ⊢Δ [a] [b] [a≡b] → let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
+                                  [F≡F₁] = proof-irrelevanceEq'' PE.refl (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F] ρ ⊢Δ) ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)
+                                  [a]₁ = convTerm₂ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a]
+                                  [b]₁ = convTerm₂ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [b]
+                                  [a≡b]₁ = convEqTerm₂ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a≡b]
+                                  [G≡G₁] = proof-irrelevanceEq'' PE.refl (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')) ([G] ρ ⊢Δ [a]₁) ([G] ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]₁)
+                              in  convEqTerm₁ ([G] ρ ⊢Δ [a]₁) ([G]₁ ρ ⊢Δ [a]) [G≡G₁] (⊩t ρ ⊢Δ [a]₁ [b]₁ [a≡b]₁))
   convTermT₁ (U ⊢Γ ⊢Γ₁) A≡B t = t
   convTermT₁ (emb⁰¹ x) A≡B t = convTermT₁ x A≡B t
   convTermT₁ (emb¹⁰ x) A≡B t = convTermT₁ x A≡B t
@@ -38,12 +39,13 @@ mutual
   convTermT₂ {l} (ne D neK D₁ neK₁) A≡B t = conv t (sym (soundnessEq {l} (ne D neK) A≡B))
   convTermT₂ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t) =
     conv ⊢t (sym A≡B)
-    , (λ ρ ⊢Δ [a] [a≡b] → let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
-                              [F≡F₁] = proof-irrelevanceEq'' PE.refl (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F] ρ ⊢Δ) ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)
-                              [a]₁ = convTerm₁ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a]
-                              [a≡b]₁ = convEqTerm₁ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a≡b]
-                              [G≡G₁] = proof-irrelevanceEq'' PE.refl (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')) ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [a]) ([G≡G'] ρ ⊢Δ [a])
-                          in  convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) [G≡G₁] (⊩t ρ ⊢Δ [a]₁ [a≡b]₁))
+    , (λ ρ ⊢Δ [a] [b] [a≡b] → let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
+                                  [F≡F₁] = proof-irrelevanceEq'' PE.refl (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F] ρ ⊢Δ) ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)
+                                  [a]₁ = convTerm₁ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a]
+                                  [b]₁ = convTerm₁ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [b]
+                                  [a≡b]₁ = convEqTerm₁ ([F] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [F≡F₁] [a≡b]
+                                  [G≡G₁] = proof-irrelevanceEq'' PE.refl (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')) ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [a]) ([G≡G'] ρ ⊢Δ [a])
+                              in  convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) [G≡G₁] (⊩t ρ ⊢Δ [a]₁ [b]₁ [a≡b]₁))
   convTermT₂ (U ⊢Γ ⊢Γ₁) A≡B t = t
   convTermT₂ (emb⁰¹ x) A≡B t = convTermT₂ x A≡B t
   convTermT₂ (emb¹⁰ x) A≡B t = convTermT₂ x A≡B t

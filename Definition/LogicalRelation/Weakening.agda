@@ -72,12 +72,13 @@ wkTerm {¹} ρ ⊢Δ (U {l< = 0<1} ⊢Γ) (⊢t , ⊩t) = T.wkTerm ρ ⊢Δ ⊢t
 wkTerm ρ ⊢Δ (ℕ D) ℕ[ n , d , natN , prop ] = ℕ[ U.wk (toWk ρ) n , wkRed:*:Term ρ ⊢Δ d , wkNatural (toWk ρ) natN , wkNatural-prop ρ ⊢Δ natN prop ]
 wkTerm ρ ⊢Δ (ne D neK) t = T.wkTerm ρ ⊢Δ t
 wkTerm ρ ⊢Δ (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) (⊢t , ⊩t) = T.wkTerm ρ ⊢Δ ⊢t ,
-  (λ ρ₁ ⊢Δ₁ [a] a≡b → let [F]₁ = [F] (ρ₁ •ₜ ρ) ⊢Δ₁
-                          [F]₂ = PE.subst (λ y → _ ⊩⟨ _ ⟩ y) (wk-comp-comm ρ₁ ρ) [F]₁
-                          [a]' = proof-irrelevanceTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) [F]₂ [F]₁ [a]
-                          [G]₁ = [G] (ρ₁ •ₜ ρ) ⊢Δ₁ [a]'
-                          [G]₂ = PE.subst (λ y → _ ⊩⟨ _ ⟩ y) (wk-comp-comm-subst ρ₁ ρ G) [G]₁
-                      in  proof-irrelevanceEqTerm'' (PE.cong (λ x → x ∘ _) (wk-comp-comm ρ₁ ρ)) (PE.cong (λ x → x ∘ _) (wk-comp-comm ρ₁ ρ)) (wk-comp-comm-subst ρ₁ ρ G) [G]₁ [G]₂ (⊩t (ρ₁ •ₜ ρ) ⊢Δ₁ [a]' (proof-irrelevanceEqTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) [F]₂ [F]₁ a≡b)))
+  (λ ρ₁ ⊢Δ₁ [a] [b] a≡b → let [F]₁ = [F] (ρ₁ •ₜ ρ) ⊢Δ₁
+                              [F]₂ = PE.subst (λ y → _ ⊩⟨ _ ⟩ y) (wk-comp-comm ρ₁ ρ) [F]₁
+                              [a]' = proof-irrelevanceTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) [F]₂ [F]₁ [a]
+                              [b]' = proof-irrelevanceTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) [F]₂ [F]₁ [b]
+                              [G]₁ = [G] (ρ₁ •ₜ ρ) ⊢Δ₁ [a]'
+                              [G]₂ = PE.subst (λ y → _ ⊩⟨ _ ⟩ y) (wk-comp-comm-subst ρ₁ ρ G) [G]₁
+                          in  proof-irrelevanceEqTerm'' (PE.cong (λ x → x ∘ _) (wk-comp-comm ρ₁ ρ)) (PE.cong (λ x → x ∘ _) (wk-comp-comm ρ₁ ρ)) (wk-comp-comm-subst ρ₁ ρ G) [G]₁ [G]₂ (⊩t (ρ₁ •ₜ ρ) ⊢Δ₁ [a]' [b]' (proof-irrelevanceEqTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) [F]₂ [F]₁ a≡b)))
 wkTerm {⁰} ρ ⊢Δ (emb {l< = ()} x) t
 wkTerm {¹} ρ ⊢Δ (emb {l< = 0<1} x) t = wkTerm ρ ⊢Δ x t
 

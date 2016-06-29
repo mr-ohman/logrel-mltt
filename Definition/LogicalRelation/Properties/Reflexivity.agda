@@ -34,6 +34,6 @@ reflEqTerm {⁰} (U {l< = ()} ⊢Γ) (⊢t , ⊩t)
 reflEqTerm {¹} (U {l< = 0<1} ⊢Γ) (⊢t , ⊩t) = U[ ⊢t , ⊢t , refl ⊢t , ⊩t , ⊩t , reflEq ⊩t ]
 reflEqTerm (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] = ℕ≡[ n , n , [ ⊢t , ⊢u , d ] , [ ⊢t , ⊢u , d ] , refl ⊢t , reflNatural natN prop ]
 reflEqTerm (ne D neK) t = refl t
-reflEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) (⊢t , [t]) = refl ⊢t , (⊢t , [t]) , (⊢t , [t]) , (λ ρ ⊢Δ [a] → [t] ρ ⊢Δ [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))
+reflEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) (⊢t , [t]) = refl ⊢t , (⊢t , [t]) , (⊢t , [t]) , (λ ρ ⊢Δ [a] → [t] ρ ⊢Δ [a] [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))
 reflEqTerm {⁰} (emb {l< = ()} x) t
 reflEqTerm {¹} (emb {l< = 0<1} x) t = reflEqTerm x t
