@@ -14,6 +14,7 @@ open import Definition.LogicalRelation.Properties.Transitivity public
 open import Definition.LogicalRelation.Properties.Conversion public
 open import Definition.LogicalRelation.Properties.Soundness public
 open import Definition.LogicalRelation.Properties.Univalence public
+open import Definition.LogicalRelation.Properties.Neutral public
 
 
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ) → Γ ⊩⟨ l ⟩ n ∷ ℕ / [ℕ] → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / [ℕ]
