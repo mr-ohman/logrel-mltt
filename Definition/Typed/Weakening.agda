@@ -6,6 +6,7 @@ open import Definition.Typed
 
 open import Tools.Context
 
+open import Data.Nat renaming (ℕ to Nat)
 import Relation.Binary.PropositionalEquality as PE
 import Relation.Binary.HeterogeneousEquality as HE
 
@@ -75,6 +76,30 @@ wk-comp-comm-subst : ∀ {Γ Δ E a} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) G
                    → wkLiftₜ (η •ₜ η′) G [ a ] PE.≡ wkLiftₜ η (wkLiftₜ η′ G) [ a ]
 wk-comp-comm-subst {a = a} η η′ G = PE.cong (λ x → x [ a ]) (wk-comp-comm-lift {G = G} η η′)
 
+
+-- mutual
+--   ⊆-refl : (Γ : Con Term) → Γ ⊆ Γ
+--   ⊆-refl ε = base
+--   ⊆-refl (Γ ∙ x) = PE.subst (λ x₁ → Γ ∙ x ⊆ Γ ∙ x₁) (wk-⊆-refl Γ x) (lift (⊆-refl Γ))
+
+--   wk-⊆-refl-lift : ∀ Γ t → wkLiftₜ (⊆-refl Γ) t PE.≡ wkₜ (⊆-refl Γ) t
+--   wk-⊆-refl-lift ε t = {!!} --UP.wk-lift-id t
+--   wk-⊆-refl-lift (Γ ∙ x) t = {!!}
+
+--   wkNat-⊆-refl : ∀ Γ x → wkNat (toWk (⊆-refl Γ)) x PE.≡ x
+--   wkNat-⊆-refl ε x = PE.refl
+--   wkNat-⊆-refl (Γ ∙ x) x₁ = {!!}
+
+--   wk-⊆-refl : ∀ Γ t → wkₜ (⊆-refl Γ) t PE.≡ t
+--   wk-⊆-refl Γ U = PE.refl
+--   wk-⊆-refl Γ (Π t ▹ t₁) = PE.cong₂ Π_▹_ (wk-⊆-refl Γ t) (PE.trans (wk-⊆-refl-lift Γ t₁) (wk-⊆-refl Γ t₁))
+--   wk-⊆-refl Γ ℕ = PE.refl
+--   wk-⊆-refl Γ (var x) = PE.cong var (wkNat-⊆-refl Γ x)
+--   wk-⊆-refl Γ (lam t) = PE.cong lam (PE.trans (wk-⊆-refl-lift Γ t) (wk-⊆-refl Γ t))
+--   wk-⊆-refl Γ (t ∘ t₁) = PE.cong₂ _∘_ (wk-⊆-refl Γ t) (wk-⊆-refl Γ t₁)
+--   wk-⊆-refl Γ zero = PE.refl
+--   wk-⊆-refl Γ (suc t) = PE.cong suc (wk-⊆-refl Γ t)
+--   wk-⊆-refl Γ (natrec t t₁ t₂ t₃) = UP.cong₄ natrec (PE.trans (wk-⊆-refl-lift Γ t) (wk-⊆-refl Γ t)) (wk-⊆-refl Γ t₁) (wk-⊆-refl Γ t₂) (wk-⊆-refl Γ t₃)
 
 -- Weakening of judgements
 

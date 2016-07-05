@@ -51,6 +51,12 @@ mutual
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A' / q
   proof-irrelevanceTerm' PE.refl p q t = proof-irrelevanceTerm p q t
 
+  proof-irrelevanceTerm'' : ∀ {Γ A A' t t' l l'}
+                            (eqA : A PE.≡ A') (eqt : t PE.≡ t')
+                            (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A')
+                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t' ∷ A' / q
+  proof-irrelevanceTerm'' PE.refl PE.refl p q t = proof-irrelevanceTerm p q t
+
   proof-irrelevanceTermT : ∀ {Γ A t l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                          → Tactic Γ l l' A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q

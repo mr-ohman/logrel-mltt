@@ -157,6 +157,9 @@ consSubst : Subst → Term → Subst
 consSubst s t zero = t
 consSubst s t (suc n) = s n
 
+substComp : Subst → Subst → Subst
+substComp σ σ' n = subst σ' (σ n)
+
 infix 25 _[_]
 _[_] : (t : Term) (s : Term) → Term
 t [ s ] = subst (consSubst idSubst s) t
