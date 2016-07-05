@@ -54,21 +54,35 @@ postulate
   ⊆-refl : (Γ : Con Term) → Γ T.⊆ Γ
   wk-⊆-refl : ∀ Γ t → T.wkₜ (⊆-refl Γ) t PE.≡ t
 
+consSubstS : ∀ {l σ t A Γ Δ} (⊨Γ : ⊨⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
+           ([σ] : Δ ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ)
+           ([A] : Γ ⊨⟨ l ⟩ A / ⊨Γ)
+           ([t] : Δ ⊩⟨ l ⟩ t ∷ subst σ A / proj₁ ([A] ⊢Δ [σ]))
+         → Δ ⊨⟨ l ⟩ consSubst σ t ∷ Γ ∙ A / ⊨Γ ∙ [A] / ⊢Δ
+consSubstS ⊨Γ ⊢Δ [σ] [A] [t] = [σ] , [t]
+
+wkSubstS : ∀ {l σ Γ Δ Δ'} (⊨Γ : ⊨⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+           (ρ : Δ T.⊆ Δ')
+           ([σ] : Δ ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ)
+         → Δ' ⊨⟨ l ⟩ wkSubst (T.toWk ρ) σ ∷ Γ / ⊨Γ / ⊢Δ'
+wkSubstS ε ⊢Δ ⊢Δ' ρ [σ] = tt
+wkSubstS {σ = σ} {Γ = Γ ∙ A} (⊨Γ ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
+  let [tailσ] = wkSubstS ⊨Γ ⊢Δ ⊢Δ' ρ (proj₁ [σ])
+  in  [tailσ]
+   ,  proof-irrelevanceTerm' (wk-subst A)
+        (LR.wk ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))))
+        (proj₁ (x ⊢Δ' [tailσ]))
+        (LR.wkTerm ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ]))
+
 wk1SubstS : ∀ {l F σ Γ Δ} (⊨Γ : ⊨⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
             (⊢F : Δ ⊢ F)
             ([σ] : Δ ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ)
           → (Δ ∙ F) ⊨⟨ l ⟩ wk1Subst σ ∷ Γ / ⊨Γ
                             / (⊢Δ ∙ ⊢F)
-wk1SubstS ε ⊢Δ [F] [σ] = tt
-wk1SubstS {F = F} {σ = σ} {Γ = Γ ∙ A} {Δ = Δ} (⊨Γ ∙ x) ⊢Δ ⊢F [σ] =
-  let ⊢Δ∙F = ⊢Δ ∙ ⊢F
-      [tailσ] = wk1SubstS {F = F} ⊨Γ ⊢Δ ⊢F (proj₁ [σ])
-  in  [tailσ]
-   ,  proof-irrelevanceTerm'' {!!} {!!}
-        (LR.wk (T.step (⊆-refl Δ)) ⊢Δ∙F (proj₁ (x ⊢Δ (proj₁ [σ]))))
-        (proj₁ (x ⊢Δ∙F [tailσ]))
-        (LR.wkTerm (T.step (⊆-refl Δ)) ⊢Δ∙F (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ]))
-
+wk1SubstS {l} {F} {σ} {Γ} {Δ} ⊨Γ ⊢Δ ⊢F [σ] =
+  PE.subst (λ x → Δ ∙ F ⊨⟨ l ⟩ x ∷ Γ / ⊨Γ / ⊢Δ ∙ ⊢F)
+           {!!}
+           (wkSubstS ⊨Γ ⊢Δ (⊢Δ ∙ ⊢F) (T.step (⊆-refl Δ)) [σ])
 
 liftSubstS : ∀ {l F σ Γ Δ} (⊨Γ : ⊨⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
              ([F] : Γ ⊨⟨ l ⟩ F / ⊨Γ)
@@ -81,15 +95,6 @@ liftSubstS {F = F} {σ = σ} {Δ = Δ} ⊨Γ ⊢Δ [F] [σ] =
   in  [tailσ] , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero)
                         (var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                                                  (todoPrf σ F) here))
-
-substCompS : ∀ {l σ σ' Γ Δ E} (⊨Γ : ⊨⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊨Δ : ⊨⟨ l ⟩ Δ) (⊢E : ⊢ E)
-           → Δ ⊨⟨ l ⟩ σ  ∷ Γ / ⊨Γ / ⊢Δ
-           → E ⊨⟨ l ⟩ σ' ∷ Δ / ⊨Δ / ⊢E
-           → E ⊨⟨ l ⟩ substComp σ σ' ∷ Γ / ⊨Γ / ⊢E
-substCompS ε ⊢Δ ⊨Δ ⊢E [σ] [σ'] = tt
-substCompS (⊨Γ ∙ x) ⊢Δ ⊨Δ ⊢E [σ] [σ'] =
-  let [tailσ] = {!!}
-  in  [tailσ] , {!!}
 
 proof-irrelevanceTermΔ : ∀ {l σ Γ Δ}
                           (⊨Γ : ⊨⟨ l ⟩ Γ)
