@@ -36,12 +36,6 @@ symNatural (suc n₁) = suc (sym n₁)
 symNatural zero = zero
 symNatural (ne x x₁ x₂) = ne x₁ x (sym x₂)
 
--- symNaturalProp : ∀ {Γ n n'} ([n≡n'] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n n')
---                → naturalEq-prop Γ n n' [n≡n'] → naturalEq-prop Γ n' n (symNatural [n≡n'])
--- symNaturalProp (suc [n≡n']) (proj₁ , proj₂) = symNaturalProp [n≡n'] proj₁ , sym proj₂
--- symNaturalProp zero prop = prop
--- symNaturalProp (ne x x₁ x₂) prop = prop
-
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
 symEqTerm {⁰} (U {l< = ()} ⊢Γ) t≡u
 symEqTerm {¹} (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = U[ ⊢u , ⊢t , sym t≡u , ⊩u , ⊩t , symEq ⊩t ⊩u [t≡u] ]

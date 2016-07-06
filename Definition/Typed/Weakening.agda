@@ -1,6 +1,6 @@
 module Definition.Typed.Weakening where
 
-open import Definition.Untyped as U hiding (wk) --; _⊆_; toWk; wkₜ; wkLiftₜ)
+open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties as UP using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
 

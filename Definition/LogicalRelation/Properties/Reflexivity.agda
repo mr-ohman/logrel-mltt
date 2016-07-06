@@ -24,11 +24,6 @@ reflNatural suc n = suc (refl n)
 reflNatural zero n = zero
 reflNatural (ne x) n = ne x x (refl n)
 
--- reflNaturalProp : ∀ {Γ n} (natN : Natural n) (⊢n : Γ ⊢ n ∷ ℕ) (prop : natural-prop Γ n natN) → naturalEq-prop Γ n n (reflNatural natN ⊢n prop)
--- reflNaturalProp (suc natN) ⊢n (proj₁ , proj₂) = (reflNaturalProp natN proj₂ proj₁) , (refl proj₂)
--- reflNaturalProp zero ⊢n prop = prop
--- reflNaturalProp (ne x) ⊢n prop = prop
-
 reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ t ∷ A / [A]
 reflEqTerm {⁰} (U {l< = ()} ⊢Γ) (⊢t , ⊩t)
 reflEqTerm {¹} (U {l< = 0<1} ⊢Γ) (⊢t , ⊩t) = U[ ⊢t , ⊢t , refl ⊢t , ⊩t , ⊩t , reflEq ⊩t ]

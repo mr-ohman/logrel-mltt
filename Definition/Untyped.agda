@@ -200,17 +200,9 @@ wk[Natural] ρ wkR (ne x x₁ x₂) = ne (wkNeutral ρ x) (wkNeutral ρ x₁) (w
 
 _<?_ : Nat → Nat → Bool
 m <? n = ⌊ suc m ≤? n ⌋
--- zero <? zero = false
--- zero <? suc n = true
--- suc m <? zero = false
--- suc m <? suc n = m <? n
 
 _==_ : (m n : Nat) → Bool
 m == n =  ⌊ m ≟ n ⌋
--- zero == zero = true
--- zero == suc n = false
--- suc m == zero = false
--- suc m == suc n = m == n
 
 ↑ : (Nat → Nat) → Nat → Term → Term
 ↑ d c U = U

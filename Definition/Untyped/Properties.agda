@@ -89,28 +89,6 @@ idSubst-lemma₀ t = idSubst-lemma t zero
 -- wellscoped-lemma ρ (natrec t t₁ t₂) =
 --   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
 
--- Context subset properties
-
--- mutual
---   ⊆-refl : (Γ : Con Term) → Γ ⊆ Γ
---   ⊆-refl ε = base
---   ⊆-refl (Γ ∙ x) = PE.subst (λ x₁ → Γ ∙ x ⊆ Γ ∙ x₁) (wk-⊆-refl Γ x) (lift (⊆-refl Γ))
-
---   wk-⊆-refl-lift : ∀ Γ t → wk (lift (toWk (⊆-refl Γ))) t ≡ wk (toWk (⊆-refl Γ)) t
---   wk-⊆-refl-lift ε t = wk-lift-id t
---   wk-⊆-refl-lift (Γ ∙ x) t = {!!}
-
---   wk-⊆-refl : ∀ Γ t → wk (toWk (⊆-refl Γ)) t ≡ t
---   wk-⊆-refl Γ U = refl
---   wk-⊆-refl Γ (Π t ▹ t₁) = {!!}
---   wk-⊆-refl Γ ℕ = refl
---   wk-⊆-refl Γ (var x) = {!!}
---   wk-⊆-refl Γ (lam t) = cong lam (trans (wk-⊆-refl-lift Γ t) (wk-⊆-refl Γ t))
---   wk-⊆-refl Γ (t ∘ t₁) = {!!}
---   wk-⊆-refl Γ zero = refl
---   wk-⊆-refl Γ (suc t) = {!!}
---   wk-⊆-refl Γ (natrec t t₁ t₂ t₃) = {!!}
-
 -- Composition properties
 
 lift-step-comp : (p : Wk) → step id • p ≡ lift p • step id

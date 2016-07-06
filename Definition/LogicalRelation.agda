@@ -3,7 +3,6 @@ module Definition.LogicalRelation where
 open import Tools.Context
 
 open import Definition.Untyped
---open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
@@ -12,8 +11,8 @@ open import Data.Sum
 open import Data.Unit
 import Relation.Binary.PropositionalEquality as PE
 
--- infix 20 _⊩⁰_
--- infix 22 _⊩⁰_≡_/_ _⊩⁰_∷_/_ _⊩⁰_≡_∷_/_
+
+-- Records for logical relation cases
 
 record ne[_]_≡_[_] (Γ : Con Term) (A B K : Term) : Set where
   constructor ne[_,_,_,_]
@@ -27,14 +26,6 @@ natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
 natural-prop Γ .(suc n) (suc {n}) = Γ ⊢ n ∷ ℕ
 natural-prop Γ .zero zero = ⊤
 natural-prop Γ n (ne x) = Γ ⊢ n ∷ ℕ
-
--- naturalEq-prop : (Γ : Con Term) (m n : Term) → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) m n
---                → Set
--- naturalEq-prop Γ .(suc m) .(suc n) (suc {m} {n} [m≡n]) = naturalEq-prop Γ m n [m≡n] × Γ ⊢ m ≡ n ∷ ℕ
--- naturalEq-prop Γ .zero .zero zero = ⊤
--- naturalEq-prop Γ m n (ne x x₁ x₂) = ⊤
-
--- Records for logical relation cases
 
 record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
   constructor ℕ[_,_,_,_]
@@ -53,94 +44,6 @@ record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
     d'     : Γ ⊢ u :⇒*: k' ∷ ℕ
     t≡u    : Γ ⊢ t ≡ u ∷ ℕ
     [k≡k'] : [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k'
-    -- prop   : naturalEq-prop Γ k k' [k≡k']
-
--- mutual
-  -- split into small and big types ⊩⁰, ⊩¹
-  -- toSubst : Wk -> Subst
-  -- maybe define something like [_,_] : Subst -> Term -> Term; [ s , t ] = subst (consSubst s t)
-
-
-  -- -- Helping functions for logical relation
-
-  -- wk-prop⁰ : (Γ : Con Term) (F : Term) → Set
-  -- wk-prop⁰ Γ F = ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ wkₜ ρ F
-
-  -- wk-subst-prop⁰ : (Γ : Con Term) (F G : Term) ([F] : wk-prop⁰ Γ F) → Set
-  -- wk-subst-prop⁰ Γ F G [F] = ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-  --                                   → Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩⁰ wkLiftₜ ρ G [ a ]
-
-  -- wk-substEq-prop⁰ : (Γ : Con Term) (F G : Term)
-  --                   ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F]) → Set
-  -- wk-substEq-prop⁰ Γ F G [F] [G] =
-  --   ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-  --             → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --             → Δ ⊩⁰ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ
-  --             → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a]
-
-  -- wk-fun-ext-prop⁰ : (Γ : Con Term) (F G f : Term)
-  --                   ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F]) → Set
-  -- wk-fun-ext-prop⁰ Γ F G f [F] [G] = ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --                  ([a≡b] : Δ ⊩⁰ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --                → Δ ⊩⁰ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
-
-  -- data _⊩⁰_ (Γ : Con Term) : Term → Set where
-  --   ℕ  : ∀ {A} (D : Γ ⊢ A :⇒*: ℕ) → Γ ⊩⁰ A
-  --   ne : ∀ {A K} (D : Γ ⊢ A :⇒*: K) (neK : Neutral K) → Γ ⊩⁰ A
-  --   Π  : ∀ {F G A} (D : Γ ⊢ A :⇒*: Π F ▹ G) (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G)
-  --                  ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F])
-  --                  (G-ext : wk-substEq-prop⁰ Γ F G [F] [G]) → Γ ⊩⁰ A
-
-  -- _⊩⁰_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩⁰ A → Set
-  -- Γ ⊩⁰ A ≡ B / ℕ  D = Γ ⊢ B ⇒* ℕ
-  -- Γ ⊩⁰ A ≡ B / ne {K = K} D neK = ne[ Γ ] A ≡ B [ K ]
-  -- Γ ⊩⁰ A ≡ B / Π  {F} {G} D ⊢F ⊢G [F] [G] G-ext = Π⁰[ Γ ] A ≡ B [ F , G , [F] , [G] ]
-
-  -- _⊩⁰_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩⁰ A → Set
-  -- Γ ⊩⁰ t ∷ A / ℕ x = ℕ[ Γ ] t ∷ A
-  -- Γ ⊩⁰ t ∷ A / ne x x₁ = Γ ⊢ t ∷ A
-  -- Γ ⊩⁰ f ∷ A / Π {F} {G} D ⊢F ⊢G [F] [G] G-ext =
-  --   Γ ⊢ f ∷ A × wk-fun-ext-prop⁰ Γ F G f [F] [G]
-
-  -- _⊩⁰_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩⁰ A → Set
-  -- Γ ⊩⁰ t ≡ u ∷ A / ℕ x = ℕ[ Γ ] t ≡ u ∷ A
-  -- Γ ⊩⁰ t ≡ u ∷ A / ne x x₁ = Γ ⊢ t ≡ u ∷ A
-  -- Γ ⊩⁰ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π⁰ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
-  --   let [A] = Π x x₁ x₂ [F] [G] x₃
-  --   in  Γ ⊢ t ≡ u ∷ A
-  --   ×   Γ ⊩⁰ t ∷ A / [A]
-  --   ×   Γ ⊩⁰ u ∷ A / [A]
-  --   ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --                → Δ ⊩⁰ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
-
-  -- -- Records for logical relation cases
-
-  -- record Π⁰[_]_≡_[_,_,_,_] (Γ : Con Term) (A B F G : Term) ([F] : wk-prop⁰ Γ F)
-  --                         ([G] : wk-subst-prop⁰ Γ F G [F]) : Set where
-  --   inductive
-  --   constructor Π⁰[_,_,_,_,_,_]
-  --   field
-  --     F'     : Term
-  --     G'     : Term
-  --     D'     : Γ ⊢ B ⇒* Π F' ▹ G'
-  --     A≡B    : Γ ⊢ A ≡ B
-  --     -- ⊩A     : Γ ⊩⁰ A
-  --     -- ⊩B     : Γ ⊩⁰ B
-  --     [F≡F'] : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⁰ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
-  --     [G≡G'] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --                      → Δ ⊩⁰ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
-
-  -- -- Issue: Agda complains about record use not being strictly positive
-  -- record Π⁰ₜ[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩⁰ A)
-  --                             ([F] : wk-prop⁰ Γ F) ([G] : wk-subst-prop⁰ Γ F G [F]) : Set where
-  --   inductive
-  --   constructor Π⁰ₜ[_,_,_,_]
-  --   field
-  --     t≡u   : Γ ⊢ t ≡ u ∷ A
-  --     ⊩t    : Γ ⊩⁰ t ∷ A / [A]
-  --     ⊩u    : Γ ⊩⁰ u ∷ A / [A]
-  --     [t≡u] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩⁰ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-  --                     → Δ ⊩⁰ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
 
 data TypeLevel : Set where
@@ -277,8 +180,6 @@ logRelRec ⁰ = λ()
 logRelRec ¹ 0<1 = LogRel.kit ⁰ (\ ())
 
 kit : ∀ (i : TypeLevel) → LogRelKit
--- kit ⁰ = LogRel.kit ⁰ (λ ())
--- kit ¹ = LogRel.kit ¹ (λ { {._} 0<1 → LogRel.kit ⁰ (λ ())})
 kit l = LogRel.kit l (logRelRec l)
 -- a bit of repetition in "kit ¹" definition, would work better with Fin 2 for TypeLevel because you could recurse.
 

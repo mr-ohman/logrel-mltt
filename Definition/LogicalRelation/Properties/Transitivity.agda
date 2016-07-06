@@ -68,40 +68,6 @@ transNatural (ne x () x₂) (suc b)
 transNatural (ne x x₁ x₂) zero = ne x x₁ x₂
 transNatural (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (trans x₂ x₅)
 
--- transNaturalProp : ∀ {Γ n n' n''}
---                  → ([n≡n'] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n n')
---                  → ([n'≡n''] : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n' n'')
---                  → naturalEq-prop Γ n n' [n≡n']
---                  → naturalEq-prop Γ n' n'' [n'≡n'']
---                  → naturalEq-prop Γ n n'' (transNatural [n≡n'] [n'≡n''])
--- transNaturalProp (suc [n≡n']) (suc [n'≡n'']) (proj₁ , proj₂) (proj₃ , proj₄) = transNaturalProp [n≡n'] [n'≡n''] proj₁ proj₃ , trans proj₂ proj₄
--- transNaturalProp (suc [n≡n']) (ne () x₁ x₂) prop₁ prop₂
--- transNaturalProp zero [n'≡n''] prop₁ prop₂ = prop₂
--- transNaturalProp (ne x () x₂) (suc [n'≡n'']) prop₁ prop₂
--- transNaturalProp (ne x () x₂) zero prop₁ prop₂
--- transNaturalProp (ne x x₁ x₂) (ne x₃ x₄ x₅) prop₁ prop₂ = prop₁
-
--- naturalProp-irrelavence : ∀ {Γ t u}
---                         → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
---                         → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
---                         → naturalEq-prop Γ t u [t≡u]₁
---                         → naturalEq-prop Γ t u [t≡u]₂
--- naturalProp-irrelavence (suc [t≡u]₁) (suc [t≡u]₂) (proj₁ , proj₂) = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ proj₁ , proj₂
--- naturalProp-irrelavence (suc [t≡u]₁) (ne () x₁ x₂) prop
--- naturalProp-irrelavence zero zero prop = prop
--- naturalProp-irrelavence zero (ne () x₁ x₂) prop
--- naturalProp-irrelavence (ne x () x₂) (suc [t≡u]₂) prop
--- naturalProp-irrelavence (ne x () x₂) zero prop
--- naturalProp-irrelavence (ne x x₁ x₂) (ne x₃ x₄ x₅) prop = prop
-
--- naturalProp-irrelavence' : ∀ {Γ t t' u}
---                          → t PE.≡ t'
---                          → ([t≡u]₁ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t u)
---                          → ([t≡u]₂ : [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) t' u)
---                          → naturalEq-prop Γ t u [t≡u]₁
---                          → naturalEq-prop Γ t' u [t≡u]₂
--- naturalProp-irrelavence' PE.refl [t≡u]₁ [t≡u]₂ prop = naturalProp-irrelavence [t≡u]₁ [t≡u]₂ prop
-
 transEqTerm : ∀ {l Γ A t u v} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ v ∷ A / [A]
 transEqTerm {⁰} (U {l< = ()} ⊢Γ) t≡u u≡v
 transEqTerm {¹} (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] = U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁ , transEq ⊩t ⊩u ⊩u₁ [t≡u] (proof-irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]

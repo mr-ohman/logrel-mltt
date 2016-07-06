@@ -13,10 +13,6 @@ data _∈_ {A : Set} (a : A) : Con A → Set where
   here  : {Γ : Con A}                     → a ∈ Γ ∙ a
   there : {Γ : Con A} {b : A} (h : a ∈ Γ) → a ∈ Γ ∙ b
 
--- toNat : {A : Set} {a : A} {As : Con A} → a ∈ As → ℕ
--- toNat here = zero
--- toNat (there x) = suc (toNat x)
-
 toNat : ∀ {A} → Con A → Nat
 toNat ε = zero
 toNat (Γ ∙ x) = suc (toNat Γ)
