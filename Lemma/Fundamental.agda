@@ -22,42 +22,42 @@ import Relation.Binary.PropositionalEquality as PE
 
 
 mutual
-  valid : ∀ {Γ} → ⊢ Γ → ⊨⟨ ¹ ⟩ Γ
+  valid : ∀ {Γ} → ⊢ Γ → ⊩ₛ⟨ ¹ ⟩ Γ
   valid ε = ε
   valid (⊢Γ ∙ A) = let [Γ] , [A] = fundamental A in [Γ] ∙ [A]
 
-  fundamentalℕ : ∀ {Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ) → Γ ⊨⟨ ¹ ⟩ ℕ / [Γ]
+  fundamentalℕ : ∀ {Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) → Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ]
   fundamentalℕ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ x₂ → id (ℕ ⊢Δ)
 
-  fundamentalU : ∀ {Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ) → Γ ⊨⟨ ¹ ⟩ U / [Γ]
+  fundamentalU : ∀ {Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) → Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ]
   fundamentalU [Γ] ⊢Δ [σ] = U {l< = 0<1} ⊢Δ , λ x₂ → PE.refl
 
-  fundamentalUniv : ∀ {A Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                    ([U] : Γ ⊨⟨ ¹ ⟩ U / [Γ])
-                  → Γ ⊨⟨ ¹ ⟩t A ∷ U / [Γ] / [U]
-                  → Γ ⊨⟨ ¹ ⟩ A / [Γ]
+  fundamentalUniv : ∀ {A Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    ([U] : Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ])
+                  → Γ ⊩ₛ⟨ ¹ ⟩t A ∷ U / [Γ] / [U]
+                  → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]
   fundamentalUniv [Γ] [U] [A] ⊢Δ [σ] =
     let [A]₁ = emb {l< = 0<1} (univEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])))
     in  [A]₁ , (λ x₁ → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁ ((proj₂ ([A] ⊢Δ [σ])) x₁))
 
-  fundamentalZero : ∀ {Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                  → Γ ⊨⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / fundamentalℕ [Γ]
+  fundamentalZero : ∀ {Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                  → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / fundamentalℕ [Γ]
   fundamentalZero [Γ] ⊢Δ [σ] = ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ]
     , (λ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ) , refl (zero ⊢Δ) , zero ])
 
-  fundamentalSuc : ∀ {Γ n} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                   ([ℕ] : Γ ⊨⟨ ¹ ⟩ ℕ / [Γ])
-                 → Γ ⊨⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ]
-                 → Γ ⊨⟨ ¹ ⟩t suc n ∷ ℕ / [Γ] / [ℕ]
+  fundamentalSuc : ∀ {Γ n} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                   ([ℕ] : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
+                 → Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ]
+                 → Γ ⊩ₛ⟨ ¹ ⟩t suc n ∷ ℕ / [Γ] / [ℕ]
   fundamentalSuc ⊢Γ [ℕ] [n] = λ ⊢Δ [σ] → sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
                             , (λ x → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x))
 
-  fundamentalConv : ∀ {t A B Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                    ([A] [A'] : Γ ⊨⟨ ¹ ⟩ A / [Γ])
-                    ([B] : Γ ⊨⟨ ¹ ⟩ B / [Γ])
-                  → Γ ⊨⟨ ¹ ⟩ A ≡ B / [Γ] / [A']
-                  → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
-                  → Γ ⊨⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
+  fundamentalConv : ∀ {t A B Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    ([A] [A'] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+                    ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
+                  → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A']
+                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
+                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
   fundamentalConv ⊢Γ [A] [A'] [B] [A≡B] [t] ⊢Δ [σ] =
     let [σA]     = proj₁ ([A] ⊢Δ [σ])
         [σA']    = proj₁ ([A'] ⊢Δ [σ])
@@ -70,7 +70,7 @@ mutual
 
 -- Fundamental theorem for types
 
-  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊨⟨ ¹ ⟩ Γ) (λ ⊨Γ → Γ ⊨⟨ ¹ ⟩ A / ⊨Γ)
+  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ₛ⟨ ¹ ⟩ Γ) (λ [Γ] → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
   fundamental (ℕ x) = valid x , fundamentalℕ (valid x)
   fundamental (U x) = valid x , fundamentalU (valid x)
   fundamental (Π_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
@@ -83,9 +83,9 @@ mutual
 -- Fundamental theorem for type equality
 
   fundamentalEq : ∀{Γ A B} → Γ ⊢ A ≡ B
-    → ∃  λ ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-    → ∃₂ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊨⟨ ¹ ⟩ B / [Γ])
-    → Γ ⊨⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
+    → ∃  λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+    → ∃₂ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
+    → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
   fundamentalEq (univ {A} {B} x) with fundamentalTermEq x
   fundamentalEq (univ {A} {B} x) | [Γ] , modelsTermEq [U] [t] [u] [t≡u] =
     let [A] = fundamentalUniv {A} [Γ] [U] [t]
@@ -111,9 +111,9 @@ mutual
 -- Fundamental theorem for terms
 
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
-    → ∃ λ ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-    → ∃ λ ([A] : Γ ⊨⟨ ¹ ⟩ A / [Γ])
-    → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
+    → ∃ λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+    → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+    → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕ x) = valid x , fundamentalU (valid x)
                            , (λ ⊢Δ [σ] → let ⊢ℕ  = ℕ ⊢Δ
                                              [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
@@ -135,8 +135,8 @@ mutual
 -- Fundamental theorem for term equality
 
   fundamentalTermEq : ∀{Γ A t t'} → Γ ⊢ t ≡ t' ∷ A
-                    → ∃ λ ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                    → Γ ⊨⟨ ¹ ⟩t t ≡ t' ∷ A / [Γ]
+                    → ∃ λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    → Γ ⊩ₛ⟨ ¹ ⟩t t ≡ t' ∷ A / [Γ]
   fundamentalTermEq (refl D) with fundamentalTerm D
   ... | [Γ] , [A] , [t] = [Γ] , modelsTermEq [A] [t] [t] λ ⊢Δ [σ] → reflEqTerm (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
   fundamentalTermEq (sym D) with fundamentalTermEq D
@@ -184,9 +184,9 @@ mutual
     {!!} , modelsTermEq [F₀] {!!} [z] {!!}
   fundamentalTermEq (natrec-suc n F z s) = {!!}
 
-  fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ) ([F] : Γ ⊨⟨ ¹ ⟩ F / [Γ])
-               → Γ ∙ F ⊨⟨ ¹ ⟩ G / [Γ] ∙ [F]
-               → Γ ⊨⟨ ¹ ⟩ Π F ▹ G / [Γ]
+  fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+               → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F]
+               → Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ]
   fundamentalΠ [Γ] [F] [G] ⊢Δ [σ] =
     let ⊢F    = soundness (proj₁ ([F] ⊢Δ [σ]))
         ⊢G    = soundness (proj₁ ([G] (⊢Δ ∙ ⊢F) ({!!} , {!!})))
@@ -196,28 +196,28 @@ mutual
     in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF]) (λ ρ ⊢Δ₁ x → {!!}) (λ ρ ⊢Δ₁ [a] x → {!!})
     ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] {!!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
 
-  substS : ∀ {F G t Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-           ([F] : Γ ⊨⟨ ¹ ⟩ F / [Γ])
-           ([G] : Γ ∙ F ⊨⟨ ¹ ⟩ G / [Γ] ∙ [F])
-           ([t] : Γ ⊨⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-         → Γ ⊨⟨ ¹ ⟩ G [ t ] / [Γ]
+  substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+           ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+           ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
+           ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
+         → Γ ⊩ₛ⟨ ¹ ⟩ G [ t ] / [Γ]
   substS [Γ] [F] [G] [t] ⊢Δ [σ] = {!!}
 
-  subst↑S : ∀ {F G t Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-            ([F] : Γ ⊨⟨ ¹ ⟩ F / [Γ])
-            ([G] : Γ ∙ F ⊨⟨ ¹ ⟩ G / [Γ] ∙ [F])
-            ([t] : Γ ⊨⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-          → Γ ∙ F ⊨⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
+  subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+            ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
+            ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
+          → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
   subst↑S ⊢Γ [F] [G] [t] ⊢Δ [σ] = {!!}
 
-  fundamentalNatrec : ∀ {F z s n Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                      ([ℕ]  : Γ ⊨⟨ ¹ ⟩ ℕ / [Γ])
-                      ([F]  : Γ ∙ ℕ ⊨⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
-                      ([F₀] : Γ ⊨⟨ ¹ ⟩ F [ zero ] / [Γ])
-                      ([F₊] : Γ ⊨⟨ ¹ ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ])
-                      ([Fₙ] : Γ ⊨⟨ ¹ ⟩ F [ n ] / [Γ])
-                    → Γ ⊨⟨ ¹ ⟩t z ∷ F [ zero ] / [Γ] / [F₀]
-                    → Γ ⊨⟨ ¹ ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊]
-                    → ([n] : Γ ⊨⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
-                    → Γ ⊨⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / substS {ℕ} {F} {n} [Γ] [ℕ] [F] [n]
+  fundamentalNatrec : ∀ {F z s n Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                      ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
+                      ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
+                      ([F₀] : Γ ⊩ₛ⟨ ¹ ⟩ F [ zero ] / [Γ])
+                      ([F₊] : Γ ⊩ₛ⟨ ¹ ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ])
+                      ([Fₙ] : Γ ⊩ₛ⟨ ¹ ⟩ F [ n ] / [Γ])
+                    → Γ ⊩ₛ⟨ ¹ ⟩t z ∷ F [ zero ] / [Γ] / [F₀]
+                    → Γ ⊩ₛ⟨ ¹ ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊]
+                    → ([n] : Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
+                    → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / substS {ℕ} {F} {n} [Γ] [ℕ] [F] [n]
   fundamentalNatrec = {!!}
