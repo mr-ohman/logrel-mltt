@@ -145,7 +145,7 @@ mutual
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') with fundamentalTermEq t≡u | fundamentalTermEq u≡t'
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]₁ , modelsTermEq [A]₁ [t]₁ [u]₁ [t≡u]₁ =
     [Γ] , modelsTermEq [A] [t]
-                 (S.irrelevanceTerm {A} {r} [Γ]₁ [Γ] [A]₁ [A] [u]₁)
+                 (S.irrelevanceTerm {A = A} {t = r} [Γ]₁ [Γ] [A]₁ [A] [u]₁)
                  (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
                                          (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq t≡u | fundamentalEq A'≡A
