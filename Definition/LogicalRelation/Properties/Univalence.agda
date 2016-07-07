@@ -18,7 +18,7 @@ univEq (Π D ⊢F ⊢G [F] [G] G-ext) [A] = ⊥-elim (U≢Π (whnfRed*' (red D) 
 univEq (emb {l< = 0<1} x) [A] = univEq x [A]
 
 univEqEq : ∀ {l l' Γ A B} ([U] : Γ ⊩⟨ l ⟩ U) ([A] : Γ ⊩⟨ l' ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ B ∷ U / [U] → Γ ⊩⟨ l' ⟩ A ≡ B / [A]
-univEqEq (U {l< = 0<1} ⊢Γ) [A] U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = proof-irrelevanceEq ⊩t [A] [t≡u]
+univEqEq (U {l< = 0<1} ⊢Γ) [A] U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = irrelevanceEq ⊩t [A] [t≡u]
 univEqEq (ℕ D) [A] [A≡B] = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
 univEqEq (ne D neK) [A] [A≡B] = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
 univEqEq (Π D ⊢F ⊢G [F] [G] G-ext) [A] [A≡B] = ⊥-elim (U≢Π (whnfRed*' (red D) U))

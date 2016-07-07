@@ -61,21 +61,21 @@ mutual
     let [σA]     = proj₁ ([A] ⊢Δ [σ])
         [σA']    = proj₁ ([A'] ⊢Δ [σ])
         [σB]     = proj₁ ([B] ⊢Δ [σ])
-        [σA≡σB]  = proof-irrelevanceEq [σA'] [σA] ([A≡B] ⊢Δ [σ])
+        [σA≡σB]  = irrelevanceEq [σA'] [σA] ([A≡B] ⊢Δ [σ])
         [σt]     = proj₁ ([t] ⊢Δ [σ])
         [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
     in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
     ,   λ [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ≡σ'])
 
-  proof-irrelevanceTermS : ∀ {A t Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
+  irrelevanceTermS : ∀ {A t Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
                            ([A] [A]' : Γ ⊨⟨ ¹ ⟩ A / [Γ])
                          → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
                          → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]'
-  proof-irrelevanceTermS ⊢Γ [A] [A]' [t] ⊢Δ [σ] =
+  irrelevanceTermS ⊢Γ [A] [A]' [t] ⊢Δ [σ] =
     let [σA]  = proj₁ ([A] ⊢Δ [σ])
         [σA]' = proj₁ ([A]' ⊢Δ [σ])
-    in  (proof-irrelevanceTerm [σA] [σA]' (proj₁ ([t] ⊢Δ [σ])))
-     ,  (λ x → proof-irrelevanceEqTerm [σA] [σA]' ((proj₂ ([t] ⊢Δ [σ])) x))
+    in  (irrelevanceTerm [σA] [σA]' (proj₁ ([t] ⊢Δ [σ])))
+     ,  (λ x → irrelevanceEqTerm [σA] [σA]' ((proj₂ ([t] ⊢Δ [σ])) x))
 
 -- Fundamental theorem for types
 
@@ -110,7 +110,7 @@ mutual
     [Γ] , [A] , {![B]!}
         , (λ ⊢Δ [σ] → transEq (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([B₁] ⊢Δ [σ]))
                               (proj₁ ([B] ⊢Δ {![σ]!})) ([A≡B₁] ⊢Δ [σ])
-                              (proof-irrelevanceEq (proj₁ ([B₁]₁ ⊢Δ {![σ]!}))
+                              (irrelevanceEq (proj₁ ([B₁]₁ ⊢Δ {![σ]!}))
                                                    (proj₁ ([B₁] ⊢Δ [σ]))
                                                    ([B₁≡B] ⊢Δ {![σ]!})))
   fundamentalEq (Π-cong {F} {H} {G} {E} ⊢F A≡B A≡B₁) with fundamentalEq A≡B | fundamentalEq A≡B₁
@@ -154,15 +154,15 @@ mutual
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') with fundamentalTermEq t≡u | fundamentalTermEq u≡t'
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]₁ , modelsTermEq [A]₁ [t]₁ [u]₁ [t≡u]₁ =
     [Γ] , modelsTermEq [A] [t]
-                 (proof-irrelevanceTermS {A} {r} [Γ] {![A]₁!} [A] {![u]₁!})
+                 (irrelevanceTermS {A} {r} [Γ] {![A]₁!} [A] {![u]₁!})
                  (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
-                                         (proof-irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
+                                         (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq t≡u | fundamentalEq A'≡A
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) | [Γ] , modelsTermEq [A'] [t] [u] [t≡u] | [Γ]₁ , [A']₁ , [A] , [A'≡A] =
     [Γ] , {!modelsTermEq [A] (fundamentalConv {t} {A} {B} [A'] [A']₁ [A] [A'≡A] [t])
                      (fundamentalConv {u} {A} {B} [A'] [A']₁ [A] [A'≡A] [u])
                      (λ ⊢Δ [σ] → convEqTerm₁ (proj₁ ([A']₁ ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([A'≡A] ⊢Δ [σ])
-                                             (proof-irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
+                                             (irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
                                                                       (proj₁ ([A']₁ ⊢Δ [σ]))
                                                                       ([t≡u] ⊢Δ [σ])))!}
   fundamentalTermEq (Π-cong x x₁ x₂) = {!!}

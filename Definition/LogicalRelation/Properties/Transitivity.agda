@@ -31,16 +31,16 @@ mutual
         [F''] : ∀ {Δ} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⟨ l'' ⟩ wkₜ ρ F''
         [F''] ρ ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wkₜ ρ x) F₂≡F'' ([F]₂ ρ ⊢Δ)
         [F'≡F''] : ∀ {Δ} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⟨ l' ⟩ wkₜ ρ F' ≡ wkₜ ρ F'' / [F'] ρ ⊢Δ
-        [F'≡F''] ρ ⊢Δ = proof-irrelevanceEq' (PE.cong (wkₜ ρ) F₁≡F') ([F]₁ ρ ⊢Δ) ([F'] ρ ⊢Δ) ([F≡F']₁ ρ ⊢Δ)
+        [F'≡F''] ρ ⊢Δ = irrelevanceEq' (PE.cong (wkₜ ρ) F₁≡F') ([F]₁ ρ ⊢Δ) ([F'] ρ ⊢Δ) ([F≡F']₁ ρ ⊢Δ)
         [G'] : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⟨ l' ⟩ a ∷ wkₜ ρ F' / [F'] ρ ⊢Δ → Δ ⊩⟨ l' ⟩ wkLiftₜ ρ G' [ a ]
-        [G'] ρ ⊢Δ [a] = let [a'] = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a]
+        [G'] ρ ⊢Δ [a] = let [a'] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a]
                         in  PE.subst (λ x →  _ ⊩⟨ _ ⟩ wkLiftₜ ρ x [ _ ]) G₁≡G' ([G]₁ ρ ⊢Δ [a'])
         [G''] : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩⟨ l'' ⟩ a ∷ wkₜ ρ F'' / [F''] ρ ⊢Δ → Δ ⊩⟨ l'' ⟩ wkLiftₜ ρ G'' [ a ]
-        [G''] ρ ⊢Δ [a] = let [a''] = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₂≡F'')) ([F''] ρ ⊢Δ) ([F]₂ ρ ⊢Δ) [a]
+        [G''] ρ ⊢Δ [a] = let [a''] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₂≡F'')) ([F''] ρ ⊢Δ) ([F]₂ ρ ⊢Δ) [a]
                         in  PE.subst (λ x →  _ ⊩⟨ _ ⟩ wkLiftₜ ρ x [ _ ]) G₂≡G'' ([G]₂ ρ ⊢Δ [a''])
         [G'≡G''] : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩⟨ l' ⟩ a ∷ wkₜ ρ F' / [F'] ρ ⊢Δ) → Δ ⊩⟨ l' ⟩ wkLiftₜ ρ G' [ a ] ≡ wkLiftₜ ρ G'' [ a ] / [G'] ρ ⊢Δ [a]
-        [G'≡G''] ρ ⊢Δ [a'] = let [a]₁ = proof-irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a']
-                             in  proof-irrelevanceEq' (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) G₁≡G') ([G]₁ ρ ⊢Δ [a]₁) ([G'] ρ ⊢Δ [a']) ([G≡G']₁ ρ ⊢Δ [a]₁)
+        [G'≡G''] ρ ⊢Δ [a'] = let [a]₁ = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F')) ([F'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a']
+                             in  irrelevanceEq' (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) G₁≡G') ([G]₁ ρ ⊢Δ [a]₁) ([G'] ρ ⊢Δ [a']) ([G≡G']₁ ρ ⊢Δ [a]₁)
     in  Π¹[ F'' , G'' , D'' , trans A≡B A≡B₁
         , (λ ρ ⊢Δ → transEq ([F] ρ ⊢Δ) ([F'] ρ ⊢Δ) ([F''] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ) ([F'≡F''] ρ ⊢Δ))
         , (λ ρ ⊢Δ [a] → let [a']  = convTerm₁ ([F] ρ ⊢Δ) ([F'] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ) [a]
@@ -70,7 +70,7 @@ transNatural (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (trans x₂ x₅)
 
 transEqTerm : ∀ {l Γ A t u v} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A] → Γ ⊩⟨ l ⟩ t ≡ v ∷ A / [A]
 transEqTerm {⁰} (U {l< = ()} ⊢Γ) t≡u u≡v
-transEqTerm {¹} (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] = U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁ , transEq ⊩t ⊩u ⊩u₁ [t≡u] (proof-irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
+transEqTerm {¹} (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] = U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁ , transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
 transEqTerm (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] ℕ≡[ k₁ , k'' , d₁ , d'' , t≡u₁ , [k≡k']₁ ] =
   let k₁Whnf = naturalWhnf (proj₁ (split [k≡k']₁))
       k'Whnf = naturalWhnf (proj₂ (split [k≡k']))

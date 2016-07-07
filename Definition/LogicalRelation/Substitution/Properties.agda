@@ -69,7 +69,7 @@ wkSubstS ε ⊢Δ ⊢Δ' ρ [σ] = tt
 wkSubstS {σ = σ} {Γ = Γ ∙ A} (⊨Γ ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
   let [tailσ] = wkSubstS ⊨Γ ⊢Δ ⊢Δ' ρ (proj₁ [σ])
   in  [tailσ]
-   ,  proof-irrelevanceTerm' (wk-subst A)
+   ,  irrelevanceTerm' (wk-subst A)
         (LR.wk ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))))
         (proj₁ (x ⊢Δ' [tailσ]))
         (LR.wkTerm ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ]))
@@ -96,26 +96,26 @@ liftSubstS {F = F} {σ = σ} {Δ = Δ} ⊨Γ ⊢Δ [F] [σ] =
                         (var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                                                  (todoPrf σ F) here))
 
-proof-irrelevanceTermΔ : ∀ {l σ Γ Δ}
+irrelevanceTermΔ : ∀ {l σ Γ Δ}
                           (⊨Γ : ⊨⟨ l ⟩ Γ)
                           (⊢Δ ⊢Δ' : ⊢ Δ)
                         → Δ ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ
                         → Δ ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ'
-proof-irrelevanceTermΔ ε ⊢Δ ⊢Δ' [σ] = tt
-proof-irrelevanceTermΔ (⊨Γ ∙ x) ⊢Δ ⊢Δ' [σ] =
-  let [tailσ] = proof-irrelevanceTermΔ ⊨Γ ⊢Δ ⊢Δ' (proj₁ [σ])
-  in  [tailσ] , proof-irrelevanceTerm (proj₁ (x ⊢Δ (proj₁ [σ])))
+irrelevanceTermΔ ε ⊢Δ ⊢Δ' [σ] = tt
+irrelevanceTermΔ (⊨Γ ∙ x) ⊢Δ ⊢Δ' [σ] =
+  let [tailσ] = irrelevanceTermΔ ⊨Γ ⊢Δ ⊢Δ' (proj₁ [σ])
+  in  [tailσ] , irrelevanceTerm (proj₁ (x ⊢Δ (proj₁ [σ])))
                                       (proj₁ (x ⊢Δ' [tailσ]))
                                       (proj₂ [σ])
 
-proof-irrelevanceTermΔ' : ∀ {l σ Γ Δ Δ'}
+irrelevanceTermΔ' : ∀ {l σ Γ Δ Δ'}
                           (⊨Γ : ⊨⟨ l ⟩ Γ)
                           (eq : Δ PE.≡ Δ')
                           (⊢Δ  : ⊢ Δ)
                           (⊢Δ' : ⊢ Δ')
                         → Δ  ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ
                         → Δ' ⊨⟨ l ⟩ σ ∷ Γ / ⊨Γ / ⊢Δ'
-proof-irrelevanceTermΔ' ⊨Γ PE.refl ⊢Δ ⊢Δ' [σ] = proof-irrelevanceTermΔ ⊨Γ ⊢Δ ⊢Δ' [σ]
+irrelevanceTermΔ' ⊨Γ PE.refl ⊢Δ ⊢Δ' [σ] = irrelevanceTermΔ ⊨Γ ⊢Δ ⊢Δ' [σ]
 
 mutual
   soundContext : ∀ {l Γ} → ⊨⟨ l ⟩ Γ → ⊢ Γ
@@ -128,7 +128,7 @@ mutual
     let ⊢Γ = soundContext ⊨Γ
         ⊢Γ∙A = soundContext (⊨Γ ∙ [A])
         ⊢Γ∙A' = ⊢Γ ∙ soundness (proj₁ ([A] ⊢Γ (idSubstS ⊨Γ)))
-        [tailσ] = proof-irrelevanceTermΔ' ⊨Γ (PE.cong (_∙_ Γ) (idSubst-lemma₀ A)) ⊢Γ∙A' ⊢Γ∙A (wk1SubstS {F = subst idSubst A} ⊨Γ ⊢Γ (soundness (proj₁ ([A] (soundContext ⊨Γ) (idSubstS ⊨Γ)))) (idSubstS ⊨Γ))
+        [tailσ] = irrelevanceTermΔ' ⊨Γ (PE.cong (_∙_ Γ) (idSubst-lemma₀ A)) ⊢Γ∙A' ⊢Γ∙A (wk1SubstS {F = subst idSubst A} ⊨Γ ⊢Γ (soundness (proj₁ ([A] (soundContext ⊨Γ) (idSubstS ⊨Γ)))) (idSubstS ⊨Γ))
     in  [tailσ] , neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
                           (var zero)
                           (var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
