@@ -9,6 +9,7 @@ open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
+import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Context
 
@@ -66,16 +67,6 @@ mutual
         [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
     in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
     ,   λ [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ≡σ'])
-
-  irrelevanceTermS : ∀ {A t Γ} ([Γ] : ⊨⟨ ¹ ⟩ Γ)
-                           ([A] [A]' : Γ ⊨⟨ ¹ ⟩ A / [Γ])
-                         → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
-                         → Γ ⊨⟨ ¹ ⟩t t ∷ A / [Γ] / [A]'
-  irrelevanceTermS ⊢Γ [A] [A]' [t] ⊢Δ [σ] =
-    let [σA]  = proj₁ ([A] ⊢Δ [σ])
-        [σA]' = proj₁ ([A]' ⊢Δ [σ])
-    in  (irrelevanceTerm [σA] [σA]' (proj₁ ([t] ⊢Δ [σ])))
-     ,  (λ x → irrelevanceEqTerm [σA] [σA]' ((proj₂ ([t] ⊢Δ [σ])) x))
 
 -- Fundamental theorem for types
 
@@ -154,7 +145,7 @@ mutual
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') with fundamentalTermEq t≡u | fundamentalTermEq u≡t'
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]₁ , modelsTermEq [A]₁ [t]₁ [u]₁ [t≡u]₁ =
     [Γ] , modelsTermEq [A] [t]
-                 (irrelevanceTermS {A} {r} [Γ] {![A]₁!} [A] {![u]₁!})
+                 (S.irrelevanceTerm {A} {r} [Γ]₁ [Γ] [A]₁ [A] [u]₁)
                  (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
                                          (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq t≡u | fundamentalEq A'≡A
