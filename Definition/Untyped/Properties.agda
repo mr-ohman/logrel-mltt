@@ -36,9 +36,6 @@ wkNat-id x zero = refl
 wkNat-id zero (suc n) = refl
 wkNat-id (suc x) (suc n) = cong suc (wkNat-id x n)
 
--- wk-lift-id : ∀ t → wk (lift id) t ≡ wk id t
--- wk-lift-id t = {!!}
-
 wk-id : (x : Term) (n : Nat) → wk (iterate lift id n) x ≡ x
 wk-id U n = refl
 wk-id (Π x ▹ x₁) n = cong₂ Π_▹_ (wk-id x n) (wk-id x₁ (suc n))
