@@ -51,25 +51,25 @@ import Relation.Binary.PropositionalEquality as PE
 -- todoPrf₂ σ F = PE.trans (wk-subst F) (todoPrf₃ σ F)
 
 
-substSubst : ∀ {l σ σ' Γ Δ}
-            ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
-            ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
-           → Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
-           → Δ ⊩ₛ⟨ l ⟩ σ' ∷ Γ / [Γ] / ⊢Δ
-substSubst ε ⊢Δ [σ] [σ≡σ'] = tt
-substSubst ([Γ] ∙ x) ⊢Δ [σ] [σ≡σ'] =
-  substSubst [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ≡σ']) , {!!}
+-- substSubst : ∀ {l σ σ' Γ Δ}
+--             ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
+--             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+--            → Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
+--            → Δ ⊩ₛ⟨ l ⟩ σ' ∷ Γ / [Γ] / ⊢Δ
+-- substSubst ε ⊢Δ [σ] [σ≡σ'] = tt
+-- substSubst ([Γ] ∙ x) ⊢Δ [σ] [σ≡σ'] =
+--   substSubst [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ≡σ']) , {!!}
 
 wk1SubstΓ : Con Term → Subst → Subst
 wk1SubstΓ Γ σ x = wk (step (T.toWk (T.⊆-refl Γ))) (σ x)
 
-wkSubstEq : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢F : Δ ⊢ F)
-            ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
-            ([wk1σ] : Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
-          → Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ≡ wk1Subst σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F / [wk1σ]
-wkSubstEq ε ⊢Δ ⊢F [σ] [wk1σ] = tt
-wkSubstEq ([Γ] ∙ x) ⊢Δ ⊢F [σ] [wk1σ] =
-  wkSubstEq [Γ] ⊢Δ ⊢F (proj₁ [σ]) (proj₁ [wk1σ]) , {!!}
+-- wkSubstEq : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢F : Δ ⊢ F)
+--             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+--             ([wk1σ] : Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
+--           → Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ≡ wk1Subst σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F / [wk1σ]
+-- wkSubstEq ε ⊢Δ ⊢F [σ] [wk1σ] = tt
+-- wkSubstEq ([Γ] ∙ x) ⊢Δ ⊢F [σ] [wk1σ] =
+--   wkSubstEq [Γ] ⊢Δ ⊢F (proj₁ [σ]) (proj₁ [wk1σ]) , {!!}
 
 
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)

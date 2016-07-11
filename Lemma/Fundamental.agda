@@ -1,6 +1,7 @@
 module Lemma.Fundamental where
 
 open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped.Properties
 open import Definition.Typed
 import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
@@ -9,6 +10,7 @@ open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
+open import Definition.LogicalRelation.Substitution.Properties
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Context
@@ -195,14 +197,18 @@ mutual
   fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
                → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F]
                → Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ]
-  fundamentalΠ [Γ] [F] [G] ⊢Δ [σ] =
+  fundamentalΠ {F} [Γ] [F] [G] {σ = σ} ⊢Δ [σ] =
     let ⊢F    = soundness (proj₁ ([F] ⊢Δ [σ]))
         ⊢G    = soundness (proj₁ ([G] (⊢Δ ∙ ⊢F) ({!!} , {!!})))
         ⊢ΠF▹G = Π ⊢F ▹ ⊢G
         [σF]  = proj₁ ([F] ⊢Δ [σ])
-        [σG]  = proj₁ ([G] (⊢Δ ∙ ⊢F) {!!})
-    in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF]) (λ ρ ⊢Δ₁ x → {!!}) (λ ρ ⊢Δ₁ [a] x → {!!})
-    ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] {!!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
+        [σG]  = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) {!!})
+    in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF]) --PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (wk-subst F)) (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])))
+          (λ {Δ} {a} ρ ⊢Δ₁ x → PE.subst (λ x → _ ⊩⟨ _ ⟩ x) {!!}
+            (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+                   (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) [F] (irrelevanceTerm' (wk-subst F) {!!} (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) x)))))
+          (λ ρ ⊢Δ₁ [a] x → {!!})
+    ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → {!wkEq ρ ⊢Δ₁ [σF] {!!}!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
 
   substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
