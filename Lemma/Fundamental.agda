@@ -52,21 +52,26 @@ mutual
   fundamentalSuc ⊢Γ [ℕ] [n] = λ ⊢Δ [σ] → sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
                             , (λ x → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x))
 
-  fundamentalConv : ∀ {t A B Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
-                    ([A] [A'] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-                    ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
-                  → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A']
-                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
-                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
-  fundamentalConv ⊢Γ [A] [A'] [B] [A≡B] [t] ⊢Δ [σ] =
-    let [σA]     = proj₁ ([A] ⊢Δ [σ])
-        [σA']    = proj₁ ([A'] ⊢Δ [σ])
-        [σB]     = proj₁ ([B] ⊢Δ [σ])
-        [σA≡σB]  = irrelevanceEq [σA'] [σA] ([A≡B] ⊢Δ [σ])
-        [σt]     = proj₁ ([t] ⊢Δ [σ])
-        [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
-    in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
-    ,   λ [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ≡σ'])
+  fundamentalConv : ∀ {t A B Γ}
+                    ([Γ] [Γ]' [Γ]'' : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    ([A]  : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+                    ([A]' : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]')
+                    ([B]  : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ]'')
+                  → Γ ⊩ₛ⟨ ¹ ⟩  A ≡ B / [Γ]   / [A]
+                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ]'  / [A]'
+                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ]'' / [B]
+  fundamentalConv [Γ] [Γ]' [Γ]'' [A] [A]' [B] [A≡B] [t] ⊢Δ [σ]'' =
+    let [σ]      = S.irrelevanceSubst [Γ]'' [Γ] ⊢Δ ⊢Δ [σ]''
+        [σ]'     = S.irrelevanceSubst [Γ]'' [Γ]' ⊢Δ ⊢Δ [σ]''
+        [σA]     = proj₁ ([A] ⊢Δ [σ])
+        [σA]'    = proj₁ ([A]' ⊢Δ [σ]')
+        [σB]     = proj₁ ([B] ⊢Δ [σ]'')
+        [σA≡σB]  = irrelevanceEq [σA] [σA]' ([A≡B] ⊢Δ [σ])
+        [σt]     = proj₁ ([t] ⊢Δ [σ]')
+        [σt≡σ't] = proj₂ ([t] ⊢Δ [σ]')
+    in  convTerm₁ [σA]' [σB] [σA≡σB] [σt]
+    ,   λ [σ≡σ'] → convEqTerm₁ [σA]' [σB] [σA≡σB] ([σt≡σ't]
+                               (S.irrelevanceSubstEq [Γ]'' [Γ]' ⊢Δ ⊢Δ [σ]'' [σ]' [σ≡σ']))
 
 -- Fundamental theorem for types
 
@@ -150,12 +155,15 @@ mutual
                                          (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq t≡u | fundamentalEq A'≡A
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) | [Γ] , modelsTermEq [A'] [t] [u] [t≡u] | [Γ]₁ , [A']₁ , [A] , [A'≡A] =
-    [Γ] , {!modelsTermEq [A] (fundamentalConv {t} {A} {B} [A'] [A']₁ [A] [A'≡A] [t])
-                     (fundamentalConv {u} {A} {B} [A'] [A']₁ [A] [A'≡A] [u])
-                     (λ ⊢Δ [σ] → convEqTerm₁ (proj₁ ([A']₁ ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([A'≡A] ⊢Δ [σ])
-                                             (irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
-                                                                      (proj₁ ([A']₁ ⊢Δ [σ]))
-                                                                      ([t≡u] ⊢Δ [σ])))!}
+    [Γ]₁
+    , modelsTermEq [A]
+                   (fundamentalConv {t} {A} {B} [Γ]₁ [Γ] [Γ]₁ [A']₁ [A'] [A] [A'≡A] [t])
+                   (fundamentalConv {u} {A} {B} [Γ]₁ [Γ] [Γ]₁ [A']₁ [A'] [A] [A'≡A] [u])
+                   (λ ⊢Δ [σ]₁ → let [σ] = S.irrelevanceSubst [Γ]₁ [Γ] ⊢Δ ⊢Δ [σ]₁
+                                in  convEqTerm₁ (proj₁ ([A']₁ ⊢Δ [σ]₁)) (proj₁ ([A] ⊢Δ [σ]₁)) ([A'≡A] ⊢Δ [σ]₁)
+                                                (irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
+                                                                   (proj₁ ([A']₁ ⊢Δ [σ]₁))
+                                                                   ([t≡u] ⊢Δ [σ])))
   fundamentalTermEq (Π-cong x x₁ x₂) = {!!}
   fundamentalTermEq (app-cong x x₁) = {!!}
   fundamentalTermEq (β-red x x₁ x₂) = {!!}
