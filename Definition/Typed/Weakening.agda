@@ -16,7 +16,7 @@ import Relation.Binary.HeterogeneousEquality as HE
 
 mutual
   data _⊆_ : Con Term → Con Term → Set where
-    base : ε ⊆ ε
+    base : ∀{Γ} → Γ ⊆ Γ
     step : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) →  Γ      ⊆ (Δ ∙ σ)
     lift : ∀ {Γ : Con Term} {Δ : Con Term} {σ} (inc : Γ ⊆ Δ) → (Γ ∙ σ) ⊆ (Δ ∙ U.wk (toWk inc) σ)
 
@@ -38,6 +38,7 @@ mutual
   _•ₜ_ : ∀ {Γ Δ E} → Δ ⊆ E → Γ ⊆ Δ → Γ ⊆ E
   base •ₜ η′ = η′
   step η •ₜ η′ = step (η •ₜ η′)
+  lift η •ₜ base = lift η
   lift η •ₜ step η′ = step (η •ₜ η′)
   lift η •ₜ lift η′ =  PE.subst (λ x → _ ∙ _ ⊆ _ ∙ x)
                                (wk-comp-comm η η′)
@@ -51,6 +52,7 @@ mutual
           → toWk (η •ₜ η′) PE.≡ toWk η • toWk η′
   comp-eq base η′ = PE.refl
   comp-eq (step η) η′ = PE.cong step (comp-eq η η′)
+  comp-eq (lift η) base = PE.refl
   comp-eq (lift η) (step η′) = PE.cong step (comp-eq η η′)
   comp-eq (lift {Δ} {E} {.(wkₜ η′ σ)} η) (lift {Γ} {.Δ} {σ} η′) =
     HE.≅-to-≡
@@ -80,15 +82,17 @@ wk-comp-comm-subst {a = a} η η′ G = PE.cong (λ x → x [ a ]) (wk-comp-comm
 
 mutual
   ⊆-refl : (Γ : Con Term) → Γ ⊆ Γ
-  ⊆-refl ε = base
-  ⊆-refl (Γ ∙ x) = PE.subst (λ x₁ → Γ ∙ x ⊆ Γ ∙ x₁) (wk-⊆-refl Γ x) (lift (⊆-refl Γ))
+  ⊆-refl Γ = base
+  -- ⊆-refl ε = base
+  -- ⊆-refl (Γ ∙ x) = PE.subst (λ x₁ → Γ ∙ x ⊆ Γ ∙ x₁) (wk-⊆-refl Γ x) (lift (⊆-refl Γ))
 
   wk-⊆-id : ∀ Γ → ∃ λ n → toWk (⊆-refl Γ) PE.≡ UP.iterate lift id n
-  wk-⊆-id ε = zero , PE.refl
-  wk-⊆-id (Γ ∙ x) with wk-⊆-id Γ
-  ... | n , prf = suc n , HE.≅-to-≡ (HE.trans ((HE.cong₂ (λ X → toWk {Γ ∙ x} {X})
-                  (HE.≡-to-≅ (PE.cong (λ x → Γ ∙ x) (PE.sym (wk-⊆-refl Γ x))))
-                  (subst-eq₁ Γ x))) (HE.≡-to-≅ (PE.cong lift prf)))
+  wk-⊆-id Γ = zero , PE.refl
+  -- wk-⊆-id ε = zero , PE.refl
+  -- wk-⊆-id (Γ ∙ x) with wk-⊆-id Γ
+  -- ... | n , prf = suc n , HE.≅-to-≡ (HE.trans ((HE.cong₂ (λ X → toWk {Γ ∙ x} {X})
+  --                  (HE.≡-to-≅ (PE.cong (λ x → Γ ∙ x) (PE.sym (wk-⊆-refl Γ x))))
+  --                  (subst-eq₁ Γ x))) (HE.≡-to-≅ (PE.cong lift prf))) !}
 
   wk-⊆-refl : ∀ Γ t → wkₜ (⊆-refl Γ) t PE.≡ t
   wk-⊆-refl Γ t = PE.trans (PE.cong (λ x → U.wk x t) (proj₂ (wk-⊆-id Γ))) (UP.wk-id t (proj₁ (wk-⊆-id Γ)))
@@ -105,7 +109,7 @@ wkIndex : ∀ {Γ Δ x A} → (pr : Γ ⊆ Δ) →
         let A' = U.wk (toWk pr) A
             x' = wkNat (toWk pr) x
         in  ⊢ Δ → x ∷ A ∈ Γ → x' ∷ A' ∈ Δ
-wkIndex base ⊢Δ ()
+wkIndex base ⊢Δ D = PE.subst (λ x → _ ∷ x ∈ _) (PE.sym (UP.wk-id _ 0)) D
 wkIndex (step pr) (⊢Δ ∙ x) i = PE.subst (λ x → _ ∷ x ∈ _)
                                         (wkIndex-step (toWk pr))
                                         (there (wkIndex pr ⊢Δ i))

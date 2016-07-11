@@ -99,7 +99,7 @@ wk1SubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
                             / (⊢Δ ∙ ⊢F)
 wk1SubstS {l} {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] =
   PE.subst (λ x → Δ ∙ F ⊩ₛ⟨ l ⟩ x ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
-           {!!}
+           PE.refl
            (wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step (T.⊆-refl Δ)) [σ])
 
 wk1SubstSΓ : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
