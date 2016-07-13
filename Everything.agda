@@ -16,6 +16,8 @@ import Definition.LogicalRelation
 import Definition.LogicalRelation.Tactic
 import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Substitution
+import Definition.LogicalRelation.Substitution.Properties
+import Definition.LogicalRelation.Substitution.Irrelevance
 import Definition.LogicalRelation.Weakening
 import Definition.LogicalRelation.Properties
 -- import Definition.LogicalRelation.PropertiesWIP -- unsolved metas
