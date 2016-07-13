@@ -82,7 +82,7 @@ mutual
   fundamental (U x) = valid x , fundamentalU (valid x)
   fundamental (Π_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
   fundamental (Π_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
-    [Γ] , fundamentalΠ {F} {G} [Γ] [F] {![G]!}
+    [Γ] , fundamentalΠ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
     [Γ] , fundamentalUniv {A} [Γ] [U] [A]
@@ -97,23 +97,29 @@ mutual
   fundamentalEq (univ {A} {B} x) | [Γ] , modelsTermEq [U] [t] [u] [t≡u] =
     let [A] = fundamentalUniv {A} [Γ] [U] [t]
         [B] = fundamentalUniv {B} [Γ] [U] [u]
-    in  {!!} , [A] , [B] , (λ ⊢Δ [σ] → univEqEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]))
+    in  [Γ] , [A] , [B] , (λ ⊢Δ [σ] → univEqEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]))
   fundamentalEq (refl D) = let [Γ] , [B] = fundamental D
                            in  [Γ] , [B] , [B] , (λ ⊢Δ [σ] → reflEq (proj₁ ([B] ⊢Δ [σ])))
   fundamentalEq (sym A≡B) with fundamentalEq A≡B
   fundamentalEq (sym A≡B) | [Γ] , [B] , [A] , [B≡A] = [Γ] , [A] , [B]
                                                  , (λ ⊢Δ [σ] → symEq (proj₁ ([B] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([B≡A] ⊢Δ [σ]))
-  fundamentalEq (trans A≡B₁ B₁≡B) with fundamentalEq A≡B₁ | fundamentalEq B₁≡B
-  fundamentalEq (trans A≡B B≡C) | [Γ] , [A] , [B₁] , [A≡B₁] | [Γ]₁ , [B₁]₁ , [B] , [B₁≡B] =
-    [Γ] , [A] , {![B]!}
-        , (λ ⊢Δ [σ] → transEq (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([B₁] ⊢Δ [σ]))
-                              (proj₁ ([B] ⊢Δ {![σ]!})) ([A≡B₁] ⊢Δ [σ])
-                              (irrelevanceEq (proj₁ ([B₁]₁ ⊢Δ {![σ]!}))
-                                                   (proj₁ ([B₁] ⊢Δ [σ]))
-                                                   ([B₁≡B] ⊢Δ {![σ]!})))
+  fundamentalEq (trans {A} {B₁} {B} A≡B₁ B₁≡B) with fundamentalEq A≡B₁ | fundamentalEq B₁≡B
+  fundamentalEq (trans {A} {B₁} {B} A≡B B≡C) | [Γ] , [A] , [B₁] , [A≡B₁] | [Γ]₁ , [B₁]₁ , [B] , [B₁≡B] =
+    [Γ] , [A] , S.irrelevance {A = B} [Γ]₁ [Γ] [B]
+        , (λ ⊢Δ [σ] →
+             let [σ]' = S.irrelevanceSubst [Γ] [Γ]₁ ⊢Δ ⊢Δ [σ]
+             in  transEq (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([B₁] ⊢Δ [σ]))
+                         (proj₁ ([B] ⊢Δ [σ]')) ([A≡B₁] ⊢Δ [σ])
+                         (irrelevanceEq (proj₁ ([B₁]₁ ⊢Δ [σ]'))
+                                        (proj₁ ([B₁] ⊢Δ [σ]))
+                                        ([B₁≡B] ⊢Δ [σ]')))
   fundamentalEq (Π-cong {F} {H} {G} {E} ⊢F A≡B A≡B₁) with fundamentalEq A≡B | fundamentalEq A≡B₁
   fundamentalEq (Π-cong {F} {H} {G} {E} ⊢F A≡B A≡B₁) | [Γ] , [F] , [H] , [F≡H] | [Γ]₁ , [G] , [E] , [G≡E] =
-    [Γ] , fundamentalΠ {F} {G} [Γ] [F] {![G]!} , fundamentalΠ {H} {E} {!!} [H] {![E]!} , {!!}
+    [Γ] , fundamentalΠ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G])
+        , fundamentalΠ {H} {E} [Γ] [H]
+            (S.irrelevanceLift {A = E} {F = F} {H = H} [Γ] [F] [H] [F≡H]
+              (S.irrelevance {A = E} [Γ]₁ ([Γ] ∙ [F]) [E]))
+        , {!!}
 
 -- Fundamental theorem for terms
 
@@ -125,10 +131,10 @@ mutual
                            , (λ ⊢Δ [σ] → let ⊢ℕ  = ℕ ⊢Δ
                                              [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
                                          in  (⊢ℕ , [ℕ]) , (λ x₁ → U[ ⊢ℕ , ⊢ℕ , refl ⊢ℕ , [ℕ] , [ℕ] , id (ℕ ⊢Δ) ]))
-  fundamentalTerm (Π x ▹ x₁) = {!!}
+  fundamentalTerm (Π ⊢F ▹ ⊢G) = {!!}
   fundamentalTerm (var x₁ x₂) = {!!}
   fundamentalTerm (lam {F} {G} ⊢F t) with fundamental ⊢F | fundamentalTerm t
-  ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , fundamentalΠ {F} {G} [Γ] [F] {![G]!} , {!!}
+  ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , fundamentalΠ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]) , {!!}
   fundamentalTerm (Dt ∘ Du) with fundamentalTerm Dt | fundamentalTerm Du
   ... | [Γ] , [ΠAB] , [t] | [Γ]₁ , [A] , [u] = {!!}
   fundamentalTerm (zero x) = valid x , fundamentalℕ (valid x) , fundamentalZero (valid x)
@@ -137,7 +143,8 @@ mutual
   fundamentalTerm (natrec x x₁ x₂ x₃) = {!!}
   fundamentalTerm (conv {t} {A} {B} ⊢t A'≡A) with fundamentalTerm ⊢t | fundamentalEq A'≡A
   fundamentalTerm (conv {t} {A} {B} ⊢t A'≡A) | [Γ] , [A'] , [t] | [Γ]₁ , [A']₁ , [A] , [A'≡A] =
-    {!!} , [A] , {!fundamentalConv {t} {A} {B} ? [A'] [A']₁ [A] [A'≡A] [t]!}
+    [Γ]₁ , [A] , fundamentalConv {t} {A} {B} [Γ] [Γ]₁ [Γ]₁ [A'] [A']₁ [A]
+                                 (S.irrelevanceEq {A = A} {B = B} [Γ]₁ [Γ] [A']₁ [A'] [A'≡A]) (S.irrelevanceTerm {A = A} {t = t} [Γ] [Γ]₁ [A'] [A']₁ [t])
 
 -- Fundamental theorem for term equality
 
@@ -153,8 +160,9 @@ mutual
   fundamentalTermEq (trans {t} {u} {r} {A} t≡u u≡t') | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]₁ , modelsTermEq [A]₁ [t]₁ [u]₁ [t≡u]₁ =
     [Γ] , modelsTermEq [A] [t]
                  (S.irrelevanceTerm {A = A} {t = r} [Γ]₁ [Γ] [A]₁ [A] [u]₁)
-                 (λ ⊢Δ [σ] → transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
-                                         (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ {![σ]!})) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ {![σ]!})))
+                 (λ ⊢Δ [σ] → let [σ]' = S.irrelevanceSubst [Γ] [Γ]₁ ⊢Δ ⊢Δ [σ]
+                             in  transEqTerm (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
+                                             (irrelevanceEqTerm (proj₁ ([A]₁ ⊢Δ [σ]')) (proj₁ ([A] ⊢Δ [σ])) ([t≡u]₁ ⊢Δ [σ]')))
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) with fundamentalTermEq t≡u | fundamentalEq A'≡A
   fundamentalTermEq (conv {A} {B} {t} {u} t≡u A'≡A) | [Γ] , modelsTermEq [A'] [t] [u] [t≡u] | [Γ]₁ , [A']₁ , [A] , [A'≡A] =
     [Γ]₁
@@ -194,26 +202,48 @@ mutual
     {!!} , modelsTermEq [F₀] {!!} [z] {!!}
   fundamentalTermEq (natrec-suc n F z s) = {!!}
 
-  fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+  fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                 ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
                → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F]
                → Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ]
   fundamentalΠ {F} {G} [Γ] [F] [G] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
     let ⊢F    = soundness (proj₁ ([F] ⊢Δ [σ]))
-        ⊢G    = soundness (proj₁ ([G] (⊢Δ ∙ ⊢F) ({!!} , {!!})))
+        ⊢G    = soundness (proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ])))
         ⊢ΠF▹G = Π ⊢F ▹ ⊢G
         [σF] = proj₁ ([F] ⊢Δ [σ])
-        [σG] = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) {!!})
+        [σG] = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
     in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
-          (λ {Δ} {a} ρ ⊢Δ₁ [a] →
+          (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
              let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
-                                         (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+                                   (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
              in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (G-substWkLemma a σ G))
-                   (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
-                               (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
-                                           (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
-                                           [F] [a]'))))
-          (λ ρ ⊢Δ₁ [a] x → {!!})
-    ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] {!!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
+                          (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+                                      (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
+                                                  (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
+                                                  [F] [a]'))))
+          (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [a≡b] →
+             let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                                   (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+                 [a≡b]' = irrelevanceEqTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                                       (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a≡b]
+                 G[a] = proj₁ ([G] ⊢Δ₁
+                          (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) [F]
+                          (irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ (proj₁ ([F] ⊢Δ [σ])))
+                          (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a])))
+                 G[a]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (G-substWkLemma a σ G))
+                          (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+                                      (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
+                                                  (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
+                                                  [F] [a]')))
+             in  irrelevanceEq'' (PE.sym (G-substWkLemma a σ G)) ((PE.sym (G-substWkLemma b σ G))) G[a] G[a]'
+                          (proj₂ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+                                      (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
+                                                  (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
+                                                  [F] [a]')) (reflSubst [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) , [a≡b]')))
+    ,   (λ [σ≡σ'] →
+           Π¹[ _ , _ , id {!!} , {!!}
+             , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] (proj₂ ([F] ⊢Δ [σ]) [σ≡σ']))
+             , (λ ρ ⊢Δ₁ [a] → {!!}) ])
 
   substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])

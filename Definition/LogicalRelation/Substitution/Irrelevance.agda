@@ -6,6 +6,8 @@ open import Definition.LogicalRelation
 import Definition.LogicalRelation.Irrelevance as LR
 open import Definition.LogicalRelation.Substitution
 
+open import Tools.Context
+
 open import Data.Product
 open import Data.Unit
 
@@ -49,7 +51,30 @@ irrelevance [Γ] [Γ]' [A] ⊢Δ [σ] =
    ,  λ [σ≡σ'] → proj₂ ([A] ⊢Δ [σ]')
                        (irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [σ] [σ]' [σ≡σ'])
 
--- irrelevanceEq
+open import Definition.LogicalRelation.Properties
+
+irrelevanceLift : ∀ {l A F H Γ}
+              ([Γ] : ⊩ₛ⟨ l ⟩ Γ)
+              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+              ([H] : Γ ⊩ₛ⟨ l ⟩ H / [Γ])
+              ([F≡H] : Γ ⊩ₛ⟨ l ⟩ F ≡ H / [Γ] / [F])
+            → Γ ∙ F ⊩ₛ⟨ l ⟩ A / [Γ] ∙ [F]
+            → Γ ∙ H ⊩ₛ⟨ l ⟩ A / [Γ] ∙ [H]
+irrelevanceLift [Γ] [F] [H] [F≡H] [A] ⊢Δ ([tailσ] , [headσ]) =
+  let [σ]' = [tailσ] , convTerm₂ (proj₁ ([F] ⊢Δ [tailσ])) (proj₁ ([H] ⊢Δ [tailσ])) ([F≡H] ⊢Δ [tailσ]) [headσ]
+  in  proj₁ ([A] ⊢Δ [σ]')
+  ,   (λ x → proj₂ ([A] ⊢Δ [σ]') (proj₁ x , convEqTerm₂ (proj₁ ([F] ⊢Δ [tailσ])) (proj₁ ([H] ⊢Δ [tailσ])) ([F≡H] ⊢Δ [tailσ]) (proj₂ x)))
+
+irrelevanceEq : ∀ {l l' A B Γ}
+                ([Γ]  : ⊩ₛ⟨ l  ⟩ Γ)
+                ([Γ]' : ⊩ₛ⟨ l' ⟩ Γ)
+                ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
+                ([A]' : Γ ⊩ₛ⟨ l' ⟩ A / [Γ]')
+              → Γ ⊩ₛ⟨ l  ⟩ A ≡ B / [Γ]  / [A]
+              → Γ ⊩ₛ⟨ l' ⟩ A ≡ B / [Γ]' / [A]'
+irrelevanceEq [Γ] [Γ]' [A] [A]' [A≡B] ⊢Δ [σ] =
+  let [σ]' = irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
+  in  LR.irrelevanceEq (proj₁ ([A] ⊢Δ [σ]')) (proj₁ ([A]' ⊢Δ [σ])) ([A≡B] ⊢Δ [σ]')
 
 irrelevanceTerm : ∀ {l l' A t Γ}
                   ([Γ]  : ⊩ₛ⟨ l  ⟩ Γ)
