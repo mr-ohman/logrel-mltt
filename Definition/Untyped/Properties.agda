@@ -146,6 +146,21 @@ substEq eq (natrec t t₁ t₂ t₃) =
   cong₄ natrec (substEq (liftSubstEq eq) t) (substEq eq t₁)
                (substEq eq t₂) (substEq eq t₃)
 
+liftIdSubst : (x : Nat) → (liftSubst idSubst) x ≡ idSubst x
+liftIdSubst zero = refl
+liftIdSubst (suc x) = refl
+
+substIdEq : (t : Term) → subst idSubst t ≡ t
+substIdEq U = refl
+substIdEq (Π t ▹ t₁) = cong₂ Π_▹_ (substIdEq t) (trans (substEq liftIdSubst t₁) (substIdEq t₁))
+substIdEq ℕ = refl
+substIdEq (var x) = refl
+substIdEq (lam t) = cong lam (trans (substEq liftIdSubst t) (substIdEq t))
+substIdEq (t ∘ t₁) = cong₂ _∘_ (substIdEq t) (substIdEq t₁)
+substIdEq zero = refl
+substIdEq (suc t) = cong suc (substIdEq t)
+substIdEq (natrec t t₁ t₂ t₃) = cong₄ natrec (trans (substEq liftIdSubst t) (substIdEq t)) (substIdEq t₁) (substIdEq t₂) (substIdEq t₃)
+
 wkSubst-liftSubst : ∀ {pr ρ} n
                   → (wkSubst (lift pr) (liftSubst ρ)) n
                   ≡ (liftSubst (wkSubst pr ρ)) n
@@ -221,3 +236,35 @@ wk-β-natrec : ∀ pr G →
       (wk (lift pr) G ▹▹
        wk (lift pr) G [ suc (var zero) ]↑)
 wk-β-natrec pr G = cong₂ Π_▹_ refl (cong₂ Π_▹_ refl (trans (wk-comp-comm (lift (lift pr)) (step id) (subst (consSubst (wk1Subst var) (suc (var zero))) G)) (trans (wk-subst G) (sym (trans (wk-subst (wk (lift pr) G)) (trans (subst-wk G) (substEq natrec-lemma G)))))))
+
+substCompLift : ∀ {σ σ'} (x : Nat)
+              → (substComp (liftSubst σ') (liftSubst σ)) x
+              ≡ (liftSubst (substComp σ' σ)) x
+substCompLift zero = refl
+substCompLift {σ} {σ'} (suc x) = trans (subst-wk (σ' x)) (sym (wk-subst (σ' x)))
+
+substCompEq : ∀ {σ σ'} (t : Term) → subst σ (subst σ' t) ≡ subst (substComp σ' σ) t
+substCompEq U = refl
+substCompEq (Π t ▹ t₁) = cong₂ Π_▹_ (substCompEq t) (trans (substCompEq t₁) (substEq substCompLift t₁))
+substCompEq ℕ = refl
+substCompEq (var x) = refl
+substCompEq (lam t) = cong lam (trans (substCompEq t) (substEq substCompLift t))
+substCompEq (t ∘ t₁) = cong₂ _∘_ (substCompEq t) (substCompEq t₁)
+substCompEq zero = refl
+substCompEq (suc t) = cong suc (substCompEq t)
+substCompEq (natrec t t₁ t₂ t₃) =
+  cong₄ natrec (trans (substCompEq t) (substEq substCompLift t))
+               (substCompEq t₁) (substCompEq t₂) (substCompEq t₃)
+
+substConcatSingleton : ∀ {a σ} (x : Nat)
+                     → (substComp (liftSubst σ) (consSubst idSubst a)) x
+                     ≡ (consSubst σ a) x
+substConcatSingleton zero = refl
+substConcatSingleton {σ = σ} (suc x) = trans (subst-wk (σ x)) (substIdEq (σ x))
+
+G-substWkLemma : ∀ {ρ} a σ G → wk (lift ρ) (subst (liftSubst σ) G) [ a ] ≡
+     subst (consSubst (wkSubst ρ σ) a) G
+G-substWkLemma a σ G =
+  trans (cong (subst (consSubst var a))
+              (trans (wk-subst G) (substEq wkSubst-liftSubst G)))
+        (trans (substCompEq G) (substEq substConcatSingleton G))

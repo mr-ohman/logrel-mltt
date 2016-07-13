@@ -197,18 +197,23 @@ mutual
   fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ) ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
                → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F]
                → Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ]
-  fundamentalΠ {F} [Γ] [F] [G] {σ = σ} ⊢Δ [σ] =
+  fundamentalΠ {F} {G} [Γ] [F] [G] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
     let ⊢F    = soundness (proj₁ ([F] ⊢Δ [σ]))
         ⊢G    = soundness (proj₁ ([G] (⊢Δ ∙ ⊢F) ({!!} , {!!})))
         ⊢ΠF▹G = Π ⊢F ▹ ⊢G
-        [σF]  = proj₁ ([F] ⊢Δ [σ])
-        [σG]  = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) {!!})
-    in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF]) --PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (wk-subst F)) (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])))
-          (λ {Δ} {a} ρ ⊢Δ₁ x → PE.subst (λ x → _ ⊩⟨ _ ⟩ x) {!!}
-            (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
-                   (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) [F] (irrelevanceTerm' (wk-subst F) {!!} (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) x)))))
+        [σF] = proj₁ ([F] ⊢Δ [σ])
+        [σG] = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) {!!})
+    in  Π (idRed:*: ⊢ΠF▹G) ⊢F ⊢G (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
+          (λ {Δ} {a} ρ ⊢Δ₁ [a] →
+             let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                                         (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+             in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (G-substWkLemma a σ G))
+                   (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+                               (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
+                                           (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
+                                           [F] [a]'))))
           (λ ρ ⊢Δ₁ [a] x → {!!})
-    ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → {!wkEq ρ ⊢Δ₁ [σF] {!!}!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
+    ,   (λ x → Π¹[ _ , _ , id {!⊢ΠF▹G!} , {!!} , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] {!!}) , (λ ρ ⊢Δ₁ [a] → {!!}) ])
 
   substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
