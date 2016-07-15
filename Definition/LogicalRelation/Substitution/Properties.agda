@@ -79,6 +79,16 @@ consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
          → Δ ⊩ₛ⟨ l ⟩ consSubst σ t ∷ Γ ∙ A / [Γ] ∙ [A] / ⊢Δ
 consSubstS [Γ] ⊢Δ [σ] [A] [t] = [σ] , [t]
 
+consSubstSEq : ∀ {l σ σ' t A Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
+             ([σ]    : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+             ([σ≡σ'] : Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
+             ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+             ([t] : Δ ⊩⟨ l ⟩ t ∷ subst σ A / proj₁ ([A] ⊢Δ [σ]))
+           → Δ ⊩ₛ⟨ l ⟩ consSubst σ t ≡ consSubst σ' t ∷ Γ ∙ A / [Γ] ∙ [A] / ⊢Δ
+               / consSubstS {t = t} {A = A} [Γ] ⊢Δ [σ] [A] [t]
+consSubstSEq [Γ] ⊢Δ [σ] [σ≡σ'] [A] [t] =
+  [σ≡σ'] , reflEqTerm (proj₁ ([A] ⊢Δ [σ])) [t]
+
 wkSubstS : ∀ {l σ Γ Δ Δ'} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
            (ρ : Δ T.⊆ Δ')
            ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
@@ -92,6 +102,19 @@ wkSubstS {σ = σ} {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
         (proj₁ (x ⊢Δ' [tailσ]))
         (LR.wkTerm ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ]))
 
+wkSubstSEq : ∀ {l σ σ' Γ Δ Δ'} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+             (ρ : Δ T.⊆ Δ')
+             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+             ([σ≡σ'] : Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
+           → Δ' ⊩ₛ⟨ l ⟩ wkSubst (T.toWk ρ) σ ≡ wkSubst (T.toWk ρ) σ' ∷ Γ / [Γ]
+                / ⊢Δ' / wkSubstS [Γ] ⊢Δ ⊢Δ' ρ [σ]
+wkSubstSEq ε ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] = tt
+wkSubstSEq {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] =
+  wkSubstSEq [Γ] ⊢Δ ⊢Δ' ρ (proj₁ [σ]) (proj₁ [σ≡σ'])
+  , irrelevanceEqTerm' (wk-subst A) (LR.wk ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))))
+                            (proj₁ (x ⊢Δ' (wkSubstS [Γ] ⊢Δ ⊢Δ' ρ (proj₁ [σ]))))
+                            (LR.wkEqTerm ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ≡σ']))
+
 wk1SubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
             (⊢F : Δ ⊢ F)
             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
@@ -101,6 +124,15 @@ wk1SubstS {l} {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] =
   PE.subst (λ x → Δ ∙ F ⊩ₛ⟨ l ⟩ x ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
            PE.refl
            (wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step (T.⊆-refl Δ)) [σ])
+
+wk1SubstSEq : ∀ {l F σ σ' Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
+              (⊢F : Δ ⊢ F)
+              ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+              ([σ≡σ'] : Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
+            → (Δ ∙ F) ⊩ₛ⟨ l ⟩ wk1Subst σ ≡ wk1Subst σ' ∷ Γ / [Γ]
+                            / (⊢Δ ∙ ⊢F) / wk1SubstS [Γ] ⊢Δ ⊢F [σ]
+wk1SubstSEq {l} {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] [σ≡σ'] =
+  wkSubstSEq [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.base) [σ] [σ≡σ']
 
 wk1SubstSΓ : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
              (⊢F : Δ ⊢ F)
