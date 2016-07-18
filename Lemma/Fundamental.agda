@@ -119,7 +119,7 @@ mutual
         , fundamentalΠ {H} {E} [Γ] [H]
             (S.irrelevanceLift {A = E} {F = F} {H = H} [Γ] [F] [H] [F≡H]
               (S.irrelevance {A = E} [Γ]₁ ([Γ] ∙ [F]) [E]))
-        , {!!}
+        , (λ {Δ} {σ} ⊢Δ [σ] → {!!})
 
 -- Fundamental theorem for terms
 
@@ -131,20 +131,30 @@ mutual
                            , (λ ⊢Δ [σ] → let ⊢ℕ  = ℕ ⊢Δ
                                              [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
                                          in  (⊢ℕ , [ℕ]) , (λ x₁ → U[ ⊢ℕ , ⊢ℕ , refl ⊢ℕ , [ℕ] , [ℕ] , id (ℕ ⊢Δ) ]))
-  fundamentalTerm (Π ⊢F ▹ ⊢G) = {!!}
-  fundamentalTerm (var x₁ x₂) = {!!}
+  fundamentalTerm (Π ⊢F ▹ ⊢G) with fundamentalTerm ⊢F | fundamentalTerm ⊢G
+  ... | [Γ] , [U] , [F] | [Γ]₁ , [U]₁ , [G] =
+    [Γ] , [U] , {!!}
+  fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , {!!}
   fundamentalTerm (lam {F} {G} ⊢F t) with fundamental ⊢F | fundamentalTerm t
   ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , fundamentalΠ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]) , {!!}
   fundamentalTerm (Dt ∘ Du) with fundamentalTerm Dt | fundamentalTerm Du
-  ... | [Γ] , [ΠAB] , [t] | [Γ]₁ , [A] , [u] = {!!}
+  ... | [Γ] , [ΠFG] , [t] | [Γ]₁ , [F] , [u] = [Γ] , {!!}
   fundamentalTerm (zero x) = valid x , fundamentalℕ (valid x) , fundamentalZero (valid x)
   fundamentalTerm (suc {n} t) with fundamentalTerm t
   fundamentalTerm (suc {n} t) | [Γ] , [ℕ] , [n] = [Γ] , [ℕ] , fundamentalSuc {n = n} [Γ] [ℕ] [n]
-  fundamentalTerm (natrec x x₁ x₂ x₃) = {!!}
+  fundamentalTerm (natrec {G} {s} {z} {n} ⊢G ⊢z ⊢s ⊢n) with fundamental ⊢G | fundamentalTerm ⊢z | fundamentalTerm ⊢s | fundamentalTerm ⊢n
+  ... | [Γ] , [G] | [Γ]₁ , [G₀] , [z] | [Γ]₂ , [G₊] , [s] | [Γ]₃ , [ℕ] , [n] =
+    let [Γ]' = [Γ]₃
+        [G]' = S.irrelevance {A = G} [Γ] ([Γ]₃ ∙ [ℕ]) [G]
+    in  [Γ]' , substS {F = ℕ} {G = G} {t = n} [Γ]' [ℕ] [G]' [n]
+    ,   (λ ⊢Δ [σ] → {!!})
   fundamentalTerm (conv {t} {A} {B} ⊢t A'≡A) with fundamentalTerm ⊢t | fundamentalEq A'≡A
   fundamentalTerm (conv {t} {A} {B} ⊢t A'≡A) | [Γ] , [A'] , [t] | [Γ]₁ , [A']₁ , [A] , [A'≡A] =
-    [Γ]₁ , [A] , fundamentalConv {t} {A} {B} [Γ] [Γ]₁ [Γ]₁ [A'] [A']₁ [A]
-                                 (S.irrelevanceEq {A = A} {B = B} [Γ]₁ [Γ] [A']₁ [A'] [A'≡A]) (S.irrelevanceTerm {A = A} {t = t} [Γ] [Γ]₁ [A'] [A']₁ [t])
+    let [Γ]' = [Γ]₁
+        [A'≡A]' = S.irrelevanceEq {A = A} {B = B} [Γ]' [Γ] [A']₁ [A'] [A'≡A]
+        [t]' = S.irrelevanceTerm {A = A} {t = t} [Γ] [Γ]' [A'] [A']₁ [t]
+    in  [Γ]' , [A]
+    ,   fundamentalConv {t} {A} {B} [Γ] [Γ]' [Γ]' [A'] [A']₁ [A] [A'≡A]' [t]'
 
 -- Fundamental theorem for term equality
 
@@ -174,7 +184,7 @@ mutual
                                                 (irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
                                                                    (proj₁ ([A']₁ ⊢Δ [σ]₁))
                                                                    ([t≡u] ⊢Δ [σ])))
-  fundamentalTermEq (Π-cong x x₁ x₂) = {!!}
+  fundamentalTermEq (Π-cong ⊢F F≡H G≡E) = {!!}
   fundamentalTermEq (app-cong x x₁) = {!!}
   fundamentalTermEq (β-red x x₁ x₂) = {!!}
   fundamentalTermEq (fun-ext x x₁ x₂ x₃) = {!!}
@@ -193,13 +203,16 @@ mutual
     [Γ]₁ , modelsTermEq [F₀] [z] [z'] [z≡z'] |
     [Γ]₂ , modelsTermEq [F₊] [s] [s'] [s≡s'] |
     [Γ]₃ , modelsTermEq [ℕ] [n] [n'] [n≡n'] =
-    {!!} , modelsTermEq {!substS {ℕ} {F} {n} ? (ℕ ?) [ℕ] [F] [n]!}
+    [Γ]₃ , modelsTermEq (substS {ℕ} {F} {n} [Γ]₃ [ℕ] (S.irrelevance {A = F} [Γ] ([Γ]₃ ∙ [ℕ]) [F]) [n])
                  {!fundamentalNatrec {F} {z} {s} {n} ? [ℕ] [F] [F₀] [F₊] {!!} [z] [s] [n]!}
                  {!fundamentalNatrec {F'} {z'} {s'} {n'} ? [ℕ] [F'] {![F₀]!} {![F₊]!} {!!} [z'] [s'] [n']!}
                  (λ ⊢Δ [σ] → {!!})
-  fundamentalTermEq (natrec-zero F z s) with fundamental F | fundamentalTerm z | fundamentalTerm s
-  fundamentalTermEq (natrec-zero F z s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [s] =
-    {!!} , modelsTermEq [F₀] {!!} [z] {!!}
+  fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
+  fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [s] =
+    let [Γ]' = [Γ]₁
+        [ℕ]' = fundamentalℕ [Γ]'
+        [F]' = S.irrelevance {A = F} [Γ] ([Γ]' ∙ [ℕ]') [F]
+    in  [Γ]' , modelsTermEq [F₀] (fundamentalNatrec [Γ]' [ℕ]' [F]' {!!} {!!} {!!} {!!} {!!} (fundamentalZero [Γ]₁)) [z] {!!}
   fundamentalTermEq (natrec-suc n F z s) = {!!}
 
   fundamentalΠ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
@@ -284,14 +297,23 @@ mutual
            ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
            ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
          → Γ ⊩ₛ⟨ ¹ ⟩ G [ t ] / [Γ]
-  substS [Γ] [F] [G] [t] ⊢Δ [σ] = {!!}
+  substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
+    let G[t] = (proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
+                      (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
+        G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
+                        G[t]
+
+    in  G[t]' , (λ [σ≡σ'] → irrelevanceEq'' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
+                                            (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
+                                            G[t] G[t]' (proj₂ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
+                      (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))) ([σ≡σ'] , (proj₂ ([t] ⊢Δ [σ]) [σ≡σ']))))
 
   subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
             ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
             ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
             ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
           → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
-  subst↑S ⊢Γ [F] [G] [t] ⊢Δ [σ] = {!!}
+  subst↑S [Γ] [F] [G] [t] ⊢Δ [σ] = {!!}
 
   fundamentalNatrec : ∀ {F z s n Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
                       ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
@@ -302,5 +324,5 @@ mutual
                     → Γ ⊩ₛ⟨ ¹ ⟩t z ∷ F [ zero ] / [Γ] / [F₀]
                     → Γ ⊩ₛ⟨ ¹ ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊]
                     → ([n] : Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
-                    → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / substS {ℕ} {F} {n} [Γ] [ℕ] [F] [n]
-  fundamentalNatrec = {!!}
+                    → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / [Fₙ]
+  fundamentalNatrec [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] ⊢Δ [σ] = {!!}

@@ -262,9 +262,31 @@ substConcatSingleton : ∀ {a σ} (x : Nat)
 substConcatSingleton zero = refl
 substConcatSingleton {σ = σ} (suc x) = trans (subst-wk (σ x)) (substIdEq (σ x))
 
+substConcatSingleton' : ∀ {a σ} (x : Nat)
+                      → (substComp (consSubst idSubst a) σ) x
+                      ≡ (consSubst σ (subst σ a)) x
+substConcatSingleton' zero = refl
+substConcatSingleton' (suc x) = refl
+
+substConcatSingleton'' : ∀ {a σ} (x : Nat)
+                       → (substComp (consSubst (wk1Subst idSubst) a) σ) x
+                       ≡ (consSubst (tail σ) (subst σ a)) x
+substConcatSingleton'' zero = refl
+substConcatSingleton'' (suc x) = refl
+
+singleSubstLemma : ∀ a σ G → (subst (liftSubst σ) G) [ a ] ≡
+     subst (consSubst σ a) G
+singleSubstLemma a σ G = trans (substCompEq G) (substEq substConcatSingleton G)
+
 G-substWkLemma : ∀ {ρ} a σ G → wk (lift ρ) (subst (liftSubst σ) G) [ a ] ≡
      subst (consSubst (wkSubst ρ σ) a) G
 G-substWkLemma a σ G =
   trans (cong (subst (consSubst var a))
               (trans (wk-subst G) (substEq wkSubst-liftSubst G)))
         (trans (substCompEq G) (substEq substConcatSingleton G))
+
+singleSubstLift : ∀ {σ} G t → subst σ (G [ t ]) ≡ subst (liftSubst σ) G [ subst σ t ]
+singleSubstLift G t = trans (substCompEq G)
+                            (trans (trans (substEq substConcatSingleton' G)
+                                          (sym (substEq substConcatSingleton G)))
+                                   (sym (substCompEq G)))
