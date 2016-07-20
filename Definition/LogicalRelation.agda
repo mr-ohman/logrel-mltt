@@ -89,6 +89,10 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     wk-subst-prop¹ Γ F G [F] = ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                                       → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ]
 
+    wk-subst-prop-T¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) (t : Term) → Set
+    wk-subst-prop-T¹ Γ F G [F] [G] t = ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                                      → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ) → Δ ⊩¹ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+
     wk-substEq-prop¹ : (Γ : Con Term) (F G : Term)
                       ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) → Set
     wk-substEq-prop¹ Γ F G [F] [G] =
