@@ -214,7 +214,7 @@ symS ε ⊢Δ [σ] [σ'] [σ≡σ'] = tt
 symS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ≡σ'] = symS [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ']) (proj₁ [σ≡σ'])
   , let [σA]           = proj₁ (x ⊢Δ (proj₁ [σ]))
         [σ'A]          = proj₁ (x ⊢Δ (proj₁ [σ']))
-        [σA≡σ'A]       = (proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ≡σ'])
+        [σA≡σ'A]       = (proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ']) (proj₁ [σ≡σ'])
         [headσ'≡headσ] = symEqTerm [σA] (proj₂ [σ≡σ'])
     in  convEqTerm₁ [σA] [σ'A] [σA≡σ'A] [headσ'≡headσ]
 
@@ -230,5 +230,5 @@ transS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ''] [σ≡σ'] [σ'≡σ''] = transS [Γ
   , let [σA]   = proj₁ (x ⊢Δ (proj₁ [σ]))
         [σ'A]  = proj₁ (x ⊢Δ (proj₁ [σ']))
         [σ''A] = proj₁ (x ⊢Δ (proj₁ [σ'']))
-        [σ'≡σ'']' = convEqTerm₂ [σA] [σ'A] ((proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ≡σ'])) (proj₂ [σ'≡σ''])
+        [σ'≡σ'']' = convEqTerm₂ [σA] [σ'A] ((proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ']) (proj₁ [σ≡σ'])) (proj₂ [σ'≡σ''])
     in  transEqTerm [σA] (proj₂ [σ≡σ']) [σ'≡σ'']'
