@@ -43,7 +43,7 @@ mutual
         [σt]     = proj₁ ([t] ⊢Δ [σ])
         [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
     in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
-    ,   λ [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ≡σ'])
+    ,   λ [σ'] [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
 
 -- Fundamental theorem for types
 

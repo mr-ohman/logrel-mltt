@@ -98,6 +98,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     wk-substEq-prop¹ Γ F G [F] [G] =
       ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                 → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                → ([b] : Δ ⊩¹ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                 → Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ
                 → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a]
 

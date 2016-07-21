@@ -43,7 +43,7 @@ mutual
           ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
           G[a]≡G[b] = soundnessEq ([G] ρ ⊢Δ [b])
                                   (symEq ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [b])
-                                         (G-ext ρ ⊢Δ [a] [a≡b]))
+                                         (G-ext ρ ⊢Δ [a] [b] [a≡b]))
           a = soundnessTerm ([F] ρ ⊢Δ) [a]
           b = soundnessTerm ([F] ρ ⊢Δ) [b]
           a≡b = soundnessTermEq ([F] ρ ⊢Δ) [a≡b]

@@ -41,7 +41,7 @@ univₛ : ∀ {A Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]
 univₛ [Γ] [U] [A] ⊢Δ [σ] =
   let [A]₁ = emb {l< = 0<1} (univEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])))
-  in  [A]₁ , (λ _ x₁ → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁ ((proj₂ ([A] ⊢Δ [σ])) {!!} x₁))
+  in  [A]₁ , (λ x x₁ → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁ ((proj₂ ([A] ⊢Δ [σ])) x x₁))
 
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]
@@ -53,7 +53,7 @@ sucₛ : ∀ {Γ n} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
      → Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ]
      → Γ ⊩ₛ⟨ ¹ ⟩t suc n ∷ ℕ / [Γ] / [ℕ]
 sucₛ ⊢Γ [ℕ] [n] = λ ⊢Δ [σ] → sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
-                          , (λ _ x → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) {!!} x))
+                          , (λ x x₁ → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x x₁))
 
 substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
          ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
@@ -92,6 +92,8 @@ postulate TODO : ∀ {a} {A : Set a} → A
            → Σ (Δ₁ ⊩⟨ ¹ ⟩ subst (consSubst (wkSubst (T.toWk ρ) σ) a) G)
                (λ [Aσ] →
                {σ' : Nat → Term} →
+               (Σ (Δ₁ ⊩ₛ⟨ ¹ ⟩ tail σ' ∷ Γ / [Γ] / ⊢Δ₁)
+               (λ [tailσ] → Δ₁ ⊩⟨ ¹ ⟩ head σ' ∷ subst (tail σ') F / proj₁ ([F] ⊢Δ₁ [tailσ]))) →
                Δ₁ ⊩ₛ⟨ ¹ ⟩ consSubst (wkSubst (T.toWk ρ) σ) a ≡ σ' ∷ Γ ∙ F /
                [Γ] ∙ [F] / ⊢Δ₁ /
                consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) [F]
@@ -113,9 +115,11 @@ postulate TODO : ∀ {a} {A : Set a} → A
          let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
                                (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
          in  [G]a' a ρ ⊢Δ₁ [a]')
-      (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [a≡b] →
+      (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
          let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
                                (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+             [b]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                               (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [b]
              [a≡b]' = irrelevanceEqTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
                                    (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a≡b]
          in  irrelevanceEq'' (PE.sym (G-substWkLemma a σ G))
@@ -123,24 +127,30 @@ postulate TODO : ∀ {a} {A : Set a} → A
                              (proj₁ ([G]a a ρ ⊢Δ₁ [a]'))
                              ([G]a' a ρ ⊢Δ₁ [a]')
                              (proj₂ ([G]a a ρ ⊢Δ₁ [a]')
-                                    (reflSubst [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) , [a≡b]')))
-  ,  (λ {σ'} [σ≡σ'] →
-         let [σ'] : Δ ⊩ₛ⟨ ¹ ⟩ σ' ∷ Γ / [Γ] / ⊢Δ
-             [σ'] = TODO
-             var0 = var (⊢Δ ∙ ⊢F [σ])
+                                    (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [b]') (reflSubst [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) , [a≡b]')))
+  ,  (λ {σ'} [σ'] [σ≡σ'] →
+         let var0 = var (⊢Δ ∙ ⊢F [σ])
                         (PE.subst (λ x → zero ∷ x ∈ (Δ ∙ subst σ F))
                                   (wk-subst F) here)
+             [wk1σ] = wk1SubstS [Γ] ⊢Δ (⊢F [σ]) [σ]
+             [wk1σ'] = wk1SubstS [Γ] ⊢Δ (⊢F [σ]) [σ']
+             [wk1σ≡wk1σ'] = wk1SubstSEq [Γ] ⊢Δ (⊢F [σ]) [σ] [σ≡σ']
+             [F][wk1σ] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
+             [F][wk1σ'] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ'])
          in  Π¹[ _ , _ , id (Π ⊢F [σ'] ▹ ⊢G [σ'])
-             , Π-cong (⊢F [σ]) (soundnessEq (proj₁ ([F] ⊢Δ [σ])) (proj₂ ([F] ⊢Δ [σ]) [σ≡σ']))
-                         (soundnessEq (proj₁ ([G]σ [σ]))
-                                      (proj₂ ([G]σ [σ])
-                                      (wk1SubstSEq [Γ] ⊢Δ (⊢F [σ]) [σ] [σ≡σ']
-                                        , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) (wk1SubstS [Γ] ⊢Δ (⊢F [σ]) [σ])))
-                                                    (var zero) (var zero) (var0 , var0 , refl var0))))
-             , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] (proj₂ ([F] ⊢Δ [σ]) [σ≡σ']))
+             , Π-cong (⊢F [σ]) (soundnessEq (proj₁ ([F] ⊢Δ [σ])) (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']))
+                      (soundnessEq (proj₁ ([G]σ [σ])) (proj₂ ([G]σ [σ])
+                        ([wk1σ'] , neuTerm [F][wk1σ'] (var zero) (conv var0
+                          (soundnessEq [F][wk1σ] (proj₂ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ]) [wk1σ'] [wk1σ≡wk1σ']))))
+                        ([wk1σ≡wk1σ'] , neuEqTerm [F][wk1σ]
+                          (var zero) (var zero) (var0 , var0 , refl var0))))
+             , (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']))
              , (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
-                  let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
-                                 (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+                  let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+                      [ρσ'] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']
+                      [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                                 (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
+                      [a]'' = convTerm₁ (proj₁ ([F] ⊢Δ₁ [ρσ])) (proj₁ ([F] ⊢Δ₁ [ρσ'])) (proj₂ ([F] ⊢Δ₁ [ρσ]) [ρσ'] (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ'])) [a]'
                       [ρσa≡ρσ'a] = consSubstSEq {t = a} {A = F} [Γ] ⊢Δ₁
                                                 (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
                                                 (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ']) [F] [a]'
@@ -148,7 +158,7 @@ postulate TODO : ∀ {a} {A : Set a} → A
                                       (PE.sym (G-substWkLemma a σ' G))
                                       (proj₁ ([G]a a ρ ⊢Δ₁ [a]'))
                                       ([G]a' a ρ ⊢Δ₁ [a]')
-                                      (proj₂ ([G]a a ρ ⊢Δ₁ [a]') [ρσa≡ρσ'a]))
+                                      (proj₂ ([G]a a ρ ⊢Δ₁ [a]') (consSubstS {t = a} {A = F} [Γ]  ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']) [F] [a]'') [ρσa≡ρσ'a]))
              ])
 
 -- Πₜₛ : ∀ {F G Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)

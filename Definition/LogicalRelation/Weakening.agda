@@ -39,7 +39,7 @@ wk {l} {Γ} {Δ} ρ ⊢Δ (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) =
   in  Π (T.wkRed:*: ρ ⊢Δ D) y (T.wk (lift ρ) (⊢Δ ∙ y) ⊢G)
         (λ ρ₁ ⊢Δ₁ → PE.subst (λ y → _ ⊩⟨ l ⟩ y) (wk-comp-comm ρ₁ ρ) ([F] (ρ₁ •ₜ ρ) ⊢Δ₁))
         (λ ρ₁ ⊢Δ₁ [a] → PE.subst (λ y → _ ⊩⟨ l ⟩ y) (wk-comp-comm-subst ρ₁ ρ G) ([G]' ρ₁ ρ ⊢Δ₁ [a]))
-        (λ ρ₁ ⊢Δ₁ [a] x₄ → irrelevanceEq'' (wk-comp-comm-subst ρ₁ ρ G) (wk-comp-comm-subst ρ₁ ρ G) ([G]' ρ₁ ρ ⊢Δ₁ [a]) (PE.subst (λ z → _ ⊩⟨ l ⟩ z) (wk-comp-comm-subst ρ₁ ρ G) ([G]' ρ₁ ρ ⊢Δ₁ [a])) (G-ext (ρ₁ •ₜ ρ) ⊢Δ₁ ([a]' ρ₁ ρ ⊢Δ₁ [a]) (irrelevanceEqTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) ([F]' ρ₁ ρ ⊢Δ₁) ([F] (ρ₁ •ₜ ρ) ⊢Δ₁) x₄)))
+        (λ ρ₁ ⊢Δ₁ [a] [b] x₄ → irrelevanceEq'' (wk-comp-comm-subst ρ₁ ρ G) (wk-comp-comm-subst ρ₁ ρ G) ([G]' ρ₁ ρ ⊢Δ₁ [a]) (PE.subst (λ z → _ ⊩⟨ l ⟩ z) (wk-comp-comm-subst ρ₁ ρ G) ([G]' ρ₁ ρ ⊢Δ₁ [a])) (G-ext (ρ₁ •ₜ ρ) ⊢Δ₁ ([a]' ρ₁ ρ ⊢Δ₁ [a]) ([a]' ρ₁ ρ ⊢Δ₁ [b]) (irrelevanceEqTerm' (PE.sym (wk-comp-comm ρ₁ ρ)) ([F]' ρ₁ ρ ⊢Δ₁) ([F] (ρ₁ •ₜ ρ) ⊢Δ₁) x₄)))
 wk {⁰} ρ ⊢Δ (emb {l< = ()} x)
 wk {¹} ρ ⊢Δ (emb {l< = 0<1} x) = emb {l< = 0<1} (wk ρ ⊢Δ x)
 
