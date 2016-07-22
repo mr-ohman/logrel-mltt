@@ -154,6 +154,20 @@ liftSubstS {F = F} {σ = σ} {Δ = Δ} [Γ] ⊢Δ [F] [σ] =
                         (var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                                                  (wk-subst F) here))
 
+liftSubstSEq : ∀ {l F σ σ' Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
+             ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
+             ([σ≡σ'] : Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
+           → (Δ ∙ subst σ F) ⊩ₛ⟨ l ⟩ liftSubst σ ≡ liftSubst σ' ∷ Γ ∙ F / [Γ] ∙ [F]
+                             / (⊢Δ ∙ soundness (proj₁ ([F] ⊢Δ [σ]))) / liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
+liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡σ'] =
+  let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
+      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (soundness (proj₁ ([F] ⊢Δ [σ]))) [σ]
+      [tailσ≡σ'] = wk1SubstSEq [Γ] ⊢Δ (soundness (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ']
+      var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
+  in  [tailσ≡σ'] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
+                         (var0 , var0 , refl var0)
+
 irrelevanceTermΔ : ∀ {l σ Γ Δ}
                           ([Γ] : ⊩ₛ⟨ l ⟩ Γ)
                           (⊢Δ ⊢Δ' : ⊢ Δ)

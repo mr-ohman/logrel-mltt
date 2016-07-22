@@ -55,7 +55,7 @@ mutual
     [Γ] , Πₛ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
-    [Γ] , univₛ {A} [Γ] [U] [A]
+    [Γ] , univₛ₁ {A} [Γ] [U] [A]
 
 -- Fundamental theorem for type equality
 
@@ -65,8 +65,8 @@ mutual
     → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
   fundamentalEq (univ {A} {B} x) with fundamentalTermEq x
   fundamentalEq (univ {A} {B} x) | [Γ] , modelsTermEq [U] [t] [u] [t≡u] =
-    let [A] = univₛ {A} [Γ] [U] [t]
-        [B] = univₛ {B} [Γ] [U] [u]
+    let [A] = univₛ₁ {A} [Γ] [U] [t]
+        [B] = univₛ₁ {B} [Γ] [U] [u]
     in  [Γ] , [A] , [B] , (λ ⊢Δ [σ] → univEqEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]))
   fundamentalEq (refl D) = let [Γ] , [B] = fundamental D
                            in  [Γ] , [B] , [B] , (λ ⊢Δ [σ] → reflEq (proj₁ ([B] ⊢Δ [σ])))
