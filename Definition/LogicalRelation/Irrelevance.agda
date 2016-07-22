@@ -62,12 +62,14 @@ mutual
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
   irrelevanceTermT (ℕ D D₁) t = t
   irrelevanceTermT (ne D neK D₁ neK₁) t = t
-  irrelevanceTermT (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) (⊢t , [t]) =
-    ⊢t , (λ ρ ⊢Δ [a]₁ [b]₁ [a≡b]₁ → let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
-                                        [a]         = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
-                                        [b]         = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [b]₁
-                                        [a≡b]       = irrelevanceEqTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
-                                    in  irrelevanceEqTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t] ρ ⊢Δ [a] [b] [a≡b]))
+  irrelevanceTermT (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁) (⊢t , [t] , [t]₁) =
+    let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
+    in  ⊢t , (λ ρ ⊢Δ [a]₁ [b]₁ [a≡b]₁ → let [a]   = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+                                            [b]   = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [b]₁
+                                            [a≡b] = irrelevanceEqTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a≡b]₁
+                                        in  irrelevanceEqTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t] ρ ⊢Δ [a] [b] [a≡b]))
+       , (λ ρ ⊢Δ [a]₁ → let [a] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁)) ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+                       in  irrelevanceTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁) ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t]₁ ρ ⊢Δ [a]))
   irrelevanceTermT (U ⊢Γ ⊢Γ₁) t = t
   irrelevanceTermT (emb⁰¹ x) t = irrelevanceTermT x t
   irrelevanceTermT (emb¹⁰ x) t = irrelevanceTermT x t

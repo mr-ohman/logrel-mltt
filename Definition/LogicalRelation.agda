@@ -133,6 +133,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     Γ ⊩¹ t ∷ A / ne x x₁ = Γ ⊢ t ∷ A
     Γ ⊩¹ f ∷ A / Π {F} {G} D ⊢F ⊢G [F] [G] G-ext =
       Γ ⊢ f ∷ A × wk-fun-ext-prop¹ Γ F G f [F] [G]
+                × wk-subst-prop-T¹ Γ F G [F] [G] f
     Γ ⊩¹ t ∷ A / emb x = Γ Lower.⊩ t ∷ A / x
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
