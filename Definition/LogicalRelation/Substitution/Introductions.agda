@@ -211,29 +211,38 @@ postulate TODO : ∀ {a} {A : Set a} → A
          in  U[ Π ⊢Fₜ ▹ ⊢Gₜ , Π ⊢Fₜ' ▹ ⊢Gₜ' , Π-cong ⊢F ⊢F≡F' ⊢G≡G'
              ,  proj₁ [ΠFG] , proj₁ [ΠFG]' , proj₂ [ΠFG] [σ']' [σ≡σ']' ])
 
--- appTerm : ∀ {F G t u Γ}
---           ([F] : Γ ⊩⟨ ¹ ⟩ F)
---           ([G] : Γ ∙ F ⊩⟨ ¹ ⟩ G)
---           ([ΠFG] : Γ ⊩⟨ ¹ ⟩ Π F ▹ G)
---           ([G[u]] : Γ ⊩⟨ ¹ ⟩ G [ u ])
---           ([t] : Γ ⊩⟨ ¹ ⟩ t ∷ Π F ▹ G / [ΠFG])
---           ([u] : Γ ⊩⟨ ¹ ⟩ u ∷ F / [F])
---         → Γ ⊩⟨ ¹ ⟩ t ∘ u ∷ G [ u ] / [G[u]]
--- appTerm {G = G} {u = u} [F] [G] [ΠFG] [G[u]] [t] [u] with G [ u ]
--- appTerm [F] [G] [ΠFG] (U ⊢Γ) [t] [u] | .U = ({!soundnessTerm [ΠFG] [t]!} ∘ (soundnessTerm [F] [u])) , {!!}
--- appTerm [F] [G] [ΠFG] (ℕ D) [t] [u] | G[u] = ℕ[ {!!} , {!!} , {!!} , {!!} ]
--- appTerm [F] [G] [ΠFG] (ne D neK) [t] [u] | G[u] = {!!}
--- appTerm [F] [G] [ΠFG] (Π D ⊢F ⊢G [F]₁ [G]₁ G-ext) [t] [u] | G[u] = {!!}
--- appTerm [F] [G] [ΠFG] (emb x) [t] [u] | G[u] = {!!}
+appTerm : ∀ {F G t u Γ l l'}
+          ([F] : Γ ⊩⟨ l' ⟩ F)
+          ([G[u]] : Γ ⊩⟨ l' ⟩ G [ u ])
+          ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+          ([t] : Γ ⊩⟨ l ⟩ t ∷ Π F ▹ G / [ΠFG])
+          ([u] : Γ ⊩⟨ l' ⟩ u ∷ F / [F])
+        → Γ ⊩⟨ l' ⟩ t ∘ u ∷ G [ u ] / [G[u]]
+appTerm [F] [G[u]] (ℕ D) [t] [u] = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+appTerm [F] [G[u]] (ne D neK) [t] [u] = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+appTerm [F] [G[u]] (Π D ⊢F ⊢G [F'] [G'] G-ext) (_ , _ , [t]) [u] =
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
+      ⊢Γ = wf ⊢F
+      [u]' = irrelevanceTerm' (PE.trans F≡F' (PE.sym (wk-id _ 0))) [F] ([F'] T.base ⊢Γ) [u]
+  in  irrelevanceTerm'' (PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G')))
+                        (PE.cong (λ x → x ∘ _) (wk-id _ 0))
+                        ([G'] T.base ⊢Γ [u]') [G[u]] ([t] T.base ⊢Γ [u]')
+appTerm [F] [G[u]] (emb {l< = 0<1} x) [t] [u] = appTerm [F] [G[u]] x [t] [u]
 
--- appₛ : ∀ {F G t u Γ}
---        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
---        ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
---        ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
---        ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G])
---        ([u] : Γ ⊩ₛ⟨ ¹ ⟩t u ∷ F / [Γ] / [F])
---      → Γ ⊩ₛ⟨ ¹ ⟩t t ∘ u ∷ G [ u ] / [Γ] / substS {F} {G} {u} [Γ] [F] [G] [u]
--- appₛ [Γ] [F] [G] [t] [u] ⊢Δ [σ] = {!!} , (λ x → {!!})
+appₛ : ∀ {F G t u Γ}
+       ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+       ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+       ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
+       ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G])
+       ([u] : Γ ⊩ₛ⟨ ¹ ⟩t u ∷ F / [Γ] / [F])
+     → Γ ⊩ₛ⟨ ¹ ⟩t t ∘ u ∷ G [ u ] / [Γ] / substS {F} {G} {u} [Γ] [F] [G] [u]
+appₛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u] {σ = σ} ⊢Δ [σ] =
+  let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
+      [G[u]] = substS {F} {G} {u} [Γ] [F] [G] [u]
+      proj₁[G[u]]  = proj₁ ([G[u]] ⊢Δ [σ])
+      proj₁[G[u]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (singleSubstLift G u) proj₁[G[u]]
+  in  irrelevanceTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (appTerm (proj₁ ([F] ⊢Δ [σ])) proj₁[G[u]]' (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ])))
+  ,   (λ x x₁ → TODO)
 
 -- lamₛ : ∀ {F G t Γ}
 --        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
@@ -245,5 +254,6 @@ postulate TODO : ∀ {a} {A : Set a} → A
 --   let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
 --   in  (lam ⊢F
 --            (soundnessTerm (proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))) (proj₁ ([t] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
---   ,   (λ ρ ⊢Δ₁ [a] [b] [a≡b] → {!!}))
---   ,   (λ x → {!!} , {!!})
+--   ,   (λ ρ ⊢Δ₁ [a] [b] [a≡b] → {!!})
+--   ,   (λ ρ ⊢Δ₁ [a] → {!!}))
+--   ,   (λ x x₁ → {!!})
