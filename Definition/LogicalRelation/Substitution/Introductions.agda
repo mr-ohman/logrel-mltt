@@ -229,6 +229,34 @@ appTerm [F] [G[u]] (Π D ⊢F ⊢G [F'] [G'] G-ext) (_ , _ , [t]) [u] =
                         ([G'] T.base ⊢Γ [u]') [G[u]] ([t] T.base ⊢Γ [u]')
 appTerm [F] [G[u]] (emb {l< = 0<1} x) [t] [u] = appTerm [F] [G[u]] x [t] [u]
 
+app-congTerm : ∀ {F G t t' u u' Γ l l'}
+          ([F] : Γ ⊩⟨ l' ⟩ F)
+          ([G[u]] : Γ ⊩⟨ l' ⟩ G [ u ])
+          ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+          ([t≡t'] : Γ ⊩⟨ l ⟩ t ≡ t' ∷ Π F ▹ G / [ΠFG])
+          ([u] : Γ ⊩⟨ l' ⟩ u ∷ F / [F])
+          ([u'] : Γ ⊩⟨ l' ⟩ u' ∷ F / [F])
+          ([u≡u'] : Γ ⊩⟨ l' ⟩ u ≡ u' ∷ F / [F])
+        → Γ ⊩⟨ l' ⟩ t ∘ u ≡ t' ∘ u' ∷ G [ u ] / [G[u]]
+app-congTerm [F] [G[u]] (ℕ D) [t≡t'] [u] [u'] [u≡u'] = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+app-congTerm [F] [G[u]] (ne D neK) [t≡t'] [u] [u'] [u≡u'] = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+app-congTerm [F] [G[u]] (Π D ⊢F ⊢G [F]₁ [G] G-ext) (proj₁ , proj₂ , (proj₃ , proj₄ , proj₅) , proj₆) [u] [u'] [u≡u'] =
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
+      F≡wkidF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
+      t∘x≡wkidt∘x : {a b : Term} → U.wk id a Term.∘ b PE.≡ a ∘ b
+      t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a 0)
+      wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
+      ⊢Γ = wf ⊢F
+      [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u]
+      [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u']
+      [u≡u']' = irrelevanceEqTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u≡u']
+      [tu≡t'u] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
+                                     ([G] T.base ⊢Γ [u]') [G[u]] (proj₆ T.base ⊢Γ [u]')
+      [t'u≡t'u'] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
+                                       ([G] T.base ⊢Γ [u]') [G[u]] (proj₄ T.base ⊢Γ [u]' [u']' [u≡u']')
+  in  transEqTerm [G[u]] [tu≡t'u] [t'u≡t'u']
+app-congTerm [F] [G[u]] (emb {l< = 0<1} x) [t≡t'] [u] [u'] [u≡u'] = app-congTerm [F] [G[u]] x [t≡t'] [u] [u'] [u≡u']
+
 appₛ : ∀ {F G t u Γ}
        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
        ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
@@ -239,10 +267,16 @@ appₛ : ∀ {F G t u Γ}
 appₛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u] {σ = σ} ⊢Δ [σ] =
   let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [G[u]] = substS {F} {G} {u} [Γ] [F] [G] [u]
+      proj₁[F] = proj₁ ([F] ⊢Δ [σ])
+      proj₁[ΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
+      proj₁[t] = proj₁ ([t] ⊢Δ [σ])
+      proj₁[u] = proj₁ ([u] ⊢Δ [σ])
       proj₁[G[u]]  = proj₁ ([G[u]] ⊢Δ [σ])
       proj₁[G[u]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (singleSubstLift G u) proj₁[G[u]]
-  in  irrelevanceTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (appTerm (proj₁ ([F] ⊢Δ [σ])) proj₁[G[u]]' (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ])))
-  ,   (λ x x₁ → TODO)
+  in  irrelevanceTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (appTerm proj₁[F] proj₁[G[u]]' proj₁[ΠFG] (proj₁ ([t] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ])))
+  ,   (λ [σ'] [σ≡σ'] →
+         let proj₁[u'] = convTerm₂ proj₁[F] (proj₁ ([F] ⊢Δ [σ'])) (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ']))
+         in  irrelevanceEqTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (app-congTerm proj₁[F] proj₁[G[u]]' proj₁[ΠFG] (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ])) proj₁[u'] (proj₂ ([u] ⊢Δ [σ]) [σ'] [σ≡σ'])))
 
 -- lamₛ : ∀ {F G t Γ}
 --        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
