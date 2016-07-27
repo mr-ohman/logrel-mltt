@@ -74,14 +74,94 @@ substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
       G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
                       G[t]
-
   in  G[t]' , (λ {σ'} [σ'] [σ≡σ'] → irrelevanceEq'' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
                                           (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
                                           G[t] G[t]' (proj₂ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
                     (consSubstS {t = subst σ' t} {A = F} [Γ] ⊢Δ [σ'] [F] (proj₁ ([t] ⊢Δ [σ']))) (([σ≡σ'] , (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ'])))))
 
-postulate TODO : ∀ {a} {A : Set a} → A
+substSΠ₁ : ∀ {F G t Γ l l'}
+           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+           ([F] : Γ ⊩⟨ l' ⟩ F)
+           ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
+         → Γ ⊩⟨ l ⟩ G [ t ]
+substSΠ₁ (ℕ D) [F] [t] = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+substSΠ₁ (ne D neK) [F] [t] = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+substSΠ₁ {F} {G} {t} (Π D ⊢F ⊢G [F] [G] G-ext) [F]₁ [t] =
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
+      Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
+      Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
+      ⊢Γ = wf (soundness [F]₁)
+      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t]
+  in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) Geq ([G] T.base ⊢Γ [t]')
+substSΠ₁ (emb {l< = 0<1} x) [F] [t] = emb {l< = 0<1} (substSΠ₁ x [F] [t])
+
+substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
+           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+           ([ΠFG≡ΠF'G'] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F' ▹ G' / [ΠFG])
+           ([F] : Γ ⊩⟨ l' ⟩ F)
+           ([F'] : Γ ⊩⟨ l' ⟩ F')
+           ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
+           ([t'] : Γ ⊩⟨ l' ⟩ t' ∷ F' / [F'])
+           ([t≡t'] : Γ ⊩⟨ l' ⟩ t ≡ t' ∷ F / [F])
+           ([G[t]] : Γ ⊩⟨ l'' ⟩ G [ t ])
+           ([G'[t']] : Γ ⊩⟨ l'' ⟩ G' [ t' ])
+         → Γ ⊩⟨ l'' ⟩ G [ t ] ≡ G' [ t' ] / [G[t]]
+substSΠ₂ (ℕ D) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
+  ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+substSΠ₂ (ne D neK) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
+  ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+substSΠ₂ (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F≡F'] , [G≡G'] ]
+         [F]₁ [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
+      F'≡F'' , G'≡G'' = Π-PE-injectivity (whnfRed*' D' Π)
+      Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
+      F'eq = PE.trans F'≡F'' (PE.sym (wk-id _ 0))
+      Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
+      Geq' = PE.cong (λ x → x [ _ ]) (PE.trans G'≡G'' (PE.sym (wk-id _ 1)))
+      ⊢Γ = wf (soundness [F]₁)
+      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t]
+      [t']' = convTerm₂' F'eq ([F] T.base ⊢Γ) [F'] ([F≡F'] T.base ⊢Γ) [t']
+      [t≡t']' = irrelevanceEqTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t≡t']
+      [Gt≡Gt'] = G-ext T.base ⊢Γ [t]' [t']' [t≡t']'
+      [Gt'≡G't'] = [G≡G'] T.base ⊢Γ [t']'
+  in  irrelevanceEq' Geq ([G] T.base ⊢Γ [t]') [G[t]]
+        (transEq' PE.refl Geq' ([G] T.base ⊢Γ [t]') ([G] T.base ⊢Γ [t']')
+                  [G'[t']] [Gt≡Gt'] [Gt'≡G't'])
+substSΠ₂ (emb {l< = 0<1} x) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
+  substSΠ₂ x [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']]
+
+substSΠ : ∀ {F G t Γ l}
+          ([Γ] : ⊩ₛ⟨ l ⟩ Γ)
+          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+          ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
+          ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+        → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
+substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
+  let [σG[t]] = substSΠ₁ (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([F] ⊢Δ [σ]))
+                         (proj₁ ([t] ⊢Δ [σ]))
+      [σG[t]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (singleSubstLift G t))
+                          [σG[t]]
+  in  [σG[t]]'
+  ,   (λ [σ'] [σ≡σ'] →
+         irrelevanceEq'' (PE.sym (singleSubstLift G t))
+                         (PE.sym (singleSubstLift G t))
+                         [σG[t]] [σG[t]]'
+                         (substSΠ₂ (proj₁ ([ΠFG] ⊢Δ [σ]))
+                                   (proj₂ ([ΠFG] ⊢Δ [σ]) [σ'] [σ≡σ'])
+                                   (proj₁ ([F] ⊢Δ [σ])) (proj₁ ([F] ⊢Δ [σ']))
+                                   (proj₁ ([t] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ']))
+                                   (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ']) [σG[t]]
+                                   (substSΠ₁ (proj₁ ([ΠFG] ⊢Δ [σ']))
+                                             (proj₁ ([F] ⊢Δ [σ']))
+                                             (proj₁ ([t] ⊢Δ [σ'])))))
+
+-- subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+--           ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+--           ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
+--           ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
+--         → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
+-- subst↑S [Γ] [F] [G] [t] ⊢Δ [σ] = ?
 
 Πₛ : ∀ {F G Γ l}
      ([Γ] : ⊩ₛ⟨ l ⟩ Γ)
@@ -290,4 +370,4 @@ appₛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u] {σ = σ} ⊢Δ [σ] =
 --            (soundnessTerm (proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))) (proj₁ ([t] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
 --   ,   (λ ρ ⊢Δ₁ [a] [b] [a≡b] → {!!})
 --   ,   (λ ρ ⊢Δ₁ [a] → {!!}))
---   ,   (λ x x₁ → {!!})
+--   ,   (λ [σ'] [σ≡σ'] → {!!})

@@ -56,6 +56,10 @@ mutual
           → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Γ ⊩⟨ l' ⟩ B ≡ C / [B] → Γ ⊩⟨ l ⟩ A ≡ C / [A]
   transEq [A] [B] [C] A≡B B≡C = transEqT (goodCases [A] [B] A≡B) (goodCases [B] [C] B≡C) A≡B B≡C
 
+  transEq' : ∀ {Γ A B B' C C' l l' l''} → B PE.≡ B' → C PE.≡ C'
+          → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) ([C] : Γ ⊩⟨ l'' ⟩ C)
+          → Γ ⊩⟨ l ⟩ A ≡ B' / [A] → Γ ⊩⟨ l' ⟩ B ≡ C' / [B] → Γ ⊩⟨ l ⟩ A ≡ C / [A]
+  transEq' PE.refl PE.refl [A] [B] [C] A≡B B≡C = transEq [A] [B] [C] A≡B B≡C
 
 transNatural : ∀ {Γ n n' n''}
              → [Natural] (λ n₁ n₂ → Γ ⊢ n₁ ≡ n₂ ∷ ℕ) n  n'

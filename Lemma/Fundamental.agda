@@ -205,20 +205,6 @@ mutual
         [F[sucn]] = substS {ℕ} {F} {suc n} [Γ]₃ [ℕ]' [F]' [sucn]
     in  [Γ]₃ , modelsTermEq [F[sucn]] {!!} {!!} {!!}
 
-  substSΠ : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
-            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-            ([ΠFG] : Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ])
-            ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-          → Γ ⊩ₛ⟨ ¹ ⟩ G [ t ] / [Γ]
-  substSΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] = {!!}
-
-  subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
-            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-            ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-            ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-          → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
-  subst↑S [Γ] [F] [G] [t] ⊢Δ [σ] = {!!}
-
   fundamentalNatrec : ∀ {F z s n Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
                       ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
                       ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
@@ -230,15 +216,3 @@ mutual
                     → ([n] : Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
                     → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / [Fₙ]
   fundamentalNatrec [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] ⊢Δ [σ] = {!!}
-
-  Π-injectivity₁ : ∀ {Γ F G}
-                   ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
-                 → Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ]
-                 → Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ]
-  Π-injectivity₁ [Γ] [ΠFG] ⊢Δ [σ] with proj₁ ([ΠFG] ⊢Δ [σ])
-  Π-injectivity₁ [Γ] [ΠFG] ⊢Δ [σ] | ℕ D = {!!}
-  Π-injectivity₁ [Γ] [ΠFG] ⊢Δ [σ] | ne D neK = {!!}
-  Π-injectivity₁ [Γ] [ΠFG] ⊢Δ [σ] | Π D ⊢F ⊢G [F] [G] G-ext =
-    let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
-    in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.trans (wk-id _ zero) (PE.sym F≡F')) ([F] T.base ⊢Δ) , (λ x → {!!})
-  Π-injectivity₁ [Γ] [ΠFG] ⊢Δ [σ] | emb x = {!!}

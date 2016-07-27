@@ -68,6 +68,13 @@ mutual
           → Γ ⊩⟨ l' ⟩ t ∷ B / [B] → Γ ⊩⟨ l ⟩ t ∷ A / [A]
   convTerm₂ [A] [B] A≡B t = convTermT₂ (goodCases [A] [B] A≡B) A≡B t
 
+  convTerm₂' : ∀ {Γ A B B' t l l'} → B PE.≡ B'
+          → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B)
+          → Γ ⊩⟨ l ⟩ A ≡ B' / [A]
+          → Γ ⊩⟨ l' ⟩ t ∷ B / [B] → Γ ⊩⟨ l ⟩ t ∷ A / [A]
+  convTerm₂' PE.refl [A] [B] A≡B t = convTerm₂ [A] [B] A≡B t
+
+
   convEqTermT₁ : ∀ {l l' Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
                → Tactic Γ l l' A B [A] [B] → Γ ⊩⟨ l ⟩ A ≡ B / [A]
                → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
