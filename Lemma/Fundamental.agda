@@ -107,7 +107,8 @@ mutual
   fundamentalTerm (_∘_ {g} {a} {F} {G} Dt Du) with fundamentalTerm Dt | fundamentalTerm Du
   ... | [Γ] , [ΠFG] , [t] | [Γ]₁ , [F] , [u] =
     let [ΠFG]' = S.irrelevance {A = Π F ▹ G} [Γ] [Γ]₁ [ΠFG]
-    in  [Γ]₁ , substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]' [u] , {!!}
+        [t]' = S.irrelevanceTerm {A = Π F ▹ G} {t = g} [Γ] [Γ]₁ [ΠFG] [ΠFG]' [t]
+    in  [Γ]₁ , substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]' [u] , appₛ {F} {G} {g} {a} [Γ]₁ [F] [ΠFG]' [t]' [u]
   fundamentalTerm (zero x) = valid x , ℕₛ (valid x) , zeroₛ (valid x)
   fundamentalTerm (suc {n} t) with fundamentalTerm t
   fundamentalTerm (suc {n} t) | [Γ] , [ℕ] , [n] = [Γ] , [ℕ] , sucₛ {n = n} [Γ] [ℕ] [n]

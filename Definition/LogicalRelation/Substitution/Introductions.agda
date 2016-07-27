@@ -340,13 +340,12 @@ app-congTerm [F] [G[u]] (emb {l< = 0<1} x) [t≡t'] [u] [u'] [u≡u'] = app-cong
 appₛ : ∀ {F G t u Γ}
        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
        ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-       ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-       ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G])
+       ([ΠFG] : Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ])
+       ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ Π F ▹ G / [Γ] / [ΠFG])
        ([u] : Γ ⊩ₛ⟨ ¹ ⟩t u ∷ F / [Γ] / [F])
-     → Γ ⊩ₛ⟨ ¹ ⟩t t ∘ u ∷ G [ u ] / [Γ] / substS {F} {G} {u} [Γ] [F] [G] [u]
-appₛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u] {σ = σ} ⊢Δ [σ] =
-  let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
-      [G[u]] = substS {F} {G} {u} [Γ] [F] [G] [u]
+     → Γ ⊩ₛ⟨ ¹ ⟩t t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
+appₛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
+  let [G[u]] = substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
       proj₁[F] = proj₁ ([F] ⊢Δ [σ])
       proj₁[ΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       proj₁[t] = proj₁ ([t] ⊢Δ [σ])
@@ -357,6 +356,21 @@ appₛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u] {σ = σ} ⊢Δ [σ] =
   ,   (λ [σ'] [σ≡σ'] →
          let proj₁[u'] = convTerm₂ proj₁[F] (proj₁ ([F] ⊢Δ [σ'])) (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ']))
          in  irrelevanceEqTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (app-congTerm proj₁[F] proj₁[G[u]]' proj₁[ΠFG] (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ])) proj₁[u'] (proj₂ ([u] ⊢Δ [σ]) [σ'] [σ≡σ'])))
+
+-- lamTerm : ∀ {F G f Γ l l'}
+--           ([F] : Γ ⊩⟨ l ⟩ F)
+--           ([G] : Γ ∙ F ⊩⟨ l ⟩ G)
+--           ([ΠFG] : Γ ⊩⟨ l' ⟩ Π F ▹ G)
+--           ([f] : Γ ∙ F ⊩⟨ l ⟩ f ∷ G / [G])
+--         → Γ ⊩⟨ l' ⟩ lam f ∷ Π F ▹ G / [ΠFG]
+-- lamTerm [F] [G] (ℕ D) [f] = {!!}
+-- lamTerm [F] [G] (ne D neK) [f] = {!!}
+-- lamTerm [F] [G] (Π D ⊢F ⊢G [F]₁ [G]₁ G-ext) [f] =
+--   let q = {!!}
+--   in  lam (soundness [F]) (soundnessTerm [G] [f])
+--   ,   (λ ρ ⊢Δ [a] [b] [a≡b] → {!!})
+--   ,   (λ ρ ⊢Δ [a] → {!!})
+-- lamTerm [F] [G] (emb {l< = 0<1} x) [f] = lamTerm [F] [G] x [f]
 
 -- lamₛ : ∀ {F G t Γ}
 --        ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
