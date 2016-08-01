@@ -91,6 +91,44 @@ mutual
               (S.irrelevance {A = E} [Γ]₁ ([Γ] ∙ [F]) [E]))
         , (λ {Δ} {σ} ⊢Δ [σ] → {!!})
 
+  fundamentalVar : ∀ {Γ A x}
+                 → x ∷ A ∈ Γ
+                 → ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                 → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+                 → Γ ⊩ₛ⟨ ¹ ⟩t var x ∷ A / [Γ] / [A]
+  fundamentalVar here (_∙_ {A = A} [Γ] [A]) =
+    (λ ⊢Δ [σ] →
+       let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
+           [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+       in  [σA']
+       ,   (λ [σ'] [σ≡σ'] →
+              irrelevanceEq'' (PE.sym (subst-wk A)) (PE.sym (subst-wk A))
+                              [σA] [σA'] (proj₂ ([A] ⊢Δ (proj₁ [σ]))
+                                                (proj₁ [σ']) (proj₁ [σ≡σ']))))
+    , (λ ⊢Δ [σ] →
+         let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
+             [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+         in  irrelevanceTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ])
+    , (λ [σ'] [σ≡σ'] → irrelevanceEqTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ≡σ'])))
+  fundamentalVar (there {A = A} h) ([Γ] ∙ [B]) =
+    (λ ⊢Δ [σ] →
+       let [h]   = (proj₁ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
+           [σA]  = proj₁ [h]
+           [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+       in  [σA']
+       ,   (λ [σ'] [σ≡σ'] →
+              irrelevanceEq'' (PE.sym (subst-wk A)) (PE.sym (subst-wk A))
+                              [σA] [σA'] (proj₂ [h] (proj₁ [σ']) (proj₁ [σ≡σ']))))
+    , (λ ⊢Δ [σ] →
+         let [h]   = (proj₁ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
+             [σA]  = proj₁ [h]
+             [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+             [h'] = (proj₂ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
+         in  irrelevanceTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₁ [h'])
+         ,   (λ [σ'] [σ≡σ'] →
+                irrelevanceEqTerm' (PE.sym (subst-wk A)) [σA] [σA']
+                                   (proj₂ [h'] (proj₁ [σ']) (proj₁ [σ≡σ']))))
+
 -- Fundamental theorem for terms
 
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
@@ -101,7 +139,7 @@ mutual
   fundamentalTerm (Π ⊢F ▹ ⊢G) with fundamentalTerm ⊢F | fundamentalTerm ⊢G
   ... | [Γ] , [U] , [F] | [Γ]₁ , [U]₁ , [G] =
     [Γ] , [U] , {!!}
-  fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , {!!}
+  fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lam {F} {G} ⊢F t) with fundamental ⊢F | fundamentalTerm t
   ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , Πₛ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]) , {!!}
   fundamentalTerm (_∘_ {g} {a} {F} {G} Dt Du) with fundamentalTerm Dt | fundamentalTerm Du
