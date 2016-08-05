@@ -18,6 +18,12 @@ open import Definition.LogicalRelation.Properties.Neutral public
 open import Definition.LogicalRelation.Properties.Reduction public
 
 
+maybeEmb : ∀ {l A Γ}
+         → Γ ⊩⟨ l ⟩ A
+         → Γ ⊩⟨ ¹ ⟩ A
+maybeEmb {⁰} [A] = emb {l< = 0<1} [A]
+maybeEmb {¹} [A] = [A]
+
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ) → Γ ⊩⟨ l ⟩ n ∷ ℕ / [ℕ] → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / [ℕ]
 sucTerm (ℕ D) ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] = ℕ[ _ , [ suc ⊢t , suc ⊢t , id (suc ⊢t) ] , suc , ⊢t ]
 sucTerm (ne D neK) [n] = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))

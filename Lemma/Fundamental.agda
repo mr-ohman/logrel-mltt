@@ -25,12 +25,12 @@ import Relation.Binary.PropositionalEquality as PE
 
 
 mutual
-  valid : ∀ {Γ} → ⊢ Γ → ⊩ₛ⟨ ¹ ⟩ Γ
+  valid : ∀ {Γ} → ⊢ Γ → ⊩ₛ Γ
   valid ε = ε
   valid (⊢Γ ∙ A) = let [Γ] , [A] = fundamental A in [Γ] ∙ [A]
 
   fundamentalConv : ∀ {t A B Γ}
-                    ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    ([Γ] : ⊩ₛ Γ)
                     ([A]  : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
                     ([B]  : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
                   → Γ ⊩ₛ⟨ ¹ ⟩  A ≡ B / [Γ] / [A]
@@ -47,7 +47,7 @@ mutual
 
 -- Fundamental theorem for types
 
-  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ₛ⟨ ¹ ⟩ Γ) (λ [Γ] → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ₛ Γ) (λ [Γ] → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
   fundamental (ℕ x) = valid x , ℕₛ (valid x)
   fundamental (U x) = valid x , Uₛ (valid x)
   fundamental (Π_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
@@ -60,7 +60,7 @@ mutual
 -- Fundamental theorem for type equality
 
   fundamentalEq : ∀{Γ A B} → Γ ⊢ A ≡ B
-    → ∃  λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+    → ∃  λ ([Γ] : ⊩ₛ Γ)
     → ∃₂ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
     → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
   fundamentalEq (univ {A} {B} x) with fundamentalTermEq x
@@ -89,17 +89,17 @@ mutual
         , Πₛ {H} {E} [Γ] [H]
             (S.irrelevanceLift {A = E} {F = F} {H = H} [Γ] [F] [H] [F≡H]
               (S.irrelevance {A = E} [Γ]₁ ([Γ] ∙ [F]) [E]))
-        , (λ {Δ} {σ} ⊢Δ [σ] → {!!})
+        , (λ {Δ} {σ} ⊢Δ [σ] → Π¹[ {!!} , {!!} , {!!} , {!!} , {!!} , {!!} ])
 
   fundamentalVar : ∀ {Γ A x}
                  → x ∷ A ∈ Γ
-                 → ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                 → ([Γ] : ⊩ₛ Γ)
                  → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
                  → Γ ⊩ₛ⟨ ¹ ⟩t var x ∷ A / [Γ] / [A]
-  fundamentalVar here (_∙_ {A = A} [Γ] [A]) =
+  fundamentalVar here (_∙_ {A = A} {l = l} [Γ] [A]) =
     (λ ⊢Δ [σ] →
        let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-           [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+           [σA'] = maybeEmb (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA])
        in  [σA']
        ,   (λ [σ'] [σ≡σ'] →
               irrelevanceEq'' (PE.sym (subst-wk A)) (PE.sym (subst-wk A))
@@ -107,7 +107,7 @@ mutual
                                                 (proj₁ [σ']) (proj₁ [σ≡σ']))))
     , (λ ⊢Δ [σ] →
          let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-             [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+             [σA'] = maybeEmb (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA])
          in  irrelevanceTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ])
     , (λ [σ'] [σ≡σ'] → irrelevanceEqTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ≡σ'])))
   fundamentalVar (there {A = A} h) ([Γ] ∙ [B]) =
@@ -132,7 +132,7 @@ mutual
 -- Fundamental theorem for terms
 
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
-    → ∃ λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+    → ∃ λ ([Γ] : ⊩ₛ Γ)
     → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕₜₛ (valid x)
@@ -166,7 +166,7 @@ mutual
 -- Fundamental theorem for term equality
 
   fundamentalTermEq : ∀{Γ A t t'} → Γ ⊢ t ≡ t' ∷ A
-                    → ∃ λ ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+                    → ∃ λ ([Γ] : ⊩ₛ Γ)
                     → Γ ⊩ₛ⟨ ¹ ⟩t t ≡ t' ∷ A / [Γ]
   fundamentalTermEq (refl D) with fundamentalTerm D
   ... | [Γ] , [A] , [t] = [Γ] , modelsTermEq [A] [t] [t] λ ⊢Δ [σ] → reflEqTerm (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
@@ -232,9 +232,9 @@ mutual
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [F₊] , [s] =
     let [Γ]' = [Γ]₁
-        [ℕ]' = ℕₛ [Γ]'
+        [ℕ]' = ℕₛ {l = ¹} [Γ]'
         [F]' = S.irrelevance {A = F} [Γ] ([Γ]' ∙ [ℕ]') [F]
-    in  [Γ]' , modelsTermEq [F₀] (fundamentalNatrec [Γ]' [ℕ]' [F]' {!!} {!!} {!!} {!!} {!!} (zeroₛ [Γ]₁)) [z] {!!}
+    in  [Γ]' , modelsTermEq [F₀] {!fundamentalNatrec [Γ]' [ℕ]' [F]' {!!} {!!} {!!} {!!} {!!} (zeroₛ [Γ]₁)!} [z] {!!}
   fundamentalTermEq (natrec-suc {n} {z} {s} {F} ⊢n ⊢F ⊢z ⊢s) with fundamentalTerm ⊢n | fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   ... | [Γ] , [ℕ] , [n] | [Γ]₁ , [F] | [Γ]₂ , [F₀] , [z] | [Γ]₃ , [F₊] , [s] =
     let [ℕ]' = S.irrelevance {A = ℕ} [Γ] [Γ]₃ [ℕ]
@@ -243,15 +243,3 @@ mutual
         [F]' = S.irrelevance {A = F} [Γ]₁ ([Γ]₃ ∙ [ℕ]') [F]
         [F[sucn]] = substS {ℕ} {F} {suc n} [Γ]₃ [ℕ]' [F]' [sucn]
     in  [Γ]₃ , modelsTermEq [F[sucn]] {!!} {!!} {!!}
-
-  fundamentalNatrec : ∀ {F z s n Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
-                      ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
-                      ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
-                      ([F₀] : Γ ⊩ₛ⟨ ¹ ⟩ F [ zero ] / [Γ])
-                      ([F₊] : Γ ⊩ₛ⟨ ¹ ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ])
-                      ([Fₙ] : Γ ⊩ₛ⟨ ¹ ⟩ F [ n ] / [Γ])
-                    → Γ ⊩ₛ⟨ ¹ ⟩t z ∷ F [ zero ] / [Γ] / [F₀]
-                    → Γ ⊩ₛ⟨ ¹ ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊]
-                    → ([n] : Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
-                    → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / [Fₙ]
-  fundamentalNatrec [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] ⊢Δ [σ] = {!!}
