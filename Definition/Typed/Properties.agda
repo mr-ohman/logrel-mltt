@@ -175,3 +175,43 @@ idRed:*: A = [ A , A , id A ]
 
 idRedTerm:*: : ∀ {Γ A t} → Γ ⊢ t ∷ A → Γ ⊢ t :⇒*: t ∷ A
 idRedTerm:*: t = [ t , t , id t ]
+
+-- Properties of U
+
+UnotInA : ∀ {A Γ} → Γ ⊢ U ∷ A → ⊥
+UnotInA (conv U∷U x) = UnotInA U∷U
+
+UnotInA[t] : ∀ {A B t a Γ}
+         → t [ a ] PE.≡ U
+         → Γ ⊢ a ∷ A
+         → Γ ∙ A ⊢ t ∷ B
+         → ⊥
+UnotInA[t] () x₁ (ℕ x₂)
+UnotInA[t] () x₁ (Π x₂ ▹ x₃)
+UnotInA[t] x₁ x₂ (var x₃ here) rewrite x₁ = UnotInA x₂
+UnotInA[t] () x₂ (var x₃ (there x₄))
+UnotInA[t] () x₁ (lam x₂ x₃)
+UnotInA[t] () x₁ (x₂ ∘ x₃)
+UnotInA[t] () x₁ (zero x₂)
+UnotInA[t] () x₁ (suc x₂)
+UnotInA[t] () x₁ (natrec x₂ x₃ x₄ x₅)
+UnotInA[t] x x₁ (conv x₂ x₃) = UnotInA[t] x x₁ x₂
+
+redUTerm : ∀ {A B U' Γ} → U' PE.≡ U → Γ ⊢ A ⇒ U' ∷ B → ⊥
+redUTerm U'≡U (conv A⇒U x) = redUTerm U'≡U A⇒U
+redUTerm () (app-subst A⇒U x)
+redUTerm U'≡U (β-red x x₁ x₂) = UnotInA[t] U'≡U x₂ x₁
+redUTerm () (natrec-subst x x₁ x₂ A⇒U)
+redUTerm U'≡U (natrec-zero x x₁ x₂) rewrite U'≡U = UnotInA x₁
+redUTerm () (natrec-suc x x₁ x₂ x₃)
+
+redU*Term : ∀ {A B Γ} → Γ ⊢ A ⇒* U ∷ B → ⊥
+redU*Term (id x) = UnotInA x
+redU*Term (x ⇨ A⇒*U) = redU*Term A⇒*U
+
+redU : ∀ {A Γ} → Γ ⊢ A ⇒ U → ⊥
+redU (univ x) = redUTerm PE.refl x
+
+redU* : ∀ {A Γ} → Γ ⊢ A ⇒* U → A PE.≡ U
+redU* (id x) = PE.refl
+redU* (x ⇨ A⇒*U) rewrite redU* A⇒*U = ⊥-elim (redU x)
