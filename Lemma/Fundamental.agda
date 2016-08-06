@@ -136,9 +136,15 @@ mutual
     → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕₜₛ (valid x)
-  fundamentalTerm (Π ⊢F ▹ ⊢G) with fundamentalTerm ⊢F | fundamentalTerm ⊢G
-  ... | [Γ] , [U] , [F] | [Γ]₁ , [U]₁ , [G] =
-    [Γ] , [U] , {!!}
+  fundamentalTerm (Π_▹_ {F} {G} ⊢F ⊢G) with fundamentalTerm ⊢F | fundamentalTerm ⊢G
+  ... | [Γ] , [U] , [F]ₜ | [Γ]₁ , [U]₁ , [G]ₜ =
+    let [F]   = univₛ {F} [Γ] [U] [F]ₜ
+        [U]'  = S.irrelevance {A = U} [Γ]₁ ([Γ] ∙ [F]) [U]₁
+        [F]ₜ' = S.irrelevanceTerm {A = U} {t = F} [Γ] [Γ] [U] (Uₛ [Γ]) [F]ₜ
+        [G]ₜ' = S.irrelevanceTerm {A = U} {t = G} [Γ]₁ ([Γ] ∙ [F]) [U]₁ (λ {Δ} {σ} → [U]' {Δ} {σ}) [G]ₜ
+    in  [Γ] , [U]
+    ,   S.irrelevanceTerm {A = U} {t = Π F ▹ G} [Γ] [Γ] (Uₛ [Γ]) [U]
+                          (Πₜₛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]' {Δ} {σ}) [F]ₜ' [G]ₜ')
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lam {F} {G} ⊢F t) with fundamental ⊢F | fundamentalTerm t
   ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , Πₛ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]) , {!!}
