@@ -13,6 +13,39 @@ open import Data.Empty using (⊥; ⊥-elim)
 import Relation.Binary.PropositionalEquality as PE
 open import Relation.Nullary
 
+
+U-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ U → ⊢ Γ
+U-elim (U ⊢Γ) = ⊢Γ
+U-elim (ℕ D) = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
+U-elim (ne D neK) = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+U-elim (Π D ⊢F ⊢G [F] [G] G-ext) = ⊥-elim (U≢Π (whnfRed*' (red D) U))
+U-elim (emb {l< = 0<1} x) = U-elim x
+
+ℕ-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ ℕ → Γ ⊢ ℕ :⇒*: ℕ
+ℕ-elim (ℕ D) = D
+ℕ-elim (ne D neK) = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
+ℕ-elim (Π D ⊢F ⊢G [F] [G] G-ext) = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
+ℕ-elim (emb {l< = 0<1} x) = ℕ-elim x
+
+ne-elim : ∀ {Γ l K} → Γ ⊩⟨ l ⟩ K → Neutral K
+        → ∃ λ K' → Γ ⊢ K :⇒*: K' × Neutral K'
+ne-elim (U ⊢Γ) ()
+ne-elim (ℕ D) neK = ⊥-elim (ℕ≢ne neK (PE.sym (whnfRed*' (red D) (ne neK))))
+ne-elim (ne D neK₁) neK = _ , D , neK₁
+ne-elim (Π D ⊢F ⊢G [F] [G] G-ext) neK = ⊥-elim (Π≢ne neK (PE.sym (whnfRed*' (red D) (ne neK))))
+ne-elim (emb {l< = 0<1} x) neK = ne-elim x neK
+
+Π-elim : ∀ {Γ F G l} → Γ ⊩⟨ l ⟩ Π F ▹ G
+       → ∃ λ l' → ∃ λ F' → ∃ λ G'
+       → Γ ⊢ F' × (Γ ∙ F') ⊢ G'
+       × ∃ λ ([F] : wk-prop l' Γ F')
+       → ∃ λ ([G] : wk-subst-prop l' Γ F' G' [F])
+       → wk-substEq-prop l' Γ F' G' [F] [G]
+Π-elim (ℕ D) = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
+Π-elim (ne D neK) = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
+Π-elim (Π D ⊢F ⊢G [F] [G] G-ext) = _ , _ , _ , ⊢F , ⊢G , [F] , [G] , G-ext
+Π-elim (emb {l< = 0<1} x) = Π-elim x
+
 data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) → Set where
   ℕ : ∀ {A B l l'} D D₁ → Tactic Γ l l' A B (ℕ D) (ℕ D₁)
   ne  : ∀ {A B K K₁ l l'}
