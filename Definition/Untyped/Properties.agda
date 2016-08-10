@@ -290,3 +290,19 @@ singleSubstLift G t = trans (substCompEq G)
                             (trans (trans (substEq substConcatSingleton' G)
                                           (sym (substEq substConcatSingleton G)))
                                    (sym (substCompEq G)))
+
+G-lamLemma : ∀ {ρ σ} G
+           → wk (lift ρ) (subst (liftSubst σ) G)
+           ≡ subst (liftSubst (wkSubst ρ σ)) G
+G-lamLemma G = trans (wk-subst G) (substEq wkSubst-liftSubst G)
+
+idWkLiftSubst : ∀ {σ} x
+              → (consSubst (wkSubst (step id) σ) (var zero)) x
+              ≡ (liftSubst σ) x
+idWkLiftSubst zero = refl
+idWkLiftSubst (suc x) = refl
+
+idWkLiftSubstLemma : ∀ σ G
+      → wk (lift (step id)) (subst (liftSubst σ) G) [ var 0 ]
+      ≡ subst (liftSubst σ) G
+idWkLiftSubstLemma σ G = trans (G-substWkLemma (var zero) σ G) (substEq idWkLiftSubst G)

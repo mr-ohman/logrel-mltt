@@ -13,6 +13,13 @@ open import Data.Empty using (⊥; ⊥-elim)
 import Relation.Binary.PropositionalEquality as PE
 
 
+irrelevanceΓ' : ∀ {l A A' Γ Γ'}
+              → Γ PE.≡ Γ'
+              → A PE.≡ A'
+              → Γ  ⊩⟨ l ⟩ A
+              → Γ' ⊩⟨ l ⟩ A'
+irrelevanceΓ' PE.refl PE.refl [A] = [A]
+
 mutual
   irrelevanceEq : ∀ {Γ A B l l'} (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A)
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
@@ -56,6 +63,16 @@ mutual
                             (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A')
                           → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t' ∷ A' / q
   irrelevanceTerm'' PE.refl PE.refl p q t = irrelevanceTerm p q t
+
+  irrelevanceTermΓ'' : ∀ {l l' A A' t t' Γ Γ'}
+                     → Γ PE.≡ Γ'
+                     → A PE.≡ A'
+                     → t PE.≡ t'
+                     → ([A]  : Γ  ⊩⟨ l  ⟩ A)
+                       ([A'] : Γ' ⊩⟨ l' ⟩ A')
+                     → Γ  ⊩⟨ l  ⟩ t ∷ A  / [A]
+                     → Γ' ⊩⟨ l' ⟩ t' ∷ A' / [A']
+  irrelevanceTermΓ'' PE.refl PE.refl PE.refl [A] [A'] [t] = irrelevanceTerm [A] [A'] [t]
 
   irrelevanceTermT : ∀ {Γ A t l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                          → Tactic Γ l l' A A p q

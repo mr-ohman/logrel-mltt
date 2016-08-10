@@ -146,8 +146,12 @@ mutual
     ,   S.irrelevanceTerm {A = U} {t = Π F ▹ G} [Γ] [Γ] (Uₛ [Γ]) [U]
                           (Πₜₛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]' {Δ} {σ}) [F]ₜ' [G]ₜ')
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
-  fundamentalTerm (lam {F} {G} ⊢F t) with fundamental ⊢F | fundamentalTerm t
-  ... | [Γ] , [F] | [Γ]₁ , [G] , [t] = [Γ] , Πₛ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]) , {!!}
+  fundamentalTerm (lam {F} {G} {t} ⊢F ⊢t) with fundamental ⊢F | fundamentalTerm ⊢t
+  ... | [Γ] , [F] | [Γ]₁ , [G] , [t] =
+    let [G]' = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
+        [t]' = S.irrelevanceTerm {A = G} {t = t} [Γ]₁ ([Γ] ∙ [F]) [G] [G]' [t]
+    in  [Γ] , Πₛ {F} {G} [Γ] [F] [G]'
+    ,   lamₛ {F} {G} {t} [Γ] [F] [G]' [t]'
   fundamentalTerm (_∘_ {g} {a} {F} {G} Dt Du) with fundamentalTerm Dt | fundamentalTerm Du
   ... | [Γ] , [ΠFG] , [t] | [Γ]₁ , [F] , [u] =
     let [ΠFG]' = S.irrelevance {A = Π F ▹ G} [Γ] [Γ]₁ [ΠFG]
