@@ -47,6 +47,14 @@ univₛ {A} {l' = ¹} [Γ] [U] [A] ⊢Δ [σ] =
   let [A]₁ = emb {l< = 0<1} (univEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])))
   in  [A]₁ , (λ x x₁ → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁ ((proj₂ ([A] ⊢Δ [σ])) x x₁))
 
+univEqₛ : ∀ {A B Γ l l'} ([Γ] : ⊩ₛ Γ)
+          ([U] : Γ ⊩ₛ⟨ l' ⟩ U / [Γ])
+          ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+        → Γ ⊩ₛ⟨ l' ⟩t' A ≡ B ∷ U / [Γ] / [U]
+        → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+univEqₛ {A} [Γ] [U] [A] [t≡u] ⊢Δ [σ] =
+  univEqEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ])
+
 univₛ₁ : ∀ {A Γ} ([Γ] : ⊩ₛ Γ)
         ([U] : Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ])
       → Γ ⊩ₛ⟨ ¹ ⟩t A ∷ U / [Γ] / [U]
@@ -67,11 +75,11 @@ sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
 sucₛ ⊢Γ [ℕ] [n] = λ ⊢Δ [σ] → sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
                           , (λ x x₁ → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x x₁))
 
-substS : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
-         ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-         ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-         ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-       → Γ ⊩ₛ⟨ ¹ ⟩ G [ t ] / [Γ]
+substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
+         ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+         ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+         ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+       → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
 substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
   let G[t] = (proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
@@ -254,6 +262,38 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                       (proj₂ ([G]a a ρ ⊢Δ₁ [a]') (consSubstS {t = a} {A = F} [Γ]  ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']) [F] [a]'') [ρσa≡ρσ'a]))
              ])
 
+Π-congₛ : ∀ {F G H E Γ l}
+          ([Γ] : ⊩ₛ Γ)
+          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+          ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+          ([H] : Γ ⊩ₛ⟨ l ⟩ H / [Γ])
+          ([E] : Γ ∙ H ⊩ₛ⟨ l ⟩ E / [Γ] ∙ [H])
+          ([F≡H] : Γ ⊩ₛ⟨ l ⟩ F ≡ H / [Γ] / [F])
+          ([G≡E] : Γ ∙ F ⊩ₛ⟨ l ⟩ G ≡ E / [Γ] ∙ [F] / [G])
+        → Γ ⊩ₛ⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
+Π-congₛ {F} {G} {H} {E} [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
+  let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
+      [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
+      _ , _ , _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
+      [σF] = proj₁ ([F] ⊢Δ [σ])
+      ⊢σF = soundness [σF]
+      [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+      ⊢σH = soundness (proj₁ ([H] ⊢Δ [σ]))
+      ⊢σE = soundness (proj₁ ([E] (⊢Δ ∙ ⊢σH) (liftSubstS {F = H} [Γ] ⊢Δ [H] [σ])))
+      ⊢σF≡σH = soundnessEq [σF] ([F≡H] ⊢Δ [σ])
+      ⊢σG≡σE = soundnessEq [σG] ([G≡E] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+  in  Π¹[ subst σ H
+        , subst (liftSubst σ) E
+        , id (Π ⊢σH ▹ ⊢σE)
+        , Π-cong ⊢σF ⊢σF≡σH ⊢σG≡σE
+        , (λ ρ ⊢Δ₁ → let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+                     in  irrelevanceEq'' (PE.sym (wk-subst F)) (PE.sym (wk-subst H)) (proj₁ ([F] ⊢Δ₁ [ρσ])) ([F]' ρ ⊢Δ₁) ([F≡H] ⊢Δ₁ [ρσ]))
+        , (λ {Δ} {a} ρ ⊢Δ₁ [a] →
+             let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+                 [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁) (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
+                 [aρσ] = consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]'
+             in  irrelevanceEq'' (PE.sym (G-substWkLemma a σ G)) (PE.sym (G-substWkLemma a σ E)) (proj₁ ([G] ⊢Δ₁ [aρσ])) ([G]' ρ ⊢Δ₁ [a]) ([G≡E] ⊢Δ₁ [aρσ])) ]
+
 Πₜₛ : ∀ {F G Γ} ([Γ] : ⊩ₛ Γ)
       ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
       ([U] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ U / [Γ] ∙ [F])
@@ -295,6 +335,45 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
              [ΠFG]' = (Πₛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ']
          in  U[ Π ⊢Fₜ ▹ ⊢Gₜ , Π ⊢Fₜ' ▹ ⊢Gₜ' , Π-cong ⊢F ⊢F≡F' ⊢G≡G'
              ,  proj₁ [ΠFG] , proj₁ [ΠFG]' , proj₂ [ΠFG] [σ'] [σ≡σ'] ])
+
+Π-congₜₛ : ∀ {F G H E Γ}
+           ([Γ] : ⊩ₛ Γ)
+           ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+           ([H] : Γ ⊩ₛ⟨ ¹ ⟩ H / [Γ])
+           ([UF] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ U / [Γ] ∙ [F])
+           ([UH] : Γ ∙ H ⊩ₛ⟨ ¹ ⟩ U / [Γ] ∙ [H])
+           ([F]ₜ : Γ ⊩ₛ⟨ ¹ ⟩t F ∷ U / [Γ] / Uₛ [Γ])
+           ([G]ₜ : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t G ∷ U / [Γ] ∙ [F] / (λ {Δ} {σ} → [UF] {Δ} {σ}))
+           ([H]ₜ : Γ ⊩ₛ⟨ ¹ ⟩t H ∷ U / [Γ] / Uₛ [Γ])
+           ([E]ₜ : Γ ∙ H ⊩ₛ⟨ ¹ ⟩t E ∷ U / [Γ] ∙ [H] / (λ {Δ} {σ} → [UH] {Δ} {σ}))
+           ([F≡H]ₜ : Γ ⊩ₛ⟨ ¹ ⟩t' F ≡ H ∷ U / [Γ] / Uₛ [Γ])
+           ([G≡E]ₜ : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t' G ≡ E ∷ U / [Γ] ∙ [F] / (λ {Δ} {σ} → [UF] {Δ} {σ}))
+         → Γ ⊩ₛ⟨ ¹ ⟩t' Π F ▹ G ≡ Π H ▹ E ∷ U / [Γ] / Uₛ [Γ]
+Π-congₜₛ {F} {G} {H} {E} [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ ⊢Δ [σ] =
+  let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
+      ⊢H = soundness (proj₁ ([H] ⊢Δ [σ]))
+      [liftFσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
+      [liftHσ] = liftSubstS {F = H} [Γ] ⊢Δ [H] [σ]
+      [F]ᵤ = univₛ {F} [Γ] (Uₛ [Γ]) [F]ₜ
+      [G]ᵤ₁ = univₛ {G} {l' = ⁰} (_∙_ {A = F} [Γ] [F]) (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ₜ
+      [G]ᵤ = S.irrelevance {A = G} (_∙_ {A = F} [Γ] [F]) (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁
+      [H]ᵤ = univₛ {H} [Γ] (Uₛ [Γ]) [H]ₜ
+      [E]ᵤ = S.irrelevance {A = E} (_∙_ {A = H} [Γ] [H]) (_∙_ {A = H} [Γ] [H]ᵤ)
+                           (univₛ {E} {l' = ⁰} (_∙_ {A = H} [Γ] [H])
+                                  (λ {Δ} {σ} → [UH] {Δ} {σ}) [E]ₜ)
+      [F≡H]ᵤ = univEqₛ {F} {H} [Γ] (Uₛ [Γ]) [F]ᵤ [F≡H]ₜ
+      [G≡E]ᵤ = S.irrelevanceEq {A = G} {B = E} (_∙_ {A = F} [Γ] [F]) (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁ [G]ᵤ
+                 (univEqₛ {G} {E} (_∙_ {A = F} [Γ] [F]) (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ᵤ₁
+                          [G≡E]ₜ)
+  in  U[ Π soundnessTerm {l = ¹} (U {l< = 0<1} ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
+         ▹ soundnessTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ])) (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
+       , Π soundnessTerm {l = ¹} (U {l< = 0<1} ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
+         ▹ soundnessTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ])) (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ]))
+       , Π-cong ⊢F (soundnessTermEq (U {l< = 0<1} ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
+                   (soundnessTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ])) ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
+       , proj₁ (Πₛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ])
+       , proj₁ (Πₛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ])
+       , Π-congₛ {F} {G} {H} {E} [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ] ]
 
 appTerm : ∀ {F G t u Γ l l'}
           ([F] : Γ ⊩⟨ l' ⟩ F)

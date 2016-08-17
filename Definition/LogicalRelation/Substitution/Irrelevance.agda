@@ -90,5 +90,28 @@ irrelevanceTerm [Γ] [Γ]' [A] [A]' [t] ⊢Δ [σ]' =
    ,  ( λ [σ'] x → LR.irrelevanceEqTerm [σA] [σA]' ((proj₂ ([t] ⊢Δ [σ]))
                            (irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ'])  (irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [σ]' [σ] x)) )
 
+irrelevanceTermLift : ∀ {l A F H t Γ}
+              ([Γ] : ⊩ₛ Γ)
+              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+              ([H] : Γ ⊩ₛ⟨ l ⟩ H / [Γ])
+              ([F≡H] : Γ ⊩ₛ⟨ l ⟩ F ≡ H / [Γ] / [F])
+              ([A] : Γ ∙ F ⊩ₛ⟨ l ⟩ A / [Γ] ∙ [F])
+            → Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] ∙ [F] / [A]
+            → Γ ∙ H ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] ∙ [H] / irrelevanceLift {A = A} {F = F} {H = H} [Γ] [F] [H] [F≡H] [A]
+irrelevanceTermLift [Γ] [F] [H] [F≡H] [A] [t] ⊢Δ ([tailσ] , [headσ]) =
+  let [σ]' = [tailσ] , convTerm₂ (proj₁ ([F] ⊢Δ [tailσ])) (proj₁ ([H] ⊢Δ [tailσ])) ([F≡H] ⊢Δ [tailσ]) [headσ]
+  in  proj₁ ([t] ⊢Δ [σ]')
+  , (λ [σ'] x → let [σ']' = proj₁ [σ'] , convTerm₂ ((proj₁ ([F] ⊢Δ (proj₁ [σ'])))) ((proj₁ ([H] ⊢Δ (proj₁ [σ']))))
+                                                      ([F≡H] ⊢Δ (proj₁ [σ'])) (proj₂ [σ'])
+                    [tailσ'] = proj₁ [σ']
+     in proj₂ ([t] ⊢Δ [σ]') [σ']' (proj₁ x , convEqTerm₂ (proj₁ ([F] ⊢Δ [tailσ])) (proj₁ ([H] ⊢Δ [tailσ])) ([F≡H] ⊢Δ [tailσ]) (proj₂ x)))
 
--- irrelevanceTermEq
+irrelevanceEqTerm : ∀ {l l' A t u Γ}
+                  ([Γ] [Γ]' : ⊩ₛ Γ)
+                  ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
+                  ([A]' : Γ ⊩ₛ⟨ l' ⟩ A / [Γ]')
+                → Γ ⊩ₛ⟨ l  ⟩t' t ≡ u ∷ A / [Γ]  / [A]
+                → Γ ⊩ₛ⟨ l' ⟩t' t ≡ u ∷ A / [Γ]' / [A]'
+irrelevanceEqTerm {A = A} {t = t} {u = u} [Γ] [Γ]' [A] [A]' [t≡u] ⊢Δ [σ] =
+  let [σ]' = irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
+  in  LR.irrelevanceEqTerm (proj₁ ([A] ⊢Δ [σ]')) (proj₁ ([A]' ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]')
