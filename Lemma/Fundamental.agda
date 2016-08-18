@@ -29,21 +29,6 @@ mutual
   valid ε = ε
   valid (⊢Γ ∙ A) = let [Γ] , [A] = fundamental A in [Γ] ∙ [A]
 
-  fundamentalConv : ∀ {t A B Γ}
-                    ([Γ] : ⊩ₛ Γ)
-                    ([A]  : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-                    ([B]  : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
-                  → Γ ⊩ₛ⟨ ¹ ⟩  A ≡ B / [Γ] / [A]
-                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
-                  → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
-  fundamentalConv [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
-    let [σA]     = proj₁ ([A] ⊢Δ [σ])
-        [σB]     = proj₁ ([B] ⊢Δ [σ])
-        [σA≡σB]  = irrelevanceEq [σA] [σA] ([A≡B] ⊢Δ [σ])
-        [σt]     = proj₁ ([t] ⊢Δ [σ])
-        [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
-    in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
-    ,   λ [σ'] [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
 
 -- Fundamental theorem for types
 
@@ -174,7 +159,7 @@ mutual
     let [Γ]' = [Γ]₁
         [t]' = S.irrelevanceTerm {A = A} {t = t} [Γ] [Γ]' [A'] [A']₁ [t]
     in  [Γ]' , [A]
-    ,   fundamentalConv {t} {A} {B} [Γ]' [A']₁ [A] [A'≡A] [t]'
+    ,   convₛ {t} {A} {B} [Γ]' [A']₁ [A] [A'≡A] [t]'
 
 -- Fundamental theorem for term equality
 
@@ -199,8 +184,8 @@ mutual
         [u]' = S.irrelevanceTerm {A = A} {t = u} [Γ] [Γ]₁ [A'] [A']₁ [u]
     in  [Γ]₁
     ,   modelsTermEq [A]
-                     (fundamentalConv {t} {A} {B} [Γ]₁ [A']₁ [A] [A'≡A] [t]')
-                     (fundamentalConv {u} {A} {B} [Γ]₁ [A']₁ [A] [A'≡A] [u]')
+                     (convₛ {t} {A} {B} [Γ]₁ [A']₁ [A] [A'≡A] [t]')
+                     (convₛ {u} {A} {B} [Γ]₁ [A']₁ [A] [A'≡A] [u]')
                      (λ ⊢Δ [σ]₁ → let [σ] = S.irrelevanceSubst [Γ]₁ [Γ] ⊢Δ ⊢Δ [σ]₁
                                 in  convEqTerm₁ (proj₁ ([A']₁ ⊢Δ [σ]₁)) (proj₁ ([A] ⊢Δ [σ]₁)) ([A'≡A] ⊢Δ [σ]₁)
                                                 (irrelevanceEqTerm (proj₁ ([A'] ⊢Δ [σ]))
@@ -236,7 +221,18 @@ mutual
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b) with fundamentalTermEq f≡g | fundamentalTermEq a≡b
   ... | [Γ] , modelsTermEq [ΠFG] [f] [g] [f≡g] | [Γ]₁ , modelsTermEq [F] [a] [b] [a≡b] =
     let [ΠFG]' = S.irrelevance {A = Π F ▹ G} [Γ] [Γ]₁ [ΠFG]
-    in  [Γ]₁ , modelsTermEq (substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]' [a]) {!!} {!!} {!!}
+        [f]' = S.irrelevanceTerm {A = Π F ▹ G} {t = f} [Γ] [Γ]₁ [ΠFG] [ΠFG]' [f]
+        [g]' = S.irrelevanceTerm {A = Π F ▹ G} {t = g} [Γ] [Γ]₁ [ΠFG] [ΠFG]' [g]
+        [f≡g]' = S.irrelevanceEqTerm {A = Π F ▹ G} {t = f} {u = g} [Γ] [Γ]₁ [ΠFG] [ΠFG]' [f≡g]
+        [G[a]] = substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]' [a]
+        [G[b]] = substSΠ {F} {G} {b} [Γ]₁ [F] [ΠFG]' [b]
+        [G[a]≡G[b]] = substSΠEq {F} {G} {a} {b} [Γ]₁ [F] [ΠFG]' [a] [b] [a≡b]
+    in  [Γ]₁ , modelsTermEq [G[a]]
+                            (appₛ {F} {G} {f} {a} [Γ]₁ [F] [ΠFG]' [f]' [a])
+                            (conv₂ₛ {g ∘ b} {G [ a ]} {G [ b ]} [Γ]₁
+                                    [G[a]] [G[b]] [G[a]≡G[b]]
+                                    (appₛ {F} {G} {g} {b} [Γ]₁ [F] [ΠFG]' [g]' [b]))
+                            (app-congₛ {F} {G} {f} {g} {a} {b} [Γ]₁ [F] [ΠFG]' [f≡g]' [a] [b] [a≡b])
   fundamentalTermEq (β-red {a} {b} {F} {G} ⊢F ⊢b ⊢a) with fundamental ⊢F | fundamentalTerm ⊢b | fundamentalTerm ⊢a
   ... | [Γ] , [F] | [Γ]₁ , [G] , [b] | [Γ]₂ , [F]₁ , [a] =
     let [G]' = S.irrelevance {A = G} [Γ]₁ ([Γ]₂ ∙ [F]₁) [G]

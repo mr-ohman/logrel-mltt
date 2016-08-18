@@ -75,6 +75,38 @@ sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
 sucₛ ⊢Γ [ℕ] [n] = λ ⊢Δ [σ] → sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
                           , (λ x x₁ → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x x₁))
 
+convₛ : ∀ {t A B Γ}
+        ([Γ] : ⊩ₛ Γ)
+        ([A]  : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+        ([B]  : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
+      → Γ ⊩ₛ⟨ ¹ ⟩  A ≡ B / [Γ] / [A]
+      → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
+      → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
+convₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
+  let [σA]     = proj₁ ([A] ⊢Δ [σ])
+      [σB]     = proj₁ ([B] ⊢Δ [σ])
+      [σA≡σB]  = irrelevanceEq [σA] [σA] ([A≡B] ⊢Δ [σ])
+      [σt]     = proj₁ ([t] ⊢Δ [σ])
+      [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
+  in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
+  ,   λ [σ'] [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
+
+conv₂ₛ : ∀ {t A B Γ}
+         ([Γ] : ⊩ₛ Γ)
+         ([A]  : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+         ([B]  : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
+       → Γ ⊩ₛ⟨ ¹ ⟩  A ≡ B / [Γ] / [A]
+       → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ B / [Γ] / [B]
+       → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
+conv₂ₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
+  let [σA]     = proj₁ ([A] ⊢Δ [σ])
+      [σB]     = proj₁ ([B] ⊢Δ [σ])
+      [σA≡σB]  = irrelevanceEq [σA] [σA] ([A≡B] ⊢Δ [σ])
+      [σt]     = proj₁ ([t] ⊢Δ [σ])
+      [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
+  in  convTerm₂ [σA] [σB] [σA≡σB] [σt]
+  ,   λ [σ'] [σ≡σ'] → convEqTerm₂ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
+
 substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
          ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -166,6 +198,27 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                    (substSΠ₁ (proj₁ ([ΠFG] ⊢Δ [σ']))
                                              (proj₁ ([F] ⊢Δ [σ']))
                                              (proj₁ ([t] ⊢Δ [σ'])))))
+
+substSΠEq : ∀ {F G t u Γ l}
+            ([Γ] : ⊩ₛ Γ)
+            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+            ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
+            ([t]   : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+            ([u]   : Γ ⊩ₛ⟨ l ⟩t u ∷ F / [Γ] / [F])
+            ([t≡u] : Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ F / [Γ] / [F])
+          → Γ ⊩ₛ⟨ l ⟩ G [ t ] ≡ G [ u ] / [Γ] / substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t]
+substSΠEq {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] [t≡u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+  let [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
+      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
+      [σF] = proj₁ ([F] ⊢Δ [σ])
+      [σt] = proj₁ ([t] ⊢Δ [σ])
+      [σu] = proj₁ ([u] ⊢Δ [σ])
+      [σt]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.base ⊢Δ) [σt]
+      [σu]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.base ⊢Δ) [σu]
+      [σt≡σu] = [t≡u] ⊢Δ [σ]
+      [G[t]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.base ⊢Δ [σt]')
+      [G[u]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.base ⊢Δ [σu]')
+  in  irrelevanceEq'' (PE.sym (singleSubstLift G t)) (PE.sym (singleSubstLift G u)) [G[t]] (proj₁ (substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ])) (substSΠ₂ [σΠFG] (reflEq [σΠFG]) [σF] [σF] [σt] [σu] [σt≡σu] [G[t]] [G[u]])
 
 -- subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
 --           ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
@@ -274,7 +327,7 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
 Π-congₛ {F} {G} {H} {E} [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
   let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , _ , _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
+      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
       [σF] = proj₁ ([F] ⊢Δ [σ])
       ⊢σF = soundness [σF]
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
@@ -441,6 +494,20 @@ appₛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
          let proj₁[u'] = convTerm₂ proj₁[F] (proj₁ ([F] ⊢Δ [σ'])) (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ']))
          in  irrelevanceEqTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (app-congTerm proj₁[F] proj₁[G[u]]' proj₁[ΠFG] (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ])) proj₁[u'] (proj₂ ([u] ⊢Δ [σ]) [σ'] [σ≡σ'])))
 
+app-congₛ : ∀ {F G t u a b Γ}
+            ([Γ] : ⊩ₛ Γ)
+            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+            ([ΠFG] : Γ ⊩ₛ⟨ ¹ ⟩ Π F ▹ G / [Γ])
+            ([t≡u] : Γ ⊩ₛ⟨ ¹ ⟩t' t ≡ u ∷ Π F ▹ G / [Γ] / [ΠFG])
+            ([a] : Γ ⊩ₛ⟨ ¹ ⟩t a ∷ F / [Γ] / [F])
+            ([b] : Γ ⊩ₛ⟨ ¹ ⟩t b ∷ F / [Γ] / [F])
+            ([a≡b] : Γ ⊩ₛ⟨ ¹ ⟩t' a ≡ b ∷ F / [Γ] / [F])
+          → Γ ⊩ₛ⟨ ¹ ⟩t' t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ] / substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a]
+app-congₛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
+  let [G[a]]  = proj₁ (substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
+      [G[a]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (singleSubstLift G a) [G[a]]
+  in  irrelevanceEqTerm' (PE.sym (singleSubstLift G a)) [G[a]]' [G[a]]
+                         (app-congTerm (proj₁ ([F] ⊢Δ [σ])) [G[a]]' (proj₁ ([ΠFG] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]) (proj₁ ([a] ⊢Δ [σ])) (proj₁ ([b] ⊢Δ [σ])) ([a≡b] ⊢Δ [σ]))
 
 lamₛ : ∀ {F G t Γ}
        ([Γ] : ⊩ₛ Γ)
@@ -452,13 +519,13 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
-      _ , _ , _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
+      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ ¹ ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
         let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
             [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
-            _ , _ , _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
+            _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
         in  (lam ⊢F
             (soundnessTerm (proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))) (proj₁ ([t] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
         ,   (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
@@ -521,7 +588,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   in  lamt ⊢Δ [σ]
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
-             _ , _ , _ , ⊢F'' , ⊢G'' , [F]'' , [G]'' , G-ext'  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ']))
+             _ , ⊢F'' , ⊢G'' , [F]'' , [G]'' , G-ext'  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ']))
              ⊢F' = soundness (proj₁ ([F] ⊢Δ [σ']))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
              [G]₁' = proj₁ ([G] (⊢Δ ∙ ⊢F') [liftσ'])

@@ -36,14 +36,15 @@ ne-elim (Π D ⊢F ⊢G [F] [G] G-ext) neK = ⊥-elim (Π≢ne neK (PE.sym (whnf
 ne-elim (emb {l< = 0<1} x) neK = ne-elim x neK
 
 Π-elim : ∀ {Γ F G l} → Γ ⊩⟨ l ⟩ Π F ▹ G
-       → ∃ λ l' → ∃ λ F' → ∃ λ G'
-       → Γ ⊢ F' × (Γ ∙ F') ⊢ G'
-       × ∃ λ ([F] : wk-prop l' Γ F')
-       → ∃ λ ([G] : wk-subst-prop l' Γ F' G' [F])
-       → wk-substEq-prop l' Γ F' G' [F] [G]
+       → ∃ λ l' --→ ∃ λ F' → ∃ λ G'
+       → Γ ⊢ F × (Γ ∙ F) ⊢ G
+       × ∃ λ ([F] : wk-prop l' Γ F)
+       → ∃ λ ([G] : wk-subst-prop l' Γ F G [F])
+       → wk-substEq-prop l' Γ F G [F] [G]
 Π-elim (ℕ D) = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
 Π-elim (ne D neK) = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-Π-elim (Π D ⊢F ⊢G [F] [G] G-ext) = _ , _ , _ , ⊢F , ⊢G , [F] , [G] , G-ext
+Π-elim (Π D ⊢F ⊢G [F] [G] G-ext) with Π-PE-injectivity (whnfRed*' (red D) Π)
+... | F≡F' , G≡G' rewrite F≡F' | G≡G' = _ , ⊢F , ⊢G , [F] , [G] , G-ext
 Π-elim (emb {l< = 0<1} x) = Π-elim x
 
 data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) → Set where
