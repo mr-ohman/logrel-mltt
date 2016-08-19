@@ -5,6 +5,7 @@ open import Definition.Untyped.Properties
 open import Definition.Typed
 import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
+open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Weakening
@@ -659,23 +660,77 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
          ,   convTerm₂ (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([ΠFG] ⊢Δ [σ'])) [σΠFG≡σ'ΠFG] (lamt ⊢Δ [σ'])
          ,   σlamt∘a≡σ'lamt∘a)
 
--- natrecTerm : ∀ {F Fn z s n Γ}
---              ([ℕ]  : Γ ⊩⟨ ¹ ⟩ ℕ)
---              ([F]  : Γ ∙ ℕ ⊩⟨ ¹ ⟩ F)
---              ([F₀] : Γ ⊩⟨ ¹ ⟩ F [ zero ])
---              ([F₊] : Γ ⊩⟨ ¹ ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑))
---              ([Fₙ] : Γ ⊩⟨ ¹ ⟩ Fn)
---            → Γ ⊩⟨ ¹ ⟩ z ∷ F [ zero ] / [F₀]
---            → Γ ⊩⟨ ¹ ⟩ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [F₊]
---            → ([n] : Γ ⊩⟨ ¹ ⟩ n ∷ ℕ / [ℕ])
---            → Γ ⊩⟨ ¹ ⟩ natrec F z s n ∷ Fn / [Fₙ]
--- natrecTerm [ℕ] [F] [F₀] [F₊] (U {l< = 0<1} ⊢Γ) [z] [s] [n] = {!!} , {!!}
--- natrecTerm [ℕ] [F] [F₀] [F₊] (ℕ D) [z] [s] [n] = {!!}
--- natrecTerm [ℕ] [F] [F₀] [F₊] (ne D neK) [z] [s] [n] = {!!}
--- natrecTerm [ℕ] [F] [F₀] [F₊] (Π D ⊢F ⊢G [F]₁ [G] G-ext) [z] [s] [n] = {!!}
--- natrecTerm [ℕ] [F] [F₀] [F₊] (emb x) [z] [s] [n] = {!!}
+-- natrecTerm : ∀ {F z s n Γ l}
+--              ([Γ]  : ⊩ₛ Γ ∙ ℕ)
+--              (D    : Γ ⊢ ℕ :⇒*: ℕ)
+--              ([F]  : Γ ∙ ℕ ⊩⟨ l ⟩ F)
+--              ([F]ₛ : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ])
+--              ([F₀] : Γ ⊩⟨ l ⟩ F [ zero ])
+--              ([F₊] : Γ ⊩⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑))
+--              ([Fₙ] : Γ ⊩⟨ l ⟩ F [ n ])
+--            → Γ ⊩⟨ l ⟩ z ∷ F [ zero ] / [F₀]
+--            → Γ ⊩⟨ l ⟩ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [F₊]
+--            → ([n] : Γ ⊩⟨ l ⟩ n ∷ ℕ / ℕ D)
+--            → Γ ⊩⟨ l ⟩ natrec F z s n ∷ F [ n ] / [Fₙ]
+-- natrecTerm [Γ] D [F] [F]ₛ [F₀] [F₊] [Fₙ] [z] [s] ℕ[ .(suc n) , d , suc {n} , ⊢n ] =
+--   let ⊢F = soundness [F]
+--       ⊢z = soundnessTerm [F₀] [z]
+--       ⊢s = soundnessTerm [F₊] [s]
+--       ⊢sn = soundnessTerm {l = ¹} (ℕ D) ℕ[ suc n , d , suc , ⊢n ]
+--       natrecn = natrecTerm {n = n} [Γ] D [F] [F]ₛ [F₀] [F₊] {!!} [z] [s] {!!}
+--       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) {!!}
+--                   ⇨∷* (conv* (natrec-suc ⊢n ⊢F ⊢z ⊢s
+--                   ⇨   id ((conv ⊢s (Π-cong {!!} (refl {!!}) (Π-cong ⊢F {!!} {!!})) ∘ ⊢n) ∘ (natrec ⊢F ⊢z ⊢s ⊢n))) {!!})
+--   in proj₁ (redSubst*Term (natrec ⊢F ⊢z ⊢s ⊢sn) reduction [Fₙ] (convTerm₁ {!!} [Fₙ] {!!} {!appTerm!}))
+-- natrecTerm [Γ] D [F] [F]ₛ [F₀] [F₊] [Fₙ] [z] [s] ℕ[ .zero , d , zero , prop ] =
+--   let ⊢F = soundness [F]
+--       ⊢z = soundnessTerm [F₀] [z]
+--       ⊢s = soundnessTerm [F₊] [s]
+--       ⊢n = soundnessTerm {l = ¹} (ℕ D) ℕ[ zero , d , zero , prop ]
+--       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) {!!}
+--                   ⇨∷* (conv* (natrec-zero ⊢F ⊢z ⊢s ⇨ id ⊢z) {!!})
+--   in  proj₁ (redSubst*Term (natrec ⊢F ⊢z ⊢s ⊢n) reduction [Fₙ] (convTerm₁ [F₀] [Fₙ] {!!} [z]))
+-- natrecTerm [Γ] D [F] [F]ₛ [F₀] [F₊] [Fₙ] [z] [s] ℕ[ m , d , ne neM , ⊢m ] =
+--   let ⊢F = soundness [F]
+--       ⊢z = soundnessTerm [F₀] [z]
+--       ⊢s = soundnessTerm [F₊] [s]
+--       ⊢n = soundnessTerm {l = ¹} (ℕ D) ℕ[ m , d , ne neM , ⊢m ]
+--       [Fₘ] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) {!!} (proj₁ ([F]ₛ {!!} {!!}))
+--       [Fₘ≡Fₙ] = {!!}
+--       natrecM = neuTerm [Fₘ] (natrec neM) (natrec ⊢F ⊢z ⊢s ⊢m)
+--       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) {!!}
+--   in  proj₁ (redSubst*Term (natrec ⊢F ⊢z ⊢s ⊢n) reduction [Fₙ] (convTerm₁ [Fₘ] [Fₙ] [Fₘ≡Fₙ] natrecM))
 
--- natrecₛ : ∀ {F z s n Γ} ([Γ] : ⊩ₛ⟨ ¹ ⟩ Γ)
+-- natrecTerm' : ∀ {F z s n Γ Δ σ l}
+--               ([Γ]  : ⊩ₛ Γ)
+--               ([ℕ]  : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+--               ([F]  : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
+--               ([F₀] : Γ ⊩ₛ⟨ l ⟩ F [ zero ] / [Γ])
+--               ([F₊] : Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ])
+--               ([Fₙ] : Γ ⊩ₛ⟨ l ⟩ F [ n ] / [Γ])
+--               ([z]  : Γ ⊩ₛ⟨ l ⟩t z ∷ F [ zero ] / [Γ] / [F₀])
+--               ([s]  : Γ ⊩ₛ⟨ l ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊])
+--               (⊢Δ   : ⊢ Δ)
+--               ([σ]  : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+--             → let ⊢ℕ = soundness (proj₁ ([ℕ] ⊢Δ [σ]))
+--               in  ([σn] : Δ ⊩⟨ l ⟩ subst σ n ∷ ℕ / ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ]))
+--             → Δ ⊩⟨ l ⟩ subst σ (natrec F z s n) ∷ subst σ (F [ n ])
+--                 / proj₁ ([Fₙ] ⊢Δ [σ])
+-- natrecTerm' [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] ⊢Δ [σ] ℕ[ .(suc m) , d , suc {m} , ⊢m ] = {!!}
+-- natrecTerm' [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] ⊢Δ [σ] ℕ[ .zero , d , zero , _ ] = {!!}
+-- natrecTerm' {Γ = Γ} {σ = σ} {l = l} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] ⊢Δ [σ] ℕ[ m , d , ne neM , ⊢m ] =
+--   let ⊢ℕ = soundness (proj₁ ([ℕ] ⊢Δ [σ]))
+--       ⊢F = soundness (proj₁ ([F] {σ = liftSubst σ} (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ] ⊢Δ [ℕ] [σ])))
+--       ⊢z = soundnessTerm (proj₁ ((substS [Γ] [ℕ] [F] (zeroₛ [Γ])) ⊢Δ [σ])) (proj₁ ([z] ⊢Δ [σ]))
+--       ⊢s = soundnessTerm {!!} (proj₁ ([s] ⊢Δ [σ]))
+--       ⊢n = soundnessTerm (ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ])) ℕ[ m , d , ne neM , ⊢m ]
+--       [σFₘ] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) {!!} (proj₁ ([F] ⊢Δ ([σ] , (neuTerm (proj₁ ([ℕ] ⊢Δ [σ])) neM ⊢m))))
+--       [Fₘ≡Fₙ] = {!!}
+--       natrecM = neuTerm [σFₘ] (natrec neM) (natrec ⊢F ⊢z ⊢s ⊢m)
+--       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) {!!}
+--   in  proj₁ (redSubst*Term (natrec ⊢F ⊢z ⊢s ⊢n) reduction {!!} (convTerm₁ [σFₘ] {!!} [Fₘ≡Fₙ] natrecM))
+
+-- natrecₛ : ∀ {F z s n Γ} ([Γ] : ⊩ₛ Γ)
 --           ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
 --           ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
 --           ([F₀] : Γ ⊩ₛ⟨ ¹ ⟩ F [ zero ] / [Γ])
