@@ -688,16 +688,26 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
 -- natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] {σ = σ} ⊢Δ [σ] =
 --   natrecTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([F] (⊢Δ ∙ soundness (proj₁ ([ℕ] ⊢Δ [σ]))) (liftSubstS {F = ℕ} [Γ] ⊢Δ [ℕ] [σ]))) {!!} {!!} {!!} {!!} {!!} {!!} , {!!}
 
--- betaEqTerm : ∀ {F A f a F[a] Γ l l'}
---            → F [ a ] PE.≡ F[a]
---            → ([A] : Γ ⊩⟨ l ⟩ A)
---              ([F] : Γ ∙ A ⊩⟨ l ⟩ F)
---              ([F[a]] : Γ ⊩⟨ l' ⟩ F[a])
---              ([f] : Γ ∙ A ⊩⟨ l ⟩ f ∷ F / [F])
---              ([a] : Γ ⊩⟨ l ⟩ a ∷ A / [A])
---            → Γ ⊩⟨ l' ⟩ (lam f) ∘ a ≡ f [ a ] ∷ F[a] / [F[a]]
--- betaEqTerm eq [A] [F] (U ⊢Γ) [f] [a] = {!!}
--- betaEqTerm eq [A] [F] (ℕ D) [f] [a] = ℕ≡[ {!!} , {!!} , {!!} , {!!} , {!!} , {!!} ]
--- betaEqTerm eq [A] [F] (ne D neK) [f] [a] = PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) eq (β-red (soundness [A]) (soundnessTerm [F] [f]) (soundnessTerm [A] [a]))
--- betaEqTerm eq [A] [F] (Π D ⊢F ⊢G [F]₁ [G] G-ext) [f] [a] = {!!}
--- betaEqTerm eq [A] [F] (emb {l< = 0<1} x) [f] [a] = betaEqTerm eq [A] [F] x [f] [a]
+_⊩ₛ_⇒_∷_/_ : (Γ : Con Term) (t u A : Term) ([Γ] : ⊩ₛ Γ) → Set
+Γ ⊩ₛ t ⇒ u ∷ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+                       → Δ ⊢ subst σ t ⇒ subst σ u ∷ subst σ A
+
+redSubstTermₛ : ∀ {A t u l Γ}
+              → ([Γ] : ⊩ₛ Γ)
+              → (∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ) → Δ ⊢ subst σ t ∷ subst σ A)
+              → Γ ⊩ₛ t ⇒ u ∷ A / [Γ]
+              → ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+              → Γ ⊩ₛ⟨ l ⟩t u ∷ A / [Γ] / [A]
+              → Γ ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] / [A]
+              × Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ A / [Γ] / [A]
+redSubstTermₛ [Γ] ⊢t t⇒u [A] [u] =
+  (λ ⊢Δ [σ] →
+     let [σA] = proj₁ ([A] ⊢Δ [σ])
+         [σt] , [σt≡σu] = redSubstTerm (⊢t ⊢Δ [σ]) (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))
+     in  [σt]
+     ,   (λ [σ'] [σ≡σ'] →
+            let [σ'A] = proj₁ ([A] ⊢Δ [σ'])
+                [σA≡σ'A] = proj₂ ([A] ⊢Δ [σ]) [σ'] [σ≡σ']
+                [σ't] , [σ't≡σ'u] = redSubstTerm (⊢t ⊢Δ [σ']) (t⇒u ⊢Δ [σ']) (proj₁ ([A] ⊢Δ [σ'])) (proj₁ ([u] ⊢Δ [σ']))
+            in  transEqTerm [σA] [σt≡σu] (transEqTerm [σA] ((proj₂ ([u] ⊢Δ [σ])) [σ'] [σ≡σ']) (convEqTerm₂ [σA] [σ'A] [σA≡σ'A] (symEqTerm [σ'A] [σ't≡σ'u])))))
+  , (λ ⊢Δ [σ] → proj₂ (redSubstTerm (⊢t ⊢Δ [σ]) (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))))

@@ -236,7 +236,24 @@ mutual
   fundamentalTermEq (β-red {a} {b} {F} {G} ⊢F ⊢b ⊢a) with fundamental ⊢F | fundamentalTerm ⊢b | fundamentalTerm ⊢a
   ... | [Γ] , [F] | [Γ]₁ , [G] , [b] | [Γ]₂ , [F]₁ , [a] =
     let [G]' = S.irrelevance {A = G} [Γ]₁ ([Γ]₂ ∙ [F]₁) [G]
-    in  [Γ]₂ , modelsTermEq (substS {F} {G} {a} [Γ]₂ [F]₁ [G]' [a]) {!!} {!!} {!!}
+        [b]' = S.irrelevanceTerm {A = G} {t = b} [Γ]₁ ([Γ]₂ ∙ [F]₁) [G] [G]' [b]
+        [G[a]] = substS {F} {G} {a} [Γ]₂ [F]₁ [G]' [a]
+        [b[a]] = {!!}
+        [lam] , [eq] = redSubstTermₛ {G [ a ]} {(lam b) ∘ a} {b [ a ]} [Γ]₂
+                                     (λ {Δ} {σ} ⊢Δ [σ] →
+                                        let [liftσ] = liftSubstS {F = F} [Γ]₂ ⊢Δ [F]₁ [σ]
+                                            ⊢σF = soundness (proj₁ ([F]₁ ⊢Δ [σ]))
+                                            ⊢σb = soundnessTerm (proj₁ ([G]' {σ = liftSubst σ} (⊢Δ ∙ ⊢σF) [liftσ])) (proj₁ ([b]' (⊢Δ ∙ ⊢σF) [liftσ]))
+                                            ⊢σa = soundnessTerm (proj₁ ([F]₁ ⊢Δ [σ])) (proj₁ ([a] ⊢Δ [σ]))
+                                        in  PE.subst (λ x → _ ⊢ _ ∷ x) {!!} (lam ⊢σF ⊢σb ∘ ⊢σa))
+                                     (λ {Δ} {σ} ⊢Δ [σ] →
+                                        let [liftσ] = liftSubstS {F = F} [Γ]₂ ⊢Δ [F]₁ [σ]
+                                            ⊢σF = soundness (proj₁ ([F]₁ ⊢Δ [σ]))
+                                            ⊢σb = soundnessTerm (proj₁ ([G]' {σ = liftSubst σ} (⊢Δ ∙ ⊢σF) [liftσ])) (proj₁ ([b]' (⊢Δ ∙ ⊢σF) [liftσ]))
+                                            ⊢σa = soundnessTerm (proj₁ ([F]₁ ⊢Δ [σ])) (proj₁ ([a] ⊢Δ [σ]))
+                                        in  {!β-red ? ? ?!})
+                                     [G[a]] {![b[a]]!}
+    in  [Γ]₂ , modelsTermEq [G[a]] [lam] {![b[a]]!} [eq]
   fundamentalTermEq (fun-ext {f} {g} {F} {G} ⊢F ⊢t ⊢t' t≡t') with
     fundamental ⊢F | fundamentalTerm ⊢t |
     fundamentalTerm ⊢t' | fundamentalTermEq t≡t'
