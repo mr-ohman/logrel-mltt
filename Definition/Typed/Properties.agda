@@ -74,6 +74,29 @@ subset* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A ≡ B
 subset* (id A) = refl A
 subset* (x ⇨ x₁) = trans (subset x) (subset* x₁)
 
+
+-- Can extract left-part of a reduction
+
+redFirstTerm : ∀ {Γ t u A} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ∷ A
+redFirstTerm (conv d x) = conv (redFirstTerm d) x
+redFirstTerm (app-subst d x) = (redFirstTerm d) ∘ x
+redFirstTerm (β-red x x₁ x₂) = (lam x x₁) ∘ x₂
+redFirstTerm (natrec-subst x x₁ x₂ d) = natrec x x₁ x₂ (redFirstTerm d)
+redFirstTerm (natrec-zero x x₁ x₂) = natrec x x₁ x₂ (zero (wfTerm x₁))
+redFirstTerm (natrec-suc x x₁ x₂ x₃) = natrec x₁ x₂ x₃ (suc x)
+
+redFirst : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A
+redFirst (univ x) = univ (redFirstTerm x)
+
+redFirst*Term : ∀ {Γ t u A} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ t ∷ A
+redFirst*Term (id x) = x
+redFirst*Term (x ⇨ d) = redFirstTerm x
+
+redFirst* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A
+redFirst* (id x) = x
+redFirst* (x ⇨ x₁) = redFirst x
+
+
 -- Neutrals do not weak head reduce
 
 neRed :   ∀{Γ t u A} (d : Γ ⊢ t ⇒ u ∷ A) (n : Neutral t) → ⊥

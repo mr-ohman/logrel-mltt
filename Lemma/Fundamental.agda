@@ -245,12 +245,6 @@ mutual
                                             ⊢σF = soundness (proj₁ ([F]₁ ⊢Δ [σ]))
                                             ⊢σb = soundnessTerm (proj₁ ([G]' {σ = liftSubst σ} (⊢Δ ∙ ⊢σF) [liftσ])) (proj₁ ([b]' (⊢Δ ∙ ⊢σF) [liftσ]))
                                             ⊢σa = soundnessTerm (proj₁ ([F]₁ ⊢Δ [σ])) (proj₁ ([a] ⊢Δ [σ]))
-                                        in  PE.subst (λ x → _ ⊢ _ ∷ x) {!!} (lam ⊢σF ⊢σb ∘ ⊢σa))
-                                     (λ {Δ} {σ} ⊢Δ [σ] →
-                                        let [liftσ] = liftSubstS {F = F} [Γ]₂ ⊢Δ [F]₁ [σ]
-                                            ⊢σF = soundness (proj₁ ([F]₁ ⊢Δ [σ]))
-                                            ⊢σb = soundnessTerm (proj₁ ([G]' {σ = liftSubst σ} (⊢Δ ∙ ⊢σF) [liftσ])) (proj₁ ([b]' (⊢Δ ∙ ⊢σF) [liftσ]))
-                                            ⊢σa = soundnessTerm (proj₁ ([F]₁ ⊢Δ [σ])) (proj₁ ([a] ⊢Δ [σ]))
                                         in  {!β-red ? ? ?!})
                                      [G[a]] {![b[a]]!}
     in  [Γ]₂ , modelsTermEq [G[a]] [lam] {![b[a]]!} [eq]

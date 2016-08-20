@@ -557,14 +557,14 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                    t[b] = irrelevanceTerm'' (PE.sym (G-substWkLemma b σ G)) (PE.sym (G-substWkLemma b σ t)) G[b]' G[b]
                                             (proj₁ ([t] {σ = consSubst (wkSubst (T.toWk ρ) σ) b}
                                                         ⊢Δ₁ (consSubstS {t = b} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [b]')))
-                   lamt∘a≡t[a] = proj₂ (redSubstTerm (lam ⊢F₁ ⊢t ∘ ⊢a) (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])
+                   lamt∘a≡t[a] = proj₂ (redSubstTerm (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])
                    G[a]≡G[b] = G-ext ρ ⊢Δ₁ [a] [b] [a≡b]
                    t[a]≡t[b] = irrelevanceEqTerm'' (PE.sym (G-substWkLemma a σ t)) (PE.sym (G-substWkLemma b σ t)) (PE.sym (G-substWkLemma a σ G)) G[a]' G[a] (proj₂ ([t] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
                                    (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]'))
                               {σ' = consSubst (wkSubst (T.toWk ρ) σ) b}
                               (consSubstS {t = b} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [b]')
                               (reflSubst [Γ] ⊢Δ₁ [ρσ] , [a≡b]'))
-                   t[b]≡lamt∘b = convEqTerm₂ G[a] G[b] G[a]≡G[b] (symEqTerm G[b] (proj₂ (redSubstTerm (lam ⊢F₁ ⊢t ∘ ⊢b) (β-red ⊢F₁ ⊢t ⊢b) G[b] t[b])))
+                   t[b]≡lamt∘b = convEqTerm₂ G[a] G[b] G[a]≡G[b] (symEqTerm G[b] (proj₂ (redSubstTerm (β-red ⊢F₁ ⊢t ⊢b) G[b] t[b])))
                in  transEqTerm G[a] lamt∘a≡t[a] (transEqTerm G[a] t[a]≡t[b] t[b]≡lamt∘b))
         ,   (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
                let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
@@ -585,7 +585,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                    t[a] = irrelevanceTerm'' (PE.sym (G-substWkLemma a σ G)) (PE.sym (G-substWkLemma a σ t)) G[a]' G[a]
                                             (proj₁ ([t] {σ = consSubst (wkSubst (T.toWk ρ) σ) a}
                                                    ⊢Δ₁ (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]')))
-               in  proj₁ (redSubstTerm (lam ⊢F₁ ⊢t ∘ ⊢a) (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])))
+               in  proj₁ (redSubstTerm (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])))
   in  lamt ⊢Δ [σ]
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
@@ -644,8 +644,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                     t[a]' = irrelevanceTerm'' (PE.sym (G-substWkLemma a σ' G)) (PE.sym (G-substWkLemma a σ' t)) G[a]₁' G[a]''
                                             (proj₁ ([t] {σ = consSubst (wkSubst (T.toWk ρ) σ') a}
                                                    ⊢Δ₁ (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ'] [F] [a]'')))
-                    [σlamt∘a≡σt[a]] = proj₂ (redSubstTerm (lam ⊢F₁ ⊢t ∘ ⊢a) (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])
-                    [σ't[a]≡σ'lamt∘a] = convEqTerm₂ G[a] G[a]'' [σG[a]≡σ'G[a]] (symEqTerm G[a]'' (proj₂ (redSubstTerm (lam ⊢F₂ ⊢t' ∘ ⊢a') (β-red ⊢F₂ ⊢t' ⊢a') G[a]'' t[a]')))
+                    [σlamt∘a≡σt[a]] = proj₂ (redSubstTerm (β-red ⊢F₁ ⊢t ⊢a) G[a] t[a])
+                    [σ't[a]≡σ'lamt∘a] = convEqTerm₂ G[a] G[a]'' [σG[a]≡σ'G[a]] (symEqTerm G[a]'' (proj₂ (redSubstTerm (β-red ⊢F₂ ⊢t' ⊢a') G[a]'' t[a]')))
                     [σt[a]≡σ't[a]] = irrelevanceEqTerm'' (PE.sym (G-substWkLemma a σ t)) (PE.sym (G-substWkLemma a σ' t)) (PE.sym (G-substWkLemma a σ G)) G[a]' G[a]
                                        (proj₂ ([t] {σ = consSubst (wkSubst (T.toWk ρ) σ) a}
                                                   ⊢Δ₁ (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]'))
@@ -749,20 +749,19 @@ _⊩ₛ_⇒_∷_/_ : (Γ : Con Term) (t u A : Term) ([Γ] : ⊩ₛ Γ) → Set
 
 redSubstTermₛ : ∀ {A t u l Γ}
               → ([Γ] : ⊩ₛ Γ)
-              → (∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ) → Δ ⊢ subst σ t ∷ subst σ A)
               → Γ ⊩ₛ t ⇒ u ∷ A / [Γ]
               → ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
               → Γ ⊩ₛ⟨ l ⟩t u ∷ A / [Γ] / [A]
               → Γ ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] / [A]
               × Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ A / [Γ] / [A]
-redSubstTermₛ [Γ] ⊢t t⇒u [A] [u] =
+redSubstTermₛ [Γ] t⇒u [A] [u] =
   (λ ⊢Δ [σ] →
      let [σA] = proj₁ ([A] ⊢Δ [σ])
-         [σt] , [σt≡σu] = redSubstTerm (⊢t ⊢Δ [σ]) (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))
+         [σt] , [σt≡σu] = redSubstTerm (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))
      in  [σt]
      ,   (λ [σ'] [σ≡σ'] →
             let [σ'A] = proj₁ ([A] ⊢Δ [σ'])
                 [σA≡σ'A] = proj₂ ([A] ⊢Δ [σ]) [σ'] [σ≡σ']
-                [σ't] , [σ't≡σ'u] = redSubstTerm (⊢t ⊢Δ [σ']) (t⇒u ⊢Δ [σ']) (proj₁ ([A] ⊢Δ [σ'])) (proj₁ ([u] ⊢Δ [σ']))
+                [σ't] , [σ't≡σ'u] = redSubstTerm (t⇒u ⊢Δ [σ']) (proj₁ ([A] ⊢Δ [σ'])) (proj₁ ([u] ⊢Δ [σ']))
             in  transEqTerm [σA] [σt≡σu] (transEqTerm [σA] ((proj₂ ([u] ⊢Δ [σ])) [σ'] [σ≡σ']) (convEqTerm₂ [σA] [σ'A] [σA≡σ'A] (symEqTerm [σ'A] [σ't≡σ'u])))))
-  , (λ ⊢Δ [σ] → proj₂ (redSubstTerm (⊢t ⊢Δ [σ]) (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))))
+  , (λ ⊢Δ [σ] → proj₂ (redSubstTerm (t⇒u ⊢Δ [σ]) (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ]))))
