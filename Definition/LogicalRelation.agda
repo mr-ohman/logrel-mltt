@@ -22,28 +22,49 @@ record ne[_]_≡_[_] (Γ : Con Term) (A B K : Term) : Set where
     neM : Neutral M
     K≡M : Γ ⊢ K ≡ M
 
-natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
-natural-prop Γ .(suc n) (suc {n}) = Γ ⊢ n ∷ ℕ
-natural-prop Γ .zero zero = ⊤
-natural-prop Γ n (ne x) = Γ ⊢ n ∷ ℕ
+mutual
+  natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
+  natural-prop Γ .(suc n) (suc {n}) = ℕ[ Γ ] n ∷ ℕ
+  natural-prop Γ .zero zero = ⊤
+  natural-prop Γ n (ne x) = Γ ⊢ n ∷ ℕ
 
-record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
-  constructor ℕ[_,_,_,_]
-  field
-    n    : Term
-    d    : Γ ⊢ t :⇒*: n ∷ ℕ
-    natN : Natural n
-    prop : natural-prop Γ n natN
+  data ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
+    ℕ[_,_,_,_] : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ)
+                 (natN : Natural n) (prop : natural-prop Γ n natN)
+               → ℕ[ Γ ] t ∷ A
 
-record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
-  constructor ℕ≡[_,_,_,_,_,_]
-  field
-    k      : Term
-    k'     : Term
-    d      : Γ ⊢ t :⇒*: k  ∷ ℕ
-    d'     : Γ ⊢ u :⇒*: k' ∷ ℕ
-    t≡u    : Γ ⊢ t ≡ u ∷ ℕ
-    [k≡k'] : [Natural] (λ n n' → Γ ⊢ n ≡ n' ∷ ℕ) k k'
+  -- record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
+  --   constructor ℕ[_,_,_,_]
+  --   inductive
+  --   field
+  --     n    : Term
+  --     d    : Γ ⊢ t :⇒*: n ∷ ℕ
+  --     natN : Natural n
+  --     prop : natural-prop Γ n natN
+
+mutual
+  [Natural]-prop : (Γ : Con Term) (n n' : Term) → [Natural] n n' → Set
+  [Natural]-prop Γ .(suc n) .(suc n') (suc {n} {n'}) = ℕ[ Γ ] n ≡ n' ∷ ℕ
+  [Natural]-prop Γ .zero .zero zero = ⊤
+  [Natural]-prop Γ n n' (ne neN neN') = Γ ⊢ n ≡ n' ∷ ℕ
+
+  data ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
+    ℕ≡[_,_,_,_,_,_,_] :
+      (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
+      (t≡u : Γ ⊢ t ≡ u ∷ ℕ) ([k≡k'] : [Natural] k k')
+      (prop : [Natural]-prop Γ k k' [k≡k']) → ℕ[ Γ ] t ≡ u ∷ A
+
+  -- record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
+  --   constructor ℕ≡[_,_,_,_,_,_,_]
+  --   inductive
+  --   field
+  --     k      : Term
+  --     k'     : Term
+  --     d      : Γ ⊢ t :⇒*: k  ∷ ℕ
+  --     d'     : Γ ⊢ u :⇒*: k' ∷ ℕ
+  --     t≡u    : Γ ⊢ t ≡ u ∷ ℕ
+  --     [k≡k'] : [Natural] k k'
+  --     prop   : [Natural]-prop Γ k k' [k≡k']
 
 
 data TypeLevel : Set where

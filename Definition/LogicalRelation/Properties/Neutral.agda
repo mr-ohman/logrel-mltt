@@ -70,7 +70,7 @@ mutual
   neuEqTerm (ℕ D) neN neN' (n , n' , n≡n') =
     let A≡ℕ = subset* (red D)
     in  ℕ≡[ _ , _ , idRedTerm:*: (conv n A≡ℕ) , idRedTerm:*: (conv n' A≡ℕ)
-          , conv n≡n' A≡ℕ , ne neN neN' (conv n≡n' A≡ℕ) ]
+          , conv n≡n' A≡ℕ , ne neN neN' , conv n≡n' A≡ℕ ]
   neuEqTerm (ne D neK) neN neN' (n , n' , n≡n') = n≡n'
   neuEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) neN neN' (n , n' , n≡n') =
     let [ΠFG] = Π D ⊢F ⊢G [F] [G] G-ext

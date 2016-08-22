@@ -67,7 +67,7 @@ univₛ₁ [Γ] [U] [A] ⊢Δ [σ] =
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] = ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ]
-  , (λ _ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ) , refl (zero ⊢Δ) , zero ])
+  , (λ _ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ) , refl (zero ⊢Δ) , zero , tt ])
 
 sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])

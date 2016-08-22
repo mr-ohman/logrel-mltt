@@ -16,13 +16,31 @@ open import Data.Unit
 open import Data.Empty using (⊥; ⊥-elim)
 import Relation.Binary.PropositionalEquality as PE
 
+mutual
+  wkTermℕ : ∀ {Γ Δ A n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+          → ℕ[ Γ ] n ∷ A → ℕ[ Δ ] U.wk (toWk ρ) n ∷ U.wk (toWk ρ) A
+  wkTermℕ ρ ⊢Δ ℕ[ n , d , natN , prop ] = ℕ[ U.wk (toWk ρ) n , wkRed:*:Term ρ ⊢Δ d , wkNatural (toWk ρ) natN , wkNatural-prop ρ ⊢Δ natN prop ]
 
-wkNatural-prop : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) (natN : Natural n)
-               → natural-prop Γ n natN
-               → natural-prop Δ (wkₜ ρ n) (wkNatural (toWk ρ) natN)
-wkNatural-prop ρ ⊢Δ suc n = T.wkTerm ρ ⊢Δ n
-wkNatural-prop ρ ⊢Δ zero n = n
-wkNatural-prop ρ ⊢Δ (ne x) n = T.wkTerm ρ ⊢Δ n
+  wkNatural-prop : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) (natN : Natural n)
+                 → natural-prop Γ n natN
+                 → natural-prop Δ (wkₜ ρ n) (wkNatural (toWk ρ) natN)
+  wkNatural-prop ρ ⊢Δ suc n = wkTermℕ ρ ⊢Δ n
+  wkNatural-prop ρ ⊢Δ zero n = n
+  wkNatural-prop ρ ⊢Δ (ne x) n = T.wkTerm ρ ⊢Δ n
+
+mutual
+  wkEqTermℕ : ∀ {Γ Δ A t u} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+            → ℕ[ Γ ] t ≡ u ∷ A
+            → ℕ[ Δ ] U.wk (toWk ρ) t ≡ U.wk (toWk ρ) u ∷ U.wk (toWk ρ) A
+  wkEqTermℕ ρ ⊢Δ ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
+    ℕ≡[ U.wk (toWk ρ) k , U.wk (toWk ρ) k' , wkRed:*:Term ρ ⊢Δ d , wkRed:*:Term ρ ⊢Δ d' , T.wkEqTerm ρ ⊢Δ t≡u , wk[Natural] (toWk ρ) [k≡k'] , wk[Natural]-prop ρ ⊢Δ [k≡k'] prop ]
+
+  wk[Natural]-prop : ∀ {Γ Δ n n'} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([n≡n'] : [Natural] n n')
+                   → [Natural]-prop Γ n n' [n≡n']
+                   → [Natural]-prop Δ (U.wk (toWk ρ) n) (U.wk (toWk ρ) n') (wk[Natural] (toWk ρ) [n≡n'])
+  wk[Natural]-prop ρ ⊢Δ suc [n≡n'] = wkEqTermℕ ρ ⊢Δ [n≡n']
+  wk[Natural]-prop ρ ⊢Δ zero t = t
+  wk[Natural]-prop ρ ⊢Δ (ne x x₁) n≡n' = T.wkEqTerm ρ ⊢Δ n≡n'
 
 wk : ∀ {l Γ Δ A} → (ρ : Γ ⊆ Δ) → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ wkₜ ρ A
 wk ρ ⊢Δ (U {l< = l<} ⊢Γ) = U {l< = l<} ⊢Δ
@@ -60,7 +78,7 @@ wkTerm : ∀ {l Γ Δ A t} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([A] : Γ ⊩�
        → Δ ⊩⟨ l ⟩ wkₜ ρ t ∷ wkₜ ρ A / wk ρ ⊢Δ [A]
 wkTerm {⁰} ρ ⊢Δ (U {l< = ()} ⊢Γ) (⊢t , ⊩t)
 wkTerm {¹} ρ ⊢Δ (U {l< = 0<1} ⊢Γ) (⊢t , ⊩t) = T.wkTerm ρ ⊢Δ ⊢t , wk ρ ⊢Δ ⊩t
-wkTerm ρ ⊢Δ (ℕ D) ℕ[ n , d , natN , prop ] = ℕ[ U.wk (toWk ρ) n , wkRed:*:Term ρ ⊢Δ d , wkNatural (toWk ρ) natN , wkNatural-prop ρ ⊢Δ natN prop ]
+wkTerm ρ ⊢Δ (ℕ D) [t] = wkTermℕ ρ ⊢Δ [t]
 wkTerm ρ ⊢Δ (ne D neK) t = T.wkTerm ρ ⊢Δ t
 wkTerm ρ ⊢Δ (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) (⊢t , ⊩t , [t]₁) = T.wkTerm ρ ⊢Δ ⊢t ,
   (λ ρ₁ ⊢Δ₁ [a] [b] a≡b → let [F]₁ = [F] (ρ₁ •ₜ ρ) ⊢Δ₁
@@ -83,8 +101,7 @@ wkEqTerm : ∀ {l Γ Δ A t u} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([A] : Γ �
        → Δ ⊩⟨ l ⟩ wkₜ ρ t ≡ wkₜ ρ u ∷ wkₜ ρ A / wk ρ ⊢Δ [A]
 wkEqTerm {⁰} ρ ⊢Δ (U {l< = ()} ⊢Γ)
 wkEqTerm {¹} ρ ⊢Δ (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = U[ T.wkTerm ρ ⊢Δ ⊢t , T.wkTerm ρ ⊢Δ ⊢u , T.wkEqTerm ρ ⊢Δ t≡u , wk ρ ⊢Δ ⊩t , wk ρ ⊢Δ ⊩u , wkEq ρ ⊢Δ ⊩t [t≡u] ]
-wkEqTerm ρ ⊢Δ (ℕ D) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] ] =
-  ℕ≡[ U.wk (toWk ρ) k , U.wk (toWk ρ) k' , wkRed:*:Term ρ ⊢Δ d , wkRed:*:Term ρ ⊢Δ d' , T.wkEqTerm ρ ⊢Δ t≡u , wk[Natural] (toWk ρ) (T.wkEqTerm ρ ⊢Δ) [k≡k'] ]
+wkEqTerm ρ ⊢Δ (ℕ D) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
 wkEqTerm ρ ⊢Δ (ne D neK) t≡u = T.wkEqTerm ρ ⊢Δ t≡u
 wkEqTerm {l} ρ ⊢Δ (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
   let [A] = Π D ⊢F ⊢G [F] [G] G-ext

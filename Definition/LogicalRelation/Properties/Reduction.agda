@@ -57,7 +57,7 @@ redSubst*Term t⇒u (ℕ D) ℕ[ n , [ ⊢u , ⊢n , d ] , natN , prop ] =
       ⊢t   = conv (redFirst*Term t⇒u) A≡ℕ
       t⇒u' = conv* t⇒u A≡ℕ
   in  ℕ[ n , [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] , natN , prop ]
-  ,   ℕ≡[ n , n , [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] , [ ⊢u , ⊢n , d ] , subset*Term t⇒u' , reflNatural natN prop ]
+  ,   ℕ≡[ n , n , [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] , [ ⊢u , ⊢n , d ] , subset*Term t⇒u' , reflNatural natN , reflNatural-prop natN prop ]
 redSubst*Term t⇒u (ne D neK) [u] = redFirst*Term t⇒u , subset*Term t⇒u
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π {F} {G} D ⊢F ⊢G [F] [G] G-ext) (proj₁' , proj₂' , proj₃') =
   let A≡ΠFG = subset* (red D)

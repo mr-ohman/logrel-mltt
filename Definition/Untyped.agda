@@ -32,15 +32,36 @@ data Natural : Term → Set where
   zero : Natural zero
   ne : ∀ {n} → Neutral n → Natural n
 
-data [Natural] (R : Term → Term → Set) : Term → Term → Set where
-  suc : ∀ {n n'} → R n n' → [Natural] R (suc n) (suc n')
-  zero : [Natural] R zero zero
-  ne : ∀ {n n'} → Neutral n → Neutral n' → R n n' → [Natural] R n n'
+data [Natural] : Term → Term → Set where
+  suc : ∀ {n n'} → [Natural] (suc n) (suc n')
+  zero : [Natural] zero zero
+  ne : ∀ {n n'} → Neutral n → Neutral n' → [Natural] n n'
 
-split : ∀ {R t u} → [Natural] R t u → Natural t × Natural u
-split (suc n) = suc , suc
+reflNatural : ∀ {n} → Natural n → [Natural] n n
+reflNatural suc = suc
+reflNatural zero = zero
+reflNatural (ne x) = ne x x
+
+symNatural : ∀ {m n} → [Natural] m n → [Natural] n m
+symNatural suc = suc
+symNatural zero = zero
+symNatural (ne x x₁) = ne x₁ x
+
+transNatural : ∀ {n n' n''}
+             → [Natural] n  n'
+             → [Natural] n' n''
+             → [Natural] n  n''
+transNatural suc suc = suc
+transNatural suc (ne () n')
+transNatural zero n' = n'
+transNatural (ne neN ()) suc
+transNatural (ne neN neN') zero = ne neN neN'
+transNatural (ne neN neN') (ne neN'₁ neN'') = ne neN neN''
+
+split : ∀ {t u} → [Natural] t u → Natural t × Natural u
+split suc = suc , suc
 split zero = zero , zero
-split (ne x x₁ x₂) = ne x , ne x₁
+split (ne x x₁) = ne x , ne x₁
 
 -- Weak head normal forms
 
@@ -187,13 +208,12 @@ wkNatural ρ suc = suc
 wkNatural ρ zero = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
-wk[Natural] : ∀ {t u R R'} ρ
-            → (∀ {t' u'} → R t' u' → R' (wk ρ t') (wk ρ u'))
-            → [Natural] R t u
-            → [Natural] R' (wk ρ t) (wk ρ u)
-wk[Natural] ρ wkR (suc [n]) = suc (wkR [n])
-wk[Natural] ρ wkR zero = zero
-wk[Natural] ρ wkR (ne x x₁ x₂) = ne (wkNeutral ρ x) (wkNeutral ρ x₁) (wkR x₂)
+wk[Natural] : ∀ {t u} ρ
+            → [Natural] t u
+            → [Natural] (wk ρ t) (wk ρ u)
+wk[Natural] ρ (suc {t} {u}) = suc {wk ρ t} {wk ρ u}
+wk[Natural] ρ zero = zero
+wk[Natural] ρ (ne x x₁) = ne (wkNeutral ρ x) (wkNeutral ρ x₁)
 
 -- Alternative substitution, based on implementation from
 -- Benjamin C. Pierce's Types and Programming Languages.
