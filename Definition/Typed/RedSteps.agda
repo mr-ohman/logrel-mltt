@@ -27,12 +27,3 @@ app-subst* : ∀ {Γ A B t t' a} → Γ ⊢ t ⇒* t' ∷ Π A ▹ B → Γ ⊢ 
            → Γ ⊢ t ∘ a ⇒* t' ∘ a ∷ B [ a ]
 app-subst* (id x) a₁ = id (x ∘ a₁)
 app-subst* (x ⇨ t⇒t') a₁ = app-subst x a₁ ⇨ app-subst* t⇒t' a₁
-
-natrec-subst* : ∀ {Γ C c g n n'} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
-              → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
-              → Γ ⊢ n ⇒* n' ∷ ℕ
-              → (∀ {t t'} → Γ ⊢ t ≡ t' ∷ ℕ → Γ ⊢ C [ t ] ≡ C [ t' ])
-              → Γ ⊢ natrec C c g n ⇒* natrec C c g n' ∷ C [ n ]
-natrec-subst* C c g (id x) prop = id (natrec C c g x)
-natrec-subst* C c g (x ⇨ n⇒n') prop =
-  natrec-subst C c g x ⇨ conv* (natrec-subst* C c g n⇒n' prop) (prop (sym (subsetTerm x)))
