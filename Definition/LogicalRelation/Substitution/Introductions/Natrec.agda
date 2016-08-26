@@ -163,7 +163,16 @@ natrecₛ : ∀ {F z s n Γ} ([Γ] : ⊩ₛ Γ)
         → Γ ⊩ₛ⟨ ¹ ⟩t s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ] / [F₊]
         → ([n] : Γ ⊩ₛ⟨ ¹ ⟩t n ∷ ℕ / [Γ] / [ℕ])
         → Γ ⊩ₛ⟨ ¹ ⟩t natrec F z s n ∷ F [ n ] / [Γ] / [Fₙ]
-natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] {σ = σ} ⊢Δ [σ] =
-  irrelevanceTerm' {!!} (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (singleSubstLemma (subst σ n) σ F)) (proj₁ ([F] ⊢Δ ([σ] , proj₁ ([n] ⊢Δ [σ]))))) (proj₁ ([Fₙ] ⊢Δ [σ]))
-                   (natrecTerm' {F} {z} {s} {subst σ n} {σ = σ} [Γ] (S.irrelevance {A = F} (_∙_ {A = {!!}} [Γ] [ℕ]) (_∙_ {l = ¹} [Γ] (ℕₛ [Γ])) [F]) [F₀] [F₊] [z] [s] ⊢Δ [σ] (irrelevanceTerm {l' = ¹} (proj₁ ([ℕ] ⊢Δ [σ])) (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([n] ⊢Δ [σ])))) ,
+natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n] {Δ = Δ} {σ = σ}  ⊢Δ [σ] =
+  let
+    [F]' = (S.irrelevance {A = F} (_∙_ {A = ℕ} [Γ] [ℕ]) (_∙_ {l = ¹} [Γ] (ℕₛ [Γ])) [F])
+    [σn]' = (irrelevanceTerm {l' = ¹} (proj₁ ([ℕ] ⊢Δ [σ])) (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([n] ⊢Δ [σ])))
+    n' = subst σ n
+  in irrelevanceTerm' {!!} (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (singleSubstLemma n' σ F)) (proj₁ ([F]' ⊢Δ ([σ] , [σn]'))))
+                        (proj₁ ([Fₙ] ⊢Δ [σ]))
+                   (natrecTerm' {F} {z} {s} {n'} {σ = σ} [Γ]
+                                [F]'
+                                [F₀] [F₊] [z] [s] ⊢Δ [σ]
+                                [σn]')
+ ,
   (λ [σ'] [σ≡σ'] → {!!})
