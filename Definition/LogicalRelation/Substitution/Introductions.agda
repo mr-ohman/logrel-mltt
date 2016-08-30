@@ -124,6 +124,30 @@ substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
                     (consSubstS {t = subst σ' t} {A = F} [Γ] ⊢Δ [σ'] [F] (proj₁ ([t] ⊢Δ [σ']))) (([σ≡σ'] , (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ'])))))
 
+substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
+             ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+             ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+             ([f] : Γ ∙ F ⊩ₛ⟨ l ⟩t f ∷ G / [Γ] ∙ [F] / [G])
+             ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+           → Γ ⊩ₛ⟨ l ⟩t f [ t ] ∷ G [ t ] / [Γ] / substS {F} {G} {t} [Γ] [F] [G] [t]
+substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
+  let prfG = PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G))
+      prff = PE.sym (PE.trans (substCompEq f) (substEq substConcatSingleton' f))
+      G[t] = proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
+                   (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
+      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) prfG G[t]
+      f[t] = proj₁ ([f] {σ = consSubst σ (subst σ t)} ⊢Δ
+                   (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
+      f[t]' = irrelevanceTerm'' prfG prff G[t] G[t]' f[t]
+  in  f[t]'
+  ,   (λ {σ'} [σ'] [σ≡σ'] →
+         irrelevanceEqTerm'' prff (PE.sym (PE.trans (substCompEq f) (substEq substConcatSingleton' f))) prfG G[t] G[t]'
+                             (proj₂ ([f] {σ = consSubst σ (subst σ t)} ⊢Δ
+                                         ([σ] , proj₁ ([t] ⊢Δ [σ])))
+                                         {σ' = consSubst σ' (subst σ' t)}
+                                         (consSubstS {t = subst σ' t} {A = F} [Γ] ⊢Δ [σ'] [F] (proj₁ ([t] ⊢Δ [σ'])))
+                                         ([σ≡σ'] , (proj₂ ([t] ⊢Δ [σ]) [σ'] [σ≡σ']))))
+
 substSΠ₁ : ∀ {F G t Γ l l'}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([F] : Γ ⊩⟨ l' ⟩ F)
