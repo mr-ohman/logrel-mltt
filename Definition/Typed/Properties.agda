@@ -190,8 +190,20 @@ U≢ne () PE.refl
 Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
 Π≢ne () PE.refl
 
+zero≢suc : ∀ {n} → Term.zero PE.≢ suc n
+zero≢suc ()
+
+zero≢ne : ∀ {k} → Neutral k → Term.zero PE.≢ k
+zero≢ne () PE.refl
+
+suc≢ne : ∀ {n k} → Neutral k → Term.suc n PE.≢ k
+suc≢ne () PE.refl
+
 Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
 Π-PE-injectivity PE.refl = PE.refl , PE.refl
+
+suc-PE-injectivity : ∀ {n m} → Term.suc n PE.≡ suc m → n PE.≡ m
+suc-PE-injectivity PE.refl = PE.refl
 
 idRed:*: : ∀ {Γ A} → Γ ⊢ A → Γ ⊢ A :⇒*: A
 idRed:*: A = [ A , A , id A ]

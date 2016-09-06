@@ -306,3 +306,6 @@ idWkLiftSubstLemma : ∀ σ G
       → wk (lift (step id)) (subst (liftSubst σ) G) [ var 0 ]
       ≡ subst (liftSubst σ) G
 idWkLiftSubstLemma σ G = trans (G-substWkLemma (var zero) σ G) (substEq idWkLiftSubst G)
+
+wk2subst : ∀ ρ A → wk ρ A ≡ subst (wkSubst ρ idSubst) A
+wk2subst ρ A = trans (PE.cong (wk ρ) (PE.sym (substIdEq A))) (wk-subst A)
