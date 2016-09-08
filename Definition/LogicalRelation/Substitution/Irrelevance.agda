@@ -11,6 +11,8 @@ open import Tools.Context
 open import Data.Product
 open import Data.Unit
 
+import Relation.Binary.PropositionalEquality as PE
+
 
 irrelevanceSubst : ∀ {σ Γ Δ}
                    ([Γ] [Γ]' : ⊩ₛ Γ)
@@ -24,6 +26,15 @@ irrelevanceSubst ([Γ] ∙ [A]) ([Γ]' ∙ [A]') ⊢Δ ⊢Δ' ([tailσ] , [head�
   ,   LR.irrelevanceTerm (proj₁ ([A] ⊢Δ [tailσ]))
                             (proj₁ ([A]' ⊢Δ' [tailσ]'))
                             [headσ]
+
+irrelevanceSubst' : ∀ {σ Γ Δ Δ'}
+                    (eq : Δ PE.≡ Δ')
+                    ([Γ] [Γ]' : ⊩ₛ Γ)
+                    (⊢Δ  : ⊢ Δ)
+                    (⊢Δ' : ⊢ Δ')
+                  → Δ  ⊩ₛ σ ∷ Γ / [Γ]  / ⊢Δ
+                  → Δ' ⊩ₛ σ ∷ Γ / [Γ]' / ⊢Δ'
+irrelevanceSubst' PE.refl [Γ] [Γ]' ⊢Δ ⊢Δ' [σ] = irrelevanceSubst [Γ] [Γ]' ⊢Δ ⊢Δ' [σ]
 
 irrelevanceSubstEq : ∀ {σ σ' Γ Δ}
                      ([Γ] [Γ]' : ⊩ₛ Γ)

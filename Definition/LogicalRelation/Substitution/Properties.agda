@@ -6,6 +6,7 @@ open import Definition.Typed
 import Definition.Typed.Weakening as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Substitution
+import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 import Definition.LogicalRelation.Weakening as LR
@@ -16,60 +17,6 @@ open import Data.Nat renaming (ℕ to Nat)
 open import Data.Unit
 open import Data.Product
 import Relation.Binary.PropositionalEquality as PE
-
-
--- todoPrf : ∀ σ F → wk1 (subst σ F) PE.≡ subst (tail (liftSubst σ)) F
--- todoPrf σ F = PE.trans (wk-subst F) PE.refl
-
--- todoPrf₁ : ∀ σ → wk1Subst σ PE.≡ tail (liftSubst σ)
--- todoPrf₁ σ = PE.refl
-
--- todoPrfL₃ : ∀ σ F → subst (liftSubst (tail (wk1Subst σ))) F PE.≡
---       subst (liftSubst (wk1Subst (tail σ))) F
--- todoPrfL₃ σ U = {!!}
--- todoPrfL₃ σ (Π F ▹ F₁) = {!!}
--- todoPrfL₃ σ ℕ = {!!}
--- todoPrfL₃ σ (var x) = PE.refl
--- todoPrfL₃ σ (lam F) = {!!}
--- todoPrfL₃ σ (F ∘ F₁) = {!!}
--- todoPrfL₃ σ zero = {!!}
--- todoPrfL₃ σ (suc F) = {!!}
--- todoPrfL₃ σ (natrec F F₁ F₂ F₃) = {!!}
-
--- todoPrf₃ : ∀ σ F → subst (tail (wk1Subst σ)) F PE.≡ subst (wk1Subst (tail σ)) F
--- todoPrf₃ σ U = {!!}
--- todoPrf₃ σ (Π F ▹ F₁) = {!!}
--- todoPrf₃ σ ℕ = {!!}
--- todoPrf₃ σ (var x) = PE.refl
--- todoPrf₃ σ (lam F) = PE.cong lam {!!}
--- todoPrf₃ σ (F ∘ F₁) = {!!}
--- todoPrf₃ σ zero = {!!}
--- todoPrf₃ σ (suc F) = {!!}
--- todoPrf₃ σ (natrec F F₁ F₂ F₃) = {!!}
-
--- todoPrf₂ : ∀ σ F → wk1 (subst (tail σ) F) PE.≡ subst (tail (wk1Subst σ)) F
--- todoPrf₂ σ F = PE.trans (wk-subst F) (todoPrf₃ σ F)
-
-
--- substSubst : ∀ {l σ σ' Γ Δ}
---             ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ)
---             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
---            → Δ ⊩ₛ⟨ l ⟩ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
---            → Δ ⊩ₛ⟨ l ⟩ σ' ∷ Γ / [Γ] / ⊢Δ
--- substSubst ε ⊢Δ [σ] [σ≡σ'] = tt
--- substSubst ([Γ] ∙ x) ⊢Δ [σ] [σ≡σ'] =
---   substSubst [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ≡σ']) , {!!}
-
-wk1SubstΓ : Con Term → Subst → Subst
-wk1SubstΓ Γ σ x = wk (step (T.toWk (T.⊆-refl Γ))) (σ x)
-
--- wkSubstEq : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ⟨ l ⟩ Γ) (⊢Δ : ⊢ Δ) (⊢F : Δ ⊢ F)
---             ([σ] : Δ ⊩ₛ⟨ l ⟩ σ ∷ Γ / [Γ] / ⊢Δ)
---             ([wk1σ] : Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
---           → Δ ∙ F ⊩ₛ⟨ l ⟩ wk1SubstΓ Δ σ ≡ wk1Subst σ ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F / [wk1σ]
--- wkSubstEq ε ⊢Δ ⊢F [σ] [wk1σ] = tt
--- wkSubstEq ([Γ] ∙ x) ⊢Δ ⊢F [σ] [wk1σ] =
---   wkSubstEq [Γ] ⊢Δ ⊢F (proj₁ [σ]) (proj₁ [wk1σ]) , {!!}
 
 
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
@@ -121,9 +68,7 @@ wk1SubstS : ∀ {F σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
           → (Δ ∙ F) ⊩ₛ wk1Subst σ ∷ Γ / [Γ]
                             / (⊢Δ ∙ ⊢F)
 wk1SubstS {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] =
-  PE.subst (λ x → Δ ∙ F ⊩ₛ x ∷ Γ / [Γ] / ⊢Δ ∙ ⊢F)
-           PE.refl
-           (wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step (T.⊆-refl Δ)) [σ])
+  wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ]
 
 wk1SubstSEq : ∀ {F σ σ' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
               (⊢F : Δ ⊢ F)
@@ -132,15 +77,7 @@ wk1SubstSEq : ∀ {F σ σ' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
             → (Δ ∙ F) ⊩ₛ wk1Subst σ ≡ wk1Subst σ' ∷ Γ / [Γ]
                             / (⊢Δ ∙ ⊢F) / wk1SubstS [Γ] ⊢Δ ⊢F [σ]
 wk1SubstSEq {l} {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] [σ≡σ'] =
-  wkSubstSEq [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.base) [σ] [σ≡σ']
-
-wk1SubstSΓ : ∀ {F σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
-             (⊢F : Δ ⊢ F)
-             ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-           → (Δ ∙ F) ⊩ₛ wk1SubstΓ Δ σ ∷ Γ / [Γ]
-                             / (⊢Δ ∙ ⊢F)
-wk1SubstSΓ {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] =
-  wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step (T.⊆-refl Δ)) [σ]
+  wkSubstSEq [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ] [σ≡σ']
 
 liftSubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -168,27 +105,6 @@ liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡�
   in  [tailσ≡σ'] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
                          (var0 , var0 , refl var0)
 
-irrelevanceTermΔ : ∀ {σ Γ Δ}
-                          ([Γ] : ⊩ₛ Γ)
-                          (⊢Δ ⊢Δ' : ⊢ Δ)
-                        → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
-                        → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ'
-irrelevanceTermΔ ε ⊢Δ ⊢Δ' [σ] = tt
-irrelevanceTermΔ ([Γ] ∙ x) ⊢Δ ⊢Δ' [σ] =
-  let [tailσ] = irrelevanceTermΔ [Γ] ⊢Δ ⊢Δ' (proj₁ [σ])
-  in  [tailσ] , irrelevanceTerm (proj₁ (x ⊢Δ (proj₁ [σ])))
-                                      (proj₁ (x ⊢Δ' [tailσ]))
-                                      (proj₂ [σ])
-
-irrelevanceTermΔ' : ∀ {σ Γ Δ Δ'}
-                          ([Γ] : ⊩ₛ Γ)
-                          (eq : Δ PE.≡ Δ')
-                          (⊢Δ  : ⊢ Δ)
-                          (⊢Δ' : ⊢ Δ')
-                        → Δ  ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
-                        → Δ' ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ'
-irrelevanceTermΔ' [Γ] PE.refl ⊢Δ ⊢Δ' [σ] = irrelevanceTermΔ [Γ] ⊢Δ ⊢Δ' [σ]
-
 mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ
   soundContext ε = ε
@@ -200,7 +116,7 @@ mutual
     let ⊢Γ = soundContext [Γ]
         ⊢Γ∙A = soundContext ([Γ] ∙ [A])
         ⊢Γ∙A' = ⊢Γ ∙ soundness (proj₁ ([A] ⊢Γ (idSubstS [Γ])))
-        [tailσ] = irrelevanceTermΔ' [Γ] (PE.cong (_∙_ Γ) (idSubst-lemma₀ A)) ⊢Γ∙A' ⊢Γ∙A (wk1SubstS {F = subst idSubst A} [Γ] ⊢Γ (soundness (proj₁ ([A] (soundContext [Γ]) (idSubstS [Γ])))) (idSubstS [Γ]))
+        [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (idSubst-lemma₀ A)) [Γ] [Γ] ⊢Γ∙A' ⊢Γ∙A (wk1SubstS {F = subst idSubst A} [Γ] ⊢Γ (soundness (proj₁ ([A] (soundContext [Γ]) (idSubstS [Γ])))) (idSubstS [Γ]))
     in  [tailσ] , neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
                           (var zero)
                           (var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))

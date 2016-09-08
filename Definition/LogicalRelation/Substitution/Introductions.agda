@@ -160,8 +160,8 @@ substSΠ₁ {F} {G} {t} (Π D ⊢F ⊢G [F] [G] G-ext) [F]₁ [t] =
       Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf (soundness [F]₁)
-      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t]
-  in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) Geq ([G] T.base ⊢Γ [t]')
+      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
+  in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) Geq ([G] T.id ⊢Γ [t]')
 substSΠ₁ (emb {l< = 0<1} x) [F] [t] = emb {l< = 0<1} (substSΠ₁ x [F] [t])
 
 substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
@@ -188,13 +188,13 @@ substSΠ₂ (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F≡F
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       Geq' = PE.cong (λ x → x [ _ ]) (PE.trans G'≡G'' (PE.sym (wk-id _ 1)))
       ⊢Γ = wf (soundness [F]₁)
-      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t]
-      [t']' = convTerm₂' F'eq ([F] T.base ⊢Γ) [F'] ([F≡F'] T.base ⊢Γ) [t']
-      [t≡t']' = irrelevanceEqTerm' Feq [F]₁ ([F] T.base ⊢Γ) [t≡t']
-      [Gt≡Gt'] = G-ext T.base ⊢Γ [t]' [t']' [t≡t']'
-      [Gt'≡G't'] = [G≡G'] T.base ⊢Γ [t']'
-  in  irrelevanceEq' Geq ([G] T.base ⊢Γ [t]') [G[t]]
-        (transEq' PE.refl Geq' ([G] T.base ⊢Γ [t]') ([G] T.base ⊢Γ [t']')
+      [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
+      [t']' = convTerm₂' F'eq ([F] T.id ⊢Γ) [F'] ([F≡F'] T.id ⊢Γ) [t']
+      [t≡t']' = irrelevanceEqTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t≡t']
+      [Gt≡Gt'] = G-ext T.id ⊢Γ [t]' [t']' [t≡t']'
+      [Gt'≡G't'] = [G≡G'] T.id ⊢Γ [t']'
+  in  irrelevanceEq' Geq ([G] T.id ⊢Γ [t]') [G[t]]
+        (transEq' PE.refl Geq' ([G] T.id ⊢Γ [t]') ([G] T.id ⊢Γ [t']')
                   [G'[t']] [Gt≡Gt'] [Gt'≡G't'])
 substSΠ₂ (emb {l< = 0<1} x) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
   substSΠ₂ x [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']]
@@ -238,11 +238,11 @@ substSΠEq {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] [t≡u] {Δ = Δ} {σ = σ} �
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σt] = proj₁ ([t] ⊢Δ [σ])
       [σu] = proj₁ ([u] ⊢Δ [σ])
-      [σt]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.base ⊢Δ) [σt]
-      [σu]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.base ⊢Δ) [σu]
+      [σt]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σt]
+      [σu]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σu]
       [σt≡σu] = [t≡u] ⊢Δ [σ]
-      [G[t]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.base ⊢Δ [σt]')
-      [G[u]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.base ⊢Δ [σu]')
+      [G[t]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σt]')
+      [G[u]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σu]')
   in  irrelevanceEq'' (PE.sym (singleSubstLift G t)) (PE.sym (singleSubstLift G u)) [G[t]] (proj₁ (substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ])) (substSΠ₂ [σΠFG] (reflEq [σΠFG]) [σF] [σF] [σt] [σu] [σt≡σu] [G[t]] [G[u]])
 
 Πₛ : ∀ {F G Γ l}
@@ -458,10 +458,10 @@ appTerm [F] [G[u]] (ne D neK) [t] [u] = ⊥-elim (Π≢ne neK (whnfRed*' (red D)
 appTerm [F] [G[u]] (Π D ⊢F ⊢G [F'] [G'] G-ext) (_ , _ , [t]) [u] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       ⊢Γ = wf ⊢F
-      [u]' = irrelevanceTerm' (PE.trans F≡F' (PE.sym (wk-id _ 0))) [F] ([F'] T.base ⊢Γ) [u]
+      [u]' = irrelevanceTerm' (PE.trans F≡F' (PE.sym (wk-id _ 0))) [F] ([F'] T.id ⊢Γ) [u]
   in  irrelevanceTerm'' (PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G')))
                         (PE.cong (λ x → x ∘ _) (wk-id _ 0))
-                        ([G'] T.base ⊢Γ [u]') [G[u]] ([t] T.base ⊢Γ [u]')
+                        ([G'] T.id ⊢Γ [u]') [G[u]] ([t] T.id ⊢Γ [u]')
 appTerm [F] [G[u]] (emb {l< = 0<1} x) [t] [u] = appTerm [F] [G[u]] x [t] [u]
 
 app-congTerm : ∀ {F G t t' u u' Γ l l'}
@@ -482,13 +482,13 @@ app-congTerm [F] [G[u]] (Π D ⊢F ⊢G [F]₁ [G] G-ext) (proj₁ , proj₂ , (
       t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a 0)
       wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf ⊢F
-      [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u]
-      [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u']
-      [u≡u']' = irrelevanceEqTerm' F≡wkidF' [F] ([F]₁ T.base ⊢Γ) [u≡u']
+      [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u]
+      [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u']
+      [u≡u']' = irrelevanceEqTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u≡u']
       [tu≡t'u] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
-                                     ([G] T.base ⊢Γ [u]') [G[u]] (proj₆ T.base ⊢Γ [u]')
+                                     ([G] T.id ⊢Γ [u]') [G[u]] (proj₆ T.id ⊢Γ [u]')
       [t'u≡t'u'] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
-                                       ([G] T.base ⊢Γ [u]') [G[u]] (proj₄ T.base ⊢Γ [u]' [u']' [u≡u']')
+                                       ([G] T.id ⊢Γ [u]') [G[u]] (proj₄ T.id ⊢Γ [u]' [u']' [u≡u']')
   in  transEqTerm [G[u]] [tu≡t'u] [t'u≡t'u']
 app-congTerm [F] [G[u]] (emb {l< = 0<1} x) [t≡t'] [u] [u'] [u≡u'] = app-congTerm [F] [G[u]] x [t≡t'] [u] [u'] [u≡u']
 
@@ -613,7 +613,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
              [σΠFG≡σ'ΠFG] = proj₂ ([ΠFG] ⊢Δ [σ]) [σ'] [σ≡σ']
              ⊢t = soundnessTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
              ⊢t' = soundnessTerm [G]₁' (proj₁ ([t] (⊢Δ ∙ ⊢F') [liftσ']))
-             neuVar = neuTerm ([F]' (T.step T.base) (⊢Δ ∙ ⊢F)) (var 0) (var (⊢Δ ∙ ⊢F) here)
+             neuVar = neuTerm ([F]' (T.step T.id) (⊢Δ ∙ ⊢F)) (var 0) (var (⊢Δ ∙ ⊢F) here)
              σlamt∘a≡σ'lamt∘a : ∀ {Δ₁ a} → (ρ : Δ T.⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁) → ([a] : Δ₁ ⊩⟨ ¹ ⟩ a ∷ T.wkₜ ρ (subst σ F) / [F]' ρ ⊢Δ₁)
                  → Δ₁ ⊩⟨ ¹ ⟩ T.wkₜ ρ (subst σ (lam t)) ∘ a ≡ T.wkₜ ρ (subst σ' (lam t)) ∘ a ∷ T.wkLiftₜ ρ (subst (liftSubst σ) G) [ a ] / [G]' ρ ⊢Δ₁ [a]
              σlamt∘a≡σ'lamt∘a {Δ₁} {a} ρ ⊢Δ₁ [a] =
@@ -672,7 +672,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                 in  transEqTerm G[a] [σlamt∘a≡σt[a]] (transEqTerm G[a] [σt[a]≡σ't[a]] [σ't[a]≡σ'lamt∘a])
          in  fun-ext ⊢F (lam ⊢F ⊢t) (conv (lam ⊢F' ⊢t') (sym (soundnessEq (proj₁ ([ΠFG] ⊢Δ [σ])) [σΠFG≡σ'ΠFG])))
                      (soundnessTermEq (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
-                                      (irrelevanceEqTerm' (idWkLiftSubstLemma σ G) ([G]' (T.step T.base) (⊢Δ ∙ ⊢F) neuVar) (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])) (σlamt∘a≡σ'lamt∘a (T.step T.base) (⊢Δ ∙ ⊢F) neuVar)))
+                                      (irrelevanceEqTerm' (idWkLiftSubstLemma σ G) ([G]' (T.step T.id) (⊢Δ ∙ ⊢F) neuVar) (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])) (σlamt∘a≡σ'lamt∘a (T.step T.id) (⊢Δ ∙ ⊢F) neuVar)))
          ,   lamt ⊢Δ [σ]
          ,   convTerm₂ (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([ΠFG] ⊢Δ [σ'])) [σΠFG≡σ'ΠFG] (lamt ⊢Δ [σ'])
          ,   σlamt∘a≡σ'lamt∘a)

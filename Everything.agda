@@ -18,9 +18,10 @@ import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Substitution
 import Definition.LogicalRelation.Substitution.Properties
 import Definition.LogicalRelation.Substitution.Irrelevance
+import Definition.LogicalRelation.Substitution.Introductions
+import Definition.LogicalRelation.Substitution.Introductions.Natrec
 import Definition.LogicalRelation.Weakening
 import Definition.LogicalRelation.Properties
--- import Definition.LogicalRelation.PropertiesWIP -- unsolved metas
 
 -- import Lemma.Fundamental  -- unsolved metas
 -- import Lemma.Completeness -- errors
