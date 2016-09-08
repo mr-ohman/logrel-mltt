@@ -309,3 +309,13 @@ idWkLiftSubstLemma σ G = trans (G-substWkLemma (var zero) σ G) (substEq idWkLi
 
 wk2subst : ∀ ρ A → wk ρ A ≡ subst (wkSubst ρ idSubst) A
 wk2subst ρ A = trans (PE.cong (wk ρ) (PE.sym (substIdEq A))) (wk-subst A)
+
+lemma : ∀ σ t x → (substComp (liftSubst σ)
+       (consSubst (wk1Subst idSubst) (subst (liftSubst σ) t))) x
+       ≡ (substComp (consSubst (wk1Subst idSubst) t) (liftSubst σ)) x
+lemma σ t zero = refl
+lemma σ t (suc x) = trans (subst-wk (σ x)) (sym (wk2subst (step id) (σ x)))
+
+singleSubstLift↑ : ∀ σ G t → subst (liftSubst σ) (G [ t ]↑) ≡ subst (liftSubst σ) G [ subst (liftSubst σ) t ]↑
+singleSubstLift↑ σ G t = trans (substCompEq G)
+                               (sym (trans (substCompEq G) (substEq (lemma σ t) G)))
