@@ -55,3 +55,19 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                                ((proj₁ [σ]) , (proj₁ ([t] ⊢Δ (proj₁ [σ])))))
       G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma2 {σ} {t} {G}) G[t]
   in  G[t]' , {!G [ t ]↑!}
+
+lemma3 : ∀ {G t σ} →
+         subst (consSubst (λ n → σ (suc n)) (subst σ t)) G PE.≡
+         subst σ (subst (consSubst (λ x → var (suc x)) t) G)
+lemma3 {G} {t} {σ} = PE.trans (substEq (\ { zero → PE.refl ; (suc x) → PE.refl }) G)  (PE.sym (substCompEq G))
+
+subst↑S' : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
+          ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
+          ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
+          ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ [Γ] [F] [F])
+        → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
+subst↑S' {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
+  let G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
+                               ((proj₁ [σ]) , (let r = (proj₁ ([t] ⊢Δ  [σ] )) in {!!} )))
+      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G} {t} {σ}) G[t]
+  in  G[t]' , {!G [ t ]↑!}
