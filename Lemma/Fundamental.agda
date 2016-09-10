@@ -13,6 +13,7 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions
 open import Definition.LogicalRelation.Substitution.Introductions.Natrec
+open import Definition.LogicalRelation.Substitution.Introductions.Temp
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Context
@@ -289,8 +290,11 @@ mutual
           [F']' = S.irrelevance {A = F'} [Γ] ([Γ]₃ ∙ [ℕ]) [F']
           [F'₀]' = substS {ℕ} {F'} {zero} [Γ]₃ [ℕ] [F']' [0]
           [F'₊]' = Πₛ {ℕ} {F' ▹▹ F' [ suc (var zero) ]↑} [Γ]₃ [ℕ]
-                      (▹▹ₛ {F'} {F' [ suc (var zero) ]↑} ([Γ]₃ ∙ [ℕ]) [F']'
-                          {!!})
+                      (▹▹ₛ {F'} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ]₃ [ℕ]) [F']'
+                          (subst↑S {ℕ} {F'} {suc (var zero)} [Γ]₃ [ℕ] [F']'
+                            (λ {Δ} {σ} → sucₛ {n = var zero} {l = ¹} (_∙_ {A = ℕ} [Γ]₃ [ℕ])
+                              (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ]₃ [ℕ] [ℕ] {Δ} {σ})
+                              (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
           [F'ₙ']' = substS {ℕ} {F'} {n'} [Γ]₃ [ℕ] [F']' [n']
           [F₀≡F'₀]' = {!!}
           [F₊≡F'₊]' = {!!}

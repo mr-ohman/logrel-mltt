@@ -27,47 +27,32 @@ import Relation.Binary.PropositionalEquality as PE
 open import Definition.LogicalRelation.Substitution.Introductions
 
 
-subst↑ : ∀ {F G t Γ Δ σ} ([Γ] : ⊩ₛ Γ)
-         ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-         ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-         (⊢Δ : ⊢ Δ)
-         ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-         ([t] : Δ ⊩⟨ ¹ ⟩ t ∷ subst σ F / proj₁ ([F] ⊢Δ [σ]))
-       → Δ ⊩⟨ ¹ ⟩ subst (liftSubst σ) G [ t ]↑
-subst↑ {F} {G} {t} {σ = σ} [Γ] [F] [G] ⊢Δ [σ] [t] =
-  let G[t] = proj₁ ([G] {σ = consSubst σ t} ⊢Δ
-                   ([σ] , [t]))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) {!!})) G[t]
-  in  G[t]'
-
-
 lemma2 : ∀ {σ t G} → subst (consSubst (\ n → σ (suc n)) (subst (tail σ) t)) G
                PE.≡ subst σ (subst (consSubst (λ x → var (suc x)) (wk1 t)) G)
 lemma2 {t = t} {G = G} = PE.trans (substEq (\ { zero → PE.sym (subst-wk t) ; (suc x) → PE.refl }) G)  (PE.sym (substCompEq G))
-
-subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
-          ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-          ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-          ([t] : Γ ⊩ₛ⟨ ¹ ⟩t t ∷ F / [Γ] / [F])
-        → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ wk1 t ]↑ / [Γ] ∙ [F]
-subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst (tail σ) t)} ⊢Δ
-                               ((proj₁ [σ]) , (proj₁ ([t] ⊢Δ (proj₁ [σ])))))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma2 {σ} {t} {G}) G[t]
-  in  G[t]' , {!G [ t ]↑!}
 
 lemma3 : ∀ {G t σ} →
          subst (consSubst (λ n → σ (suc n)) (subst σ t)) G PE.≡
          subst σ (subst (consSubst (λ x → var (suc x)) t) G)
 lemma3 {G} {t} {σ} = PE.trans (substEq (\ { zero → PE.refl ; (suc x) → PE.refl }) G)  (PE.sym (substCompEq G))
 
-subst↑S' : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
+subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-          ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ [Γ] [F] [F])
+          ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
         → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
-subst↑S' {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
-                               ((proj₁ [σ]) , (let r = (proj₁ ([t] ⊢Δ  [σ] )) in {!!} )))
+subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
+  let [wk1F] = wk1ₛ {F} {F} [Γ] [F] [F]
+      [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
+      [σwk1F]' = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
+      [t]' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t] ⊢Δ [σ]))
+      G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
+                               (proj₁ [σ] , [t]'))
       G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G} {t} {σ}) G[t]
-  in  G[t]' , {!G [ t ]↑!}
+  in  G[t]'
+  ,   (λ {σ'} [σ'] [σ≡σ'] →
+         let [σ't] = irrelevanceTerm' (subst-wk F) (proj₁ ([wk1F] {σ = σ'} ⊢Δ [σ'])) (proj₁ ([F] {σ = tail σ'} ⊢Δ (proj₁ [σ']))) (proj₁ ([t] ⊢Δ [σ']))
+             [σt≡σ't] = irrelevanceEqTerm' (subst-wk F) [σwk1F] [σwk1F]'
+                                           (proj₂ ([t] ⊢Δ [σ]) {σ' = σ'} [σ'] [σ≡σ'])
+             [σG[t]≡σ'G[t]] = proj₂ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ (proj₁ [σ] , [t]')) {σ' = consSubst (tail σ') (subst σ' t)} (proj₁ [σ'] , [σ't]) (proj₁ [σ≡σ'] , [σt≡σ't])
+         in irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G} {t} {σ'}) G[t] G[t]' [σG[t]≡σ'G[t]])
