@@ -262,9 +262,19 @@ mutual
   fundamentalTermEq (fun-ext {f} {g} {F} {G} ⊢F ⊢t ⊢t' t≡t') with
     fundamental ⊢F | fundamentalTerm ⊢t |
     fundamentalTerm ⊢t' | fundamentalTermEq t≡t'
-  ... | [Γ] , [F] | [Γ]₁ , [ΠFG] , [t] | [Γ]₂ , [ΠFG]₁ , [t'] | [Γ]₃ , modelsTermEq [G] [t0] [t'0] [t≡t'] =
-    let [t']' = S.irrelevanceTerm {A = Π F ▹ G} {t = g} [Γ]₂ [Γ]₁ [ΠFG]₁ [ΠFG] [t']
-    in  [Γ]₁ , modelsTermEq [ΠFG] [t] [t']' {!!}
+  ... | [Γ] , [F] | [Γ]₁ , [ΠFG] , [t] | [Γ]₂ , [ΠFG]₁ , [t'] | [Γ]₃ , modelsTermEq [G] [t0] [t'0] [t0≡t'0] =
+    let [F]' = S.irrelevance {A = F} [Γ] [Γ]₁ [F]
+        [G]' = S.irrelevance {A = G} [Γ]₃ ([Γ]₁ ∙ [F]') [G]
+        [t']' = S.irrelevanceTerm {A = Π F ▹ G} {t = g} [Γ]₂ [Γ]₁ [ΠFG]₁ [ΠFG] [t']
+        [ΠFG]'' = Πₛ {F} {G} [Γ]₁ [F]' [G]'
+        [t]'' = S.irrelevanceTerm {A = Π F ▹ G} {t = f} [Γ]₁ [Γ]₁ [ΠFG] [ΠFG]'' [t]
+        [t']'' = S.irrelevanceTerm {A = Π F ▹ G} {t = g} [Γ]₂ [Γ]₁ [ΠFG]₁ [ΠFG]'' [t']
+        [t0≡t'0]' = S.irrelevanceEqTerm {A = G} {t = wk1 f ∘ var zero} {u = wk1 g ∘ var zero}
+                                        [Γ]₃ ([Γ]₁ ∙ [F]') [G] [G]' [t0≡t'0]
+        [t≡t'] = fun-extₛ {f} {g} {F} {G} [Γ]₁ [F]' [G]' [t]'' [t']'' [t0≡t'0]'
+        [t≡t']' = S.irrelevanceEqTerm {A = Π F ▹ G} {t = f} {u = g}
+                                      [Γ]₁ [Γ]₁ [ΠFG]'' [ΠFG] [t≡t']
+    in  [Γ]₁ , modelsTermEq [ΠFG] [t] [t']' [t≡t']'
   fundamentalTermEq (suc-cong x) with fundamentalTermEq x
   fundamentalTermEq (suc-cong {t} {u} x) | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
     [Γ] , modelsTermEq [A] (sucₛ {n = t} [Γ] [A] [t])

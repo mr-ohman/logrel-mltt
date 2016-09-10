@@ -56,3 +56,41 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                                            (proj₂ ([t] ⊢Δ [σ]) {σ' = σ'} [σ'] [σ≡σ'])
              [σG[t]≡σ'G[t]] = proj₂ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ (proj₁ [σ] , [t]')) {σ' = consSubst (tail σ') (subst σ' t)} (proj₁ [σ'] , [σ't]) (proj₁ [σ≡σ'] , [σt≡σ't])
          in irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G} {t} {σ'}) G[t] G[t]' [σG[t]≡σ'G[t]])
+
+lemma4 : ∀ ρ σ a x → substComp (liftSubst σ)
+      (purge (lift ρ) (consSubst idSubst a)) x
+      PE.≡ consSubst (wkSubst ρ σ) a x
+lemma4 ρ σ a zero = PE.refl
+lemma4 ρ σ a (suc x) = PE.trans (subst-wk (σ x)) (PE.sym (wk2subst ρ (σ x)))
+
+fun-extₛ : ∀ {f g F G Γ l}
+           ([Γ] : ⊩ₛ Γ)
+           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+           ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+         → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
+           Γ ⊩ₛ⟨ l ⟩t f ∷ Π F ▹ G / [Γ] / [ΠFG]
+         → Γ ⊩ₛ⟨ l ⟩t g ∷ Π F ▹ G / [Γ] / [ΠFG]
+         → Γ ∙ F ⊩ₛ⟨ l ⟩t' wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G / [Γ] ∙ [F] / [G]
+         → Γ ⊩ₛ⟨ l ⟩t' f ≡ g ∷ Π F ▹ G / [Γ] / [ΠFG]
+fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
+  let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
+      [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
+      _ , ⊢F , ⊢G , [F]' , [G]' , G-ext = Π-elim [σΠFG]
+      [σG] = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+      ⊢σf = soundnessTerm [σΠFG] (proj₁ ([f] ⊢Δ [σ]))
+      ⊢σg = soundnessTerm [σΠFG] (proj₁ ([g] ⊢Δ [σ]))
+      σf0≡σg0 = soundnessTermEq [σG] ([f0≡g0] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+      σf0≡σg0' = PE.subst₂ (λ x y → Δ ∙ subst σ F ⊢ x ≡ y ∷ subst (liftSubst σ) G)
+                           (PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl)
+                           (PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl)
+                           σf0≡σg0
+  in  fun-ext ⊢F ⊢σf ⊢σg σf0≡σg0' , proj₁ ([f] ⊢Δ [σ]) , proj₁ ([g] ⊢Δ [σ])
+  ,   (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
+         let [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁) (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+             fEq = PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl
+             gEq = PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl
+             GEq = PE.sym (PE.trans (subst-wk (subst (liftSubst σ) G)) (PE.trans (substCompEq G) (substEq (lemma4 (T.toWk ρ) σ a) G)))
+         in  irrelevanceEqTerm'' fEq gEq GEq
+                                 (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
+                                 ([G]' ρ ⊢Δ₁ [a])
+                                 ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
