@@ -299,27 +299,29 @@ mutual
           [Fₙ]' = substS {ℕ} {F} {n} [Γ]₃ [ℕ] [F]' [n]
           [F']' = S.irrelevance {A = F'} [Γ] ([Γ]₃ ∙ [ℕ]) [F']
           [F'₀]' = substS {ℕ} {F'} {zero} [Γ]₃ [ℕ] [F']' [0]
-          [F'₊]' = Πₛ {ℕ} {F' ▹▹ F' [ suc (var zero) ]↑} [Γ]₃ [ℕ]
-                      (▹▹ₛ {F'} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ]₃ [ℕ]) [F']'
-                          (subst↑S {ℕ} {F'} {suc (var zero)} [Γ]₃ [ℕ] [F']'
-                            (λ {Δ} {σ} → sucₛ {n = var zero} {l = ¹} (_∙_ {A = ℕ} [Γ]₃ [ℕ])
-                              (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ]₃ [ℕ] [ℕ] {Δ} {σ})
-                              (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
+          [F'₊]' = sucCase {F'} [Γ]₃ [ℕ] [F']'
           [F'ₙ']' = substS {ℕ} {F'} {n'} [Γ]₃ [ℕ] [F']' [n']
-          [F₀≡F'₀]' = {!!}
-          [F₊≡F'₊]' = {!!}
-          [Fₙ≡F'ₙ']' = {!!}
+          [ℕ≡ℕ] = reflₛ {ℕ} [Γ]₃ [ℕ]
+          [0≡0] = reflₜₛ {ℕ} {zero} [Γ]₃ [ℕ] [0]
+          [F≡F']' = S.irrelevanceEq {A = F} {B = F'} [Γ] ([Γ]₃ ∙ [ℕ]) [F] [F]' [F≡F']
+          [F₀≡F'₀] = substSEq {ℕ} {ℕ} {F} {F'} {zero} {zero}
+                               [Γ]₃ [ℕ] [ℕ] [ℕ≡ℕ] [F]' [F']' [F≡F']' [0] [0] [0≡0]
+          [F₀≡F'₀]' = S.irrelevanceEq {A = F [ zero ]} {B = F' [ zero ]} [Γ]₃ [Γ]₃ (substS {ℕ} {F} {zero} [Γ]₃ [ℕ] [F]' [0]) [F₀]' [F₀≡F'₀]
+          [F₊≡F'₊] = sucCaseCong {F} {F'} [Γ]₃ [ℕ] [F]' [F']' [F≡F']'
+          [F₊≡F'₊]' = S.irrelevanceEq {A = sType} {B = s'Type} [Γ]₃ [Γ]₃ (sucCase {F} [Γ]₃ [ℕ] [F]') [F₊]' [F₊≡F'₊]
+          [Fₙ≡F'ₙ']' = substSEq {ℕ} {ℕ} {F} {F'} {n} {n'}
+                                [Γ]₃ [ℕ] [ℕ] [ℕ≡ℕ] [F]' [F']' [F≡F']' [n] [n'] [n≡n']
           [z]' = S.irrelevanceTerm {A = F [ zero ]} {t = z} [Γ]₁ [Γ]₃ [F₀] [F₀]' [z]
-          [z']' = convₛ {z'} {F [ zero ]} {F' [ zero ]} [Γ]₃ [F₀]' [F'₀]' {!!}
+          [z']' = convₛ {z'} {F [ zero ]} {F' [ zero ]} [Γ]₃ [F₀]' [F'₀]' [F₀≡F'₀]'
                         (S.irrelevanceTerm {A = F [ zero ]} {t = z'} [Γ]₁ [Γ]₃ [F₀] [F₀]' [z'])
           [s]' = S.irrelevanceTerm {A = sType} {t = s} [Γ]₂ [Γ]₃ [F₊] [F₊]' [s]
-          [s']' = convₛ {s'} {sType} {s'Type} [Γ]₃ [F₊]' [F'₊]' {!!}
+          [s']' = convₛ {s'} {sType} {s'Type} [Γ]₃ [F₊]' [F'₊]' [F₊≡F'₊]'
                         (S.irrelevanceTerm {A = sType} {t = s'} [Γ]₂ [Γ]₃ [F₊] [F₊]' [s'])
       in  [Γ]₃
       ,   modelsTermEq [Fₙ]'
                        (natrecₛ {F} {z} {s} {n} [Γ]₃ [ℕ] [F]' [F₀]' [F₊]' [Fₙ]' [z]' [s]' [n])
-                       (conv₂ₛ {natrec F' z' s' n'} {F [ n ]} {F' [ n' ]} [Γ]₃ [Fₙ]' [F'ₙ']' {!!}
-                               (natrecₛ {F'} {z'} {s'} {n'} [Γ]₃ [ℕ] [F']' [F'₀]' {![F'₊]'!} [F'ₙ']' [z']' [s']' [n']))
+                       (conv₂ₛ {natrec F' z' s' n'} {F [ n ]} {F' [ n' ]} [Γ]₃ [Fₙ]' [F'ₙ']' [Fₙ≡F'ₙ']'
+                               (natrecₛ {F'} {z'} {s'} {n'} [Γ]₃ [ℕ] [F']' [F'₀]' [F'₊]' [F'ₙ']' [z']' [s']' [n']))
                        {!!}
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [F₊] , [s] =

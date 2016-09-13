@@ -36,11 +36,11 @@ lemma3 : ∀ {G t σ} →
          subst σ (subst (consSubst (λ x → var (suc x)) t) G)
 lemma3 {G} {t} {σ} = PE.trans (substEq (\ { zero → PE.refl ; (suc x) → PE.refl }) G)  (PE.sym (substCompEq G))
 
-subst↑S : ∀ {F G t Γ} ([Γ] : ⊩ₛ Γ)
-          ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-          ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-          ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
-        → Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G [ t ]↑ / [Γ] ∙ [F]
+subst↑S : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
+          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+          ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+          ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
+        → Γ ∙ F ⊩ₛ⟨ l ⟩ G [ t ]↑ / [Γ] ∙ [F]
 subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
   let [wk1F] = wk1ₛ {F} {F} [Γ] [F] [F]
       [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
@@ -56,6 +56,32 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                                            (proj₂ ([t] ⊢Δ [σ]) {σ' = σ'} [σ'] [σ≡σ'])
              [σG[t]≡σ'G[t]] = proj₂ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ (proj₁ [σ] , [t]')) {σ' = consSubst (tail σ') (subst σ' t)} (proj₁ [σ'] , [σ't]) (proj₁ [σ≡σ'] , [σt≡σ't])
          in irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G} {t} {σ'}) G[t] G[t]' [σG[t]≡σ'G[t]])
+
+subst↑SEq : ∀ {F G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
+            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+            ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+            ([G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G' / [Γ] ∙ [F])
+            ([G≡G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G ≡ G' / [Γ] ∙ [F] / [G])
+            ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
+            ([t'] : Γ ∙ F ⊩ₛ⟨ l ⟩t t' ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
+            ([t≡t'] : Γ ∙ F ⊩ₛ⟨ l ⟩t' t ≡ t' ∷ wk1 F / [Γ] ∙ [F] / wk1ₛ {F} {F} [Γ] [F] [F])
+          → Γ ∙ F ⊩ₛ⟨ l ⟩ G [ t ]↑ ≡ G' [ t' ]↑ / [Γ] ∙ [F] / subst↑S {F} {G} {t} [Γ] [F] [G] [t]
+subst↑SEq {F} {G} {G'} {t} {t'} [Γ] [F] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {σ = σ} ⊢Δ [σ] =
+  let [wk1F] = wk1ₛ {F} {F} [Γ] [F] [F]
+      [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
+      [σwk1F]' = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
+      [t]' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t] ⊢Δ [σ]))
+      [t']' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t'] ⊢Δ [σ]))
+      [t≡t']' = irrelevanceEqTerm' (subst-wk F) [σwk1F] [σwk1F]' ([t≡t'] ⊢Δ [σ])
+      G[t] = proj₁ ([G] ⊢Δ (proj₁ [σ] , [t]'))
+      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G} {t} {σ}) G[t]
+      G'[t] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t]'))
+      G'[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G'} {t} {σ}) G'[t]
+      G'[t'] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t']'))
+      G'[t']' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G'} {t'} {σ}) G'[t']
+      G[t]≡G'[t] = irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G'} {t} {σ}) G[t] G[t]' ([G≡G'] ⊢Δ (proj₁ [σ] , [t]'))
+      G'[t]≡G'[t'] = irrelevanceEq'' (lemma3 {G'} {t} {σ}) (lemma3 {G'} {t'} {σ}) G'[t] G'[t]' (proj₂ ([G'] ⊢Δ (proj₁ [σ] , [t]')) (proj₁ [σ] , [t']') (reflSubst [Γ] ⊢Δ (proj₁ [σ]) , [t≡t']'))
+  in  transEq G[t]' G'[t]' G'[t']' G[t]≡G'[t] G'[t]≡G'[t']
 
 lemma4 : ∀ ρ σ a x → substComp (liftSubst σ)
       (purge (lift ρ) (consSubst idSubst a)) x
@@ -94,3 +120,97 @@ fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
                                  (proj₁ ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
                                  ([G]' ρ ⊢Δ₁ [a])
                                  ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
+
+substSEq : ∀ {F F' G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
+           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+           ([F'] : Γ ⊩ₛ⟨ l ⟩ F' / [Γ])
+           ([F≡F'] : Γ ⊩ₛ⟨ l ⟩ F ≡ F' / [Γ] / [F])
+           ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+           ([G'] : Γ ∙ F' ⊩ₛ⟨ l ⟩ G' / [Γ] ∙ [F'])
+           ([G≡G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G ≡ G' / [Γ] ∙ [F] / [G])
+           ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+           ([t'] : Γ ⊩ₛ⟨ l ⟩t t' ∷ F' / [Γ] / [F'])
+           ([t≡t'] : Γ ⊩ₛ⟨ l ⟩t' t ≡ t' ∷ F / [Γ] / [F])
+         → Γ ⊩ₛ⟨ l ⟩ G [ t ] ≡ G' [ t' ] / [Γ] / substS {F} {G} {t} [Γ] [F] [G] [t]
+substSEq {F} {F'} {G} {G'} {t} {t'} [Γ] [F] [F'] [F≡F'] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {σ = σ} ⊢Δ [σ] =
+  let G[t] = (proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
+                    (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
+      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G))) G[t]
+      [t]' = convₛ {t} {F} {F'} [Γ] [F] [F'] [F≡F'] [t]
+      G'[t] = (proj₁ ([G'] {σ = consSubst σ (subst σ t)} ⊢Δ
+                     (consSubstS {t = subst σ t} {A = F'} [Γ] ⊢Δ [σ] [F'] (proj₁ ([t]' ⊢Δ [σ])))))
+      G[t]≡G'[t] = irrelevanceEq' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G))) G[t] G[t]' ([G≡G'] {σ = consSubst σ (subst σ t)} ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
+      G'[t]≡G'[t'] = irrelevanceEq'' PE.refl (PE.sym (PE.trans (substCompEq G') (substEq substConcatSingleton' G'))) G'[t] G'[t]
+                       (proj₂ ([G'] {σ = consSubst σ (subst σ t)}
+                                    ⊢Δ ([σ] , proj₁ ([t]' ⊢Δ [σ])))
+                              {σ' = consSubst σ (subst σ t')}
+                              ([σ] , proj₁ ([t'] ⊢Δ [σ]))
+                              (reflSubst [Γ] ⊢Δ [σ] ,
+                                convEqₛ {t} {t'} {F} {F'} [Γ] [F] [F'] [F≡F'] [t≡t'] ⊢Δ [σ]))
+      G'[t'] = (proj₁ ([G'] {σ = consSubst σ (subst σ t')} ⊢Δ
+                    (consSubstS {t = subst σ t'} {A = F'} [Γ] ⊢Δ [σ] [F'] (proj₁ ([t'] ⊢Δ [σ])))))
+      G'[t']' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G') (substEq substConcatSingleton' G'))) G'[t']
+  in  transEq G[t]' G'[t] G'[t']' G[t]≡G'[t] G'[t]≡G'[t']
+
+reflₛ : ∀ {A Γ l}
+        ([Γ] : ⊩ₛ Γ)
+        ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+      → Γ ⊩ₛ⟨ l ⟩ A ≡ A / [Γ] / [A]
+reflₛ [Γ] [A] ⊢Δ [σ] =
+  reflEq (proj₁ ([A] ⊢Δ [σ]))
+
+reflₜₛ : ∀ {A t Γ l}
+         ([Γ] : ⊩ₛ Γ)
+         ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+         ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] / [A])
+       → Γ ⊩ₛ⟨ l ⟩t' t ≡ t ∷ A / [Γ] / [A]
+reflₜₛ [Γ] [A] [t] ⊢Δ [σ] =
+  reflEqTerm (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))
+
+sucCase : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
+          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+          ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
+        → Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ]
+sucCase {F} {Γ} {l} [Γ] [ℕ] [F] =
+  Πₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} [Γ] [ℕ]
+     (▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
+         (subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
+           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
+
+-- TODO add helper functions to reduce repetition
+sucCaseCong : ∀ {F F' Γ l} ([Γ] : ⊩ₛ Γ)
+              ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+              ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
+              ([F'] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F' / [Γ] ∙ [ℕ])
+              ([F≡F'] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F ≡ F' / [Γ] ∙ [ℕ] / [F])
+        → Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                  ≡ Π ℕ ▹ (F' ▹▹ F' [ suc (var zero) ]↑)
+                  / [Γ] / sucCase {F} [Γ] [ℕ] [F]
+sucCaseCong {F} {F'} {Γ} {l} [Γ] [ℕ] [F] [F'] [F≡F'] =
+  Π-congₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {ℕ} {F' ▹▹ F' [ suc (var zero) ]↑} [Γ]
+          [ℕ] (▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
+         (subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
+           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
+          [ℕ] (▹▹ₛ {F'} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F']
+         (subst↑S {ℕ} {F'} {suc (var zero)} [Γ] [ℕ] [F']
+           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
+          (reflₛ {ℕ} [Γ] [ℕ]) (▹▹-congₛ {F} {F'} {F [ suc (var zero) ]↑} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F] [F'] [F≡F'] ((subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
+           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}))) ((subst↑S {ℕ} {F'} {suc (var zero)} [Γ] [ℕ] [F']
+           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}))) (subst↑SEq {ℕ} {F} {F'} {suc (var zero)} {suc (var zero)} [Γ] [ℕ] [F] [F'] [F≡F'] (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}) (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})
+             (λ {Δ} {σ} → reflₜₛ {ℕ} {suc (var zero)} (_∙_ {A = ℕ} [Γ] [ℕ]) (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ}) (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}) {Δ} {σ})))
