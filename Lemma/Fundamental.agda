@@ -336,4 +336,14 @@ mutual
         [sucn] = sucₛ {n = n} [Γ]₃ [ℕ]' [n]'
         [F]' = S.irrelevance {A = F} [Γ]₁ ([Γ]₃ ∙ [ℕ]') [F]
         [F[sucn]] = substS {ℕ} {F} {suc n} [Γ]₃ [ℕ]' [F]' [sucn]
-    in  [Γ]₃ , modelsTermEq [F[sucn]] {!!} {!!} {!!}
+        t = (s ∘ n) ∘ (natrec F z s n)
+        y = S.irrelevanceTerm {A = F [ suc n ]} {t = t} [Γ]₃ [Γ]₃ [F[sucn]] [F[sucn]] {!!}
+        d , r = redSubstTermₛ {F [ suc n ]} {natrec F z s (suc n)} {t } {¹} {_} [Γ]₃
+                     (λ {Δ} {σ} ⊢Δ [σ] → let r = _⊢_⇒_∷_.natrec-suc {C = subst (liftSubst σ) F} {c = subst σ z} {g = subst σ s}
+                                                                    {n = subst σ n} {!!} {!!} {!!} {!!} in
+                            PE.subst (\ x → Δ ⊢ subst σ (natrec F z s (suc n)) ⇒ (subst σ t) ∷ x)
+                                     (PE.trans (PE.trans (substCompEq F) (substEq
+                                     (\ { zero → PE.refl
+                                        ; (suc x) → PE.trans (subst-wk (σ x)) (substIdEq (σ x)) }) F))
+                                                (PE.sym (substCompEq F))) r) [F[sucn]] y
+    in  [Γ]₃ , modelsTermEq [F[sucn]] d y r

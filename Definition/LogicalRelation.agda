@@ -45,10 +45,14 @@ mutual
   --     prop : natural-prop Γ n natN
 
 mutual
+  -- data [Natural]-prop' (Γ : Con Term) : (n n' : Term) → Set where
+  --   suc : ∀ {n n'} → ℕ[ Γ ] n ≡ n' ∷ ℕ → [Natural]-prop' Γ (suc n) (suc n')
+  --   zero : [Natural]-prop' Γ zero zero
+  --   ne : ∀ {n n'} → Neutral n -> Neutral n' -> Γ ⊢ n ≡ n' ∷ ℕ → [Natural]-prop' Γ n n'
   [Natural]-prop : (Γ : Con Term) (n n' : Term) → [Natural] n n' → Set
   [Natural]-prop Γ .(suc n) .(suc n') (suc {n} {n'}) = ℕ[ Γ ] n ≡ n' ∷ ℕ
-  [Natural]-prop Γ .zero .zero zero = ⊤
-  [Natural]-prop Γ n n' (ne neN neN') = Γ ⊢ n ≡ n' ∷ ℕ
+  [Natural]-prop Γ .zero    .zero     zero           = ⊤
+  [Natural]-prop Γ n        n'        (ne neN neN')  = Γ ⊢ n ≡ n' ∷ ℕ
 
   data ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
     ℕ≡[_,_,_,_,_,_,_] :
