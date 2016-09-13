@@ -27,10 +27,16 @@ data Neutral : Term → Set where
   _∘_ : ∀ {k u} → Neutral k → Neutral (k ∘ u)
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
+-- A partial view on whnfs of natural number terms.
+-- Note: not inductive.
+
 data Natural : Term → Set where
   suc : ∀ {n} → Natural (suc n)
   zero : Natural zero
   ne : ∀ {n} → Neutral n → Natural n
+
+-- A partial view on two whnfs of natural number terms.
+-- Note: not inductive.
 
 data [Natural] : Term → Term → Set where
   suc : ∀ {n n'} → [Natural] (suc n) (suc n')

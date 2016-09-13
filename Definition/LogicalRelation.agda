@@ -33,6 +33,8 @@ mutual
                  (natN : Natural n) (prop : natural-prop Γ n natN)
                → ℕ[ Γ ] t ∷ A
 
+    -- Note: parameter A is unused.
+
   -- record ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
   --   constructor ℕ[_,_,_,_]
   --   inductive
@@ -53,6 +55,8 @@ mutual
       (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
       (t≡u : Γ ⊢ t ≡ u ∷ ℕ) ([k≡k'] : [Natural] k k')
       (prop : [Natural]-prop Γ k k' [k≡k']) → ℕ[ Γ ] t ≡ u ∷ A
+
+    -- Note: parameter A is unused.
 
   -- record ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
   --   constructor ℕ≡[_,_,_,_,_,_,_]
