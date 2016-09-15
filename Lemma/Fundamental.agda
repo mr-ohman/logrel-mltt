@@ -325,22 +325,56 @@ mutual
                        {!!}
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [F₊] , [s] =
-    let [Γ]' = [Γ]₁
+    let sType = Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+        [Γ]' = [Γ]₁
         [ℕ]' = ℕₛ {l = ¹} [Γ]'
+        [F₊]' = S.irrelevance {A = sType} [Γ]₂ [Γ]' [F₊]
+        [s]' = S.irrelevanceTerm {A = sType} {t = s} [Γ]₂ [Γ]' [F₊] [F₊]' [s]
         [F]' = S.irrelevance {A = F} [Γ] ([Γ]' ∙ [ℕ]') [F]
-    in  [Γ]' , modelsTermEq [F₀] {!fundamentalNatrec [Γ]' [ℕ]' [F]' {!!} {!!} {!!} {!!} {!!} (zeroₛ [Γ]₁)!} [z] {!!}
+        d , r = redSubstTermₛ {F [ zero ]} {natrec F z s zero} {z} [Γ]'
+                              (λ {Δ} {σ} ⊢Δ [σ] →
+                                 let ⊢ℕ = soundness (proj₁ ([ℕ]' ⊢Δ [σ]))
+                                     ⊢F = soundness (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ]' ⊢Δ [ℕ]' [σ])))
+                                     ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x) (singleSubstLift F zero) (soundnessTerm (proj₁ ([F₀] ⊢Δ [σ])) (proj₁ ([z] ⊢Δ [σ])))
+                                     ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F) (soundnessTerm (proj₁ ([F₊]' ⊢Δ [σ])) (proj₁ ([s]' ⊢Δ [σ])))
+                                 in PE.subst (λ x → Δ ⊢ subst σ (natrec F z s zero) ⇒ subst σ z ∷ x)
+                                             (PE.sym (singleSubstLift F zero))
+                                             (natrec-zero ⊢F ⊢z ⊢s))
+                              [F₀] [z]
+    in  [Γ]' , modelsTermEq [F₀] d [z] r
   fundamentalTermEq (natrec-suc {n} {z} {s} {F} ⊢n ⊢F ⊢z ⊢s) with fundamentalTerm ⊢n | fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   ... | [Γ] , [ℕ] , [n] | [Γ]₁ , [F] | [Γ]₂ , [F₀] , [z] | [Γ]₃ , [F₊] , [s] =
     let [ℕ]' = S.irrelevance {A = ℕ} [Γ] [Γ]₃ [ℕ]
         [n]' = S.irrelevanceTerm {A = ℕ} {t = n} [Γ] [Γ]₃ [ℕ] [ℕ]' [n]
         [sucn] = sucₛ {n = n} [Γ]₃ [ℕ]' [n]'
+        [F₀]' = S.irrelevance {A = F [ zero ]} [Γ]₂ [Γ]₃ [F₀]
+        [z]' = S.irrelevanceTerm {A = F [ zero ]} {t = z} [Γ]₂ [Γ]₃ [F₀] [F₀]' [z]
         [F]' = S.irrelevance {A = F} [Γ]₁ ([Γ]₃ ∙ [ℕ]') [F]
         [F[sucn]] = substS {ℕ} {F} {suc n} [Γ]₃ [ℕ]' [F]' [sucn]
+        [Fₙ]' = substS {ℕ} {F} {n} [Γ]₃ [ℕ]' [F]' [n]'
+        [natrecₙ] = natrecₛ {F} {z} {s} {n} [Γ]₃ [ℕ]' [F]' [F₀]' [F₊] [Fₙ]' [z]' [s] [n]'
         t = (s ∘ n) ∘ (natrec F z s n)
-        y = S.irrelevanceTerm {A = F [ suc n ]} {t = t} [Γ]₃ [Γ]₃ [F[sucn]] [F[sucn]] {!!}
+        q = subst (liftSubst (consSubst idSubst n)) (wk1 (F [ suc (var zero) ]↑))
+        y = S.irrelevanceTerm' {A = q [ natrec F z s n ]} {A' = F [ suc n ]} {t = t}
+              (natrecIrrelevantSubst' F z s n) [Γ]₃ [Γ]₃
+              (substSΠ {F [ n ]} {q} {natrec F z s n} [Γ]₃
+                (substS {ℕ} {F} {n} [Γ]₃ [ℕ]' [F]' [n]')
+                (substSΠ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {n} [Γ]₃ [ℕ]' [F₊] [n]')
+                [natrecₙ])
+              [F[sucn]]
+              (appₛ {F [ n ]} {q} {s ∘ n} {natrec F z s n} [Γ]₃ [Fₙ]'
+                (substSΠ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {n} [Γ]₃ [ℕ]' [F₊] [n]')
+                (appₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {s} {n} [Γ]₃ [ℕ]' [F₊] [s] [n]')
+                [natrecₙ])
         d , r = redSubstTermₛ {F [ suc n ]} {natrec F z s (suc n)} {t } {¹} {_} [Γ]₃
-                     (λ {Δ} {σ} ⊢Δ [σ] → let r = _⊢_⇒_∷_.natrec-suc {C = subst (liftSubst σ) F} {c = subst σ z} {g = subst σ s}
-                                                                    {n = subst σ n} {!!} {!!} {!!} {!!} in
+                     (λ {Δ} {σ} ⊢Δ [σ] → let ⊢n = soundnessTerm (proj₁ ([ℕ]' ⊢Δ [σ])) (proj₁ ([n]' ⊢Δ [σ]))
+                                             ⊢ℕ = soundness (proj₁ ([ℕ]' ⊢Δ [σ]))
+                                             ⊢F = soundness (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ]₃ ⊢Δ [ℕ]' [σ])))
+                                             ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x) (singleSubstLift F zero) (soundnessTerm (proj₁ ([F₀]' ⊢Δ [σ])) (proj₁ ([z]' ⊢Δ [σ])))
+                                             ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F) (soundnessTerm (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([s] ⊢Δ [σ])))
+                                             r = _⊢_⇒_∷_.natrec-suc {C = subst (liftSubst σ) F} {c = subst σ z} {g = subst σ s}
+                                                                    {n = subst σ n} ⊢n ⊢F ⊢z ⊢s
+                                         in
                             PE.subst (\ x → Δ ⊢ subst σ (natrec F z s (suc n)) ⇒ (subst σ t) ∷ x)
                                      (PE.trans (PE.trans (substCompEq F) (substEq
                                      (\ { zero → PE.refl

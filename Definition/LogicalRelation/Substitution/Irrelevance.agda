@@ -101,6 +101,16 @@ irrelevanceTerm [Γ] [Γ]' [A] [A]' [t] ⊢Δ [σ]' =
    ,  ( λ [σ'] x → LR.irrelevanceEqTerm [σA] [σA]' ((proj₂ ([t] ⊢Δ [σ]))
                            (irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ'])  (irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [σ]' [σ] x)) )
 
+irrelevanceTerm' : ∀ {l l' A A' t Γ}
+                   (eq : A PE.≡ A')
+                   ([Γ] [Γ]' : ⊩ₛ Γ)
+                   ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
+                   ([A'] : Γ ⊩ₛ⟨ l' ⟩ A' / [Γ]')
+                 → Γ ⊩ₛ⟨ l  ⟩t t ∷ A / [Γ]  / [A]
+                 → Γ ⊩ₛ⟨ l' ⟩t t ∷ A' / [Γ]' / [A']
+irrelevanceTerm' {A = A} {t = t} PE.refl [Γ] [Γ]' [A] [A]' [t] = irrelevanceTerm {A = A} {t = t} [Γ] [Γ]' [A] [A]' [t]
+
+
 irrelevanceTermLift : ∀ {l A F H t Γ}
               ([Γ] : ⊩ₛ Γ)
               ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])

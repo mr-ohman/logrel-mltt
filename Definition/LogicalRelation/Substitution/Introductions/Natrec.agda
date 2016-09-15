@@ -95,6 +95,25 @@ natrecIrrelevantSubst F z s m σ = PE.sym (PE.trans (substCompEq (subst (liftSub
            (subst-wk (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F))
            (PE.trans (substCompEq F) (substEq (natrecIrrelevantSubstLemma F z s m σ) F)))))
 
+natrecIrrelevantSubstLemma' : ∀ F z s n (x : Nat) →
+      (substComp (consSubst (λ z₁ → var (suc z₁)) (suc (var zero)))
+       (purge (step id)
+        (substComp (liftSubst (consSubst idSubst n))
+         (consSubst idSubst (natrec F z s n))))) x
+      PE.≡ (consSubst var (suc n)) x
+natrecIrrelevantSubstLemma' F z s n zero = PE.cong suc (PE.trans (subst-wk n) (substIdEq n))
+natrecIrrelevantSubstLemma' F z s n (suc x) = PE.refl
+
+natrecIrrelevantSubst' : ∀ F z s n →
+      subst (liftSubst (consSubst idSubst n))
+      (wk1 (F [ suc (var zero) ]↑))
+      [ natrec F z s n ]
+      PE.≡
+      F [ suc n ]
+natrecIrrelevantSubst' F z s n = PE.trans (substCompEq (U.wk (step id)
+                                   (subst (consSubst (λ z₁ → var (suc z₁)) (suc (var zero))) F)))
+                                     (PE.trans (subst-wk (subst (consSubst (λ z₁ → var (suc z₁)) (suc (var zero))) F)) (PE.trans (substCompEq F) (substEq (natrecIrrelevantSubstLemma' F z s n) F)))
+
 natrecTerm : ∀ {F z s n Γ Δ σ l}
               ([Γ]  : ⊩ₛ Γ)
               ([F]  : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕₛ [Γ]))
