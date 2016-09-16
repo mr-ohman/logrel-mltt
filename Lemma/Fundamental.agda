@@ -314,15 +314,20 @@ mutual
           [z]' = S.irrelevanceTerm {A = F [ zero ]} {t = z} [Γ]₁ [Γ]₃ [F₀] [F₀]' [z]
           [z']' = convₛ {z'} {F [ zero ]} {F' [ zero ]} [Γ]₃ [F₀]' [F'₀]' [F₀≡F'₀]'
                         (S.irrelevanceTerm {A = F [ zero ]} {t = z'} [Γ]₁ [Γ]₃ [F₀] [F₀]' [z'])
+          [z≡z']' = S.irrelevanceEqTerm {A = F [ zero ]} {t = z} {u = z'} [Γ]₁ [Γ]₃ [F₀] [F₀]' [z≡z']
           [s]' = S.irrelevanceTerm {A = sType} {t = s} [Γ]₂ [Γ]₃ [F₊] [F₊]' [s]
           [s']' = convₛ {s'} {sType} {s'Type} [Γ]₃ [F₊]' [F'₊]' [F₊≡F'₊]'
                         (S.irrelevanceTerm {A = sType} {t = s'} [Γ]₂ [Γ]₃ [F₊] [F₊]' [s'])
+          [s≡s']' = S.irrelevanceEqTerm {A = sType} {t = s} {u = s'} [Γ]₂ [Γ]₃ [F₊] [F₊]' [s≡s']
       in  [Γ]₃
       ,   modelsTermEq [Fₙ]'
                        (natrecₛ {F} {z} {s} {n} [Γ]₃ [ℕ] [F]' [F₀]' [F₊]' [Fₙ]' [z]' [s]' [n])
                        (conv₂ₛ {natrec F' z' s' n'} {F [ n ]} {F' [ n' ]} [Γ]₃ [Fₙ]' [F'ₙ']' [Fₙ≡F'ₙ']'
                                (natrecₛ {F'} {z'} {s'} {n'} [Γ]₃ [ℕ] [F']' [F'₀]' [F'₊]' [F'ₙ']' [z']' [s']' [n']))
-                       {!!}
+                       (natrec-congₛ {F} {F'} {z} {z'} {s} {s'} {n} {n'}
+                                     [Γ]₃ [ℕ] [F]' [F']' [F≡F']'
+                                     [F₀]' [F'₀]' [F₀≡F'₀]' [F₊]' [F'₊]' [F₊≡F'₊]' [Fₙ]'
+                                     [z]' [z']' [z≡z']' [s]' [s']' [s≡s']' [n] [n'] [n≡n'])
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F] | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [F₊] , [s] =
     let sType = Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
