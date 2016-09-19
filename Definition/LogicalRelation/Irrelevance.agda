@@ -1,5 +1,7 @@
 module Definition.LogicalRelation.Irrelevance where
 
+open import Tools.Context
+
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
@@ -45,6 +47,10 @@ mutual
   irrelevanceEq'' : ∀ {Γ A A' B B' l l'} (eqA : A PE.≡ A') (eqB : B PE.≡ B') (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ A')
                         → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A' ≡ B' / q
   irrelevanceEq'' PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
+
+  irrelevanceEqLift'' : ∀ {Γ A A' B B' C C' l l'} (eqA : A PE.≡ A') (eqB : B PE.≡ B') (eqC : C PE.≡ C') (p : Γ ∙ C ⊩⟨ l ⟩ A) (q : Γ ∙ C' ⊩⟨ l' ⟩ A')
+                        → Γ ∙ C ⊩⟨ l ⟩ A ≡ B / p → Γ ∙ C' ⊩⟨ l' ⟩ A' ≡ B' / q
+  irrelevanceEqLift'' PE.refl PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
 
   irrelevanceEqT : ∀ {Γ A B l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                        → Tactic Γ l l' A A p q
