@@ -319,3 +319,7 @@ lemma σ t (suc x) = trans (subst-wk (σ x)) (sym (wk2subst (step id) (σ x)))
 singleSubstLift↑ : ∀ σ G t → subst (liftSubst σ) (G [ t ]↑) ≡ subst (liftSubst σ) G [ subst (liftSubst σ) t ]↑
 singleSubstLift↑ σ G t = trans (substCompEq G)
                                (sym (trans (substCompEq G) (substEq (lemma σ t) G)))
+
+lemma2 : ∀ {σ t G} → subst (consSubst (\ n → σ (suc n)) (subst (tail σ) t)) G
+               ≡ subst σ (subst (consSubst (λ x → var (suc x)) (wk1 t)) G)
+lemma2 {t = t} {G = G} = trans (substEq (\ { zero → sym (subst-wk t) ; (suc x) → refl }) G)  (sym (substCompEq G))

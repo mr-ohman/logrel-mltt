@@ -11,9 +11,10 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Conversion
+open import Definition.LogicalRelation.Substitution.Reduction
+open import Definition.LogicalRelation.Substitution.Reflexivity
 open import Definition.LogicalRelation.Substitution.Introductions
-open import Definition.LogicalRelation.Substitution.Introductions.Natrec
-open import Definition.LogicalRelation.Substitution.Introductions.Temp
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Context

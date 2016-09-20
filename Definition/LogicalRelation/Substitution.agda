@@ -62,3 +62,7 @@ record _⊩ₛ⟨_⟩t_≡_∷_/_ (Γ : Con Term) (l : TypeLevel) (t u A : Term)
 _⊩ₛ⟨_⟩t'_≡_∷_/_/_ : (Γ : Con Term) (l : TypeLevel) (t u A : Term) ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ]) → Set
 Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ A / [Γ] / [A] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
             → Δ ⊩⟨ l ⟩ subst σ t ≡ subst σ u ∷ subst σ A / proj₁ ([A] ⊢Δ [σ])
+
+_⊩ₛ_⇒_∷_/_ : (Γ : Con Term) (t u A : Term) ([Γ] : ⊩ₛ Γ) → Set
+Γ ⊩ₛ t ⇒ u ∷ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+                       → Δ ⊢ subst σ t ⇒ subst σ u ∷ subst σ A
