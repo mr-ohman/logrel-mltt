@@ -39,21 +39,17 @@ noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
 noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
 noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
 
-sucLemma : ∀ {t u Γ} → Γ ⊢ t ⇒* u ∷ ℕ → Γ ⊢ suc t ⇒* suc u ∷ ℕ
-sucLemma (id x) = id (suc x)
-sucLemma {t} (x ⇨ x₁) = {!!}
-
-canonicity' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ] → ∃ λ k → ε ⊢ t ⇒* sucᵏ k ∷ ℕ
+canonicity' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity' {l = l} (ℕ D) ℕ[ _ , d , suc , prop ] =
   let a , b = canonicity' {l = l} (ℕ D) prop
-  in  suc a , redₜ d ⇨∷* sucLemma b
-canonicity' (ℕ D) ℕ[ .zero , d , zero , prop ] = zero , redₜ d
+  in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
+canonicity' (ℕ D) ℕ[ .zero , d , zero , prop ] = zero , subset*Term (redₜ d)
 canonicity' (ℕ D) ℕ[ n , d , ne x , prop ] = ⊥-elim (noNe prop x)
 canonicity' (ne D neK) [t] = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
 canonicity' (Π D ⊢F ⊢G [F] [G] G-ext) [t] = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
 canonicity' (emb {l< = 0<1} x) [t] = canonicity' x [t]
 
-canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ⇒* sucᵏ k ∷ ℕ
+canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity ⊢t with fundamentalTerm ⊢t
 canonicity ⊢t | ε , [ℕ] , [t] =
   let [ℕ]' = proj₁ ([ℕ] {σ = idSubst} ε tt)

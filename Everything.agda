@@ -27,5 +27,5 @@ import Definition.LogicalRelation.Weakening
 import Definition.LogicalRelation.Properties
 
 import Lemma.Fundamental
--- import Lemma.Consequences -- unsolved metas
+import Lemma.Consequences
 -- import Lemma.Completeness -- errors
