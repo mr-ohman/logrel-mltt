@@ -9,8 +9,6 @@ open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Unit
 open import Data.Empty using (⊥; ⊥-elim)

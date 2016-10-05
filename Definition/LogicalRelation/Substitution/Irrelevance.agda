@@ -6,8 +6,6 @@ open import Definition.LogicalRelation
 import Definition.LogicalRelation.Irrelevance as LR
 open import Definition.LogicalRelation.Substitution
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Unit
 

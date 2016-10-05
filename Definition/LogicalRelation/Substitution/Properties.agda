@@ -11,8 +11,6 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 import Definition.LogicalRelation.Weakening as LR
 
-open import Tools.Context
-
 open import Data.Nat renaming (ℕ to Nat)
 open import Data.Unit
 open import Data.Product

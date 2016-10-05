@@ -21,8 +21,6 @@ open import Definition.LogicalRelation.Substitution.Introductions.Nat
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Unit
 open import Data.Empty

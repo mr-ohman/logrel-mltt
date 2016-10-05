@@ -3,7 +3,6 @@ module Definition.Typed.Properties where
 open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Product
 
-open import Tools.Context
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed

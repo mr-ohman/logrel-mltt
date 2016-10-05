@@ -1,6 +1,5 @@
 module Definition.Typed where
 
-open import Tools.Context
 open import Data.Nat renaming (ℕ to Nat)
 open import Data.Product
 open import Definition.Untyped

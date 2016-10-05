@@ -17,8 +17,6 @@ open import Definition.LogicalRelation.Substitution.Reflexivity
 open import Definition.LogicalRelation.Substitution.Introductions
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Unit
 open import Data.Empty

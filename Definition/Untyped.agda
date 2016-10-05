@@ -8,7 +8,13 @@ open import Data.Unit using (⊤; tt)
 open import Data.Product
 open import Relation.Nullary.Decidable using (⌊_⌋)
 
-open import Tools.Context
+
+infixl 30 _∙_
+
+-- Context (effectivly the same as a list)
+data Con (A : Set) : Set where
+  ε   : Con A
+  _∙_ : Con A → A → Con A
 
 infix 30 Π_▹_
 data Term : Set where

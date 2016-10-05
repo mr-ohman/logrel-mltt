@@ -1,7 +1,5 @@
 module Definition.LogicalRelation.Substitution.Weakening where
 
-open import Tools.Context
-
 open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.LogicalRelation

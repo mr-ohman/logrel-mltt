@@ -6,8 +6,6 @@ open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties.Reflexivity
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Empty using (⊥; ⊥-elim)
 import Relation.Binary.PropositionalEquality as PE

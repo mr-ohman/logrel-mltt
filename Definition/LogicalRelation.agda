@@ -1,7 +1,5 @@
 module Definition.LogicalRelation where
 
-open import Tools.Context
-
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening

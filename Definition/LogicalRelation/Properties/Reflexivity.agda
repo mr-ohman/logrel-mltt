@@ -4,8 +4,6 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.LogicalRelation
 
-open import Tools.Context
-
 open import Data.Product
 import Relation.Binary.PropositionalEquality as PE
 

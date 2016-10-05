@@ -5,7 +5,6 @@ open import Data.List using (List; []; _∷_)
 open import Data.Unit
 open import Relation.Binary.PropositionalEquality as PE hiding ([_]; subst)
 
-open import Tools.Context
 open import Definition.Untyped
 
 subst-test₁ : {x : Term} → lam (var 0) [ x ] ≡ lam (var 0)

@@ -17,8 +17,6 @@ open import Definition.LogicalRelation.Substitution.Conversion
 open import Definition.LogicalRelation.Substitution.Weakening
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Unit
 open import Data.Empty

@@ -13,8 +13,6 @@ open import Definition.LogicalRelation.Properties.Conversion
 open import Definition.LogicalRelation.Properties.Univalence
 open import Definition.LogicalRelation.Properties.Soundness
 
-open import Tools.Context
-
 open import Data.Product
 open import Data.Empty
 

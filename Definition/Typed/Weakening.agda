@@ -4,8 +4,6 @@ open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties as UP using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
 
-open import Tools.Context
-
 open import Data.Nat renaming (ℕ to Nat)
 open import Data.Product
 import Relation.Binary.PropositionalEquality as PE

@@ -5,7 +5,6 @@ open import Data.Unit
 open import Data.Nat renaming (ℕ to Nat)
 open import Data.Product
 
-open import Tools.Context
 
 open import Definition.Untyped hiding (wk)
 import Definition.Untyped as U

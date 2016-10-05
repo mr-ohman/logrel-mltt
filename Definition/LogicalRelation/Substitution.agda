@@ -4,8 +4,6 @@ open import Definition.Untyped
 open import Definition.LogicalRelation
 open import Definition.Typed
 
-open import Tools.Context
-
 open import Data.Nat
 open import Data.Product
 open import Data.Unit

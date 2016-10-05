@@ -1,7 +1,5 @@
 module Definition.LogicalRelation.Substitution.Introductions.Pi where
 
-open import Tools.Context
-
 open import Definition.Untyped hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
