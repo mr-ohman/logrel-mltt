@@ -116,53 +116,63 @@ natrecIrrelevantSubst' F z s n = PE.trans (substCompEq (U.wk (step id)
                                    (subst (consSubst (λ z₁ → var (suc z₁)) (suc (var zero))) F)))
                                      (PE.trans (subst-wk (subst (consSubst (λ z₁ → var (suc z₁)) (suc (var zero))) F)) (PE.trans (substCompEq F) (substEq (natrecIrrelevantSubstLemma' F z s n) F)))
 
+sucCase₃ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ)
+           ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+         → Γ ∙ ℕ ⊩ₛ⟨ l ⟩t suc (var zero) ∷ ℕ / [Γ] ∙ [ℕ]
+                 / (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+sucCase₃ {Γ} {l} [Γ] [ℕ] =
+  (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+       (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+       (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})
+
+sucCase₂ : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
+           ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+           ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
+         → Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F [ suc (var zero) ]↑ / [Γ] ∙ [ℕ]
+sucCase₂ {F} {Γ} {l} [Γ] [ℕ] [F] =
+  subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
+          (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
+
+sucCase₁ : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
+           ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
+           ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
+         → Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F ▹▹ F [ suc (var zero) ]↑ / [Γ] ∙ [ℕ]
+sucCase₁ {F} {Γ} {l} [Γ] [ℕ] [F] =
+  ▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
+      (sucCase₂ {F} [Γ] [ℕ] [F])
+
 sucCase : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
           ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
           ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
         → Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑) / [Γ]
 sucCase {F} {Γ} {l} [Γ] [ℕ] [F] =
   Πₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} [Γ] [ℕ]
-     (▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
-         (subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
-           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
+     (sucCase₁ {F} [Γ] [ℕ] [F])
 
--- TODO add helper functions to reduce repetition
 sucCaseCong : ∀ {F F' Γ l} ([Γ] : ⊩ₛ Γ)
               ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
               ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
               ([F'] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F' / [Γ] ∙ [ℕ])
               ([F≡F'] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F ≡ F' / [Γ] ∙ [ℕ] / [F])
-        → Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+        → Γ ⊩ₛ⟨ l ⟩ Π ℕ ▹ (F  ▹▹ F  [ suc (var zero) ]↑)
                   ≡ Π ℕ ▹ (F' ▹▹ F' [ suc (var zero) ]↑)
                   / [Γ] / sucCase {F} [Γ] [ℕ] [F]
 sucCaseCong {F} {F'} {Γ} {l} [Γ] [ℕ] [F] [F'] [F≡F'] =
-  Π-congₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {ℕ} {F' ▹▹ F' [ suc (var zero) ]↑} [Γ]
-          [ℕ] (▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
-         (subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
-           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
-          [ℕ] (▹▹ₛ {F'} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F']
-         (subst↑S {ℕ} {F'} {suc (var zero)} [Γ] [ℕ] [F']
-           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})))
-          (reflₛ {ℕ} [Γ] [ℕ]) (▹▹-congₛ {F} {F'} {F [ suc (var zero) ]↑} {F' [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F] [F'] [F≡F'] ((subst↑S {ℕ} {F} {suc (var zero)} [Γ] [ℕ] [F]
-           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}))) ((subst↑S {ℕ} {F'} {suc (var zero)} [Γ] [ℕ] [F']
-           (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}))) (subst↑SEq {ℕ} {F} {F'} {suc (var zero)} {suc (var zero)} [Γ] [ℕ] [F] [F'] [F≡F'] (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}) (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})
-             (λ {Δ} {σ} → reflₜₛ {ℕ} {suc (var zero)} (_∙_ {A = ℕ} [Γ] [ℕ]) (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ}) (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
-             (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-             (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}) {Δ} {σ})))
+  Π-congₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {ℕ} {F' ▹▹ F' [ suc (var zero) ]↑}
+          [Γ] [ℕ] (sucCase₁ {F} [Γ] [ℕ] [F]) [ℕ] (sucCase₁ {F'} [Γ] [ℕ] [F'])
+          (reflₛ {ℕ} [Γ] [ℕ])
+          (▹▹-congₛ {F} {F'} {F [ suc (var zero) ]↑} {F' [ suc (var zero) ]↑}
+             (_∙_ {A = ℕ} [Γ] [ℕ]) [F] [F'] [F≡F']
+             (sucCase₂ {F} [Γ] [ℕ] [F]) (sucCase₂ {F'} [Γ] [ℕ] [F'])
+             (subst↑SEq {ℕ} {F} {F'} {suc (var zero)} {suc (var zero)}
+                        [Γ] [ℕ] [F] [F'] [F≡F']
+                        (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
+                        (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
+                        (λ {Δ} {σ} →
+                           reflₜₛ {ℕ} {suc (var zero)} (_∙_ {A = ℕ} [Γ] [ℕ])
+                                  (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
+                                  (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
+                           {Δ} {σ})))
 
 natrecTerm : ∀ {F z s n Γ Δ σ l}
               ([Γ]  : ⊩ₛ Γ)
