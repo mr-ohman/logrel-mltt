@@ -376,8 +376,10 @@ mutual
                                              ⊢F = soundness (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ]₃ ⊢Δ [ℕ]' [σ])))
                                              ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x) (singleSubstLift F zero) (soundnessTerm (proj₁ ([F₀]' ⊢Δ [σ])) (proj₁ ([z]' ⊢Δ [σ])))
                                              ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F) (soundnessTerm (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([s] ⊢Δ [σ])))
-                                             r = _⊢_⇒_∷_.natrec-suc {C = subst (liftSubst σ) F} {c = subst σ z} {g = subst σ s}
-                                                                    {n = subst σ n} ⊢n ⊢F ⊢z ⊢s
+                                             r = _⊢_⇒_∷_.natrec-suc {n = subst σ n}
+                                                                    {z = subst σ z} {s = subst σ s}
+                                                                    {F = subst (liftSubst σ) F}
+                                                                    ⊢n ⊢F ⊢z ⊢s
                                          in
                             PE.subst (\ x → Δ ⊢ subst σ (natrec F z s (suc n)) ⇒ (subst σ t) ∷ x)
                                      (PE.trans (PE.trans (substCompEq F) (substEq
