@@ -76,7 +76,7 @@ injectivity' (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
-      [F]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁
+      [F]' = irrelevance' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁
       [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G]' = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x) (PE.trans (substVar0Id _) (PE.sym G≡G₁)) (PE.sym F≡F₁) [G]₁

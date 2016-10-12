@@ -88,7 +88,7 @@ mutual
   fundamentalVar here (_∙_ {A = A} {l = l} [Γ] [A]) =
     (λ ⊢Δ [σ] →
        let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-           [σA'] = maybeEmb (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA])
+           [σA'] = maybeEmb (irrelevance' (PE.sym (subst-wk A)) [σA])
        in  [σA']
        ,   (λ [σ'] [σ≡σ'] →
               irrelevanceEq'' (PE.sym (subst-wk A)) (PE.sym (subst-wk A))
@@ -96,14 +96,14 @@ mutual
                                                 (proj₁ [σ']) (proj₁ [σ≡σ']))))
     , (λ ⊢Δ [σ] →
          let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-             [σA'] = maybeEmb (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA])
+             [σA'] = maybeEmb (irrelevance' (PE.sym (subst-wk A)) [σA])
          in  irrelevanceTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ])
     , (λ [σ'] [σ≡σ'] → irrelevanceEqTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₂ [σ≡σ'])))
   fundamentalVar (there {A = A} h) ([Γ] ∙ [B]) =
     (λ ⊢Δ [σ] →
        let [h]   = (proj₁ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
            [σA]  = proj₁ [h]
-           [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+           [σA'] = irrelevance' (PE.sym (subst-wk A)) [σA]
        in  [σA']
        ,   (λ [σ'] [σ≡σ'] →
               irrelevanceEq'' (PE.sym (subst-wk A)) (PE.sym (subst-wk A))
@@ -111,7 +111,7 @@ mutual
     , (λ ⊢Δ [σ] →
          let [h]   = (proj₁ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
              [σA]  = proj₁ [h]
-             [σA'] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+             [σA'] = irrelevance' (PE.sym (subst-wk A)) [σA]
              [h'] = (proj₂ (fundamentalVar h [Γ])) ⊢Δ (proj₁ [σ])
          in  irrelevanceTerm' (PE.sym (subst-wk A)) [σA] [σA'] (proj₁ [h'])
          ,   (λ [σ'] [σ≡σ'] →

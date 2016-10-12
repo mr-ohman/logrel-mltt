@@ -106,7 +106,7 @@ liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡�
 mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ
   soundContext ε = ε
-  soundContext (x ∙ x₁) = soundContext x ∙ soundness (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (idSubst-lemma₀ _) (proj₁ (x₁ (soundContext x) (idSubstS x))))
+  soundContext (x ∙ x₁) = soundContext x ∙ soundness (irrelevance' (idSubst-lemma₀ _) (proj₁ (x₁ (soundContext x) (idSubstS x))))
 
   idSubstS : ∀ {Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ idSubst ∷ Γ / [Γ] / soundContext [Γ]
   idSubstS ε = tt

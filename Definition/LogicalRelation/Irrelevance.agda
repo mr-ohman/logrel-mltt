@@ -26,6 +26,12 @@ irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) suc prop
 irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) zero prop
 irrelevanceNatural-prop PE.refl PE.refl (ne x x₁) (ne x₂ x₃) prop = prop
 
+irrelevance' : ∀ {A A' Γ l}
+             → A PE.≡ A'
+             → Γ ⊩⟨ l ⟩ A
+             → Γ ⊩⟨ l ⟩ A'
+irrelevance' PE.refl [A] = [A]
+
 irrelevanceΓ' : ∀ {l A A' Γ Γ'}
               → Γ PE.≡ Γ'
               → A PE.≡ A'

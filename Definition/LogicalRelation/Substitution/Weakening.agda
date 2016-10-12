@@ -17,7 +17,7 @@ wk1ₛ : ∀ {A F Γ l}
     → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 A / [Γ] ∙ [F]
 wk1ₛ {A} [Γ] [F] [A] ⊢Δ [σ] =
   let [σA] = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-      [σA]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+      [σA]' = irrelevance' (PE.sym (subst-wk A)) [σA]
   in  [σA]'
   ,   (λ [σ'] [σ≡σ'] →
          irrelevanceEq'' (PE.sym (subst-wk A))
@@ -33,7 +33,7 @@ wk1Eqₛ : ∀ {A B F Γ l}
        → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 A ≡ wk1 B / [Γ] ∙ [F] / wk1ₛ {A} {F} [Γ] [F] [A]
 wk1Eqₛ {A} {B} [Γ] [F] [A] [A≡B] ⊢Δ [σ] =
   let [σA] = proj₁ ([A] ⊢Δ (proj₁ [σ]))
-      [σA]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (subst-wk A)) [σA]
+      [σA]' = irrelevance' (PE.sym (subst-wk A)) [σA]
   in  irrelevanceEq'' (PE.sym (subst-wk A))
                       (PE.sym (subst-wk B))
                       [σA] [σA]'

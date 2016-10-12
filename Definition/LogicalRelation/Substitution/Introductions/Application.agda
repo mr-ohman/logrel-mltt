@@ -78,7 +78,7 @@ appₛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
       proj₁[t] = proj₁ ([t] ⊢Δ [σ])
       proj₁[u] = proj₁ ([u] ⊢Δ [σ])
       proj₁[G[u]]  = proj₁ ([G[u]] ⊢Δ [σ])
-      proj₁[G[u]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (singleSubstLift G u) proj₁[G[u]]
+      proj₁[G[u]]' = irrelevance' (singleSubstLift G u) proj₁[G[u]]
   in  irrelevanceTerm' (PE.sym (singleSubstLift G u)) proj₁[G[u]]' proj₁[G[u]] (appTerm proj₁[F] proj₁[G[u]]' proj₁[ΠFG] (proj₁ ([t] ⊢Δ [σ])) (proj₁ ([u] ⊢Δ [σ])))
   ,   (λ [σ'] [σ≡σ'] →
          let proj₁[u'] = convTerm₂ proj₁[F] (proj₁ ([F] ⊢Δ [σ'])) (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']) (proj₁ ([u] ⊢Δ [σ']))
@@ -95,6 +95,6 @@ app-congₛ : ∀ {F G t u a b Γ}
           → Γ ⊩ₛ⟨ ¹ ⟩t' t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ] / substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a]
 app-congₛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
   let [G[a]]  = proj₁ (substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
-      [G[a]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (singleSubstLift G a) [G[a]]
+      [G[a]]' = irrelevance' (singleSubstLift G a) [G[a]]
   in  irrelevanceEqTerm' (PE.sym (singleSubstLift G a)) [G[a]]' [G[a]]
                          (app-congTerm (proj₁ ([F] ⊢Δ [σ])) [G[a]]' (proj₁ ([ΠFG] ⊢Δ [σ])) ([t≡u] ⊢Δ [σ]) (proj₁ ([a] ⊢Δ [σ])) (proj₁ ([b] ⊢Δ [σ])) ([a≡b] ⊢Δ [σ]))

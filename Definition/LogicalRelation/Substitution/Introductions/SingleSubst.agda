@@ -33,7 +33,7 @@ substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
 substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
   let G[t] = (proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
+      G[t]' = irrelevance' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
                       G[t]
   in  G[t]' , (λ {σ'} [σ'] [σ≡σ'] → irrelevanceEq'' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
                                           (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G)))
@@ -55,7 +55,7 @@ substSEq : ∀ {F F' G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
 substSEq {F} {F'} {G} {G'} {t} {t'} [Γ] [F] [F'] [F≡F'] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {σ = σ} ⊢Δ [σ] =
   let G[t] = (proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
                     (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ])))))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G))) G[t]
+      G[t]' = irrelevance' (PE.sym (PE.trans (substCompEq G) (substEq substConcatSingleton' G))) G[t]
       [t]' = convₛ {t} {F} {F'} [Γ] [F] [F'] [F≡F'] [t]
       G'[t] = (proj₁ ([G'] {σ = consSubst σ (subst σ t)} ⊢Δ
                      (consSubstS {t = subst σ t} {A = F'} [Γ] ⊢Δ [σ] [F'] (proj₁ ([t]' ⊢Δ [σ])))))
@@ -69,7 +69,7 @@ substSEq {F} {F'} {G} {G'} {t} {t'} [Γ] [F] [F'] [F≡F'] [G] [G'] [G≡G'] [t]
                                 convEqₛ {t} {t'} {F} {F'} [Γ] [F] [F'] [F≡F'] [t≡t'] ⊢Δ [σ]))
       G'[t'] = (proj₁ ([G'] {σ = consSubst σ (subst σ t')} ⊢Δ
                     (consSubstS {t = subst σ t'} {A = F'} [Γ] ⊢Δ [σ] [F'] (proj₁ ([t'] ⊢Δ [σ])))))
-      G'[t']' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (PE.trans (substCompEq G') (substEq substConcatSingleton' G'))) G'[t']
+      G'[t']' = irrelevance' (PE.sym (PE.trans (substCompEq G') (substEq substConcatSingleton' G'))) G'[t']
   in  transEq G[t]' G'[t] G'[t']' G[t]≡G'[t] G'[t]≡G'[t']
 
 substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
@@ -83,7 +83,7 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
       prff = PE.sym (PE.trans (substCompEq f) (substEq substConcatSingleton' f))
       G[t] = proj₁ ([G] {σ = consSubst σ (subst σ t)} ⊢Δ
                    (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) prfG G[t]
+      G[t]' = irrelevance' prfG G[t]
       f[t] = proj₁ ([f] {σ = consSubst σ (subst σ t)} ⊢Δ
                    (consSubstS {t = subst σ t} {A = F} [Γ] ⊢Δ [σ] [F] (proj₁ ([t] ⊢Δ [σ]))))
       f[t]' = irrelevanceTerm'' prfG prff G[t] G[t]' f[t]
@@ -113,7 +113,7 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
       [t]' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t] ⊢Δ [σ]))
       G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
                                (proj₁ [σ] , [t]'))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G} {t} {σ}) G[t]
+      G[t]' = irrelevance' (lemma3 {G} {t} {σ}) G[t]
   in  G[t]'
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [σ't] = irrelevanceTerm' (subst-wk F) (proj₁ ([wk1F] {σ = σ'} ⊢Δ [σ'])) (proj₁ ([F] {σ = tail σ'} ⊢Δ (proj₁ [σ']))) (proj₁ ([t] ⊢Δ [σ']))
@@ -139,11 +139,11 @@ subst↑SEq {F} {G} {G'} {t} {t'} [Γ] [F] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {
       [t']' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t'] ⊢Δ [σ]))
       [t≡t']' = irrelevanceEqTerm' (subst-wk F) [σwk1F] [σwk1F]' ([t≡t'] ⊢Δ [σ])
       G[t] = proj₁ ([G] ⊢Δ (proj₁ [σ] , [t]'))
-      G[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G} {t} {σ}) G[t]
+      G[t]' = irrelevance' (lemma3 {G} {t} {σ}) G[t]
       G'[t] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t]'))
-      G'[t]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G'} {t} {σ}) G'[t]
+      G'[t]' = irrelevance' (lemma3 {G'} {t} {σ}) G'[t]
       G'[t'] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t']'))
-      G'[t']' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (lemma3 {G'} {t'} {σ}) G'[t']
+      G'[t']' = irrelevance' (lemma3 {G'} {t'} {σ}) G'[t']
       G[t]≡G'[t] = irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G'} {t} {σ}) G[t] G[t]' ([G≡G'] ⊢Δ (proj₁ [σ] , [t]'))
       G'[t]≡G'[t'] = irrelevanceEq'' (lemma3 {G'} {t} {σ}) (lemma3 {G'} {t'} {σ}) G'[t] G'[t]' (proj₂ ([G'] ⊢Δ (proj₁ [σ] , [t]')) (proj₁ [σ] , [t']') (reflSubst [Γ] ⊢Δ (proj₁ [σ]) , [t≡t']'))
   in  transEq G[t]' G'[t]' G'[t']' G[t]≡G'[t] G'[t]≡G'[t']
@@ -161,7 +161,7 @@ substSΠ₁ {F} {G} {t} (Π D ⊢F ⊢G [F] [G] G-ext) [F]₁ [t] =
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf (soundness [F]₁)
       [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
-  in  PE.subst (λ x → _ ⊩⟨ _ ⟩ x) Geq ([G] T.id ⊢Γ [t]')
+  in  irrelevance' Geq ([G] T.id ⊢Γ [t]')
 substSΠ₁ (emb {l< = 0<1} x) [F] [t] = emb {l< = 0<1} (substSΠ₁ x [F] [t])
 
 substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
@@ -208,7 +208,7 @@ substSΠ : ∀ {F G t Γ l}
 substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
   let [σG[t]] = substSΠ₁ (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([F] ⊢Δ [σ]))
                          (proj₁ ([t] ⊢Δ [σ]))
-      [σG[t]]' = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (singleSubstLift G t))
+      [σG[t]]' = irrelevance' (PE.sym (singleSubstLift G t))
                           [σG[t]]
   in  [σG[t]]'
   ,   (λ [σ'] [σ≡σ'] →
@@ -241,6 +241,6 @@ substSΠEq {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] [t≡u] {Δ = Δ} {σ = σ} �
       [σt]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σt]
       [σu]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σu]
       [σt≡σu] = [t≡u] ⊢Δ [σ]
-      [G[t]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σt]')
-      [G[u]] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σu]')
+      [G[t]] = irrelevance' (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σt]')
+      [G[u]] = irrelevance' (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σu]')
   in  irrelevanceEq'' (PE.sym (singleSubstLift G t)) (PE.sym (singleSubstLift G u)) [G[t]] (proj₁ (substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ])) (substSΠ₂ [σΠFG] (reflEq [σΠFG]) [σF] [σF] [σt] [σu] [σt≡σu] [G[t]] [G[u]])

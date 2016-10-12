@@ -57,7 +57,7 @@ import Relation.Binary.PropositionalEquality as PE
             → Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst (T.toWk ρ) σ) F
                  / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))
             → Δ₁ ⊩⟨ l ⟩ T.wkLiftₜ ρ (subst (liftSubst σ) G) [ a ]
-      [G]a' a ρ ⊢Δ₁ [a] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (PE.sym (G-substWkLemma a σ G))
+      [G]a' a ρ ⊢Δ₁ [a] = irrelevance' (PE.sym (G-substWkLemma a σ G))
                                    (proj₁ ([G]a a ρ ⊢Δ₁ [a]))
   in Π (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
        (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
