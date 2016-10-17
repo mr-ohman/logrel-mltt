@@ -52,6 +52,10 @@ mutual
                         → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A' ≡ B' / q
   irrelevanceEq'' PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
 
+  irrelevanceEqR' : ∀ {Γ A B B' l} (eqB : B PE.≡ B') (p : Γ ⊩⟨ l ⟩ A)
+                  → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l ⟩ A ≡ B' / p
+  irrelevanceEqR' PE.refl p A≡B = A≡B
+
   irrelevanceEqLift'' : ∀ {Γ A A' B B' C C' l l'} (eqA : A PE.≡ A') (eqB : B PE.≡ B') (eqC : C PE.≡ C') (p : Γ ∙ C ⊩⟨ l ⟩ A) (q : Γ ∙ C' ⊩⟨ l' ⟩ A')
                         → Γ ∙ C ⊩⟨ l ⟩ A ≡ B / p → Γ ∙ C' ⊩⟨ l' ⟩ A' ≡ B' / q
   irrelevanceEqLift'' PE.refl PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
