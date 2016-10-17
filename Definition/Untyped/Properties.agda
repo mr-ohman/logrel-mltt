@@ -7,20 +7,27 @@ open import Relation.Binary.PropositionalEquality as PE hiding ([_]; subst)
 
 open import Definition.Untyped
 
+
+-- Proofs that single substitutions works as expected with lambda.
+
 subst-test₁ : {x : Term} → lam (var 0) [ x ] ≡ lam (var 0)
 subst-test₁ = refl
 
 subst-test₂ : {x : Term} → lam (var 1) [ x ] ≡ lam (wk1 x)
 subst-test₂ = refl
 
-cong₃ : ∀ {a b c d} {A : Set a} {B : Set b} {C : Set c} {D : Set d}
-        (f : A → B → C → D) {x y u v a b} → x ≡ y → u ≡ v → a ≡ b
-        → f x u a ≡ f y v b
+cong₃ : ∀ {a b c d}
+          {A : Set a} {B : Set b} {C : Set c} {D : Set d}
+          {x y u v a b}
+        (f : A → B → C → D) → x ≡ y → u ≡ v → a ≡ b
+      → f x u a ≡ f y v b
 cong₃ f refl refl refl = refl
 
-cong₄ : ∀ {a b c d e} {A : Set a} {B : Set b} {C : Set c} {D : Set d} {E : Set e}
-        (f : A → B → C → D → E) {x y u v s t q r} → x ≡ y → u ≡ v → s ≡ t → q ≡ r
-        → f x u s q ≡ f y v t r
+cong₄ : ∀ {a b c d e}
+          {A : Set a} {B : Set b} {C : Set c} {D : Set d} {E : Set e}
+          {x y u v s t q r}
+        (f : A → B → C → D → E) → x ≡ y → u ≡ v → s ≡ t → q ≡ r
+      → f x u s q ≡ f y v t r
 cong₄ f refl refl refl refl = refl
 
 iterate : {A : Set} → (A → A) → A → Nat → A
@@ -44,7 +51,8 @@ wk-id (lam x) n = cong lam (wk-id x (suc n))
 wk-id (x ∘ x₁) n = cong₂ _∘_ (wk-id x n) (wk-id x₁ n)
 wk-id zero n = refl
 wk-id (suc x) n = cong suc (wk-id x n)
-wk-id (natrec x x₁ x₂ x₃) n = cong₄ natrec (wk-id x (suc n)) (wk-id x₁ n) (wk-id x₂ n) (wk-id x₃ n)
+wk-id (natrec x x₁ x₂ x₃) n =
+  cong₄ natrec (wk-id x (suc n)) (wk-id x₁ n) (wk-id x₂ n) (wk-id x₃ n)
 
 idSubst-lemma-var : (m n : Nat) → substVar (arbLifts n) m ≡ var m
 idSubst-lemma-var m zero = refl
@@ -66,24 +74,6 @@ idSubst-lemma (natrec t t₁ t₂ t₃) n =
 idSubst-lemma₀ : (t : Term) → subst idSubst t ≡ t
 idSubst-lemma₀ t = idSubst-lemma t zero
 
--- wellscoped-lemma-var : {Γ Δ : Con ⊤} (ρ : Γ ⊆ Δ) (x : Nat)
---                      → WellScoped.wkNat ρ x ≡ wkNat (toWk ρ) x
--- wellscoped-lemma-var base x = refl
--- wellscoped-lemma-var (step ρ) x = cong suc (wellscoped-lemma-var ρ x)
--- wellscoped-lemma-var (lift ρ) zero = refl
--- wellscoped-lemma-var (lift ρ) (suc x) = cong suc (wellscoped-lemma-var ρ x)
-
--- wellscoped-lemma : ∀ {Γ Δ} (ρ : Γ ⊆ Δ) t → WellScoped.wk ρ t ≡ wk (toWk ρ) t
--- wellscoped-lemma ρ U = refl
--- wellscoped-lemma ρ (Π t ▹ t₁) = cong₂ Π_▹_ (wellscoped-lemma ρ t) (wellscoped-lemma (lift ρ) t₁)
--- wellscoped-lemma ρ ℕ = refl
--- wellscoped-lemma ρ (var x) = cong var (wellscoped-lemma-var ρ x)
--- wellscoped-lemma ρ (lam t) = cong lam (wellscoped-lemma (lift ρ) t)
--- wellscoped-lemma ρ (t ∘ t₁) = cong₂ _∘_ (wellscoped-lemma ρ t) (wellscoped-lemma ρ t₁)
--- wellscoped-lemma ρ zero = refl
--- wellscoped-lemma ρ (suc t) = cong suc (wellscoped-lemma ρ t)
--- wellscoped-lemma ρ (natrec t t₁ t₂) =
---   cong₃ natrec (wellscoped-lemma (lift ρ) t) (wellscoped-lemma ρ t₁) (wellscoped-lemma ρ t₂)
 
 -- Composition properties
 
