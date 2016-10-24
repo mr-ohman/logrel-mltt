@@ -11,7 +11,7 @@ open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Properties.Symmetry
 open import Definition.LogicalRelation.Properties.Transitivity
 open import Definition.LogicalRelation.Properties.Conversion
-open import Definition.LogicalRelation.Properties.Univalence
+open import Definition.LogicalRelation.Properties.Universe
 open import Definition.LogicalRelation.Properties.Soundness
 
 open import Data.Product

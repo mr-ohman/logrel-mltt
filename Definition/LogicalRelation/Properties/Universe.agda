@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Properties.Univalence where
+module Definition.LogicalRelation.Properties.Universe where
 
 open import Definition.Untyped
 open import Definition.Typed
