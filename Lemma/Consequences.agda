@@ -18,6 +18,7 @@ open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 import Definition.LogicalRelation.Weakening as LR
 open import Definition.LogicalRelation.Irrelevance
+open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
@@ -38,15 +39,16 @@ noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
 noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
 noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
 
-canonicity' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity' {l = l} (ℕ D) ℕ[ _ , d , suc , prop ] =
-  let a , b = canonicity' {l = l} (ℕ D) prop
+canonicity'' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
+canonicity'' {l = l} (noemb (ℕ D)) ℕ[ _ , d , suc , prop ] =
+  let a , b = canonicity'' {l = l} (noemb (ℕ D)) prop
   in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
-canonicity' (ℕ D) ℕ[ .zero , d , zero , prop ] = zero , subset*Term (redₜ d)
-canonicity' (ℕ D) ℕ[ n , d , ne x , prop ] = ⊥-elim (noNe prop x)
-canonicity' (ne D neK) [t] = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-canonicity' (Π D ⊢F ⊢G [F] [G] G-ext) [t] = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
-canonicity' (emb {l< = 0<1} x) [t] = canonicity' x [t]
+canonicity'' (noemb (ℕ D)) ℕ[ .zero , d , zero , prop ] = zero , subset*Term (redₜ d)
+canonicity'' (noemb (ℕ D)) ℕ[ n , d , ne x , prop ] = ⊥-elim (noNe prop x)
+canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
+
+canonicity' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
+canonicity' [ℕ] [t] = canonicity'' (ℕ-elim [ℕ]) (irrelevanceTerm [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [t])
 
 canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity ⊢t with fundamentalTerm ⊢t
@@ -64,14 +66,12 @@ substVar0Id' (suc x) = PE.refl
 substVar0Id : ∀ F → (U.wk (lift (step id)) F) [ var zero ] PE.≡ F
 substVar0Id F = PE.trans (subst-wk F) (PE.trans (substEq substVar0Id' F) (substIdEq F))
 
-injectivity' : ∀ {F G H E Γ l}
-               ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
-             → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
+injectivity'' : ∀ {F G H E Γ l}
+               ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
+             → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-injectivity' (ℕ D) [ΠFG≡ΠHE] = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-injectivity' (ne D neK) [ΠFG≡ΠHE] = ⊥-elim ((Π≢ne neK (whnfRed*' (red D) Π)))
-injectivity' (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+injectivity'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
       ⊢Γ = wf ⊢F
@@ -85,7 +85,14 @@ injectivity' (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F' , G' , D' , A≡B , [F≡F'
       [G≡E]₁ = [G≡G'] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁)) (PE.trans (substVar0Id _) (PE.sym E≡G')) (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
   in  soundnessEq [F]' [F≡H]' , soundnessEq [G]' [G≡E]'
-injectivity' (emb {l< = 0<1} x) [ΠFG≡ΠHE] = injectivity' x [ΠFG≡ΠHE]
+injectivity'' (emb 0<1 x) [ΠFG≡ΠHE] = injectivity'' x [ΠFG≡ΠHE]
+
+injectivity' : ∀ {F G H E Γ l}
+               ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+             → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
+             → Γ ⊢ F ≡ H
+             × Γ ∙ F ⊢ G ≡ E
+injectivity' [ΠFG] [ΠFG≡ΠHE] = injectivity'' (Π-elim [ΠFG]) (irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠHE])
 
 injectivity : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 injectivity ⊢ΠFG≡ΠHE with fundamentalEq ⊢ΠFG≡ΠHE

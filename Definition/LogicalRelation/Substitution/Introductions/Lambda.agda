@@ -28,13 +28,13 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
-      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
+      _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext  = extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ ¹ ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
         let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
             [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
-            _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ]))
+            _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext  = extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  (lam ⊢F
             (soundnessTerm (proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))) (proj₁ ([t] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
         ,   (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
@@ -97,7 +97,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   in  lamt ⊢Δ [σ]
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
-             _ , ⊢F'' , ⊢G'' , [F]'' , [G]'' , G-ext'  = Π-elim (proj₁ ([ΠFG] ⊢Δ [σ']))
+             _ , Π F'' G'' D'' ⊢F'' ⊢G'' [F]'' [G]'' G-ext'  = extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ'])))
              ⊢F' = soundness (proj₁ ([F] ⊢Δ [σ']))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
              [G]₁' = proj₁ ([G] (⊢Δ ∙ ⊢F') [liftσ'])
@@ -186,7 +186,7 @@ fun-extₛ : ∀ {f g F G Γ l}
 fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
   let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , ⊢F , ⊢G , [F]' , [G]' , G-ext = Π-elim [σΠFG]
+      _ , Π F' G' D' ⊢F ⊢G [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σG] = proj₁ ([G] {σ = liftSubst σ} (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       ⊢σf = soundnessTerm [σΠFG] (proj₁ ([f] ⊢Δ [σ]))
       ⊢σg = soundnessTerm [σΠFG] (proj₁ ([g] ⊢Δ [σ]))

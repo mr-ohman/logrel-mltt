@@ -80,6 +80,11 @@ data TypeLevel : Set where
 record LogRelKit : Set₁ where
   constructor Kit
   field
+    _⊩U : (Γ : Con Term) → Set
+    _⊩ℕ_ : (Γ : Con Term) → Term → Set
+    _⊩ne_ : (Γ : Con Term) → Term → Set
+    _⊩Π_ : (Γ : Con Term) → Term → Set
+
     _⊩_ : (Γ : Con Term) → Term → Set
     _⊩_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩ A → Set
     _⊩_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩ A → Set
@@ -137,38 +142,69 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                      ([a≡b] : Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                    → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
+    record _⊩¹U (Γ : Con Term) : Set where
+      constructor U
+      field
+        l' : TypeLevel
+        l< : l' < l
+        ⊢Γ : ⊢ Γ
+
+    record _⊩¹ℕ_ (Γ : Con Term) (A : Term) : Set where
+      constructor ℕ
+      field
+        D : Γ ⊢ A :⇒*: ℕ
+
+    record _⊩¹ne_ (Γ : Con Term) (A : Term) : Set where
+      constructor ne
+      field
+        K   : Term
+        D   : Γ ⊢ A :⇒*: K
+        neK : Neutral K
+
+    record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where
+      inductive
+      constructor Π
+      field
+        F : Term
+        G : Term
+        D : Γ ⊢ A :⇒*: Π F ▹ G
+        ⊢F : Γ ⊢ F
+        ⊢G : Γ ∙ F ⊢ G
+        [F] : wk-prop¹ Γ F
+        [G] : wk-subst-prop¹ Γ F G [F]
+        G-ext : wk-substEq-prop¹ Γ F G [F] [G]
+
     data _⊩¹_ (Γ : Con Term) : Term → Set where
-      U  : ∀ {l'} {l< : l' < l} (⊢Γ : ⊢ Γ) → Γ ⊩¹ U
-      ℕ  : ∀ {A} (D : Γ ⊢ A :⇒*: ℕ) → Γ ⊩¹ A
-      ne : ∀ {A K} (D : Γ ⊢ A :⇒*: K) (neK : Neutral K) → Γ ⊩¹ A
-      Π  : ∀ {F G A} (D : Γ ⊢ A :⇒*: Π F ▹ G) (⊢F : Γ ⊢ F) (⊢G : Γ ∙ F ⊢ G)
-                   ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F])
-                   (G-ext : wk-substEq-prop¹ Γ F G [F] [G]) → Γ ⊩¹ A
+      U  : Γ ⊩¹U → Γ ⊩¹ U
+      ℕ  : ∀ {A} → Γ ⊩¹ℕ A → Γ ⊩¹ A
+      ne : ∀ {A} → Γ ⊩¹ne A → Γ ⊩¹ A
+      Π  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
       emb : ∀ {A l'}{l< : l' < l} (let open LogRelKit (rec l<))
                      → Γ ⊩ A  → Γ ⊩¹ A
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ .U ≡ t / U {l< = l<} ⊢Γ = t PE.≡ U
-    Γ ⊩¹ A ≡ B / ℕ  D = Γ ⊢ B ⇒* ℕ
-    Γ ⊩¹ A ≡ B / ne {K = K} D neK = ne[ Γ ] A ≡ B [ K ]
-    Γ ⊩¹ A ≡ B / Π  {F} {G} D ⊢F ⊢G [F] [G] G-ext = Π¹[ Γ ] A ≡ B [ F , G , [F] , [G] ]
+    Γ ⊩¹ .U ≡ t / U (U l' l< ⊢Γ) = t PE.≡ U
+    Γ ⊩¹ A ≡ B / ℕ (ℕ D) = Γ ⊢ B ⇒* ℕ
+    Γ ⊩¹ A ≡ B / ne (ne K D neK) = ne[ Γ ] A ≡ B [ K ]
+    Γ ⊩¹ A ≡ B / Π (Π F G D ⊢F ⊢G [F] [G] G-ext) = Π¹[ Γ ] A ≡ B [ F , G , [F] , [G] ]
     Γ ⊩¹ A ≡ B / emb x = Γ Lower.⊩ A ≡ B / x
 
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ A ∷ .U / U {l< = l<} ⊢Γ = Γ ⊢ A ∷ U × Γ ⊩ A where open Lower {l< = l<}
-    Γ ⊩¹ t ∷ A / ℕ x = ℕ[ Γ ] t ∷ A
-    Γ ⊩¹ t ∷ A / ne x x₁ = Γ ⊢ t ∷ A
-    Γ ⊩¹ f ∷ A / Π {F} {G} D ⊢F ⊢G [F] [G] G-ext =
+    Γ ⊩¹ A ∷ .U / U (U l' l< ⊢Γ) = Γ ⊢ A ∷ U × Γ ⊩ A where open Lower {l< = l<}
+    Γ ⊩¹ t ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ∷ A
+    Γ ⊩¹ t ∷ A / ne (ne K D neK) = Γ ⊢ t ∷ A
+    Γ ⊩¹ f ∷ A / Π (Π F G D ⊢F ⊢G [F] [G] G-ext) =
       Γ ⊢ f ∷ A × wk-fun-ext-prop¹ Γ F G f [F] [G]
                 × wk-subst-prop-T¹ Γ F G [F] [G] f
     Γ ⊩¹ t ∷ A / emb x = Γ Lower.⊩ t ∷ A / x
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ≡ u ∷ .U / U {l< = l<} ⊢Γ = U[ l< ][ Γ ] t ≡ u ∷ U
-    Γ ⊩¹ t ≡ u ∷ A / ℕ x = ℕ[ Γ ] t ≡ u ∷ A
-    Γ ⊩¹ t ≡ u ∷ A / ne x x₁ = Γ ⊢ t ≡ u ∷ A
-    Γ ⊩¹ t ≡ u ∷ A / Π {F} {G} x x₁ x₂ [F] [G] x₃ = --Π¹ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
-      let [A] = Π x x₁ x₂ [F] [G] x₃
+    Γ ⊩¹ t ≡ u ∷ .U / U (U l' l< ⊢Γ) = U[ l< ][ Γ ] t ≡ u ∷ U
+    Γ ⊩¹ t ≡ u ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ≡ u ∷ A
+    Γ ⊩¹ t ≡ u ∷ A / ne (ne K D neK) = Γ ⊢ t ≡ u ∷ A
+    Γ ⊩¹ t ≡ u ∷ A / Π (Π F G D ⊢F ⊢G [F] [G] G-ext) =
+      --Π¹ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]
+      let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
       in  Γ ⊢ t ≡ u ∷ A
       ×   Γ ⊩¹ t ∷ A / [A]
       ×   Γ ⊩¹ u ∷ A / [A]
@@ -204,7 +240,9 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                         → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
     kit : LogRelKit
-    kit = Kit _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_ wk-prop¹ wk-subst-prop¹ wk-substEq-prop¹
+    kit = Kit _⊩¹U _⊩¹ℕ_ _⊩¹ne_ _⊩¹Π_
+              _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
+              wk-prop¹ wk-subst-prop¹ wk-substEq-prop¹
 
 open LogRel public using (U; ℕ; ne; Π; emb; U[_,_,_,_,_,_]; Π¹[_,_,_,_,_,_]; Π¹ₜ[_,_,_,_])
 
@@ -216,17 +254,28 @@ kit : ∀ (i : TypeLevel) → LogRelKit
 kit l = LogRel.kit l (logRelRec l)
 -- a bit of repetition in "kit ¹" definition, would work better with Fin 2 for TypeLevel because you could recurse.
 
-_⊩⟨_⟩_ : (Γ : Con Term) (T : TypeLevel) → Term → Set
-Γ ⊩⟨ l ⟩ A  = Γ ⊩ A where open LogRelKit (kit l)
+_⊩'⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
+Γ ⊩'⟨ l ⟩U = Γ ⊩U where open LogRelKit (kit l)
 
-_⊩⟨_⟩_≡_/_ : (Γ : Con Term) (T : TypeLevel) (A B : Term) → Γ ⊩⟨ T ⟩ A → Set
+_⊩'⟨_⟩ℕ_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
+Γ ⊩'⟨ l ⟩ℕ A = Γ ⊩ℕ A where open LogRelKit (kit l)
+
+_⊩'⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
+Γ ⊩'⟨ l ⟩ne A = Γ ⊩ne A where open LogRelKit (kit l)
+
+_⊩'⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
+Γ ⊩'⟨ l ⟩Π A = Γ ⊩Π A where open LogRelKit (kit l)
+
+_⊩⟨_⟩_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
+Γ ⊩⟨ l ⟩ A = Γ ⊩ A where open LogRelKit (kit l)
+
+_⊩⟨_⟩_≡_/_ : (Γ : Con Term) (l : TypeLevel) (A B : Term) → Γ ⊩⟨ l ⟩ A → Set
 Γ ⊩⟨ l ⟩ A ≡ B / [A] = Γ ⊩ A ≡ B / [A] where open LogRelKit (kit l)
 
-
-_⊩⟨_⟩_∷_/_ : (Γ : Con Term) (T : TypeLevel) (t A : Term) → Γ ⊩⟨ T ⟩ A → Set
+_⊩⟨_⟩_∷_/_ : (Γ : Con Term) (l : TypeLevel) (t A : Term) → Γ ⊩⟨ l ⟩ A → Set
 Γ ⊩⟨ l ⟩ t ∷ A / [A] = Γ ⊩ t ∷ A / [A] where open LogRelKit (kit l)
 
-_⊩⟨_⟩_≡_∷_/_ : (Γ : Con Term) (T : TypeLevel) (t u A : Term) → Γ ⊩⟨ T ⟩ A → Set
+_⊩⟨_⟩_≡_∷_/_ : (Γ : Con Term) (l : TypeLevel) (t u A : Term) → Γ ⊩⟨ l ⟩ A → Set
 Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A] = Γ ⊩ t ≡ u ∷ A / [A] where open LogRelKit (kit l)
 
 wk-prop : ∀ l (Γ : Con Term) (F : Term) → Set
