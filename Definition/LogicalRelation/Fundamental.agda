@@ -1,4 +1,4 @@
-module Lemma.Fundamental where
+module Definition.LogicalRelation.Fundamental where
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
