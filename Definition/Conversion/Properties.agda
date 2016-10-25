@@ -19,14 +19,15 @@ mutual
   ~-subset (natrec k~l x x₁ x₂ x₃) = natrec-cong {!!} {!!} {!!} (~-subset k~l)
 
   convSubsetTerm : ∀ {a b A Γ} → ⊢ Γ → Γ ⊢ a [conv] b ∷ A → Γ ⊢ a ≡ b ∷ A
-  convSubsetTerm ⊢Γ (tmp x x₁ x₂ c) = let c'  = convSubsetTerm ⊢Γ c
-                                          x₂' = subset*Term x₂
-                                          x₁' = subset*Term x₁
-                                          x'  = subset* x
-                                      in  conv (trans x₁' (trans c' (sym x₂'))) (sym x')
+  convSubsetTerm ⊢Γ (reduction x x₁ x₂ c) =
+    let c'  = convSubsetTerm ⊢Γ c
+        x₂' = subset*Term x₂
+        x₁' = subset*Term x₁
+        x'  = subset* x
+    in  conv (trans x₁' (trans c' (sym x₂'))) (sym x')
   convSubsetTerm ⊢Γ (ℕ-ins x x₁ x₂) = {!!}
   convSubsetTerm ⊢Γ (ne-ins x x₁ x₂ x₃) = {!!}
-  convSubsetTerm ⊢Γ (tmp2 x x₁ x₂) = {!!}
+  convSubsetTerm ⊢Γ (univ x x₁ x₂) = {!!}
   convSubsetTerm ⊢Γ zero-refl = refl (zero ⊢Γ)
   convSubsetTerm ⊢Γ (suc-cong c) = {!!}
   convSubsetTerm ⊢Γ (fun-ext x x₁ c) = {!!}
