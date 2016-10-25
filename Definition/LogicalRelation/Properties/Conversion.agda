@@ -19,10 +19,11 @@ mutual
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
              → Γ ⊩⟨ l ⟩  t ∷ A / [A]
              → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
-  convTermT₁ (ℕ D D₁) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
-  convTermT₁ {l} (ne D neK D₁ neK₁) A≡B t =
-    conv t (soundnessEq {l} (ne D neK) A≡B)
-  convTermT₁ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+  convTermT₁ (ℕ ℕA ℕB) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
+  convTermT₁ {l} (ne neA neB) A≡B t =
+    conv t (soundnessEq {l} (ne neA) A≡B)
+  convTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
              Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t , [t]₁) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
     in  conv ⊢t A≡B
@@ -49,7 +50,7 @@ mutual
                                        ([G] ρ ⊢Δ [a]₁)
                                        ([G≡G'] ρ ⊢Δ [a]₁)
           in  convTerm₁ ([G] ρ ⊢Δ [a]₁) ([G]₁ ρ ⊢Δ [a]) [G≡G₁] ([t]₁ ρ ⊢Δ [a]₁))
-  convTermT₁ (U ⊢Γ ⊢Γ₁) A≡B t = t
+  convTermT₁ (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) A≡B t = t
   convTermT₁ (emb⁰¹ x) A≡B t = convTermT₁ x A≡B t
   convTermT₁ (emb¹⁰ x) A≡B t = convTermT₁ x A≡B t
 
@@ -58,10 +59,11 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
-  convTermT₂ (ℕ D D₁) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
-  convTermT₂ {l} (ne D neK D₁ neK₁) A≡B t =
-    conv t (sym (soundnessEq {l} (ne D neK) A≡B))
-  convTermT₂ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+  convTermT₂ (ℕ ℕA ℕB) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
+  convTermT₂ {l} (ne neA neB) A≡B t =
+    conv t (sym (soundnessEq {l} (ne neA) A≡B))
+  convTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
              Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t , [t]₁) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
     in  conv ⊢t (sym A≡B)
@@ -87,7 +89,7 @@ mutual
                                         ([G≡G'] ρ ⊢Δ [a])
            in  convTerm₂ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁)
                          [G≡G₁] ([t]₁ ρ ⊢Δ [a]₁))
-  convTermT₂ (U ⊢Γ ⊢Γ₁) A≡B t = t
+  convTermT₂ (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) A≡B t = t
   convTermT₂ (emb⁰¹ x) A≡B t = convTermT₂ x A≡B t
   convTermT₂ (emb¹⁰ x) A≡B t = convTermT₂ x A≡B t
 
@@ -116,15 +118,16 @@ mutual
                → Γ ⊩⟨ l ⟩  A ≡ B / [A]
                → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
                → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
-  convEqTermT₁ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
+  convEqTermT₁ (ℕ ℕA ℕB) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
     ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
-  convEqTermT₁ {l} (ne D neK D₁ neK₁) A≡B t≡u =
-    conv t≡u (soundnessEq {l} (ne D neK) A≡B)
-  convEqTermT₁ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+  convEqTermT₁ {l} (ne neA neB) A≡B t≡u =
+    conv t≡u (soundnessEq {l} (ne neA) A≡B)
+  convEqTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
                Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
                (t≡u , ⊩t , ⊩u , [t≡u]) =
-    let [A] = Π D ⊢F ⊢G [F] [G] G-ext
-        [B] = Π D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁
+    let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+        [B] = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
         [A≡B] = Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
     in  conv t≡u A≡B , convTerm₁ [A] [B] [A≡B] ⊩t , convTerm₁ [A] [B] [A≡B] ⊩u
      ,  (λ ρ ⊢Δ [a] →
@@ -138,7 +141,7 @@ mutual
                                         ([G≡G'] ρ ⊢Δ [a]₁)
            in  convEqTerm₁ ([G] ρ ⊢Δ [a]₁) ([G]₁ ρ ⊢Δ [a])
                            [G≡G₁] ([t≡u] ρ ⊢Δ [a]₁))
-  convEqTermT₁ (U ⊢Γ ⊢Γ₁) A≡B t≡u = t≡u
+  convEqTermT₁ (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) A≡B t≡u = t≡u
   convEqTermT₁ (emb⁰¹ x) A≡B t≡u = convEqTermT₁ x A≡B t≡u
   convEqTermT₁ (emb¹⁰ x) A≡B t≡u = convEqTermT₁ x A≡B t≡u
 
@@ -149,13 +152,14 @@ mutual
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
   convEqTermT₂ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
     ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
-  convEqTermT₂ {l} (ne D neK D₁ neK₁) A≡B t≡u =
-    conv t≡u (sym (soundnessEq {l} (ne D neK) A≡B))
-  convEqTermT₂ (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+  convEqTermT₂ {l} (ne neA neB) A≡B t≡u =
+    conv t≡u (sym (soundnessEq {l} (ne neA) A≡B))
+  convEqTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
                Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
                (t≡u , ⊩t , ⊩u , [t≡u]) =
-    let [A] = Π D ⊢F ⊢G [F] [G] G-ext
-        [B] = Π D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁
+    let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+        [B] = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
         [A≡B] = Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
     in  conv t≡u (sym A≡B) , convTerm₂ [A] [B] [A≡B] ⊩t
                            , convTerm₂ [A] [B] [A≡B] ⊩u
@@ -170,7 +174,7 @@ mutual
                                         ([G≡G'] ρ ⊢Δ [a])
            in  convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁)
                            [G≡G₁] ([t≡u] ρ ⊢Δ [a]₁))
-  convEqTermT₂ (U ⊢Γ ⊢Γ₁) A≡B t≡u = t≡u
+  convEqTermT₂ (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) A≡B t≡u = t≡u
   convEqTermT₂ (emb⁰¹ x) A≡B t≡u = convEqTermT₂ x A≡B t≡u
   convEqTermT₂ (emb¹⁰ x) A≡B t≡u = convEqTermT₂ x A≡B t≡u
 

@@ -148,25 +148,30 @@ subst↑SEq {F} {G} {G'} {t} {t'} [Γ] [F] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {
       G'[t]≡G'[t'] = irrelevanceEq'' (lemma3 {G'} {t} {σ}) (lemma3 {G'} {t'} {σ}) G'[t] G'[t]' (proj₂ ([G'] ⊢Δ (proj₁ [σ] , [t]')) (proj₁ [σ] , [t']') (reflSubst [Γ] ⊢Δ (proj₁ [σ]) , [t≡t']'))
   in  transEq G[t]' G'[t]' G'[t']' G[t]≡G'[t] G'[t]≡G'[t']
 
-substSΠ₁ : ∀ {F G t Γ l l'}
-           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+substSΠ₁' : ∀ {F G t Γ l l'}
+           ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([F] : Γ ⊩⟨ l' ⟩ F)
            ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
          → Γ ⊩⟨ l ⟩ G [ t ]
-substSΠ₁ (ℕ D) [F] [t] = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-substSΠ₁ (ne D neK) [F] [t] = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-substSΠ₁ {F} {G} {t} (Π D ⊢F ⊢G [F] [G] G-ext) [F]₁ [t] =
+substSΠ₁' {t = t} (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) [F]₁ [t] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf (soundness [F]₁)
       [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
   in  irrelevance' Geq ([G] T.id ⊢Γ [t]')
-substSΠ₁ (emb {l< = 0<1} x) [F] [t] = emb {l< = 0<1} (substSΠ₁ x [F] [t])
+substSΠ₁' (emb 0<1 x) [F]₁ [t] = emb {l< = 0<1} (substSΠ₁' x [F]₁ [t])
 
-substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
+substSΠ₁ : ∀ {F G t Γ l l'}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
-           ([ΠFG≡ΠF'G'] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F' ▹ G' / [ΠFG])
+           ([F] : Γ ⊩⟨ l' ⟩ F)
+           ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
+         → Γ ⊩⟨ l ⟩ G [ t ]
+substSΠ₁ [ΠFG] [F] [t] = substSΠ₁' (Π-elim [ΠFG]) [F] [t]
+
+substSΠ₂' : ∀ {F F' G G' t t' Γ l l' l''}
+           ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
+           ([ΠFG≡ΠF'G'] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F' ▹ G' / Π-intr [ΠFG])
            ([F] : Γ ⊩⟨ l' ⟩ F)
            ([F'] : Γ ⊩⟨ l' ⟩ F')
            ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
@@ -175,11 +180,7 @@ substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
            ([G[t]] : Γ ⊩⟨ l'' ⟩ G [ t ])
            ([G'[t']] : Γ ⊩⟨ l'' ⟩ G' [ t' ])
          → Γ ⊩⟨ l'' ⟩ G [ t ] ≡ G' [ t' ] / [G[t]]
-substSΠ₂ (ℕ D) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
-  ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-substSΠ₂ (ne D neK) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
-  ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-substSΠ₂ (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F≡F'] , [G≡G'] ]
+substSΠ₂' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) Π¹[ F'' , G'' , D' , A≡B , [F≡F'] , [G≡G'] ]
          [F]₁ [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F'≡F'' , G'≡G'' = Π-PE-injectivity (whnfRed*' D' Π)
@@ -196,8 +197,22 @@ substSΠ₂ (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F≡F
   in  irrelevanceEq' Geq ([G] T.id ⊢Γ [t]') [G[t]]
         (transEq' PE.refl Geq' ([G] T.id ⊢Γ [t]') ([G] T.id ⊢Γ [t']')
                   [G'[t']] [Gt≡Gt'] [Gt'≡G't'])
-substSΠ₂ (emb {l< = 0<1} x) [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
-  substSΠ₂ x [ΠFG≡ΠF'G'] [F] [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']]
+substSΠ₂' (emb 0<1 x) = substSΠ₂' x
+
+substSΠ₂ : ∀ {F F' G G' t t' Γ l l' l''}
+           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+           ([ΠFG≡ΠF'G'] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F' ▹ G' / [ΠFG])
+           ([F] : Γ ⊩⟨ l' ⟩ F)
+           ([F'] : Γ ⊩⟨ l' ⟩ F')
+           ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
+           ([t'] : Γ ⊩⟨ l' ⟩ t' ∷ F' / [F'])
+           ([t≡t'] : Γ ⊩⟨ l' ⟩ t ≡ t' ∷ F / [F])
+           ([G[t]] : Γ ⊩⟨ l'' ⟩ G [ t ])
+           ([G'[t']] : Γ ⊩⟨ l'' ⟩ G' [ t' ])
+         → Γ ⊩⟨ l'' ⟩ G [ t ] ≡ G' [ t' ] / [G[t]]
+substSΠ₂ [ΠFG] [ΠFG≡ΠF'G'] =
+  let [ΠFG≡ΠF'G']' = irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠF'G']
+  in  substSΠ₂' (Π-elim [ΠFG]) [ΠFG≡ΠF'G']'
 
 substSΠ : ∀ {F G t Γ l}
           ([Γ] : ⊩ₛ Γ)
@@ -234,13 +249,18 @@ substSΠEq : ∀ {F G t u Γ l}
           → Γ ⊩ₛ⟨ l ⟩ G [ t ] ≡ G [ u ] / [Γ] / substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t]
 substSΠEq {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] [t≡u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
+      _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext' = extractMaybeEmb (Π-elim [σΠFG])
+      F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D') Π)
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σt] = proj₁ ([t] ⊢Δ [σ])
       [σu] = proj₁ ([u] ⊢Δ [σ])
-      [σt]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σt]
-      [σu]' = irrelevanceTerm' (PE.sym (wk-id (subst σ F) 0)) [σF] ([F]' T.id ⊢Δ) [σu]
+      [σt]' = irrelevanceTerm' (PE.trans F≡F' (PE.sym (wk-id F' 0))) [σF] ([F]' T.id ⊢Δ) [σt]
+      [σu]' = irrelevanceTerm' (PE.trans F≡F' (PE.sym (wk-id F' 0))) [σF] ([F]' T.id ⊢Δ) [σu]
       [σt≡σu] = [t≡u] ⊢Δ [σ]
-      [G[t]] = irrelevance' (PE.cong (λ x → x [ subst σ t ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σt]')
-      [G[u]] = irrelevance' (PE.cong (λ x → x [ subst σ u ]) (wk-id (subst (liftSubst σ) G) 1)) ([G]' T.id ⊢Δ [σu]')
-  in  irrelevanceEq'' (PE.sym (singleSubstLift G t)) (PE.sym (singleSubstLift G u)) [G[t]] (proj₁ (substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ])) (substSΠ₂ [σΠFG] (reflEq [σΠFG]) [σF] [σF] [σt] [σu] [σt≡σu] [G[t]] [G[u]])
+      [G[t]] = irrelevance' (PE.cong (λ x → x [ subst σ t ]) (PE.trans (wk-id G' 1) (PE.sym G≡G'))) ([G]' T.id ⊢Δ [σt]')
+      [G[u]] = irrelevance' (PE.cong (λ x → x [ subst σ u ]) (PE.trans (wk-id G' 1) (PE.sym G≡G'))) ([G]' T.id ⊢Δ [σu]')
+  in  irrelevanceEq'' (PE.sym (singleSubstLift G t))
+                      (PE.sym (singleSubstLift G u))
+                      [G[t]]
+                      (proj₁ (substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ]))
+                      (substSΠ₂ {subst σ F} {subst σ F} {subst (liftSubst σ) G} {subst (liftSubst σ) G} (proj₁ ([ΠFG] ⊢Δ [σ])) (reflEq (proj₁ ([ΠFG] ⊢Δ [σ]))) [σF] [σF] [σt] [σu] [σt≡σu] [G[t]] [G[u]])

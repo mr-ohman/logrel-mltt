@@ -59,7 +59,7 @@ import Relation.Binary.PropositionalEquality as PE
             → Δ₁ ⊩⟨ l ⟩ T.wkLiftₜ ρ (subst (liftSubst σ) G) [ a ]
       [G]a' a ρ ⊢Δ₁ [a] = irrelevance' (PE.sym (G-substWkLemma a σ G))
                                    (proj₁ ([G]a a ρ ⊢Δ₁ [a]))
-  in Π (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
+  in Π (Π (subst σ F) (subst (liftSubst σ) G) (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
        (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
          let [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
                                (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
@@ -76,7 +76,7 @@ import Relation.Binary.PropositionalEquality as PE
                              (proj₁ ([G]a a ρ ⊢Δ₁ [a]'))
                              ([G]a' a ρ ⊢Δ₁ [a]')
                              (proj₂ ([G]a a ρ ⊢Δ₁ [a]')
-                                    (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [b]') (reflSubst [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) , [a≡b]')))
+                                    (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [b]') (reflSubst [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) , [a≡b]'))))
   ,  (λ {σ'} [σ'] [σ≡σ'] →
          let var0 = var (⊢Δ ∙ ⊢F [σ])
                         (PE.subst (λ x → zero ∷ x ∈ (Δ ∙ subst σ F))
@@ -122,7 +122,7 @@ import Relation.Binary.PropositionalEquality as PE
 Π-congₛ {F} {G} {H} {E} [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
   let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , ⊢F' , ⊢G' , [F]' , [G]' , G-ext' = Π-elim [σΠFG]
+      _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext' = extractMaybeEmb (Π-elim [σΠFG])
       [σF] = proj₁ ([F] ⊢Δ [σ])
       ⊢σF = soundness [σF]
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
@@ -151,7 +151,7 @@ import Relation.Binary.PropositionalEquality as PE
 Πₜₛ {F} {G} {Γ} [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
-      ⊢Fₜ = soundnessTerm (U {l< = 0<1} ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ]))
+      ⊢Fₜ = soundnessTerm (U (U ⁰ 0<1 ⊢Δ)) (proj₁ ([Fₜ] ⊢Δ [σ]))
       ⊢Gₜ = soundnessTerm (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ])) (proj₁ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]))
       [F]₀ = univₛ {F} [Γ] (Uₛ [Γ]) [Fₜ]
       [Gₜ]' = S.irrelevanceTerm {A = U} {t = G}
@@ -175,9 +175,9 @@ import Relation.Binary.PropositionalEquality as PE
                                               (proj₂ ([F] (⊢Δ ∙ ⊢F) [wk1σ]) [wk1σ']
                                                      (wk1SubstSEq [Γ] ⊢Δ ⊢F [σ] [σ≡σ']))))
              ⊢F' = soundness (proj₁ ([F] ⊢Δ [σ']))
-             ⊢Fₜ' = soundnessTerm (U {l< = 0<1} ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ']))
+             ⊢Fₜ' = soundnessTerm (U (U ⁰ 0<1 ⊢Δ)) (proj₁ ([Fₜ] ⊢Δ [σ']))
              ⊢Gₜ' = soundnessTerm (proj₁ ([U] (⊢Δ ∙ ⊢F') [liftσ'])) (proj₁ ([Gₜ] (⊢Δ ∙ ⊢F') [liftσ']))
-             ⊢F≡F' = soundnessTermEq (U {l< = 0<1} ⊢Δ) (proj₂ ([Fₜ] ⊢Δ [σ]) [σ'] [σ≡σ'])
+             ⊢F≡F' = soundnessTermEq (U (U ⁰ 0<1 ⊢Δ)) (proj₂ ([Fₜ] ⊢Δ [σ]) [σ'] [σ≡σ'])
              ⊢G≡G' = soundnessTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                                      (proj₂ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]) [liftσ']' (liftSubstSEq {F = F} [Γ] ⊢Δ [F] [σ] [σ≡σ']))
              [ΠFG]' = (Πₛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ']
@@ -213,11 +213,11 @@ import Relation.Binary.PropositionalEquality as PE
       [G≡E]ᵤ = S.irrelevanceEq {A = G} {B = E} (_∙_ {A = F} [Γ] [F]) (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁ [G]ᵤ
                  (univEqₛ {G} {E} (_∙_ {A = F} [Γ] [F]) (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ᵤ₁
                           [G≡E]ₜ)
-  in  U[ Π soundnessTerm {l = ¹} (U {l< = 0<1} ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
+  in  U[ Π soundnessTerm {l = ¹} (U (U ⁰ 0<1 ⊢Δ)) (proj₁ ([F]ₜ ⊢Δ [σ]))
          ▹ soundnessTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ])) (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
-       , Π soundnessTerm {l = ¹} (U {l< = 0<1} ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
+       , Π soundnessTerm {l = ¹} (U (U ⁰ 0<1 ⊢Δ)) (proj₁ ([H]ₜ ⊢Δ [σ]))
          ▹ soundnessTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ])) (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ]))
-       , Π-cong ⊢F (soundnessTermEq (U {l< = 0<1} ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
+       , Π-cong ⊢F (soundnessTermEq (U (U ⁰ 0<1 ⊢Δ)) ([F≡H]ₜ ⊢Δ [σ]))
                    (soundnessTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ])) ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
        , proj₁ (Πₛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ])
        , proj₁ (Πₛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ])

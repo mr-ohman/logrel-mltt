@@ -21,16 +21,17 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
-  transEqT (ℕ D D₁) (ℕ .D₁ D₂) A≡B B≡C = B≡C
-  transEqT (ne D neK D₁ neK₁) (ne .D₁ .neK₁ D₂ neK₂)
+  transEqT (ℕ ℕA ℕB) (ℕ .ℕB ℕC) A≡B B≡C = B≡C
+  transEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne ._ (ne K₂ D₂ neK₂))
            ne[ M , D' , neM , K≡M ] ne[ M₁ , D'' , neM₁ , K≡M₁ ] =
     ne[ M₁ , D'' , neM₁
       , trans K≡M (trans (trans (sym (subset* (red D')))
                                 (subset* (red D₁)))
                          K≡M₁) ]
   transEqT {Γ} {l = l} {l' = l′} {l'' = l″}
-           (Π D ⊢F ⊢G [F] [G] G-ext D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
-           (Π .D₁ .⊢F₁ .⊢G₁ .[F]₁ .[G]₁ .G-ext₁ D₂ ⊢F₂ ⊢G₂ [F]₂ [G]₂ G-ext₂)
+           (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
+              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+           (Π ._ (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ [F]₂ [G]₂ G-ext₂))
            Π¹[ F′ , G′ , D′ , A≡B , [F≡F′] , [G≡G′] ]
            Π¹[ F″ , G″ , D″ , A≡B₁ , [F≡F′]₁ , [G≡G′]₁ ] =
     let F₁≡F′  , G₁≡G′  = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D′  , Π))
@@ -129,14 +130,16 @@ transEqTerm : ∀ {l Γ A t u v}
             → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
             → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A]
             → Γ ⊩⟨ l ⟩ t ≡ v ∷ A / [A]
-transEqTerm (U {l< = 0<1} ⊢Γ) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ]
-                              U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] =
+transEqTerm (U (U .⁰ 0<1 ⊢Γ))
+            U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ]
+            U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] =
   U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁
    , transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
-transEqTerm (ℕ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
-transEqTerm (ne D neK) t≡u u≡v = trans t≡u u≡v
-transEqTerm (Π D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u])
-                                      (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =
+transEqTerm (ℕ ℕA) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
+transEqTerm (ne neA) t≡u u≡v = trans t≡u u≡v
+transEqTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
+            (t≡u , ⊩t , ⊩u , [t≡u])
+            (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =
   trans t≡u t≡u₁ , ⊩t , ⊩u₁
     , (λ ρ ⊢Δ [a] → transEqTerm ([G] ρ ⊢Δ [a])
                                 ([t≡u] ρ ⊢Δ [a])
