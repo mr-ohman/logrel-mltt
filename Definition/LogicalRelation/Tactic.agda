@@ -5,7 +5,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties.Reflexivity
-open import Definition.LogicalRelation.Properties.Soundness
+open import Definition.LogicalRelation.Properties.Wellformed
 
 open import Data.Product
 open import Data.Empty using (⊥; ⊥-elim)

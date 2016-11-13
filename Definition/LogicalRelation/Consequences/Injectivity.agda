@@ -16,7 +16,7 @@ open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Wellformed
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Definition.LogicalRelation.Fundamental
@@ -63,7 +63,7 @@ injectivity'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
       [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁))
                                    (PE.trans (substVar0Id _) (PE.sym E≡G'))
                                    (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
-  in  soundnessEq [F]' [F≡H]' , soundnessEq [G]' [G≡E]'
+  in  wellformedEq [F]' [F≡H]' , wellformedEq [G]' [G≡E]'
 injectivity'' (emb 0<1 x) [ΠFG≡ΠHE] = injectivity'' x [ΠFG≡ΠHE]
 
 injectivity' : ∀ {F G H E Γ l}

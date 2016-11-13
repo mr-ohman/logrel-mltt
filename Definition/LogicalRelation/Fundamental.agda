@@ -305,10 +305,10 @@ mutual
           redSubstTermₛ {G [ a ]} {(lam b) ∘ a} {b [ a ]} [Γ]₂
             (λ {Δ} {σ} ⊢Δ [σ] →
                let [liftσ] = liftSubstS {F = F} [Γ]₂ ⊢Δ [F]₁ [σ]
-                   ⊢σF = soundness (proj₁ ([F]₁ ⊢Δ [σ]))
-                   ⊢σb = soundnessTerm (proj₁ ([G]' (⊢Δ ∙ ⊢σF) [liftσ]))
+                   ⊢σF = wellformed (proj₁ ([F]₁ ⊢Δ [σ]))
+                   ⊢σb = wellformedTerm (proj₁ ([G]' (⊢Δ ∙ ⊢σF) [liftσ]))
                                        (proj₁ ([b]' (⊢Δ ∙ ⊢σF) [liftσ]))
-                   ⊢σa = soundnessTerm (proj₁ ([F]₁ ⊢Δ [σ]))
+                   ⊢σa = wellformedTerm (proj₁ ([F]₁ ⊢Δ [σ]))
                                        (proj₁ ([a] ⊢Δ [σ]))
                in  PE.subst₂ (λ x y → _ ⊢ (lam (subst (liftSubst σ) b))
                                           ∘ (subst σ a) ⇒ x ∷ y)
@@ -429,17 +429,17 @@ mutual
         d , r =
           redSubstTermₛ {F [ zero ]} {natrec F z s zero} {z} [Γ]'
             (λ {Δ} {σ} ⊢Δ [σ] →
-               let ⊢ℕ = soundness (proj₁ ([ℕ]' ⊢Δ [σ]))
-                   ⊢F = soundness (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ)
+               let ⊢ℕ = wellformed (proj₁ ([ℕ]' ⊢Δ [σ]))
+                   ⊢F = wellformed (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ)
                                                (liftSubstS {F = ℕ}
                                                            [Γ]' ⊢Δ [ℕ]' [σ])))
                    ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x)
                                  (singleSubstLift F zero)
-                                 (soundnessTerm (proj₁ ([F₀] ⊢Δ [σ]))
+                                 (wellformedTerm (proj₁ ([F₀] ⊢Δ [σ]))
                                                 (proj₁ ([z] ⊢Δ [σ])))
                    ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x)
                                  (natrecSucCase σ F)
-                                 (soundnessTerm (proj₁ ([F₊]' ⊢Δ [σ]))
+                                 (wellformedTerm (proj₁ ([F₊]' ⊢Δ [σ]))
                                                 (proj₁ ([s]' ⊢Δ [σ])))
                in PE.subst (λ x → Δ ⊢ subst σ (natrec F z s zero)
                                     ⇒ subst σ z ∷ x)
@@ -483,19 +483,19 @@ mutual
         d , r =
           redSubstTermₛ {F [ suc n ]} {natrec F z s (suc n)} {t } {¹} {_} [Γ]₃
             (λ {Δ} {σ} ⊢Δ [σ] →
-               let ⊢n = soundnessTerm (proj₁ ([ℕ]' ⊢Δ [σ]))
+               let ⊢n = wellformedTerm (proj₁ ([ℕ]' ⊢Δ [σ]))
                                       (proj₁ ([n]' ⊢Δ [σ]))
-                   ⊢ℕ = soundness (proj₁ ([ℕ]' ⊢Δ [σ]))
-                   ⊢F = soundness (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ)
+                   ⊢ℕ = wellformed (proj₁ ([ℕ]' ⊢Δ [σ]))
+                   ⊢F = wellformed (proj₁ ([F]' (⊢Δ ∙ ⊢ℕ)
                                                (liftSubstS {F = ℕ}
                                                            [Γ]₃ ⊢Δ [ℕ]' [σ])))
                    ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x)
                                  (singleSubstLift F zero)
-                                 (soundnessTerm (proj₁ ([F₀]' ⊢Δ [σ]))
+                                 (wellformedTerm (proj₁ ([F₀]' ⊢Δ [σ]))
                                                 (proj₁ ([z]' ⊢Δ [σ])))
                    ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x)
                                  (natrecSucCase σ F)
-                                 (soundnessTerm (proj₁ ([F₊] ⊢Δ [σ]))
+                                 (wellformedTerm (proj₁ ([F₊] ⊢Δ [σ]))
                                                 (proj₁ ([s] ⊢Δ [σ])))
                    r = _⊢_⇒_∷_.natrec-suc {n = subst σ n}
                                           {z = subst σ z} {s = subst σ s}

@@ -183,7 +183,7 @@ substSΠ₁' {t = t} (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) [F]₁ [t] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
-      ⊢Γ = wf (soundness [F]₁)
+      ⊢Γ = wf (wellformed [F]₁)
       [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
   in  irrelevance' Geq ([G] T.id ⊢Γ [t]')
 substSΠ₁' (emb 0<1 x) [F]₁ [t] = emb {l< = 0<1} (substSΠ₁' x [F]₁ [t])
@@ -215,7 +215,7 @@ substSΠ₂' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
       F'eq = PE.trans F'≡F'' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       Geq' = PE.cong (λ x → x [ _ ]) (PE.trans G'≡G'' (PE.sym (wk-id _ 1)))
-      ⊢Γ = wf (soundness [F]₁)
+      ⊢Γ = wf (wellformed [F]₁)
       [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
       [t']' = convTerm₂' F'eq ([F] T.id ⊢Γ) [F'] ([F≡F'] T.id ⊢Γ) [t']
       [t≡t']' = irrelevanceEqTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t≡t']

@@ -25,7 +25,7 @@ lamₛ : ∀ {F G t Γ}
        ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ G / [Γ] ∙ [F] / [G])
      → Γ ⊩ₛ⟨ ¹ ⟩t lam t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
 lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
-  let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
+  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext =
@@ -33,12 +33,12 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ ¹ ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
-        let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
+        let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
             [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
             _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  (lam ⊢F
-              (soundnessTerm (proj₁ ([G] (⊢Δ ∙ ⊢F)
+              (wellformedTerm (proj₁ ([G] (⊢Δ ∙ ⊢F)
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ])))
                              (proj₁ ([t] (⊢Δ ∙ ⊢F)
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
@@ -50,8 +50,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                            (proj₁ ([F] ⊢Δ₁ [ρσ])) [b]
                    [a≡b]' = irrelevanceEqTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)
                                                (proj₁ ([F] ⊢Δ₁ [ρσ])) [a≡b]
-                   ⊢F₁' = soundness (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                   ⊢F₁ = soundness ([F]' ρ ⊢Δ₁)
+                   ⊢F₁' = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                   ⊢F₁ = wellformed ([F]' ρ ⊢Δ₁)
                    [G]₁ = proj₁ ([G] (⊢Δ₁ ∙ ⊢F₁')
                                      (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ]))
                    [G]₁' = irrelevanceΓ'
@@ -64,9 +64,9 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                             [G]₁ [G]₁'
                             (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₁')
                                         (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ])))
-                   ⊢a = soundnessTerm ([F]' ρ ⊢Δ₁) [a]
-                   ⊢b = soundnessTerm ([F]' ρ ⊢Δ₁) [b]
-                   ⊢t = soundnessTerm [G]₁' [t]'
+                   ⊢a = wellformedTerm ([F]' ρ ⊢Δ₁) [a]
+                   ⊢b = wellformedTerm ([F]' ρ ⊢Δ₁) [b]
+                   ⊢t = wellformedTerm [G]₁' [t]'
                    G[a]' = proj₁ ([G] ⊢Δ₁ ([ρσ] , [a]'))
                    G[a] = [G]' ρ ⊢Δ₁ [a]
                    t[a] = irrelevanceTerm''
@@ -100,8 +100,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                    [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)
                                            (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
-                   ⊢F₁' = soundness (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                   ⊢F₁ = soundness ([F]' ρ ⊢Δ₁)
+                   ⊢F₁' = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                   ⊢F₁ = wellformed ([F]' ρ ⊢Δ₁)
                    [G]₁ = proj₁ ([G] (⊢Δ₁ ∙ ⊢F₁')
                                      (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ]))
                    [G]₁' = irrelevanceΓ'
@@ -114,8 +114,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                             [G]₁ [G]₁'
                             (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₁')
                                         (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ])))
-                   ⊢a = soundnessTerm ([F]' ρ ⊢Δ₁) [a]
-                   ⊢t = soundnessTerm [G]₁' [t]'
+                   ⊢a = wellformedTerm ([F]' ρ ⊢Δ₁) [a]
+                   ⊢t = wellformedTerm [G]₁' [t]'
                    G[a]' = proj₁ ([G] ⊢Δ₁ ([ρσ] , [a]'))
                    G[a] = [G]' ρ ⊢Δ₁ [a]
                    t[a] = irrelevanceTerm'' (PE.sym (G-substWkLemma a σ G))
@@ -128,12 +128,12 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
              _ , Π F'' G'' D'' ⊢F'' ⊢G'' [F]'' [G]'' G-ext' =
                extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ'])))
-             ⊢F' = soundness (proj₁ ([F] ⊢Δ [σ']))
+             ⊢F' = wellformed (proj₁ ([F] ⊢Δ [σ']))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
              [G]₁' = proj₁ ([G] (⊢Δ ∙ ⊢F') [liftσ'])
              [σΠFG≡σ'ΠFG] = proj₂ ([ΠFG] ⊢Δ [σ]) [σ'] [σ≡σ']
-             ⊢t = soundnessTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
-             ⊢t' = soundnessTerm [G]₁' (proj₁ ([t] (⊢Δ ∙ ⊢F') [liftσ']))
+             ⊢t = wellformedTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
+             ⊢t' = wellformedTerm [G]₁' (proj₁ ([t] (⊢Δ ∙ ⊢F') [liftσ']))
              neuVar = neuTerm ([F]' (T.step T.id) (⊢Δ ∙ ⊢F))
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
              σlamt∘a≡σ'lamt∘a : ∀ {Δ₁ a} → (ρ : Δ T.⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
@@ -146,18 +146,18 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                 let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                     [ρσ'] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']
                     [ρσ≡ρσ'] = wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ']
-                    ⊢F₁' = soundness (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                    ⊢F₁ = soundness ([F]' ρ ⊢Δ₁)
-                    ⊢F₂' = soundness (proj₁ ([F] ⊢Δ₁ [ρσ']))
-                    ⊢F₂ = soundness ([F]'' ρ ⊢Δ₁)
+                    ⊢F₁' = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                    ⊢F₁ = wellformed ([F]' ρ ⊢Δ₁)
+                    ⊢F₂' = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ']))
+                    ⊢F₂ = wellformed ([F]'' ρ ⊢Δ₁)
                     [σF≡σ'F] = proj₂ ([F] ⊢Δ₁ [ρσ]) [ρσ'] [ρσ≡ρσ']
                     [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)
                                             (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
                     [a]'' = convTerm₁ (proj₁ ([F] ⊢Δ₁ [ρσ]))
                                       (proj₁ ([F] ⊢Δ₁ [ρσ']))
                                       [σF≡σ'F] [a]'
-                    ⊢a = soundnessTerm ([F]' ρ ⊢Δ₁) [a]
-                    ⊢a' = soundnessTerm ([F]'' ρ ⊢Δ₁)
+                    ⊢a = wellformedTerm ([F]' ρ ⊢Δ₁) [a]
+                    ⊢a' = wellformedTerm ([F]'' ρ ⊢Δ₁)
                             (irrelevanceTerm' (PE.sym (wk-subst F))
                                               (proj₁ ([F] ⊢Δ₁ [ρσ']))
                                               ([F]'' ρ ⊢Δ₁)
@@ -200,8 +200,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                               [G]₂ [G]₂'
                               (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₂')
                                           (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ'])))
-                    ⊢t = soundnessTerm [G]₁' [t]'
-                    ⊢t' = soundnessTerm [G]₂' [t]''
+                    ⊢t = wellformedTerm [G]₁' [t]'
+                    ⊢t' = wellformedTerm [G]₂' [t]''
                     t[a] = irrelevanceTerm''
                              (PE.sym (G-substWkLemma a σ G))
                              (PE.sym (G-substWkLemma a σ t)) G[a]' G[a]
@@ -232,9 +232,9 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                              [σ't[a]≡σ'lamt∘a])
          in  fun-ext ⊢F (lam ⊢F ⊢t)
                      (conv (lam ⊢F' ⊢t')
-                           (sym (soundnessEq (proj₁ ([ΠFG] ⊢Δ [σ]))
+                           (sym (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                              [σΠFG≡σ'ΠFG])))
-                     (soundnessTermEq
+                     (wellformedTermEq
                        (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                        (irrelevanceEqTerm'
                          (idWkLiftSubstLemma σ G)
@@ -269,9 +269,9 @@ fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       _ , Π F' G' D' ⊢F ⊢G [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
-      ⊢σf = soundnessTerm [σΠFG] (proj₁ ([f] ⊢Δ [σ]))
-      ⊢σg = soundnessTerm [σΠFG] (proj₁ ([g] ⊢Δ [σ]))
-      σf0≡σg0 = soundnessTermEq [σG]
+      ⊢σf = wellformedTerm [σΠFG] (proj₁ ([f] ⊢Δ [σ]))
+      ⊢σg = wellformedTerm [σΠFG] (proj₁ ([g] ⊢Δ [σ]))
+      σf0≡σg0 = wellformedTermEq [σG]
                                 ([f0≡g0] (⊢Δ ∙ ⊢F)
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0' =

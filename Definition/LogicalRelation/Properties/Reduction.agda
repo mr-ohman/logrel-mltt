@@ -12,7 +12,7 @@ open import Definition.LogicalRelation.Properties.Symmetry
 open import Definition.LogicalRelation.Properties.Transitivity
 open import Definition.LogicalRelation.Properties.Conversion
 open import Definition.LogicalRelation.Properties.Universe
-open import Definition.LogicalRelation.Properties.Soundness
+open import Definition.LogicalRelation.Properties.Wellformed
 
 open import Data.Product
 open import Data.Empty
@@ -72,7 +72,7 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
                → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
                × (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷
                  wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
-      ta×ta≡ua ρ ⊢Δ [a] = let ⊢a = soundnessTerm ([F] ρ ⊢Δ) [a]
+      ta×ta≡ua ρ ⊢Δ [a] = let ⊢a = wellformedTerm ([F] ρ ⊢Δ) [a]
                           in  redSubst*Term (app-subst* (wkRed*Term ρ ⊢Δ t⇒u') ⊢a)
                                             ([G] ρ ⊢Δ [a]) (proj₃' ρ ⊢Δ [a])
       ta : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
@@ -105,7 +105,7 @@ redSubst : ∀ {A B l Γ}
          → Γ ⊩⟨ l ⟩ B
          → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
          → Γ ⊩⟨ l ⟩ A ≡ B / [A]
-redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (soundness [B])) [B]
+redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (wellformed [B])) [B]
 
 redSubstTerm : ∀ {A t u l Γ}
              → Γ ⊢ t ⇒ u ∷ A
@@ -113,4 +113,4 @@ redSubstTerm : ∀ {A t u l Γ}
              → Γ ⊩⟨ l ⟩ u ∷ A / [A]
              → Γ ⊩⟨ l ⟩ t ∷ A / [A]
              × Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
-redSubstTerm t⇒u [A] [u] = redSubst*Term (t⇒u ⇨ id (soundnessTerm [A] [u])) [A] [u]
+redSubstTerm t⇒u [A] [u] = redSubst*Term (t⇒u ⇨ id (wellformedTerm [A] [u])) [A] [u]

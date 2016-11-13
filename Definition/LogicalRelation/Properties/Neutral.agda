@@ -7,7 +7,7 @@ open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.Properties.Soundness
+open import Definition.LogicalRelation.Properties.Wellformed
 open import Definition.LogicalRelation.Properties.Symmetry
 
 open import Data.Empty
@@ -48,12 +48,12 @@ mutual
     , (λ ρ ⊢Δ [a] [b] [a≡b] →
       let A≡ΠFG = subset* (red D)
           ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
-          G[a]≡G[b] = soundnessEq ([G] ρ ⊢Δ [b])
+          G[a]≡G[b] = wellformedEq ([G] ρ ⊢Δ [b])
                                   (symEq ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [b])
                                          (G-ext ρ ⊢Δ [a] [b] [a≡b]))
-          a = soundnessTerm ([F] ρ ⊢Δ) [a]
-          b = soundnessTerm ([F] ρ ⊢Δ) [b]
-          a≡b = soundnessTermEq ([F] ρ ⊢Δ) [a≡b]
+          a = wellformedTerm ([F] ρ ⊢Δ) [a]
+          b = wellformedTerm ([F] ρ ⊢Δ) [b]
+          a≡b = wellformedTermEq ([F] ρ ⊢Δ) [a≡b]
           ρn = conv (wkTerm ρ ⊢Δ n) ρA≡ρΠFG
           neN∘a = _∘_ (wkNeutral (toWk ρ) neN)
           neN∘b = _∘_ (wkNeutral (toWk ρ) neN)
@@ -62,7 +62,7 @@ mutual
                        , (conv (ρn ∘ b) G[a]≡G[b])
                        , app-cong (refl ρn) a≡b))
     , (λ ρ ⊢Δ [a] → let ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
-                        a = soundnessTerm ([F] ρ ⊢Δ) [a]
+                        a = wellformedTerm ([F] ρ ⊢Δ) [a]
                     in  neuTerm ([G] ρ ⊢Δ [a]) (_∘_ (wkNeutral (toWk ρ) neN))
                                 (conv (wkTerm ρ ⊢Δ n) ρA≡ρΠFG ∘ a))
   neuTerm (emb {l< = 0<1} x) neN n = neuTerm x neN n
@@ -88,7 +88,7 @@ mutual
             ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
             ρn = wkTerm ρ ⊢Δ n
             ρn' = wkTerm ρ ⊢Δ n'
-            a = soundnessTerm ([F] ρ ⊢Δ) [a]
+            a = wellformedTerm ([F] ρ ⊢Δ) [a]
             neN∙a   = _∘_ (wkNeutral (toWk ρ) neN)
             neN'∙a' = _∘_ (wkNeutral (toWk ρ) neN')
         in  neuEqTerm ([G] ρ ⊢Δ [a]) neN∙a neN'∙a'
