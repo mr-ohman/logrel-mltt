@@ -69,7 +69,8 @@ substVar0Id F = PE.trans (subst-wk F) (PE.trans (substEq substVar0Id' F) (substI
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-Π≡-inj'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+Π≡-inj'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
+         Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
       ⊢Γ = wf ⊢F
@@ -77,11 +78,17 @@ substVar0Id F = PE.trans (subst-wk F) (PE.trans (substEq substVar0Id' F) (substI
       [F]' = irrelevance' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁
       [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
-      [G]' = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x) (PE.trans (substVar0Id _) (PE.sym G≡G₁)) (PE.sym F≡F₁) [G]₁
+      [G]' = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x)
+                       (PE.trans (substVar0Id _) (PE.sym G≡G₁))
+                       (PE.sym F≡F₁) [G]₁
       [F≡H]₁ = [F≡F'] id ⊢Γ
-      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) (PE.trans (wk-id _ zero) (PE.sym H≡F')) [F]₁ [F]' [F≡H]₁
+      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _ zero) (PE.sym F≡F₁))
+                               (PE.trans (wk-id _ zero) (PE.sym H≡F'))
+                               [F]₁ [F]' [F≡H]₁
       [G≡E]₁ = [G≡G'] (step id) (⊢Γ ∙ ⊢F) [x∷F]
-      [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁)) (PE.trans (substVar0Id _) (PE.sym E≡G')) (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
+      [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁))
+                                   (PE.trans (substVar0Id _) (PE.sym E≡G'))
+                                   (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
   in  soundnessEq [F]' [F≡H]' , soundnessEq [G]' [G≡E]'
 Π≡-inj'' (emb 0<1 x) [ΠFG≡ΠHE] = Π≡-inj'' x [ΠFG≡ΠHE]
 
@@ -90,7 +97,8 @@ substVar0Id F = PE.trans (subst-wk F) (PE.trans (substEq substVar0Id' F) (substI
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-Π≡-inj' [ΠFG] [ΠFG≡ΠHE] = Π≡-inj'' (Π-elim [ΠFG]) (irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠHE])
+Π≡-inj' [ΠFG] [ΠFG≡ΠHE] =
+  Π≡-inj'' (Π-elim [ΠFG]) (irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠHE])
 
 Π≡-inj : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 Π≡-inj ⊢ΠFG≡ΠHE with fundamentalEq ⊢ΠFG≡ΠHE

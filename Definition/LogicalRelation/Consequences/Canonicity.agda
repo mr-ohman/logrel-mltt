@@ -38,7 +38,10 @@ noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
 noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
 noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
 
-canonicity'' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
+canonicity'' : ∀ {t l}
+             → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ)
+             → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
+             → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity'' {l = l} (noemb (ℕ D)) ℕ[ _ , d , suc , prop ] =
   let a , b = canonicity'' {l = l} (noemb (ℕ D)) prop
   in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
@@ -46,8 +49,12 @@ canonicity'' (noemb (ℕ D)) ℕ[ .zero , d , zero , prop ] = zero , subset*Term
 canonicity'' (noemb (ℕ D)) ℕ[ n , d , ne x , prop ] = ⊥-elim (noNe prop x)
 canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
 
-canonicity' : ∀ {t l} → ([ℕ] : ε ⊩⟨ l ⟩ ℕ) → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ] → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity' [ℕ] [t] = canonicity'' (ℕ-elim [ℕ]) (irrelevanceTerm [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [t])
+canonicity' : ∀ {t l}
+            → ([ℕ] : ε ⊩⟨ l ⟩ ℕ)
+            → ε ⊩⟨ l ⟩ t ∷ ℕ / [ℕ]
+            → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
+canonicity' [ℕ] [t] =
+  canonicity'' (ℕ-elim [ℕ]) (irrelevanceTerm [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [t])
 
 canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity ⊢t with fundamentalTerm ⊢t

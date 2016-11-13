@@ -159,13 +159,16 @@ whrDet' (univ x) (univ x₁) = whrDet x x₁
 whrDet↘ : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ⇒* u' ∷ A) → Γ ⊢ u' ⇒* u ∷ A
 whrDet↘ (proj₁ , proj₂) (id x) = proj₁
 whrDet↘ (id x , proj₂) (x₁ ⇨ d') = ⊥-elim (whnfRed x₁ proj₂)
-whrDet↘ (x ⇨ proj₁ , proj₂) (x₁ ⇨ d') = whrDet↘ (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x x₁) (proj₁ , proj₂)) d'
+whrDet↘ (x ⇨ proj₁ , proj₂) (x₁ ⇨ d') =
+  whrDet↘ (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x x₁) (proj₁ , proj₂)) d'
 
 whrDet* : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ↘ u' ∷ A) → u PE.≡ u'
 whrDet* (id x , proj₂) (id x₁ , proj₄) = PE.refl
 whrDet* (id x , proj₂) (x₁ ⇨ proj₃ , proj₄) = ⊥-elim (whnfRed x₁ proj₂)
 whrDet* (x ⇨ proj₁ , proj₂) (id x₁ , proj₄) = ⊥-elim (whnfRed x proj₄)
-whrDet* (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) = whrDet* (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x₁ x) (proj₃ , proj₄))
+whrDet* (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) =
+  whrDet* (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _)
+                                    (whrDet x₁ x) (proj₃ , proj₄))
 
 whrDet*' : ∀{Γ A B B'} (d : Γ ⊢ A ↘ B) (d' : Γ ⊢ A ↘ B') → B PE.≡ B'
 whrDet*' (id x , proj₂) (id x₁ , proj₄) = PE.refl

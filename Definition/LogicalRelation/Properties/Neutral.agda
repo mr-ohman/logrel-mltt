@@ -63,7 +63,8 @@ mutual
                        , app-cong (refl ρn) a≡b))
     , (λ ρ ⊢Δ [a] → let ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
                         a = soundnessTerm ([F] ρ ⊢Δ) [a]
-                    in  neuTerm ([G] ρ ⊢Δ [a]) (_∘_ (wkNeutral (toWk ρ) neN)) (conv (wkTerm ρ ⊢Δ n) ρA≡ρΠFG ∘ a))
+                    in  neuTerm ([G] ρ ⊢Δ [a]) (_∘_ (wkNeutral (toWk ρ) neN))
+                                (conv (wkTerm ρ ⊢Δ n) ρA≡ρΠFG ∘ a))
   neuTerm (emb {l< = 0<1} x) neN n = neuTerm x neN n
 
   neuEqTerm : ∀ {l Γ A n n'} ([A] : Γ ⊩⟨ l ⟩ A)
