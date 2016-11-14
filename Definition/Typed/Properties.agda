@@ -98,6 +98,16 @@ redFirst* (id A) = A
 redFirst* (A⇒A' ⇨ A'⇒*B) = redFirst A⇒A'
 
 
+-- No neutral terms are well-formed in an empty context
+
+noNe : ∀ {t A} → ε ⊢ t ∷ A → Neutral t → ⊥
+noNe (var x₁ ()) (var x)
+noNe (conv ⊢t x) (var n) = noNe ⊢t (var n)
+noNe (⊢t ∘ ⊢t₁) (_∘_ neT) = noNe ⊢t neT
+noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
+noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
+noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
+
 -- Neutrals do not weak head reduce
 
 neRed : ∀ {Γ t u A} (d : Γ ⊢ t ⇒ u ∷ A) (n : Neutral t) → ⊥

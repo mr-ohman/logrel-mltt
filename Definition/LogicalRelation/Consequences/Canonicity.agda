@@ -30,14 +30,6 @@ sucᵏ : Nat → Term
 sucᵏ zero = zero
 sucᵏ (suc n) = suc (sucᵏ n)
 
-noNe : ∀ {t A} → ε ⊢ t ∷ A → Neutral t → ⊥
-noNe (var x₁ ()) (var x)
-noNe (conv ⊢t x) (var n) = noNe ⊢t (var n)
-noNe (⊢t ∘ ⊢t₁) (_∘_ neT) = noNe ⊢t neT
-noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
-noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
-noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
-
 canonicity'' : ∀ {t l}
              → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ)
              → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
