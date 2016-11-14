@@ -1,3 +1,5 @@
+-- A Logical Relation for Dependent Type Theory Formalized in Agda
+
 module Everything where
 
 import Tools.Context
@@ -9,7 +11,6 @@ import Definition.Untyped.Properties
 import Definition.Typed
 import Definition.Typed.Properties
 import Definition.Typed.Weakening
--- import Definition.Typed.Arrows     -- unsolved metas
 
 import Definition.LogicalRelation
 import Definition.LogicalRelation.Tactic
