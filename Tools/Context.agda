@@ -1,6 +1,6 @@
 module Tools.Context where
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Unit using (⊤; tt)
 
 infixl 30 _∙_

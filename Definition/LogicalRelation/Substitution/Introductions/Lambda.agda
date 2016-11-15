@@ -12,7 +12,7 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Product
 
 import Relation.Binary.PropositionalEquality as PE

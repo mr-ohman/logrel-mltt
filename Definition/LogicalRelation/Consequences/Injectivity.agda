@@ -23,7 +23,7 @@ open import Definition.LogicalRelation.Fundamental
 
 open import Data.Empty
 open import Data.Unit
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Product
 
 import Relation.Binary.PropositionalEquality as PE

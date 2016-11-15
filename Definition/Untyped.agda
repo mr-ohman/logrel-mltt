@@ -1,6 +1,6 @@
 module Definition.Untyped where
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Product
 
 

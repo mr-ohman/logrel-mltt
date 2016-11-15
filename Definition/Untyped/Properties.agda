@@ -1,6 +1,6 @@
 module Definition.Untyped.Properties where
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.List using (List; []; _∷_)
 open import Data.Unit
 open import Relation.Binary.PropositionalEquality as PE hiding ([_]; subst)

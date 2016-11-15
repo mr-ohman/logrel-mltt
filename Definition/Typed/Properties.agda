@@ -7,7 +7,7 @@ open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
      using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 import Relation.Binary.PropositionalEquality as PE
 
 

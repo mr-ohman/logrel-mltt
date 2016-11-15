@@ -24,7 +24,7 @@ open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Data.Product
 open import Data.Unit
 open import Data.Empty
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 
 import Relation.Binary.PropositionalEquality as PE
 

@@ -16,7 +16,7 @@ open import Definition.LogicalRelation.Substitution.Properties
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.Universe
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Product
 
 import Relation.Binary.PropositionalEquality as PE

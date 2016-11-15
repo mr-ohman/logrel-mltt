@@ -5,7 +5,7 @@ open import Definition.Untyped.Properties as UP
      using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Data.Nat.Base renaming (ℕ to Nat)
 open import Data.Product
 import Relation.Binary.PropositionalEquality as PE
 import Relation.Binary.HeterogeneousEquality as HE
