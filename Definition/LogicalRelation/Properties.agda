@@ -7,7 +7,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 
-open import Data.Empty
+open import Tools.Empty
 
 
 open import Definition.LogicalRelation.Properties.Reflexivity public

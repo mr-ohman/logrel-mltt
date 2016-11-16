@@ -3,7 +3,7 @@ module Definition.LogicalRelation.Substitution.Reduction where
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
 
 redSubstTermₛ : ∀ {A t u l Γ}

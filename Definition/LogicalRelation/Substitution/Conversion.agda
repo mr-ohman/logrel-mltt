@@ -4,7 +4,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
 
 convₛ : ∀ {t A B Γ l}

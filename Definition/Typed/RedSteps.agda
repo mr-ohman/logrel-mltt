@@ -4,7 +4,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 
-open import Data.Nat.Base renaming (ℕ to Nat)
+open import Tools.Nat
 
 _⇨*_ : ∀ {Γ A B C} → Γ ⊢ A ⇒* B → Γ ⊢ B ⇒* C → Γ ⊢ A ⇒* C
 id ⊢B ⇨* B⇒C = B⇒C

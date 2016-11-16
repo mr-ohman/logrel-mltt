@@ -7,8 +7,8 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
 
-open import Data.Product
-open import Data.Empty
+open import Tools.Product
+open import Tools.Empty
 
 
 univEq' : ∀ {l Γ A} ([U] : Γ ⊩⟨ l ⟩U) → Γ ⊩⟨ l ⟩ A ∷ U / U-intr [U] → Γ ⊩⟨ ⁰ ⟩ A

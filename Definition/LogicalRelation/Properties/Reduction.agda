@@ -14,10 +14,10 @@ open import Definition.LogicalRelation.Properties.Conversion
 open import Definition.LogicalRelation.Properties.Universe
 open import Definition.LogicalRelation.Properties.Wellformed
 
-open import Data.Product
-open import Data.Empty
+open import Tools.Product
+open import Tools.Empty
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 redSubst* : ∀ {A B l Γ}

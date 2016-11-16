@@ -5,7 +5,7 @@ module Definition.Untyped.AltSubst where
 
 open import Definition.Untyped
 
-open import Data.Nat.Base renaming (ℕ to Nat)
+open import Tools.Nat
 open import Data.Bool using (Bool; true; false; if_then_else_)
 
 open import Relation.Nullary.Decidable using (⌊_⌋)

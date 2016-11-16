@@ -8,7 +8,7 @@ open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.SingleSubst
 
 open import Tools.Context
-open import Data.Product
+open import Tools.Product
 
 
 inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ

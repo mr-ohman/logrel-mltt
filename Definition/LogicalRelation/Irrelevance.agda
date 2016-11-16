@@ -8,8 +8,8 @@ open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 irrelevanceNatural-prop : ∀ {Γ n n' m m'}

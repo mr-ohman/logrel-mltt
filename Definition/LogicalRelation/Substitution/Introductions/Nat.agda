@@ -8,8 +8,8 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Introductions.Universe
 
-open import Data.Unit
-open import Data.Product
+open import Tools.Unit
+open import Tools.Product
 
 
 ℕₛ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ]

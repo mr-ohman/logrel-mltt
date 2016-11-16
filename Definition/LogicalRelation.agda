@@ -4,10 +4,9 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
-open import Data.Product
-open import Data.Sum
-open import Data.Unit
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+open import Tools.Unit
+import Tools.PropositionalEquality as PE
 
 
 -- Records for logical relation cases

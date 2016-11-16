@@ -17,12 +17,12 @@ open import Definition.LogicalRelation.Substitution.Conversion
 open import Definition.LogicalRelation.Substitution.Weakening
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
-open import Data.Product
-open import Data.Unit
-open import Data.Empty
-open import Data.Nat.Base renaming (ℕ to Nat)
+open import Tools.Product
+open import Tools.Unit
+open import Tools.Empty
+open import Tools.Nat
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)

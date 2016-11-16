@@ -11,7 +11,7 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 
-open import Data.Product
+open import Tools.Product
 
 
 wellformedₛ : ∀ {A l Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ A / [Γ] → Γ ⊢ A

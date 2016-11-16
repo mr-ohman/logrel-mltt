@@ -10,9 +10,9 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Wellformed
 open import Definition.LogicalRelation.Properties.Symmetry
 
-open import Data.Empty
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Empty
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 neu : ∀ {l Γ A} (neA : Neutral A) → Γ ⊢ A → Γ ⊩⟨ l ⟩ A

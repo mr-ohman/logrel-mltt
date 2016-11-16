@@ -4,11 +4,11 @@ open import Definition.Untyped
 open import Definition.LogicalRelation
 open import Definition.Typed
 
-open import Data.Nat
-open import Data.Product
-open import Data.Unit
+open import Tools.Nat
+open import Tools.Product
+open import Tools.Unit
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 mutual

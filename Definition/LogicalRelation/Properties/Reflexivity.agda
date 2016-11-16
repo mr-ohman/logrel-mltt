@@ -4,8 +4,8 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.LogicalRelation
 
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 reflEq : ∀ {l Γ A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]

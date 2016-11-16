@@ -16,10 +16,10 @@ open import Definition.LogicalRelation.Substitution.Properties
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.Universe
 
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.Product
+open import Tools.Nat
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 Πₛ : ∀ {F G Γ l}

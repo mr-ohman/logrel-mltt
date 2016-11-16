@@ -5,8 +5,8 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 wellformed : ∀ {l Γ A} → Γ ⊩⟨ l ⟩ A → Γ ⊢ A

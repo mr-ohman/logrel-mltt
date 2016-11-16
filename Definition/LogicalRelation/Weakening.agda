@@ -9,9 +9,9 @@ open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 
-open import Data.Product
-open import Data.Unit
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+open import Tools.Unit
+import Tools.PropositionalEquality as PE
 
 mutual
   wkTermℕ : ∀ {Γ Δ A n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)

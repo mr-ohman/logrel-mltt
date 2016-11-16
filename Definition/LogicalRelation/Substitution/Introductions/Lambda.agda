@@ -12,10 +12,10 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.Product
+open import Tools.Nat
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 lamₛ : ∀ {F G t Γ}

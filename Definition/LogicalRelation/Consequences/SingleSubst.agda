@@ -12,7 +12,7 @@ open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Definition.LogicalRelation.Fundamental
 open import Definition.LogicalRelation.Consequences.Syntactic
 
-open import Data.Product
+open import Tools.Product
 
 
 substType : ∀ {t F G Γ} → Γ ∙ F ⊢ G → Γ ⊢ t ∷ F → Γ ⊢ G [ t ]

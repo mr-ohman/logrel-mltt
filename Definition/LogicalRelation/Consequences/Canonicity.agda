@@ -18,12 +18,12 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Fundamental
 
-open import Data.Empty
-open import Data.Unit
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.Product
+open import Tools.Empty
+open import Tools.Unit
+open import Tools.Nat
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 sucᵏ : Nat → Term

@@ -6,10 +6,10 @@ open import Definition.LogicalRelation
 import Definition.LogicalRelation.Irrelevance as LR
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
-open import Data.Unit
+open import Tools.Product
+open import Tools.Unit
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 irrelevanceSubst : ∀ {σ Γ Δ}

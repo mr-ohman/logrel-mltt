@@ -7,7 +7,7 @@ open import Definition.LogicalRelation.Substitution.Wellformed
 open import Definition.LogicalRelation.Fundamental
 open import Definition.LogicalRelation.Consequences.Injectivity
 
-open import Data.Product
+open import Tools.Product
 
 
 syntacticEq : ∀ {A B Γ} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B

@@ -21,12 +21,12 @@ open import Definition.LogicalRelation.Substitution.Introductions.Nat
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
-open import Data.Product
-open import Data.Unit
-open import Data.Empty
-open import Data.Nat.Base renaming (ℕ to Nat)
+open import Tools.Product
+open import Tools.Unit
+open import Tools.Empty
+open import Tools.Nat
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 natrec-subst* : ∀ {Γ C c g n n' l} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]

@@ -1,9 +1,8 @@
 module Definition.Untyped.Properties where
 
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.List using (List; []; _∷_)
-open import Data.Unit
-open import Relation.Binary.PropositionalEquality as PE hiding ([_]; subst)
+open import Tools.Nat
+open import Tools.Unit
+open import Tools.PropositionalEquality as PE hiding (subst)
 
 open import Definition.Untyped
 
@@ -15,20 +14,6 @@ subst-test₁ = refl
 
 subst-test₂ : {x : Term} → lam (var 1) [ x ] ≡ lam (wk1 x)
 subst-test₂ = refl
-
-cong₃ : ∀ {a b c d}
-          {A : Set a} {B : Set b} {C : Set c} {D : Set d}
-          {x y u v a b}
-        (f : A → B → C → D) → x ≡ y → u ≡ v → a ≡ b
-      → f x u a ≡ f y v b
-cong₃ f refl refl refl = refl
-
-cong₄ : ∀ {a b c d e}
-          {A : Set a} {B : Set b} {C : Set c} {D : Set d} {E : Set e}
-          {x y u v s t q r}
-        (f : A → B → C → D → E) → x ≡ y → u ≡ v → s ≡ t → q ≡ r
-      → f x u s q ≡ f y v t r
-cong₄ f refl refl refl refl = refl
 
 iterate : {A : Set} → (A → A) → A → Nat → A
 iterate s z zero = z

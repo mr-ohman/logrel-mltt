@@ -1,14 +1,14 @@
 module Definition.Typed.Properties where
 
-open import Data.Empty using (⊥; ⊥-elim)
-open import Data.Product
+open import Tools.Empty using (⊥; ⊥-elim)
+open import Tools.Product
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
      using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
-open import Data.Nat.Base renaming (ℕ to Nat)
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Nat
+import Tools.PropositionalEquality as PE
 
 
 -- Wellformed context extraction

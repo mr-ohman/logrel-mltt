@@ -9,8 +9,8 @@ open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
 
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 mutual

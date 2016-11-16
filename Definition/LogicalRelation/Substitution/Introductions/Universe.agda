@@ -7,9 +7,9 @@ open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 Uₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ]

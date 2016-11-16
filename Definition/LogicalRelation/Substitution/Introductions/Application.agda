@@ -13,10 +13,10 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
-open import Data.Empty
-open import Data.Product
+open import Tools.Empty
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 appTerm' : ∀ {F G t u Γ l l'}

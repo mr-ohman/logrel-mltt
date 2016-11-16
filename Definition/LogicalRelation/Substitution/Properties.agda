@@ -11,10 +11,10 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 import Definition.LogicalRelation.Weakening as LR
 
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.Unit
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Nat
+open import Tools.Unit
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)

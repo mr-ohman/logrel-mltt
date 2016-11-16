@@ -1,7 +1,7 @@
 module Definition.Untyped where
 
-open import Data.Nat.Base renaming (ℕ to Nat)
-open import Data.Product
+open import Tools.Nat
+open import Tools.Product
 
 
 infixl 30 _∙_

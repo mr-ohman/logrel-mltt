@@ -1,7 +1,7 @@
 module Definition.Untyped.Indexed where
 
-open import Data.Unit
-open import Data.Product
+open import Tools.Unit
+open import Tools.Product
 open import Tools.Context as Context
 open Context.NonDependent
 
