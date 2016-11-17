@@ -4,10 +4,9 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
-open import Data.Product
-open import Data.Sum
-open import Data.Unit
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+open import Tools.Unit
+import Tools.PropositionalEquality as PE
 
 
 -- Records for logical relation cases
@@ -118,15 +117,23 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     wk-prop¹ Γ F = ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F
 
     wk-subst-prop¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) → Set
-    wk-subst-prop¹ Γ F G [F] = ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                                      → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ]
+    wk-subst-prop¹ Γ F G [F] =
+      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+              → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ]
 
-    wk-subst-prop-T¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) (t : Term) → Set
-    wk-subst-prop-T¹ Γ F G [F] [G] t = ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                                      → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ) → Δ ⊩¹ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+    wk-subst-prop-T¹ : (Γ : Con Term) (F G : Term)
+                       ([F] : wk-prop¹ Γ F)
+                       ([G] : wk-subst-prop¹ Γ F G [F]) (t : Term)
+                     → Set
+    wk-subst-prop-T¹ Γ F G [F] [G] t =
+      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+              → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+              → Δ ⊩¹ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
     wk-substEq-prop¹ : (Γ : Con Term) (F G : Term)
-                      ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) → Set
+                       ([F] : wk-prop¹ Γ F)
+                       ([G] : wk-subst-prop¹ Γ F G [F])
+                     → Set
     wk-substEq-prop¹ Γ F G [F] [G] =
       ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                 → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
@@ -135,12 +142,15 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                 → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a]
 
     wk-fun-ext-prop¹ : (Γ : Con Term) (F G f : Term)
-                      ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) → Set
-    wk-fun-ext-prop¹ Γ F G f [F] [G] = ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                     ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                     ([b] : Δ ⊩¹ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                     ([a≡b] : Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                   → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+                       ([F] : wk-prop¹ Γ F)
+                       ([G] : wk-subst-prop¹ Γ F G [F])
+                     → Set
+    wk-fun-ext-prop¹ Γ F G f [F] [G] =
+      ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                  ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                  ([b] : Δ ⊩¹ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                  ([a≡b] : Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+                → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
     record _⊩¹U (Γ : Con Term) : Set where
       constructor U
@@ -229,14 +239,17 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
 
     -- Issue: Agda complains about record use not being strictly positive
     record Π¹ₜ[_]_≡_∷_[_,_,_,_,_] (Γ : Con Term) (t u A F G : Term) ([A] : Γ ⊩¹ A)
-                                ([F] : wk-prop¹ Γ F) ([G] : wk-subst-prop¹ Γ F G [F]) : Set where
+                                  ([F] : wk-prop¹ Γ F)
+                                  ([G] : wk-subst-prop¹ Γ F G [F]) : Set where
       inductive
       constructor Π¹ₜ[_,_,_,_]
       field
         t≡u   : Γ ⊢ t ≡ u ∷ A
         ⊩t    : Γ ⊩¹ t ∷ A / [A]
         ⊩u    : Γ ⊩¹ u ∷ A / [A]
-        [t≡u] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+        [t≡u] : ∀ {Δ a} → (ρ : Γ ⊆ Δ)
+                          (⊢Δ : ⊢ Δ)
+                          ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                         → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
     kit : LogRelKit
@@ -252,7 +265,8 @@ logRelRec ¹ 0<1 = LogRel.kit ⁰ (\ ())
 
 kit : ∀ (i : TypeLevel) → LogRelKit
 kit l = LogRel.kit l (logRelRec l)
--- a bit of repetition in "kit ¹" definition, would work better with Fin 2 for TypeLevel because you could recurse.
+-- a bit of repetition in "kit ¹" definition, would work better with Fin 2 for
+-- TypeLevel because you could recurse.
 
 _⊩'⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
 Γ ⊩'⟨ l ⟩U = Γ ⊩U where open LogRelKit (kit l)

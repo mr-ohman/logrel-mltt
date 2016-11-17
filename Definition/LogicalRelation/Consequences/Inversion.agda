@@ -4,11 +4,11 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 
-open import Definition.LogicalRelation.Consequences.Injectivity
+open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.SingleSubst
 
 open import Tools.Context
-open import Data.Product
+open import Tools.Product
 
 
 inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
@@ -25,6 +25,6 @@ inversion-natrec (conv d x) = trans (sym x) (inversion-natrec d)
 
 inversion-app :  ∀ {Γ f a A} → Γ ⊢ (f ∘ a) ∷ A →
   ∃₂ λ F G → Γ ⊢ f ∷ Π F ▹ G × Γ ⊢ a ∷ F × Γ ⊢ A ≡ G [ a ]
-inversion-app (d ∘ d₁) = _ , _ , d , d₁ , refl (substTypeΠ (term-inj d) d₁)
+inversion-app (d ∘ d₁) = _ , _ , d , d₁ , refl (substTypeΠ (syntacticTerm d) d₁)
 inversion-app (conv d x) = let a , b , c , d , e = inversion-app d
                            in  a , b , c , d , trans (sym x) e

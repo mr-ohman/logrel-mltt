@@ -6,9 +6,9 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 wk1ₛ : ∀ {A F Γ l}
       ([Γ] : ⊩ₛ Γ)

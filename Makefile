@@ -7,3 +7,6 @@ agdalocfiles=$(shell find . \( \( -name '*.agda' \) ! -name '.*' \) )
 
 agda-loc :
 	@wc $(agdalocfiles)
+
+agda-woc :
+	@wc -L $(agdalocfiles)

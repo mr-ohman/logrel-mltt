@@ -1,7 +1,7 @@
 module Definition.Untyped.Indexed where
 
-open import Data.Unit
-open import Data.Product
+open import Tools.Unit
+open import Tools.Product
 open import Tools.Context as Context
 open Context.NonDependent
 
@@ -58,7 +58,8 @@ subst σ (lam t) = lam (subst (liftSubst σ) t)
 subst σ (t ∘ t₁) = (subst σ t) ∘ (subst σ t₁)
 subst σ zero = zero
 subst σ (suc t) = suc (subst σ t)
-subst σ (natrec t t₁ t₂ t₃) = natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂) (subst σ t₃)
+subst σ (natrec t t₁ t₂ t₃) =
+  natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂) (subst σ t₃)
 
 _[_] : ∀ {Γ} (t : Term (Γ ∙ tt)) (s : Term Γ) → Term Γ
 t [ s ] = subst (s , idSubst _) t

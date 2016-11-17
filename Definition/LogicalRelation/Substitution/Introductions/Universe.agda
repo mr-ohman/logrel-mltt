@@ -7,9 +7,9 @@ open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 Uₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ]
@@ -21,7 +21,8 @@ univₛ : ∀ {A Γ l l'} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ l' ⟩ A / [Γ]
 univₛ {l' = l'} [Γ] [U] [A] ⊢Δ [σ] =
   let [A]₁ = maybeEmb' {l'} (univEq (proj₁ ([U] ⊢Δ [σ])) (proj₁ ([A] ⊢Δ [σ])))
-  in  [A]₁ , (λ [σ'] [σ≡σ'] → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁ ((proj₂ ([A] ⊢Δ [σ])) [σ'] [σ≡σ']))
+  in  [A]₁ , (λ [σ'] [σ≡σ'] → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁
+                                       ((proj₂ ([A] ⊢Δ [σ])) [σ'] [σ≡σ']))
 
 univEqₛ : ∀ {A B Γ l l'} ([Γ] : ⊩ₛ Γ)
           ([U] : Γ ⊩ₛ⟨ l' ⟩ U / [Γ])

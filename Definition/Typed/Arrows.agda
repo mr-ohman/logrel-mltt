@@ -8,7 +8,7 @@ open import Definition.Typed.Properties
 
 open import Tools.Context
 
-open import Data.Product
+open import Tools.Product
 
 wfTail : ∀ {Γ A} → ⊢ Γ ∙ A → ⊢ Γ
 wfTail (⊢Γ ∙ A) = ⊢Γ

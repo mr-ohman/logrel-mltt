@@ -11,10 +11,10 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 import Definition.LogicalRelation.Weakening as LR
 
-open import Data.Nat renaming (ℕ to Nat)
-open import Data.Unit
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Nat
+open import Tools.Unit
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
@@ -81,10 +81,10 @@ liftSubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
              ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            → (Δ ∙ subst σ F) ⊩ₛ liftSubst σ ∷ Γ ∙ F / [Γ] ∙ [F]
-                             / (⊢Δ ∙ soundness (proj₁ ([F] ⊢Δ [σ])))
+                             / (⊢Δ ∙ wellformed (proj₁ ([F] ⊢Δ [σ])))
 liftSubstS {F = F} {σ = σ} {Δ = Δ} [Γ] ⊢Δ [F] [σ] =
-  let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
-      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (soundness (proj₁ ([F] ⊢Δ [σ]))) [σ]
+  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
+      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ]
   in  [tailσ] , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero)
                         (var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                                                  (wk-subst F) here))
@@ -94,11 +94,12 @@ liftSubstSEq : ∀ {l F σ σ' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
              ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
              ([σ≡σ'] : Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
            → (Δ ∙ subst σ F) ⊩ₛ liftSubst σ ≡ liftSubst σ' ∷ Γ ∙ F / [Γ] ∙ [F]
-                             / (⊢Δ ∙ soundness (proj₁ ([F] ⊢Δ [σ]))) / liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
+                             / (⊢Δ ∙ wellformed (proj₁ ([F] ⊢Δ [σ])))
+                             / liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
 liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡σ'] =
-  let ⊢F = soundness (proj₁ ([F] ⊢Δ [σ]))
-      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (soundness (proj₁ ([F] ⊢Δ [σ]))) [σ]
-      [tailσ≡σ'] = wk1SubstSEq [Γ] ⊢Δ (soundness (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ']
+  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
+      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ]
+      [tailσ≡σ'] = wk1SubstSEq [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ']
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
   in  [tailσ≡σ'] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
                          (var0 , var0 , refl var0)
@@ -106,21 +107,31 @@ liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡�
 mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ
   soundContext ε = ε
-  soundContext (x ∙ x₁) = soundContext x ∙ soundness (irrelevance' (idSubst-lemma₀ _) (proj₁ (x₁ (soundContext x) (idSubstS x))))
+  soundContext (x ∙ x₁) =
+    soundContext x ∙ wellformed (irrelevance' (idSubst-lemma₀ _)
+                                             (proj₁ (x₁ (soundContext x)
+                                                        (idSubstS x))))
 
   idSubstS : ∀ {Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ idSubst ∷ Γ / [Γ] / soundContext [Γ]
   idSubstS ε = tt
   idSubstS {Γ = Γ ∙ A} ([Γ] ∙ [A]) =
     let ⊢Γ = soundContext [Γ]
         ⊢Γ∙A = soundContext ([Γ] ∙ [A])
-        ⊢Γ∙A' = ⊢Γ ∙ soundness (proj₁ ([A] ⊢Γ (idSubstS [Γ])))
-        [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (idSubst-lemma₀ A)) [Γ] [Γ] ⊢Γ∙A' ⊢Γ∙A (wk1SubstS {F = subst idSubst A} [Γ] ⊢Γ (soundness (proj₁ ([A] (soundContext [Γ]) (idSubstS [Γ])))) (idSubstS [Γ]))
-    in  [tailσ] , neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
-                          (var zero)
-                          (var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
-                                              (wk-subst A)
-                                              (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A) ∈ (Γ ∙ x))
-                                                        (idSubst-lemma₀ A) here)))
+        ⊢Γ∙A' = ⊢Γ ∙ wellformed (proj₁ ([A] ⊢Γ (idSubstS [Γ])))
+        [A]' = wk1SubstS {F = subst idSubst A} [Γ] ⊢Γ
+                         (wellformed (proj₁ ([A] (soundContext [Γ])
+                                                (idSubstS [Γ]))))
+                         (idSubstS [Γ])
+        [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (idSubst-lemma₀ A))
+                                      [Γ] [Γ] ⊢Γ∙A' ⊢Γ∙A [A]'
+    in  [tailσ]
+    ,   neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
+                (var zero)
+                (var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
+                                    (wk-subst A)
+                                    (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A)
+                                                       ∈ (Γ ∙ x))
+                                              (idSubst-lemma₀ A) here)))
 
 reflSubst : ∀ {σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
             ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
@@ -139,7 +150,8 @@ symS : ∀ {σ σ' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
      → Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
      → Δ ⊩ₛ σ' ≡ σ ∷ Γ / [Γ] / ⊢Δ / [σ']
 symS ε ⊢Δ [σ] [σ'] [σ≡σ'] = tt
-symS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ≡σ'] = symS [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ']) (proj₁ [σ≡σ'])
+symS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ≡σ'] =
+  symS [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ']) (proj₁ [σ≡σ'])
   , let [σA]           = proj₁ (x ⊢Δ (proj₁ [σ]))
         [σ'A]          = proj₁ (x ⊢Δ (proj₁ [σ']))
         [σA≡σ'A]       = (proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ']) (proj₁ [σ≡σ'])
@@ -154,9 +166,13 @@ transS : ∀ {σ σ' σ'' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
        → Δ ⊩ₛ σ' ≡ σ'' ∷ Γ / [Γ] / ⊢Δ / [σ']
        → Δ ⊩ₛ σ  ≡ σ'' ∷ Γ / [Γ] / ⊢Δ / [σ]
 transS ε ⊢Δ [σ] [σ'] [σ''] [σ≡σ'] [σ'≡σ''] = tt
-transS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ''] [σ≡σ'] [σ'≡σ''] = transS [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ']) (proj₁ [σ'']) (proj₁ [σ≡σ']) (proj₁ [σ'≡σ''])
+transS ([Γ] ∙ x) ⊢Δ [σ] [σ'] [σ''] [σ≡σ'] [σ'≡σ''] =
+  transS [Γ] ⊢Δ (proj₁ [σ]) (proj₁ [σ']) (proj₁ [σ''])
+         (proj₁ [σ≡σ']) (proj₁ [σ'≡σ''])
   , let [σA]   = proj₁ (x ⊢Δ (proj₁ [σ]))
         [σ'A]  = proj₁ (x ⊢Δ (proj₁ [σ']))
         [σ''A] = proj₁ (x ⊢Δ (proj₁ [σ'']))
-        [σ'≡σ'']' = convEqTerm₂ [σA] [σ'A] ((proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ']) (proj₁ [σ≡σ'])) (proj₂ [σ'≡σ''])
+        [σ'≡σ'']' = convEqTerm₂ [σA] [σ'A]
+                                ((proj₂ (x ⊢Δ (proj₁ [σ]))) (proj₁ [σ'])
+                                        (proj₁ [σ≡σ'])) (proj₂ [σ'≡σ''])
     in  transEqTerm [σA] (proj₂ [σ≡σ']) [σ'≡σ'']'

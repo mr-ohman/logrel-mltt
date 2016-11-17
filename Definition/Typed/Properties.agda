@@ -1,14 +1,14 @@
 module Definition.Typed.Properties where
 
-open import Data.Empty using (⊥; ⊥-elim)
-open import Data.Product
+open import Tools.Empty using (⊥; ⊥-elim)
+open import Tools.Product
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
      using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
-open import Data.Nat renaming (ℕ to Nat)
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Nat
+import Tools.PropositionalEquality as PE
 
 
 -- Wellformed context extraction
@@ -98,6 +98,16 @@ redFirst* (id A) = A
 redFirst* (A⇒A' ⇨ A'⇒*B) = redFirst A⇒A'
 
 
+-- No neutral terms are well-formed in an empty context
+
+noNe : ∀ {t A} → ε ⊢ t ∷ A → Neutral t → ⊥
+noNe (var x₁ ()) (var x)
+noNe (conv ⊢t x) (var n) = noNe ⊢t (var n)
+noNe (⊢t ∘ ⊢t₁) (_∘_ neT) = noNe ⊢t neT
+noNe (conv ⊢t x) (_∘_ neT) = noNe ⊢t (_∘_ neT)
+noNe (natrec x ⊢t ⊢t₁ ⊢t₂) (natrec neT) = noNe ⊢t₂ neT
+noNe (conv ⊢t x) (natrec neT) = noNe ⊢t (natrec neT)
+
 -- Neutrals do not weak head reduce
 
 neRed : ∀ {Γ t u A} (d : Γ ⊢ t ⇒ u ∷ A) (n : Neutral t) → ⊥
@@ -159,13 +169,16 @@ whrDet' (univ x) (univ x₁) = whrDet x x₁
 whrDet↘ : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ⇒* u' ∷ A) → Γ ⊢ u' ⇒* u ∷ A
 whrDet↘ (proj₁ , proj₂) (id x) = proj₁
 whrDet↘ (id x , proj₂) (x₁ ⇨ d') = ⊥-elim (whnfRed x₁ proj₂)
-whrDet↘ (x ⇨ proj₁ , proj₂) (x₁ ⇨ d') = whrDet↘ (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x x₁) (proj₁ , proj₂)) d'
+whrDet↘ (x ⇨ proj₁ , proj₂) (x₁ ⇨ d') =
+  whrDet↘ (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x x₁) (proj₁ , proj₂)) d'
 
 whrDet* : ∀{Γ t u A u'} (d : Γ ⊢ t ↘ u ∷ A) (d' : Γ ⊢ t ↘ u' ∷ A) → u PE.≡ u'
 whrDet* (id x , proj₂) (id x₁ , proj₄) = PE.refl
 whrDet* (id x , proj₂) (x₁ ⇨ proj₃ , proj₄) = ⊥-elim (whnfRed x₁ proj₂)
 whrDet* (x ⇨ proj₁ , proj₂) (id x₁ , proj₄) = ⊥-elim (whnfRed x proj₄)
-whrDet* (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) = whrDet* (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _) (whrDet x₁ x) (proj₃ , proj₄))
+whrDet* (x ⇨ proj₁ , proj₂) (x₁ ⇨ proj₃ , proj₄) =
+  whrDet* (proj₁ , proj₂) (PE.subst (λ x₂ → _ ⊢ x₂ ↘ _ ∷ _)
+                                    (whrDet x₁ x) (proj₃ , proj₄))
 
 whrDet*' : ∀{Γ A B B'} (d : Γ ⊢ A ↘ B) (d' : Γ ⊢ A ↘ B') → B PE.≡ B'
 whrDet*' (id x , proj₂) (id x₁ , proj₄) = PE.refl

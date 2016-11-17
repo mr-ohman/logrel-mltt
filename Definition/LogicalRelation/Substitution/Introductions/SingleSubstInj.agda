@@ -19,12 +19,12 @@ open import Definition.LogicalRelation.Substitution.Reflexivity
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 
-open import Data.Product
-open import Data.Unit
-open import Data.Empty
-open import Data.Nat renaming (ℕ to Nat)
+open import Tools.Product
+open import Tools.Unit
+open import Tools.Empty
+open import Tools.Nat
 
-import Relation.Binary.PropositionalEquality as PE
+import Tools.PropositionalEquality as PE
 
 
 substVar0Id' : ∀ x → (purge (lift (step id)) (consSubst idSubst (var zero)))
@@ -70,9 +70,13 @@ injectivityΠEq (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F
       [G]' = irrelevanceΓ' (PE.cong₂ _∙_ PE.refl (PE.sym F≡F₁))
                            (PE.trans (substVar0Id _) (PE.sym G≡G₁)) [G]₁
       [F≡H]₁ = [F≡F'] T.id ⊢Γ
-      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) (PE.trans (wk-id _ zero) (PE.sym H≡F')) [F]₁ [F]' [F≡H]₁
+      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _ zero) (PE.sym F≡F₁))
+                               (PE.trans (wk-id _ zero) (PE.sym H≡F'))
+                               [F]₁ [F]' [F≡H]₁
       [G≡E]₁ = [G≡G'] (T.step T.id) (⊢Γ ∙ ⊢F) [x∷F]
-      [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁)) (PE.trans (substVar0Id _) (PE.sym E≡G')) (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
+      [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁))
+                                   (PE.trans (substVar0Id _) (PE.sym E≡G'))
+                                   (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
   in  [F≡H]' , [G≡E]'
 injectivityΠEq (emb x) [ΠFG≡ΠF'G'] = {!!}
 

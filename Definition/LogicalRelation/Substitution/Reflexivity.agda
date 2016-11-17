@@ -3,7 +3,7 @@ module Definition.LogicalRelation.Substitution.Reflexivity where
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 
-open import Data.Product
+open import Tools.Product
 
 
 reflₛ : ∀ {A Γ l}

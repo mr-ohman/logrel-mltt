@@ -5,12 +5,12 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties.Reflexivity
-open import Definition.LogicalRelation.Properties.Soundness
+open import Definition.LogicalRelation.Properties.Wellformed
 
-open import Data.Product
-open import Data.Empty using (⊥; ⊥-elim)
-import Relation.Binary.PropositionalEquality as PE
-open import Relation.Nullary
+open import Tools.Product
+open import Tools.Empty using (⊥; ⊥-elim)
+import Tools.PropositionalEquality as PE
+--open import Relation.Nullary
 
 
 data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set where

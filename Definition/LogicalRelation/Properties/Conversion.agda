@@ -7,10 +7,10 @@ open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.Properties.Soundness
+open import Definition.LogicalRelation.Properties.Wellformed
 
-open import Data.Product
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 mutual
@@ -21,7 +21,7 @@ mutual
              → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
   convTermT₁ (ℕ ℕA ℕB) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
   convTermT₁ {l} (ne neA neB) A≡B t =
-    conv t (soundnessEq {l} (ne neA) A≡B)
+    conv t (wellformedEq {l} (ne neA) A≡B)
   convTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                 (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
              Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t , [t]₁) =
@@ -61,7 +61,7 @@ mutual
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
   convTermT₂ (ℕ ℕA ℕB) A≡B ℕ[ n , d , natN , prop ] = ℕ[ n , d , natN , prop ]
   convTermT₂ {l} (ne neA neB) A≡B t =
-    conv t (sym (soundnessEq {l} (ne neA) A≡B))
+    conv t (sym (wellformedEq {l} (ne neA) A≡B))
   convTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                 (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
              Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] (⊢t , ⊩t , [t]₁) =
@@ -121,7 +121,7 @@ mutual
   convEqTermT₁ (ℕ ℕA ℕB) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
     ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
   convEqTermT₁ {l} (ne neA neB) A≡B t≡u =
-    conv t≡u (soundnessEq {l} (ne neA) A≡B)
+    conv t≡u (wellformedEq {l} (ne neA) A≡B)
   convEqTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                   (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
                Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
@@ -153,7 +153,7 @@ mutual
   convEqTermT₂ (ℕ D D₁) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
     ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
   convEqTermT₂ {l} (ne neA neB) A≡B t≡u =
-    conv t≡u (sym (soundnessEq {l} (ne neA) A≡B))
+    conv t≡u (sym (wellformedEq {l} (ne neA) A≡B))
   convEqTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                   (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
                Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ]
