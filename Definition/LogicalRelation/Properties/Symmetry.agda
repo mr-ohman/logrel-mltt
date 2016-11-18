@@ -45,7 +45,7 @@ mutual
                                   ([G]₁ ρ ⊢Δ [a])
                                   (symEq ([G] ρ ⊢Δ [a]₁) [ρG'a]
                                          ([G≡G'] ρ ⊢Δ [a]₁))) ]
-  symEqT (U UA UB) A≡B = PE.refl
+  symEqT (U (U _ _ _) (U _ _ _)) A≡B = PE.refl
   symEqT (emb⁰¹ x) A≡B = symEqT x A≡B
   symEqT (emb¹⁰ x) A≡B = symEqT x A≡B
 
@@ -68,7 +68,7 @@ symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
 symEqTerm (U (U .⁰ 0<1 ⊢Γ)) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] =
   U[ ⊢u , ⊢t , sym t≡u , ⊩u , ⊩t , symEq ⊩t ⊩u [t≡u] ]
-symEqTerm (ℕ ℕA) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
+symEqTerm (ℕ (ℕ _)) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
   ℕ≡[ k' , k , d' , d , sym t≡u
     , symNatural [k≡k'] , symNatural-prop [k≡k'] prop ]
 symEqTerm (ne (ne K D neK)) t≡u = sym t≡u

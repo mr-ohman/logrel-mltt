@@ -93,9 +93,9 @@ wkEq : ∀ {l Γ Δ A B} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
        ([A] : Γ ⊩⟨ l ⟩ A)
      → Γ ⊩⟨ l ⟩ A ≡ B / [A]
      → Δ ⊩⟨ l ⟩ wkₜ ρ A ≡ wkₜ ρ B / wk ρ ⊢Δ [A]
-wkEq ρ ⊢Δ (U UA) PE.refl = PE.refl
-wkEq ρ ⊢Δ (ℕ ℕA) A≡B = wkRed* ρ ⊢Δ A≡B
-wkEq ρ ⊢Δ (ne neA) ne[ M , D' , neM , K≡M ] =
+wkEq ρ ⊢Δ (U (U _ _ _)) PE.refl = PE.refl
+wkEq ρ ⊢Δ (ℕ (ℕ _)) A≡B = wkRed* ρ ⊢Δ A≡B
+wkEq ρ ⊢Δ (ne (ne _ _ _)) ne[ M , D' , neM , K≡M ] =
   ne[ U.wk (toWk ρ) M , wkRed:*: ρ ⊢Δ D'
     , wkNeutral (toWk ρ) neM , T.wkEq ρ ⊢Δ K≡M ]
 wkEq ρ ⊢Δ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
@@ -126,8 +126,8 @@ wkTerm : ∀ {l Γ Δ A t} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
        → Γ ⊩⟨ l ⟩ t ∷ A / [A]
        → Δ ⊩⟨ l ⟩ wkₜ ρ t ∷ wkₜ ρ A / wk ρ ⊢Δ [A]
 wkTerm ρ ⊢Δ (U (U .⁰ 0<1 ⊢Γ)) (⊢t , ⊩t) = T.wkTerm ρ ⊢Δ ⊢t , wk ρ ⊢Δ ⊩t
-wkTerm ρ ⊢Δ (ℕ ℕA) [t] = wkTermℕ ρ ⊢Δ [t]
-wkTerm ρ ⊢Δ (ne neA) t = T.wkTerm ρ ⊢Δ t
+wkTerm ρ ⊢Δ (ℕ (ℕ _)) [t] = wkTermℕ ρ ⊢Δ [t]
+wkTerm ρ ⊢Δ (ne (ne _ _ _)) t = T.wkTerm ρ ⊢Δ t
 wkTerm ρ ⊢Δ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) (⊢t , [ta≡tb] , [ta]) =
   T.wkTerm ρ ⊢Δ ⊢t
   -- TODO Minimize duplicates
@@ -164,8 +164,8 @@ wkEqTerm : ∀ {l Γ Δ A t u} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
 wkEqTerm ρ ⊢Δ (U (U .⁰ 0<1 ⊢Γ)) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] =
   U[ T.wkTerm ρ ⊢Δ ⊢t , T.wkTerm ρ ⊢Δ ⊢u , T.wkEqTerm ρ ⊢Δ t≡u
    , wk ρ ⊢Δ ⊩t , wk ρ ⊢Δ ⊩u , wkEq ρ ⊢Δ ⊩t [t≡u] ]
-wkEqTerm ρ ⊢Δ (ℕ ℕA) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
-wkEqTerm ρ ⊢Δ (ne neA) t≡u = T.wkEqTerm ρ ⊢Δ t≡u
+wkEqTerm ρ ⊢Δ (ℕ (ℕ _)) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
+wkEqTerm ρ ⊢Δ (ne (ne _ _ _)) t≡u = T.wkEqTerm ρ ⊢Δ t≡u
 wkEqTerm ρ ⊢Δ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) (t≡u , ⊩t , ⊩u , [t≡u]) =
   -- TODO Minimize duplicates
   let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)

@@ -21,7 +21,7 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
-  transEqT (ℕ ℕA ℕB) (ℕ .ℕB ℕC) A≡B B≡C = B≡C
+  transEqT (ℕ (ℕ _) (ℕ _)) (ℕ _ (ℕ _)) A≡B B≡C = B≡C
   transEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne ._ (ne K₂ D₂ neK₂))
            ne[ M , D' , neM , K≡M ] ne[ M₁ , D'' , neM₁ , K≡M₁ ] =
     ne[ M₁ , D'' , neM₁
@@ -76,7 +76,7 @@ mutual
                  [a″] = convTerm₁ ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ) [a′]
              in  transEq ([G] ρ ⊢Δ [a]) ([G′] ρ ⊢Δ [a′]) ([G″] ρ ⊢Δ [a″])
                          ([G≡G′] ρ ⊢Δ [a]) ([G′≡G″] ρ ⊢Δ [a′])) ]
-  transEqT (U ⊢Γ ⊢Γ₁) (U .⊢Γ₁ ⊢Γ₂) A≡B B≡C = PE.refl
+  transEqT (U ⊢Γ ⊢Γ₁) (U .⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
   transEqT (emb⁰¹ AB) BC A≡B B≡C = transEqT AB BC A≡B B≡C
   transEqT (emb¹⁰ AB) (emb⁰¹ BC) A≡B B≡C = transEqT AB BC A≡B B≡C
   transEqT (emb¹⁰ AB) (emb¹⁰ (emb⁰¹ BC)) A≡B B≡C = transEqT AB BC A≡B B≡C
@@ -135,8 +135,8 @@ transEqTerm (U (U .⁰ 0<1 ⊢Γ))
             U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] =
   U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁
    , transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
-transEqTerm (ℕ ℕA) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
-transEqTerm (ne neA) t≡u u≡v = trans t≡u u≡v
+transEqTerm (ℕ (ℕ _)) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
+transEqTerm (ne (ne _ _ _)) t≡u u≡v = trans t≡u u≡v
 transEqTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
             (t≡u , ⊩t , ⊩u , [t≡u])
             (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =

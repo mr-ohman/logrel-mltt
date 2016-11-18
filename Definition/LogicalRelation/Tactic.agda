@@ -102,9 +102,9 @@ data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) �
 goodCases : ∀ {l l' Γ A B} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B)
           → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Tactic Γ l l' A B [A] [B]
 goodCases (U UA) (U UB) A≡B = U UA UB
-goodCases (U ⊢Γ) (ℕ (ℕ D)) PE.refl = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
-goodCases (U ⊢Γ) (ne (ne K D neK)) PE.refl = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
-goodCases (U ⊢Γ) (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) PE.refl =
+goodCases (U (U _ _ ⊢Γ)) (ℕ (ℕ D)) PE.refl = ⊥-elim (U≢ℕ (whnfRed*' (red D) U))
+goodCases (U (U _ _ ⊢Γ)) (ne (ne K D neK)) PE.refl = ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+goodCases (U (U _ _ ⊢Γ)) (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) PE.refl =
   ⊥-elim (U≢Π (whnfRed*' (red D) U))
 goodCases (ℕ (ℕ D)) (U ⊢Γ) A≡B = ⊥-elim (U≢ℕ (whnfRed*' A≡B U))
 goodCases (ℕ ℕA) (ℕ ℕB) A≡B = ℕ ℕA ℕB
