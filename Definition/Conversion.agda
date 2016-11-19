@@ -3,7 +3,7 @@ module Definition.Conversion where
 open import Definition.Untyped
 open import Definition.Typed
 
-open import Data.Nat renaming (ℕ to Nat)
+open import Tools.Nat
 
 
 infix 10 _⊢_~_↑_

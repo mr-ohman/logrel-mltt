@@ -6,7 +6,7 @@ open import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 
-open import Data.Product
+open import Tools.Product
 
 
 lemma2 : ∀ {a A Γ} → Γ ⊢ A → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a ⇒* b ∷ A

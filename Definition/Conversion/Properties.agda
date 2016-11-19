@@ -5,11 +5,11 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
 
-open import Data.Nat renaming (ℕ to Nat)
-open import Data.Product
-open import Data.Empty
-open import Relation.Nullary
-import Relation.Binary.PropositionalEquality as PE
+open import Tools.Nat
+open import Tools.Product
+open import Tools.Empty
+open import Tools.Nullary
+import Tools.PropositionalEquality as PE
 
 mutual
   ~-subset : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
