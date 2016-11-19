@@ -12,19 +12,6 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
-irrelevanceNatural-prop : ∀ {Γ n n' m m'}
-                        → n PE.≡ n' → m PE.≡ m'
-                        → ([n≡m] : [Natural] n m) ([n'≡m'] : [Natural] n' m')
-                        → [Natural]-prop Γ n m [n≡m]
-                        → [Natural]-prop Γ n' m' [n'≡m']
-irrelevanceNatural-prop PE.refl PE.refl suc suc prop = prop
-irrelevanceNatural-prop PE.refl PE.refl suc (ne () x₁) prop
-irrelevanceNatural-prop PE.refl PE.refl zero zero t = t
-irrelevanceNatural-prop PE.refl PE.refl zero (ne () x₁) prop
-irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) suc prop
-irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) zero prop
-irrelevanceNatural-prop PE.refl PE.refl (ne x x₁) (ne x₂ x₃) prop = prop
-
 irrelevance' : ∀ {A A' Γ l}
              → A PE.≡ A'
              → Γ ⊩⟨ l ⟩ A

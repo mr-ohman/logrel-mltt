@@ -118,8 +118,8 @@ mutual
                → Γ ⊩⟨ l ⟩  A ≡ B / [A]
                → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
                → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
-  convEqTermT₁ (ℕ (ℕ _) (ℕ _)) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
-    ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
+  convEqTermT₁ (ℕ (ℕ _) (ℕ _)) A≡B ℕ≡[ k , k' , d , d' , t≡u , prop ] =
+    ℕ≡[ k , k' , d , d' , t≡u , prop ]
   convEqTermT₁ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t≡u =
     conv t≡u (wellformedEq {l} (ne (ne K D neK)) A≡B)
   convEqTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
@@ -150,8 +150,8 @@ mutual
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
              → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
-  convEqTermT₂ (ℕ (ℕ _) (ℕ _)) A≡B ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
-    ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
+  convEqTermT₂ (ℕ (ℕ _) (ℕ _)) A≡B ℕ≡[ k , k' , d , d' , t≡u , prop ] =
+    ℕ≡[ k , k' , d , d' , t≡u , prop ]
   convEqTermT₂ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t≡u =
     conv t≡u (sym (wellformedEq {l} (ne (ne K D neK)) A≡B))
   convEqTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)

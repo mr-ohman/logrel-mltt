@@ -54,23 +54,21 @@ mutual
         → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEq [A] [B] A≡B = symEqT (goodCases [A] [B] A≡B) A≡B
 
-symNatural-prop : ∀ {Γ k k'} ([k≡k'] : [Natural] k k')
-                → [Natural]-prop Γ k k' [k≡k']
-                → [Natural]-prop Γ k' k (symNatural [k≡k'])
-symNatural-prop suc ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
-  ℕ≡[ k' , k , d' , d , sym t≡u
-    , symNatural [k≡k'] , symNatural-prop [k≡k'] prop ]
-symNatural-prop zero prop = prop
-symNatural-prop (ne x x₁) prop = sym prop
+symNatural-prop : ∀ {Γ k k'}
+                → [Natural]-prop Γ k k'
+                → [Natural]-prop Γ k' k
+symNatural-prop (suc ℕ≡[ k , k' , d , d' , t≡u , prop ]) =
+  suc ℕ≡[ k' , k , d' , d , sym t≡u , symNatural-prop prop ]
+symNatural-prop zero = zero
+symNatural-prop (ne x x₁ prop) = ne x₁ x (sym prop)
 
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
 symEqTerm (U (U .⁰ 0<1 ⊢Γ)) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] =
   U[ ⊢u , ⊢t , sym t≡u , ⊩u , ⊩t , symEq ⊩t ⊩u [t≡u] ]
-symEqTerm (ℕ (ℕ _)) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
-  ℕ≡[ k' , k , d' , d , sym t≡u
-    , symNatural [k≡k'] , symNatural-prop [k≡k'] prop ]
+symEqTerm (ℕ (ℕ _)) ℕ≡[ k , k' , d , d' , t≡u , prop ] =
+  ℕ≡[ k' , k , d' , d , sym t≡u , symNatural-prop prop ]
 symEqTerm (ne (ne K D neK)) t≡u = sym t≡u
 symEqTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) (t≡u , ⊩t , ⊩u , [t≡u]) =
   sym t≡u , ⊩u , ⊩t , (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]))

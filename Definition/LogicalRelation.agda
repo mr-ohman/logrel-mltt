@@ -21,14 +21,14 @@ record ne[_]_≡_[_] (Γ : Con Term) (A B K : Term) : Set where
 
 mutual
   natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
-  natural-prop Γ .(suc n) (suc {n}) = ℕ[ Γ ] n ∷ ℕ
+  natural-prop Γ .(suc n) (suc {n}) = ℕ[ Γ ] n ∷ℕ
   natural-prop Γ .zero zero = ⊤
   natural-prop Γ n (ne x) = Γ ⊢ n ∷ ℕ
 
-  data ℕ[_]_∷_ (Γ : Con Term) (t A : Term) : Set where
+  data ℕ[_]_∷ℕ (Γ : Con Term) (t : Term) : Set where
     ℕ[_,_,_,_] : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ)
                  (natN : Natural n) (prop : natural-prop Γ n natN)
-               → ℕ[ Γ ] t ∷ A
+               → ℕ[ Γ ] t ∷ℕ
 
     -- Note: parameter A is unused.
 
@@ -42,20 +42,25 @@ mutual
   --     prop : natural-prop Γ n natN
 
 mutual
-  -- data [Natural]-prop' (Γ : Con Term) : (n n' : Term) → Set where
-  --   suc : ∀ {n n'} → ℕ[ Γ ] n ≡ n' ∷ ℕ → [Natural]-prop' Γ (suc n) (suc n')
-  --   zero : [Natural]-prop' Γ zero zero
-  --   ne : ∀ {n n'} → Neutral n -> Neutral n' -> Γ ⊢ n ≡ n' ∷ ℕ → [Natural]-prop' Γ n n'
-  [Natural]-prop : (Γ : Con Term) (n n' : Term) → [Natural] n n' → Set
-  [Natural]-prop Γ .(suc n) .(suc n') (suc {n} {n'}) = ℕ[ Γ ] n ≡ n' ∷ ℕ
-  [Natural]-prop Γ .zero    .zero     zero           = ⊤
-  [Natural]-prop Γ n        n'        (ne neN neN')  = Γ ⊢ n ≡ n' ∷ ℕ
+  data [Natural]-prop (Γ : Con Term) : (n n' : Term) → Set where
+    suc : ∀ {n n'} → ℕ[ Γ ] n ≡ n' ∷ℕ → [Natural]-prop Γ (suc n) (suc n')
+    zero : [Natural]-prop Γ zero zero
+    ne : ∀ {n n'} → Neutral n → Neutral n' → Γ ⊢ n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
+  -- [Natural]-prop : (Γ : Con Term) (n n' : Term) → [Natural] n n' → Set
+  -- [Natural]-prop Γ .(suc n) .(suc n') (suc {n} {n'}) = ℕ[ Γ ] n ≡ n' ∷ ℕ
+  -- [Natural]-prop Γ .zero    .zero     zero           = ⊤
+  -- [Natural]-prop Γ n        n'        (ne neN neN')  = Γ ⊢ n ≡ n' ∷ ℕ
 
-  data ℕ[_]_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
-    ℕ≡[_,_,_,_,_,_,_] :
+  data ℕ[_]_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
+    ℕ≡[_,_,_,_,_,_] :
       (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
-      (t≡u : Γ ⊢ t ≡ u ∷ ℕ) ([k≡k'] : [Natural] k k')
-      (prop : [Natural]-prop Γ k k' [k≡k']) → ℕ[ Γ ] t ≡ u ∷ A
+      (t≡u : Γ ⊢ t ≡ u ∷ ℕ)
+      (prop : [Natural]-prop Γ k k') → ℕ[ Γ ] t ≡ u ∷ℕ
+
+split : ∀ {Γ a b} → [Natural]-prop Γ a b → Natural a × Natural b
+split (suc x) = suc , suc
+split zero = zero , zero
+split (ne x x₁ x₂) = ne x , ne x₁
 
     -- Note: parameter A is unused.
 
@@ -201,7 +206,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
 
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ A ∷ .U / U (U l' l< ⊢Γ) = Γ ⊢ A ∷ U × Γ ⊩ A where open Lower {l< = l<}
-    Γ ⊩¹ t ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ∷ A
+    Γ ⊩¹ t ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ∷ℕ
     Γ ⊩¹ t ∷ A / ne (ne K D neK) = Γ ⊢ t ∷ A
     Γ ⊩¹ f ∷ A / Π (Π F G D ⊢F ⊢G [F] [G] G-ext) =
       Γ ⊢ f ∷ A × wk-fun-ext-prop¹ Γ F G f [F] [G]
@@ -210,7 +215,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ≡ u ∷ .U / U (U l' l< ⊢Γ) = U[ l< ][ Γ ] t ≡ u ∷ U
-    Γ ⊩¹ t ≡ u ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ≡ u ∷ A
+    Γ ⊩¹ t ≡ u ∷ A / ℕ (ℕ D) = ℕ[ Γ ] t ≡ u ∷ℕ
     Γ ⊩¹ t ≡ u ∷ A / ne (ne K D neK) = Γ ⊢ t ≡ u ∷ A
     Γ ⊩¹ t ≡ u ∷ A / Π (Π F G D ⊢F ⊢G [F] [G] G-ext) =
       --Π¹ₜ[ Γ ] t ≡ u ∷ A [ F , G , Π x x₁ x₂ [F] [G] x₃ , [F] , [G] ]

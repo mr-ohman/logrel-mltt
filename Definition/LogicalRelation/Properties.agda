@@ -55,10 +55,10 @@ sucEqTerm' : ∀ {l Γ n n'}
            → Γ ⊩⟨ l ⟩ n ≡ n' ∷ ℕ / ℕ-intr [ℕ]
            → Γ ⊩⟨ l ⟩ suc n ≡ suc n' ∷ ℕ / ℕ-intr [ℕ]
 sucEqTerm' (noemb (ℕ D)) ℕ≡[ k , k' , [ ⊢t , ⊢u , d ]
-                           , [ ⊢t₁ , ⊢u₁ , d₁ ] , t≡u , [k≡k'] , prop ] =
+                           , [ ⊢t₁ , ⊢u₁ , d₁ ] , t≡u , prop ] =
   ℕ≡[ _ , _ , idRedTerm:*: (suc ⊢t) , idRedTerm:*: (suc ⊢t₁) , suc-cong t≡u
-    , suc , ℕ≡[ k , k' , [ ⊢t , ⊢u , d ] , [ ⊢t₁ , ⊢u₁ , d₁ ]
-    , t≡u , [k≡k'] , prop ] ]
+    , suc ℕ≡[ k , k' , [ ⊢t , ⊢u , d ] , [ ⊢t₁ , ⊢u₁ , d₁ ]
+    , t≡u , prop ] ]
 sucEqTerm' (emb 0<1 x) [n≡n'] = sucEqTerm' x [n≡n']
 
 sucEqTerm : ∀ {l Γ n n'} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)

@@ -14,8 +14,8 @@ open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 mutual
-  wkTermℕ : ∀ {Γ Δ A n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-          → ℕ[ Γ ] n ∷ A → ℕ[ Δ ] U.wk (toWk ρ) n ∷ U.wk (toWk ρ) A
+  wkTermℕ : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+          → ℕ[ Γ ] n ∷ℕ → ℕ[ Δ ] U.wk (toWk ρ) n ∷ℕ
   wkTermℕ ρ ⊢Δ ℕ[ n , d , natN , prop ] =
     ℕ[ U.wk (toWk ρ) n , wkRed:*:Term ρ ⊢Δ d , wkNatural (toWk ρ) natN
      , wkNatural-prop ρ ⊢Δ natN prop ]
@@ -28,22 +28,21 @@ mutual
   wkNatural-prop ρ ⊢Δ (ne x) n = T.wkTerm ρ ⊢Δ n
 
 mutual
-  wkEqTermℕ : ∀ {Γ Δ A t u} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-            → ℕ[ Γ ] t ≡ u ∷ A
-            → ℕ[ Δ ] U.wk (toWk ρ) t ≡ U.wk (toWk ρ) u ∷ U.wk (toWk ρ) A
-  wkEqTermℕ ρ ⊢Δ ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
+  wkEqTermℕ : ∀ {Γ Δ t u} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+            → ℕ[ Γ ] t ≡ u ∷ℕ
+            → ℕ[ Δ ] U.wk (toWk ρ) t ≡ U.wk (toWk ρ) u ∷ℕ
+  wkEqTermℕ ρ ⊢Δ ℕ≡[ k , k' , d , d' , t≡u , prop ] =
     ℕ≡[ U.wk (toWk ρ) k , U.wk (toWk ρ) k' , wkRed:*:Term ρ ⊢Δ d
-      , wkRed:*:Term ρ ⊢Δ d' , T.wkEqTerm ρ ⊢Δ t≡u , wk[Natural] (toWk ρ) [k≡k']
-      , wk[Natural]-prop ρ ⊢Δ [k≡k'] prop ]
+      , wkRed:*:Term ρ ⊢Δ d' , T.wkEqTerm ρ ⊢Δ t≡u
+      , wk[Natural]-prop ρ ⊢Δ prop ]
 
   wk[Natural]-prop : ∀ {Γ Δ n n'} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                     ([n≡n'] : [Natural] n n')
-                   → [Natural]-prop Γ n n' [n≡n']
+                   → [Natural]-prop Γ n n'
                    → [Natural]-prop Δ (U.wk (toWk ρ) n) (U.wk (toWk ρ) n')
-                                      (wk[Natural] (toWk ρ) [n≡n'])
-  wk[Natural]-prop ρ ⊢Δ suc [n≡n'] = wkEqTermℕ ρ ⊢Δ [n≡n']
-  wk[Natural]-prop ρ ⊢Δ zero t = t
-  wk[Natural]-prop ρ ⊢Δ (ne x x₁) n≡n' = T.wkEqTerm ρ ⊢Δ n≡n'
+  wk[Natural]-prop ρ ⊢Δ (suc [n≡n']) = suc (wkEqTermℕ ρ ⊢Δ [n≡n'])
+  wk[Natural]-prop ρ ⊢Δ zero = zero
+  wk[Natural]-prop ρ ⊢Δ (ne x x₁ n≡n') =
+    ne (wkNeutral (toWk ρ) x) (wkNeutral (toWk ρ) x₁) (T.wkEqTerm ρ ⊢Δ n≡n')
 
 wk : ∀ {l Γ Δ A} → (ρ : Γ ⊆ Δ) → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ wkₜ ρ A
 wk ρ ⊢Δ (U (U l' l< ⊢Γ)) = U (U l' l< ⊢Δ)
