@@ -21,7 +21,7 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
-  transEqT (ℕ ℕA ℕB) (ℕ .ℕB ℕC) A≡B B≡C = B≡C
+  transEqT (ℕ (ℕ _) (ℕ _)) (ℕ _ (ℕ _)) A≡B B≡C = B≡C
   transEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne ._ (ne K₂ D₂ neK₂))
            ne[ M , D' , neM , K≡M ] ne[ M₁ , D'' , neM₁ , K≡M₁ ] =
     ne[ M₁ , D'' , neM₁
@@ -76,7 +76,7 @@ mutual
                  [a″] = convTerm₁ ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ) [a′]
              in  transEq ([G] ρ ⊢Δ [a]) ([G′] ρ ⊢Δ [a′]) ([G″] ρ ⊢Δ [a″])
                          ([G≡G′] ρ ⊢Δ [a]) ([G′≡G″] ρ ⊢Δ [a′])) ]
-  transEqT (U ⊢Γ ⊢Γ₁) (U .⊢Γ₁ ⊢Γ₂) A≡B B≡C = PE.refl
+  transEqT (U ⊢Γ ⊢Γ₁) (U .⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
   transEqT (emb⁰¹ AB) BC A≡B B≡C = transEqT AB BC A≡B B≡C
   transEqT (emb¹⁰ AB) (emb⁰¹ BC) A≡B B≡C = transEqT AB BC A≡B B≡C
   transEqT (emb¹⁰ AB) (emb¹⁰ (emb⁰¹ BC)) A≡B B≡C = transEqT AB BC A≡B B≡C
@@ -98,32 +98,29 @@ mutual
   transEq' PE.refl PE.refl [A] [B] [C] A≡B B≡C = transEq [A] [B] [C] A≡B B≡C
 
 mutual
-  transEqTermℕ : ∀ {Γ A n n' n''}
-               → ℕ[ Γ ] n  ≡ n'  ∷ A
-               → ℕ[ Γ ] n' ≡ n'' ∷ A
-               → ℕ[ Γ ] n  ≡ n'' ∷ A
-  transEqTermℕ ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ]
-               ℕ≡[ k₁ , k'' , d₁ , d'' , t≡u₁ , [k≡k']₁ , prop₁ ] =
-    let k₁Whnf = naturalWhnf (proj₁ (split [k≡k']₁))
-        k'Whnf = naturalWhnf (proj₂ (split [k≡k']))
+  transEqTermℕ : ∀ {Γ n n' n''}
+               → ℕ[ Γ ] n  ≡ n'  ∷ℕ
+               → ℕ[ Γ ] n' ≡ n'' ∷ℕ
+               → ℕ[ Γ ] n  ≡ n'' ∷ℕ
+  transEqTermℕ ℕ≡[ k , k' , d , d' , t≡u , prop ]
+               ℕ≡[ k₁ , k'' , d₁ , d'' , t≡u₁ , prop₁ ] =
+    let k₁Whnf = naturalWhnf (proj₁ (split prop₁))
+        k'Whnf = naturalWhnf (proj₂ (split prop))
         k₁≡k' = whrDet* (redₜ d₁ , k₁Whnf) (redₜ d' , k'Whnf)
-        [k'≡k''] = PE.subst (λ x → [Natural] x _) k₁≡k' [k≡k']₁
-        prop' = irrelevanceNatural-prop k₁≡k' PE.refl [k≡k']₁ [k'≡k''] prop₁
-    in  ℕ≡[ k , k'' , d , d'' , trans t≡u t≡u₁ , transNatural [k≡k'] [k'≡k'']
-          , transNatural-prop [k≡k'] prop [k'≡k''] prop' ]
+        prop' = PE.subst (λ x → [Natural]-prop _ x _) k₁≡k' prop₁
+    in  ℕ≡[ k , k'' , d , d'' , trans t≡u t≡u₁
+          , transNatural-prop prop prop' ]
 
   transNatural-prop : ∀ {Γ k k' k''}
-                    → ([k≡k'] : [Natural] k k')
-                    → [Natural]-prop Γ k k' [k≡k']
-                    → ([k'≡k''] : [Natural] k' k'')
-                    → [Natural]-prop Γ k' k'' [k'≡k'']
-                    → [Natural]-prop Γ k k'' (transNatural [k≡k'] [k'≡k''])
-  transNatural-prop suc prop suc prop₁ = transEqTermℕ prop prop₁
-  transNatural-prop suc prop (ne () x₁) prop₁
-  transNatural-prop zero prop [k'≡k''] prop₁ = prop₁
-  transNatural-prop (ne x ()) prop suc prop₁
-  transNatural-prop (ne x x₁) prop zero prop₁ = prop
-  transNatural-prop (ne x x₁) prop (ne x₂ x₃) prop₁ = trans prop prop₁
+                    → [Natural]-prop Γ k k'
+                    → [Natural]-prop Γ k' k''
+                    → [Natural]-prop Γ k k''
+  transNatural-prop (suc x) (suc x₁) = suc (transEqTermℕ x x₁)
+  transNatural-prop (suc x) (ne () x₂ x₃)
+  transNatural-prop zero prop₁ = prop₁
+  transNatural-prop prop zero = prop
+  transNatural-prop (ne x () x₂) (suc x₃)
+  transNatural-prop (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (trans x₂ x₅)
 
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -135,8 +132,8 @@ transEqTerm (U (U .⁰ 0<1 ⊢Γ))
             U[ ⊢t₁ , ⊢u₁ , t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁ ] =
   U[ ⊢t , ⊢u₁ , trans t≡u t≡u₁ , ⊩t , ⊩u₁
    , transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁) ]
-transEqTerm (ℕ ℕA) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
-transEqTerm (ne neA) t≡u u≡v = trans t≡u u≡v
+transEqTerm (ℕ (ℕ _)) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
+transEqTerm (ne (ne _ _ _)) t≡u u≡v = trans t≡u u≡v
 transEqTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
             (t≡u , ⊩t , ⊩u , [t≡u])
             (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =

@@ -41,7 +41,7 @@ wellformedTermEq : ∀ {l Γ A t u} → ([A] : Γ ⊩⟨ l ⟩ A)
                 → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
                 → Γ ⊢ t ≡ u ∷ A
 wellformedTermEq (U (U l' l< ⊢Γ)) U[ ⊢t , ⊢u , t≡u , ⊩t , ⊩u , [t≡u] ] = t≡u
-wellformedTermEq (ℕ (ℕ D)) ℕ≡[ k , k' , d , d' , t≡u , [k≡k'] , prop ] =
+wellformedTermEq (ℕ (ℕ D)) ℕ≡[ k , k' , d , d' , t≡u , prop ] =
   conv t≡u (sym (subset* (red D)))
 wellformedTermEq (ne (ne K D neK)) t≡u = t≡u
 wellformedTermEq (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) (t≡u , ⊩t , ⊩u , [t≡u]) = t≡u

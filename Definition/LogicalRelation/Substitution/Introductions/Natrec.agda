@@ -140,10 +140,10 @@ sucCase₃ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ)
            ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
          → Γ ∙ ℕ ⊩ₛ⟨ l ⟩t suc (var zero) ∷ ℕ / [Γ] ∙ [ℕ]
                  / (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-sucCase₃ {Γ} {l} [Γ] [ℕ] =
-  (λ {Δ} {σ} → sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
+sucCase₃ {Γ} {l} [Γ] [ℕ] {Δ} {σ} =
+  sucₛ {n = var zero} {l = l} (_∙_ {A = ℕ} [Γ] [ℕ])
        (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
-       (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ})
+       (λ ⊢Δ [σ] → proj₂ [σ] , (λ [σ'] [σ≡σ'] → proj₂ [σ≡σ'])) {Δ} {σ}
 
 sucCase₂ : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
            ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
@@ -394,7 +394,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                 ℕ[ .(suc n') , d , suc {n'} , [n'] ]
                 ℕ[ .(suc m') , d' , suc {m'} , [m'] ]
                 ℕ≡[ .(suc n'') , .(suc m'') , d₁ , d₁'
-                  , t≡u , suc {n''} {m''} , [n''≡m''] ] =
+                  , t≡u , suc {n''} {m''} [n''≡m''] ] =
   let n''≡n' = suc-PE-injectivity (whrDet* (redₜ d₁ , suc) (redₜ d , suc))
       m''≡m' = suc-PE-injectivity (whrDet* (redₜ d₁' , suc) (redₜ d' , suc))
       [ℕ] = ℕₛ {l = l} [Γ]
@@ -403,7 +403,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       [n'≡m'] = irrelevanceEqTerm'' n''≡n' m''≡m' PE.refl [σℕ] [σℕ] [n''≡m'']
       [σn] = ℕ[ suc n' , d , suc , [n'] ]
       [σ'm] = ℕ[ suc m' , d' , suc , [m'] ]
-      [σn≡σ'm] = ℕ≡[ suc n'' , suc m'' , d₁ , d₁' , t≡u , suc , [n''≡m''] ]
+      [σn≡σ'm] = ℕ≡[ suc n'' , suc m'' , d₁ , d₁' , t≡u , suc [n''≡m''] ]
       ⊢ℕ = wellformed [σℕ]
       ⊢F = wellformed (proj₁ ([F] (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ] ⊢Δ [ℕ] [σ])))
       ⊢z = PE.subst (λ x → _ ⊢ _ ∷ x) (singleSubstLift F zero)
@@ -562,7 +562,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                 [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ .zero , d , zero , prop ] ℕ[ .zero , d₁ , zero , prop₁ ]
-                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero , prop₂ ] =
+                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero ] =
   let [ℕ] = ℕₛ {l = l} [Γ]
       [σℕ] = proj₁ ([ℕ] ⊢Δ [σ])
       ⊢ℕ = wellformed (proj₁ ([ℕ] ⊢Δ [σ]))
@@ -587,7 +587,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       [σ'm]' , [σ'm≡σ'0] = redSubst*Term (redₜ d') (proj₁ ([ℕ] ⊢Δ [σ'])) [σ'0]
       [σn] = ℕ[ zero , d , zero , _ ]
       [σ'm] = ℕ[ zero , d' , zero , _ ]
-      [σn≡σ'm] = ℕ≡[ zero , zero , d₂ , d' , t≡u , zero , prop₂ ]
+      [σn≡σ'm] = ℕ≡[ zero , zero , d₂ , d' , t≡u , zero ]
       [σn≡σ'0] = transEqTerm [σℕ] [σn≡σ'm] [σ'm≡σ'0]
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
       [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
@@ -672,7 +672,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                 [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ n' , d , ne neN' , ⊢n' ] ℕ[ m' , d' , ne neM' , ⊢m' ]
-                ℕ≡[ n'' , m'' , d₁ , d₁' , t≡u , ne x₂ x₃ , prop₂ ] =
+                ℕ≡[ n'' , m'' , d₁ , d₁' , t≡u , ne x₂ x₃ prop₂ ] =
   let n''≡n' = whrDet* (redₜ d₁ , ne x₂) (redₜ d , ne neN')
       m''≡m' = whrDet* (redₜ d₁' , ne x₃) (redₜ d' , ne neM')
       [ℕ] = ℕₛ {l = l} [Γ]
@@ -680,7 +680,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       [σ'ℕ] = proj₁ ([ℕ] ⊢Δ [σ'])
       [σn] = ℕ[ n' , d , ne neN' , ⊢n' ]
       [σ'm] = ℕ[ m' , d' , ne neM' , ⊢m' ]
-      [σn≡σ'm] = ℕ≡[ n'' , m'' , d₁ , d₁' , t≡u , ne x₂ x₃ , prop₂ ]
+      [σn≡σ'm] = ℕ≡[ n'' , m'' , d₁ , d₁' , t≡u , ne x₂ x₃ prop₂ ]
       ⊢ℕ = wellformed (proj₁ ([ℕ] ⊢Δ [σ]))
       [σF] = proj₁ ([F] (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ] ⊢Δ [ℕ] [σ]))
       [σ'F] = proj₁ ([F] (⊢Δ ∙ ⊢ℕ) (liftSubstS {F = ℕ} [Γ] ⊢Δ [ℕ] [σ']))
@@ -803,64 +803,64 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ .zero , d₁ , zero , prop₁ ]
-                ℕ≡[ _ , _ , d₂ , d' , t≡u , suc , prop₂ ] =
+                ℕ≡[ _ , _ , d₂ , d' , t≡u , suc prop₂ ] =
   ⊥-elim (zero≢suc (whrDet* (redₜ d₁ , zero) (redₜ d' , suc)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ n , d₁ , ne x , prop₁ ]
-                ℕ≡[ _ , _ , d₂ , d' , t≡u , suc , prop₂ ] =
+                ℕ≡[ _ , _ , d₂ , d' , t≡u , suc prop₂ ] =
   ⊥-elim (suc≢ne x (whrDet* (redₜ d' , suc) (redₜ d₁ , ne x)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ .zero , d , zero , prop ] [σm]
-                ℕ≡[ _ , _ , d₁ , d' , t≡u , suc , prop₂ ] =
+                ℕ≡[ _ , _ , d₁ , d' , t≡u , suc prop₂ ] =
   ⊥-elim (zero≢suc (whrDet* (redₜ d , zero) (redₜ d₁ , suc)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ n , d , ne x , prop ] [σm]
-                ℕ≡[ _ , _ , d₁ , d' , t≡u , suc , prop₂ ] =
+                ℕ≡[ _ , _ , d₁ , d' , t≡u , suc prop₂ ] =
   ⊥-elim (suc≢ne x (whrDet* (redₜ d₁ , suc) (redₜ d , ne x)))
 
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ _ , d , suc , prop ] [σm]
-                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero , prop₂ ] =
+                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero ] =
   ⊥-elim (zero≢suc (whrDet* (redₜ d₂ , zero) (redₜ d , suc)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ _ , d₁ , suc , prop₁ ]
-                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero , prop₂ ] =
+                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero ] =
   ⊥-elim (zero≢suc (whrDet* (redₜ d' , zero) (redₜ d₁ , suc)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ n , d₁ , ne x , prop₁ ]
-                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero , prop₂ ] =
+                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero ] =
   ⊥-elim (zero≢ne x (whrDet* (redₜ d' , zero) (redₜ d₁ , ne x)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ n , d , ne x , prop ] [σm]
-                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero , prop₂ ] =
+                ℕ≡[ .zero , .zero , d₂ , d' , t≡u , zero ] =
   ⊥-elim (zero≢ne x (whrDet* (redₜ d₂ , zero) (redₜ d , ne x)))
 
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ _ , d , suc , prop ] [σm]
-                ℕ≡[ n₁ , n' , d₂ , d' , t≡u , ne x x₁ , prop₂ ] =
+                ℕ≡[ n₁ , n' , d₂ , d' , t≡u , ne x x₁ prop₂ ] =
   ⊥-elim (suc≢ne x (whrDet* (redₜ d , suc) (redₜ d₂ , ne x)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 ℕ[ .zero , d , zero , prop ] [σm]
-                ℕ≡[ n , n' , d₂ , d' , t≡u , ne x x₁ , prop₂ ] =
+                ℕ≡[ n , n' , d₂ , d' , t≡u , ne x x₁ prop₂ ] =
   ⊥-elim (zero≢ne x (whrDet* (redₜ d , zero) (redₜ d₂ , ne x)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ _ , d₁ , suc , prop₁ ]
-                ℕ≡[ n₁ , n' , d₂ , d' , t≡u , ne x₁ x₂ , prop₂ ] =
+                ℕ≡[ n₁ , n' , d₂ , d' , t≡u , ne x₁ x₂ prop₂ ] =
   ⊥-elim (suc≢ne x₂ (whrDet* (redₜ d₁ , suc) (redₜ d' , ne x₂)))
 natrec-congTerm [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
                 [z] [z'] [z≡z'] [s] [s'] [s≡s'] ⊢Δ [σ] [σ'] [σ≡σ']
                 [σn] ℕ[ .zero , d₁ , zero , prop₁ ]
-                ℕ≡[ n , n' , d₂ , d' , t≡u , ne x₁ x₂ , prop₂ ] =
+                ℕ≡[ n , n' , d₂ , d' , t≡u , ne x₁ x₂ prop₂ ] =
   ⊥-elim (zero≢ne x₂ (whrDet* (redₜ d₁ , zero) (redₜ d' , ne x₂)))
 
 natrecₛ : ∀ {F z s n Γ} ([Γ] : ⊩ₛ Γ)

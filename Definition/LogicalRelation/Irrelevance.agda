@@ -12,19 +12,6 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
-irrelevanceNatural-prop : ∀ {Γ n n' m m'}
-                        → n PE.≡ n' → m PE.≡ m'
-                        → ([n≡m] : [Natural] n m) ([n'≡m'] : [Natural] n' m')
-                        → [Natural]-prop Γ n m [n≡m]
-                        → [Natural]-prop Γ n' m' [n'≡m']
-irrelevanceNatural-prop PE.refl PE.refl suc suc prop = prop
-irrelevanceNatural-prop PE.refl PE.refl suc (ne () x₁) prop
-irrelevanceNatural-prop PE.refl PE.refl zero zero t = t
-irrelevanceNatural-prop PE.refl PE.refl zero (ne () x₁) prop
-irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) suc prop
-irrelevanceNatural-prop PE.refl PE.refl (ne () x₁) zero prop
-irrelevanceNatural-prop PE.refl PE.refl (ne x x₁) (ne x₂ x₃) prop = prop
-
 irrelevance' : ∀ {A A' Γ l}
              → A PE.≡ A'
              → Γ ⊩⟨ l ⟩ A
@@ -66,7 +53,7 @@ mutual
   irrelevanceEqT : ∀ {Γ A B l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                        → Tactic Γ l l' A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
-  irrelevanceEqT (ℕ ℕA ℕB) A≡B = A≡B
+  irrelevanceEqT (ℕ (ℕ ℕA) (ℕ ℕB)) A≡B = A≡B
   irrelevanceEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) ne[ M , D' , neM , K≡M ] =
     ne[ M , D' , neM , (trans (sym (subset* (red D₁))) (trans (subset* (red D)) K≡M)) ]
   irrelevanceEqT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
@@ -81,7 +68,7 @@ mutual
                                           ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
                in  irrelevanceEq' (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁)
                                   ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a])) ]
-  irrelevanceEqT (U UA UB) A≡B = A≡B
+  irrelevanceEqT (U (U _ _ _) (U _ _ _)) A≡B = A≡B
   irrelevanceEqT (emb⁰¹ x) A≡B = irrelevanceEqT x A≡B
   irrelevanceEqT (emb¹⁰ x) A≡B = irrelevanceEqT x A≡B
 
@@ -115,8 +102,8 @@ mutual
   irrelevanceTermT : ∀ {Γ A t l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                          → Tactic Γ l l' A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
-  irrelevanceTermT (ℕ ℕA ℕB) t = t
-  irrelevanceTermT (ne neA neB) t = t
+  irrelevanceTermT (ℕ (ℕ _) (ℕ _)) t = t
+  irrelevanceTermT (ne (ne _ _ _) (ne _ _ _)) t = t
   irrelevanceTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                       (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)) (⊢t , [t] , [t]₁) =
     let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
@@ -159,8 +146,8 @@ mutual
   irrelevanceEqTermT : ∀ {Γ A t u} {l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                            → Tactic Γ l l' A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l' ⟩ t ≡ u ∷ A / q
-  irrelevanceEqTermT (ℕ ℕA ℕB) t≡u = t≡u
-  irrelevanceEqTermT (ne neA neB) t≡u = t≡u
+  irrelevanceEqTermT (ℕ (ℕ _) (ℕ _)) t≡u = t≡u
+  irrelevanceEqTermT (ne (ne _ _ _) (ne _ _ _)) t≡u = t≡u
   irrelevanceEqTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                         (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
                       (t≡u , ⊩t , ⊩u , [t≡u]) =

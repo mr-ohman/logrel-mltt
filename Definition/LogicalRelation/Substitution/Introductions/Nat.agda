@@ -27,7 +27,7 @@ zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
 zeroₛ [Γ] ⊢Δ [σ] =
   ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ]
    , (λ _ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ)
-                 , refl (zero ⊢Δ) , zero , tt ])
+                 , refl (zero ⊢Δ) , zero ])
 
 sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
