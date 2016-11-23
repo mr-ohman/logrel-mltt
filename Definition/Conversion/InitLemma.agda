@@ -31,7 +31,7 @@ lemma1 (univ x) = let a , b , c = lemma2 (U (wfTerm x)) x
 lem4 : ∀ {x A B Γ} → Γ ⊢ A → Γ ⊢ B → x ∷ A ∈ Γ → x ∷ B ∈ Γ → Γ ⊢ A ≡ B
 lem4 A B here here = refl A
 lem4 A B (there a) (there b) = let q = lem4 {!!} {!!} a b
-                               in  wkEq (step id) ({!!} ∙ {!!}) q
+                               in  wkEq (step id) (wf A) q
 
 lemma3 : ∀ {t A B Γ} → Neutral t → Γ ⊢ t ∷ A → Γ ⊢ t ∷ B → Γ ⊢ A ≡ B
 lemma3 (var x) (var x₁ x₂) (var x₃ x₄) = {!!}

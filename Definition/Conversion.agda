@@ -13,6 +13,7 @@ infix 10 _⊢_[conv]_∷_
 mutual
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
     var    : ∀ {x A}
+           → ⊢ Γ
            → x ∷ A ∈ Γ
            → Γ ⊢ var x ~ var x ↑ A
     app    : ∀ {k l t v F G}
@@ -38,8 +39,8 @@ mutual
               → Γ ⊢ B ⇒* B'
               → Γ ⊢ A' [conv] B'
               → Γ ⊢ A [conv] B
-    U-refl    : Γ ⊢ U [conv] U
-    ℕ-refl    : Γ ⊢ ℕ [conv] ℕ
+    U-refl    : ⊢ Γ → Γ ⊢ U [conv] U
+    ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv] ℕ
     ne        : ∀ {K L}
               → Γ ⊢ K ~ L ↑ U
               → Γ ⊢ K
@@ -65,7 +66,7 @@ mutual
               → Γ ⊢ k [conv] l ∷ A
     ne-ins    : ∀ {k l A M}
               → Γ ⊢ k ~ l ↑ A
-              → Γ ⊢ A ⇒* ℕ
+              → Γ ⊢ A ⇒* M
               → Γ ⊢ k ∷ A
               → Neutral M
               → Γ ⊢ k [conv] l ∷ A
@@ -74,7 +75,7 @@ mutual
               → Γ ⊢ B ∷ U
               → Γ ⊢ A [conv] B
               → Γ ⊢ A [conv] B ∷ U
-    zero-refl : Γ ⊢ zero [conv] zero ∷ ℕ
+    zero-refl : ⊢ Γ → Γ ⊢ zero [conv] zero ∷ ℕ
     suc-cong  : ∀ {m n}
               → Γ ⊢ m [conv] n ∷ ℕ
               → Γ ⊢ suc m [conv] suc n ∷ ℕ
