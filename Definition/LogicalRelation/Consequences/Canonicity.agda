@@ -34,11 +34,11 @@ canonicity'' : ∀ {t l}
              → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ)
              → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
              → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity'' {l = l} (noemb (ℕ D)) ℕ[ _ , d , suc , prop ] =
-  let a , b = canonicity'' {l = l} (noemb (ℕ D)) prop
+canonicity'' {l = l} (noemb D) (ℕₜ _ d suc prop) =
+  let a , b = canonicity'' {l = l} (noemb D) prop
   in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
-canonicity'' (noemb (ℕ D)) ℕ[ .zero , d , zero , prop ] = zero , subset*Term (redₜ d)
-canonicity'' (noemb (ℕ D)) ℕ[ n , d , ne x , prop ] = ⊥-elim (noNe prop x)
+canonicity'' (noemb D) (ℕₜ .zero d zero prop) = zero , subset*Term (redₜ d)
+canonicity'' (noemb D) (ℕₜ n d (ne x) prop) = ⊥-elim (noNe prop x)
 canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
 
 canonicity' : ∀ {t l}

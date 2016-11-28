@@ -53,21 +53,21 @@ mutual
   irrelevanceEqT : ∀ {Γ A B l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                        → Tactic Γ l l' A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
-  irrelevanceEqT (ℕ (ℕ ℕA) (ℕ ℕB)) A≡B = A≡B
-  irrelevanceEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) ne[ M , D' , neM , K≡M ] =
-    ne[ M , D' , neM , (trans (sym (subset* (red D₁))) (trans (subset* (red D)) K≡M)) ]
+  irrelevanceEqT (ℕ D D') A≡B = A≡B
+  irrelevanceEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne₌ M D' neM K≡M) =
+    ne₌ M D' neM (trans (sym (subset* (red D₁))) (trans (subset* (red D)) K≡M))
   irrelevanceEqT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                     (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
-                 Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+                 (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
     let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
-    in  Π¹[ F' , G' , D' , A≡B
-          , (λ ρ ⊢Δ → irrelevanceEq' (PE.cong (wkₜ ρ) F≡F₁) ([F] ρ ⊢Δ)
-                                     ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
-          , (λ ρ ⊢Δ [a]₁ →
-               let [a] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁))
-                                          ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
-               in  irrelevanceEq' (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁)
-                                  ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a])) ]
+    in  Π₌ F' G' D' A≡B
+           (λ ρ ⊢Δ → irrelevanceEq' (PE.cong (wkₜ ρ) F≡F₁) ([F] ρ ⊢Δ)
+                                    ([F]₁ ρ ⊢Δ) ([F≡F'] ρ ⊢Δ))
+           (λ ρ ⊢Δ [a]₁ →
+              let [a] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁))
+                                         ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
+              in  irrelevanceEq' (PE.cong (λ y → wkLiftₜ ρ y [ _ ]) G≡G₁)
+                                 ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([G≡G'] ρ ⊢Δ [a]))
   irrelevanceEqT (U (U _ _ _) (U _ _ _)) A≡B = A≡B
   irrelevanceEqT (emb⁰¹ x) A≡B = irrelevanceEqT x A≡B
   irrelevanceEqT (emb¹⁰ x) A≡B = irrelevanceEqT x A≡B
@@ -102,7 +102,7 @@ mutual
   irrelevanceTermT : ∀ {Γ A t l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                          → Tactic Γ l l' A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
-  irrelevanceTermT (ℕ (ℕ _) (ℕ _)) t = t
+  irrelevanceTermT (ℕ D D') t = t
   irrelevanceTermT (ne (ne _ _ _) (ne _ _ _)) t = t
   irrelevanceTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                       (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)) (⊢t , [t] , [t]₁) =
@@ -122,7 +122,7 @@ mutual
                                      ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
           in  irrelevanceTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁)
                                ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t]₁ ρ ⊢Δ [a]))
-  irrelevanceTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) t = t
+  irrelevanceTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) (Uₜ ⊢t ⊩t) = Uₜ ⊢t ⊩t
   irrelevanceTermT (emb⁰¹ x) t = irrelevanceTermT x t
   irrelevanceTermT (emb¹⁰ x) t = irrelevanceTermT x t
 
@@ -146,7 +146,7 @@ mutual
   irrelevanceEqTermT : ∀ {Γ A t u} {l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
                            → Tactic Γ l l' A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l' ⟩ t ≡ u ∷ A / q
-  irrelevanceEqTermT (ℕ (ℕ _) (ℕ _)) t≡u = t≡u
+  irrelevanceEqTermT (ℕ D D') t≡u = t≡u
   irrelevanceEqTermT (ne (ne _ _ _) (ne _ _ _)) t≡u = t≡u
   irrelevanceEqTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
                         (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
@@ -160,6 +160,7 @@ mutual
                                       ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
            in  irrelevanceEqTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁)
                                   ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t≡u] ρ ⊢Δ [a]))
-  irrelevanceEqTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) t≡u = t≡u
+  irrelevanceEqTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
+    Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]
   irrelevanceEqTermT (emb⁰¹ x) t≡u = irrelevanceEqTermT x t≡u
   irrelevanceEqTermT (emb¹⁰ x) t≡u = irrelevanceEqTermT x t≡u

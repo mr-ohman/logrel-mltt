@@ -22,7 +22,7 @@ neuEq' : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ne A)
          (neB : Neutral B)
        → Γ ⊢ A :≡: B → Γ ⊩⟨ l ⟩ A ≡ B / ne-intr [A]
 neuEq' (noemb (ne K D neK)) neB (A , B , A≡B) =
-  ne[ _ , idRed:*: B , neB , trans (sym (subset* (red D))) A≡B ]
+  ne₌ _ (idRed:*: B) neB (trans (sym (subset* (red D))) A≡B)
 neuEq' (emb 0<1 x) neB A:≡:B = neuEq' x neB A:≡:B
 
 neuEq : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ A)
@@ -39,12 +39,12 @@ mutual
   neuTerm : ∀ {l Γ A n} ([A] : Γ ⊩⟨ l ⟩ A) (neN : Neutral n)
           → Γ ⊢ n ∷ A
           → Γ ⊩⟨ l ⟩ n ∷ A / [A]
-  neuTerm (U (U .⁰ 0<1 ⊢Γ)) neN n = n , neu neN (univ n)
-  neuTerm (ℕ (ℕ D)) neN n =
+  neuTerm (U' .⁰ 0<1 ⊢Γ) neN n = Uₜ n (neu neN (univ n))
+  neuTerm (ℕ D) neN n =
     let A≡ℕ = subset* (red D)
-    in  ℕ[ _ , idRedTerm:*: (conv n A≡ℕ) , ne neN , conv n A≡ℕ ]
-  neuTerm (ne (ne K D neK)) neN n = n
-  neuTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) neN n = n
+    in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) (ne neN) (conv n A≡ℕ)
+  neuTerm (ne' K D neK) neN n = n
+  neuTerm (Π' F G D ⊢F ⊢G [F] [G] G-ext) neN n = n
     , (λ ρ ⊢Δ [a] [b] [a≡b] →
       let A≡ΠFG = subset* (red D)
           ρA≡ρΠFG = wkEq ρ ⊢Δ (subset* (red D))
@@ -65,22 +65,22 @@ mutual
                         a = wellformedTerm ([F] ρ ⊢Δ) [a]
                     in  neuTerm ([G] ρ ⊢Δ [a]) (_∘_ (wkNeutral (toWk ρ) neN))
                                 (conv (wkTerm ρ ⊢Δ n) ρA≡ρΠFG ∘ a))
-  neuTerm (emb {l< = 0<1} x) neN n = neuTerm x neN n
+  neuTerm (emb 0<1 x) neN n = neuTerm x neN n
 
   neuEqTerm : ∀ {l Γ A n n'} ([A] : Γ ⊩⟨ l ⟩ A)
               (neN : Neutral n) (neN' : Neutral n')
             → Γ ⊢ n :≡: n' ∷ A → Γ ⊩⟨ l ⟩ n ≡ n' ∷ A / [A]
-  neuEqTerm (U (U .⁰ 0<1 ⊢Γ)) neN neN' (n , n' , n≡n') =
+  neuEqTerm (U' .⁰ 0<1 ⊢Γ) neN neN' (n , n' , n≡n') =
     let [n]  = neu neN  (univ n)
         [n'] = neu neN' (univ n')
-    in  U[ n , n' , n≡n' , [n] , [n']
-         , neuEq [n] neN neN' (univ n , univ n' , univ n≡n') ]
-  neuEqTerm (ℕ (ℕ D)) neN neN' (n , n' , n≡n') =
+    in  Uₜ₌ n n' n≡n' [n] [n']
+            (neuEq [n] neN neN' (univ n , univ n' , univ n≡n'))
+  neuEqTerm (ℕ D) neN neN' (n , n' , n≡n') =
     let A≡ℕ = subset* (red D)
-    in  ℕ≡[ _ , _ , idRedTerm:*: (conv n A≡ℕ) , idRedTerm:*: (conv n' A≡ℕ)
-          , conv n≡n' A≡ℕ , ne neN neN' (conv n≡n' A≡ℕ) ]
-  neuEqTerm (ne (ne K D neK)) neN neN' (n , n' , n≡n') = n≡n'
-  neuEqTerm (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)) neN neN' (n , n' , n≡n') =
+    in  ℕₜ₌ _ _ (idRedTerm:*: (conv n A≡ℕ)) (idRedTerm:*: (conv n' A≡ℕ))
+            (conv n≡n' A≡ℕ) (ne neN neN' (conv n≡n' A≡ℕ))
+  neuEqTerm (ne' K D neK) neN neN' (n , n' , n≡n') = n≡n'
+  neuEqTerm (Π' F G D ⊢F ⊢G [F] [G] G-ext) neN neN' (n , n' , n≡n') =
     let [ΠFG] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
     in  n≡n' , neuTerm [ΠFG] neN n , neuTerm [ΠFG] neN' n'
      ,  (λ ρ ⊢Δ [a] →
@@ -95,4 +95,4 @@ mutual
                       ( (conv ρn  ρA≡ρΠFG ∘ a)
                       , (conv ρn' ρA≡ρΠFG ∘ a)
                       , app-cong (wkEqTerm ρ ⊢Δ (conv n≡n' A≡ΠFG)) (refl a)))
-  neuEqTerm (emb {l< = 0<1} x) neN neN' n:≡:n' = neuEqTerm x neN neN' n:≡:n'
+  neuEqTerm (emb 0<1 x) neN neN' n:≡:n' = neuEqTerm x neN neN' n:≡:n'
