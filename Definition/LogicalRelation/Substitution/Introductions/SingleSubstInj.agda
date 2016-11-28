@@ -59,7 +59,7 @@ injectivityΠEq : ∀ {F F' G G' Γ l}
                  Γ ⊩⟨ l ⟩ F ≡ F' / [F] × Γ ∙ F ⊩⟨ l ⟩ G ≡ G' / [G]
 injectivityΠEq (ℕ D) [ΠFG≡ΠF'G'] = {!!}
 injectivityΠEq (ne D neK) [ΠFG≡ΠF'G'] = {!!}
-injectivityΠEq (Π D ⊢F ⊢G [F] [G] G-ext) Π¹[ F'' , G'' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+injectivityΠEq (Π D ⊢F ⊢G [F] [G] G-ext) (Π₌ F'' G'' D' A≡B [F≡F'] [G≡G']) =
   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
       ⊢Γ = wf ⊢F

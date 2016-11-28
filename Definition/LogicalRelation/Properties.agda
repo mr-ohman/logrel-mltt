@@ -23,22 +23,22 @@ open import Definition.LogicalRelation.Properties.Reduction public
 maybeEmb : ∀ {l A Γ}
          → Γ ⊩⟨ l ⟩ A
          → Γ ⊩⟨ ¹ ⟩ A
-maybeEmb {⁰} [A] = emb {l< = 0<1} [A]
+maybeEmb {⁰} [A] = emb 0<1 [A]
 maybeEmb {¹} [A] = [A]
 
 maybeEmb' : ∀ {l A Γ}
           → Γ ⊩⟨ ⁰ ⟩ A
           → Γ ⊩⟨ l ⟩ A
 maybeEmb' {⁰} [A] = [A]
-maybeEmb' {¹} [A] = emb {l< = 0<1} [A]
+maybeEmb' {¹} [A] = emb 0<1 [A]
 
 sucTerm' : ∀ {l Γ n}
            ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
          → Γ ⊩⟨ l ⟩ n ∷ ℕ / ℕ-intr [ℕ]
          → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / ℕ-intr [ℕ]
-sucTerm' (noemb (ℕ D)) ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] =
-  ℕ[ _ , [ suc ⊢t , suc ⊢t , id (suc ⊢t) ]
-   , suc , ℕ[ n , [ ⊢t , ⊢u , d ] , natN , prop ] ]
+sucTerm' (noemb D) (ℕₜ n [ ⊢t , ⊢u , d ] natN prop) =
+  ℕₜ _ [ suc ⊢t , suc ⊢t , id (suc ⊢t) ]
+     suc (ℕₜ n [ ⊢t , ⊢u , d ] natN prop)
 sucTerm' (emb 0<1 x) [n] = sucTerm' x [n]
 
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)
@@ -54,11 +54,10 @@ sucEqTerm' : ∀ {l Γ n n'}
              ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
            → Γ ⊩⟨ l ⟩ n ≡ n' ∷ ℕ / ℕ-intr [ℕ]
            → Γ ⊩⟨ l ⟩ suc n ≡ suc n' ∷ ℕ / ℕ-intr [ℕ]
-sucEqTerm' (noemb (ℕ D)) ℕ≡[ k , k' , [ ⊢t , ⊢u , d ]
-                           , [ ⊢t₁ , ⊢u₁ , d₁ ] , t≡u , prop ] =
-  ℕ≡[ _ , _ , idRedTerm:*: (suc ⊢t) , idRedTerm:*: (suc ⊢t₁) , suc-cong t≡u
-    , suc ℕ≡[ k , k' , [ ⊢t , ⊢u , d ] , [ ⊢t₁ , ⊢u₁ , d₁ ]
-    , t≡u , prop ] ]
+sucEqTerm' (noemb D) (ℕₜ₌ k k' [ ⊢t , ⊢u , d ]
+                              [ ⊢t₁ , ⊢u₁ , d₁ ] t≡u prop) =
+  ℕₜ₌ _ _ (idRedTerm:*: (suc ⊢t)) (idRedTerm:*: (suc ⊢t₁)) (suc-cong t≡u)
+      (suc (ℕₜ₌ k k' [ ⊢t , ⊢u , d ] [ ⊢t₁ , ⊢u₁ , d₁ ] t≡u prop))
 sucEqTerm' (emb 0<1 x) [n≡n'] = sucEqTerm' x [n≡n']
 
 sucEqTerm : ∀ {l Γ n n'} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)

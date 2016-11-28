@@ -25,22 +25,22 @@ redSubst* : ∀ {A B l Γ}
           → Γ ⊩⟨ l ⟩ B
           → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ A ≡ B / [A]
-redSubst* D (U (U l' l< ⊢Γ)) rewrite redU* D =
+redSubst* D (U' l' l< ⊢Γ) rewrite redU* D =
   U (U l' l< ⊢Γ) , PE.refl
-redSubst* D (ℕ (ℕ [ ⊢B , ⊢ℕ , D' ])) =
+redSubst* D (ℕ [ ⊢B , ⊢ℕ , D' ]) =
   let ⊢A = redFirst* D
-  in  ℕ (ℕ ([ ⊢A , ⊢ℕ , D ⇨* D' ])) , D'
-redSubst* D (ne (ne K [ ⊢B , ⊢K , D' ] neK)) =
+  in  ℕ ([ ⊢A , ⊢ℕ , D ⇨* D' ]) , D'
+redSubst* D (ne' K [ ⊢B , ⊢K , D' ] neK) =
   let ⊢A = redFirst* D
-  in  ne (ne K [ ⊢A , ⊢K , D ⇨* D' ] neK)
-  ,   ne[ _ , [ ⊢B , ⊢K , D' ] , neK , refl ⊢K ]
-redSubst* D (Π (Π F G [ ⊢B , ⊢ΠFG , D' ] ⊢F ⊢G [F] [G] G-ext)) =
+  in  (ne' K [ ⊢A , ⊢K , D ⇨* D' ] neK)
+  ,   (ne₌ _ [ ⊢B , ⊢K , D' ] neK (refl ⊢K))
+redSubst* D (Π' F G [ ⊢B , ⊢ΠFG , D' ] ⊢F ⊢G [F] [G] G-ext) =
   let ⊢A = redFirst* D
-  in  Π (Π F G [ ⊢A , ⊢ΠFG , D ⇨* D' ] ⊢F ⊢G [F] [G] G-ext)
-  ,   Π¹[ _ , _ , D' , subset* D , (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
-        , (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a])) ]
-redSubst* D (emb {l< = 0<1} x) with redSubst* D x
-redSubst* D (emb {l< = 0<1} x) | y , y₁ = emb {l< = 0<1} y , y₁
+  in  (Π' F G [ ⊢A , ⊢ΠFG , D ⇨* D' ] ⊢F ⊢G [F] [G] G-ext)
+  ,   (Π₌ _ _ D' (subset* D) (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
+        (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a])))
+redSubst* D (emb 0<1 x) with redSubst* D x
+redSubst* D (emb 0<1 x) | y , y₁ = emb 0<1 y , y₁
 
 redSubst*Term : ∀ {A t u l Γ}
               → Γ ⊢ t ⇒* u ∷ A
@@ -48,21 +48,21 @@ redSubst*Term : ∀ {A t u l Γ}
               → Γ ⊩⟨ l ⟩ u ∷ A / [A]
               → Γ ⊩⟨ l ⟩ t ∷ A / [A]
               × Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
-redSubst*Term t⇒u (U (U .⁰ 0<1 ⊢Γ)) [u] =
+redSubst*Term t⇒u (U' .⁰ 0<1 ⊢Γ) (Uₜ ⊢u ⊩u) =
   let ⊢t = redFirst*Term t⇒u
-      q = redSubst* (univ* t⇒u) (univEq (U (U ⁰ 0<1 ⊢Γ)) [u])
-  in  (⊢t , proj₁ q) ,
-      U[ ⊢t , proj₁ [u] , subset*Term t⇒u
-       , proj₁ q , proj₂ [u] , proj₂ q ]
-redSubst*Term t⇒u (ℕ (ℕ D)) ℕ[ n , [ ⊢u , ⊢n , d ] , natN , prop ] =
+      q = redSubst* (univ* t⇒u) (univEq (U' ⁰ 0<1 ⊢Γ) (Uₜ ⊢u ⊩u))
+  in  (Uₜ ⊢t (proj₁ q))
+  ,   Uₜ₌ ⊢t ⊢u (subset*Term t⇒u)
+          (proj₁ q) ⊩u (proj₂ q)
+redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] natN prop) =
   let A≡ℕ  = subset* (red D)
       ⊢t   = conv (redFirst*Term t⇒u) A≡ℕ
       t⇒u' = conv* t⇒u A≡ℕ
-  in  ℕ[ n , [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] , natN , prop ]
-  ,   ℕ≡[ n , n , [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] , [ ⊢u , ⊢n , d ]
-        , subset*Term t⇒u' , reflNatural-prop natN prop ]
-redSubst*Term t⇒u (ne (ne K D neK)) [u] = redFirst*Term t⇒u , subset*Term t⇒u
-redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
+  in  ℕₜ n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] natN prop
+  ,   ℕₜ₌ n n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] [ ⊢u , ⊢n , d ]
+          (subset*Term t⇒u') (reflNatural-prop natN prop)
+redSubst*Term t⇒u (ne' K D neK) [u] = redFirst*Term t⇒u , subset*Term t⇒u
+redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G [F] [G] G-ext)
               (proj₁' , proj₂' , proj₃') =
   let A≡ΠFG = subset* (red D)
       ⊢t    = redFirst*Term t⇒u
@@ -98,7 +98,7 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π (Π F G D ⊢F ⊢G [F] [G] G-ext))
                          (symEqTerm ([G] ρ ⊢Δ [b]) (ta≡ua ρ ⊢Δ [b]))))
   in  (⊢t , ta≡tb , ta)
   ,   subset*Term t⇒u , (⊢t , ta≡tb , ta) , (proj₁' , proj₂' , proj₃') , ta≡ua
-redSubst*Term t⇒u (emb {l< = 0<1} x) [u] = redSubst*Term t⇒u x [u]
+redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 redSubst : ∀ {A B l Γ}
          → Γ ⊢ A ⇒ B

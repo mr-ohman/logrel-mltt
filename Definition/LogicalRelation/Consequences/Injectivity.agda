@@ -44,7 +44,7 @@ injectivity'' : ∀ {F G H E Γ l}
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
 injectivity'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
-         Π¹[ F' , G' , D' , A≡B , [F≡F'] , [G≡G'] ] =
+         (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
       ⊢Γ = wf ⊢F

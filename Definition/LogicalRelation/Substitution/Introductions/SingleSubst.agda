@@ -186,7 +186,7 @@ substSΠ₁' {t = t} (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext)) [F]₁ [t] =
       ⊢Γ = wf (wellformed [F]₁)
       [t]' = irrelevanceTerm' Feq [F]₁ ([F] T.id ⊢Γ) [t]
   in  irrelevance' Geq ([G] T.id ⊢Γ [t]')
-substSΠ₁' (emb 0<1 x) [F]₁ [t] = emb {l< = 0<1} (substSΠ₁' x [F]₁ [t])
+substSΠ₁' (emb 0<1 x) [F]₁ [t] = emb 0<1 (substSΠ₁' x [F]₁ [t])
 
 substSΠ₁ : ∀ {F G t Γ l l'}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
@@ -207,7 +207,7 @@ substSΠ₂' : ∀ {F F' G G' t t' Γ l l' l''}
            ([G'[t']] : Γ ⊩⟨ l'' ⟩ G' [ t' ])
          → Γ ⊩⟨ l'' ⟩ G [ t ] ≡ G' [ t' ] / [G[t]]
 substSΠ₂' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
-          Π¹[ F'' , G'' , D' , A≡B , [F≡F'] , [G≡G'] ]
+          (Π₌ F'' G'' D' A≡B [F≡F'] [G≡G'])
           [F]₁ [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F'≡F'' , G'≡G'' = Π-PE-injectivity (whnfRed*' D' Π)

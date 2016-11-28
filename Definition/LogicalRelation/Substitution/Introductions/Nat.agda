@@ -13,21 +13,21 @@ open import Tools.Product
 
 
 ℕₛ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ]
-ℕₛ [Γ] ⊢Δ [σ] = ℕ (ℕ (idRed:*: (ℕ ⊢Δ))) , λ _ x₂ → id (ℕ ⊢Δ)
+ℕₛ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ _ x₂ → id (ℕ ⊢Δ)
 
 ℕₜₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
     → Γ ⊩ₛ⟨ ¹ ⟩t ℕ ∷ U / [Γ] / Uₛ [Γ]
 ℕₜₛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
-                     [ℕ] = ℕ (ℕ (idRed:*: (ℕ ⊢Δ)))
-                 in  (⊢ℕ , [ℕ])
-                 ,   (λ _ x₁ → U[ ⊢ℕ , ⊢ℕ , refl ⊢ℕ , [ℕ] , [ℕ] , id (ℕ ⊢Δ) ])
+                     [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
+                 in  Uₜ ⊢ℕ [ℕ]
+                 ,   (λ _ x₁ → Uₜ₌ ⊢ℕ ⊢ℕ (refl ⊢ℕ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] =
-  ℕ[ zero , idRedTerm:*: (zero ⊢Δ) , zero , tt ]
-   , (λ _ x₁ → ℕ≡[ zero , zero , idRedTerm:*: (zero ⊢Δ) , idRedTerm:*: (zero ⊢Δ)
-                 , refl (zero ⊢Δ) , zero ])
+  ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) zero tt
+    , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
+                    (refl (zero ⊢Δ)) zero)
 
 sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
