@@ -1,4 +1,6 @@
-module Definition.LogicalRelation.Properties.Reflexivity where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Properties.Reflexivity {{eqrel : EqRelSet}} where
 
 open import Definition.Untyped
 open import Definition.Typed
@@ -11,10 +13,10 @@ import Tools.PropositionalEquality as PE
 reflEq : ∀ {l Γ A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]
 reflEq (U' l' l< ⊢Γ) = PE.refl
 reflEq (ℕ D) = red D
-reflEq (ne' K [ ⊢A , ⊢B , D ] neK) =
-  ne₌ _ [ ⊢A , ⊢B , D ] neK (refl ⊢B)
-reflEq (Π' F G [ ⊢A , ⊢B , D ] ⊢F ⊢G [F] [G] G-ext) =
-  Π₌ _ _ D (refl ⊢A)
+reflEq (ne' K [ ⊢A , ⊢B , D ] neK K≡K) =
+  ne₌ _ [ ⊢A , ⊢B , D ] neK K≡K
+reflEq (Π' F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
+  Π₌ _ _ D A≡A
      (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
      (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
 reflEq (emb 0<1 [A]) = reflEq [A]
@@ -22,22 +24,22 @@ reflEq (emb 0<1 [A]) = reflEq [A]
 reflNatural-prop : ∀ {Γ n} (natN : Natural n)
                  → natural-prop Γ n natN
                  → [Natural]-prop Γ n n
-reflNatural-prop suc (ℕₜ n d natN prop) =
-  suc (ℕₜ₌ n n d d (refl (_⊢_:⇒*:_∷_.⊢t d))
+reflNatural-prop suc (ℕₜ n d t≡t natN prop) =
+  suc (ℕₜ₌ n n d d t≡t
            (reflNatural-prop natN prop))
 reflNatural-prop zero t = zero
-reflNatural-prop (ne x) n = ne x x (refl n)
+reflNatural-prop (ne x) (neₜ ⊢t t≡t) = ne x x t≡t
 
 reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
            → Γ ⊩⟨ l ⟩ t ≡ t ∷ A / [A]
-reflEqTerm (U' ⁰ 0<1 ⊢Γ) (Uₜ ⊢t ⊩t) =
-  Uₜ₌ ⊢t ⊢t (refl ⊢t) ⊩t ⊩t (reflEq ⊩t)
-reflEqTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] natN prop) =
-  ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] (refl ⊢t)
+reflEqTerm (U' ⁰ 0<1 ⊢Γ) (Uₜ ⊢t t≡t ⊩t) =
+  Uₜ₌ ⊢t ⊢t t≡t ⊩t ⊩t (reflEq ⊩t)
+reflEqTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t natN prop) =
+  ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
       (reflNatural-prop natN prop)
-reflEqTerm (ne' K D neK) t = refl t
-reflEqTerm (Π' F G D ⊢F ⊢G [F] [G] G-ext) (Πₜ ⊢t [t] [t]₁) =
-  Πₜ₌ (refl ⊢t) (Πₜ ⊢t [t] [t]₁) (Πₜ ⊢t [t] [t]₁)
+reflEqTerm (ne (ne K D neK K≡K)) (neₜ ⊢t t≡t) = t≡t
+reflEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ ⊢t t≡t [t] [t]₁) =
+  Πₜ₌ t≡t (Πₜ ⊢t t≡t [t] [t]₁) (Πₜ ⊢t t≡t [t] [t]₁)
       (λ ρ ⊢Δ [a] → [t] ρ ⊢Δ [a] [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t
