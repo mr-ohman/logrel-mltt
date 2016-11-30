@@ -1,7 +1,8 @@
 module Definition.EqualityRelation where
 
 open import Definition.Untyped
-open import Definition.Typed hiding (_⊢_≡_; _⊢_≡_∷_)
+open import Definition.Typed
+open import Definition.Typed.Weakening
 
 record EqRelSet : Set₁ where
   constructor eqRel
@@ -29,4 +30,25 @@ record EqRelSet : Set₁ where
            → Γ ⊢ a ⇒* a' ∷ B
            → Γ ⊢ b ⇒* b' ∷ B
            → Γ ⊢ a' ≅ b' ∷ B
-           → Γ ⊢ a  ≅ b ∷ A
+           → Γ ⊢ a  ≅ b  ∷ A
+
+    ≅-wk  : ∀ {A B Γ Δ} (ρ : Γ ⊆ Δ)
+          → ⊢ Δ
+          → Γ ⊢ A ≅ B
+          → Δ ⊢ wkₜ ρ A ≅ wkₜ ρ B
+    ≅ₜ-wk : ∀ {t u A Γ Δ} (ρ : Γ ⊆ Δ)
+          → ⊢ Δ
+          → Γ ⊢ t ≅ u ∷ A
+          → Δ ⊢ wkₜ ρ t ≅ wkₜ ρ u ∷ wkₜ ρ A
+
+    ≅-eq  : ∀ {A B Γ}
+          → Γ ⊢ A ≅ B
+          → Γ ⊢ A ≡ B
+    ≅ₜ-eq : ∀ {t u A Γ}
+          → Γ ⊢ t ≅ u ∷ A
+          → Γ ⊢ t ≡ u ∷ A
+
+    ≅-conv : ∀ {t u A B Γ}
+           → Γ ⊢ t ≅ u ∷ A
+           → Γ ⊢ A ≅ B
+           → Γ ⊢ t ≅ u ∷ B

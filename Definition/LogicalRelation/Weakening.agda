@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Weakening where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Weakening {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Typed
@@ -16,8 +19,9 @@ import Tools.PropositionalEquality as PE
 mutual
   wkTermℕ : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
           → Γ ⊩ℕ n ∷ℕ → Δ ⊩ℕ U.wk (toWk ρ) n ∷ℕ
-  wkTermℕ ρ ⊢Δ (ℕₜ n d natN prop) =
-    ℕₜ (U.wk (toWk ρ) n) (wkRed:*:Term ρ ⊢Δ d) (wkNatural (toWk ρ) natN)
+  wkTermℕ ρ ⊢Δ (ℕₜ n d n≡n natN prop) =
+    ℕₜ (U.wk (toWk ρ) n) (wkRed:*:Term ρ ⊢Δ d)
+       (≅ₜ-wk ρ ⊢Δ n≡n) (wkNatural (toWk ρ) natN)
        (wkNatural-prop ρ ⊢Δ natN prop)
 
   wkNatural-prop : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) (natN : Natural n)
@@ -25,7 +29,7 @@ mutual
                  → natural-prop Δ (wkₜ ρ n) (wkNatural (toWk ρ) natN)
   wkNatural-prop ρ ⊢Δ suc n = wkTermℕ ρ ⊢Δ n
   wkNatural-prop ρ ⊢Δ zero n = n
-  wkNatural-prop ρ ⊢Δ (ne x) n = T.wkTerm ρ ⊢Δ n
+  wkNatural-prop ρ ⊢Δ (ne x) (neₜ ⊢t t≡t) = neₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t)
 
 mutual
   wkEqTermℕ : ∀ {Γ Δ t u} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
@@ -33,7 +37,7 @@ mutual
             → Δ ⊩ℕ U.wk (toWk ρ) t ≡ U.wk (toWk ρ) u ∷ℕ
   wkEqTermℕ ρ ⊢Δ (ℕₜ₌ k k' d d' t≡u prop) =
     ℕₜ₌ (U.wk (toWk ρ) k) (U.wk (toWk ρ) k') (wkRed:*:Term ρ ⊢Δ d)
-        (wkRed:*:Term ρ ⊢Δ d') (T.wkEqTerm ρ ⊢Δ t≡u)
+        (wkRed:*:Term ρ ⊢Δ d') (≅ₜ-wk ρ ⊢Δ t≡u)
         (wk[Natural]-prop ρ ⊢Δ prop)
 
   wk[Natural]-prop : ∀ {Γ Δ n n'} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
@@ -42,14 +46,14 @@ mutual
   wk[Natural]-prop ρ ⊢Δ (suc [n≡n']) = suc (wkEqTermℕ ρ ⊢Δ [n≡n'])
   wk[Natural]-prop ρ ⊢Δ zero = zero
   wk[Natural]-prop ρ ⊢Δ (ne x x₁ n≡n') =
-    ne (wkNeutral (toWk ρ) x) (wkNeutral (toWk ρ) x₁) (T.wkEqTerm ρ ⊢Δ n≡n')
+    ne (wkNeutral (toWk ρ) x) (wkNeutral (toWk ρ) x₁) (≅ₜ-wk ρ ⊢Δ n≡n')
 
 wk : ∀ {l Γ Δ A} → (ρ : Γ ⊆ Δ) → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ wkₜ ρ A
 wk ρ ⊢Δ (U' l' l< ⊢Γ) = U (U l' l< ⊢Δ)
 wk ρ ⊢Δ (ℕ D) = ℕ (wkRed:*: ρ ⊢Δ D)
-wk ρ ⊢Δ (ne' K D neK) =
-  ne (ne (wkₜ ρ K) (wkRed:*: ρ ⊢Δ D) (wkNeutral (toWk ρ) neK))
-wk {l} {Γ} {Δ} ρ ⊢Δ (Π' F G D ⊢F ⊢G [F] [G] G-ext) =
+wk ρ ⊢Δ (ne' K D neK K≡K) =
+  ne' (wkₜ ρ K) (wkRed:*: ρ ⊢Δ D) (wkNeutral (toWk ρ) neK) (≅-wk ρ ⊢Δ K≡K)
+wk {l} {Γ} {Δ} ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
   let ⊢ρF = T.wk ρ ⊢Δ ⊢F
       [F]' : ∀ {E} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) (⊢E : ⊢ E)
            → E ⊩⟨ l ⟩ wkₜ η (wkₜ η′ F)
@@ -67,6 +71,7 @@ wk {l} {Γ} {Δ} ρ ⊢Δ (Π' F G D ⊢F ⊢G [F] [G] G-ext) =
       [G]' η η′ ⊢E [a] = [G] (η •ₜ η′) ⊢E ([a]' η η′ ⊢E [a])
   in  Π (Π (wkₜ ρ F) (wkLiftₜ ρ G) (T.wkRed:*: ρ ⊢Δ D) ⊢ρF
            (T.wk (lift ρ) (⊢Δ ∙ ⊢ρF) ⊢G)
+           (≅-wk ρ ⊢Δ A≡A)
            (λ ρ₁ ⊢Δ₁ → irrelevance' (wk-comp-comm ρ₁ ρ)
                                     ([F] (ρ₁ •ₜ ρ) ⊢Δ₁))
            (λ ρ₁ ⊢Δ₁ [a] → irrelevance' (wk-comp-comm-subst ρ₁ ρ G)
@@ -94,13 +99,13 @@ wkEq : ∀ {l Γ Δ A B} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
      → Δ ⊩⟨ l ⟩ wkₜ ρ A ≡ wkₜ ρ B / wk ρ ⊢Δ [A]
 wkEq ρ ⊢Δ (U' _ _ _) PE.refl = PE.refl
 wkEq ρ ⊢Δ (ℕ D) A≡B = wkRed* ρ ⊢Δ A≡B
-wkEq ρ ⊢Δ (ne' _ _ _) (ne₌ M D' neM K≡M) =
+wkEq ρ ⊢Δ (ne' _ _ _ _) (ne₌ M D' neM K≡M) =
   ne₌ (U.wk (toWk ρ) M) (wkRed:*: ρ ⊢Δ D')
-      (wkNeutral (toWk ρ) neM) (T.wkEq ρ ⊢Δ K≡M)
-wkEq ρ ⊢Δ (Π' F G D ⊢F ⊢G [F] [G] G-ext)
+      (wkNeutral (toWk ρ) neM) (≅-wk ρ ⊢Δ K≡M)
+wkEq ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
           (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   -- TODO Minimize duplicates
-  Π₌ (wkₜ ρ F') (wkLiftₜ ρ G') (T.wkRed* ρ ⊢Δ D') (T.wkEq ρ ⊢Δ A≡B)
+  Π₌ (wkₜ ρ F') (wkLiftₜ ρ G') (T.wkRed* ρ ⊢Δ D') (≅-wk ρ ⊢Δ A≡B)
      (λ ρ₁ ⊢Δ₁ → irrelevanceEq'' (wk-comp-comm ρ₁ ρ)
                                  (wk-comp-comm ρ₁ ρ)
                                  ([F] (ρ₁ •ₜ ρ) ⊢Δ₁)
@@ -124,11 +129,14 @@ wkTerm : ∀ {l Γ Δ A t} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
          ([A] : Γ ⊩⟨ l ⟩ A)
        → Γ ⊩⟨ l ⟩ t ∷ A / [A]
        → Δ ⊩⟨ l ⟩ wkₜ ρ t ∷ wkₜ ρ A / wk ρ ⊢Δ [A]
-wkTerm ρ ⊢Δ (U' .⁰ 0<1 ⊢Γ) (Uₜ ⊢t ⊩t) = Uₜ (T.wkTerm ρ ⊢Δ ⊢t) (wk ρ ⊢Δ ⊩t)
+wkTerm ρ ⊢Δ (U' .⁰ 0<1 ⊢Γ) (Uₜ ⊢t t≡t ⊩t) =
+  Uₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t) (wk ρ ⊢Δ ⊩t)
 wkTerm ρ ⊢Δ (ℕ D) [t] = wkTermℕ ρ ⊢Δ [t]
-wkTerm ρ ⊢Δ (ne' _ _ _) t = T.wkTerm ρ ⊢Δ t
-wkTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G [F] [G] G-ext) (⊢t , [ta≡tb] , [ta]) =
+wkTerm ρ ⊢Δ (ne' K D neK K≡K) (neₜ ⊢t t≡t) =
+  neₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t)
+wkTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ ⊢t t≡t [ta≡tb] [ta]) =
   T.wkTerm ρ ⊢Δ ⊢t
+  , ≅ₜ-wk ρ ⊢Δ t≡t
   -- TODO Minimize duplicates
   , (λ ρ₁ ⊢Δ₁ [a] [b] [a≡b] →
        let F-compEq = PE.sym (wk-comp-comm ρ₁ ρ)
@@ -161,14 +169,14 @@ wkEqTerm : ∀ {l Γ Δ A t u} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
          → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
          → Δ ⊩⟨ l ⟩ wkₜ ρ t ≡ wkₜ ρ u ∷ wkₜ ρ A / wk ρ ⊢Δ [A]
 wkEqTerm ρ ⊢Δ (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
-  Uₜ₌ (T.wkTerm ρ ⊢Δ ⊢t) (T.wkTerm ρ ⊢Δ ⊢u) (T.wkEqTerm ρ ⊢Δ t≡u)
+  Uₜ₌ (T.wkTerm ρ ⊢Δ ⊢t) (T.wkTerm ρ ⊢Δ ⊢u) (≅ₜ-wk ρ ⊢Δ t≡u)
       (wk ρ ⊢Δ ⊩t) (wk ρ ⊢Δ ⊩u) (wkEq ρ ⊢Δ ⊩t [t≡u])
 wkEqTerm ρ ⊢Δ (ℕ D) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
-wkEqTerm ρ ⊢Δ (ne' _ _ _) t≡u = T.wkEqTerm ρ ⊢Δ t≡u
-wkEqTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
+wkEqTerm ρ ⊢Δ (ne' _ _ _ _) t≡u = ≅ₜ-wk ρ ⊢Δ t≡u
+wkEqTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ₌ t≡u ⊩t ⊩u [t≡u]) =
   -- TODO Minimize duplicates
-  let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-  in  T.wkEqTerm ρ ⊢Δ t≡u , wkTerm ρ ⊢Δ [A] ⊩t , wkTerm ρ ⊢Δ [A] ⊩u
+  let [A] = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext
+  in  ≅ₜ-wk ρ ⊢Δ t≡u , wkTerm ρ ⊢Δ [A] ⊩t , wkTerm ρ ⊢Δ [A] ⊩u
   ,   (λ ρ₁ ⊢Δ₁ [a] →
          let [F]₁ = [F] (ρ₁ •ₜ ρ) ⊢Δ₁
              [F]₂ = irrelevance' (wk-comp-comm ρ₁ ρ) [F]₁

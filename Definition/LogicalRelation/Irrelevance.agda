@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Irrelevance where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Irrelevance {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
@@ -54,10 +57,11 @@ mutual
                        → Tactic Γ l l' A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
   irrelevanceEqT (ℕ D D') A≡B = A≡B
-  irrelevanceEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne₌ M D' neM K≡M) =
-    ne₌ M D' neM (trans (sym (subset* (red D₁))) (trans (subset* (red D)) K≡M))
-  irrelevanceEqT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                    (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+  irrelevanceEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D' neM K≡M)
+                 rewrite whrDet*' (red D , ne neK) (red D₁ , ne neK₁) =
+    ne₌ M D' neM K≡M
+  irrelevanceEqT (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                    (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                  (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
     let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
     in  Π₌ F' G' D' A≡B
@@ -103,11 +107,12 @@ mutual
                          → Tactic Γ l l' A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
   irrelevanceTermT (ℕ D D') t = t
-  irrelevanceTermT (ne (ne _ _ _) (ne _ _ _)) t = t
-  irrelevanceTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                      (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)) (⊢t , [t] , [t]₁) =
+  irrelevanceTermT (ne (ne _ _ _ _) (ne _ _ _ _)) t = t
+  irrelevanceTermT (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                      (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)) (Πₜ ⊢t t≡t [t] [t]₁) =
     let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
     in  ⊢t
+     ,  t≡t
      ,  (λ ρ ⊢Δ [a]₁ [b]₁ [a≡b]₁ →
            let [a]   = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁))
                                         ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
@@ -122,7 +127,7 @@ mutual
                                      ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) [a]₁
           in  irrelevanceTerm' (PE.cong (λ G → wkLiftₜ ρ G [ _ ]) G≡G₁)
                                ([G] ρ ⊢Δ [a]) ([G]₁ ρ ⊢Δ [a]₁) ([t]₁ ρ ⊢Δ [a]))
-  irrelevanceTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) (Uₜ ⊢t ⊩t) = Uₜ ⊢t ⊩t
+  irrelevanceTermT (U (U .⁰ 0<1 ⊢Γ) (U .⁰ 0<1 ⊢Γ₁)) (Uₜ ⊢t t≡t ⊩t) = Uₜ ⊢t t≡t ⊩t
   irrelevanceTermT (emb⁰¹ x) t = irrelevanceTermT x t
   irrelevanceTermT (emb¹⁰ x) t = irrelevanceTermT x t
 
@@ -147,13 +152,13 @@ mutual
                            → Tactic Γ l l' A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l' ⟩ t ≡ u ∷ A / q
   irrelevanceEqTermT (ℕ D D') t≡u = t≡u
-  irrelevanceEqTermT (ne (ne _ _ _) (ne _ _ _)) t≡u = t≡u
-  irrelevanceEqTermT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                        (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+  irrelevanceEqTermT (ne (ne _ _ _ _) (ne _ _ _ _)) t≡u = t≡u
+  irrelevanceEqTermT (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                        (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                       (t≡u , ⊩t , ⊩u , [t≡u]) =
     let F≡F₁ , G≡G₁ = Π-PE-injectivity (whrDet*' (red D , Π) (red D₁ , Π))
-        [A]         = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-        [A]₁        = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+        [A]         = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext
+        [A]₁        = Π' F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁
     in  t≡u , irrelevanceTerm [A] [A]₁ ⊩t , irrelevanceTerm [A] [A]₁ ⊩u
      ,  (λ ρ ⊢Δ [a]₁ →
            let [a] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F≡F₁))
