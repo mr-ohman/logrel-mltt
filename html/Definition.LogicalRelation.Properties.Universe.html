@@ -1,0 +1,1177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Universe</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Universe.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Universe</a
+      ><a name="54"
+      > </a
+      ><a name="55" class="Keyword"
+      >where</a
+      ><a name="60"
+      >
+
+</a
+      ><a name="62" class="Keyword"
+      >open</a
+      ><a name="66"
+      > </a
+      ><a name="67" class="Keyword"
+      >import</a
+      ><a name="73"
+      > </a
+      ><a name="74" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="92"
+      >
+</a
+      ><a name="93" class="Keyword"
+      >open</a
+      ><a name="97"
+      > </a
+      ><a name="98" class="Keyword"
+      >import</a
+      ><a name="104"
+      > </a
+      ><a name="105" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="121"
+      >
+</a
+      ><a name="122" class="Keyword"
+      >open</a
+      ><a name="126"
+      > </a
+      ><a name="127" class="Keyword"
+      >import</a
+      ><a name="133"
+      > </a
+      ><a name="134" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="161"
+      > </a
+      ><a name="162" class="Symbol"
+      >as</a
+      ><a name="164"
+      > </a
+      ><a name="165" class="Module"
+      >T</a
+      ><a name="166"
+      >
+</a
+      ><a name="167" class="Keyword"
+      >open</a
+      ><a name="171"
+      > </a
+      ><a name="172" class="Keyword"
+      >import</a
+      ><a name="178"
+      > </a
+      ><a name="179" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="205"
+      >
+</a
+      ><a name="206" class="Keyword"
+      >open</a
+      ><a name="210"
+      > </a
+      ><a name="211" class="Keyword"
+      >import</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="251"
+      >
+</a
+      ><a name="252" class="Keyword"
+      >open</a
+      ><a name="256"
+      > </a
+      ><a name="257" class="Keyword"
+      >import</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="302"
+      >
+
+</a
+      ><a name="304" class="Keyword"
+      >open</a
+      ><a name="308"
+      > </a
+      ><a name="309" class="Keyword"
+      >import</a
+      ><a name="315"
+      > </a
+      ><a name="316" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="329"
+      >
+</a
+      ><a name="330" class="Keyword"
+      >open</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Keyword"
+      >import</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="353"
+      >
+
+
+</a
+      ><a name="356" href="Definition.LogicalRelation.Properties.Universe.html#356" class="Function"
+      >univEq'</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Symbol"
+      >:</a
+      ><a name="365"
+      > </a
+      ><a name="366" class="Symbol"
+      >&#8704;</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Symbol"
+      >{</a
+      ><a name="369" href="Definition.LogicalRelation.Properties.Universe.html#369" class="Bound"
+      >l</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Definition.LogicalRelation.Properties.Universe.html#371" class="Bound"
+      >&#915;</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Definition.LogicalRelation.Properties.Universe.html#373" class="Bound"
+      >A</a
+      ><a name="374" class="Symbol"
+      >}</a
+      ><a name="375"
+      > </a
+      ><a name="376" class="Symbol"
+      >(</a
+      ><a name="377" href="Definition.LogicalRelation.Properties.Universe.html#377" class="Bound"
+      >[U]</a
+      ><a name="380"
+      > </a
+      ><a name="381" class="Symbol"
+      >:</a
+      ><a name="382"
+      > </a
+      ><a name="383" href="Definition.LogicalRelation.Properties.Universe.html#371" class="Bound"
+      >&#915;</a
+      ><a name="384"
+      > </a
+      ><a name="385" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="Definition.LogicalRelation.Properties.Universe.html#369" class="Bound"
+      >l</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#10217;U</a
+      ><a name="392" class="Symbol"
+      >)</a
+      ><a name="393"
+      > </a
+      ><a name="394" class="Symbol"
+      >&#8594;</a
+      ><a name="395"
+      > </a
+      ><a name="396" href="Definition.LogicalRelation.Properties.Universe.html#371" class="Bound"
+      >&#915;</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Definition.LogicalRelation.Properties.Universe.html#369" class="Bound"
+      >l</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Definition.LogicalRelation.Properties.Universe.html#373" class="Bound"
+      >A</a
+      ><a name="406"
+      > </a
+      ><a name="407" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="410"
+      > </a
+      ><a name="411" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="419"
+      > </a
+      ><a name="420" href="Definition.LogicalRelation.Properties.Universe.html#377" class="Bound"
+      >[U]</a
+      ><a name="423"
+      > </a
+      ><a name="424" class="Symbol"
+      >&#8594;</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Definition.LogicalRelation.Properties.Universe.html#371" class="Bound"
+      >&#915;</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="432"
+      > </a
+      ><a name="433" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="434"
+      > </a
+      ><a name="435" href="Definition.LogicalRelation.Properties.Universe.html#373" class="Bound"
+      >A</a
+      ><a name="436"
+      >
+</a
+      ><a name="437" href="Definition.LogicalRelation.Properties.Universe.html#356" class="Function"
+      >univEq'</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="Symbol"
+      >(</a
+      ><a name="446" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="451"
+      > </a
+      ><a name="452" class="Symbol"
+      >(</a
+      ><a name="453" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="454"
+      > </a
+      ><a name="455" class="DottedPattern Symbol"
+      >.</a
+      ><a name="456" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Definition.LogicalRelation.Properties.Universe.html#462" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="464" class="Symbol"
+      >))</a
+      ><a name="466"
+      > </a
+      ><a name="467" class="Symbol"
+      >(</a
+      ><a name="468" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="470"
+      > </a
+      ><a name="471" href="Definition.LogicalRelation.Properties.Universe.html#471" class="Bound"
+      >proj&#8321;</a
+      ><a name="476"
+      > </a
+      ><a name="477" href="Definition.LogicalRelation.Properties.Universe.html#477" class="Bound"
+      >proj&#8322;</a
+      ><a name="482" class="Symbol"
+      >)</a
+      ><a name="483"
+      > </a
+      ><a name="484" class="Symbol"
+      >=</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Definition.LogicalRelation.Properties.Universe.html#477" class="Bound"
+      >proj&#8322;</a
+      ><a name="491"
+      >
+</a
+      ><a name="492" href="Definition.LogicalRelation.Properties.Universe.html#356" class="Function"
+      >univEq'</a
+      ><a name="499"
+      > </a
+      ><a name="500" class="Symbol"
+      >(</a
+      ><a name="501" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Definition.LogicalRelation.Properties.Universe.html#509" class="Bound"
+      >x</a
+      ><a name="510" class="Symbol"
+      >)</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Definition.LogicalRelation.Properties.Universe.html#512" class="Bound"
+      >[A]</a
+      ><a name="515"
+      > </a
+      ><a name="516" class="Symbol"
+      >=</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Definition.LogicalRelation.Properties.Universe.html#356" class="Function"
+      >univEq'</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Definition.LogicalRelation.Properties.Universe.html#509" class="Bound"
+      >x</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Definition.LogicalRelation.Properties.Universe.html#512" class="Bound"
+      >[A]</a
+      ><a name="531"
+      >
+
+</a
+      ><a name="533" href="Definition.LogicalRelation.Properties.Universe.html#533" class="Function"
+      >univEq</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="Symbol"
+      >:</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >&#8704;</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >{</a
+      ><a name="545" href="Definition.LogicalRelation.Properties.Universe.html#545" class="Bound"
+      >l</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Definition.LogicalRelation.Properties.Universe.html#547" class="Bound"
+      >&#915;</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Definition.LogicalRelation.Properties.Universe.html#549" class="Bound"
+      >A</a
+      ><a name="550" class="Symbol"
+      >}</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >(</a
+      ><a name="553" href="Definition.LogicalRelation.Properties.Universe.html#553" class="Bound"
+      >[U]</a
+      ><a name="556"
+      > </a
+      ><a name="557" class="Symbol"
+      >:</a
+      ><a name="558"
+      > </a
+      ><a name="559" href="Definition.LogicalRelation.Properties.Universe.html#547" class="Bound"
+      >&#915;</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="563"
+      > </a
+      ><a name="564" href="Definition.LogicalRelation.Properties.Universe.html#545" class="Bound"
+      >l</a
+      ><a name="565"
+      > </a
+      ><a name="566" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="569" class="Symbol"
+      >)</a
+      ><a name="570"
+      > </a
+      ><a name="571" class="Symbol"
+      >&#8594;</a
+      ><a name="572"
+      > </a
+      ><a name="573" href="Definition.LogicalRelation.Properties.Universe.html#547" class="Bound"
+      >&#915;</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Definition.LogicalRelation.Properties.Universe.html#545" class="Bound"
+      >l</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Definition.LogicalRelation.Properties.Universe.html#549" class="Bound"
+      >A</a
+      ><a name="583"
+      > </a
+      ><a name="584" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Definition.LogicalRelation.Properties.Universe.html#553" class="Bound"
+      >[U]</a
+      ><a name="593"
+      > </a
+      ><a name="594" class="Symbol"
+      >&#8594;</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Definition.LogicalRelation.Properties.Universe.html#547" class="Bound"
+      >&#915;</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.LogicalRelation.Properties.Universe.html#549" class="Bound"
+      >A</a
+      ><a name="606"
+      >
+</a
+      ><a name="607" href="Definition.LogicalRelation.Properties.Universe.html#533" class="Function"
+      >univEq</a
+      ><a name="613"
+      > </a
+      ><a name="614" href="Definition.LogicalRelation.Properties.Universe.html#614" class="Bound"
+      >[U]</a
+      ><a name="617"
+      > </a
+      ><a name="618" href="Definition.LogicalRelation.Properties.Universe.html#618" class="Bound"
+      >[A]</a
+      ><a name="621"
+      > </a
+      ><a name="622" class="Symbol"
+      >=</a
+      ><a name="623"
+      > </a
+      ><a name="624" href="Definition.LogicalRelation.Properties.Universe.html#356" class="Function"
+      >univEq'</a
+      ><a name="631"
+      > </a
+      ><a name="632" class="Symbol"
+      >(</a
+      ><a name="633" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Definition.LogicalRelation.Properties.Universe.html#614" class="Bound"
+      >[U]</a
+      ><a name="643" class="Symbol"
+      >)</a
+      ><a name="644"
+      >
+                         </a
+      ><a name="670" class="Symbol"
+      >(</a
+      ><a name="671" href="Definition.LogicalRelation.Irrelevance.html#3313" class="Function"
+      >irrelevanceTerm</a
+      ><a name="686"
+      > </a
+      ><a name="687" href="Definition.LogicalRelation.Properties.Universe.html#614" class="Bound"
+      >[U]</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >(</a
+      ><a name="692" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="698"
+      > </a
+      ><a name="699" class="Symbol"
+      >(</a
+      ><a name="700" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Definition.LogicalRelation.Properties.Universe.html#614" class="Bound"
+      >[U]</a
+      ><a name="710" class="Symbol"
+      >))</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="Definition.LogicalRelation.Properties.Universe.html#618" class="Bound"
+      >[A]</a
+      ><a name="716" class="Symbol"
+      >)</a
+      ><a name="717"
+      >
+
+</a
+      ><a name="719" href="Definition.LogicalRelation.Properties.Universe.html#719" class="Function"
+      >univEqEq'</a
+      ><a name="728"
+      > </a
+      ><a name="729" class="Symbol"
+      >:</a
+      ><a name="730"
+      > </a
+      ><a name="731" class="Symbol"
+      >&#8704;</a
+      ><a name="732"
+      > </a
+      ><a name="733" class="Symbol"
+      >{</a
+      ><a name="734" href="Definition.LogicalRelation.Properties.Universe.html#734" class="Bound"
+      >l</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Definition.LogicalRelation.Properties.Universe.html#736" class="Bound"
+      >l'</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Definition.LogicalRelation.Properties.Universe.html#739" class="Bound"
+      >&#915;</a
+      ><a name="740"
+      > </a
+      ><a name="741" href="Definition.LogicalRelation.Properties.Universe.html#741" class="Bound"
+      >A</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Definition.LogicalRelation.Properties.Universe.html#743" class="Bound"
+      >B</a
+      ><a name="744" class="Symbol"
+      >}</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >(</a
+      ><a name="747" href="Definition.LogicalRelation.Properties.Universe.html#747" class="Bound"
+      >[U]</a
+      ><a name="750"
+      > </a
+      ><a name="751" class="Symbol"
+      >:</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Definition.LogicalRelation.Properties.Universe.html#739" class="Bound"
+      >&#915;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="757"
+      > </a
+      ><a name="758" href="Definition.LogicalRelation.Properties.Universe.html#734" class="Bound"
+      >l</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#10217;U</a
+      ><a name="762" class="Symbol"
+      >)</a
+      ><a name="763"
+      > </a
+      ><a name="764" class="Symbol"
+      >(</a
+      ><a name="765" href="Definition.LogicalRelation.Properties.Universe.html#765" class="Bound"
+      >[A]</a
+      ><a name="768"
+      > </a
+      ><a name="769" class="Symbol"
+      >:</a
+      ><a name="770"
+      > </a
+      ><a name="771" href="Definition.LogicalRelation.Properties.Universe.html#739" class="Bound"
+      >&#915;</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.LogicalRelation.Properties.Universe.html#736" class="Bound"
+      >l'</a
+      ><a name="778"
+      > </a
+      ><a name="779" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Definition.LogicalRelation.Properties.Universe.html#741" class="Bound"
+      >A</a
+      ><a name="782" class="Symbol"
+      >)</a
+      ><a name="783"
+      >
+         </a
+      ><a name="793" class="Symbol"
+      >&#8594;</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Definition.LogicalRelation.Properties.Universe.html#739" class="Bound"
+      >&#915;</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="799"
+      > </a
+      ><a name="800" href="Definition.LogicalRelation.Properties.Universe.html#734" class="Bound"
+      >l</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Definition.LogicalRelation.Properties.Universe.html#741" class="Bound"
+      >A</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Definition.LogicalRelation.Properties.Universe.html#743" class="Bound"
+      >B</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="Definition.LogicalRelation.Properties.Universe.html#747" class="Bound"
+      >[U]</a
+      ><a name="826"
+      >
+         </a
+      ><a name="836" class="Symbol"
+      >&#8594;</a
+      ><a name="837"
+      > </a
+      ><a name="838" href="Definition.LogicalRelation.Properties.Universe.html#739" class="Bound"
+      >&#915;</a
+      ><a name="839"
+      > </a
+      ><a name="840" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="842"
+      > </a
+      ><a name="843" href="Definition.LogicalRelation.Properties.Universe.html#736" class="Bound"
+      >l'</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="847"
+      > </a
+      ><a name="848" href="Definition.LogicalRelation.Properties.Universe.html#741" class="Bound"
+      >A</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="851"
+      > </a
+      ><a name="852" href="Definition.LogicalRelation.Properties.Universe.html#743" class="Bound"
+      >B</a
+      ><a name="853"
+      > </a
+      ><a name="854" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="855"
+      > </a
+      ><a name="856" href="Definition.LogicalRelation.Properties.Universe.html#765" class="Bound"
+      >[A]</a
+      ><a name="859"
+      >
+</a
+      ><a name="860" href="Definition.LogicalRelation.Properties.Universe.html#719" class="Function"
+      >univEqEq'</a
+      ><a name="869"
+      > </a
+      ><a name="870" class="Symbol"
+      >(</a
+      ><a name="871" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="Symbol"
+      >(</a
+      ><a name="878" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="DottedPattern Symbol"
+      >.</a
+      ><a name="881" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="886"
+      > </a
+      ><a name="887" href="Definition.LogicalRelation.Properties.Universe.html#887" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="889" class="Symbol"
+      >))</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Definition.LogicalRelation.Properties.Universe.html#892" class="Bound"
+      >[A]</a
+      ><a name="895"
+      > </a
+      ><a name="896" class="Symbol"
+      >(</a
+      ><a name="897" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="900"
+      > </a
+      ><a name="901" href="Definition.LogicalRelation.Properties.Universe.html#901" class="Bound"
+      >&#8866;t</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Definition.LogicalRelation.Properties.Universe.html#904" class="Bound"
+      >&#8866;u</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="Definition.LogicalRelation.Properties.Universe.html#907" class="Bound"
+      >t&#8801;u</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Definition.LogicalRelation.Properties.Universe.html#911" class="Bound"
+      >&#8873;t</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Definition.LogicalRelation.Properties.Universe.html#914" class="Bound"
+      >&#8873;u</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.LogicalRelation.Properties.Universe.html#917" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="922" class="Symbol"
+      >)</a
+      ><a name="923"
+      > </a
+      ><a name="924" class="Symbol"
+      >=</a
+      ><a name="925"
+      >
+  </a
+      ><a name="928" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Definition.LogicalRelation.Properties.Universe.html#911" class="Bound"
+      >&#8873;t</a
+      ><a name="944"
+      > </a
+      ><a name="945" href="Definition.LogicalRelation.Properties.Universe.html#892" class="Bound"
+      >[A]</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Definition.LogicalRelation.Properties.Universe.html#917" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="954"
+      >
+</a
+      ><a name="955" href="Definition.LogicalRelation.Properties.Universe.html#719" class="Function"
+      >univEqEq'</a
+      ><a name="964"
+      > </a
+      ><a name="965" class="Symbol"
+      >(</a
+      ><a name="966" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="Definition.LogicalRelation.Properties.Universe.html#974" class="Bound"
+      >x</a
+      ><a name="975" class="Symbol"
+      >)</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Definition.LogicalRelation.Properties.Universe.html#977" class="Bound"
+      >[A]</a
+      ><a name="980"
+      > </a
+      ><a name="981" href="Definition.LogicalRelation.Properties.Universe.html#981" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="986"
+      > </a
+      ><a name="987" class="Symbol"
+      >=</a
+      ><a name="988"
+      > </a
+      ><a name="989" href="Definition.LogicalRelation.Properties.Universe.html#719" class="Function"
+      >univEqEq'</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Definition.LogicalRelation.Properties.Universe.html#974" class="Bound"
+      >x</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Definition.LogicalRelation.Properties.Universe.html#977" class="Bound"
+      >[A]</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" href="Definition.LogicalRelation.Properties.Universe.html#981" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1010"
+      >
+
+</a
+      ><a name="1012" href="Definition.LogicalRelation.Properties.Universe.html#1012" class="Function"
+      >univEqEq</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" class="Symbol"
+      >:</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" class="Symbol"
+      >&#8704;</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >{</a
+      ><a name="1026" href="Definition.LogicalRelation.Properties.Universe.html#1026" class="Bound"
+      >l</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Definition.LogicalRelation.Properties.Universe.html#1028" class="Bound"
+      >l'</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Definition.LogicalRelation.Properties.Universe.html#1031" class="Bound"
+      >&#915;</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Definition.LogicalRelation.Properties.Universe.html#1033" class="Bound"
+      >A</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Definition.LogicalRelation.Properties.Universe.html#1035" class="Bound"
+      >B</a
+      ><a name="1036" class="Symbol"
+      >}</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" class="Symbol"
+      >(</a
+      ><a name="1039" href="Definition.LogicalRelation.Properties.Universe.html#1039" class="Bound"
+      >[U]</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" class="Symbol"
+      >:</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" href="Definition.LogicalRelation.Properties.Universe.html#1031" class="Bound"
+      >&#915;</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Definition.LogicalRelation.Properties.Universe.html#1026" class="Bound"
+      >l</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="1055" class="Symbol"
+      >)</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" class="Symbol"
+      >(</a
+      ><a name="1058" href="Definition.LogicalRelation.Properties.Universe.html#1058" class="Bound"
+      >[A]</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" class="Symbol"
+      >:</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" href="Definition.LogicalRelation.Properties.Universe.html#1031" class="Bound"
+      >&#915;</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" href="Definition.LogicalRelation.Properties.Universe.html#1028" class="Bound"
+      >l'</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Definition.LogicalRelation.Properties.Universe.html#1033" class="Bound"
+      >A</a
+      ><a name="1075" class="Symbol"
+      >)</a
+      ><a name="1076"
+      >
+         </a
+      ><a name="1086" class="Symbol"
+      >&#8594;</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" href="Definition.LogicalRelation.Properties.Universe.html#1031" class="Bound"
+      >&#915;</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" href="Definition.LogicalRelation.Properties.Universe.html#1026" class="Bound"
+      >l</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" href="Definition.LogicalRelation.Properties.Universe.html#1033" class="Bound"
+      >A</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Definition.LogicalRelation.Properties.Universe.html#1035" class="Bound"
+      >B</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Definition.LogicalRelation.Properties.Universe.html#1039" class="Bound"
+      >[U]</a
+      ><a name="1112"
+      >
+         </a
+      ><a name="1122" class="Symbol"
+      >&#8594;</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" href="Definition.LogicalRelation.Properties.Universe.html#1031" class="Bound"
+      >&#915;</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1128"
+      > </a
+      ><a name="1129" href="Definition.LogicalRelation.Properties.Universe.html#1028" class="Bound"
+      >l'</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="1133"
+      > </a
+      ><a name="1134" href="Definition.LogicalRelation.Properties.Universe.html#1033" class="Bound"
+      >A</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Definition.LogicalRelation.Properties.Universe.html#1035" class="Bound"
+      >B</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" href="Definition.LogicalRelation.Properties.Universe.html#1058" class="Bound"
+      >[A]</a
+      ><a name="1145"
+      >
+</a
+      ><a name="1146" href="Definition.LogicalRelation.Properties.Universe.html#1012" class="Function"
+      >univEqEq</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="Definition.LogicalRelation.Properties.Universe.html#1155" class="Bound"
+      >[U]</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Definition.LogicalRelation.Properties.Universe.html#1159" class="Bound"
+      >[A]</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Definition.LogicalRelation.Properties.Universe.html#1163" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" class="Symbol"
+      >=</a
+      ><a name="1170"
+      >
+  </a
+      ><a name="1173" class="Keyword"
+      >let</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="Definition.LogicalRelation.Properties.Universe.html#1177" class="Bound"
+      >[A&#8801;B]'</a
+      ><a name="1183"
+      > </a
+      ><a name="1184" class="Symbol"
+      >=</a
+      ><a name="1185"
+      > </a
+      ><a name="1186" href="Definition.LogicalRelation.Irrelevance.html#6152" class="Function"
+      >irrelevanceEqTerm</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="Definition.LogicalRelation.Properties.Universe.html#1155" class="Bound"
+      >[U]</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" class="Symbol"
+      >(</a
+      ><a name="1209" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" class="Symbol"
+      >(</a
+      ><a name="1217" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Definition.LogicalRelation.Properties.Universe.html#1155" class="Bound"
+      >[U]</a
+      ><a name="1227" class="Symbol"
+      >))</a
+      ><a name="1229"
+      > </a
+      ><a name="1230" href="Definition.LogicalRelation.Properties.Universe.html#1163" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1235"
+      >
+  </a
+      ><a name="1238" class="Keyword"
+      >in</a
+      ><a name="1240"
+      >  </a
+      ><a name="1242" href="Definition.LogicalRelation.Properties.Universe.html#719" class="Function"
+      >univEqEq'</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" class="Symbol"
+      >(</a
+      ><a name="1253" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Definition.LogicalRelation.Properties.Universe.html#1155" class="Bound"
+      >[U]</a
+      ><a name="1263" class="Symbol"
+      >)</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Definition.LogicalRelation.Properties.Universe.html#1159" class="Bound"
+      >[A]</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" href="Definition.LogicalRelation.Properties.Universe.html#1177" class="Bound"
+      >[A&#8801;B]'</a
+      ><a name="1275"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

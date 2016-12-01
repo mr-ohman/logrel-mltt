@@ -1,0 +1,4611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Reduction</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Reduction.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Reduction</a
+      ><a name="55"
+      > </a
+      ><a name="56" class="Keyword"
+      >where</a
+      ><a name="61"
+      >
+
+</a
+      ><a name="63" class="Keyword"
+      >open</a
+      ><a name="67"
+      > </a
+      ><a name="68" class="Keyword"
+      >import</a
+      ><a name="74"
+      > </a
+      ><a name="75" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="93"
+      >
+</a
+      ><a name="94" class="Keyword"
+      >open</a
+      ><a name="98"
+      > </a
+      ><a name="99" class="Keyword"
+      >import</a
+      ><a name="105"
+      > </a
+      ><a name="106" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="122"
+      >
+</a
+      ><a name="123" class="Keyword"
+      >open</a
+      ><a name="127"
+      > </a
+      ><a name="128" class="Keyword"
+      >import</a
+      ><a name="134"
+      > </a
+      ><a name="135" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="161"
+      >
+</a
+      ><a name="162" class="Keyword"
+      >open</a
+      ><a name="166"
+      > </a
+      ><a name="167" class="Keyword"
+      >import</a
+      ><a name="173"
+      > </a
+      ><a name="174" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="201"
+      >
+</a
+      ><a name="202" class="Keyword"
+      >open</a
+      ><a name="206"
+      > </a
+      ><a name="207" class="Keyword"
+      >import</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Definition.Typed.RedSteps.html#1" class="Module"
+      >Definition.Typed.RedSteps</a
+      ><a name="239"
+      >
+</a
+      ><a name="240" class="Keyword"
+      >open</a
+      ><a name="244"
+      > </a
+      ><a name="245" class="Keyword"
+      >import</a
+      ><a name="251"
+      > </a
+      ><a name="252" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="278"
+      >
+</a
+      ><a name="279" class="Keyword"
+      >open</a
+      ><a name="283"
+      > </a
+      ><a name="284" class="Keyword"
+      >import</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="324"
+      >
+</a
+      ><a name="325" class="Keyword"
+      >open</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Keyword"
+      >import</a
+      ><a name="336"
+      > </a
+      ><a name="337" href="Definition.LogicalRelation.Properties.Reflexivity.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Reflexivity</a
+      ><a name="386"
+      >
+</a
+      ><a name="387" class="Keyword"
+      >open</a
+      ><a name="391"
+      > </a
+      ><a name="392" class="Keyword"
+      >import</a
+      ><a name="398"
+      > </a
+      ><a name="399" href="Definition.LogicalRelation.Properties.Symmetry.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Symmetry</a
+      ><a name="445"
+      >
+</a
+      ><a name="446" class="Keyword"
+      >open</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Keyword"
+      >import</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Definition.LogicalRelation.Properties.Transitivity.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Transitivity</a
+      ><a name="508"
+      >
+</a
+      ><a name="509" class="Keyword"
+      >open</a
+      ><a name="513"
+      > </a
+      ><a name="514" class="Keyword"
+      >import</a
+      ><a name="520"
+      > </a
+      ><a name="521" href="Definition.LogicalRelation.Properties.Conversion.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Conversion</a
+      ><a name="569"
+      >
+</a
+      ><a name="570" class="Keyword"
+      >open</a
+      ><a name="574"
+      > </a
+      ><a name="575" class="Keyword"
+      >import</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Definition.LogicalRelation.Properties.Universe.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Universe</a
+      ><a name="628"
+      >
+</a
+      ><a name="629" class="Keyword"
+      >open</a
+      ><a name="633"
+      > </a
+      ><a name="634" class="Keyword"
+      >import</a
+      ><a name="640"
+      > </a
+      ><a name="641" href="Definition.LogicalRelation.Properties.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Wellformed</a
+      ><a name="689"
+      >
+
+</a
+      ><a name="691" class="Keyword"
+      >open</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Keyword"
+      >import</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="716"
+      >
+</a
+      ><a name="717" class="Keyword"
+      >open</a
+      ><a name="721"
+      > </a
+      ><a name="722" class="Keyword"
+      >import</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="740"
+      >
+
+</a
+      ><a name="742" class="Keyword"
+      >import</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >as</a
+      ><a name="779"
+      > </a
+      ><a name="780" class="Module"
+      >PE</a
+      ><a name="782"
+      >
+
+
+</a
+      ><a name="785" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="794"
+      > </a
+      ><a name="795" class="Symbol"
+      >:</a
+      ><a name="796"
+      > </a
+      ><a name="797" class="Symbol"
+      >&#8704;</a
+      ><a name="798"
+      > </a
+      ><a name="799" class="Symbol"
+      >{</a
+      ><a name="800" href="Definition.LogicalRelation.Properties.Reduction.html#800" class="Bound"
+      >A</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="Definition.LogicalRelation.Properties.Reduction.html#802" class="Bound"
+      >B</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Definition.LogicalRelation.Properties.Reduction.html#804" class="Bound"
+      >l</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Definition.LogicalRelation.Properties.Reduction.html#806" class="Bound"
+      >&#915;</a
+      ><a name="807" class="Symbol"
+      >}</a
+      ><a name="808"
+      >
+          </a
+      ><a name="819" class="Symbol"
+      >&#8594;</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Definition.LogicalRelation.Properties.Reduction.html#806" class="Bound"
+      >&#915;</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Definition.LogicalRelation.Properties.Reduction.html#800" class="Bound"
+      >A</a
+      ><a name="826"
+      > </a
+      ><a name="827" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="829"
+      > </a
+      ><a name="830" href="Definition.LogicalRelation.Properties.Reduction.html#802" class="Bound"
+      >B</a
+      ><a name="831"
+      >
+          </a
+      ><a name="842" class="Symbol"
+      >&#8594;</a
+      ><a name="843"
+      > </a
+      ><a name="844" href="Definition.LogicalRelation.Properties.Reduction.html#806" class="Bound"
+      >&#915;</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="848"
+      > </a
+      ><a name="849" href="Definition.LogicalRelation.Properties.Reduction.html#804" class="Bound"
+      >l</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Definition.LogicalRelation.Properties.Reduction.html#802" class="Bound"
+      >B</a
+      ><a name="854"
+      >
+          </a
+      ><a name="865" class="Symbol"
+      >&#8594;</a
+      ><a name="866"
+      > </a
+      ><a name="867" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="868"
+      > </a
+      ><a name="869" class="Symbol"
+      >&#955;</a
+      ><a name="870"
+      > </a
+      ><a name="871" class="Symbol"
+      >(</a
+      ><a name="872" href="Definition.LogicalRelation.Properties.Reduction.html#872" class="Bound"
+      >[A]</a
+      ><a name="875"
+      > </a
+      ><a name="876" class="Symbol"
+      >:</a
+      ><a name="877"
+      > </a
+      ><a name="878" href="Definition.LogicalRelation.Properties.Reduction.html#806" class="Bound"
+      >&#915;</a
+      ><a name="879"
+      > </a
+      ><a name="880" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Definition.LogicalRelation.Properties.Reduction.html#804" class="Bound"
+      >l</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="886"
+      > </a
+      ><a name="887" href="Definition.LogicalRelation.Properties.Reduction.html#800" class="Bound"
+      >A</a
+      ><a name="888" class="Symbol"
+      >)</a
+      ><a name="889"
+      >
+          </a
+      ><a name="900" class="Symbol"
+      >&#8594;</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Definition.LogicalRelation.Properties.Reduction.html#806" class="Bound"
+      >&#915;</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="Definition.LogicalRelation.Properties.Reduction.html#804" class="Bound"
+      >l</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Definition.LogicalRelation.Properties.Reduction.html#800" class="Bound"
+      >A</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Definition.LogicalRelation.Properties.Reduction.html#802" class="Bound"
+      >B</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Definition.LogicalRelation.Properties.Reduction.html#872" class="Bound"
+      >[A]</a
+      ><a name="922"
+      >
+</a
+      ><a name="923" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="932"
+      > </a
+      ><a name="933" href="Definition.LogicalRelation.Properties.Reduction.html#933" class="Bound"
+      >D</a
+      ><a name="934"
+      > </a
+      ><a name="935" class="Symbol"
+      >(</a
+      ><a name="936" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Definition.LogicalRelation.Properties.Reduction.html#939" class="Bound"
+      >l'</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Definition.LogicalRelation.Properties.Reduction.html#942" class="Bound"
+      >l&lt;</a
+      ><a name="944"
+      > </a
+      ><a name="945" href="Definition.LogicalRelation.Properties.Reduction.html#945" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="947" class="Symbol"
+      >)</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Keyword"
+      >rewrite</a
+      ><a name="956"
+      > </a
+      ><a name="957" href="Definition.Typed.Properties.html#9057" class="Function"
+      >redU*</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Definition.LogicalRelation.Properties.Reduction.html#933" class="Bound"
+      >D</a
+      ><a name="964"
+      > </a
+      ><a name="965" class="Symbol"
+      >=</a
+      ><a name="966"
+      >
+  </a
+      ><a name="969" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="970"
+      > </a
+      ><a name="971" class="Symbol"
+      >(</a
+      ><a name="972" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="Definition.LogicalRelation.Properties.Reduction.html#939" class="Bound"
+      >l'</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Definition.LogicalRelation.Properties.Reduction.html#942" class="Bound"
+      >l&lt;</a
+      ><a name="979"
+      > </a
+      ><a name="980" href="Definition.LogicalRelation.Properties.Reduction.html#945" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="982" class="Symbol"
+      >)</a
+      ><a name="983"
+      > </a
+      ><a name="984" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="993"
+      >
+</a
+      ><a name="994" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Definition.LogicalRelation.Properties.Reduction.html#1004" class="Bound"
+      >D</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" class="Symbol"
+      >(</a
+      ><a name="1007" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Definition.LogicalRelation.Properties.Reduction.html#1011" class="Bound"
+      >&#8866;B</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" href="Definition.LogicalRelation.Properties.Reduction.html#1016" class="Bound"
+      >&#8866;&#8469;</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Definition.LogicalRelation.Properties.Reduction.html#1021" class="Bound"
+      >D'</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1025" class="Symbol"
+      >)</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" class="Symbol"
+      >=</a
+      ><a name="1028"
+      >
+  </a
+      ><a name="1031" class="Keyword"
+      >let</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Definition.LogicalRelation.Properties.Reduction.html#1035" class="Bound"
+      >&#8866;A</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" class="Symbol"
+      >=</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" href="Definition.Typed.Properties.html#3016" class="Function"
+      >redFirst*</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Definition.LogicalRelation.Properties.Reduction.html#1004" class="Bound"
+      >D</a
+      ><a name="1051"
+      >
+  </a
+      ><a name="1054" class="Keyword"
+      >in</a
+      ><a name="1056"
+      >  </a
+      ><a name="1058" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" class="Symbol"
+      >(</a
+      ><a name="1061" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Definition.LogicalRelation.Properties.Reduction.html#1035" class="Bound"
+      >&#8866;A</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Definition.LogicalRelation.Properties.Reduction.html#1016" class="Bound"
+      >&#8866;&#8469;</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Definition.LogicalRelation.Properties.Reduction.html#1004" class="Bound"
+      >D</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="Definition.LogicalRelation.Properties.Reduction.html#1021" class="Bound"
+      >D'</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1082" class="Symbol"
+      >)</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" href="Definition.LogicalRelation.Properties.Reduction.html#1021" class="Bound"
+      >D'</a
+      ><a name="1088"
+      >
+</a
+      ><a name="1089" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Definition.LogicalRelation.Properties.Reduction.html#1099" class="Bound"
+      >D</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" class="Symbol"
+      >(</a
+      ><a name="1102" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" href="Definition.LogicalRelation.Properties.Reduction.html#1106" class="Bound"
+      >K</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" href="Definition.LogicalRelation.Properties.Reduction.html#1110" class="Bound"
+      >&#8866;B</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1114"
+      > </a
+      ><a name="1115" href="Definition.LogicalRelation.Properties.Reduction.html#1115" class="Bound"
+      >&#8866;K</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Definition.LogicalRelation.Properties.Reduction.html#1120" class="Bound"
+      >D'</a
+      ><a name="1122"
+      > </a
+      ><a name="1123" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1124"
+      > </a
+      ><a name="1125" href="Definition.LogicalRelation.Properties.Reduction.html#1125" class="Bound"
+      >neK</a
+      ><a name="1128" class="Symbol"
+      >)</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" class="Symbol"
+      >=</a
+      ><a name="1131"
+      >
+  </a
+      ><a name="1134" class="Keyword"
+      >let</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Definition.LogicalRelation.Properties.Reduction.html#1138" class="Bound"
+      >&#8866;A</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" class="Symbol"
+      >=</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" href="Definition.Typed.Properties.html#3016" class="Function"
+      >redFirst*</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Definition.LogicalRelation.Properties.Reduction.html#1099" class="Bound"
+      >D</a
+      ><a name="1154"
+      >
+  </a
+      ><a name="1157" class="Keyword"
+      >in</a
+      ><a name="1159"
+      >  </a
+      ><a name="1161" class="Symbol"
+      >(</a
+      ><a name="1162" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Definition.LogicalRelation.Properties.Reduction.html#1106" class="Bound"
+      >K</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="Definition.LogicalRelation.Properties.Reduction.html#1138" class="Bound"
+      >&#8866;A</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" href="Definition.LogicalRelation.Properties.Reduction.html#1115" class="Bound"
+      >&#8866;K</a
+      ><a name="1177"
+      > </a
+      ><a name="1178" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="Definition.LogicalRelation.Properties.Reduction.html#1099" class="Bound"
+      >D</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="Definition.LogicalRelation.Properties.Reduction.html#1120" class="Bound"
+      >D'</a
+      ><a name="1187"
+      > </a
+      ><a name="1188" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Definition.LogicalRelation.Properties.Reduction.html#1125" class="Bound"
+      >neK</a
+      ><a name="1193" class="Symbol"
+      >)</a
+      ><a name="1194"
+      >
+  </a
+      ><a name="1197" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1198"
+      >   </a
+      ><a name="1201" class="Symbol"
+      >(</a
+      ><a name="1202" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" class="Symbol"
+      >_</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Definition.LogicalRelation.Properties.Reduction.html#1110" class="Bound"
+      >&#8866;B</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1214"
+      > </a
+      ><a name="1215" href="Definition.LogicalRelation.Properties.Reduction.html#1115" class="Bound"
+      >&#8866;K</a
+      ><a name="1217"
+      > </a
+      ><a name="1218" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Definition.LogicalRelation.Properties.Reduction.html#1120" class="Bound"
+      >D'</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1224"
+      > </a
+      ><a name="1225" href="Definition.LogicalRelation.Properties.Reduction.html#1125" class="Bound"
+      >neK</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >(</a
+      ><a name="1230" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" href="Definition.LogicalRelation.Properties.Reduction.html#1115" class="Bound"
+      >&#8866;K</a
+      ><a name="1237" class="Symbol"
+      >))</a
+      ><a name="1239"
+      >
+</a
+      ><a name="1240" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" href="Definition.LogicalRelation.Properties.Reduction.html#1250" class="Bound"
+      >D</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" class="Symbol"
+      >(</a
+      ><a name="1253" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Definition.LogicalRelation.Properties.Reduction.html#1256" class="Bound"
+      >F</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" href="Definition.LogicalRelation.Properties.Reduction.html#1258" class="Bound"
+      >G</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1261"
+      > </a
+      ><a name="1262" href="Definition.LogicalRelation.Properties.Reduction.html#1262" class="Bound"
+      >&#8866;B</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1266"
+      > </a
+      ><a name="1267" href="Definition.LogicalRelation.Properties.Reduction.html#1267" class="Bound"
+      >&#8866;&#928;FG</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="Definition.LogicalRelation.Properties.Reduction.html#1274" class="Bound"
+      >D'</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Definition.LogicalRelation.Properties.Reduction.html#1279" class="Bound"
+      >&#8866;F</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" href="Definition.LogicalRelation.Properties.Reduction.html#1282" class="Bound"
+      >&#8866;G</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" href="Definition.LogicalRelation.Properties.Reduction.html#1285" class="Bound"
+      >[F]</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Definition.LogicalRelation.Properties.Reduction.html#1289" class="Bound"
+      >[G]</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Definition.LogicalRelation.Properties.Reduction.html#1293" class="Bound"
+      >G-ext</a
+      ><a name="1298" class="Symbol"
+      >)</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" class="Symbol"
+      >=</a
+      ><a name="1301"
+      >
+  </a
+      ><a name="1304" class="Keyword"
+      >let</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" href="Definition.LogicalRelation.Properties.Reduction.html#1308" class="Bound"
+      >&#8866;A</a
+      ><a name="1310"
+      > </a
+      ><a name="1311" class="Symbol"
+      >=</a
+      ><a name="1312"
+      > </a
+      ><a name="1313" href="Definition.Typed.Properties.html#3016" class="Function"
+      >redFirst*</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Definition.LogicalRelation.Properties.Reduction.html#1250" class="Bound"
+      >D</a
+      ><a name="1324"
+      >
+  </a
+      ><a name="1327" class="Keyword"
+      >in</a
+      ><a name="1329"
+      >  </a
+      ><a name="1331" class="Symbol"
+      >(</a
+      ><a name="1332" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" href="Definition.LogicalRelation.Properties.Reduction.html#1256" class="Bound"
+      >F</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" href="Definition.LogicalRelation.Properties.Reduction.html#1258" class="Bound"
+      >G</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" href="Definition.LogicalRelation.Properties.Reduction.html#1308" class="Bound"
+      >&#8866;A</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1345"
+      > </a
+      ><a name="1346" href="Definition.LogicalRelation.Properties.Reduction.html#1267" class="Bound"
+      >&#8866;&#928;FG</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Definition.LogicalRelation.Properties.Reduction.html#1250" class="Bound"
+      >D</a
+      ><a name="1354"
+      > </a
+      ><a name="1355" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="Definition.LogicalRelation.Properties.Reduction.html#1274" class="Bound"
+      >D'</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1362"
+      > </a
+      ><a name="1363" href="Definition.LogicalRelation.Properties.Reduction.html#1279" class="Bound"
+      >&#8866;F</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Definition.LogicalRelation.Properties.Reduction.html#1282" class="Bound"
+      >&#8866;G</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" href="Definition.LogicalRelation.Properties.Reduction.html#1285" class="Bound"
+      >[F]</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" href="Definition.LogicalRelation.Properties.Reduction.html#1289" class="Bound"
+      >[G]</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" href="Definition.LogicalRelation.Properties.Reduction.html#1293" class="Bound"
+      >G-ext</a
+      ><a name="1382" class="Symbol"
+      >)</a
+      ><a name="1383"
+      >
+  </a
+      ><a name="1386" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1387"
+      >   </a
+      ><a name="1390" class="Symbol"
+      >(</a
+      ><a name="1391" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" class="Symbol"
+      >_</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" class="Symbol"
+      >_</a
+      ><a name="1397"
+      > </a
+      ><a name="1398" href="Definition.LogicalRelation.Properties.Reduction.html#1274" class="Bound"
+      >D'</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" class="Symbol"
+      >(</a
+      ><a name="1402" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" href="Definition.LogicalRelation.Properties.Reduction.html#1250" class="Bound"
+      >D</a
+      ><a name="1411" class="Symbol"
+      >)</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" class="Symbol"
+      >(&#955;</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" href="Definition.LogicalRelation.Properties.Reduction.html#1416" class="Bound"
+      >&#961;</a
+      ><a name="1417"
+      > </a
+      ><a name="1418" href="Definition.LogicalRelation.Properties.Reduction.html#1418" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1420"
+      > </a
+      ><a name="1421" class="Symbol"
+      >&#8594;</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" class="Symbol"
+      >(</a
+      ><a name="1431" href="Definition.LogicalRelation.Properties.Reduction.html#1285" class="Bound"
+      >[F]</a
+      ><a name="1434"
+      > </a
+      ><a name="1435" href="Definition.LogicalRelation.Properties.Reduction.html#1416" class="Bound"
+      >&#961;</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" href="Definition.LogicalRelation.Properties.Reduction.html#1418" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1439" class="Symbol"
+      >))</a
+      ><a name="1441"
+      >
+        </a
+      ><a name="1450" class="Symbol"
+      >(&#955;</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" href="Definition.LogicalRelation.Properties.Reduction.html#1453" class="Bound"
+      >&#961;</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" href="Definition.LogicalRelation.Properties.Reduction.html#1455" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="Definition.LogicalRelation.Properties.Reduction.html#1458" class="Bound"
+      >[a]</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" class="Symbol"
+      >&#8594;</a
+      ><a name="1463"
+      > </a
+      ><a name="1464" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" class="Symbol"
+      >(</a
+      ><a name="1472" href="Definition.LogicalRelation.Properties.Reduction.html#1289" class="Bound"
+      >[G]</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" href="Definition.LogicalRelation.Properties.Reduction.html#1453" class="Bound"
+      >&#961;</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="Definition.LogicalRelation.Properties.Reduction.html#1455" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Definition.LogicalRelation.Properties.Reduction.html#1458" class="Bound"
+      >[a]</a
+      ><a name="1484" class="Symbol"
+      >)))</a
+      ><a name="1487"
+      >
+</a
+      ><a name="1488" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="Definition.LogicalRelation.Properties.Reduction.html#1498" class="Bound"
+      >D</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" class="Symbol"
+      >(</a
+      ><a name="1501" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" href="Definition.LogicalRelation.Properties.Reduction.html#1509" class="Bound"
+      >x</a
+      ><a name="1510" class="Symbol"
+      >)</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" class="Keyword"
+      >with</a
+      ><a name="1516"
+      > </a
+      ><a name="1517" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" href="Definition.LogicalRelation.Properties.Reduction.html#1498" class="Bound"
+      >D</a
+      ><a name="1528"
+      > </a
+      ><a name="1529" href="Definition.LogicalRelation.Properties.Reduction.html#1509" class="Bound"
+      >x</a
+      ><a name="1530"
+      >
+</a
+      ><a name="1531" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Definition.LogicalRelation.Properties.Reduction.html#1541" class="Bound"
+      >D</a
+      ><a name="1542"
+      > </a
+      ><a name="1543" class="Symbol"
+      >(</a
+      ><a name="1544" class="InductiveConstructor"
+      >emb</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Definition.LogicalRelation.Properties.Reduction.html#1552" class="Bound"
+      >x</a
+      ><a name="1553" class="Symbol"
+      >)</a
+      ><a name="1554"
+      > </a
+      ><a name="1555" class="Symbol"
+      >|</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" href="Definition.LogicalRelation.Properties.Reduction.html#1557" class="Bound"
+      >y</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" href="Definition.LogicalRelation.Properties.Reduction.html#1561" class="Bound"
+      >y&#8321;</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" class="Symbol"
+      >=</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1573"
+      > </a
+      ><a name="1574" href="Definition.LogicalRelation.Properties.Reduction.html#1557" class="Bound"
+      >y</a
+      ><a name="1575"
+      > </a
+      ><a name="1576" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1577"
+      > </a
+      ><a name="1578" href="Definition.LogicalRelation.Properties.Reduction.html#1561" class="Bound"
+      >y&#8321;</a
+      ><a name="1580"
+      >
+
+</a
+      ><a name="1582" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" class="Symbol"
+      >:</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="Symbol"
+      >&#8704;</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" class="Symbol"
+      >{</a
+      ><a name="1601" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" href="Definition.LogicalRelation.Properties.Reduction.html#1603" class="Bound"
+      >t</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" href="Definition.LogicalRelation.Properties.Reduction.html#1605" class="Bound"
+      >u</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" href="Definition.LogicalRelation.Properties.Reduction.html#1607" class="Bound"
+      >l</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1610" class="Symbol"
+      >}</a
+      ><a name="1611"
+      >
+              </a
+      ><a name="1626" class="Symbol"
+      >&#8594;</a
+      ><a name="1627"
+      > </a
+      ><a name="1628" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1629"
+      > </a
+      ><a name="1630" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" href="Definition.LogicalRelation.Properties.Reduction.html#1603" class="Bound"
+      >t</a
+      ><a name="1633"
+      > </a
+      ><a name="1634" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Definition.LogicalRelation.Properties.Reduction.html#1605" class="Bound"
+      >u</a
+      ><a name="1638"
+      > </a
+      ><a name="1639" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1642"
+      >
+              </a
+      ><a name="1657" class="Symbol"
+      >&#8594;</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" class="Symbol"
+      >(</a
+      ><a name="1660" href="Definition.LogicalRelation.Properties.Reduction.html#1660" class="Bound"
+      >[A]</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" class="Symbol"
+      >:</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" href="Definition.LogicalRelation.Properties.Reduction.html#1607" class="Bound"
+      >l</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1676" class="Symbol"
+      >)</a
+      ><a name="1677"
+      >
+              </a
+      ><a name="1692" class="Symbol"
+      >&#8594;</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" href="Definition.LogicalRelation.Properties.Reduction.html#1607" class="Bound"
+      >l</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1702"
+      > </a
+      ><a name="1703" href="Definition.LogicalRelation.Properties.Reduction.html#1605" class="Bound"
+      >u</a
+      ><a name="1704"
+      > </a
+      ><a name="1705" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Definition.LogicalRelation.Properties.Reduction.html#1660" class="Bound"
+      >[A]</a
+      ><a name="1714"
+      >
+              </a
+      ><a name="1729" class="Symbol"
+      >&#8594;</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1735"
+      > </a
+      ><a name="1736" href="Definition.LogicalRelation.Properties.Reduction.html#1607" class="Bound"
+      >l</a
+      ><a name="1737"
+      > </a
+      ><a name="1738" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1739"
+      > </a
+      ><a name="1740" href="Definition.LogicalRelation.Properties.Reduction.html#1603" class="Bound"
+      >t</a
+      ><a name="1741"
+      > </a
+      ><a name="1742" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1743"
+      > </a
+      ><a name="1744" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1745"
+      > </a
+      ><a name="1746" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1747"
+      > </a
+      ><a name="1748" href="Definition.LogicalRelation.Properties.Reduction.html#1660" class="Bound"
+      >[A]</a
+      ><a name="1751"
+      >
+              </a
+      ><a name="1766" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" href="Definition.LogicalRelation.Properties.Reduction.html#1609" class="Bound"
+      >&#915;</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Definition.LogicalRelation.Properties.Reduction.html#1607" class="Bound"
+      >l</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" href="Definition.LogicalRelation.Properties.Reduction.html#1603" class="Bound"
+      >t</a
+      ><a name="1778"
+      > </a
+      ><a name="1779" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="1780"
+      > </a
+      ><a name="1781" href="Definition.LogicalRelation.Properties.Reduction.html#1605" class="Bound"
+      >u</a
+      ><a name="1782"
+      > </a
+      ><a name="1783" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="1784"
+      > </a
+      ><a name="1785" href="Definition.LogicalRelation.Properties.Reduction.html#1601" class="Bound"
+      >A</a
+      ><a name="1786"
+      > </a
+      ><a name="1787" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="1788"
+      > </a
+      ><a name="1789" href="Definition.LogicalRelation.Properties.Reduction.html#1660" class="Bound"
+      >[A]</a
+      ><a name="1792"
+      >
+</a
+      ><a name="1793" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Definition.LogicalRelation.Properties.Reduction.html#1807" class="Bound"
+      >t&#8658;u</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" class="Symbol"
+      >(</a
+      ><a name="1812" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" class="DottedPattern Symbol"
+      >.</a
+      ><a name="1816" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1821"
+      > </a
+      ><a name="1822" href="Definition.LogicalRelation.Properties.Reduction.html#1822" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1824" class="Symbol"
+      >)</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" class="Symbol"
+      >(</a
+      ><a name="1827" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Definition.LogicalRelation.Properties.Reduction.html#1830" class="Bound"
+      >&#8866;u</a
+      ><a name="1832"
+      > </a
+      ><a name="1833" href="Definition.LogicalRelation.Properties.Reduction.html#1833" class="Bound"
+      >&#8873;u</a
+      ><a name="1835" class="Symbol"
+      >)</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" class="Symbol"
+      >=</a
+      ><a name="1838"
+      >
+  </a
+      ><a name="1841" class="Keyword"
+      >let</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" href="Definition.LogicalRelation.Properties.Reduction.html#1845" class="Bound"
+      >&#8866;t</a
+      ><a name="1847"
+      > </a
+      ><a name="1848" class="Symbol"
+      >=</a
+      ><a name="1849"
+      > </a
+      ><a name="1850" href="Definition.Typed.Properties.html#2884" class="Function"
+      >redFirst*Term</a
+      ><a name="1863"
+      > </a
+      ><a name="1864" href="Definition.LogicalRelation.Properties.Reduction.html#1807" class="Bound"
+      >t&#8658;u</a
+      ><a name="1867"
+      >
+      </a
+      ><a name="1874" href="Definition.LogicalRelation.Properties.Reduction.html#1874" class="Bound"
+      >q</a
+      ><a name="1875"
+      > </a
+      ><a name="1876" class="Symbol"
+      >=</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="1887"
+      > </a
+      ><a name="1888" class="Symbol"
+      >(</a
+      ><a name="1889" href="Definition.Typed.RedSteps.html#576" class="Function"
+      >univ*</a
+      ><a name="1894"
+      > </a
+      ><a name="1895" href="Definition.LogicalRelation.Properties.Reduction.html#1807" class="Bound"
+      >t&#8658;u</a
+      ><a name="1898" class="Symbol"
+      >)</a
+      ><a name="1899"
+      > </a
+      ><a name="1900" class="Symbol"
+      >(</a
+      ><a name="1901" href="Definition.LogicalRelation.Properties.Universe.html#533" class="Function"
+      >univEq</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" class="Symbol"
+      >(</a
+      ><a name="1909" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1911"
+      > </a
+      ><a name="1912" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="1913"
+      > </a
+      ><a name="1914" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1917"
+      > </a
+      ><a name="1918" href="Definition.LogicalRelation.Properties.Reduction.html#1822" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1920" class="Symbol"
+      >)</a
+      ><a name="1921"
+      > </a
+      ><a name="1922" class="Symbol"
+      >(</a
+      ><a name="1923" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1925"
+      > </a
+      ><a name="1926" href="Definition.LogicalRelation.Properties.Reduction.html#1830" class="Bound"
+      >&#8866;u</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" href="Definition.LogicalRelation.Properties.Reduction.html#1833" class="Bound"
+      >&#8873;u</a
+      ><a name="1931" class="Symbol"
+      >))</a
+      ><a name="1933"
+      >
+  </a
+      ><a name="1936" class="Keyword"
+      >in</a
+      ><a name="1938"
+      >  </a
+      ><a name="1940" class="Symbol"
+      >(</a
+      ><a name="1941" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" href="Definition.LogicalRelation.Properties.Reduction.html#1845" class="Bound"
+      >&#8866;t</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" class="Symbol"
+      >(</a
+      ><a name="1948" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" href="Definition.LogicalRelation.Properties.Reduction.html#1874" class="Bound"
+      >q</a
+      ><a name="1955" class="Symbol"
+      >))</a
+      ><a name="1957"
+      >
+  </a
+      ><a name="1960" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1961"
+      >   </a
+      ><a name="1964" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="1967"
+      > </a
+      ><a name="1968" href="Definition.LogicalRelation.Properties.Reduction.html#1845" class="Bound"
+      >&#8866;t</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="Definition.LogicalRelation.Properties.Reduction.html#1830" class="Bound"
+      >&#8866;u</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" class="Symbol"
+      >(</a
+      ><a name="1975" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Definition.LogicalRelation.Properties.Reduction.html#1807" class="Bound"
+      >t&#8658;u</a
+      ><a name="1990" class="Symbol"
+      >)</a
+      ><a name="1991"
+      >
+          </a
+      ><a name="2002" class="Symbol"
+      >(</a
+      ><a name="2003" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Definition.LogicalRelation.Properties.Reduction.html#1874" class="Bound"
+      >q</a
+      ><a name="2010" class="Symbol"
+      >)</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" href="Definition.LogicalRelation.Properties.Reduction.html#1833" class="Bound"
+      >&#8873;u</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" class="Symbol"
+      >(</a
+      ><a name="2016" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="Definition.LogicalRelation.Properties.Reduction.html#1874" class="Bound"
+      >q</a
+      ><a name="2023" class="Symbol"
+      >)</a
+      ><a name="2024"
+      >
+</a
+      ><a name="2025" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" href="Definition.LogicalRelation.Properties.Reduction.html#2039" class="Bound"
+      >t&#8658;u</a
+      ><a name="2042"
+      > </a
+      ><a name="2043" class="Symbol"
+      >(</a
+      ><a name="2044" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" href="Definition.LogicalRelation.Properties.Reduction.html#2046" class="Bound"
+      >D</a
+      ><a name="2047" class="Symbol"
+      >)</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" class="Symbol"
+      >(</a
+      ><a name="2050" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="2052"
+      > </a
+      ><a name="2053" href="Definition.LogicalRelation.Properties.Reduction.html#2053" class="Bound"
+      >n</a
+      ><a name="2054"
+      > </a
+      ><a name="2055" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" href="Definition.LogicalRelation.Properties.Reduction.html#2057" class="Bound"
+      >&#8866;u</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2061"
+      > </a
+      ><a name="2062" href="Definition.LogicalRelation.Properties.Reduction.html#2062" class="Bound"
+      >&#8866;n</a
+      ><a name="2064"
+      > </a
+      ><a name="2065" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2066"
+      > </a
+      ><a name="2067" href="Definition.LogicalRelation.Properties.Reduction.html#2067" class="Bound"
+      >d</a
+      ><a name="2068"
+      > </a
+      ><a name="2069" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="2070"
+      > </a
+      ><a name="2071" href="Definition.LogicalRelation.Properties.Reduction.html#2071" class="Bound"
+      >natN</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" href="Definition.LogicalRelation.Properties.Reduction.html#2076" class="Bound"
+      >prop</a
+      ><a name="2080" class="Symbol"
+      >)</a
+      ><a name="2081"
+      > </a
+      ><a name="2082" class="Symbol"
+      >=</a
+      ><a name="2083"
+      >
+  </a
+      ><a name="2086" class="Keyword"
+      >let</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" href="Definition.LogicalRelation.Properties.Reduction.html#2090" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="2093"
+      >  </a
+      ><a name="2095" class="Symbol"
+      >=</a
+      ><a name="2096"
+      > </a
+      ><a name="2097" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="2104"
+      > </a
+      ><a name="2105" class="Symbol"
+      >(</a
+      ><a name="2106" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" href="Definition.LogicalRelation.Properties.Reduction.html#2046" class="Bound"
+      >D</a
+      ><a name="2111" class="Symbol"
+      >)</a
+      ><a name="2112"
+      >
+      </a
+      ><a name="2119" href="Definition.LogicalRelation.Properties.Reduction.html#2119" class="Bound"
+      >&#8866;t</a
+      ><a name="2121"
+      >   </a
+      ><a name="2124" class="Symbol"
+      >=</a
+      ><a name="2125"
+      > </a
+      ><a name="2126" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="2130"
+      > </a
+      ><a name="2131" class="Symbol"
+      >(</a
+      ><a name="2132" href="Definition.Typed.Properties.html#2884" class="Function"
+      >redFirst*Term</a
+      ><a name="2145"
+      > </a
+      ><a name="2146" href="Definition.LogicalRelation.Properties.Reduction.html#2039" class="Bound"
+      >t&#8658;u</a
+      ><a name="2149" class="Symbol"
+      >)</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" href="Definition.LogicalRelation.Properties.Reduction.html#2090" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="2154"
+      >
+      </a
+      ><a name="2161" href="Definition.LogicalRelation.Properties.Reduction.html#2161" class="Bound"
+      >t&#8658;u'</a
+      ><a name="2165"
+      > </a
+      ><a name="2166" class="Symbol"
+      >=</a
+      ><a name="2167"
+      > </a
+      ><a name="2168" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="2173"
+      > </a
+      ><a name="2174" href="Definition.LogicalRelation.Properties.Reduction.html#2039" class="Bound"
+      >t&#8658;u</a
+      ><a name="2177"
+      > </a
+      ><a name="2178" href="Definition.LogicalRelation.Properties.Reduction.html#2090" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="2181"
+      >
+  </a
+      ><a name="2184" class="Keyword"
+      >in</a
+      ><a name="2186"
+      >  </a
+      ><a name="2188" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="2190"
+      > </a
+      ><a name="2191" href="Definition.LogicalRelation.Properties.Reduction.html#2053" class="Bound"
+      >n</a
+      ><a name="2192"
+      > </a
+      ><a name="2193" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="2194"
+      > </a
+      ><a name="2195" href="Definition.LogicalRelation.Properties.Reduction.html#2119" class="Bound"
+      >&#8866;t</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2199"
+      > </a
+      ><a name="2200" href="Definition.LogicalRelation.Properties.Reduction.html#2062" class="Bound"
+      >&#8866;n</a
+      ><a name="2202"
+      > </a
+      ><a name="2203" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Definition.LogicalRelation.Properties.Reduction.html#2161" class="Bound"
+      >t&#8658;u'</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >&#8680;&#8759;*</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="Definition.LogicalRelation.Properties.Reduction.html#2067" class="Bound"
+      >d</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="2217"
+      > </a
+      ><a name="2218" href="Definition.LogicalRelation.Properties.Reduction.html#2071" class="Bound"
+      >natN</a
+      ><a name="2222"
+      > </a
+      ><a name="2223" href="Definition.LogicalRelation.Properties.Reduction.html#2076" class="Bound"
+      >prop</a
+      ><a name="2227"
+      >
+  </a
+      ><a name="2230" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2231"
+      >   </a
+      ><a name="2234" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="2237"
+      > </a
+      ><a name="2238" href="Definition.LogicalRelation.Properties.Reduction.html#2053" class="Bound"
+      >n</a
+      ><a name="2239"
+      > </a
+      ><a name="2240" href="Definition.LogicalRelation.Properties.Reduction.html#2053" class="Bound"
+      >n</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="2243"
+      > </a
+      ><a name="2244" href="Definition.LogicalRelation.Properties.Reduction.html#2119" class="Bound"
+      >&#8866;t</a
+      ><a name="2246"
+      > </a
+      ><a name="2247" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2248"
+      > </a
+      ><a name="2249" href="Definition.LogicalRelation.Properties.Reduction.html#2062" class="Bound"
+      >&#8866;n</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="Definition.LogicalRelation.Properties.Reduction.html#2161" class="Bound"
+      >t&#8658;u'</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >&#8680;&#8759;*</a
+      ><a name="2262"
+      > </a
+      ><a name="2263" href="Definition.LogicalRelation.Properties.Reduction.html#2067" class="Bound"
+      >d</a
+      ><a name="2264"
+      > </a
+      ><a name="2265" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="2268"
+      > </a
+      ><a name="2269" href="Definition.LogicalRelation.Properties.Reduction.html#2057" class="Bound"
+      >&#8866;u</a
+      ><a name="2271"
+      > </a
+      ><a name="2272" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2273"
+      > </a
+      ><a name="2274" href="Definition.LogicalRelation.Properties.Reduction.html#2062" class="Bound"
+      >&#8866;n</a
+      ><a name="2276"
+      > </a
+      ><a name="2277" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" href="Definition.LogicalRelation.Properties.Reduction.html#2067" class="Bound"
+      >d</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="2282"
+      >
+          </a
+      ><a name="2293" class="Symbol"
+      >(</a
+      ><a name="2294" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="2305"
+      > </a
+      ><a name="2306" href="Definition.LogicalRelation.Properties.Reduction.html#2161" class="Bound"
+      >t&#8658;u'</a
+      ><a name="2310" class="Symbol"
+      >)</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" class="Symbol"
+      >(</a
+      ><a name="2313" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="2329"
+      > </a
+      ><a name="2330" href="Definition.LogicalRelation.Properties.Reduction.html#2071" class="Bound"
+      >natN</a
+      ><a name="2334"
+      > </a
+      ><a name="2335" href="Definition.LogicalRelation.Properties.Reduction.html#2076" class="Bound"
+      >prop</a
+      ><a name="2339" class="Symbol"
+      >)</a
+      ><a name="2340"
+      >
+</a
+      ><a name="2341" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="2354"
+      > </a
+      ><a name="2355" href="Definition.LogicalRelation.Properties.Reduction.html#2355" class="Bound"
+      >t&#8658;u</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" class="Symbol"
+      >(</a
+      ><a name="2360" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="2363"
+      > </a
+      ><a name="2364" href="Definition.LogicalRelation.Properties.Reduction.html#2364" class="Bound"
+      >K</a
+      ><a name="2365"
+      > </a
+      ><a name="2366" href="Definition.LogicalRelation.Properties.Reduction.html#2366" class="Bound"
+      >D</a
+      ><a name="2367"
+      > </a
+      ><a name="2368" href="Definition.LogicalRelation.Properties.Reduction.html#2368" class="Bound"
+      >neK</a
+      ><a name="2371" class="Symbol"
+      >)</a
+      ><a name="2372"
+      > </a
+      ><a name="2373" href="Definition.LogicalRelation.Properties.Reduction.html#2373" class="Bound"
+      >[u]</a
+      ><a name="2376"
+      > </a
+      ><a name="2377" class="Symbol"
+      >=</a
+      ><a name="2378"
+      > </a
+      ><a name="2379" href="Definition.Typed.Properties.html#2884" class="Function"
+      >redFirst*Term</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" href="Definition.LogicalRelation.Properties.Reduction.html#2355" class="Bound"
+      >t&#8658;u</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2398"
+      > </a
+      ><a name="2399" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="2410"
+      > </a
+      ><a name="2411" href="Definition.LogicalRelation.Properties.Reduction.html#2355" class="Bound"
+      >t&#8658;u</a
+      ><a name="2414"
+      >
+</a
+      ><a name="2415" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="2428"
+      > </a
+      ><a name="2429" class="Symbol"
+      >{</a
+      ><a name="2430" href="Definition.LogicalRelation.Properties.Reduction.html#2430" class="Bound"
+      >A</a
+      ><a name="2431" class="Symbol"
+      >}</a
+      ><a name="2432"
+      > </a
+      ><a name="2433" class="Symbol"
+      >{</a
+      ><a name="2434" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="2435" class="Symbol"
+      >}</a
+      ><a name="2436"
+      > </a
+      ><a name="2437" class="Symbol"
+      >{</a
+      ><a name="2438" href="Definition.LogicalRelation.Properties.Reduction.html#2438" class="Bound"
+      >u</a
+      ><a name="2439" class="Symbol"
+      >}</a
+      ><a name="2440"
+      > </a
+      ><a name="2441" class="Symbol"
+      >{</a
+      ><a name="2442" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="2443" class="Symbol"
+      >}</a
+      ><a name="2444"
+      > </a
+      ><a name="2445" class="Symbol"
+      >{</a
+      ><a name="2446" href="Definition.LogicalRelation.Properties.Reduction.html#2446" class="Bound"
+      >&#915;</a
+      ><a name="2447" class="Symbol"
+      >}</a
+      ><a name="2448"
+      > </a
+      ><a name="2449" href="Definition.LogicalRelation.Properties.Reduction.html#2449" class="Bound"
+      >t&#8658;u</a
+      ><a name="2452"
+      > </a
+      ><a name="2453" class="Symbol"
+      >(</a
+      ><a name="2454" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="2456"
+      > </a
+      ><a name="2457" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="2458"
+      > </a
+      ><a name="2459" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="2460"
+      > </a
+      ><a name="2461" href="Definition.LogicalRelation.Properties.Reduction.html#2461" class="Bound"
+      >D</a
+      ><a name="2462"
+      > </a
+      ><a name="2463" href="Definition.LogicalRelation.Properties.Reduction.html#2463" class="Bound"
+      >&#8866;F</a
+      ><a name="2465"
+      > </a
+      ><a name="2466" href="Definition.LogicalRelation.Properties.Reduction.html#2466" class="Bound"
+      >&#8866;G</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="2472"
+      > </a
+      ><a name="2473" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="2476"
+      > </a
+      ><a name="2477" href="Definition.LogicalRelation.Properties.Reduction.html#2477" class="Bound"
+      >G-ext</a
+      ><a name="2482" class="Symbol"
+      >)</a
+      ><a name="2483"
+      >
+              </a
+      ><a name="2498" class="Symbol"
+      >(</a
+      ><a name="2499" href="Definition.LogicalRelation.Properties.Reduction.html#2499" class="Bound"
+      >proj&#8321;'</a
+      ><a name="2505"
+      > </a
+      ><a name="2506" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2507"
+      > </a
+      ><a name="2508" href="Definition.LogicalRelation.Properties.Reduction.html#2508" class="Bound"
+      >proj&#8322;'</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2516"
+      > </a
+      ><a name="2517" href="Definition.LogicalRelation.Properties.Reduction.html#2517" class="Bound"
+      >proj&#8323;'</a
+      ><a name="2523" class="Symbol"
+      >)</a
+      ><a name="2524"
+      > </a
+      ><a name="2525" class="Symbol"
+      >=</a
+      ><a name="2526"
+      >
+  </a
+      ><a name="2529" class="Keyword"
+      >let</a
+      ><a name="2532"
+      > </a
+      ><a name="2533" href="Definition.LogicalRelation.Properties.Reduction.html#2533" class="Bound"
+      >A&#8801;&#928;FG</a
+      ><a name="2538"
+      > </a
+      ><a name="2539" class="Symbol"
+      >=</a
+      ><a name="2540"
+      > </a
+      ><a name="2541" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="2548"
+      > </a
+      ><a name="2549" class="Symbol"
+      >(</a
+      ><a name="2550" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" href="Definition.LogicalRelation.Properties.Reduction.html#2461" class="Bound"
+      >D</a
+      ><a name="2555" class="Symbol"
+      >)</a
+      ><a name="2556"
+      >
+      </a
+      ><a name="2563" href="Definition.LogicalRelation.Properties.Reduction.html#2563" class="Bound"
+      >&#8866;t</a
+      ><a name="2565"
+      >    </a
+      ><a name="2569" class="Symbol"
+      >=</a
+      ><a name="2570"
+      > </a
+      ><a name="2571" href="Definition.Typed.Properties.html#2884" class="Function"
+      >redFirst*Term</a
+      ><a name="2584"
+      > </a
+      ><a name="2585" href="Definition.LogicalRelation.Properties.Reduction.html#2449" class="Bound"
+      >t&#8658;u</a
+      ><a name="2588"
+      >
+      </a
+      ><a name="2595" href="Definition.LogicalRelation.Properties.Reduction.html#2595" class="Bound"
+      >t&#8658;u'</a
+      ><a name="2599"
+      >  </a
+      ><a name="2601" class="Symbol"
+      >=</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="2608"
+      > </a
+      ><a name="2609" href="Definition.LogicalRelation.Properties.Reduction.html#2449" class="Bound"
+      >t&#8658;u</a
+      ><a name="2612"
+      > </a
+      ><a name="2613" href="Definition.LogicalRelation.Properties.Reduction.html#2533" class="Bound"
+      >A&#8801;&#928;FG</a
+      ><a name="2618"
+      >
+      </a
+      ><a name="2625" href="Definition.LogicalRelation.Properties.Reduction.html#2625" class="Bound"
+      >ta&#215;ta&#8801;ua</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" class="Symbol"
+      >:</a
+      ><a name="2635"
+      > </a
+      ><a name="2636" class="Symbol"
+      >&#8704;</a
+      ><a name="2637"
+      > </a
+      ><a name="2638" class="Symbol"
+      >{</a
+      ><a name="2639" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2640"
+      > </a
+      ><a name="2641" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2642" class="Symbol"
+      >}</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" class="Symbol"
+      >(</a
+      ><a name="2645" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2646"
+      > </a
+      ><a name="2647" class="Symbol"
+      >:</a
+      ><a name="2648"
+      > </a
+      ><a name="2649" href="Definition.LogicalRelation.Properties.Reduction.html#2446" class="Bound"
+      >&#915;</a
+      ><a name="2650"
+      > </a
+      ><a name="2651" href="Definition.Typed.Weakening.html#392" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2654" class="Symbol"
+      >)</a
+      ><a name="2655"
+      > </a
+      ><a name="2656" class="Symbol"
+      >(</a
+      ><a name="2657" href="Definition.LogicalRelation.Properties.Reduction.html#2657" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" class="Symbol"
+      >:</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="Definition.Typed.html#411" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2663"
+      > </a
+      ><a name="2664" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2665" class="Symbol"
+      >)</a
+      ><a name="2666"
+      >
+                 </a
+      ><a name="2684" class="Symbol"
+      >(</a
+      ><a name="2685" href="Definition.LogicalRelation.Properties.Reduction.html#2685" class="Bound"
+      >[a]</a
+      ><a name="2688"
+      > </a
+      ><a name="2689" class="Symbol"
+      >:</a
+      ><a name="2690"
+      > </a
+      ><a name="2691" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2695"
+      > </a
+      ><a name="2696" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="2699"
+      > </a
+      ><a name="2700" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2701"
+      > </a
+      ><a name="2702" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="2703"
+      > </a
+      ><a name="2704" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="2707"
+      > </a
+      ><a name="2708" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2709"
+      > </a
+      ><a name="2710" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="2711"
+      > </a
+      ><a name="2712" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="2713"
+      > </a
+      ><a name="2714" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2719"
+      > </a
+      ><a name="2720" href="Definition.LogicalRelation.Properties.Reduction.html#2657" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2722" class="Symbol"
+      >)</a
+      ><a name="2723"
+      >
+               </a
+      ><a name="2739" class="Symbol"
+      >&#8594;</a
+      ><a name="2740"
+      > </a
+      ><a name="2741" class="Symbol"
+      >(</a
+      ><a name="2742" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2743"
+      > </a
+      ><a name="2744" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2746"
+      > </a
+      ><a name="2747" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="2748"
+      > </a
+      ><a name="2749" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="2750"
+      > </a
+      ><a name="2751" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="2754"
+      > </a
+      ><a name="2755" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2756"
+      > </a
+      ><a name="2757" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="2758"
+      > </a
+      ><a name="2759" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="2764"
+      > </a
+      ><a name="2765" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="2772"
+      > </a
+      ><a name="2773" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2774"
+      > </a
+      ><a name="2775" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="2776"
+      > </a
+      ><a name="2777" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="2782"
+      > </a
+      ><a name="2783" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="2784"
+      > </a
+      ><a name="2785" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="2788"
+      > </a
+      ><a name="2789" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2790"
+      > </a
+      ><a name="2791" href="Definition.LogicalRelation.Properties.Reduction.html#2657" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" href="Definition.LogicalRelation.Properties.Reduction.html#2685" class="Bound"
+      >[a]</a
+      ><a name="2797" class="Symbol"
+      >)</a
+      ><a name="2798"
+      >
+               </a
+      ><a name="2814" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" class="Symbol"
+      >(</a
+      ><a name="2817" href="Definition.LogicalRelation.Properties.Reduction.html#2639" class="Bound"
+      >&#916;</a
+      ><a name="2818"
+      > </a
+      ><a name="2819" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2821"
+      > </a
+      ><a name="2822" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="2823"
+      > </a
+      ><a name="2824" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="2825"
+      > </a
+      ><a name="2826" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="2829"
+      > </a
+      ><a name="2830" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2831"
+      > </a
+      ><a name="2832" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="2833"
+      > </a
+      ><a name="2834" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2837"
+      > </a
+      ><a name="2838" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="2839"
+      > </a
+      ><a name="2840" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="2843"
+      > </a
+      ><a name="2844" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2845"
+      > </a
+      ><a name="2846" href="Definition.LogicalRelation.Properties.Reduction.html#2438" class="Bound"
+      >u</a
+      ><a name="2847"
+      > </a
+      ><a name="2848" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="2853"
+      >
+                 </a
+      ><a name="2871" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="2878"
+      > </a
+      ><a name="2879" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2880"
+      > </a
+      ><a name="2881" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Definition.LogicalRelation.Properties.Reduction.html#2641" class="Bound"
+      >a</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="2894"
+      > </a
+      ><a name="2895" href="Definition.LogicalRelation.Properties.Reduction.html#2645" class="Bound"
+      >&#961;</a
+      ><a name="2896"
+      > </a
+      ><a name="2897" href="Definition.LogicalRelation.Properties.Reduction.html#2657" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2899"
+      > </a
+      ><a name="2900" href="Definition.LogicalRelation.Properties.Reduction.html#2685" class="Bound"
+      >[a]</a
+      ><a name="2903" class="Symbol"
+      >)</a
+      ><a name="2904"
+      >
+      </a
+      ><a name="2911" href="Definition.LogicalRelation.Properties.Reduction.html#2625" class="Bound"
+      >ta&#215;ta&#8801;ua</a
+      ><a name="2919"
+      > </a
+      ><a name="2920" href="Definition.LogicalRelation.Properties.Reduction.html#2920" class="Bound"
+      >&#961;</a
+      ><a name="2921"
+      > </a
+      ><a name="2922" href="Definition.LogicalRelation.Properties.Reduction.html#2922" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2924"
+      > </a
+      ><a name="2925" href="Definition.LogicalRelation.Properties.Reduction.html#2925" class="Bound"
+      >[a]</a
+      ><a name="2928"
+      > </a
+      ><a name="2929" class="Symbol"
+      >=</a
+      ><a name="2930"
+      > </a
+      ><a name="2931" class="Keyword"
+      >let</a
+      ><a name="2934"
+      > </a
+      ><a name="2935" href="Definition.LogicalRelation.Properties.Reduction.html#2935" class="Bound"
+      >&#8866;a</a
+      ><a name="2937"
+      > </a
+      ><a name="2938" class="Symbol"
+      >=</a
+      ><a name="2939"
+      > </a
+      ><a name="2940" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" class="Symbol"
+      >(</a
+      ><a name="2956" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="2959"
+      > </a
+      ><a name="2960" href="Definition.LogicalRelation.Properties.Reduction.html#2920" class="Bound"
+      >&#961;</a
+      ><a name="2961"
+      > </a
+      ><a name="2962" href="Definition.LogicalRelation.Properties.Reduction.html#2922" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2964" class="Symbol"
+      >)</a
+      ><a name="2965"
+      > </a
+      ><a name="2966" href="Definition.LogicalRelation.Properties.Reduction.html#2925" class="Bound"
+      >[a]</a
+      ><a name="2969"
+      >
+                          </a
+      ><a name="2996" class="Keyword"
+      >in</a
+      ><a name="2998"
+      >  </a
+      ><a name="3000" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" class="Symbol"
+      >(</a
+      ><a name="3015" href="Definition.Typed.RedSteps.html#689" class="Function"
+      >app-subst*</a
+      ><a name="3025"
+      > </a
+      ><a name="3026" class="Symbol"
+      >(</a
+      ><a name="3027" href="Definition.Typed.Weakening.html#12536" class="Function"
+      >wkRed*Term</a
+      ><a name="3037"
+      > </a
+      ><a name="3038" href="Definition.LogicalRelation.Properties.Reduction.html#2920" class="Bound"
+      >&#961;</a
+      ><a name="3039"
+      > </a
+      ><a name="3040" href="Definition.LogicalRelation.Properties.Reduction.html#2922" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3042"
+      > </a
+      ><a name="3043" href="Definition.LogicalRelation.Properties.Reduction.html#2595" class="Bound"
+      >t&#8658;u'</a
+      ><a name="3047" class="Symbol"
+      >)</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" href="Definition.LogicalRelation.Properties.Reduction.html#2935" class="Bound"
+      >&#8866;a</a
+      ><a name="3051" class="Symbol"
+      >)</a
+      ><a name="3052"
+      >
+                                            </a
+      ><a name="3097" class="Symbol"
+      >(</a
+      ><a name="3098" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="3101"
+      > </a
+      ><a name="3102" href="Definition.LogicalRelation.Properties.Reduction.html#2920" class="Bound"
+      >&#961;</a
+      ><a name="3103"
+      > </a
+      ><a name="3104" href="Definition.LogicalRelation.Properties.Reduction.html#2922" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3106"
+      > </a
+      ><a name="3107" href="Definition.LogicalRelation.Properties.Reduction.html#2925" class="Bound"
+      >[a]</a
+      ><a name="3110" class="Symbol"
+      >)</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" class="Symbol"
+      >(</a
+      ><a name="3113" href="Definition.LogicalRelation.Properties.Reduction.html#2517" class="Bound"
+      >proj&#8323;'</a
+      ><a name="3119"
+      > </a
+      ><a name="3120" href="Definition.LogicalRelation.Properties.Reduction.html#2920" class="Bound"
+      >&#961;</a
+      ><a name="3121"
+      > </a
+      ><a name="3122" href="Definition.LogicalRelation.Properties.Reduction.html#2922" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3124"
+      > </a
+      ><a name="3125" href="Definition.LogicalRelation.Properties.Reduction.html#2925" class="Bound"
+      >[a]</a
+      ><a name="3128" class="Symbol"
+      >)</a
+      ><a name="3129"
+      >
+      </a
+      ><a name="3136" href="Definition.LogicalRelation.Properties.Reduction.html#3136" class="Bound"
+      >ta</a
+      ><a name="3138"
+      > </a
+      ><a name="3139" class="Symbol"
+      >:</a
+      ><a name="3140"
+      > </a
+      ><a name="3141" class="Symbol"
+      >&#8704;</a
+      ><a name="3142"
+      > </a
+      ><a name="3143" class="Symbol"
+      >{</a
+      ><a name="3144" href="Definition.LogicalRelation.Properties.Reduction.html#3144" class="Bound"
+      >&#916;</a
+      ><a name="3145"
+      > </a
+      ><a name="3146" href="Definition.LogicalRelation.Properties.Reduction.html#3146" class="Bound"
+      >a</a
+      ><a name="3147" class="Symbol"
+      >}</a
+      ><a name="3148"
+      > </a
+      ><a name="3149" class="Symbol"
+      >(</a
+      ><a name="3150" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3151"
+      > </a
+      ><a name="3152" class="Symbol"
+      >:</a
+      ><a name="3153"
+      > </a
+      ><a name="3154" href="Definition.LogicalRelation.Properties.Reduction.html#2446" class="Bound"
+      >&#915;</a
+      ><a name="3155"
+      > </a
+      ><a name="3156" href="Definition.Typed.Weakening.html#392" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="3157"
+      > </a
+      ><a name="3158" href="Definition.LogicalRelation.Properties.Reduction.html#3144" class="Bound"
+      >&#916;</a
+      ><a name="3159" class="Symbol"
+      >)</a
+      ><a name="3160"
+      > </a
+      ><a name="3161" class="Symbol"
+      >(</a
+      ><a name="3162" href="Definition.LogicalRelation.Properties.Reduction.html#3162" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3164"
+      > </a
+      ><a name="3165" class="Symbol"
+      >:</a
+      ><a name="3166"
+      > </a
+      ><a name="3167" href="Definition.Typed.html#411" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3168"
+      > </a
+      ><a name="3169" href="Definition.LogicalRelation.Properties.Reduction.html#3144" class="Bound"
+      >&#916;</a
+      ><a name="3170" class="Symbol"
+      >)</a
+      ><a name="3171"
+      >
+           </a
+      ><a name="3183" class="Symbol"
+      >(</a
+      ><a name="3184" href="Definition.LogicalRelation.Properties.Reduction.html#3184" class="Bound"
+      >[a]</a
+      ><a name="3187"
+      > </a
+      ><a name="3188" class="Symbol"
+      >:</a
+      ><a name="3189"
+      > </a
+      ><a name="3190" href="Definition.LogicalRelation.Properties.Reduction.html#3144" class="Bound"
+      >&#916;</a
+      ><a name="3191"
+      > </a
+      ><a name="3192" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3194"
+      > </a
+      ><a name="3195" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3196"
+      > </a
+      ><a name="3197" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="3198"
+      > </a
+      ><a name="3199" href="Definition.LogicalRelation.Properties.Reduction.html#3146" class="Bound"
+      >a</a
+      ><a name="3200"
+      > </a
+      ><a name="3201" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="3202"
+      > </a
+      ><a name="3203" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3206"
+      > </a
+      ><a name="3207" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3208"
+      > </a
+      ><a name="3209" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="3210"
+      > </a
+      ><a name="3211" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="3212"
+      > </a
+      ><a name="3213" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="3216"
+      > </a
+      ><a name="3217" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3218"
+      > </a
+      ><a name="3219" href="Definition.LogicalRelation.Properties.Reduction.html#3162" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3221" class="Symbol"
+      >)</a
+      ><a name="3222"
+      >
+         </a
+      ><a name="3232" class="Symbol"
+      >&#8594;</a
+      ><a name="3233"
+      > </a
+      ><a name="3234" class="Symbol"
+      >(</a
+      ><a name="3235" href="Definition.LogicalRelation.Properties.Reduction.html#3144" class="Bound"
+      >&#916;</a
+      ><a name="3236"
+      > </a
+      ><a name="3237" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3239"
+      > </a
+      ><a name="3240" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3241"
+      > </a
+      ><a name="3242" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="3243"
+      > </a
+      ><a name="3244" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3247"
+      > </a
+      ><a name="3248" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3249"
+      > </a
+      ><a name="3250" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="3251"
+      > </a
+      ><a name="3252" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3253"
+      > </a
+      ><a name="3254" href="Definition.LogicalRelation.Properties.Reduction.html#3146" class="Bound"
+      >a</a
+      ><a name="3255"
+      > </a
+      ><a name="3256" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="3257"
+      > </a
+      ><a name="3258" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="3265"
+      > </a
+      ><a name="3266" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3267"
+      > </a
+      ><a name="3268" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="3269"
+      > </a
+      ><a name="3270" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="3271"
+      > </a
+      ><a name="3272" href="Definition.LogicalRelation.Properties.Reduction.html#3146" class="Bound"
+      >a</a
+      ><a name="3273"
+      > </a
+      ><a name="3274" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="3277"
+      > </a
+      ><a name="3278" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="3281"
+      > </a
+      ><a name="3282" href="Definition.LogicalRelation.Properties.Reduction.html#3150" class="Bound"
+      >&#961;</a
+      ><a name="3283"
+      > </a
+      ><a name="3284" href="Definition.LogicalRelation.Properties.Reduction.html#3162" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" href="Definition.LogicalRelation.Properties.Reduction.html#3184" class="Bound"
+      >[a]</a
+      ><a name="3290" class="Symbol"
+      >)</a
+      ><a name="3291"
+      >
+      </a
+      ><a name="3298" href="Definition.LogicalRelation.Properties.Reduction.html#3136" class="Bound"
+      >ta</a
+      ><a name="3300"
+      > </a
+      ><a name="3301" href="Definition.LogicalRelation.Properties.Reduction.html#3301" class="Bound"
+      >&#961;</a
+      ><a name="3302"
+      > </a
+      ><a name="3303" href="Definition.LogicalRelation.Properties.Reduction.html#3303" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3305"
+      > </a
+      ><a name="3306" href="Definition.LogicalRelation.Properties.Reduction.html#3306" class="Bound"
+      >[a]</a
+      ><a name="3309"
+      > </a
+      ><a name="3310" class="Symbol"
+      >=</a
+      ><a name="3311"
+      > </a
+      ><a name="3312" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="3317"
+      > </a
+      ><a name="3318" class="Symbol"
+      >(</a
+      ><a name="3319" href="Definition.LogicalRelation.Properties.Reduction.html#2625" class="Bound"
+      >ta&#215;ta&#8801;ua</a
+      ><a name="3327"
+      > </a
+      ><a name="3328" href="Definition.LogicalRelation.Properties.Reduction.html#3301" class="Bound"
+      >&#961;</a
+      ><a name="3329"
+      > </a
+      ><a name="3330" href="Definition.LogicalRelation.Properties.Reduction.html#3303" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3332"
+      > </a
+      ><a name="3333" href="Definition.LogicalRelation.Properties.Reduction.html#3306" class="Bound"
+      >[a]</a
+      ><a name="3336" class="Symbol"
+      >)</a
+      ><a name="3337"
+      >
+      </a
+      ><a name="3344" href="Definition.LogicalRelation.Properties.Reduction.html#3344" class="Bound"
+      >ta&#8801;ua</a
+      ><a name="3349"
+      > </a
+      ><a name="3350" class="Symbol"
+      >:</a
+      ><a name="3351"
+      > </a
+      ><a name="3352" class="Symbol"
+      >&#8704;</a
+      ><a name="3353"
+      > </a
+      ><a name="3354" class="Symbol"
+      >{</a
+      ><a name="3355" href="Definition.LogicalRelation.Properties.Reduction.html#3355" class="Bound"
+      >&#916;</a
+      ><a name="3356"
+      > </a
+      ><a name="3357" href="Definition.LogicalRelation.Properties.Reduction.html#3357" class="Bound"
+      >a</a
+      ><a name="3358" class="Symbol"
+      >}</a
+      ><a name="3359"
+      > </a
+      ><a name="3360" class="Symbol"
+      >(</a
+      ><a name="3361" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3362"
+      > </a
+      ><a name="3363" class="Symbol"
+      >:</a
+      ><a name="3364"
+      > </a
+      ><a name="3365" href="Definition.LogicalRelation.Properties.Reduction.html#2446" class="Bound"
+      >&#915;</a
+      ><a name="3366"
+      > </a
+      ><a name="3367" href="Definition.Typed.Weakening.html#392" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="3368"
+      > </a
+      ><a name="3369" href="Definition.LogicalRelation.Properties.Reduction.html#3355" class="Bound"
+      >&#916;</a
+      ><a name="3370" class="Symbol"
+      >)</a
+      ><a name="3371"
+      > </a
+      ><a name="3372" class="Symbol"
+      >(</a
+      ><a name="3373" href="Definition.LogicalRelation.Properties.Reduction.html#3373" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3375"
+      > </a
+      ><a name="3376" class="Symbol"
+      >:</a
+      ><a name="3377"
+      > </a
+      ><a name="3378" href="Definition.Typed.html#411" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3379"
+      > </a
+      ><a name="3380" href="Definition.LogicalRelation.Properties.Reduction.html#3355" class="Bound"
+      >&#916;</a
+      ><a name="3381" class="Symbol"
+      >)</a
+      ><a name="3382"
+      >
+              </a
+      ><a name="3397" class="Symbol"
+      >(</a
+      ><a name="3398" href="Definition.LogicalRelation.Properties.Reduction.html#3398" class="Bound"
+      >[a]</a
+      ><a name="3401"
+      > </a
+      ><a name="3402" class="Symbol"
+      >:</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" href="Definition.LogicalRelation.Properties.Reduction.html#3355" class="Bound"
+      >&#916;</a
+      ><a name="3405"
+      > </a
+      ><a name="3406" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3408"
+      > </a
+      ><a name="3409" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3410"
+      > </a
+      ><a name="3411" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="3412"
+      > </a
+      ><a name="3413" href="Definition.LogicalRelation.Properties.Reduction.html#3357" class="Bound"
+      >a</a
+      ><a name="3414"
+      > </a
+      ><a name="3415" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="3416"
+      > </a
+      ><a name="3417" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="3424"
+      > </a
+      ><a name="3425" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="3426"
+      > </a
+      ><a name="3427" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="3430"
+      > </a
+      ><a name="3431" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3432"
+      > </a
+      ><a name="3433" href="Definition.LogicalRelation.Properties.Reduction.html#3373" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3435" class="Symbol"
+      >)</a
+      ><a name="3436"
+      >
+            </a
+      ><a name="3449" class="Symbol"
+      >&#8594;</a
+      ><a name="3450"
+      > </a
+      ><a name="3451" class="Symbol"
+      >(</a
+      ><a name="3452" href="Definition.LogicalRelation.Properties.Reduction.html#3355" class="Bound"
+      >&#916;</a
+      ><a name="3453"
+      > </a
+      ><a name="3454" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3456"
+      > </a
+      ><a name="3457" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3458"
+      > </a
+      ><a name="3459" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="3460"
+      > </a
+      ><a name="3461" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3464"
+      > </a
+      ><a name="3465" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3466"
+      > </a
+      ><a name="3467" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="3468"
+      > </a
+      ><a name="3469" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3470"
+      > </a
+      ><a name="3471" href="Definition.LogicalRelation.Properties.Reduction.html#3357" class="Bound"
+      >a</a
+      ><a name="3472"
+      > </a
+      ><a name="3473" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3478"
+      > </a
+      ><a name="3479" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3480"
+      > </a
+      ><a name="3481" href="Definition.LogicalRelation.Properties.Reduction.html#2438" class="Bound"
+      >u</a
+      ><a name="3482"
+      > </a
+      ><a name="3483" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3484"
+      > </a
+      ><a name="3485" href="Definition.LogicalRelation.Properties.Reduction.html#3357" class="Bound"
+      >a</a
+      ><a name="3486"
+      > </a
+      ><a name="3487" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="3488"
+      >
+              </a
+      ><a name="3503" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="3510"
+      > </a
+      ><a name="3511" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3512"
+      > </a
+      ><a name="3513" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="3514"
+      > </a
+      ><a name="3515" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="3516"
+      > </a
+      ><a name="3517" href="Definition.LogicalRelation.Properties.Reduction.html#3357" class="Bound"
+      >a</a
+      ><a name="3518"
+      > </a
+      ><a name="3519" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="3520"
+      > </a
+      ><a name="3521" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="3522"
+      > </a
+      ><a name="3523" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="3526"
+      > </a
+      ><a name="3527" href="Definition.LogicalRelation.Properties.Reduction.html#3361" class="Bound"
+      >&#961;</a
+      ><a name="3528"
+      > </a
+      ><a name="3529" href="Definition.LogicalRelation.Properties.Reduction.html#3373" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3531"
+      > </a
+      ><a name="3532" href="Definition.LogicalRelation.Properties.Reduction.html#3398" class="Bound"
+      >[a]</a
+      ><a name="3535" class="Symbol"
+      >)</a
+      ><a name="3536"
+      >
+      </a
+      ><a name="3543" href="Definition.LogicalRelation.Properties.Reduction.html#3344" class="Bound"
+      >ta&#8801;ua</a
+      ><a name="3548"
+      > </a
+      ><a name="3549" href="Definition.LogicalRelation.Properties.Reduction.html#3549" class="Bound"
+      >&#961;</a
+      ><a name="3550"
+      > </a
+      ><a name="3551" href="Definition.LogicalRelation.Properties.Reduction.html#3551" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3553"
+      > </a
+      ><a name="3554" href="Definition.LogicalRelation.Properties.Reduction.html#3554" class="Bound"
+      >[a]</a
+      ><a name="3557"
+      > </a
+      ><a name="3558" class="Symbol"
+      >=</a
+      ><a name="3559"
+      > </a
+      ><a name="3560" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="3565"
+      > </a
+      ><a name="3566" class="Symbol"
+      >(</a
+      ><a name="3567" href="Definition.LogicalRelation.Properties.Reduction.html#2625" class="Bound"
+      >ta&#215;ta&#8801;ua</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" href="Definition.LogicalRelation.Properties.Reduction.html#3549" class="Bound"
+      >&#961;</a
+      ><a name="3577"
+      > </a
+      ><a name="3578" href="Definition.LogicalRelation.Properties.Reduction.html#3551" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3580"
+      > </a
+      ><a name="3581" href="Definition.LogicalRelation.Properties.Reduction.html#3554" class="Bound"
+      >[a]</a
+      ><a name="3584" class="Symbol"
+      >)</a
+      ><a name="3585"
+      >
+      </a
+      ><a name="3592" href="Definition.LogicalRelation.Properties.Reduction.html#3592" class="Bound"
+      >ta&#8801;tb</a
+      ><a name="3597"
+      > </a
+      ><a name="3598" class="Symbol"
+      >:</a
+      ><a name="3599"
+      > </a
+      ><a name="3600" class="Symbol"
+      >&#8704;</a
+      ><a name="3601"
+      > </a
+      ><a name="3602" class="Symbol"
+      >{</a
+      ><a name="3603" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3604"
+      > </a
+      ><a name="3605" href="Definition.LogicalRelation.Properties.Reduction.html#3605" class="Bound"
+      >a</a
+      ><a name="3606"
+      > </a
+      ><a name="3607" href="Definition.LogicalRelation.Properties.Reduction.html#3607" class="Bound"
+      >b</a
+      ><a name="3608" class="Symbol"
+      >}</a
+      ><a name="3609"
+      > </a
+      ><a name="3610" class="Symbol"
+      >(</a
+      ><a name="3611" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3612"
+      > </a
+      ><a name="3613" class="Symbol"
+      >:</a
+      ><a name="3614"
+      > </a
+      ><a name="3615" href="Definition.LogicalRelation.Properties.Reduction.html#2446" class="Bound"
+      >&#915;</a
+      ><a name="3616"
+      > </a
+      ><a name="3617" href="Definition.Typed.Weakening.html#392" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="3618"
+      > </a
+      ><a name="3619" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3620" class="Symbol"
+      >)</a
+      ><a name="3621"
+      > </a
+      ><a name="3622" class="Symbol"
+      >(</a
+      ><a name="3623" href="Definition.LogicalRelation.Properties.Reduction.html#3623" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3625"
+      > </a
+      ><a name="3626" class="Symbol"
+      >:</a
+      ><a name="3627"
+      > </a
+      ><a name="3628" href="Definition.Typed.html#411" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3629"
+      > </a
+      ><a name="3630" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3631" class="Symbol"
+      >)</a
+      ><a name="3632"
+      >
+              </a
+      ><a name="3647" class="Symbol"
+      >(</a
+      ><a name="3648" href="Definition.LogicalRelation.Properties.Reduction.html#3648" class="Bound"
+      >[a]</a
+      ><a name="3651"
+      > </a
+      ><a name="3652" class="Symbol"
+      >:</a
+      ><a name="3653"
+      > </a
+      ><a name="3654" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3655"
+      > </a
+      ><a name="3656" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3658"
+      > </a
+      ><a name="3659" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3660"
+      > </a
+      ><a name="3661" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="3662"
+      > </a
+      ><a name="3663" href="Definition.LogicalRelation.Properties.Reduction.html#3605" class="Bound"
+      >a</a
+      ><a name="3664"
+      > </a
+      ><a name="3665" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="3666"
+      > </a
+      ><a name="3667" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3670"
+      > </a
+      ><a name="3671" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3672"
+      > </a
+      ><a name="3673" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="3674"
+      > </a
+      ><a name="3675" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="3676"
+      > </a
+      ><a name="3677" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="3680"
+      > </a
+      ><a name="3681" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3682"
+      > </a
+      ><a name="3683" href="Definition.LogicalRelation.Properties.Reduction.html#3623" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3685" class="Symbol"
+      >)</a
+      ><a name="3686"
+      >
+              </a
+      ><a name="3701" class="Symbol"
+      >(</a
+      ><a name="3702" href="Definition.LogicalRelation.Properties.Reduction.html#3702" class="Bound"
+      >[b]</a
+      ><a name="3705"
+      > </a
+      ><a name="3706" class="Symbol"
+      >:</a
+      ><a name="3707"
+      > </a
+      ><a name="3708" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3709"
+      > </a
+      ><a name="3710" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3712"
+      > </a
+      ><a name="3713" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3714"
+      > </a
+      ><a name="3715" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="3716"
+      > </a
+      ><a name="3717" href="Definition.LogicalRelation.Properties.Reduction.html#3607" class="Bound"
+      >b</a
+      ><a name="3718"
+      > </a
+      ><a name="3719" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="3720"
+      > </a
+      ><a name="3721" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3724"
+      > </a
+      ><a name="3725" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3726"
+      > </a
+      ><a name="3727" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="3728"
+      > </a
+      ><a name="3729" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="3730"
+      > </a
+      ><a name="3731" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="3734"
+      > </a
+      ><a name="3735" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3736"
+      > </a
+      ><a name="3737" href="Definition.LogicalRelation.Properties.Reduction.html#3623" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3739" class="Symbol"
+      >)</a
+      ><a name="3740"
+      >
+              </a
+      ><a name="3755" class="Symbol"
+      >(</a
+      ><a name="3756" href="Definition.LogicalRelation.Properties.Reduction.html#3756" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="3761"
+      > </a
+      ><a name="3762" class="Symbol"
+      >:</a
+      ><a name="3763"
+      > </a
+      ><a name="3764" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3765"
+      > </a
+      ><a name="3766" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3768"
+      > </a
+      ><a name="3769" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3770"
+      > </a
+      ><a name="3771" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="3772"
+      > </a
+      ><a name="3773" href="Definition.LogicalRelation.Properties.Reduction.html#3605" class="Bound"
+      >a</a
+      ><a name="3774"
+      > </a
+      ><a name="3775" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="3776"
+      > </a
+      ><a name="3777" href="Definition.LogicalRelation.Properties.Reduction.html#3607" class="Bound"
+      >b</a
+      ><a name="3778"
+      > </a
+      ><a name="3779" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="3780"
+      > </a
+      ><a name="3781" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3784"
+      > </a
+      ><a name="3785" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3786"
+      > </a
+      ><a name="3787" href="Definition.LogicalRelation.Properties.Reduction.html#2457" class="Bound"
+      >F</a
+      ><a name="3788"
+      > </a
+      ><a name="3789" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="3790"
+      > </a
+      ><a name="3791" href="Definition.LogicalRelation.Properties.Reduction.html#2469" class="Bound"
+      >[F]</a
+      ><a name="3794"
+      > </a
+      ><a name="3795" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3796"
+      > </a
+      ><a name="3797" href="Definition.LogicalRelation.Properties.Reduction.html#3623" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3799" class="Symbol"
+      >)</a
+      ><a name="3800"
+      >
+            </a
+      ><a name="3813" class="Symbol"
+      >&#8594;</a
+      ><a name="3814"
+      > </a
+      ><a name="3815" class="Symbol"
+      >(</a
+      ><a name="3816" href="Definition.LogicalRelation.Properties.Reduction.html#3603" class="Bound"
+      >&#916;</a
+      ><a name="3817"
+      > </a
+      ><a name="3818" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3820"
+      > </a
+      ><a name="3821" href="Definition.LogicalRelation.Properties.Reduction.html#2442" class="Bound"
+      >l</a
+      ><a name="3822"
+      > </a
+      ><a name="3823" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="3824"
+      > </a
+      ><a name="3825" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3828"
+      > </a
+      ><a name="3829" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3830"
+      > </a
+      ><a name="3831" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="3832"
+      > </a
+      ><a name="3833" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3834"
+      > </a
+      ><a name="3835" href="Definition.LogicalRelation.Properties.Reduction.html#3605" class="Bound"
+      >a</a
+      ><a name="3836"
+      > </a
+      ><a name="3837" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="3838"
+      > </a
+      ><a name="3839" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="3842"
+      > </a
+      ><a name="3843" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3844"
+      > </a
+      ><a name="3845" href="Definition.LogicalRelation.Properties.Reduction.html#2434" class="Bound"
+      >t</a
+      ><a name="3846"
+      > </a
+      ><a name="3847" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3848"
+      > </a
+      ><a name="3849" href="Definition.LogicalRelation.Properties.Reduction.html#3607" class="Bound"
+      >b</a
+      ><a name="3850"
+      > </a
+      ><a name="3851" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="3852"
+      >
+              </a
+      ><a name="3867" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="3874"
+      > </a
+      ><a name="3875" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3876"
+      > </a
+      ><a name="3877" href="Definition.LogicalRelation.Properties.Reduction.html#2459" class="Bound"
+      >G</a
+      ><a name="3878"
+      > </a
+      ><a name="3879" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="3880"
+      > </a
+      ><a name="3881" href="Definition.LogicalRelation.Properties.Reduction.html#3605" class="Bound"
+      >a</a
+      ><a name="3882"
+      > </a
+      ><a name="3883" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="3884"
+      > </a
+      ><a name="3885" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="3886"
+      > </a
+      ><a name="3887" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="3890"
+      > </a
+      ><a name="3891" href="Definition.LogicalRelation.Properties.Reduction.html#3611" class="Bound"
+      >&#961;</a
+      ><a name="3892"
+      > </a
+      ><a name="3893" href="Definition.LogicalRelation.Properties.Reduction.html#3623" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3895"
+      > </a
+      ><a name="3896" href="Definition.LogicalRelation.Properties.Reduction.html#3648" class="Bound"
+      >[a]</a
+      ><a name="3899" class="Symbol"
+      >)</a
+      ><a name="3900"
+      >
+      </a
+      ><a name="3907" href="Definition.LogicalRelation.Properties.Reduction.html#3592" class="Bound"
+      >ta&#8801;tb</a
+      ><a name="3912"
+      > </a
+      ><a name="3913" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3917"
+      > </a
+      ><a name="3918" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="3921"
+      > </a
+      ><a name="3922" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="3925"
+      > </a
+      ><a name="3926" href="Definition.LogicalRelation.Properties.Reduction.html#3926" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="3931"
+      > </a
+      ><a name="3932" class="Symbol"
+      >=</a
+      ><a name="3933"
+      >
+        </a
+      ><a name="3942" href="Definition.LogicalRelation.Properties.Transitivity.html#5749" class="Function"
+      >transEqTerm</a
+      ><a name="3953"
+      > </a
+      ><a name="3954" class="Symbol"
+      >(</a
+      ><a name="3955" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="3958"
+      > </a
+      ><a name="3959" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="3960"
+      > </a
+      ><a name="3961" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3963"
+      > </a
+      ><a name="3964" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="3967" class="Symbol"
+      >)</a
+      ><a name="3968"
+      > </a
+      ><a name="3969" class="Symbol"
+      >(</a
+      ><a name="3970" href="Definition.LogicalRelation.Properties.Reduction.html#3344" class="Bound"
+      >ta&#8801;ua</a
+      ><a name="3975"
+      > </a
+      ><a name="3976" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="3977"
+      > </a
+      ><a name="3978" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3980"
+      > </a
+      ><a name="3981" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="3984" class="Symbol"
+      >)</a
+      ><a name="3985"
+      >
+          </a
+      ><a name="3996" class="Symbol"
+      >(</a
+      ><a name="3997" href="Definition.LogicalRelation.Properties.Transitivity.html#5749" class="Function"
+      >transEqTerm</a
+      ><a name="4008"
+      > </a
+      ><a name="4009" class="Symbol"
+      >(</a
+      ><a name="4010" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="4013"
+      > </a
+      ><a name="4014" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4015"
+      > </a
+      ><a name="4016" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4018"
+      > </a
+      ><a name="4019" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="4022" class="Symbol"
+      >)</a
+      ><a name="4023"
+      > </a
+      ><a name="4024" class="Symbol"
+      >(</a
+      ><a name="4025" href="Definition.LogicalRelation.Properties.Reduction.html#2508" class="Bound"
+      >proj&#8322;'</a
+      ><a name="4031"
+      > </a
+      ><a name="4032" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4033"
+      > </a
+      ><a name="4034" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4036"
+      > </a
+      ><a name="4037" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="4040"
+      > </a
+      ><a name="4041" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="4044"
+      > </a
+      ><a name="4045" href="Definition.LogicalRelation.Properties.Reduction.html#3926" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="4050" class="Symbol"
+      >)</a
+      ><a name="4051"
+      >
+            </a
+      ><a name="4064" class="Symbol"
+      >(</a
+      ><a name="4065" href="Definition.LogicalRelation.Properties.Conversion.html#9203" class="Function"
+      >convEqTerm&#8322;</a
+      ><a name="4076"
+      > </a
+      ><a name="4077" class="Symbol"
+      >(</a
+      ><a name="4078" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="4081"
+      > </a
+      ><a name="4082" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4083"
+      > </a
+      ><a name="4084" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4086"
+      > </a
+      ><a name="4087" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="4090" class="Symbol"
+      >)</a
+      ><a name="4091"
+      > </a
+      ><a name="4092" class="Symbol"
+      >(</a
+      ><a name="4093" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="4096"
+      > </a
+      ><a name="4097" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4098"
+      > </a
+      ><a name="4099" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4101"
+      > </a
+      ><a name="4102" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="4105" class="Symbol"
+      >)</a
+      ><a name="4106"
+      >
+                         </a
+      ><a name="4132" class="Symbol"
+      >(</a
+      ><a name="4133" href="Definition.LogicalRelation.Properties.Reduction.html#2477" class="Bound"
+      >G-ext</a
+      ><a name="4138"
+      > </a
+      ><a name="4139" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4140"
+      > </a
+      ><a name="4141" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4143"
+      > </a
+      ><a name="4144" href="Definition.LogicalRelation.Properties.Reduction.html#3918" class="Bound"
+      >[a]</a
+      ><a name="4147"
+      > </a
+      ><a name="4148" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="4151"
+      > </a
+      ><a name="4152" href="Definition.LogicalRelation.Properties.Reduction.html#3926" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="4157" class="Symbol"
+      >)</a
+      ><a name="4158"
+      >
+                         </a
+      ><a name="4184" class="Symbol"
+      >(</a
+      ><a name="4185" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="4194"
+      > </a
+      ><a name="4195" class="Symbol"
+      >(</a
+      ><a name="4196" href="Definition.LogicalRelation.Properties.Reduction.html#2473" class="Bound"
+      >[G]</a
+      ><a name="4199"
+      > </a
+      ><a name="4200" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4201"
+      > </a
+      ><a name="4202" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4204"
+      > </a
+      ><a name="4205" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="4208" class="Symbol"
+      >)</a
+      ><a name="4209"
+      > </a
+      ><a name="4210" class="Symbol"
+      >(</a
+      ><a name="4211" href="Definition.LogicalRelation.Properties.Reduction.html#3344" class="Bound"
+      >ta&#8801;ua</a
+      ><a name="4216"
+      > </a
+      ><a name="4217" href="Definition.LogicalRelation.Properties.Reduction.html#3913" class="Bound"
+      >&#961;</a
+      ><a name="4218"
+      > </a
+      ><a name="4219" href="Definition.LogicalRelation.Properties.Reduction.html#3915" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="4221"
+      > </a
+      ><a name="4222" href="Definition.LogicalRelation.Properties.Reduction.html#3922" class="Bound"
+      >[b]</a
+      ><a name="4225" class="Symbol"
+      >))))</a
+      ><a name="4229"
+      >
+  </a
+      ><a name="4232" class="Keyword"
+      >in</a
+      ><a name="4234"
+      >  </a
+      ><a name="4236" class="Symbol"
+      >(</a
+      ><a name="4237" href="Definition.LogicalRelation.Properties.Reduction.html#2563" class="Bound"
+      >&#8866;t</a
+      ><a name="4239"
+      > </a
+      ><a name="4240" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4241"
+      > </a
+      ><a name="4242" href="Definition.LogicalRelation.Properties.Reduction.html#3592" class="Bound"
+      >ta&#8801;tb</a
+      ><a name="4247"
+      > </a
+      ><a name="4248" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4249"
+      > </a
+      ><a name="4250" href="Definition.LogicalRelation.Properties.Reduction.html#3136" class="Bound"
+      >ta</a
+      ><a name="4252" class="Symbol"
+      >)</a
+      ><a name="4253"
+      >
+  </a
+      ><a name="4256" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4257"
+      >   </a
+      ><a name="4260" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="4271"
+      > </a
+      ><a name="4272" href="Definition.LogicalRelation.Properties.Reduction.html#2449" class="Bound"
+      >t&#8658;u</a
+      ><a name="4275"
+      > </a
+      ><a name="4276" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4277"
+      > </a
+      ><a name="4278" class="Symbol"
+      >(</a
+      ><a name="4279" href="Definition.LogicalRelation.Properties.Reduction.html#2563" class="Bound"
+      >&#8866;t</a
+      ><a name="4281"
+      > </a
+      ><a name="4282" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4283"
+      > </a
+      ><a name="4284" href="Definition.LogicalRelation.Properties.Reduction.html#3592" class="Bound"
+      >ta&#8801;tb</a
+      ><a name="4289"
+      > </a
+      ><a name="4290" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4291"
+      > </a
+      ><a name="4292" href="Definition.LogicalRelation.Properties.Reduction.html#3136" class="Bound"
+      >ta</a
+      ><a name="4294" class="Symbol"
+      >)</a
+      ><a name="4295"
+      > </a
+      ><a name="4296" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4297"
+      > </a
+      ><a name="4298" class="Symbol"
+      >(</a
+      ><a name="4299" href="Definition.LogicalRelation.Properties.Reduction.html#2499" class="Bound"
+      >proj&#8321;'</a
+      ><a name="4305"
+      > </a
+      ><a name="4306" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4307"
+      > </a
+      ><a name="4308" href="Definition.LogicalRelation.Properties.Reduction.html#2508" class="Bound"
+      >proj&#8322;'</a
+      ><a name="4314"
+      > </a
+      ><a name="4315" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4316"
+      > </a
+      ><a name="4317" href="Definition.LogicalRelation.Properties.Reduction.html#2517" class="Bound"
+      >proj&#8323;'</a
+      ><a name="4323" class="Symbol"
+      >)</a
+      ><a name="4324"
+      > </a
+      ><a name="4325" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4326"
+      > </a
+      ><a name="4327" href="Definition.LogicalRelation.Properties.Reduction.html#3344" class="Bound"
+      >ta&#8801;ua</a
+      ><a name="4332"
+      >
+</a
+      ><a name="4333" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="4346"
+      > </a
+      ><a name="4347" href="Definition.LogicalRelation.Properties.Reduction.html#4347" class="Bound"
+      >t&#8658;u</a
+      ><a name="4350"
+      > </a
+      ><a name="4351" class="Symbol"
+      >(</a
+      ><a name="4352" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="4355"
+      > </a
+      ><a name="4356" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="4359"
+      > </a
+      ><a name="4360" href="Definition.LogicalRelation.Properties.Reduction.html#4360" class="Bound"
+      >x</a
+      ><a name="4361" class="Symbol"
+      >)</a
+      ><a name="4362"
+      > </a
+      ><a name="4363" href="Definition.LogicalRelation.Properties.Reduction.html#4363" class="Bound"
+      >[u]</a
+      ><a name="4366"
+      > </a
+      ><a name="4367" class="Symbol"
+      >=</a
+      ><a name="4368"
+      > </a
+      ><a name="4369" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="4382"
+      > </a
+      ><a name="4383" href="Definition.LogicalRelation.Properties.Reduction.html#4347" class="Bound"
+      >t&#8658;u</a
+      ><a name="4386"
+      > </a
+      ><a name="4387" href="Definition.LogicalRelation.Properties.Reduction.html#4360" class="Bound"
+      >x</a
+      ><a name="4388"
+      > </a
+      ><a name="4389" href="Definition.LogicalRelation.Properties.Reduction.html#4363" class="Bound"
+      >[u]</a
+      ><a name="4392"
+      >
+
+</a
+      ><a name="4394" href="Definition.LogicalRelation.Properties.Reduction.html#4394" class="Function"
+      >redSubst</a
+      ><a name="4402"
+      > </a
+      ><a name="4403" class="Symbol"
+      >:</a
+      ><a name="4404"
+      > </a
+      ><a name="4405" class="Symbol"
+      >&#8704;</a
+      ><a name="4406"
+      > </a
+      ><a name="4407" class="Symbol"
+      >{</a
+      ><a name="4408" href="Definition.LogicalRelation.Properties.Reduction.html#4408" class="Bound"
+      >A</a
+      ><a name="4409"
+      > </a
+      ><a name="4410" href="Definition.LogicalRelation.Properties.Reduction.html#4410" class="Bound"
+      >B</a
+      ><a name="4411"
+      > </a
+      ><a name="4412" href="Definition.LogicalRelation.Properties.Reduction.html#4412" class="Bound"
+      >l</a
+      ><a name="4413"
+      > </a
+      ><a name="4414" href="Definition.LogicalRelation.Properties.Reduction.html#4414" class="Bound"
+      >&#915;</a
+      ><a name="4415" class="Symbol"
+      >}</a
+      ><a name="4416"
+      >
+         </a
+      ><a name="4426" class="Symbol"
+      >&#8594;</a
+      ><a name="4427"
+      > </a
+      ><a name="4428" href="Definition.LogicalRelation.Properties.Reduction.html#4414" class="Bound"
+      >&#915;</a
+      ><a name="4429"
+      > </a
+      ><a name="4430" href="Definition.Typed.html#5772" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="4431"
+      > </a
+      ><a name="4432" href="Definition.LogicalRelation.Properties.Reduction.html#4408" class="Bound"
+      >A</a
+      ><a name="4433"
+      > </a
+      ><a name="4434" href="Definition.Typed.html#5772" class="Datatype Operator"
+      >&#8658;</a
+      ><a name="4435"
+      > </a
+      ><a name="4436" href="Definition.LogicalRelation.Properties.Reduction.html#4410" class="Bound"
+      >B</a
+      ><a name="4437"
+      >
+         </a
+      ><a name="4447" class="Symbol"
+      >&#8594;</a
+      ><a name="4448"
+      > </a
+      ><a name="4449" href="Definition.LogicalRelation.Properties.Reduction.html#4414" class="Bound"
+      >&#915;</a
+      ><a name="4450"
+      > </a
+      ><a name="4451" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4453"
+      > </a
+      ><a name="4454" href="Definition.LogicalRelation.Properties.Reduction.html#4412" class="Bound"
+      >l</a
+      ><a name="4455"
+      > </a
+      ><a name="4456" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="4457"
+      > </a
+      ><a name="4458" href="Definition.LogicalRelation.Properties.Reduction.html#4410" class="Bound"
+      >B</a
+      ><a name="4459"
+      >
+         </a
+      ><a name="4469" class="Symbol"
+      >&#8594;</a
+      ><a name="4470"
+      > </a
+      ><a name="4471" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="4472"
+      > </a
+      ><a name="4473" class="Symbol"
+      >&#955;</a
+      ><a name="4474"
+      > </a
+      ><a name="4475" class="Symbol"
+      >(</a
+      ><a name="4476" href="Definition.LogicalRelation.Properties.Reduction.html#4476" class="Bound"
+      >[A]</a
+      ><a name="4479"
+      > </a
+      ><a name="4480" class="Symbol"
+      >:</a
+      ><a name="4481"
+      > </a
+      ><a name="4482" href="Definition.LogicalRelation.Properties.Reduction.html#4414" class="Bound"
+      >&#915;</a
+      ><a name="4483"
+      > </a
+      ><a name="4484" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4486"
+      > </a
+      ><a name="4487" href="Definition.LogicalRelation.Properties.Reduction.html#4412" class="Bound"
+      >l</a
+      ><a name="4488"
+      > </a
+      ><a name="4489" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="4490"
+      > </a
+      ><a name="4491" href="Definition.LogicalRelation.Properties.Reduction.html#4408" class="Bound"
+      >A</a
+      ><a name="4492" class="Symbol"
+      >)</a
+      ><a name="4493"
+      >
+         </a
+      ><a name="4503" class="Symbol"
+      >&#8594;</a
+      ><a name="4504"
+      > </a
+      ><a name="4505" href="Definition.LogicalRelation.Properties.Reduction.html#4414" class="Bound"
+      >&#915;</a
+      ><a name="4506"
+      > </a
+      ><a name="4507" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4509"
+      > </a
+      ><a name="4510" href="Definition.LogicalRelation.Properties.Reduction.html#4412" class="Bound"
+      >l</a
+      ><a name="4511"
+      > </a
+      ><a name="4512" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="4513"
+      > </a
+      ><a name="4514" href="Definition.LogicalRelation.Properties.Reduction.html#4408" class="Bound"
+      >A</a
+      ><a name="4515"
+      > </a
+      ><a name="4516" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="4517"
+      > </a
+      ><a name="4518" href="Definition.LogicalRelation.Properties.Reduction.html#4410" class="Bound"
+      >B</a
+      ><a name="4519"
+      > </a
+      ><a name="4520" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="4521"
+      > </a
+      ><a name="4522" href="Definition.LogicalRelation.Properties.Reduction.html#4476" class="Bound"
+      >[A]</a
+      ><a name="4525"
+      >
+</a
+      ><a name="4526" href="Definition.LogicalRelation.Properties.Reduction.html#4394" class="Function"
+      >redSubst</a
+      ><a name="4534"
+      > </a
+      ><a name="4535" href="Definition.LogicalRelation.Properties.Reduction.html#4535" class="Bound"
+      >A&#8658;B</a
+      ><a name="4538"
+      > </a
+      ><a name="4539" href="Definition.LogicalRelation.Properties.Reduction.html#4539" class="Bound"
+      >[B]</a
+      ><a name="4542"
+      > </a
+      ><a name="4543" class="Symbol"
+      >=</a
+      ><a name="4544"
+      > </a
+      ><a name="4545" href="Definition.LogicalRelation.Properties.Reduction.html#785" class="Function"
+      >redSubst*</a
+      ><a name="4554"
+      > </a
+      ><a name="4555" class="Symbol"
+      >(</a
+      ><a name="4556" href="Definition.LogicalRelation.Properties.Reduction.html#4535" class="Bound"
+      >A&#8658;B</a
+      ><a name="4559"
+      > </a
+      ><a name="4560" href="Definition.Typed.html#6249" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="4561"
+      > </a
+      ><a name="4562" href="Definition.Typed.html#6202" class="InductiveConstructor"
+      >id</a
+      ><a name="4564"
+      > </a
+      ><a name="4565" class="Symbol"
+      >(</a
+      ><a name="4566" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="4576"
+      > </a
+      ><a name="4577" href="Definition.LogicalRelation.Properties.Reduction.html#4539" class="Bound"
+      >[B]</a
+      ><a name="4580" class="Symbol"
+      >))</a
+      ><a name="4582"
+      > </a
+      ><a name="4583" href="Definition.LogicalRelation.Properties.Reduction.html#4539" class="Bound"
+      >[B]</a
+      ><a name="4586"
+      >
+
+</a
+      ><a name="4588" href="Definition.LogicalRelation.Properties.Reduction.html#4588" class="Function"
+      >redSubstTerm</a
+      ><a name="4600"
+      > </a
+      ><a name="4601" class="Symbol"
+      >:</a
+      ><a name="4602"
+      > </a
+      ><a name="4603" class="Symbol"
+      >&#8704;</a
+      ><a name="4604"
+      > </a
+      ><a name="4605" class="Symbol"
+      >{</a
+      ><a name="4606" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4607"
+      > </a
+      ><a name="4608" href="Definition.LogicalRelation.Properties.Reduction.html#4608" class="Bound"
+      >t</a
+      ><a name="4609"
+      > </a
+      ><a name="4610" href="Definition.LogicalRelation.Properties.Reduction.html#4610" class="Bound"
+      >u</a
+      ><a name="4611"
+      > </a
+      ><a name="4612" href="Definition.LogicalRelation.Properties.Reduction.html#4612" class="Bound"
+      >l</a
+      ><a name="4613"
+      > </a
+      ><a name="4614" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4615" class="Symbol"
+      >}</a
+      ><a name="4616"
+      >
+             </a
+      ><a name="4630" class="Symbol"
+      >&#8594;</a
+      ><a name="4631"
+      > </a
+      ><a name="4632" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4633"
+      > </a
+      ><a name="4634" href="Definition.Typed.html#4471" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="4635"
+      > </a
+      ><a name="4636" href="Definition.LogicalRelation.Properties.Reduction.html#4608" class="Bound"
+      >t</a
+      ><a name="4637"
+      > </a
+      ><a name="4638" href="Definition.Typed.html#4471" class="Datatype Operator"
+      >&#8658;</a
+      ><a name="4639"
+      > </a
+      ><a name="4640" href="Definition.LogicalRelation.Properties.Reduction.html#4610" class="Bound"
+      >u</a
+      ><a name="4641"
+      > </a
+      ><a name="4642" href="Definition.Typed.html#4471" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="4643"
+      > </a
+      ><a name="4644" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4645"
+      >
+             </a
+      ><a name="4659" class="Symbol"
+      >&#8594;</a
+      ><a name="4660"
+      > </a
+      ><a name="4661" class="Symbol"
+      >(</a
+      ><a name="4662" href="Definition.LogicalRelation.Properties.Reduction.html#4662" class="Bound"
+      >[A]</a
+      ><a name="4665"
+      > </a
+      ><a name="4666" class="Symbol"
+      >:</a
+      ><a name="4667"
+      > </a
+      ><a name="4668" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4669"
+      > </a
+      ><a name="4670" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4672"
+      > </a
+      ><a name="4673" href="Definition.LogicalRelation.Properties.Reduction.html#4612" class="Bound"
+      >l</a
+      ><a name="4674"
+      > </a
+      ><a name="4675" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="4676"
+      > </a
+      ><a name="4677" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4678" class="Symbol"
+      >)</a
+      ><a name="4679"
+      >
+             </a
+      ><a name="4693" class="Symbol"
+      >&#8594;</a
+      ><a name="4694"
+      > </a
+      ><a name="4695" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4696"
+      > </a
+      ><a name="4697" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4699"
+      > </a
+      ><a name="4700" href="Definition.LogicalRelation.Properties.Reduction.html#4612" class="Bound"
+      >l</a
+      ><a name="4701"
+      > </a
+      ><a name="4702" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="4703"
+      > </a
+      ><a name="4704" href="Definition.LogicalRelation.Properties.Reduction.html#4610" class="Bound"
+      >u</a
+      ><a name="4705"
+      > </a
+      ><a name="4706" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="4707"
+      > </a
+      ><a name="4708" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4709"
+      > </a
+      ><a name="4710" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="4711"
+      > </a
+      ><a name="4712" href="Definition.LogicalRelation.Properties.Reduction.html#4662" class="Bound"
+      >[A]</a
+      ><a name="4715"
+      >
+             </a
+      ><a name="4729" class="Symbol"
+      >&#8594;</a
+      ><a name="4730"
+      > </a
+      ><a name="4731" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4732"
+      > </a
+      ><a name="4733" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4735"
+      > </a
+      ><a name="4736" href="Definition.LogicalRelation.Properties.Reduction.html#4612" class="Bound"
+      >l</a
+      ><a name="4737"
+      > </a
+      ><a name="4738" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="4739"
+      > </a
+      ><a name="4740" href="Definition.LogicalRelation.Properties.Reduction.html#4608" class="Bound"
+      >t</a
+      ><a name="4741"
+      > </a
+      ><a name="4742" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="4743"
+      > </a
+      ><a name="4744" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4745"
+      > </a
+      ><a name="4746" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="4747"
+      > </a
+      ><a name="4748" href="Definition.LogicalRelation.Properties.Reduction.html#4662" class="Bound"
+      >[A]</a
+      ><a name="4751"
+      >
+             </a
+      ><a name="4765" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="4766"
+      > </a
+      ><a name="4767" href="Definition.LogicalRelation.Properties.Reduction.html#4614" class="Bound"
+      >&#915;</a
+      ><a name="4768"
+      > </a
+      ><a name="4769" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="4771"
+      > </a
+      ><a name="4772" href="Definition.LogicalRelation.Properties.Reduction.html#4612" class="Bound"
+      >l</a
+      ><a name="4773"
+      > </a
+      ><a name="4774" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="4775"
+      > </a
+      ><a name="4776" href="Definition.LogicalRelation.Properties.Reduction.html#4608" class="Bound"
+      >t</a
+      ><a name="4777"
+      > </a
+      ><a name="4778" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="4779"
+      > </a
+      ><a name="4780" href="Definition.LogicalRelation.Properties.Reduction.html#4610" class="Bound"
+      >u</a
+      ><a name="4781"
+      > </a
+      ><a name="4782" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="4783"
+      > </a
+      ><a name="4784" href="Definition.LogicalRelation.Properties.Reduction.html#4606" class="Bound"
+      >A</a
+      ><a name="4785"
+      > </a
+      ><a name="4786" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="4787"
+      > </a
+      ><a name="4788" href="Definition.LogicalRelation.Properties.Reduction.html#4662" class="Bound"
+      >[A]</a
+      ><a name="4791"
+      >
+</a
+      ><a name="4792" href="Definition.LogicalRelation.Properties.Reduction.html#4588" class="Function"
+      >redSubstTerm</a
+      ><a name="4804"
+      > </a
+      ><a name="4805" href="Definition.LogicalRelation.Properties.Reduction.html#4805" class="Bound"
+      >t&#8658;u</a
+      ><a name="4808"
+      > </a
+      ><a name="4809" href="Definition.LogicalRelation.Properties.Reduction.html#4809" class="Bound"
+      >[A]</a
+      ><a name="4812"
+      > </a
+      ><a name="4813" href="Definition.LogicalRelation.Properties.Reduction.html#4813" class="Bound"
+      >[u]</a
+      ><a name="4816"
+      > </a
+      ><a name="4817" class="Symbol"
+      >=</a
+      ><a name="4818"
+      > </a
+      ><a name="4819" href="Definition.LogicalRelation.Properties.Reduction.html#1582" class="Function"
+      >redSubst*Term</a
+      ><a name="4832"
+      > </a
+      ><a name="4833" class="Symbol"
+      >(</a
+      ><a name="4834" href="Definition.LogicalRelation.Properties.Reduction.html#4805" class="Bound"
+      >t&#8658;u</a
+      ><a name="4837"
+      > </a
+      ><a name="4838" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="4839"
+      > </a
+      ><a name="4840" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="4842"
+      > </a
+      ><a name="4843" class="Symbol"
+      >(</a
+      ><a name="4844" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="4858"
+      > </a
+      ><a name="4859" href="Definition.LogicalRelation.Properties.Reduction.html#4809" class="Bound"
+      >[A]</a
+      ><a name="4862"
+      > </a
+      ><a name="4863" href="Definition.LogicalRelation.Properties.Reduction.html#4813" class="Bound"
+      >[u]</a
+      ><a name="4866" class="Symbol"
+      >))</a
+      ><a name="4868"
+      > </a
+      ><a name="4869" href="Definition.LogicalRelation.Properties.Reduction.html#4809" class="Bound"
+      >[A]</a
+      ><a name="4872"
+      > </a
+      ><a name="4873" href="Definition.LogicalRelation.Properties.Reduction.html#4813" class="Bound"
+      >[u]</a
+      ><a name="4876"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

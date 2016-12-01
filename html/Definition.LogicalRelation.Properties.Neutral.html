@@ -1,0 +1,3455 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Neutral</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Neutral.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Neutral</a
+      ><a name="53"
+      > </a
+      ><a name="54" class="Keyword"
+      >where</a
+      ><a name="59"
+      >
+
+</a
+      ><a name="61" class="Keyword"
+      >open</a
+      ><a name="65"
+      > </a
+      ><a name="66" class="Keyword"
+      >import</a
+      ><a name="72"
+      > </a
+      ><a name="73" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="91"
+      >
+</a
+      ><a name="92" class="Keyword"
+      >open</a
+      ><a name="96"
+      > </a
+      ><a name="97" class="Keyword"
+      >import</a
+      ><a name="103"
+      > </a
+      ><a name="104" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="120"
+      >
+</a
+      ><a name="121" class="Keyword"
+      >open</a
+      ><a name="125"
+      > </a
+      ><a name="126" class="Keyword"
+      >import</a
+      ><a name="132"
+      > </a
+      ><a name="133" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="160"
+      >
+</a
+      ><a name="161" class="Keyword"
+      >open</a
+      ><a name="165"
+      > </a
+      ><a name="166" class="Keyword"
+      >import</a
+      ><a name="172"
+      > </a
+      ><a name="173" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="199"
+      >
+</a
+      ><a name="200" class="Keyword"
+      >open</a
+      ><a name="204"
+      > </a
+      ><a name="205" class="Keyword"
+      >import</a
+      ><a name="211"
+      > </a
+      ><a name="212" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="238"
+      >
+</a
+      ><a name="239" class="Keyword"
+      >open</a
+      ><a name="243"
+      > </a
+      ><a name="244" class="Keyword"
+      >import</a
+      ><a name="250"
+      > </a
+      ><a name="251" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="284"
+      >
+</a
+      ><a name="285" class="Keyword"
+      >open</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Keyword"
+      >import</a
+      ><a name="296"
+      > </a
+      ><a name="297" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="335"
+      >
+</a
+      ><a name="336" class="Keyword"
+      >open</a
+      ><a name="340"
+      > </a
+      ><a name="341" class="Keyword"
+      >import</a
+      ><a name="347"
+      > </a
+      ><a name="348" href="Definition.LogicalRelation.Properties.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Wellformed</a
+      ><a name="396"
+      >
+</a
+      ><a name="397" class="Keyword"
+      >open</a
+      ><a name="401"
+      > </a
+      ><a name="402" class="Keyword"
+      >import</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Definition.LogicalRelation.Properties.Symmetry.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Symmetry</a
+      ><a name="455"
+      >
+
+</a
+      ><a name="457" class="Keyword"
+      >open</a
+      ><a name="461"
+      > </a
+      ><a name="462" class="Keyword"
+      >import</a
+      ><a name="468"
+      > </a
+      ><a name="469" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="480"
+      >
+</a
+      ><a name="481" class="Keyword"
+      >open</a
+      ><a name="485"
+      > </a
+      ><a name="486" class="Keyword"
+      >import</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="506"
+      >
+</a
+      ><a name="507" class="Keyword"
+      >import</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >as</a
+      ><a name="544"
+      > </a
+      ><a name="545" class="Module"
+      >PE</a
+      ><a name="547"
+      >
+
+
+</a
+      ><a name="550" href="Definition.LogicalRelation.Properties.Neutral.html#550" class="Function"
+      >neu</a
+      ><a name="553"
+      > </a
+      ><a name="554" class="Symbol"
+      >:</a
+      ><a name="555"
+      > </a
+      ><a name="556" class="Symbol"
+      >&#8704;</a
+      ><a name="557"
+      > </a
+      ><a name="558" class="Symbol"
+      >{</a
+      ><a name="559" href="Definition.LogicalRelation.Properties.Neutral.html#559" class="Bound"
+      >l</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="Definition.LogicalRelation.Properties.Neutral.html#561" class="Bound"
+      >&#915;</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Definition.LogicalRelation.Properties.Neutral.html#563" class="Bound"
+      >A</a
+      ><a name="564" class="Symbol"
+      >}</a
+      ><a name="565"
+      > </a
+      ><a name="566" class="Symbol"
+      >(</a
+      ><a name="567" href="Definition.LogicalRelation.Properties.Neutral.html#567" class="Bound"
+      >neA</a
+      ><a name="570"
+      > </a
+      ><a name="571" class="Symbol"
+      >:</a
+      ><a name="572"
+      > </a
+      ><a name="573" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="580"
+      > </a
+      ><a name="581" href="Definition.LogicalRelation.Properties.Neutral.html#563" class="Bound"
+      >A</a
+      ><a name="582" class="Symbol"
+      >)</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >&#8594;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Definition.LogicalRelation.Properties.Neutral.html#561" class="Bound"
+      >&#915;</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Definition.LogicalRelation.Properties.Neutral.html#563" class="Bound"
+      >A</a
+      ><a name="591"
+      > </a
+      ><a name="592" class="Symbol"
+      >&#8594;</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Definition.LogicalRelation.Properties.Neutral.html#561" class="Bound"
+      >&#915;</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="598"
+      > </a
+      ><a name="599" href="Definition.LogicalRelation.Properties.Neutral.html#559" class="Bound"
+      >l</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="Definition.LogicalRelation.Properties.Neutral.html#563" class="Bound"
+      >A</a
+      ><a name="604"
+      >
+</a
+      ><a name="605" href="Definition.LogicalRelation.Properties.Neutral.html#550" class="Function"
+      >neu</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Definition.LogicalRelation.Properties.Neutral.html#609" class="Bound"
+      >neA</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Definition.LogicalRelation.Properties.Neutral.html#613" class="Bound"
+      >A</a
+      ><a name="614"
+      > </a
+      ><a name="615" class="Symbol"
+      >=</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="619"
+      > </a
+      ><a name="620" class="Symbol"
+      >(</a
+      ><a name="621" href="Definition.LogicalRelation.html#452" class="InductiveConstructor"
+      >ne</a
+      ><a name="623"
+      > </a
+      ><a name="624" class="Symbol"
+      >_</a
+      ><a name="625"
+      > </a
+      ><a name="626" class="Symbol"
+      >(</a
+      ><a name="627" href="Definition.Typed.Properties.html#7844" class="Function"
+      >idRed:*:</a
+      ><a name="635"
+      > </a
+      ><a name="636" href="Definition.LogicalRelation.Properties.Neutral.html#613" class="Bound"
+      >A</a
+      ><a name="637" class="Symbol"
+      >)</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="Definition.LogicalRelation.Properties.Neutral.html#609" class="Bound"
+      >neA</a
+      ><a name="642" class="Symbol"
+      >)</a
+      ><a name="643"
+      >
+
+</a
+      ><a name="645" href="Definition.LogicalRelation.Properties.Neutral.html#645" class="Function"
+      >neuEq'</a
+      ><a name="651"
+      > </a
+      ><a name="652" class="Symbol"
+      >:</a
+      ><a name="653"
+      > </a
+      ><a name="654" class="Symbol"
+      >&#8704;</a
+      ><a name="655"
+      > </a
+      ><a name="656" class="Symbol"
+      >{</a
+      ><a name="657" href="Definition.LogicalRelation.Properties.Neutral.html#657" class="Bound"
+      >l</a
+      ><a name="658"
+      > </a
+      ><a name="659" href="Definition.LogicalRelation.Properties.Neutral.html#659" class="Bound"
+      >&#915;</a
+      ><a name="660"
+      > </a
+      ><a name="661" href="Definition.LogicalRelation.Properties.Neutral.html#661" class="Bound"
+      >A</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Definition.LogicalRelation.Properties.Neutral.html#663" class="Bound"
+      >B</a
+      ><a name="664" class="Symbol"
+      >}</a
+      ><a name="665"
+      > </a
+      ><a name="666" class="Symbol"
+      >(</a
+      ><a name="667" href="Definition.LogicalRelation.Properties.Neutral.html#667" class="Bound"
+      >[A]</a
+      ><a name="670"
+      > </a
+      ><a name="671" class="Symbol"
+      >:</a
+      ><a name="672"
+      > </a
+      ><a name="673" href="Definition.LogicalRelation.Properties.Neutral.html#659" class="Bound"
+      >&#915;</a
+      ><a name="674"
+      > </a
+      ><a name="675" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="Definition.LogicalRelation.Properties.Neutral.html#657" class="Bound"
+      >l</a
+      ><a name="679"
+      > </a
+      ><a name="680" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#10217;ne</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Definition.LogicalRelation.Properties.Neutral.html#661" class="Bound"
+      >A</a
+      ><a name="685" class="Symbol"
+      >)</a
+      ><a name="686"
+      >
+         </a
+      ><a name="696" class="Symbol"
+      >(</a
+      ><a name="697" href="Definition.LogicalRelation.Properties.Neutral.html#697" class="Bound"
+      >neB</a
+      ><a name="700"
+      > </a
+      ><a name="701" class="Symbol"
+      >:</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Definition.LogicalRelation.Properties.Neutral.html#663" class="Bound"
+      >B</a
+      ><a name="712" class="Symbol"
+      >)</a
+      ><a name="713"
+      >
+       </a
+      ><a name="721" class="Symbol"
+      >&#8594;</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Definition.LogicalRelation.Properties.Neutral.html#659" class="Bound"
+      >&#915;</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Definition.Typed.html#6902" class="Function Operator"
+      >&#8866;</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="Definition.LogicalRelation.Properties.Neutral.html#661" class="Bound"
+      >A</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Definition.Typed.html#6902" class="Function Operator"
+      >:&#8801;:</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Definition.LogicalRelation.Properties.Neutral.html#663" class="Bound"
+      >B</a
+      ><a name="734"
+      > </a
+      ><a name="735" class="Symbol"
+      >&#8594;</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Definition.LogicalRelation.Properties.Neutral.html#659" class="Bound"
+      >&#915;</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Definition.LogicalRelation.Properties.Neutral.html#657" class="Bound"
+      >l</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="745"
+      > </a
+      ><a name="746" href="Definition.LogicalRelation.Properties.Neutral.html#661" class="Bound"
+      >A</a
+      ><a name="747"
+      > </a
+      ><a name="748" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="749"
+      > </a
+      ><a name="750" href="Definition.LogicalRelation.Properties.Neutral.html#663" class="Bound"
+      >B</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="753"
+      > </a
+      ><a name="754" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Definition.LogicalRelation.Properties.Neutral.html#667" class="Bound"
+      >[A]</a
+      ><a name="765"
+      >
+</a
+      ><a name="766" href="Definition.LogicalRelation.Properties.Neutral.html#645" class="Function"
+      >neuEq'</a
+      ><a name="772"
+      > </a
+      ><a name="773" class="Symbol"
+      >(</a
+      ><a name="774" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="779"
+      > </a
+      ><a name="780" class="Symbol"
+      >(</a
+      ><a name="781" href="Definition.LogicalRelation.html#452" class="InductiveConstructor"
+      >ne</a
+      ><a name="783"
+      > </a
+      ><a name="784" href="Definition.LogicalRelation.Properties.Neutral.html#784" class="Bound"
+      >K</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Definition.LogicalRelation.Properties.Neutral.html#786" class="Bound"
+      >D</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Definition.LogicalRelation.Properties.Neutral.html#788" class="Bound"
+      >neK</a
+      ><a name="791" class="Symbol"
+      >))</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.LogicalRelation.Properties.Neutral.html#794" class="Bound"
+      >neB</a
+      ><a name="797"
+      > </a
+      ><a name="798" class="Symbol"
+      >(</a
+      ><a name="799" href="Definition.LogicalRelation.Properties.Neutral.html#799" class="Bound"
+      >A</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="Definition.LogicalRelation.Properties.Neutral.html#803" class="Bound"
+      >B</a
+      ><a name="804"
+      > </a
+      ><a name="805" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Definition.LogicalRelation.Properties.Neutral.html#807" class="Bound"
+      >A&#8801;B</a
+      ><a name="810" class="Symbol"
+      >)</a
+      ><a name="811"
+      > </a
+      ><a name="812" class="Symbol"
+      >=</a
+      ><a name="813"
+      >
+  </a
+      ><a name="816" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="819"
+      > </a
+      ><a name="820" class="Symbol"
+      >_</a
+      ><a name="821"
+      > </a
+      ><a name="822" class="Symbol"
+      >(</a
+      ><a name="823" href="Definition.Typed.Properties.html#7844" class="Function"
+      >idRed:*:</a
+      ><a name="831"
+      > </a
+      ><a name="832" href="Definition.LogicalRelation.Properties.Neutral.html#803" class="Bound"
+      >B</a
+      ><a name="833" class="Symbol"
+      >)</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Definition.LogicalRelation.Properties.Neutral.html#794" class="Bound"
+      >neB</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >(</a
+      ><a name="840" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="845"
+      > </a
+      ><a name="846" class="Symbol"
+      >(</a
+      ><a name="847" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="850"
+      > </a
+      ><a name="851" class="Symbol"
+      >(</a
+      ><a name="852" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="859"
+      > </a
+      ><a name="860" class="Symbol"
+      >(</a
+      ><a name="861" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="864"
+      > </a
+      ><a name="865" href="Definition.LogicalRelation.Properties.Neutral.html#786" class="Bound"
+      >D</a
+      ><a name="866" class="Symbol"
+      >)))</a
+      ><a name="869"
+      > </a
+      ><a name="870" href="Definition.LogicalRelation.Properties.Neutral.html#807" class="Bound"
+      >A&#8801;B</a
+      ><a name="873" class="Symbol"
+      >)</a
+      ><a name="874"
+      >
+</a
+      ><a name="875" href="Definition.LogicalRelation.Properties.Neutral.html#645" class="Function"
+      >neuEq'</a
+      ><a name="881"
+      > </a
+      ><a name="882" class="Symbol"
+      >(</a
+      ><a name="883" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="886"
+      > </a
+      ><a name="887" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="890"
+      > </a
+      ><a name="891" href="Definition.LogicalRelation.Properties.Neutral.html#891" class="Bound"
+      >x</a
+      ><a name="892" class="Symbol"
+      >)</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Definition.LogicalRelation.Properties.Neutral.html#894" class="Bound"
+      >neB</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Definition.LogicalRelation.Properties.Neutral.html#898" class="Bound"
+      >A:&#8801;:B</a
+      ><a name="903"
+      > </a
+      ><a name="904" class="Symbol"
+      >=</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="Definition.LogicalRelation.Properties.Neutral.html#645" class="Function"
+      >neuEq'</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Definition.LogicalRelation.Properties.Neutral.html#891" class="Bound"
+      >x</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Definition.LogicalRelation.Properties.Neutral.html#894" class="Bound"
+      >neB</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Definition.LogicalRelation.Properties.Neutral.html#898" class="Bound"
+      >A:&#8801;:B</a
+      ><a name="924"
+      >
+
+</a
+      ><a name="926" href="Definition.LogicalRelation.Properties.Neutral.html#926" class="Function"
+      >neuEq</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >:</a
+      ><a name="933"
+      > </a
+      ><a name="934" class="Symbol"
+      >&#8704;</a
+      ><a name="935"
+      > </a
+      ><a name="936" class="Symbol"
+      >{</a
+      ><a name="937" href="Definition.LogicalRelation.Properties.Neutral.html#937" class="Bound"
+      >l</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Definition.LogicalRelation.Properties.Neutral.html#939" class="Bound"
+      >&#915;</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Definition.LogicalRelation.Properties.Neutral.html#941" class="Bound"
+      >A</a
+      ><a name="942"
+      > </a
+      ><a name="943" href="Definition.LogicalRelation.Properties.Neutral.html#943" class="Bound"
+      >B</a
+      ><a name="944" class="Symbol"
+      >}</a
+      ><a name="945"
+      > </a
+      ><a name="946" class="Symbol"
+      >(</a
+      ><a name="947" href="Definition.LogicalRelation.Properties.Neutral.html#947" class="Bound"
+      >[A]</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >:</a
+      ><a name="952"
+      > </a
+      ><a name="953" href="Definition.LogicalRelation.Properties.Neutral.html#939" class="Bound"
+      >&#915;</a
+      ><a name="954"
+      > </a
+      ><a name="955" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Definition.LogicalRelation.Properties.Neutral.html#937" class="Bound"
+      >l</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Definition.LogicalRelation.Properties.Neutral.html#941" class="Bound"
+      >A</a
+      ><a name="963" class="Symbol"
+      >)</a
+      ><a name="964"
+      >
+        </a
+      ><a name="973" class="Symbol"
+      >(</a
+      ><a name="974" href="Definition.LogicalRelation.Properties.Neutral.html#974" class="Bound"
+      >neA</a
+      ><a name="977"
+      > </a
+      ><a name="978" class="Symbol"
+      >:</a
+      ><a name="979"
+      > </a
+      ><a name="980" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.LogicalRelation.Properties.Neutral.html#941" class="Bound"
+      >A</a
+      ><a name="989" class="Symbol"
+      >)</a
+      ><a name="990"
+      >
+        </a
+      ><a name="999" class="Symbol"
+      >(</a
+      ><a name="1000" href="Definition.LogicalRelation.Properties.Neutral.html#1000" class="Bound"
+      >neB</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" class="Symbol"
+      >:</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Definition.LogicalRelation.Properties.Neutral.html#943" class="Bound"
+      >B</a
+      ><a name="1015" class="Symbol"
+      >)</a
+      ><a name="1016"
+      >
+      </a
+      ><a name="1023" class="Symbol"
+      >&#8594;</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" href="Definition.LogicalRelation.Properties.Neutral.html#939" class="Bound"
+      >&#915;</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" href="Definition.Typed.html#6902" class="Function Operator"
+      >&#8866;</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="Definition.LogicalRelation.Properties.Neutral.html#941" class="Bound"
+      >A</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Definition.Typed.html#6902" class="Function Operator"
+      >:&#8801;:</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Definition.LogicalRelation.Properties.Neutral.html#943" class="Bound"
+      >B</a
+      ><a name="1036"
+      >
+      </a
+      ><a name="1043" class="Symbol"
+      >&#8594;</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" href="Definition.LogicalRelation.Properties.Neutral.html#939" class="Bound"
+      >&#915;</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Definition.LogicalRelation.Properties.Neutral.html#937" class="Bound"
+      >l</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Definition.LogicalRelation.Properties.Neutral.html#941" class="Bound"
+      >A</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Definition.LogicalRelation.Properties.Neutral.html#943" class="Bound"
+      >B</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" href="Definition.LogicalRelation.Properties.Neutral.html#947" class="Bound"
+      >[A]</a
+      ><a name="1065"
+      >
+</a
+      ><a name="1066" href="Definition.LogicalRelation.Properties.Neutral.html#926" class="Function"
+      >neuEq</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Definition.LogicalRelation.Properties.Neutral.html#1072" class="Bound"
+      >[A]</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Definition.LogicalRelation.Properties.Neutral.html#1076" class="Bound"
+      >neA</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Definition.LogicalRelation.Properties.Neutral.html#1080" class="Bound"
+      >neB</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Definition.LogicalRelation.Properties.Neutral.html#1084" class="Bound"
+      >A:&#8801;:B</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" class="Symbol"
+      >=</a
+      ><a name="1091"
+      >
+  </a
+      ><a name="1094" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" class="Symbol"
+      >(</a
+      ><a name="1109" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="1116"
+      > </a
+      ><a name="1117" class="Symbol"
+      >(</a
+      ><a name="1118" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Definition.LogicalRelation.Properties.Neutral.html#1072" class="Bound"
+      >[A]</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="Definition.LogicalRelation.Properties.Neutral.html#1076" class="Bound"
+      >neA</a
+      ><a name="1133" class="Symbol"
+      >))</a
+      ><a name="1135"
+      >
+                </a
+      ><a name="1152" href="Definition.LogicalRelation.Properties.Neutral.html#1072" class="Bound"
+      >[A]</a
+      ><a name="1155"
+      >
+                </a
+      ><a name="1172" class="Symbol"
+      >(</a
+      ><a name="1173" href="Definition.LogicalRelation.Properties.Neutral.html#645" class="Function"
+      >neuEq'</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" class="Symbol"
+      >(</a
+      ><a name="1181" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Definition.LogicalRelation.Properties.Neutral.html#1072" class="Bound"
+      >[A]</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" href="Definition.LogicalRelation.Properties.Neutral.html#1076" class="Bound"
+      >neA</a
+      ><a name="1196" class="Symbol"
+      >)</a
+      ><a name="1197"
+      > </a
+      ><a name="1198" href="Definition.LogicalRelation.Properties.Neutral.html#1080" class="Bound"
+      >neB</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="Definition.LogicalRelation.Properties.Neutral.html#1084" class="Bound"
+      >A:&#8801;:B</a
+      ><a name="1207" class="Symbol"
+      >)</a
+      ><a name="1208"
+      >
+
+</a
+      ><a name="1210" class="Keyword"
+      >mutual</a
+      ><a name="1216"
+      >
+  </a
+      ><a name="1219" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" class="Symbol"
+      >:</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >&#8704;</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" class="Symbol"
+      >{</a
+      ><a name="1232" href="Definition.LogicalRelation.Properties.Neutral.html#1232" class="Bound"
+      >l</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" href="Definition.LogicalRelation.Properties.Neutral.html#1234" class="Bound"
+      >&#915;</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" href="Definition.LogicalRelation.Properties.Neutral.html#1236" class="Bound"
+      >A</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" href="Definition.LogicalRelation.Properties.Neutral.html#1238" class="Bound"
+      >n</a
+      ><a name="1239" class="Symbol"
+      >}</a
+      ><a name="1240"
+      > </a
+      ><a name="1241" class="Symbol"
+      >(</a
+      ><a name="1242" href="Definition.LogicalRelation.Properties.Neutral.html#1242" class="Bound"
+      >[A]</a
+      ><a name="1245"
+      > </a
+      ><a name="1246" class="Symbol"
+      >:</a
+      ><a name="1247"
+      > </a
+      ><a name="1248" href="Definition.LogicalRelation.Properties.Neutral.html#1234" class="Bound"
+      >&#915;</a
+      ><a name="1249"
+      > </a
+      ><a name="1250" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Definition.LogicalRelation.Properties.Neutral.html#1232" class="Bound"
+      >l</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" href="Definition.LogicalRelation.Properties.Neutral.html#1236" class="Bound"
+      >A</a
+      ><a name="1258" class="Symbol"
+      >)</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >(</a
+      ><a name="1261" href="Definition.LogicalRelation.Properties.Neutral.html#1261" class="Bound"
+      >neN</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" class="Symbol"
+      >:</a
+      ><a name="1266"
+      > </a
+      ><a name="1267" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Definition.LogicalRelation.Properties.Neutral.html#1238" class="Bound"
+      >n</a
+      ><a name="1276" class="Symbol"
+      >)</a
+      ><a name="1277"
+      >
+          </a
+      ><a name="1288" class="Symbol"
+      >&#8594;</a
+      ><a name="1289"
+      > </a
+      ><a name="1290" href="Definition.LogicalRelation.Properties.Neutral.html#1234" class="Bound"
+      >&#915;</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1293"
+      > </a
+      ><a name="1294" href="Definition.LogicalRelation.Properties.Neutral.html#1238" class="Bound"
+      >n</a
+      ><a name="1295"
+      > </a
+      ><a name="1296" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" href="Definition.LogicalRelation.Properties.Neutral.html#1236" class="Bound"
+      >A</a
+      ><a name="1299"
+      >
+          </a
+      ><a name="1310" class="Symbol"
+      >&#8594;</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Definition.LogicalRelation.Properties.Neutral.html#1234" class="Bound"
+      >&#915;</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="Definition.LogicalRelation.Properties.Neutral.html#1232" class="Bound"
+      >l</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" href="Definition.LogicalRelation.Properties.Neutral.html#1238" class="Bound"
+      >n</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Definition.LogicalRelation.Properties.Neutral.html#1236" class="Bound"
+      >A</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="Definition.LogicalRelation.Properties.Neutral.html#1242" class="Bound"
+      >[A]</a
+      ><a name="1332"
+      >
+  </a
+      ><a name="1335" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" class="Symbol"
+      >(</a
+      ><a name="1344" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" class="DottedPattern Symbol"
+      >.</a
+      ><a name="1348" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="Definition.LogicalRelation.Properties.Neutral.html#1354" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1356" class="Symbol"
+      >)</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="Definition.LogicalRelation.Properties.Neutral.html#1358" class="Bound"
+      >neN</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" href="Definition.LogicalRelation.Properties.Neutral.html#1362" class="Bound"
+      >n</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" class="Symbol"
+      >=</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" href="Definition.LogicalRelation.Properties.Neutral.html#1362" class="Bound"
+      >n</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" class="Symbol"
+      >(</a
+      ><a name="1372" href="Definition.LogicalRelation.Properties.Neutral.html#550" class="Function"
+      >neu</a
+      ><a name="1375"
+      > </a
+      ><a name="1376" href="Definition.LogicalRelation.Properties.Neutral.html#1358" class="Bound"
+      >neN</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="Symbol"
+      >(</a
+      ><a name="1381" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" href="Definition.LogicalRelation.Properties.Neutral.html#1362" class="Bound"
+      >n</a
+      ><a name="1387" class="Symbol"
+      >))</a
+      ><a name="1389"
+      >
+  </a
+      ><a name="1392" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1399"
+      > </a
+      ><a name="1400" class="Symbol"
+      >(</a
+      ><a name="1401" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" href="Definition.LogicalRelation.Properties.Neutral.html#1403" class="Bound"
+      >D</a
+      ><a name="1404" class="Symbol"
+      >)</a
+      ><a name="1405"
+      > </a
+      ><a name="1406" href="Definition.LogicalRelation.Properties.Neutral.html#1406" class="Bound"
+      >neN</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" href="Definition.LogicalRelation.Properties.Neutral.html#1410" class="Bound"
+      >n</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" class="Symbol"
+      >=</a
+      ><a name="1413"
+      >
+    </a
+      ><a name="1418" class="Keyword"
+      >let</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Definition.LogicalRelation.Properties.Neutral.html#1422" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="1425"
+      > </a
+      ><a name="1426" class="Symbol"
+      >=</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1435"
+      > </a
+      ><a name="1436" class="Symbol"
+      >(</a
+      ><a name="1437" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" href="Definition.LogicalRelation.Properties.Neutral.html#1403" class="Bound"
+      >D</a
+      ><a name="1442" class="Symbol"
+      >)</a
+      ><a name="1443"
+      >
+    </a
+      ><a name="1448" class="Keyword"
+      >in</a
+      ><a name="1450"
+      >  </a
+      ><a name="1452" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" class="Symbol"
+      >_</a
+      ><a name="1456"
+      > </a
+      ><a name="1457" class="Symbol"
+      >(</a
+      ><a name="1458" href="Definition.Typed.Properties.html#7917" class="Function"
+      >idRedTerm:*:</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" class="Symbol"
+      >(</a
+      ><a name="1472" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="Definition.LogicalRelation.Properties.Neutral.html#1410" class="Bound"
+      >n</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" href="Definition.LogicalRelation.Properties.Neutral.html#1422" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="1482" class="Symbol"
+      >))</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" class="Symbol"
+      >(</a
+      ><a name="1486" href="Definition.Untyped.html#1362" class="InductiveConstructor"
+      >ne</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" href="Definition.LogicalRelation.Properties.Neutral.html#1406" class="Bound"
+      >neN</a
+      ><a name="1492" class="Symbol"
+      >)</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" class="Symbol"
+      >(</a
+      ><a name="1495" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Definition.LogicalRelation.Properties.Neutral.html#1410" class="Bound"
+      >n</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Definition.LogicalRelation.Properties.Neutral.html#1422" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="1505" class="Symbol"
+      >)</a
+      ><a name="1506"
+      >
+  </a
+      ><a name="1509" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1516"
+      > </a
+      ><a name="1517" class="Symbol"
+      >(</a
+      ><a name="1518" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1521"
+      > </a
+      ><a name="1522" href="Definition.LogicalRelation.Properties.Neutral.html#1522" class="Bound"
+      >K</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Definition.LogicalRelation.Properties.Neutral.html#1524" class="Bound"
+      >D</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="Definition.LogicalRelation.Properties.Neutral.html#1526" class="Bound"
+      >neK</a
+      ><a name="1529" class="Symbol"
+      >)</a
+      ><a name="1530"
+      > </a
+      ><a name="1531" href="Definition.LogicalRelation.Properties.Neutral.html#1531" class="Bound"
+      >neN</a
+      ><a name="1534"
+      > </a
+      ><a name="1535" href="Definition.LogicalRelation.Properties.Neutral.html#1535" class="Bound"
+      >n</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" class="Symbol"
+      >=</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" href="Definition.LogicalRelation.Properties.Neutral.html#1535" class="Bound"
+      >n</a
+      ><a name="1540"
+      >
+  </a
+      ><a name="1543" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" class="Symbol"
+      >(</a
+      ><a name="1552" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1554"
+      > </a
+      ><a name="1555" href="Definition.LogicalRelation.Properties.Neutral.html#1555" class="Bound"
+      >F</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" href="Definition.LogicalRelation.Properties.Neutral.html#1557" class="Bound"
+      >G</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" href="Definition.LogicalRelation.Properties.Neutral.html#1559" class="Bound"
+      >D</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" href="Definition.LogicalRelation.Properties.Neutral.html#1561" class="Bound"
+      >&#8866;F</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" href="Definition.LogicalRelation.Properties.Neutral.html#1564" class="Bound"
+      >&#8866;G</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" href="Definition.LogicalRelation.Properties.Neutral.html#1567" class="Bound"
+      >[F]</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="1574"
+      > </a
+      ><a name="1575" href="Definition.LogicalRelation.Properties.Neutral.html#1575" class="Bound"
+      >G-ext</a
+      ><a name="1580" class="Symbol"
+      >)</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Definition.LogicalRelation.Properties.Neutral.html#1582" class="Bound"
+      >neN</a
+      ><a name="1585"
+      > </a
+      ><a name="1586" href="Definition.LogicalRelation.Properties.Neutral.html#1586" class="Bound"
+      >n</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" class="Symbol"
+      >=</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" href="Definition.LogicalRelation.Properties.Neutral.html#1586" class="Bound"
+      >n</a
+      ><a name="1591"
+      >
+    </a
+      ><a name="1596" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="Symbol"
+      >(&#955;</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" href="Definition.LogicalRelation.Properties.Neutral.html#1606" class="Bound"
+      >[a]</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="Definition.LogicalRelation.Properties.Neutral.html#1610" class="Bound"
+      >[b]</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Definition.LogicalRelation.Properties.Neutral.html#1614" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" class="Symbol"
+      >&#8594;</a
+      ><a name="1621"
+      >
+      </a
+      ><a name="1628" class="Keyword"
+      >let</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" href="Definition.LogicalRelation.Properties.Neutral.html#1632" class="Bound"
+      >A&#8801;&#928;FG</a
+      ><a name="1637"
+      > </a
+      ><a name="1638" class="Symbol"
+      >=</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" class="Symbol"
+      >(</a
+      ><a name="1649" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" href="Definition.LogicalRelation.Properties.Neutral.html#1559" class="Bound"
+      >D</a
+      ><a name="1654" class="Symbol"
+      >)</a
+      ><a name="1655"
+      >
+          </a
+      ><a name="1666" href="Definition.LogicalRelation.Properties.Neutral.html#1666" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" class="Symbol"
+      >=</a
+      ><a name="1675"
+      > </a
+      ><a name="1676" href="Definition.Typed.Weakening.html#5413" class="Function"
+      >wkEq</a
+      ><a name="1680"
+      > </a
+      ><a name="1681" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1682"
+      > </a
+      ><a name="1683" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1685"
+      > </a
+      ><a name="1686" class="Symbol"
+      >(</a
+      ><a name="1687" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" class="Symbol"
+      >(</a
+      ><a name="1696" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" href="Definition.LogicalRelation.Properties.Neutral.html#1559" class="Bound"
+      >D</a
+      ><a name="1701" class="Symbol"
+      >))</a
+      ><a name="1703"
+      >
+          </a
+      ><a name="1714" href="Definition.LogicalRelation.Properties.Neutral.html#1714" class="Bound"
+      >G[a]&#8801;G[b]</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" class="Symbol"
+      >=</a
+      ><a name="1725"
+      > </a
+      ><a name="1726" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" class="Symbol"
+      >(</a
+      ><a name="1740" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="1743"
+      > </a
+      ><a name="1744" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1745"
+      > </a
+      ><a name="1746" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" href="Definition.LogicalRelation.Properties.Neutral.html#1610" class="Bound"
+      >[b]</a
+      ><a name="1752" class="Symbol"
+      >)</a
+      ><a name="1753"
+      >
+                                  </a
+      ><a name="1788" class="Symbol"
+      >(</a
+      ><a name="1789" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" class="Symbol"
+      >(</a
+      ><a name="1796" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1804"
+      > </a
+      ><a name="1805" href="Definition.LogicalRelation.Properties.Neutral.html#1606" class="Bound"
+      >[a]</a
+      ><a name="1808" class="Symbol"
+      >)</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" class="Symbol"
+      >(</a
+      ><a name="1811" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1816"
+      > </a
+      ><a name="1817" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1819"
+      > </a
+      ><a name="1820" href="Definition.LogicalRelation.Properties.Neutral.html#1610" class="Bound"
+      >[b]</a
+      ><a name="1823" class="Symbol"
+      >)</a
+      ><a name="1824"
+      >
+                                         </a
+      ><a name="1866" class="Symbol"
+      >(</a
+      ><a name="1867" href="Definition.LogicalRelation.Properties.Neutral.html#1575" class="Bound"
+      >G-ext</a
+      ><a name="1872"
+      > </a
+      ><a name="1873" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1874"
+      > </a
+      ><a name="1875" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" href="Definition.LogicalRelation.Properties.Neutral.html#1606" class="Bound"
+      >[a]</a
+      ><a name="1881"
+      > </a
+      ><a name="1882" href="Definition.LogicalRelation.Properties.Neutral.html#1610" class="Bound"
+      >[b]</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" href="Definition.LogicalRelation.Properties.Neutral.html#1614" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="1891" class="Symbol"
+      >))</a
+      ><a name="1893"
+      >
+          </a
+      ><a name="1904" href="Definition.LogicalRelation.Properties.Neutral.html#1904" class="Bound"
+      >a</a
+      ><a name="1905"
+      > </a
+      ><a name="1906" class="Symbol"
+      >=</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1922"
+      > </a
+      ><a name="1923" class="Symbol"
+      >(</a
+      ><a name="1924" href="Definition.LogicalRelation.Properties.Neutral.html#1567" class="Bound"
+      >[F]</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1929"
+      > </a
+      ><a name="1930" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1932" class="Symbol"
+      >)</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" href="Definition.LogicalRelation.Properties.Neutral.html#1606" class="Bound"
+      >[a]</a
+      ><a name="1937"
+      >
+          </a
+      ><a name="1948" href="Definition.LogicalRelation.Properties.Neutral.html#1948" class="Bound"
+      >b</a
+      ><a name="1949"
+      > </a
+      ><a name="1950" class="Symbol"
+      >=</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" class="Symbol"
+      >(</a
+      ><a name="1968" href="Definition.LogicalRelation.Properties.Neutral.html#1567" class="Bound"
+      >[F]</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1976" class="Symbol"
+      >)</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Definition.LogicalRelation.Properties.Neutral.html#1610" class="Bound"
+      >[b]</a
+      ><a name="1981"
+      >
+          </a
+      ><a name="1992" href="Definition.LogicalRelation.Properties.Neutral.html#1992" class="Bound"
+      >a&#8801;b</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >=</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" class="Symbol"
+      >(</a
+      ><a name="2016" href="Definition.LogicalRelation.Properties.Neutral.html#1567" class="Bound"
+      >[F]</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2024" class="Symbol"
+      >)</a
+      ><a name="2025"
+      > </a
+      ><a name="2026" href="Definition.LogicalRelation.Properties.Neutral.html#1614" class="Bound"
+      >[a&#8801;b]</a
+      ><a name="2031"
+      >
+          </a
+      ><a name="2042" href="Definition.LogicalRelation.Properties.Neutral.html#2042" class="Bound"
+      >&#961;n</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" class="Symbol"
+      >=</a
+      ><a name="2046"
+      > </a
+      ><a name="2047" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="2051"
+      > </a
+      ><a name="2052" class="Symbol"
+      >(</a
+      ><a name="2053" href="Definition.Typed.Weakening.html#4157" class="Function"
+      >wkTerm</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="2061"
+      > </a
+      ><a name="2062" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2064"
+      > </a
+      ><a name="2065" href="Definition.LogicalRelation.Properties.Neutral.html#1586" class="Bound"
+      >n</a
+      ><a name="2066" class="Symbol"
+      >)</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" href="Definition.LogicalRelation.Properties.Neutral.html#1666" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="2075"
+      >
+          </a
+      ><a name="2086" href="Definition.LogicalRelation.Properties.Neutral.html#2086" class="Bound"
+      >neN&#8728;a</a
+      ><a name="2091"
+      > </a
+      ><a name="2092" class="Symbol"
+      >=</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" href="Definition.Untyped.html#825" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" class="Symbol"
+      >(</a
+      ><a name="2099" href="Definition.Untyped.html#3860" class="Function"
+      >wkNeutral</a
+      ><a name="2108"
+      > </a
+      ><a name="2109" class="Symbol"
+      >(</a
+      ><a name="2110" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="2114"
+      > </a
+      ><a name="2115" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="2116" class="Symbol"
+      >)</a
+      ><a name="2117"
+      > </a
+      ><a name="2118" href="Definition.LogicalRelation.Properties.Neutral.html#1582" class="Bound"
+      >neN</a
+      ><a name="2121" class="Symbol"
+      >)</a
+      ><a name="2122"
+      >
+          </a
+      ><a name="2133" href="Definition.LogicalRelation.Properties.Neutral.html#2133" class="Bound"
+      >neN&#8728;b</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" class="Symbol"
+      >=</a
+      ><a name="2140"
+      > </a
+      ><a name="2141" href="Definition.Untyped.html#825" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" class="Symbol"
+      >(</a
+      ><a name="2146" href="Definition.Untyped.html#3860" class="Function"
+      >wkNeutral</a
+      ><a name="2155"
+      > </a
+      ><a name="2156" class="Symbol"
+      >(</a
+      ><a name="2157" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="2161"
+      > </a
+      ><a name="2162" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="2163" class="Symbol"
+      >)</a
+      ><a name="2164"
+      > </a
+      ><a name="2165" href="Definition.LogicalRelation.Properties.Neutral.html#1582" class="Bound"
+      >neN</a
+      ><a name="2168" class="Symbol"
+      >)</a
+      ><a name="2169"
+      >
+      </a
+      ><a name="2176" class="Keyword"
+      >in</a
+      ><a name="2178"
+      >  </a
+      ><a name="2180" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="2189"
+      > </a
+      ><a name="2190" class="Symbol"
+      >(</a
+      ><a name="2191" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="2194"
+      > </a
+      ><a name="2195" href="Definition.LogicalRelation.Properties.Neutral.html#1601" class="Bound"
+      >&#961;</a
+      ><a name="2196"
+      > </a
+      ><a name="2197" href="Definition.LogicalRelation.Properties.Neutral.html#1603" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2199"
+      > </a
+      ><a name="2200" href="Definition.LogicalRelation.Properties.Neutral.html#1606" class="Bound"
+      >[a]</a
+      ><a name="2203" class="Symbol"
+      >)</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Definition.LogicalRelation.Properties.Neutral.html#2086" class="Bound"
+      >neN&#8728;a</a
+      ><a name="2210"
+      > </a
+      ><a name="2211" href="Definition.LogicalRelation.Properties.Neutral.html#2133" class="Bound"
+      >neN&#8728;b</a
+      ><a name="2216"
+      >
+                       </a
+      ><a name="2240" class="Symbol"
+      >(</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" class="Symbol"
+      >(</a
+      ><a name="2243" href="Definition.LogicalRelation.Properties.Neutral.html#2042" class="Bound"
+      >&#961;n</a
+      ><a name="2245"
+      > </a
+      ><a name="2246" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" href="Definition.LogicalRelation.Properties.Neutral.html#1904" class="Bound"
+      >a</a
+      ><a name="2249" class="Symbol"
+      >)</a
+      ><a name="2250"
+      >
+                       </a
+      ><a name="2274" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" class="Symbol"
+      >(</a
+      ><a name="2277" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" class="Symbol"
+      >(</a
+      ><a name="2283" href="Definition.LogicalRelation.Properties.Neutral.html#2042" class="Bound"
+      >&#961;n</a
+      ><a name="2285"
+      > </a
+      ><a name="2286" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2287"
+      > </a
+      ><a name="2288" href="Definition.LogicalRelation.Properties.Neutral.html#1948" class="Bound"
+      >b</a
+      ><a name="2289" class="Symbol"
+      >)</a
+      ><a name="2290"
+      > </a
+      ><a name="2291" href="Definition.LogicalRelation.Properties.Neutral.html#1714" class="Bound"
+      >G[a]&#8801;G[b]</a
+      ><a name="2300" class="Symbol"
+      >)</a
+      ><a name="2301"
+      >
+                       </a
+      ><a name="2325" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2326"
+      > </a
+      ><a name="2327" href="Definition.Typed.html#2948" class="InductiveConstructor"
+      >app-cong</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" class="Symbol"
+      >(</a
+      ><a name="2337" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="2341"
+      > </a
+      ><a name="2342" href="Definition.LogicalRelation.Properties.Neutral.html#2042" class="Bound"
+      >&#961;n</a
+      ><a name="2344" class="Symbol"
+      >)</a
+      ><a name="2345"
+      > </a
+      ><a name="2346" href="Definition.LogicalRelation.Properties.Neutral.html#1992" class="Bound"
+      >a&#8801;b</a
+      ><a name="2349" class="Symbol"
+      >))</a
+      ><a name="2351"
+      >
+    </a
+      ><a name="2356" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2357"
+      > </a
+      ><a name="2358" class="Symbol"
+      >(&#955;</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2362"
+      > </a
+      ><a name="2363" href="Definition.LogicalRelation.Properties.Neutral.html#2363" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2365"
+      > </a
+      ><a name="2366" href="Definition.LogicalRelation.Properties.Neutral.html#2366" class="Bound"
+      >[a]</a
+      ><a name="2369"
+      > </a
+      ><a name="2370" class="Symbol"
+      >&#8594;</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" class="Keyword"
+      >let</a
+      ><a name="2375"
+      > </a
+      ><a name="2376" href="Definition.LogicalRelation.Properties.Neutral.html#2376" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="2383"
+      > </a
+      ><a name="2384" class="Symbol"
+      >=</a
+      ><a name="2385"
+      > </a
+      ><a name="2386" href="Definition.Typed.Weakening.html#5413" class="Function"
+      >wkEq</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" href="Definition.LogicalRelation.Properties.Neutral.html#2363" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2395"
+      > </a
+      ><a name="2396" class="Symbol"
+      >(</a
+      ><a name="2397" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" class="Symbol"
+      >(</a
+      ><a name="2406" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2409"
+      > </a
+      ><a name="2410" href="Definition.LogicalRelation.Properties.Neutral.html#1559" class="Bound"
+      >D</a
+      ><a name="2411" class="Symbol"
+      >))</a
+      ><a name="2413"
+      >
+                        </a
+      ><a name="2438" href="Definition.LogicalRelation.Properties.Neutral.html#2438" class="Bound"
+      >a</a
+      ><a name="2439"
+      > </a
+      ><a name="2440" class="Symbol"
+      >=</a
+      ><a name="2441"
+      > </a
+      ><a name="2442" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="2456"
+      > </a
+      ><a name="2457" class="Symbol"
+      >(</a
+      ><a name="2458" href="Definition.LogicalRelation.Properties.Neutral.html#1567" class="Bound"
+      >[F]</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" href="Definition.LogicalRelation.Properties.Neutral.html#2363" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2466" class="Symbol"
+      >)</a
+      ><a name="2467"
+      > </a
+      ><a name="2468" href="Definition.LogicalRelation.Properties.Neutral.html#2366" class="Bound"
+      >[a]</a
+      ><a name="2471"
+      >
+                    </a
+      ><a name="2492" class="Keyword"
+      >in</a
+      ><a name="2494"
+      >  </a
+      ><a name="2496" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="2503"
+      > </a
+      ><a name="2504" class="Symbol"
+      >(</a
+      ><a name="2505" href="Definition.LogicalRelation.Properties.Neutral.html#1571" class="Bound"
+      >[G]</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2510"
+      > </a
+      ><a name="2511" href="Definition.LogicalRelation.Properties.Neutral.html#2363" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2513"
+      > </a
+      ><a name="2514" href="Definition.LogicalRelation.Properties.Neutral.html#2366" class="Bound"
+      >[a]</a
+      ><a name="2517" class="Symbol"
+      >)</a
+      ><a name="2518"
+      > </a
+      ><a name="2519" class="Symbol"
+      >(</a
+      ><a name="2520" href="Definition.Untyped.html#825" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="2523"
+      > </a
+      ><a name="2524" class="Symbol"
+      >(</a
+      ><a name="2525" href="Definition.Untyped.html#3860" class="Function"
+      >wkNeutral</a
+      ><a name="2534"
+      > </a
+      ><a name="2535" class="Symbol"
+      >(</a
+      ><a name="2536" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="2540"
+      > </a
+      ><a name="2541" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2542" class="Symbol"
+      >)</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" href="Definition.LogicalRelation.Properties.Neutral.html#1582" class="Bound"
+      >neN</a
+      ><a name="2547" class="Symbol"
+      >))</a
+      ><a name="2549"
+      >
+                                </a
+      ><a name="2582" class="Symbol"
+      >(</a
+      ><a name="2583" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="2587"
+      > </a
+      ><a name="2588" class="Symbol"
+      >(</a
+      ><a name="2589" href="Definition.Typed.Weakening.html#4157" class="Function"
+      >wkTerm</a
+      ><a name="2595"
+      > </a
+      ><a name="2596" href="Definition.LogicalRelation.Properties.Neutral.html#2361" class="Bound"
+      >&#961;</a
+      ><a name="2597"
+      > </a
+      ><a name="2598" href="Definition.LogicalRelation.Properties.Neutral.html#2363" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2600"
+      > </a
+      ><a name="2601" href="Definition.LogicalRelation.Properties.Neutral.html#1586" class="Bound"
+      >n</a
+      ><a name="2602" class="Symbol"
+      >)</a
+      ><a name="2603"
+      > </a
+      ><a name="2604" href="Definition.LogicalRelation.Properties.Neutral.html#2376" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="2611"
+      > </a
+      ><a name="2612" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="2613"
+      > </a
+      ><a name="2614" href="Definition.LogicalRelation.Properties.Neutral.html#2438" class="Bound"
+      >a</a
+      ><a name="2615" class="Symbol"
+      >))</a
+      ><a name="2617"
+      >
+  </a
+      ><a name="2620" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="2627"
+      > </a
+      ><a name="2628" class="Symbol"
+      >(</a
+      ><a name="2629" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="2632"
+      > </a
+      ><a name="2633" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2636"
+      > </a
+      ><a name="2637" href="Definition.LogicalRelation.Properties.Neutral.html#2637" class="Bound"
+      >x</a
+      ><a name="2638" class="Symbol"
+      >)</a
+      ><a name="2639"
+      > </a
+      ><a name="2640" href="Definition.LogicalRelation.Properties.Neutral.html#2640" class="Bound"
+      >neN</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" href="Definition.LogicalRelation.Properties.Neutral.html#2644" class="Bound"
+      >n</a
+      ><a name="2645"
+      > </a
+      ><a name="2646" class="Symbol"
+      >=</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="2655"
+      > </a
+      ><a name="2656" href="Definition.LogicalRelation.Properties.Neutral.html#2637" class="Bound"
+      >x</a
+      ><a name="2657"
+      > </a
+      ><a name="2658" href="Definition.LogicalRelation.Properties.Neutral.html#2640" class="Bound"
+      >neN</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="Definition.LogicalRelation.Properties.Neutral.html#2644" class="Bound"
+      >n</a
+      ><a name="2663"
+      >
+
+  </a
+      ><a name="2667" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="2676"
+      > </a
+      ><a name="2677" class="Symbol"
+      >:</a
+      ><a name="2678"
+      > </a
+      ><a name="2679" class="Symbol"
+      >&#8704;</a
+      ><a name="2680"
+      > </a
+      ><a name="2681" class="Symbol"
+      >{</a
+      ><a name="2682" href="Definition.LogicalRelation.Properties.Neutral.html#2682" class="Bound"
+      >l</a
+      ><a name="2683"
+      > </a
+      ><a name="2684" href="Definition.LogicalRelation.Properties.Neutral.html#2684" class="Bound"
+      >&#915;</a
+      ><a name="2685"
+      > </a
+      ><a name="2686" href="Definition.LogicalRelation.Properties.Neutral.html#2686" class="Bound"
+      >A</a
+      ><a name="2687"
+      > </a
+      ><a name="2688" href="Definition.LogicalRelation.Properties.Neutral.html#2688" class="Bound"
+      >n</a
+      ><a name="2689"
+      > </a
+      ><a name="2690" href="Definition.LogicalRelation.Properties.Neutral.html#2690" class="Bound"
+      >n'</a
+      ><a name="2692" class="Symbol"
+      >}</a
+      ><a name="2693"
+      > </a
+      ><a name="2694" class="Symbol"
+      >(</a
+      ><a name="2695" href="Definition.LogicalRelation.Properties.Neutral.html#2695" class="Bound"
+      >[A]</a
+      ><a name="2698"
+      > </a
+      ><a name="2699" class="Symbol"
+      >:</a
+      ><a name="2700"
+      > </a
+      ><a name="2701" href="Definition.LogicalRelation.Properties.Neutral.html#2684" class="Bound"
+      >&#915;</a
+      ><a name="2702"
+      > </a
+      ><a name="2703" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" href="Definition.LogicalRelation.Properties.Neutral.html#2682" class="Bound"
+      >l</a
+      ><a name="2707"
+      > </a
+      ><a name="2708" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2709"
+      > </a
+      ><a name="2710" href="Definition.LogicalRelation.Properties.Neutral.html#2686" class="Bound"
+      >A</a
+      ><a name="2711" class="Symbol"
+      >)</a
+      ><a name="2712"
+      >
+              </a
+      ><a name="2727" class="Symbol"
+      >(</a
+      ><a name="2728" href="Definition.LogicalRelation.Properties.Neutral.html#2728" class="Bound"
+      >neN</a
+      ><a name="2731"
+      > </a
+      ><a name="2732" class="Symbol"
+      >:</a
+      ><a name="2733"
+      > </a
+      ><a name="2734" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="2741"
+      > </a
+      ><a name="2742" href="Definition.LogicalRelation.Properties.Neutral.html#2688" class="Bound"
+      >n</a
+      ><a name="2743" class="Symbol"
+      >)</a
+      ><a name="2744"
+      > </a
+      ><a name="2745" class="Symbol"
+      >(</a
+      ><a name="2746" href="Definition.LogicalRelation.Properties.Neutral.html#2746" class="Bound"
+      >neN'</a
+      ><a name="2750"
+      > </a
+      ><a name="2751" class="Symbol"
+      >:</a
+      ><a name="2752"
+      > </a
+      ><a name="2753" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" href="Definition.LogicalRelation.Properties.Neutral.html#2690" class="Bound"
+      >n'</a
+      ><a name="2763" class="Symbol"
+      >)</a
+      ><a name="2764"
+      >
+            </a
+      ><a name="2777" class="Symbol"
+      >&#8594;</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Definition.LogicalRelation.Properties.Neutral.html#2684" class="Bound"
+      >&#915;</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="Definition.Typed.html#7030" class="Function Operator"
+      >&#8866;</a
+      ><a name="2782"
+      > </a
+      ><a name="2783" href="Definition.LogicalRelation.Properties.Neutral.html#2688" class="Bound"
+      >n</a
+      ><a name="2784"
+      > </a
+      ><a name="2785" href="Definition.Typed.html#7030" class="Function Operator"
+      >:&#8801;:</a
+      ><a name="2788"
+      > </a
+      ><a name="2789" href="Definition.LogicalRelation.Properties.Neutral.html#2690" class="Bound"
+      >n'</a
+      ><a name="2791"
+      > </a
+      ><a name="2792" href="Definition.Typed.html#7030" class="Function Operator"
+      >&#8759;</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" href="Definition.LogicalRelation.Properties.Neutral.html#2686" class="Bound"
+      >A</a
+      ><a name="2795"
+      > </a
+      ><a name="2796" class="Symbol"
+      >&#8594;</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" href="Definition.LogicalRelation.Properties.Neutral.html#2684" class="Bound"
+      >&#915;</a
+      ><a name="2799"
+      > </a
+      ><a name="2800" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2802"
+      > </a
+      ><a name="2803" href="Definition.LogicalRelation.Properties.Neutral.html#2682" class="Bound"
+      >l</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="2806"
+      > </a
+      ><a name="2807" href="Definition.LogicalRelation.Properties.Neutral.html#2688" class="Bound"
+      >n</a
+      ><a name="2808"
+      > </a
+      ><a name="2809" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="2810"
+      > </a
+      ><a name="2811" href="Definition.LogicalRelation.Properties.Neutral.html#2690" class="Bound"
+      >n'</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" href="Definition.LogicalRelation.Properties.Neutral.html#2686" class="Bound"
+      >A</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="2819"
+      > </a
+      ><a name="2820" href="Definition.LogicalRelation.Properties.Neutral.html#2695" class="Bound"
+      >[A]</a
+      ><a name="2823"
+      >
+  </a
+      ><a name="2826" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" class="Symbol"
+      >(</a
+      ><a name="2837" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="2839"
+      > </a
+      ><a name="2840" class="DottedPattern Symbol"
+      >.</a
+      ><a name="2841" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="2842"
+      > </a
+      ><a name="2843" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2846"
+      > </a
+      ><a name="2847" href="Definition.LogicalRelation.Properties.Neutral.html#2847" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2849" class="Symbol"
+      >)</a
+      ><a name="2850"
+      > </a
+      ><a name="2851" href="Definition.LogicalRelation.Properties.Neutral.html#2851" class="Bound"
+      >neN</a
+      ><a name="2854"
+      > </a
+      ><a name="2855" href="Definition.LogicalRelation.Properties.Neutral.html#2855" class="Bound"
+      >neN'</a
+      ><a name="2859"
+      > </a
+      ><a name="2860" class="Symbol"
+      >(</a
+      ><a name="2861" href="Definition.LogicalRelation.Properties.Neutral.html#2861" class="Bound"
+      >n</a
+      ><a name="2862"
+      > </a
+      ><a name="2863" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2864"
+      > </a
+      ><a name="2865" href="Definition.LogicalRelation.Properties.Neutral.html#2865" class="Bound"
+      >n'</a
+      ><a name="2867"
+      > </a
+      ><a name="2868" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2869"
+      > </a
+      ><a name="2870" href="Definition.LogicalRelation.Properties.Neutral.html#2870" class="Bound"
+      >n&#8801;n'</a
+      ><a name="2874" class="Symbol"
+      >)</a
+      ><a name="2875"
+      > </a
+      ><a name="2876" class="Symbol"
+      >=</a
+      ><a name="2877"
+      >
+    </a
+      ><a name="2882" class="Keyword"
+      >let</a
+      ><a name="2885"
+      > </a
+      ><a name="2886" href="Definition.LogicalRelation.Properties.Neutral.html#2886" class="Bound"
+      >[n]</a
+      ><a name="2889"
+      >  </a
+      ><a name="2891" class="Symbol"
+      >=</a
+      ><a name="2892"
+      > </a
+      ><a name="2893" href="Definition.LogicalRelation.Properties.Neutral.html#550" class="Function"
+      >neu</a
+      ><a name="2896"
+      > </a
+      ><a name="2897" href="Definition.LogicalRelation.Properties.Neutral.html#2851" class="Bound"
+      >neN</a
+      ><a name="2900"
+      >  </a
+      ><a name="2902" class="Symbol"
+      >(</a
+      ><a name="2903" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="2907"
+      > </a
+      ><a name="2908" href="Definition.LogicalRelation.Properties.Neutral.html#2861" class="Bound"
+      >n</a
+      ><a name="2909" class="Symbol"
+      >)</a
+      ><a name="2910"
+      >
+        </a
+      ><a name="2919" href="Definition.LogicalRelation.Properties.Neutral.html#2919" class="Bound"
+      >[n']</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" class="Symbol"
+      >=</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" href="Definition.LogicalRelation.Properties.Neutral.html#550" class="Function"
+      >neu</a
+      ><a name="2929"
+      > </a
+      ><a name="2930" href="Definition.LogicalRelation.Properties.Neutral.html#2855" class="Bound"
+      >neN'</a
+      ><a name="2934"
+      > </a
+      ><a name="2935" class="Symbol"
+      >(</a
+      ><a name="2936" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="2940"
+      > </a
+      ><a name="2941" href="Definition.LogicalRelation.Properties.Neutral.html#2865" class="Bound"
+      >n'</a
+      ><a name="2943" class="Symbol"
+      >)</a
+      ><a name="2944"
+      >
+    </a
+      ><a name="2949" class="Keyword"
+      >in</a
+      ><a name="2951"
+      >  </a
+      ><a name="2953" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" href="Definition.LogicalRelation.Properties.Neutral.html#2861" class="Bound"
+      >n</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Definition.LogicalRelation.Properties.Neutral.html#2865" class="Bound"
+      >n'</a
+      ><a name="2961"
+      > </a
+      ><a name="2962" href="Definition.LogicalRelation.Properties.Neutral.html#2870" class="Bound"
+      >n&#8801;n'</a
+      ><a name="2966"
+      > </a
+      ><a name="2967" href="Definition.LogicalRelation.Properties.Neutral.html#2886" class="Bound"
+      >[n]</a
+      ><a name="2970"
+      > </a
+      ><a name="2971" href="Definition.LogicalRelation.Properties.Neutral.html#2919" class="Bound"
+      >[n']</a
+      ><a name="2975"
+      >
+            </a
+      ><a name="2988" class="Symbol"
+      >(</a
+      ><a name="2989" href="Definition.LogicalRelation.Properties.Neutral.html#926" class="Function"
+      >neuEq</a
+      ><a name="2994"
+      > </a
+      ><a name="2995" href="Definition.LogicalRelation.Properties.Neutral.html#2886" class="Bound"
+      >[n]</a
+      ><a name="2998"
+      > </a
+      ><a name="2999" href="Definition.LogicalRelation.Properties.Neutral.html#2851" class="Bound"
+      >neN</a
+      ><a name="3002"
+      > </a
+      ><a name="3003" href="Definition.LogicalRelation.Properties.Neutral.html#2855" class="Bound"
+      >neN'</a
+      ><a name="3007"
+      > </a
+      ><a name="3008" class="Symbol"
+      >(</a
+      ><a name="3009" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" href="Definition.LogicalRelation.Properties.Neutral.html#2861" class="Bound"
+      >n</a
+      ><a name="3015"
+      > </a
+      ><a name="3016" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3017"
+      > </a
+      ><a name="3018" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="3022"
+      > </a
+      ><a name="3023" href="Definition.LogicalRelation.Properties.Neutral.html#2865" class="Bound"
+      >n'</a
+      ><a name="3025"
+      > </a
+      ><a name="3026" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3027"
+      > </a
+      ><a name="3028" href="Definition.Typed.html#1817" class="InductiveConstructor"
+      >univ</a
+      ><a name="3032"
+      > </a
+      ><a name="3033" href="Definition.LogicalRelation.Properties.Neutral.html#2870" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3037" class="Symbol"
+      >))</a
+      ><a name="3039"
+      >
+  </a
+      ><a name="3042" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="3051"
+      > </a
+      ><a name="3052" class="Symbol"
+      >(</a
+      ><a name="3053" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="3054"
+      > </a
+      ><a name="3055" href="Definition.LogicalRelation.Properties.Neutral.html#3055" class="Bound"
+      >D</a
+      ><a name="3056" class="Symbol"
+      >)</a
+      ><a name="3057"
+      > </a
+      ><a name="3058" href="Definition.LogicalRelation.Properties.Neutral.html#3058" class="Bound"
+      >neN</a
+      ><a name="3061"
+      > </a
+      ><a name="3062" href="Definition.LogicalRelation.Properties.Neutral.html#3062" class="Bound"
+      >neN'</a
+      ><a name="3066"
+      > </a
+      ><a name="3067" class="Symbol"
+      >(</a
+      ><a name="3068" href="Definition.LogicalRelation.Properties.Neutral.html#3068" class="Bound"
+      >n</a
+      ><a name="3069"
+      > </a
+      ><a name="3070" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3071"
+      > </a
+      ><a name="3072" href="Definition.LogicalRelation.Properties.Neutral.html#3072" class="Bound"
+      >n'</a
+      ><a name="3074"
+      > </a
+      ><a name="3075" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3076"
+      > </a
+      ><a name="3077" href="Definition.LogicalRelation.Properties.Neutral.html#3077" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3081" class="Symbol"
+      >)</a
+      ><a name="3082"
+      > </a
+      ><a name="3083" class="Symbol"
+      >=</a
+      ><a name="3084"
+      >
+    </a
+      ><a name="3089" class="Keyword"
+      >let</a
+      ><a name="3092"
+      > </a
+      ><a name="3093" href="Definition.LogicalRelation.Properties.Neutral.html#3093" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="3096"
+      > </a
+      ><a name="3097" class="Symbol"
+      >=</a
+      ><a name="3098"
+      > </a
+      ><a name="3099" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="3106"
+      > </a
+      ><a name="3107" class="Symbol"
+      >(</a
+      ><a name="3108" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" href="Definition.LogicalRelation.Properties.Neutral.html#3055" class="Bound"
+      >D</a
+      ><a name="3113" class="Symbol"
+      >)</a
+      ><a name="3114"
+      >
+    </a
+      ><a name="3119" class="Keyword"
+      >in</a
+      ><a name="3121"
+      >  </a
+      ><a name="3123" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="3126"
+      > </a
+      ><a name="3127" class="Symbol"
+      >_</a
+      ><a name="3128"
+      > </a
+      ><a name="3129" class="Symbol"
+      >_</a
+      ><a name="3130"
+      > </a
+      ><a name="3131" class="Symbol"
+      >(</a
+      ><a name="3132" href="Definition.Typed.Properties.html#7917" class="Function"
+      >idRedTerm:*:</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" class="Symbol"
+      >(</a
+      ><a name="3146" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="3150"
+      > </a
+      ><a name="3151" href="Definition.LogicalRelation.Properties.Neutral.html#3068" class="Bound"
+      >n</a
+      ><a name="3152"
+      > </a
+      ><a name="3153" href="Definition.LogicalRelation.Properties.Neutral.html#3093" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="3156" class="Symbol"
+      >))</a
+      ><a name="3158"
+      > </a
+      ><a name="3159" class="Symbol"
+      >(</a
+      ><a name="3160" href="Definition.Typed.Properties.html#7917" class="Function"
+      >idRedTerm:*:</a
+      ><a name="3172"
+      > </a
+      ><a name="3173" class="Symbol"
+      >(</a
+      ><a name="3174" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="3178"
+      > </a
+      ><a name="3179" href="Definition.LogicalRelation.Properties.Neutral.html#3072" class="Bound"
+      >n'</a
+      ><a name="3181"
+      > </a
+      ><a name="3182" href="Definition.LogicalRelation.Properties.Neutral.html#3093" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="3185" class="Symbol"
+      >))</a
+      ><a name="3187"
+      >
+            </a
+      ><a name="3200" class="Symbol"
+      >(</a
+      ><a name="3201" href="Definition.Typed.html#2636" class="InductiveConstructor"
+      >conv</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="Definition.LogicalRelation.Properties.Neutral.html#3077" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3210"
+      > </a
+      ><a name="3211" href="Definition.LogicalRelation.Properties.Neutral.html#3093" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="3214" class="Symbol"
+      >)</a
+      ><a name="3215"
+      > </a
+      ><a name="3216" class="Symbol"
+      >(</a
+      ><a name="3217" href="Definition.LogicalRelation.html#1785" class="InductiveConstructor"
+      >ne</a
+      ><a name="3219"
+      > </a
+      ><a name="3220" href="Definition.LogicalRelation.Properties.Neutral.html#3058" class="Bound"
+      >neN</a
+      ><a name="3223"
+      > </a
+      ><a name="3224" href="Definition.LogicalRelation.Properties.Neutral.html#3062" class="Bound"
+      >neN'</a
+      ><a name="3228"
+      > </a
+      ><a name="3229" class="Symbol"
+      >(</a
+      ><a name="3230" href="Definition.Typed.html#2636" class="InductiveConstructor"
+      >conv</a
+      ><a name="3234"
+      > </a
+      ><a name="3235" href="Definition.LogicalRelation.Properties.Neutral.html#3077" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3239"
+      > </a
+      ><a name="3240" href="Definition.LogicalRelation.Properties.Neutral.html#3093" class="Bound"
+      >A&#8801;&#8469;</a
+      ><a name="3243" class="Symbol"
+      >))</a
+      ><a name="3245"
+      >
+  </a
+      ><a name="3248" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="3257"
+      > </a
+      ><a name="3258" class="Symbol"
+      >(</a
+      ><a name="3259" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="3262"
+      > </a
+      ><a name="3263" href="Definition.LogicalRelation.Properties.Neutral.html#3263" class="Bound"
+      >K</a
+      ><a name="3264"
+      > </a
+      ><a name="3265" href="Definition.LogicalRelation.Properties.Neutral.html#3265" class="Bound"
+      >D</a
+      ><a name="3266"
+      > </a
+      ><a name="3267" href="Definition.LogicalRelation.Properties.Neutral.html#3267" class="Bound"
+      >neK</a
+      ><a name="3270" class="Symbol"
+      >)</a
+      ><a name="3271"
+      > </a
+      ><a name="3272" href="Definition.LogicalRelation.Properties.Neutral.html#3272" class="Bound"
+      >neN</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" href="Definition.LogicalRelation.Properties.Neutral.html#3276" class="Bound"
+      >neN'</a
+      ><a name="3280"
+      > </a
+      ><a name="3281" class="Symbol"
+      >(</a
+      ><a name="3282" href="Definition.LogicalRelation.Properties.Neutral.html#3282" class="Bound"
+      >n</a
+      ><a name="3283"
+      > </a
+      ><a name="3284" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3285"
+      > </a
+      ><a name="3286" href="Definition.LogicalRelation.Properties.Neutral.html#3286" class="Bound"
+      >n'</a
+      ><a name="3288"
+      > </a
+      ><a name="3289" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3290"
+      > </a
+      ><a name="3291" href="Definition.LogicalRelation.Properties.Neutral.html#3291" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3295" class="Symbol"
+      >)</a
+      ><a name="3296"
+      > </a
+      ><a name="3297" class="Symbol"
+      >=</a
+      ><a name="3298"
+      > </a
+      ><a name="3299" href="Definition.LogicalRelation.Properties.Neutral.html#3291" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3303"
+      >
+  </a
+      ><a name="3306" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="3315"
+      > </a
+      ><a name="3316" class="Symbol"
+      >(</a
+      ><a name="3317" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="3319"
+      > </a
+      ><a name="3320" href="Definition.LogicalRelation.Properties.Neutral.html#3320" class="Bound"
+      >F</a
+      ><a name="3321"
+      > </a
+      ><a name="3322" href="Definition.LogicalRelation.Properties.Neutral.html#3322" class="Bound"
+      >G</a
+      ><a name="3323"
+      > </a
+      ><a name="3324" href="Definition.LogicalRelation.Properties.Neutral.html#3324" class="Bound"
+      >D</a
+      ><a name="3325"
+      > </a
+      ><a name="3326" href="Definition.LogicalRelation.Properties.Neutral.html#3326" class="Bound"
+      >&#8866;F</a
+      ><a name="3328"
+      > </a
+      ><a name="3329" href="Definition.LogicalRelation.Properties.Neutral.html#3329" class="Bound"
+      >&#8866;G</a
+      ><a name="3331"
+      > </a
+      ><a name="3332" href="Definition.LogicalRelation.Properties.Neutral.html#3332" class="Bound"
+      >[F]</a
+      ><a name="3335"
+      > </a
+      ><a name="3336" href="Definition.LogicalRelation.Properties.Neutral.html#3336" class="Bound"
+      >[G]</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" href="Definition.LogicalRelation.Properties.Neutral.html#3340" class="Bound"
+      >G-ext</a
+      ><a name="3345" class="Symbol"
+      >)</a
+      ><a name="3346"
+      > </a
+      ><a name="3347" href="Definition.LogicalRelation.Properties.Neutral.html#3347" class="Bound"
+      >neN</a
+      ><a name="3350"
+      > </a
+      ><a name="3351" href="Definition.LogicalRelation.Properties.Neutral.html#3351" class="Bound"
+      >neN'</a
+      ><a name="3355"
+      > </a
+      ><a name="3356" class="Symbol"
+      >(</a
+      ><a name="3357" href="Definition.LogicalRelation.Properties.Neutral.html#3357" class="Bound"
+      >n</a
+      ><a name="3358"
+      > </a
+      ><a name="3359" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3360"
+      > </a
+      ><a name="3361" href="Definition.LogicalRelation.Properties.Neutral.html#3361" class="Bound"
+      >n'</a
+      ><a name="3363"
+      > </a
+      ><a name="3364" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3365"
+      > </a
+      ><a name="3366" href="Definition.LogicalRelation.Properties.Neutral.html#3366" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3370" class="Symbol"
+      >)</a
+      ><a name="3371"
+      > </a
+      ><a name="3372" class="Symbol"
+      >=</a
+      ><a name="3373"
+      >
+    </a
+      ><a name="3378" class="Keyword"
+      >let</a
+      ><a name="3381"
+      > </a
+      ><a name="3382" href="Definition.LogicalRelation.Properties.Neutral.html#3382" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3387"
+      > </a
+      ><a name="3388" class="Symbol"
+      >=</a
+      ><a name="3389"
+      > </a
+      ><a name="3390" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="3391"
+      > </a
+      ><a name="3392" class="Symbol"
+      >(</a
+      ><a name="3393" href="Definition.LogicalRelation.html#5186" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" href="Definition.LogicalRelation.Properties.Neutral.html#3320" class="Bound"
+      >F</a
+      ><a name="3396"
+      > </a
+      ><a name="3397" href="Definition.LogicalRelation.Properties.Neutral.html#3322" class="Bound"
+      >G</a
+      ><a name="3398"
+      > </a
+      ><a name="3399" href="Definition.LogicalRelation.Properties.Neutral.html#3324" class="Bound"
+      >D</a
+      ><a name="3400"
+      > </a
+      ><a name="3401" href="Definition.LogicalRelation.Properties.Neutral.html#3326" class="Bound"
+      >&#8866;F</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" href="Definition.LogicalRelation.Properties.Neutral.html#3329" class="Bound"
+      >&#8866;G</a
+      ><a name="3406"
+      > </a
+      ><a name="3407" href="Definition.LogicalRelation.Properties.Neutral.html#3332" class="Bound"
+      >[F]</a
+      ><a name="3410"
+      > </a
+      ><a name="3411" href="Definition.LogicalRelation.Properties.Neutral.html#3336" class="Bound"
+      >[G]</a
+      ><a name="3414"
+      > </a
+      ><a name="3415" href="Definition.LogicalRelation.Properties.Neutral.html#3340" class="Bound"
+      >G-ext</a
+      ><a name="3420" class="Symbol"
+      >)</a
+      ><a name="3421"
+      >
+    </a
+      ><a name="3426" class="Keyword"
+      >in</a
+      ><a name="3428"
+      >  </a
+      ><a name="3430" href="Definition.LogicalRelation.Properties.Neutral.html#3366" class="Bound"
+      >n&#8801;n'</a
+      ><a name="3434"
+      > </a
+      ><a name="3435" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3436"
+      > </a
+      ><a name="3437" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="3444"
+      > </a
+      ><a name="3445" href="Definition.LogicalRelation.Properties.Neutral.html#3382" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3450"
+      > </a
+      ><a name="3451" href="Definition.LogicalRelation.Properties.Neutral.html#3347" class="Bound"
+      >neN</a
+      ><a name="3454"
+      > </a
+      ><a name="3455" href="Definition.LogicalRelation.Properties.Neutral.html#3357" class="Bound"
+      >n</a
+      ><a name="3456"
+      > </a
+      ><a name="3457" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3458"
+      > </a
+      ><a name="3459" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="3466"
+      > </a
+      ><a name="3467" href="Definition.LogicalRelation.Properties.Neutral.html#3382" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3472"
+      > </a
+      ><a name="3473" href="Definition.LogicalRelation.Properties.Neutral.html#3351" class="Bound"
+      >neN'</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" href="Definition.LogicalRelation.Properties.Neutral.html#3361" class="Bound"
+      >n'</a
+      ><a name="3480"
+      >
+     </a
+      ><a name="3486" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3487"
+      >  </a
+      ><a name="3489" class="Symbol"
+      >(&#955;</a
+      ><a name="3491"
+      > </a
+      ><a name="3492" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3493"
+      > </a
+      ><a name="3494" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3496"
+      > </a
+      ><a name="3497" href="Definition.LogicalRelation.Properties.Neutral.html#3497" class="Bound"
+      >[a]</a
+      ><a name="3500"
+      > </a
+      ><a name="3501" class="Symbol"
+      >&#8594;</a
+      ><a name="3502"
+      >
+        </a
+      ><a name="3511" class="Keyword"
+      >let</a
+      ><a name="3514"
+      > </a
+      ><a name="3515" href="Definition.LogicalRelation.Properties.Neutral.html#3515" class="Bound"
+      >A&#8801;&#928;FG</a
+      ><a name="3520"
+      > </a
+      ><a name="3521" class="Symbol"
+      >=</a
+      ><a name="3522"
+      > </a
+      ><a name="3523" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="3530"
+      > </a
+      ><a name="3531" class="Symbol"
+      >(</a
+      ><a name="3532" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="3535"
+      > </a
+      ><a name="3536" href="Definition.LogicalRelation.Properties.Neutral.html#3324" class="Bound"
+      >D</a
+      ><a name="3537" class="Symbol"
+      >)</a
+      ><a name="3538"
+      >
+            </a
+      ><a name="3551" href="Definition.LogicalRelation.Properties.Neutral.html#3551" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="3558"
+      > </a
+      ><a name="3559" class="Symbol"
+      >=</a
+      ><a name="3560"
+      > </a
+      ><a name="3561" href="Definition.Typed.Weakening.html#5413" class="Function"
+      >wkEq</a
+      ><a name="3565"
+      > </a
+      ><a name="3566" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3567"
+      > </a
+      ><a name="3568" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3570"
+      > </a
+      ><a name="3571" class="Symbol"
+      >(</a
+      ><a name="3572" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="3579"
+      > </a
+      ><a name="3580" class="Symbol"
+      >(</a
+      ><a name="3581" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="3584"
+      > </a
+      ><a name="3585" href="Definition.LogicalRelation.Properties.Neutral.html#3324" class="Bound"
+      >D</a
+      ><a name="3586" class="Symbol"
+      >))</a
+      ><a name="3588"
+      >
+            </a
+      ><a name="3601" href="Definition.LogicalRelation.Properties.Neutral.html#3601" class="Bound"
+      >&#961;n</a
+      ><a name="3603"
+      > </a
+      ><a name="3604" class="Symbol"
+      >=</a
+      ><a name="3605"
+      > </a
+      ><a name="3606" href="Definition.Typed.Weakening.html#4157" class="Function"
+      >wkTerm</a
+      ><a name="3612"
+      > </a
+      ><a name="3613" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3614"
+      > </a
+      ><a name="3615" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3617"
+      > </a
+      ><a name="3618" href="Definition.LogicalRelation.Properties.Neutral.html#3357" class="Bound"
+      >n</a
+      ><a name="3619"
+      >
+            </a
+      ><a name="3632" href="Definition.LogicalRelation.Properties.Neutral.html#3632" class="Bound"
+      >&#961;n'</a
+      ><a name="3635"
+      > </a
+      ><a name="3636" class="Symbol"
+      >=</a
+      ><a name="3637"
+      > </a
+      ><a name="3638" href="Definition.Typed.Weakening.html#4157" class="Function"
+      >wkTerm</a
+      ><a name="3644"
+      > </a
+      ><a name="3645" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3646"
+      > </a
+      ><a name="3647" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3649"
+      > </a
+      ><a name="3650" href="Definition.LogicalRelation.Properties.Neutral.html#3361" class="Bound"
+      >n'</a
+      ><a name="3652"
+      >
+            </a
+      ><a name="3665" href="Definition.LogicalRelation.Properties.Neutral.html#3665" class="Bound"
+      >a</a
+      ><a name="3666"
+      > </a
+      ><a name="3667" class="Symbol"
+      >=</a
+      ><a name="3668"
+      > </a
+      ><a name="3669" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="3683"
+      > </a
+      ><a name="3684" class="Symbol"
+      >(</a
+      ><a name="3685" href="Definition.LogicalRelation.Properties.Neutral.html#3332" class="Bound"
+      >[F]</a
+      ><a name="3688"
+      > </a
+      ><a name="3689" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3690"
+      > </a
+      ><a name="3691" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3693" class="Symbol"
+      >)</a
+      ><a name="3694"
+      > </a
+      ><a name="3695" href="Definition.LogicalRelation.Properties.Neutral.html#3497" class="Bound"
+      >[a]</a
+      ><a name="3698"
+      >
+            </a
+      ><a name="3711" href="Definition.LogicalRelation.Properties.Neutral.html#3711" class="Bound"
+      >neN&#8729;a</a
+      ><a name="3716"
+      >   </a
+      ><a name="3719" class="Symbol"
+      >=</a
+      ><a name="3720"
+      > </a
+      ><a name="3721" href="Definition.Untyped.html#825" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="3724"
+      > </a
+      ><a name="3725" class="Symbol"
+      >(</a
+      ><a name="3726" href="Definition.Untyped.html#3860" class="Function"
+      >wkNeutral</a
+      ><a name="3735"
+      > </a
+      ><a name="3736" class="Symbol"
+      >(</a
+      ><a name="3737" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="3741"
+      > </a
+      ><a name="3742" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3743" class="Symbol"
+      >)</a
+      ><a name="3744"
+      > </a
+      ><a name="3745" href="Definition.LogicalRelation.Properties.Neutral.html#3347" class="Bound"
+      >neN</a
+      ><a name="3748" class="Symbol"
+      >)</a
+      ><a name="3749"
+      >
+            </a
+      ><a name="3762" href="Definition.LogicalRelation.Properties.Neutral.html#3762" class="Bound"
+      >neN'&#8729;a'</a
+      ><a name="3769"
+      > </a
+      ><a name="3770" class="Symbol"
+      >=</a
+      ><a name="3771"
+      > </a
+      ><a name="3772" href="Definition.Untyped.html#825" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="3775"
+      > </a
+      ><a name="3776" class="Symbol"
+      >(</a
+      ><a name="3777" href="Definition.Untyped.html#3860" class="Function"
+      >wkNeutral</a
+      ><a name="3786"
+      > </a
+      ><a name="3787" class="Symbol"
+      >(</a
+      ><a name="3788" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="3792"
+      > </a
+      ><a name="3793" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3794" class="Symbol"
+      >)</a
+      ><a name="3795"
+      > </a
+      ><a name="3796" href="Definition.LogicalRelation.Properties.Neutral.html#3351" class="Bound"
+      >neN'</a
+      ><a name="3800" class="Symbol"
+      >)</a
+      ><a name="3801"
+      >
+        </a
+      ><a name="3810" class="Keyword"
+      >in</a
+      ><a name="3812"
+      >  </a
+      ><a name="3814" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="3823"
+      > </a
+      ><a name="3824" class="Symbol"
+      >(</a
+      ><a name="3825" href="Definition.LogicalRelation.Properties.Neutral.html#3336" class="Bound"
+      >[G]</a
+      ><a name="3828"
+      > </a
+      ><a name="3829" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3830"
+      > </a
+      ><a name="3831" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3833"
+      > </a
+      ><a name="3834" href="Definition.LogicalRelation.Properties.Neutral.html#3497" class="Bound"
+      >[a]</a
+      ><a name="3837" class="Symbol"
+      >)</a
+      ><a name="3838"
+      > </a
+      ><a name="3839" href="Definition.LogicalRelation.Properties.Neutral.html#3711" class="Bound"
+      >neN&#8729;a</a
+      ><a name="3844"
+      > </a
+      ><a name="3845" href="Definition.LogicalRelation.Properties.Neutral.html#3762" class="Bound"
+      >neN'&#8729;a'</a
+      ><a name="3852"
+      >
+                      </a
+      ><a name="3875" class="Symbol"
+      >(</a
+      ><a name="3876"
+      > </a
+      ><a name="3877" class="Symbol"
+      >(</a
+      ><a name="3878" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="3882"
+      > </a
+      ><a name="3883" href="Definition.LogicalRelation.Properties.Neutral.html#3601" class="Bound"
+      >&#961;n</a
+      ><a name="3885"
+      >  </a
+      ><a name="3887" href="Definition.LogicalRelation.Properties.Neutral.html#3551" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="3894"
+      > </a
+      ><a name="3895" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3896"
+      > </a
+      ><a name="3897" href="Definition.LogicalRelation.Properties.Neutral.html#3665" class="Bound"
+      >a</a
+      ><a name="3898" class="Symbol"
+      >)</a
+      ><a name="3899"
+      >
+                      </a
+      ><a name="3922" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3923"
+      > </a
+      ><a name="3924" class="Symbol"
+      >(</a
+      ><a name="3925" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="3929"
+      > </a
+      ><a name="3930" href="Definition.LogicalRelation.Properties.Neutral.html#3632" class="Bound"
+      >&#961;n'</a
+      ><a name="3933"
+      > </a
+      ><a name="3934" href="Definition.LogicalRelation.Properties.Neutral.html#3551" class="Bound"
+      >&#961;A&#8801;&#961;&#928;FG</a
+      ><a name="3941"
+      > </a
+      ><a name="3942" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="3943"
+      > </a
+      ><a name="3944" href="Definition.LogicalRelation.Properties.Neutral.html#3665" class="Bound"
+      >a</a
+      ><a name="3945" class="Symbol"
+      >)</a
+      ><a name="3946"
+      >
+                      </a
+      ><a name="3969" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3970"
+      > </a
+      ><a name="3971" href="Definition.Typed.html#2948" class="InductiveConstructor"
+      >app-cong</a
+      ><a name="3979"
+      > </a
+      ><a name="3980" class="Symbol"
+      >(</a
+      ><a name="3981" href="Definition.Typed.Weakening.html#5947" class="Function"
+      >wkEqTerm</a
+      ><a name="3989"
+      > </a
+      ><a name="3990" href="Definition.LogicalRelation.Properties.Neutral.html#3492" class="Bound"
+      >&#961;</a
+      ><a name="3991"
+      > </a
+      ><a name="3992" href="Definition.LogicalRelation.Properties.Neutral.html#3494" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3994"
+      > </a
+      ><a name="3995" class="Symbol"
+      >(</a
+      ><a name="3996" href="Definition.Typed.html#2636" class="InductiveConstructor"
+      >conv</a
+      ><a name="4000"
+      > </a
+      ><a name="4001" href="Definition.LogicalRelation.Properties.Neutral.html#3366" class="Bound"
+      >n&#8801;n'</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" href="Definition.LogicalRelation.Properties.Neutral.html#3515" class="Bound"
+      >A&#8801;&#928;FG</a
+      ><a name="4011" class="Symbol"
+      >))</a
+      ><a name="4013"
+      > </a
+      ><a name="4014" class="Symbol"
+      >(</a
+      ><a name="4015" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="4019"
+      > </a
+      ><a name="4020" href="Definition.LogicalRelation.Properties.Neutral.html#3665" class="Bound"
+      >a</a
+      ><a name="4021" class="Symbol"
+      >)))</a
+      ><a name="4024"
+      >
+  </a
+      ><a name="4027" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="4036"
+      > </a
+      ><a name="4037" class="Symbol"
+      >(</a
+      ><a name="4038" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="4041"
+      > </a
+      ><a name="4042" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="4045"
+      > </a
+      ><a name="4046" href="Definition.LogicalRelation.Properties.Neutral.html#4046" class="Bound"
+      >x</a
+      ><a name="4047" class="Symbol"
+      >)</a
+      ><a name="4048"
+      > </a
+      ><a name="4049" href="Definition.LogicalRelation.Properties.Neutral.html#4049" class="Bound"
+      >neN</a
+      ><a name="4052"
+      > </a
+      ><a name="4053" href="Definition.LogicalRelation.Properties.Neutral.html#4053" class="Bound"
+      >neN'</a
+      ><a name="4057"
+      > </a
+      ><a name="4058" href="Definition.LogicalRelation.Properties.Neutral.html#4058" class="Bound"
+      >n:&#8801;:n'</a
+      ><a name="4064"
+      > </a
+      ><a name="4065" class="Symbol"
+      >=</a
+      ><a name="4066"
+      > </a
+      ><a name="4067" href="Definition.LogicalRelation.Properties.Neutral.html#2667" class="Function"
+      >neuEqTerm</a
+      ><a name="4076"
+      > </a
+      ><a name="4077" href="Definition.LogicalRelation.Properties.Neutral.html#4046" class="Bound"
+      >x</a
+      ><a name="4078"
+      > </a
+      ><a name="4079" href="Definition.LogicalRelation.Properties.Neutral.html#4049" class="Bound"
+      >neN</a
+      ><a name="4082"
+      > </a
+      ><a name="4083" href="Definition.LogicalRelation.Properties.Neutral.html#4053" class="Bound"
+      >neN'</a
+      ><a name="4087"
+      > </a
+      ><a name="4088" href="Definition.LogicalRelation.Properties.Neutral.html#4058" class="Bound"
+      >n:&#8801;:n'</a
+      ><a name="4094"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

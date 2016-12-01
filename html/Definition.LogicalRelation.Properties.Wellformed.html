@@ -1,0 +1,1823 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Wellformed</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Wellformed</a
+      ><a name="56"
+      > </a
+      ><a name="57" class="Keyword"
+      >where</a
+      ><a name="62"
+      >
+
+</a
+      ><a name="64" class="Keyword"
+      >open</a
+      ><a name="68"
+      > </a
+      ><a name="69" class="Keyword"
+      >import</a
+      ><a name="75"
+      > </a
+      ><a name="76" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="94"
+      >
+</a
+      ><a name="95" class="Keyword"
+      >open</a
+      ><a name="99"
+      > </a
+      ><a name="100" class="Keyword"
+      >import</a
+      ><a name="106"
+      > </a
+      ><a name="107" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="123"
+      >
+</a
+      ><a name="124" class="Keyword"
+      >open</a
+      ><a name="128"
+      > </a
+      ><a name="129" class="Keyword"
+      >import</a
+      ><a name="135"
+      > </a
+      ><a name="136" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="163"
+      >
+</a
+      ><a name="164" class="Keyword"
+      >open</a
+      ><a name="168"
+      > </a
+      ><a name="169" class="Keyword"
+      >import</a
+      ><a name="175"
+      > </a
+      ><a name="176" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="202"
+      >
+
+</a
+      ><a name="204" class="Keyword"
+      >open</a
+      ><a name="208"
+      > </a
+      ><a name="209" class="Keyword"
+      >import</a
+      ><a name="215"
+      > </a
+      ><a name="216" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="229"
+      >
+</a
+      ><a name="230" class="Keyword"
+      >import</a
+      ><a name="236"
+      > </a
+      ><a name="237" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="264"
+      > </a
+      ><a name="265" class="Symbol"
+      >as</a
+      ><a name="267"
+      > </a
+      ><a name="268" class="Module"
+      >PE</a
+      ><a name="270"
+      >
+
+
+</a
+      ><a name="273" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="283"
+      > </a
+      ><a name="284" class="Symbol"
+      >:</a
+      ><a name="285"
+      > </a
+      ><a name="286" class="Symbol"
+      >&#8704;</a
+      ><a name="287"
+      > </a
+      ><a name="288" class="Symbol"
+      >{</a
+      ><a name="289" href="Definition.LogicalRelation.Properties.Wellformed.html#289" class="Bound"
+      >l</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Definition.LogicalRelation.Properties.Wellformed.html#291" class="Bound"
+      >&#915;</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Definition.LogicalRelation.Properties.Wellformed.html#293" class="Bound"
+      >A</a
+      ><a name="294" class="Symbol"
+      >}</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Symbol"
+      >&#8594;</a
+      ><a name="297"
+      > </a
+      ><a name="298" href="Definition.LogicalRelation.Properties.Wellformed.html#291" class="Bound"
+      >&#915;</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Definition.LogicalRelation.Properties.Wellformed.html#289" class="Bound"
+      >l</a
+      ><a name="304"
+      > </a
+      ><a name="305" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="306"
+      > </a
+      ><a name="307" href="Definition.LogicalRelation.Properties.Wellformed.html#293" class="Bound"
+      >A</a
+      ><a name="308"
+      > </a
+      ><a name="309" class="Symbol"
+      >&#8594;</a
+      ><a name="310"
+      > </a
+      ><a name="311" href="Definition.LogicalRelation.Properties.Wellformed.html#291" class="Bound"
+      >&#915;</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="314"
+      > </a
+      ><a name="315" href="Definition.LogicalRelation.Properties.Wellformed.html#293" class="Bound"
+      >A</a
+      ><a name="316"
+      >
+</a
+      ><a name="317" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="Symbol"
+      >(</a
+      ><a name="329" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="331"
+      > </a
+      ><a name="332" href="Definition.LogicalRelation.Properties.Wellformed.html#332" class="Bound"
+      >l'</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="Definition.LogicalRelation.Properties.Wellformed.html#335" class="Bound"
+      >l&lt;</a
+      ><a name="337"
+      > </a
+      ><a name="338" href="Definition.LogicalRelation.Properties.Wellformed.html#338" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="340" class="Symbol"
+      >)</a
+      ><a name="341"
+      > </a
+      ><a name="342" class="Symbol"
+      >=</a
+      ><a name="343"
+      > </a
+      ><a name="344" href="Definition.Typed.html#612" class="InductiveConstructor"
+      >U</a
+      ><a name="345"
+      > </a
+      ><a name="346" href="Definition.LogicalRelation.Properties.Wellformed.html#338" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="348"
+      >
+</a
+      ><a name="349" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="359"
+      > </a
+      ><a name="360" class="Symbol"
+      >(</a
+      ><a name="361" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="362"
+      > </a
+      ><a name="363" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="364"
+      > </a
+      ><a name="365" href="Definition.LogicalRelation.Properties.Wellformed.html#365" class="Bound"
+      >&#8866;A</a
+      ><a name="367"
+      > </a
+      ><a name="368" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="369"
+      > </a
+      ><a name="370" href="Definition.LogicalRelation.Properties.Wellformed.html#370" class="Bound"
+      >&#8866;B</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Definition.LogicalRelation.Properties.Wellformed.html#375" class="Bound"
+      >D</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="378" class="Symbol"
+      >)</a
+      ><a name="379"
+      > </a
+      ><a name="380" class="Symbol"
+      >=</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Definition.LogicalRelation.Properties.Wellformed.html#365" class="Bound"
+      >&#8866;A</a
+      ><a name="384"
+      >
+</a
+      ><a name="385" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Symbol"
+      >(</a
+      ><a name="397" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Definition.LogicalRelation.Properties.Wellformed.html#401" class="Bound"
+      >K</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Definition.LogicalRelation.Properties.Wellformed.html#405" class="Bound"
+      >&#8866;A</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="409"
+      > </a
+      ><a name="410" href="Definition.LogicalRelation.Properties.Wellformed.html#410" class="Bound"
+      >&#8866;B</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="414"
+      > </a
+      ><a name="415" href="Definition.LogicalRelation.Properties.Wellformed.html#415" class="Bound"
+      >D</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="418"
+      > </a
+      ><a name="419" href="Definition.LogicalRelation.Properties.Wellformed.html#419" class="Bound"
+      >neK</a
+      ><a name="422" class="Symbol"
+      >)</a
+      ><a name="423"
+      > </a
+      ><a name="424" class="Symbol"
+      >=</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Definition.LogicalRelation.Properties.Wellformed.html#405" class="Bound"
+      >&#8866;A</a
+      ><a name="428"
+      >
+</a
+      ><a name="429" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="Symbol"
+      >(</a
+      ><a name="441" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Definition.LogicalRelation.Properties.Wellformed.html#444" class="Bound"
+      >F</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="Definition.LogicalRelation.Properties.Wellformed.html#446" class="Bound"
+      >G</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Definition.LogicalRelation.Properties.Wellformed.html#450" class="Bound"
+      >&#8866;A</a
+      ><a name="452"
+      > </a
+      ><a name="453" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Definition.LogicalRelation.Properties.Wellformed.html#455" class="Bound"
+      >&#8866;B</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Definition.LogicalRelation.Properties.Wellformed.html#460" class="Bound"
+      >D</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="463"
+      > </a
+      ><a name="464" href="Definition.LogicalRelation.Properties.Wellformed.html#464" class="Bound"
+      >&#8866;F</a
+      ><a name="466"
+      > </a
+      ><a name="467" href="Definition.LogicalRelation.Properties.Wellformed.html#467" class="Bound"
+      >&#8866;G</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.LogicalRelation.Properties.Wellformed.html#470" class="Bound"
+      >[F]</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Definition.LogicalRelation.Properties.Wellformed.html#474" class="Bound"
+      >[G]</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Definition.LogicalRelation.Properties.Wellformed.html#478" class="Bound"
+      >G-ext</a
+      ><a name="483" class="Symbol"
+      >)</a
+      ><a name="484"
+      > </a
+      ><a name="485" class="Symbol"
+      >=</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="Definition.LogicalRelation.Properties.Wellformed.html#450" class="Bound"
+      >&#8866;A</a
+      ><a name="489"
+      >
+</a
+      ><a name="490" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="500"
+      > </a
+      ><a name="501" class="Symbol"
+      >(</a
+      ><a name="502" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="505"
+      > </a
+      ><a name="506" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="509"
+      > </a
+      ><a name="510" href="Definition.LogicalRelation.Properties.Wellformed.html#510" class="Bound"
+      >A</a
+      ><a name="511" class="Symbol"
+      >)</a
+      ><a name="512"
+      > </a
+      ><a name="513" class="Symbol"
+      >=</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Definition.LogicalRelation.Properties.Wellformed.html#510" class="Bound"
+      >A</a
+      ><a name="527"
+      >
+
+</a
+      ><a name="529" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >:</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >&#8704;</a
+      ><a name="545"
+      > </a
+      ><a name="546" class="Symbol"
+      >{</a
+      ><a name="547" href="Definition.LogicalRelation.Properties.Wellformed.html#547" class="Bound"
+      >l</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Definition.LogicalRelation.Properties.Wellformed.html#549" class="Bound"
+      >&#915;</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Definition.LogicalRelation.Properties.Wellformed.html#551" class="Bound"
+      >A</a
+      ><a name="552"
+      > </a
+      ><a name="553" href="Definition.LogicalRelation.Properties.Wellformed.html#553" class="Bound"
+      >B</a
+      ><a name="554" class="Symbol"
+      >}</a
+      ><a name="555"
+      > </a
+      ><a name="556" class="Symbol"
+      >&#8594;</a
+      ><a name="557"
+      > </a
+      ><a name="558" class="Symbol"
+      >(</a
+      ><a name="559" href="Definition.LogicalRelation.Properties.Wellformed.html#559" class="Bound"
+      >[A]</a
+      ><a name="562"
+      > </a
+      ><a name="563" class="Symbol"
+      >:</a
+      ><a name="564"
+      > </a
+      ><a name="565" href="Definition.LogicalRelation.Properties.Wellformed.html#549" class="Bound"
+      >&#915;</a
+      ><a name="566"
+      > </a
+      ><a name="567" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="569"
+      > </a
+      ><a name="570" href="Definition.LogicalRelation.Properties.Wellformed.html#547" class="Bound"
+      >l</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Definition.LogicalRelation.Properties.Wellformed.html#551" class="Bound"
+      >A</a
+      ><a name="575" class="Symbol"
+      >)</a
+      ><a name="576"
+      >
+            </a
+      ><a name="589" class="Symbol"
+      >&#8594;</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="Definition.LogicalRelation.Properties.Wellformed.html#549" class="Bound"
+      >&#915;</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Definition.LogicalRelation.Properties.Wellformed.html#547" class="Bound"
+      >l</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Definition.LogicalRelation.Properties.Wellformed.html#551" class="Bound"
+      >A</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="603"
+      > </a
+      ><a name="604" href="Definition.LogicalRelation.Properties.Wellformed.html#553" class="Bound"
+      >B</a
+      ><a name="605"
+      > </a
+      ><a name="606" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="607"
+      > </a
+      ><a name="608" href="Definition.LogicalRelation.Properties.Wellformed.html#559" class="Bound"
+      >[A]</a
+      ><a name="611"
+      >
+            </a
+      ><a name="624" class="Symbol"
+      >&#8594;</a
+      ><a name="625"
+      > </a
+      ><a name="626" href="Definition.LogicalRelation.Properties.Wellformed.html#549" class="Bound"
+      >&#915;</a
+      ><a name="627"
+      > </a
+      ><a name="628" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="Definition.LogicalRelation.Properties.Wellformed.html#551" class="Bound"
+      >A</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Definition.LogicalRelation.Properties.Wellformed.html#553" class="Bound"
+      >B</a
+      ><a name="635"
+      >
+</a
+      ><a name="636" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="648"
+      > </a
+      ><a name="649" class="Symbol"
+      >(</a
+      ><a name="650" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="652"
+      > </a
+      ><a name="653" href="Definition.LogicalRelation.Properties.Wellformed.html#653" class="Bound"
+      >l'</a
+      ><a name="655"
+      > </a
+      ><a name="656" href="Definition.LogicalRelation.Properties.Wellformed.html#656" class="Bound"
+      >l&lt;</a
+      ><a name="658"
+      > </a
+      ><a name="659" href="Definition.LogicalRelation.Properties.Wellformed.html#659" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="661" class="Symbol"
+      >)</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="670"
+      > </a
+      ><a name="671" class="Symbol"
+      >=</a
+      ><a name="672"
+      > </a
+      ><a name="673" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="677"
+      > </a
+      ><a name="678" class="Symbol"
+      >(</a
+      ><a name="679" href="Definition.Typed.html#612" class="InductiveConstructor"
+      >U</a
+      ><a name="680"
+      > </a
+      ><a name="681" href="Definition.LogicalRelation.Properties.Wellformed.html#659" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="683" class="Symbol"
+      >)</a
+      ><a name="684"
+      >
+</a
+      ><a name="685" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="697"
+      > </a
+      ><a name="698" class="Symbol"
+      >(</a
+      ><a name="699" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Definition.LogicalRelation.Properties.Wellformed.html#701" class="Bound"
+      >D</a
+      ><a name="702" class="Symbol"
+      >)</a
+      ><a name="703"
+      > </a
+      ><a name="704" href="Definition.LogicalRelation.Properties.Wellformed.html#704" class="Bound"
+      >A&#8801;B</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >=</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="715"
+      > </a
+      ><a name="716" class="Symbol"
+      >(</a
+      ><a name="717" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="724"
+      > </a
+      ><a name="725" class="Symbol"
+      >(</a
+      ><a name="726" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Definition.LogicalRelation.Properties.Wellformed.html#701" class="Bound"
+      >D</a
+      ><a name="731" class="Symbol"
+      >))</a
+      ><a name="733"
+      > </a
+      ><a name="734" class="Symbol"
+      >(</a
+      ><a name="735" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="738"
+      > </a
+      ><a name="739" class="Symbol"
+      >(</a
+      ><a name="740" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="747"
+      > </a
+      ><a name="748" href="Definition.LogicalRelation.Properties.Wellformed.html#704" class="Bound"
+      >A&#8801;B</a
+      ><a name="751" class="Symbol"
+      >))</a
+      ><a name="753"
+      >
+</a
+      ><a name="754" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="766"
+      > </a
+      ><a name="767" class="Symbol"
+      >(</a
+      ><a name="768" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Definition.LogicalRelation.Properties.Wellformed.html#772" class="Bound"
+      >K</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Definition.LogicalRelation.Properties.Wellformed.html#774" class="Bound"
+      >D</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.LogicalRelation.Properties.Wellformed.html#776" class="Bound"
+      >neK</a
+      ><a name="779" class="Symbol"
+      >)</a
+      ><a name="780"
+      > </a
+      ><a name="781" class="Symbol"
+      >(</a
+      ><a name="782" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Definition.LogicalRelation.Properties.Wellformed.html#786" class="Bound"
+      >M</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Definition.LogicalRelation.Properties.Wellformed.html#788" class="Bound"
+      >D'</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="Definition.LogicalRelation.Properties.Wellformed.html#791" class="Bound"
+      >neM</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Definition.LogicalRelation.Properties.Wellformed.html#795" class="Bound"
+      >K&#8801;M</a
+      ><a name="798" class="Symbol"
+      >)</a
+      ><a name="799"
+      > </a
+      ><a name="800" class="Symbol"
+      >=</a
+      ><a name="801"
+      >
+  </a
+      ><a name="804" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="809"
+      > </a
+      ><a name="810" class="Symbol"
+      >(</a
+      ><a name="811" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="818"
+      > </a
+      ><a name="819" class="Symbol"
+      >(</a
+      ><a name="820" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Definition.LogicalRelation.Properties.Wellformed.html#774" class="Bound"
+      >D</a
+      ><a name="825" class="Symbol"
+      >))</a
+      ><a name="827"
+      > </a
+      ><a name="828" class="Symbol"
+      >(</a
+      ><a name="829" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Definition.LogicalRelation.Properties.Wellformed.html#795" class="Bound"
+      >K&#8801;M</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >(</a
+      ><a name="840" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="843"
+      > </a
+      ><a name="844" class="Symbol"
+      >(</a
+      ><a name="845" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="852"
+      > </a
+      ><a name="853" class="Symbol"
+      >(</a
+      ><a name="854" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="857"
+      > </a
+      ><a name="858" href="Definition.LogicalRelation.Properties.Wellformed.html#788" class="Bound"
+      >D'</a
+      ><a name="860" class="Symbol"
+      >))))</a
+      ><a name="864"
+      >
+</a
+      ><a name="865" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="877"
+      > </a
+      ><a name="878" class="Symbol"
+      >(</a
+      ><a name="879" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="881"
+      > </a
+      ><a name="882" href="Definition.LogicalRelation.Properties.Wellformed.html#882" class="Bound"
+      >F</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Definition.LogicalRelation.Properties.Wellformed.html#884" class="Bound"
+      >G</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Definition.LogicalRelation.Properties.Wellformed.html#886" class="Bound"
+      >D</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.LogicalRelation.Properties.Wellformed.html#888" class="Bound"
+      >&#8866;F</a
+      ><a name="890"
+      > </a
+      ><a name="891" href="Definition.LogicalRelation.Properties.Wellformed.html#891" class="Bound"
+      >&#8866;G</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Definition.LogicalRelation.Properties.Wellformed.html#894" class="Bound"
+      >[F]</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Definition.LogicalRelation.Properties.Wellformed.html#898" class="Bound"
+      >[G]</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Definition.LogicalRelation.Properties.Wellformed.html#902" class="Bound"
+      >G-ext</a
+      ><a name="907" class="Symbol"
+      >)</a
+      ><a name="908"
+      >
+             </a
+      ><a name="922" class="Symbol"
+      >(</a
+      ><a name="923" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Definition.LogicalRelation.Properties.Wellformed.html#926" class="Bound"
+      >F'</a
+      ><a name="928"
+      > </a
+      ><a name="929" href="Definition.LogicalRelation.Properties.Wellformed.html#929" class="Bound"
+      >G'</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Definition.LogicalRelation.Properties.Wellformed.html#932" class="Bound"
+      >D'</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="Definition.LogicalRelation.Properties.Wellformed.html#935" class="Bound"
+      >A&#8801;B</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Definition.LogicalRelation.Properties.Wellformed.html#939" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="945"
+      > </a
+      ><a name="946" href="Definition.LogicalRelation.Properties.Wellformed.html#946" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="952" class="Symbol"
+      >)</a
+      ><a name="953"
+      > </a
+      ><a name="954" class="Symbol"
+      >=</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Definition.LogicalRelation.Properties.Wellformed.html#935" class="Bound"
+      >A&#8801;B</a
+      ><a name="959"
+      >
+</a
+      ><a name="960" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="972"
+      > </a
+      ><a name="973" class="Symbol"
+      >(</a
+      ><a name="974" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="977"
+      > </a
+      ><a name="978" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="981"
+      > </a
+      ><a name="982" href="Definition.LogicalRelation.Properties.Wellformed.html#982" class="Bound"
+      >A</a
+      ><a name="983" class="Symbol"
+      >)</a
+      ><a name="984"
+      > </a
+      ><a name="985" href="Definition.LogicalRelation.Properties.Wellformed.html#985" class="Bound"
+      >A&#8801;B</a
+      ><a name="988"
+      > </a
+      ><a name="989" class="Symbol"
+      >=</a
+      ><a name="990"
+      > </a
+      ><a name="991" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Definition.LogicalRelation.Properties.Wellformed.html#982" class="Bound"
+      >A</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Definition.LogicalRelation.Properties.Wellformed.html#985" class="Bound"
+      >A&#8801;B</a
+      ><a name="1009"
+      >
+
+</a
+      ><a name="1011" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" class="Symbol"
+      >:</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" class="Symbol"
+      >&#8704;</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" class="Symbol"
+      >{</a
+      ><a name="1031" href="Definition.LogicalRelation.Properties.Wellformed.html#1031" class="Bound"
+      >l</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Definition.LogicalRelation.Properties.Wellformed.html#1033" class="Bound"
+      >&#915;</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Definition.LogicalRelation.Properties.Wellformed.html#1035" class="Bound"
+      >A</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="Definition.LogicalRelation.Properties.Wellformed.html#1037" class="Bound"
+      >t</a
+      ><a name="1038" class="Symbol"
+      >}</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" class="Symbol"
+      >&#8594;</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >(</a
+      ><a name="1043" href="Definition.LogicalRelation.Properties.Wellformed.html#1043" class="Bound"
+      >[A]</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" class="Symbol"
+      >:</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Definition.LogicalRelation.Properties.Wellformed.html#1033" class="Bound"
+      >&#915;</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Definition.LogicalRelation.Properties.Wellformed.html#1031" class="Bound"
+      >l</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Definition.LogicalRelation.Properties.Wellformed.html#1035" class="Bound"
+      >A</a
+      ><a name="1059" class="Symbol"
+      >)</a
+      ><a name="1060"
+      >
+              </a
+      ><a name="1075" class="Symbol"
+      >&#8594;</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Definition.LogicalRelation.Properties.Wellformed.html#1033" class="Bound"
+      >&#915;</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="Definition.LogicalRelation.Properties.Wellformed.html#1031" class="Bound"
+      >l</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" href="Definition.LogicalRelation.Properties.Wellformed.html#1037" class="Bound"
+      >t</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="Definition.LogicalRelation.Properties.Wellformed.html#1035" class="Bound"
+      >A</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Definition.LogicalRelation.Properties.Wellformed.html#1043" class="Bound"
+      >[A]</a
+      ><a name="1097"
+      >
+              </a
+      ><a name="1112" class="Symbol"
+      >&#8594;</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="Definition.LogicalRelation.Properties.Wellformed.html#1033" class="Bound"
+      >&#915;</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Definition.LogicalRelation.Properties.Wellformed.html#1037" class="Bound"
+      >t</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="Definition.LogicalRelation.Properties.Wellformed.html#1035" class="Bound"
+      >A</a
+      ><a name="1123"
+      >
+</a
+      ><a name="1124" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1138"
+      > </a
+      ><a name="1139" class="Symbol"
+      >(</a
+      ><a name="1140" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" href="Definition.LogicalRelation.Properties.Wellformed.html#1143" class="Bound"
+      >l'</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Definition.LogicalRelation.Properties.Wellformed.html#1146" class="Bound"
+      >l&lt;</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="Definition.LogicalRelation.Properties.Wellformed.html#1149" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1151" class="Symbol"
+      >)</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" class="Symbol"
+      >(</a
+      ><a name="1154" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" href="Definition.LogicalRelation.Properties.Wellformed.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Definition.LogicalRelation.Properties.Wellformed.html#1160" class="Bound"
+      >&#8873;t</a
+      ><a name="1162" class="Symbol"
+      >)</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" class="Symbol"
+      >=</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Definition.LogicalRelation.Properties.Wellformed.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1168"
+      >
+</a
+      ><a name="1169" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1183"
+      > </a
+      ><a name="1184" class="Symbol"
+      >(</a
+      ><a name="1185" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" href="Definition.LogicalRelation.Properties.Wellformed.html#1187" class="Bound"
+      >D</a
+      ><a name="1188" class="Symbol"
+      >)</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" class="Symbol"
+      >(</a
+      ><a name="1191" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Definition.LogicalRelation.Properties.Wellformed.html#1194" class="Bound"
+      >n</a
+      ><a name="1195"
+      > </a
+      ><a name="1196" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1197"
+      > </a
+      ><a name="1198" href="Definition.LogicalRelation.Properties.Wellformed.html#1198" class="Bound"
+      >&#8866;t</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Definition.LogicalRelation.Properties.Wellformed.html#1203" class="Bound"
+      >&#8866;u</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Definition.LogicalRelation.Properties.Wellformed.html#1208" class="Bound"
+      >d</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" href="Definition.LogicalRelation.Properties.Wellformed.html#1212" class="Bound"
+      >natN</a
+      ><a name="1216"
+      > </a
+      ><a name="1217" href="Definition.LogicalRelation.Properties.Wellformed.html#1217" class="Bound"
+      >prop</a
+      ><a name="1221" class="Symbol"
+      >)</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" class="Symbol"
+      >=</a
+      ><a name="1224"
+      >
+  </a
+      ><a name="1227" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Definition.LogicalRelation.Properties.Wellformed.html#1198" class="Bound"
+      >&#8866;t</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" class="Symbol"
+      >(</a
+      ><a name="1236" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" class="Symbol"
+      >(</a
+      ><a name="1241" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" class="Symbol"
+      >(</a
+      ><a name="1250" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" href="Definition.LogicalRelation.Properties.Wellformed.html#1187" class="Bound"
+      >D</a
+      ><a name="1255" class="Symbol"
+      >)))</a
+      ><a name="1258"
+      >
+</a
+      ><a name="1259" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" class="Symbol"
+      >(</a
+      ><a name="1275" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Definition.LogicalRelation.Properties.Wellformed.html#1279" class="Bound"
+      >K</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Definition.LogicalRelation.Properties.Wellformed.html#1281" class="Bound"
+      >D</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" href="Definition.LogicalRelation.Properties.Wellformed.html#1283" class="Bound"
+      >neK</a
+      ><a name="1286" class="Symbol"
+      >)</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Definition.LogicalRelation.Properties.Wellformed.html#1288" class="Bound"
+      >t</a
+      ><a name="1289"
+      > </a
+      ><a name="1290" class="Symbol"
+      >=</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Definition.LogicalRelation.Properties.Wellformed.html#1288" class="Bound"
+      >t</a
+      ><a name="1293"
+      >
+</a
+      ><a name="1294" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" class="Symbol"
+      >(</a
+      ><a name="1310" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1312"
+      > </a
+      ><a name="1313" href="Definition.LogicalRelation.Properties.Wellformed.html#1313" class="Bound"
+      >F</a
+      ><a name="1314"
+      > </a
+      ><a name="1315" href="Definition.LogicalRelation.Properties.Wellformed.html#1315" class="Bound"
+      >G</a
+      ><a name="1316"
+      > </a
+      ><a name="1317" href="Definition.LogicalRelation.Properties.Wellformed.html#1317" class="Bound"
+      >D</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Definition.LogicalRelation.Properties.Wellformed.html#1319" class="Bound"
+      >&#8866;F</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" href="Definition.LogicalRelation.Properties.Wellformed.html#1322" class="Bound"
+      >&#8866;G</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Definition.LogicalRelation.Properties.Wellformed.html#1325" class="Bound"
+      >[F]</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="Definition.LogicalRelation.Properties.Wellformed.html#1329" class="Bound"
+      >[G]</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" href="Definition.LogicalRelation.Properties.Wellformed.html#1333" class="Bound"
+      >G-ext</a
+      ><a name="1338" class="Symbol"
+      >)</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Symbol"
+      >(</a
+      ><a name="1341" href="Definition.LogicalRelation.html#8169" class="InductiveConstructor"
+      >&#928;&#8348;</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="Definition.LogicalRelation.Properties.Wellformed.html#1344" class="Bound"
+      >&#8866;t</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Definition.LogicalRelation.Properties.Wellformed.html#1347" class="Bound"
+      >[t]</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" href="Definition.LogicalRelation.Properties.Wellformed.html#1351" class="Bound"
+      >[t]&#8321;</a
+      ><a name="1355" class="Symbol"
+      >)</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" class="Symbol"
+      >=</a
+      ><a name="1358"
+      > </a
+      ><a name="1359" href="Definition.LogicalRelation.Properties.Wellformed.html#1344" class="Bound"
+      >&#8866;t</a
+      ><a name="1361"
+      >
+</a
+      ><a name="1362" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" class="Symbol"
+      >(</a
+      ><a name="1378" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" href="Definition.LogicalRelation.Properties.Wellformed.html#1386" class="Bound"
+      >A</a
+      ><a name="1387" class="Symbol"
+      >)</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" href="Definition.LogicalRelation.Properties.Wellformed.html#1389" class="Bound"
+      >t</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" class="Symbol"
+      >=</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" href="Definition.LogicalRelation.Properties.Wellformed.html#1386" class="Bound"
+      >A</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" href="Definition.LogicalRelation.Properties.Wellformed.html#1389" class="Bound"
+      >t</a
+      ><a name="1411"
+      >
+
+</a
+      ><a name="1413" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" class="Symbol"
+      >:</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" class="Symbol"
+      >&#8704;</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" class="Symbol"
+      >{</a
+      ><a name="1435" href="Definition.LogicalRelation.Properties.Wellformed.html#1435" class="Bound"
+      >l</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" href="Definition.LogicalRelation.Properties.Wellformed.html#1437" class="Bound"
+      >&#915;</a
+      ><a name="1438"
+      > </a
+      ><a name="1439" href="Definition.LogicalRelation.Properties.Wellformed.html#1439" class="Bound"
+      >A</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" href="Definition.LogicalRelation.Properties.Wellformed.html#1441" class="Bound"
+      >t</a
+      ><a name="1442"
+      > </a
+      ><a name="1443" href="Definition.LogicalRelation.Properties.Wellformed.html#1443" class="Bound"
+      >u</a
+      ><a name="1444" class="Symbol"
+      >}</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >&#8594;</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" class="Symbol"
+      >(</a
+      ><a name="1449" href="Definition.LogicalRelation.Properties.Wellformed.html#1449" class="Bound"
+      >[A]</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" class="Symbol"
+      >:</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" href="Definition.LogicalRelation.Properties.Wellformed.html#1437" class="Bound"
+      >&#915;</a
+      ><a name="1456"
+      > </a
+      ><a name="1457" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" href="Definition.LogicalRelation.Properties.Wellformed.html#1435" class="Bound"
+      >l</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1463"
+      > </a
+      ><a name="1464" href="Definition.LogicalRelation.Properties.Wellformed.html#1439" class="Bound"
+      >A</a
+      ><a name="1465" class="Symbol"
+      >)</a
+      ><a name="1466"
+      >
+                </a
+      ><a name="1483" class="Symbol"
+      >&#8594;</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" href="Definition.LogicalRelation.Properties.Wellformed.html#1437" class="Bound"
+      >&#915;</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1489"
+      > </a
+      ><a name="1490" href="Definition.LogicalRelation.Properties.Wellformed.html#1435" class="Bound"
+      >l</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" href="Definition.LogicalRelation.Properties.Wellformed.html#1441" class="Bound"
+      >t</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="Definition.LogicalRelation.Properties.Wellformed.html#1443" class="Bound"
+      >u</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Definition.LogicalRelation.Properties.Wellformed.html#1439" class="Bound"
+      >A</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Definition.LogicalRelation.Properties.Wellformed.html#1449" class="Bound"
+      >[A]</a
+      ><a name="1509"
+      >
+                </a
+      ><a name="1526" class="Symbol"
+      >&#8594;</a
+      ><a name="1527"
+      > </a
+      ><a name="1528" href="Definition.LogicalRelation.Properties.Wellformed.html#1437" class="Bound"
+      >&#915;</a
+      ><a name="1529"
+      > </a
+      ><a name="1530" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" href="Definition.LogicalRelation.Properties.Wellformed.html#1441" class="Bound"
+      >t</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1535"
+      > </a
+      ><a name="1536" href="Definition.LogicalRelation.Properties.Wellformed.html#1443" class="Bound"
+      >u</a
+      ><a name="1537"
+      > </a
+      ><a name="1538" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="Definition.LogicalRelation.Properties.Wellformed.html#1439" class="Bound"
+      >A</a
+      ><a name="1541"
+      >
+</a
+      ><a name="1542" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" class="Symbol"
+      >(</a
+      ><a name="1560" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1562"
+      > </a
+      ><a name="1563" href="Definition.LogicalRelation.Properties.Wellformed.html#1563" class="Bound"
+      >l'</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" href="Definition.LogicalRelation.Properties.Wellformed.html#1566" class="Bound"
+      >l&lt;</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" href="Definition.LogicalRelation.Properties.Wellformed.html#1569" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1571" class="Symbol"
+      >)</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" class="Symbol"
+      >(</a
+      ><a name="1574" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="1577"
+      > </a
+      ><a name="1578" href="Definition.LogicalRelation.Properties.Wellformed.html#1578" class="Bound"
+      >&#8866;t</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" href="Definition.LogicalRelation.Properties.Wellformed.html#1581" class="Bound"
+      >&#8866;u</a
+      ><a name="1583"
+      > </a
+      ><a name="1584" href="Definition.LogicalRelation.Properties.Wellformed.html#1584" class="Bound"
+      >t&#8801;u</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" href="Definition.LogicalRelation.Properties.Wellformed.html#1588" class="Bound"
+      >&#8873;t</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" href="Definition.LogicalRelation.Properties.Wellformed.html#1591" class="Bound"
+      >&#8873;u</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" href="Definition.LogicalRelation.Properties.Wellformed.html#1594" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="1599" class="Symbol"
+      >)</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" class="Symbol"
+      >=</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" href="Definition.LogicalRelation.Properties.Wellformed.html#1584" class="Bound"
+      >t&#8801;u</a
+      ><a name="1606"
+      >
+</a
+      ><a name="1607" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" class="Symbol"
+      >(</a
+      ><a name="1625" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" href="Definition.LogicalRelation.Properties.Wellformed.html#1627" class="Bound"
+      >D</a
+      ><a name="1628" class="Symbol"
+      >)</a
+      ><a name="1629"
+      > </a
+      ><a name="1630" class="Symbol"
+      >(</a
+      ><a name="1631" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" href="Definition.LogicalRelation.Properties.Wellformed.html#1635" class="Bound"
+      >k</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Definition.LogicalRelation.Properties.Wellformed.html#1637" class="Bound"
+      >k'</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" href="Definition.LogicalRelation.Properties.Wellformed.html#1640" class="Bound"
+      >d</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" href="Definition.LogicalRelation.Properties.Wellformed.html#1642" class="Bound"
+      >d'</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" href="Definition.LogicalRelation.Properties.Wellformed.html#1645" class="Bound"
+      >t&#8801;u</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" href="Definition.LogicalRelation.Properties.Wellformed.html#1649" class="Bound"
+      >prop</a
+      ><a name="1653" class="Symbol"
+      >)</a
+      ><a name="1654"
+      > </a
+      ><a name="1655" class="Symbol"
+      >=</a
+      ><a name="1656"
+      >
+  </a
+      ><a name="1659" href="Definition.Typed.html#2636" class="InductiveConstructor"
+      >conv</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Definition.LogicalRelation.Properties.Wellformed.html#1645" class="Bound"
+      >t&#8801;u</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" class="Symbol"
+      >(</a
+      ><a name="1669" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" class="Symbol"
+      >(</a
+      ><a name="1674" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="1681"
+      > </a
+      ><a name="1682" class="Symbol"
+      >(</a
+      ><a name="1683" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Definition.LogicalRelation.Properties.Wellformed.html#1627" class="Bound"
+      >D</a
+      ><a name="1688" class="Symbol"
+      >)))</a
+      ><a name="1691"
+      >
+</a
+      ><a name="1692" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" class="Symbol"
+      >(</a
+      ><a name="1710" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Definition.LogicalRelation.Properties.Wellformed.html#1714" class="Bound"
+      >K</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Definition.LogicalRelation.Properties.Wellformed.html#1716" class="Bound"
+      >D</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="Definition.LogicalRelation.Properties.Wellformed.html#1718" class="Bound"
+      >neK</a
+      ><a name="1721" class="Symbol"
+      >)</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" href="Definition.LogicalRelation.Properties.Wellformed.html#1723" class="Bound"
+      >t&#8801;u</a
+      ><a name="1726"
+      > </a
+      ><a name="1727" class="Symbol"
+      >=</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" href="Definition.LogicalRelation.Properties.Wellformed.html#1723" class="Bound"
+      >t&#8801;u</a
+      ><a name="1732"
+      >
+</a
+      ><a name="1733" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1749"
+      > </a
+      ><a name="1750" class="Symbol"
+      >(</a
+      ><a name="1751" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1753"
+      > </a
+      ><a name="1754" href="Definition.LogicalRelation.Properties.Wellformed.html#1754" class="Bound"
+      >F</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" href="Definition.LogicalRelation.Properties.Wellformed.html#1756" class="Bound"
+      >G</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Definition.LogicalRelation.Properties.Wellformed.html#1758" class="Bound"
+      >D</a
+      ><a name="1759"
+      > </a
+      ><a name="1760" href="Definition.LogicalRelation.Properties.Wellformed.html#1760" class="Bound"
+      >&#8866;F</a
+      ><a name="1762"
+      > </a
+      ><a name="1763" href="Definition.LogicalRelation.Properties.Wellformed.html#1763" class="Bound"
+      >&#8866;G</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" href="Definition.LogicalRelation.Properties.Wellformed.html#1766" class="Bound"
+      >[F]</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Definition.LogicalRelation.Properties.Wellformed.html#1770" class="Bound"
+      >[G]</a
+      ><a name="1773"
+      > </a
+      ><a name="1774" href="Definition.LogicalRelation.Properties.Wellformed.html#1774" class="Bound"
+      >G-ext</a
+      ><a name="1779" class="Symbol"
+      >)</a
+      ><a name="1780"
+      > </a
+      ><a name="1781" class="Symbol"
+      >(</a
+      ><a name="1782" href="Definition.LogicalRelation.html#8198" class="InductiveConstructor"
+      >&#928;&#8348;&#8332;</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="Definition.LogicalRelation.Properties.Wellformed.html#1786" class="Bound"
+      >t&#8801;u</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="Definition.LogicalRelation.Properties.Wellformed.html#1790" class="Bound"
+      >&#8873;t</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" href="Definition.LogicalRelation.Properties.Wellformed.html#1793" class="Bound"
+      >&#8873;u</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" href="Definition.LogicalRelation.Properties.Wellformed.html#1796" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="1801" class="Symbol"
+      >)</a
+      ><a name="1802"
+      > </a
+      ><a name="1803" class="Symbol"
+      >=</a
+      ><a name="1804"
+      > </a
+      ><a name="1805" href="Definition.LogicalRelation.Properties.Wellformed.html#1786" class="Bound"
+      >t&#8801;u</a
+      ><a name="1808"
+      >
+</a
+      ><a name="1809" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" class="Symbol"
+      >(</a
+      ><a name="1827" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1834"
+      > </a
+      ><a name="1835" href="Definition.LogicalRelation.Properties.Wellformed.html#1835" class="Bound"
+      >A</a
+      ><a name="1836" class="Symbol"
+      >)</a
+      ><a name="1837"
+      > </a
+      ><a name="1838" href="Definition.LogicalRelation.Properties.Wellformed.html#1838" class="Bound"
+      >t&#8801;u</a
+      ><a name="1841"
+      > </a
+      ><a name="1842" class="Symbol"
+      >=</a
+      ><a name="1843"
+      > </a
+      ><a name="1844" href="Definition.LogicalRelation.Properties.Wellformed.html#1413" class="Function"
+      >wellformedTermEq</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" href="Definition.LogicalRelation.Properties.Wellformed.html#1835" class="Bound"
+      >A</a
+      ><a name="1862"
+      > </a
+      ><a name="1863" href="Definition.LogicalRelation.Properties.Wellformed.html#1838" class="Bound"
+      >t&#8801;u</a
+      ><a name="1866"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

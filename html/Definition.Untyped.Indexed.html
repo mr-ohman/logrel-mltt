@@ -1,0 +1,2426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.Untyped.Indexed</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.Untyped.Indexed.html#1" class="Module"
+      >Definition.Untyped.Indexed</a
+      ><a name="34"
+      > </a
+      ><a name="35" class="Keyword"
+      >where</a
+      ><a name="40"
+      >
+
+</a
+      ><a name="42" class="Keyword"
+      >open</a
+      ><a name="46"
+      > </a
+      ><a name="47" class="Keyword"
+      >import</a
+      ><a name="53"
+      > </a
+      ><a name="54" href="Tools.Unit.html#1" class="Module"
+      >Tools.Unit</a
+      ><a name="64"
+      >
+</a
+      ><a name="65" class="Keyword"
+      >open</a
+      ><a name="69"
+      > </a
+      ><a name="70" class="Keyword"
+      >import</a
+      ><a name="76"
+      > </a
+      ><a name="77" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="90"
+      >
+</a
+      ><a name="91" class="Keyword"
+      >open</a
+      ><a name="95"
+      > </a
+      ><a name="96" class="Keyword"
+      >import</a
+      ><a name="102"
+      > </a
+      ><a name="103" href="Tools.Context.html#1" class="Module"
+      >Tools.Context</a
+      ><a name="116"
+      > </a
+      ><a name="117" class="Symbol"
+      >as</a
+      ><a name="119"
+      > </a
+      ><a name="120" class="Module"
+      >Context</a
+      ><a name="127"
+      >
+</a
+      ><a name="128" class="Keyword"
+      >open</a
+      ><a name="132"
+      > </a
+      ><a name="133" href="Tools.Context.html#14" class="Module"
+      >Context.</a
+      ><a name="141" href="Tools.Context.html#486" class="Module"
+      >NonDependent</a
+      ><a name="153"
+      >
+
+</a
+      ><a name="155" class="Keyword"
+      >data</a
+      ><a name="159"
+      > </a
+      ><a name="160" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="164"
+      > </a
+      ><a name="165" class="Symbol"
+      >(</a
+      ><a name="166" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="167"
+      > </a
+      ><a name="168" class="Symbol"
+      >:</a
+      ><a name="169"
+      > </a
+      ><a name="170" href="Tools.Context.html#109" class="Datatype"
+      >Con</a
+      ><a name="173"
+      > </a
+      ><a name="174" href="Agda.Builtin.Unit.html#41" class="Record"
+      >&#8868;</a
+      ><a name="175" class="Symbol"
+      >)</a
+      ><a name="176"
+      > </a
+      ><a name="177" class="Symbol"
+      >:</a
+      ><a name="178"
+      > </a
+      ><a name="179" class="PrimitiveType"
+      >Set</a
+      ><a name="182"
+      > </a
+      ><a name="183" class="Keyword"
+      >where</a
+      ><a name="188"
+      >
+  </a
+      ><a name="191" href="Definition.Untyped.Indexed.html#191" class="InductiveConstructor"
+      >U</a
+      ><a name="192"
+      > </a
+      ><a name="193" class="Symbol"
+      >:</a
+      ><a name="194"
+      > </a
+      ><a name="195" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="199"
+      > </a
+      ><a name="200" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="201"
+      >
+  </a
+      ><a name="204" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#928;_&#9657;_</a
+      ><a name="208"
+      > </a
+      ><a name="209" class="Symbol"
+      >:</a
+      ><a name="210"
+      > </a
+      ><a name="211" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="215"
+      > </a
+      ><a name="216" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="217"
+      > </a
+      ><a name="218" class="Symbol"
+      >&#8594;</a
+      ><a name="219"
+      > </a
+      ><a name="220" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="224"
+      > </a
+      ><a name="225" class="Symbol"
+      >(</a
+      ><a name="226" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="227"
+      > </a
+      ><a name="228" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="229"
+      > </a
+      ><a name="230" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="232" class="Symbol"
+      >)</a
+      ><a name="233"
+      > </a
+      ><a name="234" class="Symbol"
+      >&#8594;</a
+      ><a name="235"
+      > </a
+      ><a name="236" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="240"
+      > </a
+      ><a name="241" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="242"
+      >
+  </a
+      ><a name="245" href="Definition.Untyped.Indexed.html#245" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="246"
+      > </a
+      ><a name="247" class="Symbol"
+      >:</a
+      ><a name="248"
+      > </a
+      ><a name="249" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="253"
+      > </a
+      ><a name="254" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="255"
+      >
+  </a
+      ><a name="258" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="261"
+      > </a
+      ><a name="262" class="Symbol"
+      >:</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Tools.Context.html#181" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="268"
+      > </a
+      ><a name="269" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="270"
+      > </a
+      ><a name="271" class="Symbol"
+      >&#8594;</a
+      ><a name="272"
+      > </a
+      ><a name="273" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="277"
+      > </a
+      ><a name="278" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="279"
+      >
+  </a
+      ><a name="282" href="Definition.Untyped.Indexed.html#282" class="InductiveConstructor"
+      >lam</a
+      ><a name="285"
+      > </a
+      ><a name="286" class="Symbol"
+      >:</a
+      ><a name="287"
+      > </a
+      ><a name="288" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="292"
+      > </a
+      ><a name="293" class="Symbol"
+      >(</a
+      ><a name="294" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="297"
+      > </a
+      ><a name="298" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="300" class="Symbol"
+      >)</a
+      ><a name="301"
+      > </a
+      ><a name="302" class="Symbol"
+      >&#8594;</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="308"
+      > </a
+      ><a name="309" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="310"
+      >
+  </a
+      ><a name="313" href="Definition.Untyped.Indexed.html#313" class="InductiveConstructor Operator"
+      >_&#8728;_</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="Symbol"
+      >:</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Symbol"
+      >&#8594;</a
+      ><a name="327"
+      > </a
+      ><a name="328" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="332"
+      > </a
+      ><a name="333" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Symbol"
+      >&#8594;</a
+      ><a name="336"
+      > </a
+      ><a name="337" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="343"
+      >
+  </a
+      ><a name="346" href="Definition.Untyped.Indexed.html#346" class="InductiveConstructor"
+      >zero</a
+      ><a name="350"
+      > </a
+      ><a name="351" class="Symbol"
+      >:</a
+      ><a name="352"
+      > </a
+      ><a name="353" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="359"
+      >
+  </a
+      ><a name="362" href="Definition.Untyped.Indexed.html#362" class="InductiveConstructor"
+      >suc</a
+      ><a name="365"
+      > </a
+      ><a name="366" class="Symbol"
+      >:</a
+      ><a name="367"
+      > </a
+      ><a name="368" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="374"
+      > </a
+      ><a name="375" class="Symbol"
+      >&#8594;</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="383"
+      >
+  </a
+      ><a name="386" href="Definition.Untyped.Indexed.html#386" class="InductiveConstructor"
+      >natrec</a
+      ><a name="392"
+      > </a
+      ><a name="393" class="Symbol"
+      >:</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="399"
+      > </a
+      ><a name="400" class="Symbol"
+      >(</a
+      ><a name="401" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="407" class="Symbol"
+      >)</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Symbol"
+      >&#8594;</a
+      ><a name="410"
+      > </a
+      ><a name="411" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="415"
+      > </a
+      ><a name="416" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Symbol"
+      >&#8594;</a
+      ><a name="419"
+      > </a
+      ><a name="420" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="426"
+      > </a
+      ><a name="427" class="Symbol"
+      >&#8594;</a
+      ><a name="428"
+      > </a
+      ><a name="429" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="433"
+      > </a
+      ><a name="434" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="435"
+      > </a
+      ><a name="436" class="Symbol"
+      >&#8594;</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="442"
+      > </a
+      ><a name="443" href="Definition.Untyped.Indexed.html#166" class="Bound"
+      >&#915;</a
+      ><a name="444"
+      >
+
+</a
+      ><a name="446" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="448"
+      > </a
+      ><a name="449" class="Symbol"
+      >:</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Symbol"
+      >{</a
+      ><a name="452" href="Definition.Untyped.Indexed.html#452" class="Bound"
+      >&#915;</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Definition.Untyped.Indexed.html#454" class="Bound"
+      >&#916;</a
+      ><a name="455"
+      > </a
+      ><a name="456" class="Symbol"
+      >:</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Tools.Context.html#109" class="Datatype"
+      >Con</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Agda.Builtin.Unit.html#41" class="Record"
+      >&#8868;</a
+      ><a name="463" class="Symbol"
+      >}</a
+      ><a name="464"
+      > </a
+      ><a name="465" class="Symbol"
+      >(</a
+      ><a name="466" href="Definition.Untyped.Indexed.html#466" class="Bound"
+      >&#961;</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Symbol"
+      >:</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.Untyped.Indexed.html#452" class="Bound"
+      >&#915;</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Tools.Context.html#512" class="Datatype Operator"
+      >&#8838;</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Definition.Untyped.Indexed.html#454" class="Bound"
+      >&#916;</a
+      ><a name="475" class="Symbol"
+      >)</a
+      ><a name="476"
+      > </a
+      ><a name="477" class="Symbol"
+      >(</a
+      ><a name="478" href="Definition.Untyped.Indexed.html#478" class="Bound"
+      >t</a
+      ><a name="479"
+      > </a
+      ><a name="480" class="Symbol"
+      >:</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="486"
+      > </a
+      ><a name="487" href="Definition.Untyped.Indexed.html#452" class="Bound"
+      >&#915;</a
+      ><a name="488" class="Symbol"
+      >)</a
+      ><a name="489"
+      > </a
+      ><a name="490" class="Symbol"
+      >&#8594;</a
+      ><a name="491"
+      > </a
+      ><a name="492" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="496"
+      > </a
+      ><a name="497" href="Definition.Untyped.Indexed.html#454" class="Bound"
+      >&#916;</a
+      ><a name="498"
+      >
+</a
+      ><a name="499" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Definition.Untyped.Indexed.html#502" class="Bound"
+      >&#961;</a
+      ><a name="503"
+      > </a
+      ><a name="504" href="Definition.Untyped.Indexed.html#191" class="InductiveConstructor"
+      >U</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Symbol"
+      >=</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="Definition.Untyped.Indexed.html#191" class="InductiveConstructor"
+      >U</a
+      ><a name="509"
+      >
+</a
+      ><a name="510" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="Definition.Untyped.Indexed.html#513" class="Bound"
+      >&#961;</a
+      ><a name="514"
+      > </a
+      ><a name="515" class="Symbol"
+      >(</a
+      ><a name="516" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Definition.Untyped.Indexed.html#518" class="Bound"
+      >t</a
+      ><a name="519"
+      > </a
+      ><a name="520" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Definition.Untyped.Indexed.html#522" class="Bound"
+      >t&#8321;</a
+      ><a name="524" class="Symbol"
+      >)</a
+      ><a name="525"
+      > </a
+      ><a name="526" class="Symbol"
+      >=</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="529"
+      > </a
+      ><a name="530" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="532"
+      > </a
+      ><a name="533" href="Definition.Untyped.Indexed.html#513" class="Bound"
+      >&#961;</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Definition.Untyped.Indexed.html#518" class="Bound"
+      >t</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >(</a
+      ><a name="543" href="Tools.Context.html#650" class="InductiveConstructor"
+      >lift</a
+      ><a name="547"
+      > </a
+      ><a name="548" href="Definition.Untyped.Indexed.html#513" class="Bound"
+      >&#961;</a
+      ><a name="549" class="Symbol"
+      >)</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Definition.Untyped.Indexed.html#522" class="Bound"
+      >t&#8321;</a
+      ><a name="553"
+      >
+</a
+      ><a name="554" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="556"
+      > </a
+      ><a name="557" href="Definition.Untyped.Indexed.html#557" class="Bound"
+      >&#961;</a
+      ><a name="558"
+      > </a
+      ><a name="559" href="Definition.Untyped.Indexed.html#245" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="560"
+      > </a
+      ><a name="561" class="Symbol"
+      >=</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Definition.Untyped.Indexed.html#245" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="564"
+      >
+</a
+      ><a name="565" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="Definition.Untyped.Indexed.html#568" class="Bound"
+      >&#961;</a
+      ><a name="569"
+      > </a
+      ><a name="570" class="Symbol"
+      >(</a
+      ><a name="571" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="Definition.Untyped.Indexed.html#575" class="Bound"
+      >x</a
+      ><a name="576" class="Symbol"
+      >)</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >=</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >(</a
+      ><a name="585" href="Tools.Context.html#977" class="Function"
+      >weak</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Definition.Untyped.Indexed.html#568" class="Bound"
+      >&#961;</a
+      ><a name="591"
+      > </a
+      ><a name="592" href="Definition.Untyped.Indexed.html#575" class="Bound"
+      >x</a
+      ><a name="593" class="Symbol"
+      >)</a
+      ><a name="594"
+      >
+</a
+      ><a name="595" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.Untyped.Indexed.html#598" class="Bound"
+      >&#961;</a
+      ><a name="599"
+      > </a
+      ><a name="600" class="Symbol"
+      >(</a
+      ><a name="601" href="Definition.Untyped.Indexed.html#282" class="InductiveConstructor"
+      >lam</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.Untyped.Indexed.html#605" class="Bound"
+      >t</a
+      ><a name="606" class="Symbol"
+      >)</a
+      ><a name="607"
+      > </a
+      ><a name="608" class="Symbol"
+      >=</a
+      ><a name="609"
+      > </a
+      ><a name="610" href="Definition.Untyped.Indexed.html#282" class="InductiveConstructor"
+      >lam</a
+      ><a name="613"
+      > </a
+      ><a name="614" class="Symbol"
+      >(</a
+      ><a name="615" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="617"
+      > </a
+      ><a name="618" class="Symbol"
+      >(</a
+      ><a name="619" href="Tools.Context.html#650" class="InductiveConstructor"
+      >lift</a
+      ><a name="623"
+      > </a
+      ><a name="624" href="Definition.Untyped.Indexed.html#598" class="Bound"
+      >&#961;</a
+      ><a name="625" class="Symbol"
+      >)</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Definition.Untyped.Indexed.html#605" class="Bound"
+      >t</a
+      ><a name="628" class="Symbol"
+      >)</a
+      ><a name="629"
+      >
+</a
+      ><a name="630" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="632"
+      > </a
+      ><a name="633" href="Definition.Untyped.Indexed.html#633" class="Bound"
+      >&#961;</a
+      ><a name="634"
+      > </a
+      ><a name="635" class="Symbol"
+      >(</a
+      ><a name="636" href="Definition.Untyped.Indexed.html#636" class="Bound"
+      >t</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="Definition.Untyped.Indexed.html#313" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Definition.Untyped.Indexed.html#640" class="Bound"
+      >t&#8321;</a
+      ><a name="642" class="Symbol"
+      >)</a
+      ><a name="643"
+      > </a
+      ><a name="644" class="Symbol"
+      >=</a
+      ><a name="645"
+      > </a
+      ><a name="646" class="Symbol"
+      >(</a
+      ><a name="647" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="649"
+      > </a
+      ><a name="650" href="Definition.Untyped.Indexed.html#633" class="Bound"
+      >&#961;</a
+      ><a name="651"
+      > </a
+      ><a name="652" href="Definition.Untyped.Indexed.html#636" class="Bound"
+      >t</a
+      ><a name="653" class="Symbol"
+      >)</a
+      ><a name="654"
+      > </a
+      ><a name="655" href="Definition.Untyped.Indexed.html#313" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Symbol"
+      >(</a
+      ><a name="658" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="660"
+      > </a
+      ><a name="661" href="Definition.Untyped.Indexed.html#633" class="Bound"
+      >&#961;</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Definition.Untyped.Indexed.html#640" class="Bound"
+      >t&#8321;</a
+      ><a name="665" class="Symbol"
+      >)</a
+      ><a name="666"
+      >
+</a
+      ><a name="667" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="669"
+      > </a
+      ><a name="670" href="Definition.Untyped.Indexed.html#670" class="Bound"
+      >&#961;</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Definition.Untyped.Indexed.html#346" class="InductiveConstructor"
+      >zero</a
+      ><a name="676"
+      > </a
+      ><a name="677" class="Symbol"
+      >=</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="Definition.Untyped.Indexed.html#346" class="InductiveConstructor"
+      >zero</a
+      ><a name="683"
+      >
+</a
+      ><a name="684" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="686"
+      > </a
+      ><a name="687" href="Definition.Untyped.Indexed.html#687" class="Bound"
+      >&#961;</a
+      ><a name="688"
+      > </a
+      ><a name="689" class="Symbol"
+      >(</a
+      ><a name="690" href="Definition.Untyped.Indexed.html#362" class="InductiveConstructor"
+      >suc</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Definition.Untyped.Indexed.html#694" class="Bound"
+      >t</a
+      ><a name="695" class="Symbol"
+      >)</a
+      ><a name="696"
+      > </a
+      ><a name="697" class="Symbol"
+      >=</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Definition.Untyped.Indexed.html#362" class="InductiveConstructor"
+      >suc</a
+      ><a name="702"
+      > </a
+      ><a name="703" class="Symbol"
+      >(</a
+      ><a name="704" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Definition.Untyped.Indexed.html#687" class="Bound"
+      >&#961;</a
+      ><a name="708"
+      > </a
+      ><a name="709" href="Definition.Untyped.Indexed.html#694" class="Bound"
+      >t</a
+      ><a name="710" class="Symbol"
+      >)</a
+      ><a name="711"
+      >
+</a
+      ><a name="712" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="714"
+      > </a
+      ><a name="715" href="Definition.Untyped.Indexed.html#715" class="Bound"
+      >&#961;</a
+      ><a name="716"
+      > </a
+      ><a name="717" class="Symbol"
+      >(</a
+      ><a name="718" href="Definition.Untyped.Indexed.html#386" class="InductiveConstructor"
+      >natrec</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Definition.Untyped.Indexed.html#725" class="Bound"
+      >t</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="Definition.Untyped.Indexed.html#727" class="Bound"
+      >t&#8321;</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Definition.Untyped.Indexed.html#730" class="Bound"
+      >t&#8322;</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Definition.Untyped.Indexed.html#733" class="Bound"
+      >t&#8323;</a
+      ><a name="735" class="Symbol"
+      >)</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Symbol"
+      >=</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Definition.Untyped.Indexed.html#386" class="InductiveConstructor"
+      >natrec</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >(</a
+      ><a name="747" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="749"
+      > </a
+      ><a name="750" class="Symbol"
+      >(</a
+      ><a name="751" href="Tools.Context.html#650" class="InductiveConstructor"
+      >lift</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Definition.Untyped.Indexed.html#715" class="Bound"
+      >&#961;</a
+      ><a name="757" class="Symbol"
+      >)</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Definition.Untyped.Indexed.html#725" class="Bound"
+      >t</a
+      ><a name="760" class="Symbol"
+      >)</a
+      ><a name="761"
+      > </a
+      ><a name="762" class="Symbol"
+      >(</a
+      ><a name="763" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Definition.Untyped.Indexed.html#715" class="Bound"
+      >&#961;</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Definition.Untyped.Indexed.html#727" class="Bound"
+      >t&#8321;</a
+      ><a name="770" class="Symbol"
+      >)</a
+      ><a name="771"
+      > </a
+      ><a name="772" class="Symbol"
+      >(</a
+      ><a name="773" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.Untyped.Indexed.html#715" class="Bound"
+      >&#961;</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Definition.Untyped.Indexed.html#730" class="Bound"
+      >t&#8322;</a
+      ><a name="780" class="Symbol"
+      >)</a
+      ><a name="781"
+      > </a
+      ><a name="782" class="Symbol"
+      >(</a
+      ><a name="783" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Definition.Untyped.Indexed.html#715" class="Bound"
+      >&#961;</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Definition.Untyped.Indexed.html#733" class="Bound"
+      >t&#8323;</a
+      ><a name="790" class="Symbol"
+      >)</a
+      ><a name="791"
+      >
+
+</a
+      ><a name="793" href="Definition.Untyped.Indexed.html#793" class="Function"
+      >wk1</a
+      ><a name="796"
+      > </a
+      ><a name="797" class="Symbol"
+      >:</a
+      ><a name="798"
+      > </a
+      ><a name="799" class="Symbol"
+      >&#8704;</a
+      ><a name="800"
+      > </a
+      ><a name="801" class="Symbol"
+      >{</a
+      ><a name="802" href="Definition.Untyped.Indexed.html#802" class="Bound"
+      >&#915;</a
+      ><a name="803" class="Symbol"
+      >}</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="Symbol"
+      >&#8594;</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="Definition.Untyped.Indexed.html#802" class="Bound"
+      >&#915;</a
+      ><a name="813"
+      > </a
+      ><a name="814" class="Symbol"
+      >&#8594;</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >(</a
+      ><a name="822" href="Definition.Untyped.Indexed.html#802" class="Bound"
+      >&#915;</a
+      ><a name="823"
+      > </a
+      ><a name="824" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="828" class="Symbol"
+      >)</a
+      ><a name="829"
+      >
+</a
+      ><a name="830" href="Definition.Untyped.Indexed.html#793" class="Function"
+      >wk1</a
+      ><a name="833"
+      > </a
+      ><a name="834" class="Symbol"
+      >=</a
+      ><a name="835"
+      > </a
+      ><a name="836" href="Definition.Untyped.Indexed.html#446" class="Function"
+      >wk</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >(</a
+      ><a name="840" href="Tools.Context.html#575" class="InductiveConstructor"
+      >step</a
+      ><a name="844"
+      > </a
+      ><a name="845" class="Symbol"
+      >(</a
+      ><a name="846" href="Tools.Context.html#1266" class="Function"
+      >&#8838;-refl</a
+      ><a name="852"
+      > </a
+      ><a name="853" class="Symbol"
+      >_))</a
+      ><a name="856"
+      >
+
+</a
+      ><a name="858" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >:</a
+      ><a name="865"
+      > </a
+      ><a name="866" href="Tools.Context.html#109" class="Datatype"
+      >Con</a
+      ><a name="869"
+      > </a
+      ><a name="870" href="Agda.Builtin.Unit.html#41" class="Record"
+      >&#8868;</a
+      ><a name="871"
+      > </a
+      ><a name="872" class="Symbol"
+      >&#8594;</a
+      ><a name="873"
+      > </a
+      ><a name="874" href="Tools.Context.html#109" class="Datatype"
+      >Con</a
+      ><a name="877"
+      > </a
+      ><a name="878" href="Agda.Builtin.Unit.html#41" class="Record"
+      >&#8868;</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="Symbol"
+      >&#8594;</a
+      ><a name="881"
+      > </a
+      ><a name="882" class="PrimitiveType"
+      >Set</a
+      ><a name="885"
+      >
+</a
+      ><a name="886" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Definition.Untyped.Indexed.html#892" class="Bound"
+      >&#916;</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Tools.Context.html#137" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="895"
+      > </a
+      ><a name="896" class="Symbol"
+      >=</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Agda.Builtin.Unit.html#41" class="Record"
+      >&#8868;</a
+      ><a name="899"
+      >
+</a
+      ><a name="900" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="Definition.Untyped.Indexed.html#906" class="Bound"
+      >&#916;</a
+      ><a name="907"
+      > </a
+      ><a name="908" class="Symbol"
+      >(</a
+      ><a name="909" href="Definition.Untyped.Indexed.html#909" class="Bound"
+      >&#915;</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Definition.Untyped.Indexed.html#913" class="Bound"
+      >&#947;</a
+      ><a name="914" class="Symbol"
+      >)</a
+      ><a name="915"
+      > </a
+      ><a name="916" class="Symbol"
+      >=</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Definition.Untyped.Indexed.html#906" class="Bound"
+      >&#916;</a
+      ><a name="924"
+      > </a
+      ><a name="925" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="932"
+      > </a
+      ><a name="933" href="Definition.Untyped.Indexed.html#906" class="Bound"
+      >&#916;</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="Definition.Untyped.Indexed.html#909" class="Bound"
+      >&#915;</a
+      ><a name="936"
+      >
+
+</a
+      ><a name="938" href="Definition.Untyped.Indexed.html#938" class="Function"
+      >substVar</a
+      ><a name="946"
+      > </a
+      ><a name="947" class="Symbol"
+      >:</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >&#8704;</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >{</a
+      ><a name="952" href="Definition.Untyped.Indexed.html#952" class="Bound"
+      >&#915;</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Definition.Untyped.Indexed.html#954" class="Bound"
+      >&#916;</a
+      ><a name="955" class="Symbol"
+      >}</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >(</a
+      ><a name="958" href="Definition.Untyped.Indexed.html#958" class="Bound"
+      >&#963;</a
+      ><a name="959"
+      > </a
+      ><a name="960" class="Symbol"
+      >:</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="Definition.Untyped.Indexed.html#954" class="Bound"
+      >&#916;</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Definition.Untyped.Indexed.html#952" class="Bound"
+      >&#915;</a
+      ><a name="971" class="Symbol"
+      >)</a
+      ><a name="972"
+      > </a
+      ><a name="973" class="Symbol"
+      >(</a
+      ><a name="974" href="Definition.Untyped.Indexed.html#974" class="Bound"
+      >x</a
+      ><a name="975"
+      > </a
+      ><a name="976" class="Symbol"
+      >:</a
+      ><a name="977"
+      > </a
+      ><a name="978" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="980"
+      > </a
+      ><a name="981" href="Tools.Context.html#181" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="982"
+      > </a
+      ><a name="983" href="Definition.Untyped.Indexed.html#952" class="Bound"
+      >&#915;</a
+      ><a name="984" class="Symbol"
+      >)</a
+      ><a name="985"
+      > </a
+      ><a name="986" class="Symbol"
+      >&#8594;</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="Definition.Untyped.Indexed.html#954" class="Bound"
+      >&#916;</a
+      ><a name="994"
+      >
+</a
+      ><a name="995" href="Definition.Untyped.Indexed.html#938" class="Function"
+      >substVar</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" class="Symbol"
+      >(</a
+      ><a name="1005" href="Definition.Untyped.Indexed.html#1005" class="Bound"
+      >proj&#8321;</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Definition.Untyped.Indexed.html#1013" class="Bound"
+      >proj&#8322;</a
+      ><a name="1018" class="Symbol"
+      >)</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Tools.Context.html#225" class="InductiveConstructor"
+      >here</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >=</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" href="Definition.Untyped.Indexed.html#1005" class="Bound"
+      >proj&#8321;</a
+      ><a name="1032"
+      >
+</a
+      ><a name="1033" href="Definition.Untyped.Indexed.html#938" class="Function"
+      >substVar</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="Symbol"
+      >(</a
+      ><a name="1043" href="Definition.Untyped.Indexed.html#1043" class="Bound"
+      >proj&#8321;</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Definition.Untyped.Indexed.html#1051" class="Bound"
+      >proj&#8322;</a
+      ><a name="1056" class="Symbol"
+      >)</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" class="Symbol"
+      >(</a
+      ><a name="1059" href="Tools.Context.html#279" class="InductiveConstructor"
+      >there</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" href="Definition.Untyped.Indexed.html#1065" class="Bound"
+      >x</a
+      ><a name="1066" class="Symbol"
+      >)</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" class="Symbol"
+      >=</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Definition.Untyped.Indexed.html#938" class="Function"
+      >substVar</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" href="Definition.Untyped.Indexed.html#1051" class="Bound"
+      >proj&#8322;</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Definition.Untyped.Indexed.html#1065" class="Bound"
+      >x</a
+      ><a name="1086"
+      >
+
+</a
+      ><a name="1088" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" class="Symbol"
+      >:</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" class="Symbol"
+      >&#8704;</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" class="Symbol"
+      >{</a
+      ><a name="1102" href="Definition.Untyped.Indexed.html#1102" class="Bound"
+      >&#915;</a
+      ><a name="1103" class="Symbol"
+      >}</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Definition.Untyped.Indexed.html#1105" class="Bound"
+      >&#916;</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" class="Symbol"
+      >&#8594;</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1114"
+      > </a
+      ><a name="1115" href="Definition.Untyped.Indexed.html#1102" class="Bound"
+      >&#915;</a
+      ><a name="1116"
+      > </a
+      ><a name="1117" href="Definition.Untyped.Indexed.html#1105" class="Bound"
+      >&#916;</a
+      ><a name="1118"
+      > </a
+      ><a name="1119" class="Symbol"
+      >&#8594;</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" class="Symbol"
+      >(</a
+      ><a name="1128" href="Definition.Untyped.Indexed.html#1102" class="Bound"
+      >&#915;</a
+      ><a name="1129"
+      > </a
+      ><a name="1130" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1134" class="Symbol"
+      >)</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Definition.Untyped.Indexed.html#1105" class="Bound"
+      >&#916;</a
+      ><a name="1137"
+      >
+</a
+      ><a name="1138" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" href="Tools.Context.html#137" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="Definition.Untyped.Indexed.html#1149" class="Bound"
+      >x</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" class="Symbol"
+      >=</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1155"
+      >
+</a
+      ><a name="1156" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" class="Symbol"
+      >(</a
+      ><a name="1166" href="Definition.Untyped.Indexed.html#1166" class="Bound"
+      >&#916;</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="Definition.Untyped.Indexed.html#1170" class="Bound"
+      >x</a
+      ><a name="1171" class="Symbol"
+      >)</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Symbol"
+      >(</a
+      ><a name="1174" href="Definition.Untyped.Indexed.html#1174" class="Bound"
+      >proj&#8321;</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Definition.Untyped.Indexed.html#1182" class="Bound"
+      >proj&#8322;</a
+      ><a name="1187" class="Symbol"
+      >)</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" class="Symbol"
+      >=</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" href="Definition.Untyped.Indexed.html#793" class="Function"
+      >wk1</a
+      ><a name="1194"
+      > </a
+      ><a name="1195" href="Definition.Untyped.Indexed.html#1174" class="Bound"
+      >proj&#8321;</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" href="Definition.Untyped.Indexed.html#1166" class="Bound"
+      >&#916;</a
+      ><a name="1213"
+      > </a
+      ><a name="1214" href="Definition.Untyped.Indexed.html#1182" class="Bound"
+      >proj&#8322;</a
+      ><a name="1219"
+      >
+
+</a
+      ><a name="1221" href="Definition.Untyped.Indexed.html#1221" class="Function"
+      >idSubst</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" class="Symbol"
+      >:</a
+      ><a name="1230"
+      > </a
+      ><a name="1231" class="Symbol"
+      >&#8704;</a
+      ><a name="1232"
+      > </a
+      ><a name="1233" href="Definition.Untyped.Indexed.html#1233" class="Bound"
+      >&#915;</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" class="Symbol"
+      >&#8594;</a
+      ><a name="1236"
+      > </a
+      ><a name="1237" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" href="Definition.Untyped.Indexed.html#1233" class="Bound"
+      >&#915;</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" href="Definition.Untyped.Indexed.html#1233" class="Bound"
+      >&#915;</a
+      ><a name="1246"
+      >
+</a
+      ><a name="1247" href="Definition.Untyped.Indexed.html#1221" class="Function"
+      >idSubst</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" href="Tools.Context.html#137" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" class="Symbol"
+      >=</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1261"
+      >
+</a
+      ><a name="1262" href="Definition.Untyped.Indexed.html#1221" class="Function"
+      >idSubst</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" class="Symbol"
+      >(</a
+      ><a name="1271" href="Definition.Untyped.Indexed.html#1271" class="Bound"
+      >&#915;</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Definition.Untyped.Indexed.html#1275" class="Bound"
+      >x</a
+      ><a name="1276" class="Symbol"
+      >)</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" class="Symbol"
+      >=</a
+      ><a name="1279"
+      > </a
+      ><a name="1280" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Tools.Context.html#225" class="InductiveConstructor"
+      >here</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" href="Definition.Untyped.Indexed.html#1271" class="Bound"
+      >&#915;</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" class="Symbol"
+      >(</a
+      ><a name="1303" href="Definition.Untyped.Indexed.html#1221" class="Function"
+      >idSubst</a
+      ><a name="1310"
+      > </a
+      ><a name="1311" href="Definition.Untyped.Indexed.html#1271" class="Bound"
+      >&#915;</a
+      ><a name="1312" class="Symbol"
+      >)</a
+      ><a name="1313"
+      >
+
+</a
+      ><a name="1315" href="Definition.Untyped.Indexed.html#1315" class="Function"
+      >liftSubst</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >:</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" class="Symbol"
+      >&#8704;</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" class="Symbol"
+      >{</a
+      ><a name="1330" href="Definition.Untyped.Indexed.html#1330" class="Bound"
+      >&#915;</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" href="Definition.Untyped.Indexed.html#1332" class="Bound"
+      >&#916;</a
+      ><a name="1333" class="Symbol"
+      >}</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" class="Symbol"
+      >&#8594;</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" class="Symbol"
+      >(</a
+      ><a name="1338" href="Definition.Untyped.Indexed.html#1338" class="Bound"
+      >&#963;</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Symbol"
+      >:</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" href="Definition.Untyped.Indexed.html#1332" class="Bound"
+      >&#916;</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Definition.Untyped.Indexed.html#1330" class="Bound"
+      >&#915;</a
+      ><a name="1351" class="Symbol"
+      >)</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" class="Symbol"
+      >&#8594;</a
+      ><a name="1354"
+      > </a
+      ><a name="1355" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Symbol"
+      >(</a
+      ><a name="1362" href="Definition.Untyped.Indexed.html#1332" class="Bound"
+      >&#916;</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1368" class="Symbol"
+      >)</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" class="Symbol"
+      >(</a
+      ><a name="1371" href="Definition.Untyped.Indexed.html#1330" class="Bound"
+      >&#915;</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1377" class="Symbol"
+      >)</a
+      ><a name="1378"
+      >
+</a
+      ><a name="1379" href="Definition.Untyped.Indexed.html#1315" class="Function"
+      >liftSubst</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" href="Definition.Untyped.Indexed.html#1389" class="Bound"
+      >&#963;</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" class="Symbol"
+      >=</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" href="Tools.Context.html#225" class="InductiveConstructor"
+      >here</a
+      ><a name="1401"
+      > </a
+      ><a name="1402" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Definition.Untyped.Indexed.html#1088" class="Function"
+      >wk1Subst</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" class="Symbol"
+      >_</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" href="Definition.Untyped.Indexed.html#1389" class="Bound"
+      >&#963;</a
+      ><a name="1416"
+      >
+
+</a
+      ><a name="1418" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" class="Symbol"
+      >:</a
+      ><a name="1425"
+      > </a
+      ><a name="1426" class="Symbol"
+      >&#8704;</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" class="Symbol"
+      >{</a
+      ><a name="1429" href="Definition.Untyped.Indexed.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1430"
+      > </a
+      ><a name="1431" href="Definition.Untyped.Indexed.html#1431" class="Bound"
+      >&#916;</a
+      ><a name="1432" class="Symbol"
+      >}</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" class="Symbol"
+      >(</a
+      ><a name="1435" href="Definition.Untyped.Indexed.html#1435" class="Bound"
+      >&#963;</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" class="Symbol"
+      >:</a
+      ><a name="1438"
+      > </a
+      ><a name="1439" href="Definition.Untyped.Indexed.html#858" class="Function"
+      >Subst</a
+      ><a name="1444"
+      > </a
+      ><a name="1445" href="Definition.Untyped.Indexed.html#1431" class="Bound"
+      >&#916;</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" href="Definition.Untyped.Indexed.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1448" class="Symbol"
+      >)</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" class="Symbol"
+      >(</a
+      ><a name="1451" href="Definition.Untyped.Indexed.html#1451" class="Bound"
+      >t</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" class="Symbol"
+      >:</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" href="Definition.Untyped.Indexed.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1461" class="Symbol"
+      >)</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" class="Symbol"
+      >&#8594;</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="1469"
+      > </a
+      ><a name="1470" href="Definition.Untyped.Indexed.html#1431" class="Bound"
+      >&#916;</a
+      ><a name="1471"
+      >
+</a
+      ><a name="1472" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="Definition.Untyped.Indexed.html#1478" class="Bound"
+      >&#963;</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" href="Definition.Untyped.Indexed.html#191" class="InductiveConstructor"
+      >U</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" class="Symbol"
+      >=</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" href="Definition.Untyped.Indexed.html#191" class="InductiveConstructor"
+      >U</a
+      ><a name="1485"
+      >
+</a
+      ><a name="1486" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Definition.Untyped.Indexed.html#1492" class="Bound"
+      >&#963;</a
+      ><a name="1493"
+      > </a
+      ><a name="1494" class="Symbol"
+      >(</a
+      ><a name="1495" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="Definition.Untyped.Indexed.html#1497" class="Bound"
+      >t</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Definition.Untyped.Indexed.html#1501" class="Bound"
+      >t&#8321;</a
+      ><a name="1503" class="Symbol"
+      >)</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" class="Symbol"
+      >=</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1514"
+      > </a
+      ><a name="1515" href="Definition.Untyped.Indexed.html#1492" class="Bound"
+      >&#963;</a
+      ><a name="1516"
+      > </a
+      ><a name="1517" href="Definition.Untyped.Indexed.html#1497" class="Bound"
+      >t</a
+      ><a name="1518"
+      > </a
+      ><a name="1519" href="Definition.Untyped.Indexed.html#204" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" class="Symbol"
+      >(</a
+      ><a name="1528" href="Definition.Untyped.Indexed.html#1315" class="Function"
+      >liftSubst</a
+      ><a name="1537"
+      > </a
+      ><a name="1538" href="Definition.Untyped.Indexed.html#1492" class="Bound"
+      >&#963;</a
+      ><a name="1539" class="Symbol"
+      >)</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Definition.Untyped.Indexed.html#1501" class="Bound"
+      >t&#8321;</a
+      ><a name="1543"
+      >
+</a
+      ><a name="1544" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="Definition.Untyped.Indexed.html#1550" class="Bound"
+      >&#963;</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Definition.Untyped.Indexed.html#245" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" class="Symbol"
+      >=</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="Definition.Untyped.Indexed.html#245" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1557"
+      >
+</a
+      ><a name="1558" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" href="Definition.Untyped.Indexed.html#1564" class="Bound"
+      >&#963;</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" class="Symbol"
+      >(</a
+      ><a name="1567" href="Definition.Untyped.Indexed.html#258" class="InductiveConstructor"
+      >var</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" href="Definition.Untyped.Indexed.html#1571" class="Bound"
+      >x</a
+      ><a name="1572" class="Symbol"
+      >)</a
+      ><a name="1573"
+      > </a
+      ><a name="1574" class="Symbol"
+      >=</a
+      ><a name="1575"
+      > </a
+      ><a name="1576" href="Definition.Untyped.Indexed.html#938" class="Function"
+      >substVar</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Definition.Untyped.Indexed.html#1564" class="Bound"
+      >&#963;</a
+      ><a name="1586"
+      > </a
+      ><a name="1587" href="Definition.Untyped.Indexed.html#1571" class="Bound"
+      >x</a
+      ><a name="1588"
+      >
+</a
+      ><a name="1589" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1594"
+      > </a
+      ><a name="1595" href="Definition.Untyped.Indexed.html#1595" class="Bound"
+      >&#963;</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" class="Symbol"
+      >(</a
+      ><a name="1598" href="Definition.Untyped.Indexed.html#282" class="InductiveConstructor"
+      >lam</a
+      ><a name="1601"
+      > </a
+      ><a name="1602" href="Definition.Untyped.Indexed.html#1602" class="Bound"
+      >t</a
+      ><a name="1603" class="Symbol"
+      >)</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" class="Symbol"
+      >=</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" href="Definition.Untyped.Indexed.html#282" class="InductiveConstructor"
+      >lam</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" class="Symbol"
+      >(</a
+      ><a name="1612" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" class="Symbol"
+      >(</a
+      ><a name="1619" href="Definition.Untyped.Indexed.html#1315" class="Function"
+      >liftSubst</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" href="Definition.Untyped.Indexed.html#1595" class="Bound"
+      >&#963;</a
+      ><a name="1630" class="Symbol"
+      >)</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" href="Definition.Untyped.Indexed.html#1602" class="Bound"
+      >t</a
+      ><a name="1633" class="Symbol"
+      >)</a
+      ><a name="1634"
+      >
+</a
+      ><a name="1635" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" href="Definition.Untyped.Indexed.html#1641" class="Bound"
+      >&#963;</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" class="Symbol"
+      >(</a
+      ><a name="1644" href="Definition.Untyped.Indexed.html#1644" class="Bound"
+      >t</a
+      ><a name="1645"
+      > </a
+      ><a name="1646" href="Definition.Untyped.Indexed.html#313" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" href="Definition.Untyped.Indexed.html#1648" class="Bound"
+      >t&#8321;</a
+      ><a name="1650" class="Symbol"
+      >)</a
+      ><a name="1651"
+      > </a
+      ><a name="1652" class="Symbol"
+      >=</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" class="Symbol"
+      >(</a
+      ><a name="1655" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" href="Definition.Untyped.Indexed.html#1641" class="Bound"
+      >&#963;</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" href="Definition.Untyped.Indexed.html#1644" class="Bound"
+      >t</a
+      ><a name="1664" class="Symbol"
+      >)</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="Definition.Untyped.Indexed.html#313" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" class="Symbol"
+      >(</a
+      ><a name="1669" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Definition.Untyped.Indexed.html#1641" class="Bound"
+      >&#963;</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Definition.Untyped.Indexed.html#1648" class="Bound"
+      >t&#8321;</a
+      ><a name="1679" class="Symbol"
+      >)</a
+      ><a name="1680"
+      >
+</a
+      ><a name="1681" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Definition.Untyped.Indexed.html#1687" class="Bound"
+      >&#963;</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" href="Definition.Untyped.Indexed.html#346" class="InductiveConstructor"
+      >zero</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" class="Symbol"
+      >=</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" href="Definition.Untyped.Indexed.html#346" class="InductiveConstructor"
+      >zero</a
+      ><a name="1700"
+      >
+</a
+      ><a name="1701" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Definition.Untyped.Indexed.html#1707" class="Bound"
+      >&#963;</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" class="Symbol"
+      >(</a
+      ><a name="1710" href="Definition.Untyped.Indexed.html#362" class="InductiveConstructor"
+      >suc</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Definition.Untyped.Indexed.html#1714" class="Bound"
+      >t</a
+      ><a name="1715" class="Symbol"
+      >)</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" class="Symbol"
+      >=</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" href="Definition.Untyped.Indexed.html#362" class="InductiveConstructor"
+      >suc</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" class="Symbol"
+      >(</a
+      ><a name="1724" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" href="Definition.Untyped.Indexed.html#1707" class="Bound"
+      >&#963;</a
+      ><a name="1731"
+      > </a
+      ><a name="1732" href="Definition.Untyped.Indexed.html#1714" class="Bound"
+      >t</a
+      ><a name="1733" class="Symbol"
+      >)</a
+      ><a name="1734"
+      >
+</a
+      ><a name="1735" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" href="Definition.Untyped.Indexed.html#1741" class="Bound"
+      >&#963;</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" class="Symbol"
+      >(</a
+      ><a name="1744" href="Definition.Untyped.Indexed.html#386" class="InductiveConstructor"
+      >natrec</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Definition.Untyped.Indexed.html#1751" class="Bound"
+      >t</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" href="Definition.Untyped.Indexed.html#1753" class="Bound"
+      >t&#8321;</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" href="Definition.Untyped.Indexed.html#1756" class="Bound"
+      >t&#8322;</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Definition.Untyped.Indexed.html#1759" class="Bound"
+      >t&#8323;</a
+      ><a name="1761" class="Symbol"
+      >)</a
+      ><a name="1762"
+      > </a
+      ><a name="1763" class="Symbol"
+      >=</a
+      ><a name="1764"
+      >
+  </a
+      ><a name="1767" href="Definition.Untyped.Indexed.html#386" class="InductiveConstructor"
+      >natrec</a
+      ><a name="1773"
+      > </a
+      ><a name="1774" class="Symbol"
+      >(</a
+      ><a name="1775" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1780"
+      > </a
+      ><a name="1781" class="Symbol"
+      >(</a
+      ><a name="1782" href="Definition.Untyped.Indexed.html#1315" class="Function"
+      >liftSubst</a
+      ><a name="1791"
+      > </a
+      ><a name="1792" href="Definition.Untyped.Indexed.html#1741" class="Bound"
+      >&#963;</a
+      ><a name="1793" class="Symbol"
+      >)</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" href="Definition.Untyped.Indexed.html#1751" class="Bound"
+      >t</a
+      ><a name="1796" class="Symbol"
+      >)</a
+      ><a name="1797"
+      > </a
+      ><a name="1798" class="Symbol"
+      >(</a
+      ><a name="1799" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1804"
+      > </a
+      ><a name="1805" href="Definition.Untyped.Indexed.html#1741" class="Bound"
+      >&#963;</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Definition.Untyped.Indexed.html#1753" class="Bound"
+      >t&#8321;</a
+      ><a name="1809" class="Symbol"
+      >)</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" class="Symbol"
+      >(</a
+      ><a name="1812" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" href="Definition.Untyped.Indexed.html#1741" class="Bound"
+      >&#963;</a
+      ><a name="1819"
+      > </a
+      ><a name="1820" href="Definition.Untyped.Indexed.html#1756" class="Bound"
+      >t&#8322;</a
+      ><a name="1822" class="Symbol"
+      >)</a
+      ><a name="1823"
+      > </a
+      ><a name="1824" class="Symbol"
+      >(</a
+      ><a name="1825" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Definition.Untyped.Indexed.html#1741" class="Bound"
+      >&#963;</a
+      ><a name="1832"
+      > </a
+      ><a name="1833" href="Definition.Untyped.Indexed.html#1759" class="Bound"
+      >t&#8323;</a
+      ><a name="1835" class="Symbol"
+      >)</a
+      ><a name="1836"
+      >
+
+</a
+      ><a name="1838" href="Definition.Untyped.Indexed.html#1838" class="Function Operator"
+      >_[_]</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" class="Symbol"
+      >:</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" class="Symbol"
+      >&#8704;</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" class="Symbol"
+      >{</a
+      ><a name="1848" href="Definition.Untyped.Indexed.html#1848" class="Bound"
+      >&#915;</a
+      ><a name="1849" class="Symbol"
+      >}</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" class="Symbol"
+      >(</a
+      ><a name="1852" href="Definition.Untyped.Indexed.html#1852" class="Bound"
+      >t</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" class="Symbol"
+      >:</a
+      ><a name="1855"
+      > </a
+      ><a name="1856" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" class="Symbol"
+      >(</a
+      ><a name="1862" href="Definition.Untyped.Indexed.html#1848" class="Bound"
+      >&#915;</a
+      ><a name="1863"
+      > </a
+      ><a name="1864" href="Tools.Context.html#151" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1865"
+      > </a
+      ><a name="1866" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1868" class="Symbol"
+      >))</a
+      ><a name="1870"
+      > </a
+      ><a name="1871" class="Symbol"
+      >(</a
+      ><a name="1872" href="Definition.Untyped.Indexed.html#1872" class="Bound"
+      >s</a
+      ><a name="1873"
+      > </a
+      ><a name="1874" class="Symbol"
+      >:</a
+      ><a name="1875"
+      > </a
+      ><a name="1876" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="1880"
+      > </a
+      ><a name="1881" href="Definition.Untyped.Indexed.html#1848" class="Bound"
+      >&#915;</a
+      ><a name="1882" class="Symbol"
+      >)</a
+      ><a name="1883"
+      > </a
+      ><a name="1884" class="Symbol"
+      >&#8594;</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" href="Definition.Untyped.Indexed.html#160" class="Datatype"
+      >Term</a
+      ><a name="1890"
+      > </a
+      ><a name="1891" href="Definition.Untyped.Indexed.html#1848" class="Bound"
+      >&#915;</a
+      ><a name="1892"
+      >
+</a
+      ><a name="1893" href="Definition.Untyped.Indexed.html#1893" class="Bound"
+      >t</a
+      ><a name="1894"
+      > </a
+      ><a name="1895" href="Definition.Untyped.Indexed.html#1838" class="Function Operator"
+      >[</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" href="Definition.Untyped.Indexed.html#1897" class="Bound"
+      >s</a
+      ><a name="1898"
+      > </a
+      ><a name="1899" href="Definition.Untyped.Indexed.html#1838" class="Function Operator"
+      >]</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" class="Symbol"
+      >=</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Definition.Untyped.Indexed.html#1418" class="Function"
+      >subst</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" class="Symbol"
+      >(</a
+      ><a name="1910" href="Definition.Untyped.Indexed.html#1897" class="Bound"
+      >s</a
+      ><a name="1911"
+      > </a
+      ><a name="1912" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1913"
+      > </a
+      ><a name="1914" href="Definition.Untyped.Indexed.html#1221" class="Function"
+      >idSubst</a
+      ><a name="1921"
+      > </a
+      ><a name="1922" class="Symbol"
+      >_)</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" href="Definition.Untyped.Indexed.html#1893" class="Bound"
+      >t</a
+      ><a name="1926"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

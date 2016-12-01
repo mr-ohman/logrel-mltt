@@ -1,0 +1,1147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.Typed.RedSteps</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.Typed.RedSteps.html#1" class="Module"
+      >Definition.Typed.RedSteps</a
+      ><a name="33"
+      > </a
+      ><a name="34" class="Keyword"
+      >where</a
+      ><a name="39"
+      >
+
+</a
+      ><a name="41" class="Keyword"
+      >open</a
+      ><a name="45"
+      > </a
+      ><a name="46" class="Keyword"
+      >import</a
+      ><a name="52"
+      > </a
+      ><a name="53" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="71"
+      >
+</a
+      ><a name="72" class="Keyword"
+      >open</a
+      ><a name="76"
+      > </a
+      ><a name="77" class="Keyword"
+      >import</a
+      ><a name="83"
+      > </a
+      ><a name="84" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="100"
+      >
+</a
+      ><a name="101" class="Keyword"
+      >open</a
+      ><a name="105"
+      > </a
+      ><a name="106" class="Keyword"
+      >import</a
+      ><a name="112"
+      > </a
+      ><a name="113" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="140"
+      >
+
+</a
+      ><a name="142" class="Keyword"
+      >open</a
+      ><a name="146"
+      > </a
+      ><a name="147" class="Keyword"
+      >import</a
+      ><a name="153"
+      > </a
+      ><a name="154" href="Tools.Nat.html#1" class="Module"
+      >Tools.Nat</a
+      ><a name="163"
+      >
+
+</a
+      ><a name="165" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >_&#8680;*_</a
+      ><a name="169"
+      > </a
+      ><a name="170" class="Symbol"
+      >:</a
+      ><a name="171"
+      > </a
+      ><a name="172" class="Symbol"
+      >&#8704;</a
+      ><a name="173"
+      > </a
+      ><a name="174" class="Symbol"
+      >{</a
+      ><a name="175" href="Definition.Typed.RedSteps.html#175" class="Bound"
+      >&#915;</a
+      ><a name="176"
+      > </a
+      ><a name="177" href="Definition.Typed.RedSteps.html#177" class="Bound"
+      >A</a
+      ><a name="178"
+      > </a
+      ><a name="179" href="Definition.Typed.RedSteps.html#179" class="Bound"
+      >B</a
+      ><a name="180"
+      > </a
+      ><a name="181" href="Definition.Typed.RedSteps.html#181" class="Bound"
+      >C</a
+      ><a name="182" class="Symbol"
+      >}</a
+      ><a name="183"
+      > </a
+      ><a name="184" class="Symbol"
+      >&#8594;</a
+      ><a name="185"
+      > </a
+      ><a name="186" href="Definition.Typed.RedSteps.html#175" class="Bound"
+      >&#915;</a
+      ><a name="187"
+      > </a
+      ><a name="188" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="189"
+      > </a
+      ><a name="190" href="Definition.Typed.RedSteps.html#177" class="Bound"
+      >A</a
+      ><a name="191"
+      > </a
+      ><a name="192" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="194"
+      > </a
+      ><a name="195" href="Definition.Typed.RedSteps.html#179" class="Bound"
+      >B</a
+      ><a name="196"
+      > </a
+      ><a name="197" class="Symbol"
+      >&#8594;</a
+      ><a name="198"
+      > </a
+      ><a name="199" href="Definition.Typed.RedSteps.html#175" class="Bound"
+      >&#915;</a
+      ><a name="200"
+      > </a
+      ><a name="201" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="202"
+      > </a
+      ><a name="203" href="Definition.Typed.RedSteps.html#179" class="Bound"
+      >B</a
+      ><a name="204"
+      > </a
+      ><a name="205" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="207"
+      > </a
+      ><a name="208" href="Definition.Typed.RedSteps.html#181" class="Bound"
+      >C</a
+      ><a name="209"
+      > </a
+      ><a name="210" class="Symbol"
+      >&#8594;</a
+      ><a name="211"
+      > </a
+      ><a name="212" href="Definition.Typed.RedSteps.html#175" class="Bound"
+      >&#915;</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="215"
+      > </a
+      ><a name="216" href="Definition.Typed.RedSteps.html#177" class="Bound"
+      >A</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="220"
+      > </a
+      ><a name="221" href="Definition.Typed.RedSteps.html#181" class="Bound"
+      >C</a
+      ><a name="222"
+      >
+</a
+      ><a name="223" href="Definition.Typed.html#6202" class="InductiveConstructor"
+      >id</a
+      ><a name="225"
+      > </a
+      ><a name="226" href="Definition.Typed.RedSteps.html#226" class="Bound"
+      >&#8866;B</a
+      ><a name="228"
+      > </a
+      ><a name="229" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="231"
+      > </a
+      ><a name="232" href="Definition.Typed.RedSteps.html#232" class="Bound"
+      >B&#8658;C</a
+      ><a name="235"
+      > </a
+      ><a name="236" class="Symbol"
+      >=</a
+      ><a name="237"
+      > </a
+      ><a name="238" href="Definition.Typed.RedSteps.html#232" class="Bound"
+      >B&#8658;C</a
+      ><a name="241"
+      >
+</a
+      ><a name="242" class="Symbol"
+      >(</a
+      ><a name="243" href="Definition.Typed.RedSteps.html#243" class="Bound"
+      >A&#8658;A'</a
+      ><a name="247"
+      > </a
+      ><a name="248" href="Definition.Typed.html#6249" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="249"
+      > </a
+      ><a name="250" href="Definition.Typed.RedSteps.html#250" class="Bound"
+      >A'&#8658;B</a
+      ><a name="254" class="Symbol"
+      >)</a
+      ><a name="255"
+      > </a
+      ><a name="256" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="258"
+      > </a
+      ><a name="259" href="Definition.Typed.RedSteps.html#259" class="Bound"
+      >B&#8658;C</a
+      ><a name="262"
+      > </a
+      ><a name="263" class="Symbol"
+      >=</a
+      ><a name="264"
+      > </a
+      ><a name="265" href="Definition.Typed.RedSteps.html#243" class="Bound"
+      >A&#8658;A'</a
+      ><a name="269"
+      > </a
+      ><a name="270" href="Definition.Typed.html#6249" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Symbol"
+      >(</a
+      ><a name="273" href="Definition.Typed.RedSteps.html#250" class="Bound"
+      >A'&#8658;B</a
+      ><a name="277"
+      > </a
+      ><a name="278" href="Definition.Typed.RedSteps.html#165" class="Function Operator"
+      >&#8680;*</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Definition.Typed.RedSteps.html#259" class="Bound"
+      >B&#8658;C</a
+      ><a name="284" class="Symbol"
+      >)</a
+      ><a name="285"
+      >
+
+</a
+      ><a name="287" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >_&#8680;&#8759;*_</a
+      ><a name="292"
+      > </a
+      ><a name="293" class="Symbol"
+      >:</a
+      ><a name="294"
+      > </a
+      ><a name="295" class="Symbol"
+      >&#8704;</a
+      ><a name="296"
+      > </a
+      ><a name="297" class="Symbol"
+      >{</a
+      ><a name="298" href="Definition.Typed.RedSteps.html#298" class="Bound"
+      >&#915;</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Definition.Typed.RedSteps.html#300" class="Bound"
+      >A</a
+      ><a name="301"
+      > </a
+      ><a name="302" href="Definition.Typed.RedSteps.html#302" class="Bound"
+      >t</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Definition.Typed.RedSteps.html#304" class="Bound"
+      >u</a
+      ><a name="305"
+      > </a
+      ><a name="306" href="Definition.Typed.RedSteps.html#306" class="Bound"
+      >r</a
+      ><a name="307" class="Symbol"
+      >}</a
+      ><a name="308"
+      > </a
+      ><a name="309" class="Symbol"
+      >&#8594;</a
+      ><a name="310"
+      > </a
+      ><a name="311" href="Definition.Typed.RedSteps.html#298" class="Bound"
+      >&#915;</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="314"
+      > </a
+      ><a name="315" href="Definition.Typed.RedSteps.html#302" class="Bound"
+      >t</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="319"
+      > </a
+      ><a name="320" href="Definition.Typed.RedSteps.html#304" class="Bound"
+      >u</a
+      ><a name="321"
+      > </a
+      ><a name="322" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Definition.Typed.RedSteps.html#300" class="Bound"
+      >A</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Symbol"
+      >&#8594;</a
+      ><a name="327"
+      > </a
+      ><a name="328" href="Definition.Typed.RedSteps.html#298" class="Bound"
+      >&#915;</a
+      ><a name="329"
+      > </a
+      ><a name="330" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="331"
+      > </a
+      ><a name="332" href="Definition.Typed.RedSteps.html#304" class="Bound"
+      >u</a
+      ><a name="333"
+      > </a
+      ><a name="334" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="336"
+      > </a
+      ><a name="337" href="Definition.Typed.RedSteps.html#306" class="Bound"
+      >r</a
+      ><a name="338"
+      > </a
+      ><a name="339" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="Definition.Typed.RedSteps.html#300" class="Bound"
+      >A</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Symbol"
+      >&#8594;</a
+      ><a name="344"
+      > </a
+      ><a name="345" href="Definition.Typed.RedSteps.html#298" class="Bound"
+      >&#915;</a
+      ><a name="346"
+      > </a
+      ><a name="347" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="348"
+      > </a
+      ><a name="349" href="Definition.Typed.RedSteps.html#302" class="Bound"
+      >t</a
+      ><a name="350"
+      > </a
+      ><a name="351" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Definition.Typed.RedSteps.html#306" class="Bound"
+      >r</a
+      ><a name="355"
+      > </a
+      ><a name="356" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Definition.Typed.RedSteps.html#300" class="Bound"
+      >A</a
+      ><a name="359"
+      >
+</a
+      ><a name="360" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="362"
+      > </a
+      ><a name="363" href="Definition.Typed.RedSteps.html#363" class="Bound"
+      >&#8866;u</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >&#8680;&#8759;*</a
+      ><a name="369"
+      > </a
+      ><a name="370" href="Definition.Typed.RedSteps.html#370" class="Bound"
+      >u&#8658;r</a
+      ><a name="373"
+      > </a
+      ><a name="374" class="Symbol"
+      >=</a
+      ><a name="375"
+      > </a
+      ><a name="376" href="Definition.Typed.RedSteps.html#370" class="Bound"
+      >u&#8658;r</a
+      ><a name="379"
+      >
+</a
+      ><a name="380" class="Symbol"
+      >(</a
+      ><a name="381" href="Definition.Typed.RedSteps.html#381" class="Bound"
+      >t&#8658;t'</a
+      ><a name="385"
+      > </a
+      ><a name="386" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="Definition.Typed.RedSteps.html#388" class="Bound"
+      >t'&#8658;u</a
+      ><a name="392" class="Symbol"
+      >)</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >&#8680;&#8759;*</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Definition.Typed.RedSteps.html#398" class="Bound"
+      >u&#8658;r</a
+      ><a name="401"
+      > </a
+      ><a name="402" class="Symbol"
+      >=</a
+      ><a name="403"
+      > </a
+      ><a name="404" href="Definition.Typed.RedSteps.html#381" class="Bound"
+      >t&#8658;t'</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="410"
+      > </a
+      ><a name="411" class="Symbol"
+      >(</a
+      ><a name="412" href="Definition.Typed.RedSteps.html#388" class="Bound"
+      >t'&#8658;u</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Definition.Typed.RedSteps.html#287" class="Function Operator"
+      >&#8680;&#8759;*</a
+      ><a name="420"
+      > </a
+      ><a name="421" href="Definition.Typed.RedSteps.html#398" class="Bound"
+      >u&#8658;r</a
+      ><a name="424" class="Symbol"
+      >)</a
+      ><a name="425"
+      >
+
+</a
+      ><a name="427" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="432"
+      > </a
+      ><a name="433" class="Symbol"
+      >:</a
+      ><a name="434"
+      > </a
+      ><a name="435" class="Symbol"
+      >&#8704;</a
+      ><a name="436"
+      > </a
+      ><a name="437" class="Symbol"
+      >{</a
+      ><a name="438" href="Definition.Typed.RedSteps.html#438" class="Bound"
+      >&#915;</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="Definition.Typed.RedSteps.html#440" class="Bound"
+      >A</a
+      ><a name="441"
+      > </a
+      ><a name="442" href="Definition.Typed.RedSteps.html#442" class="Bound"
+      >B</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Definition.Typed.RedSteps.html#444" class="Bound"
+      >t</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="Definition.Typed.RedSteps.html#446" class="Bound"
+      >u</a
+      ><a name="447" class="Symbol"
+      >}</a
+      ><a name="448"
+      > </a
+      ><a name="449" class="Symbol"
+      >&#8594;</a
+      ><a name="450"
+      > </a
+      ><a name="451" href="Definition.Typed.RedSteps.html#438" class="Bound"
+      >&#915;</a
+      ><a name="452"
+      > </a
+      ><a name="453" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Definition.Typed.RedSteps.html#444" class="Bound"
+      >t</a
+      ><a name="456"
+      > </a
+      ><a name="457" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Definition.Typed.RedSteps.html#446" class="Bound"
+      >u</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="463"
+      > </a
+      ><a name="464" href="Definition.Typed.RedSteps.html#440" class="Bound"
+      >A</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >&#8594;</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Definition.Typed.RedSteps.html#438" class="Bound"
+      >&#915;</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Definition.Typed.RedSteps.html#440" class="Bound"
+      >A</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Definition.Typed.RedSteps.html#442" class="Bound"
+      >B</a
+      ><a name="477"
+      > </a
+      ><a name="478" class="Symbol"
+      >&#8594;</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="Definition.Typed.RedSteps.html#438" class="Bound"
+      >&#915;</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="Definition.Typed.RedSteps.html#444" class="Bound"
+      >t</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="488"
+      > </a
+      ><a name="489" href="Definition.Typed.RedSteps.html#446" class="Bound"
+      >u</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Definition.Typed.RedSteps.html#442" class="Bound"
+      >B</a
+      ><a name="494"
+      >
+</a
+      ><a name="495" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="500"
+      > </a
+      ><a name="501" class="Symbol"
+      >(</a
+      ><a name="502" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Definition.Typed.RedSteps.html#505" class="Bound"
+      >x</a
+      ><a name="506" class="Symbol"
+      >)</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="Definition.Typed.RedSteps.html#508" class="Bound"
+      >A&#8801;B</a
+      ><a name="511"
+      > </a
+      ><a name="512" class="Symbol"
+      >=</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="516"
+      > </a
+      ><a name="517" class="Symbol"
+      >(</a
+      ><a name="518" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="522"
+      > </a
+      ><a name="523" href="Definition.Typed.RedSteps.html#505" class="Bound"
+      >x</a
+      ><a name="524"
+      > </a
+      ><a name="525" href="Definition.Typed.RedSteps.html#508" class="Bound"
+      >A&#8801;B</a
+      ><a name="528" class="Symbol"
+      >)</a
+      ><a name="529"
+      >
+</a
+      ><a name="530" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="535"
+      > </a
+      ><a name="536" class="Symbol"
+      >(</a
+      ><a name="537" href="Definition.Typed.RedSteps.html#537" class="Bound"
+      >x</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="540"
+      > </a
+      ><a name="541" href="Definition.Typed.RedSteps.html#541" class="Bound"
+      >d</a
+      ><a name="542" class="Symbol"
+      >)</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Definition.Typed.RedSteps.html#544" class="Bound"
+      >A&#8801;B</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Symbol"
+      >=</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Definition.Typed.html#4529" class="InductiveConstructor"
+      >conv</a
+      ><a name="554"
+      > </a
+      ><a name="555" href="Definition.Typed.RedSteps.html#537" class="Bound"
+      >x</a
+      ><a name="556"
+      > </a
+      ><a name="557" href="Definition.Typed.RedSteps.html#544" class="Bound"
+      >A&#8801;B</a
+      ><a name="560"
+      > </a
+      ><a name="561" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Definition.Typed.RedSteps.html#427" class="Function"
+      >conv*</a
+      ><a name="568"
+      > </a
+      ><a name="569" href="Definition.Typed.RedSteps.html#541" class="Bound"
+      >d</a
+      ><a name="570"
+      > </a
+      ><a name="571" href="Definition.Typed.RedSteps.html#544" class="Bound"
+      >A&#8801;B</a
+      ><a name="574"
+      >
+
+</a
+      ><a name="576" href="Definition.Typed.RedSteps.html#576" class="Function"
+      >univ*</a
+      ><a name="581"
+      > </a
+      ><a name="582" class="Symbol"
+      >:</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >&#8704;</a
+      ><a name="585"
+      > </a
+      ><a name="586" class="Symbol"
+      >{</a
+      ><a name="587" href="Definition.Typed.RedSteps.html#587" class="Bound"
+      >&#915;</a
+      ><a name="588"
+      > </a
+      ><a name="589" href="Definition.Typed.RedSteps.html#589" class="Bound"
+      >A</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="Definition.Typed.RedSteps.html#591" class="Bound"
+      >B</a
+      ><a name="592" class="Symbol"
+      >}</a
+      ><a name="593"
+      > </a
+      ><a name="594" class="Symbol"
+      >&#8594;</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Definition.Typed.RedSteps.html#587" class="Bound"
+      >&#915;</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Definition.Typed.RedSteps.html#589" class="Bound"
+      >A</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.Typed.RedSteps.html#591" class="Bound"
+      >B</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="610"
+      > </a
+      ><a name="611" class="Symbol"
+      >&#8594;</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Definition.Typed.RedSteps.html#587" class="Bound"
+      >&#915;</a
+      ><a name="614"
+      > </a
+      ><a name="615" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="Definition.Typed.RedSteps.html#589" class="Bound"
+      >A</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Definition.Typed.html#6152" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="621"
+      > </a
+      ><a name="622" href="Definition.Typed.RedSteps.html#591" class="Bound"
+      >B</a
+      ><a name="623"
+      >
+</a
+      ><a name="624" href="Definition.Typed.RedSteps.html#576" class="Function"
+      >univ*</a
+      ><a name="629"
+      > </a
+      ><a name="630" class="Symbol"
+      >(</a
+      ><a name="631" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Definition.Typed.RedSteps.html#634" class="Bound"
+      >x</a
+      ><a name="635" class="Symbol"
+      >)</a
+      ><a name="636"
+      > </a
+      ><a name="637" class="Symbol"
+      >=</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="Definition.Typed.html#6202" class="InductiveConstructor"
+      >id</a
+      ><a name="641"
+      > </a
+      ><a name="642" class="Symbol"
+      >(</a
+      ><a name="643" href="Definition.Typed.html#723" class="InductiveConstructor"
+      >univ</a
+      ><a name="647"
+      > </a
+      ><a name="648" href="Definition.Typed.RedSteps.html#634" class="Bound"
+      >x</a
+      ><a name="649" class="Symbol"
+      >)</a
+      ><a name="650"
+      >
+</a
+      ><a name="651" href="Definition.Typed.RedSteps.html#576" class="Function"
+      >univ*</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Symbol"
+      >(</a
+      ><a name="658" href="Definition.Typed.RedSteps.html#658" class="Bound"
+      >x</a
+      ><a name="659"
+      > </a
+      ><a name="660" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="661"
+      > </a
+      ><a name="662" href="Definition.Typed.RedSteps.html#662" class="Bound"
+      >A&#8658;B</a
+      ><a name="665" class="Symbol"
+      >)</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="Symbol"
+      >=</a
+      ><a name="668"
+      > </a
+      ><a name="669" href="Definition.Typed.html#5821" class="InductiveConstructor"
+      >univ</a
+      ><a name="673"
+      > </a
+      ><a name="674" href="Definition.Typed.RedSteps.html#658" class="Bound"
+      >x</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Definition.Typed.html#6249" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="677"
+      > </a
+      ><a name="678" href="Definition.Typed.RedSteps.html#576" class="Function"
+      >univ*</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Definition.Typed.RedSteps.html#662" class="Bound"
+      >A&#8658;B</a
+      ><a name="687"
+      >
+
+</a
+      ><a name="689" href="Definition.Typed.RedSteps.html#689" class="Function"
+      >app-subst*</a
+      ><a name="699"
+      > </a
+      ><a name="700" class="Symbol"
+      >:</a
+      ><a name="701"
+      > </a
+      ><a name="702" class="Symbol"
+      >&#8704;</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >{</a
+      ><a name="705" href="Definition.Typed.RedSteps.html#705" class="Bound"
+      >&#915;</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Definition.Typed.RedSteps.html#707" class="Bound"
+      >A</a
+      ><a name="708"
+      > </a
+      ><a name="709" href="Definition.Typed.RedSteps.html#709" class="Bound"
+      >B</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Definition.Typed.RedSteps.html#711" class="Bound"
+      >t</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="Definition.Typed.RedSteps.html#713" class="Bound"
+      >t'</a
+      ><a name="715"
+      > </a
+      ><a name="716" href="Definition.Typed.RedSteps.html#716" class="Bound"
+      >a</a
+      ><a name="717" class="Symbol"
+      >}</a
+      ><a name="718"
+      > </a
+      ><a name="719" class="Symbol"
+      >&#8594;</a
+      ><a name="720"
+      > </a
+      ><a name="721" href="Definition.Typed.RedSteps.html#705" class="Bound"
+      >&#915;</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Definition.Typed.RedSteps.html#711" class="Bound"
+      >t</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Definition.Typed.RedSteps.html#713" class="Bound"
+      >t'</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Definition.Typed.RedSteps.html#707" class="Bound"
+      >A</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="740"
+      > </a
+      ><a name="741" href="Definition.Typed.RedSteps.html#709" class="Bound"
+      >B</a
+      ><a name="742"
+      > </a
+      ><a name="743" class="Symbol"
+      >&#8594;</a
+      ><a name="744"
+      > </a
+      ><a name="745" href="Definition.Typed.RedSteps.html#705" class="Bound"
+      >&#915;</a
+      ><a name="746"
+      > </a
+      ><a name="747" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="Definition.Typed.RedSteps.html#716" class="Bound"
+      >a</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Definition.Typed.RedSteps.html#707" class="Bound"
+      >A</a
+      ><a name="754"
+      >
+           </a
+      ><a name="766" class="Symbol"
+      >&#8594;</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Definition.Typed.RedSteps.html#705" class="Bound"
+      >&#915;</a
+      ><a name="769"
+      > </a
+      ><a name="770" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Definition.Typed.RedSteps.html#711" class="Bound"
+      >t</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.Typed.RedSteps.html#716" class="Bound"
+      >a</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8658;*</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Definition.Typed.RedSteps.html#713" class="Bound"
+      >t'</a
+      ><a name="783"
+      > </a
+      ><a name="784" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Definition.Typed.RedSteps.html#716" class="Bound"
+      >a</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Definition.Typed.html#5910" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="789"
+      > </a
+      ><a name="790" href="Definition.Typed.RedSteps.html#709" class="Bound"
+      >B</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.Typed.RedSteps.html#716" class="Bound"
+      >a</a
+      ><a name="795"
+      > </a
+      ><a name="796" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="797"
+      >
+</a
+      ><a name="798" href="Definition.Typed.RedSteps.html#689" class="Function"
+      >app-subst*</a
+      ><a name="808"
+      > </a
+      ><a name="809" class="Symbol"
+      >(</a
+      ><a name="810" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Definition.Typed.RedSteps.html#813" class="Bound"
+      >x</a
+      ><a name="814" class="Symbol"
+      >)</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Definition.Typed.RedSteps.html#816" class="Bound"
+      >a&#8321;</a
+      ><a name="818"
+      > </a
+      ><a name="819" class="Symbol"
+      >=</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Definition.Typed.html#5969" class="InductiveConstructor"
+      >id</a
+      ><a name="823"
+      > </a
+      ><a name="824" class="Symbol"
+      >(</a
+      ><a name="825" href="Definition.Typed.RedSteps.html#813" class="Bound"
+      >x</a
+      ><a name="826"
+      > </a
+      ><a name="827" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="828"
+      > </a
+      ><a name="829" href="Definition.Typed.RedSteps.html#816" class="Bound"
+      >a&#8321;</a
+      ><a name="831" class="Symbol"
+      >)</a
+      ><a name="832"
+      >
+</a
+      ><a name="833" href="Definition.Typed.RedSteps.html#689" class="Function"
+      >app-subst*</a
+      ><a name="843"
+      > </a
+      ><a name="844" class="Symbol"
+      >(</a
+      ><a name="845" href="Definition.Typed.RedSteps.html#845" class="Bound"
+      >x</a
+      ><a name="846"
+      > </a
+      ><a name="847" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="848"
+      > </a
+      ><a name="849" href="Definition.Typed.RedSteps.html#849" class="Bound"
+      >t&#8658;t'</a
+      ><a name="853" class="Symbol"
+      >)</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Definition.Typed.RedSteps.html#855" class="Bound"
+      >a&#8321;</a
+      ><a name="857"
+      > </a
+      ><a name="858" class="Symbol"
+      >=</a
+      ><a name="859"
+      > </a
+      ><a name="860" href="Definition.Typed.html#4647" class="InductiveConstructor"
+      >app-subst</a
+      ><a name="869"
+      > </a
+      ><a name="870" href="Definition.Typed.RedSteps.html#845" class="Bound"
+      >x</a
+      ><a name="871"
+      > </a
+      ><a name="872" href="Definition.Typed.RedSteps.html#855" class="Bound"
+      >a&#8321;</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Definition.Typed.html#6026" class="InductiveConstructor Operator"
+      >&#8680;</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="Definition.Typed.RedSteps.html#689" class="Function"
+      >app-subst*</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.Typed.RedSteps.html#849" class="Bound"
+      >t&#8658;t'</a
+      ><a name="892"
+      > </a
+      ><a name="893" href="Definition.Typed.RedSteps.html#855" class="Bound"
+      >a&#8321;</a
+      ><a name="895"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

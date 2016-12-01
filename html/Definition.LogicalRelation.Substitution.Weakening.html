@@ -1,0 +1,1053 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Substitution.Weakening</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Substitution.Weakening.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Weakening</a
+      ><a name="57"
+      > </a
+      ><a name="58" class="Keyword"
+      >where</a
+      ><a name="63"
+      >
+
+</a
+      ><a name="65" class="Keyword"
+      >open</a
+      ><a name="69"
+      > </a
+      ><a name="70" class="Keyword"
+      >import</a
+      ><a name="76"
+      > </a
+      ><a name="77" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="95"
+      >
+</a
+      ><a name="96" class="Keyword"
+      >open</a
+      ><a name="100"
+      > </a
+      ><a name="101" class="Keyword"
+      >import</a
+      ><a name="107"
+      > </a
+      ><a name="108" href="Definition.Untyped.Properties.html#1" class="Module"
+      >Definition.Untyped.Properties</a
+      ><a name="137"
+      >
+</a
+      ><a name="138" class="Keyword"
+      >open</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="Keyword"
+      >import</a
+      ><a name="149"
+      > </a
+      ><a name="150" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="176"
+      >
+</a
+      ><a name="177" class="Keyword"
+      >open</a
+      ><a name="181"
+      > </a
+      ><a name="182" class="Keyword"
+      >import</a
+      ><a name="188"
+      > </a
+      ><a name="189" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="227"
+      >
+</a
+      ><a name="228" class="Keyword"
+      >open</a
+      ><a name="232"
+      > </a
+      ><a name="233" class="Keyword"
+      >import</a
+      ><a name="239"
+      > </a
+      ><a name="240" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="279"
+      >
+
+</a
+      ><a name="281" class="Keyword"
+      >open</a
+      ><a name="285"
+      > </a
+      ><a name="286" class="Keyword"
+      >import</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="306"
+      >
+
+</a
+      ><a name="308" class="Keyword"
+      >import</a
+      ><a name="314"
+      > </a
+      ><a name="315" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Symbol"
+      >as</a
+      ><a name="345"
+      > </a
+      ><a name="346" class="Module"
+      >PE</a
+      ><a name="348"
+      >
+
+</a
+      ><a name="350" href="Definition.LogicalRelation.Substitution.Weakening.html#350" class="Function"
+      >wk1&#8347;</a
+      ><a name="354"
+      > </a
+      ><a name="355" class="Symbol"
+      >:</a
+      ><a name="356"
+      > </a
+      ><a name="357" class="Symbol"
+      >&#8704;</a
+      ><a name="358"
+      > </a
+      ><a name="359" class="Symbol"
+      >{</a
+      ><a name="360" href="Definition.LogicalRelation.Substitution.Weakening.html#360" class="Bound"
+      >A</a
+      ><a name="361"
+      > </a
+      ><a name="362" href="Definition.LogicalRelation.Substitution.Weakening.html#362" class="Bound"
+      >F</a
+      ><a name="363"
+      > </a
+      ><a name="364" href="Definition.LogicalRelation.Substitution.Weakening.html#364" class="Bound"
+      >&#915;</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Definition.LogicalRelation.Substitution.Weakening.html#366" class="Bound"
+      >l</a
+      ><a name="367" class="Symbol"
+      >}</a
+      ><a name="368"
+      >
+      </a
+      ><a name="375" class="Symbol"
+      >(</a
+      ><a name="376" href="Definition.LogicalRelation.Substitution.Weakening.html#376" class="Bound"
+      >[&#915;]</a
+      ><a name="379"
+      > </a
+      ><a name="380" class="Symbol"
+      >:</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="384"
+      > </a
+      ><a name="385" href="Definition.LogicalRelation.Substitution.Weakening.html#364" class="Bound"
+      >&#915;</a
+      ><a name="386" class="Symbol"
+      >)</a
+      ><a name="387"
+      >
+      </a
+      ><a name="394" class="Symbol"
+      >(</a
+      ><a name="395" href="Definition.LogicalRelation.Substitution.Weakening.html#395" class="Bound"
+      >[F]</a
+      ><a name="398"
+      > </a
+      ><a name="399" class="Symbol"
+      >:</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Definition.LogicalRelation.Substitution.Weakening.html#364" class="Bound"
+      >&#915;</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="406"
+      > </a
+      ><a name="407" href="Definition.LogicalRelation.Substitution.Weakening.html#366" class="Bound"
+      >l</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="410"
+      > </a
+      ><a name="411" href="Definition.LogicalRelation.Substitution.Weakening.html#362" class="Bound"
+      >F</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="414"
+      > </a
+      ><a name="415" href="Definition.LogicalRelation.Substitution.Weakening.html#376" class="Bound"
+      >[&#915;]</a
+      ><a name="418" class="Symbol"
+      >)</a
+      ><a name="419"
+      >
+    </a
+      ><a name="424" class="Symbol"
+      >&#8594;</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Definition.LogicalRelation.Substitution.Weakening.html#364" class="Bound"
+      >&#915;</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Definition.LogicalRelation.Substitution.Weakening.html#366" class="Bound"
+      >l</a
+      ><a name="433"
+      > </a
+      ><a name="434" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="435"
+      > </a
+      ><a name="436" href="Definition.LogicalRelation.Substitution.Weakening.html#360" class="Bound"
+      >A</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="Definition.LogicalRelation.Substitution.Weakening.html#376" class="Bound"
+      >[&#915;]</a
+      ><a name="443"
+      >
+    </a
+      ><a name="448" class="Symbol"
+      >&#8594;</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Definition.LogicalRelation.Substitution.Weakening.html#364" class="Bound"
+      >&#915;</a
+      ><a name="451"
+      > </a
+      ><a name="452" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Definition.LogicalRelation.Substitution.Weakening.html#362" class="Bound"
+      >F</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Definition.LogicalRelation.Substitution.Weakening.html#366" class="Bound"
+      >l</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="463"
+      > </a
+      ><a name="464" href="Definition.Untyped.html#3624" class="Function"
+      >wk1</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Definition.LogicalRelation.Substitution.Weakening.html#360" class="Bound"
+      >A</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Definition.LogicalRelation.Substitution.Weakening.html#376" class="Bound"
+      >[&#915;]</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Definition.LogicalRelation.Substitution.html#328" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Definition.LogicalRelation.Substitution.Weakening.html#395" class="Bound"
+      >[F]</a
+      ><a name="481"
+      >
+</a
+      ><a name="482" href="Definition.LogicalRelation.Substitution.Weakening.html#350" class="Function"
+      >wk1&#8347;</a
+      ><a name="486"
+      > </a
+      ><a name="487" class="Symbol"
+      >{</a
+      ><a name="488" href="Definition.LogicalRelation.Substitution.Weakening.html#488" class="Bound"
+      >A</a
+      ><a name="489" class="Symbol"
+      >}</a
+      ><a name="490"
+      > </a
+      ><a name="491" href="Definition.LogicalRelation.Substitution.Weakening.html#491" class="Bound"
+      >[&#915;]</a
+      ><a name="494"
+      > </a
+      ><a name="495" href="Definition.LogicalRelation.Substitution.Weakening.html#495" class="Bound"
+      >[F]</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="Definition.LogicalRelation.Substitution.Weakening.html#499" class="Bound"
+      >[A]</a
+      ><a name="502"
+      > </a
+      ><a name="503" href="Definition.LogicalRelation.Substitution.Weakening.html#503" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="505"
+      > </a
+      ><a name="506" href="Definition.LogicalRelation.Substitution.Weakening.html#506" class="Bound"
+      >[&#963;]</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Symbol"
+      >=</a
+      ><a name="511"
+      >
+  </a
+      ><a name="514" class="Keyword"
+      >let</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Definition.LogicalRelation.Substitution.Weakening.html#518" class="Bound"
+      >[&#963;A]</a
+      ><a name="522"
+      > </a
+      ><a name="523" class="Symbol"
+      >=</a
+      ><a name="524"
+      > </a
+      ><a name="525" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="530"
+      > </a
+      ><a name="531" class="Symbol"
+      >(</a
+      ><a name="532" href="Definition.LogicalRelation.Substitution.Weakening.html#499" class="Bound"
+      >[A]</a
+      ><a name="535"
+      > </a
+      ><a name="536" href="Definition.LogicalRelation.Substitution.Weakening.html#503" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="Symbol"
+      >(</a
+      ><a name="540" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Definition.LogicalRelation.Substitution.Weakening.html#506" class="Bound"
+      >[&#963;]</a
+      ><a name="549" class="Symbol"
+      >))</a
+      ><a name="551"
+      >
+      </a
+      ><a name="558" href="Definition.LogicalRelation.Substitution.Weakening.html#558" class="Bound"
+      >[&#963;A]'</a
+      ><a name="563"
+      > </a
+      ><a name="564" class="Symbol"
+      >=</a
+      ><a name="565"
+      > </a
+      ><a name="566" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="Symbol"
+      >(</a
+      ><a name="580" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="586"
+      > </a
+      ><a name="587" class="Symbol"
+      >(</a
+      ><a name="588" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="596"
+      > </a
+      ><a name="597" href="Definition.LogicalRelation.Substitution.Weakening.html#488" class="Bound"
+      >A</a
+      ><a name="598" class="Symbol"
+      >))</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="Definition.LogicalRelation.Substitution.Weakening.html#518" class="Bound"
+      >[&#963;A]</a
+      ><a name="605"
+      >
+  </a
+      ><a name="608" class="Keyword"
+      >in</a
+      ><a name="610"
+      >  </a
+      ><a name="612" href="Definition.LogicalRelation.Substitution.Weakening.html#558" class="Bound"
+      >[&#963;A]'</a
+      ><a name="617"
+      >
+  </a
+      ><a name="620" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="621"
+      >   </a
+      ><a name="624" class="Symbol"
+      >(&#955;</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Definition.LogicalRelation.Substitution.Weakening.html#627" class="Bound"
+      >[&#963;']</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Definition.LogicalRelation.Substitution.Weakening.html#632" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="638"
+      > </a
+      ><a name="639" class="Symbol"
+      >&#8594;</a
+      ><a name="640"
+      >
+         </a
+      ><a name="650" href="Definition.LogicalRelation.Irrelevance.html#1198" class="Function"
+      >irrelevanceEq''</a
+      ><a name="665"
+      > </a
+      ><a name="666" class="Symbol"
+      >(</a
+      ><a name="667" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >(</a
+      ><a name="675" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Definition.LogicalRelation.Substitution.Weakening.html#488" class="Bound"
+      >A</a
+      ><a name="685" class="Symbol"
+      >))</a
+      ><a name="687"
+      >
+                         </a
+      ><a name="713" class="Symbol"
+      >(</a
+      ><a name="714" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="720"
+      > </a
+      ><a name="721" class="Symbol"
+      >(</a
+      ><a name="722" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Definition.LogicalRelation.Substitution.Weakening.html#488" class="Bound"
+      >A</a
+      ><a name="732" class="Symbol"
+      >))</a
+      ><a name="734"
+      >
+                         </a
+      ><a name="760" href="Definition.LogicalRelation.Substitution.Weakening.html#518" class="Bound"
+      >[&#963;A]</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Definition.LogicalRelation.Substitution.Weakening.html#558" class="Bound"
+      >[&#963;A]'</a
+      ><a name="770"
+      >
+                         </a
+      ><a name="796" class="Symbol"
+      >(</a
+      ><a name="797" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="802"
+      > </a
+      ><a name="803" class="Symbol"
+      >(</a
+      ><a name="804" href="Definition.LogicalRelation.Substitution.Weakening.html#499" class="Bound"
+      >[A]</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Definition.LogicalRelation.Substitution.Weakening.html#503" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="810"
+      > </a
+      ><a name="811" class="Symbol"
+      >(</a
+      ><a name="812" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Definition.LogicalRelation.Substitution.Weakening.html#506" class="Bound"
+      >[&#963;]</a
+      ><a name="821" class="Symbol"
+      >))</a
+      ><a name="823"
+      > </a
+      ><a name="824" class="Symbol"
+      >(</a
+      ><a name="825" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="830"
+      > </a
+      ><a name="831" href="Definition.LogicalRelation.Substitution.Weakening.html#627" class="Bound"
+      >[&#963;']</a
+      ><a name="835" class="Symbol"
+      >)</a
+      ><a name="836"
+      > </a
+      ><a name="837" class="Symbol"
+      >(</a
+      ><a name="838" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="843"
+      > </a
+      ><a name="844" href="Definition.LogicalRelation.Substitution.Weakening.html#632" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="850" class="Symbol"
+      >)))</a
+      ><a name="853"
+      >
+
+</a
+      ><a name="855" href="Definition.LogicalRelation.Substitution.Weakening.html#855" class="Function"
+      >wk1Eq&#8347;</a
+      ><a name="861"
+      > </a
+      ><a name="862" class="Symbol"
+      >:</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >&#8704;</a
+      ><a name="865"
+      > </a
+      ><a name="866" class="Symbol"
+      >{</a
+      ><a name="867" href="Definition.LogicalRelation.Substitution.Weakening.html#867" class="Bound"
+      >A</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="Definition.LogicalRelation.Substitution.Weakening.html#869" class="Bound"
+      >B</a
+      ><a name="870"
+      > </a
+      ><a name="871" href="Definition.LogicalRelation.Substitution.Weakening.html#871" class="Bound"
+      >F</a
+      ><a name="872"
+      > </a
+      ><a name="873" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Definition.LogicalRelation.Substitution.Weakening.html#875" class="Bound"
+      >l</a
+      ><a name="876" class="Symbol"
+      >}</a
+      ><a name="877"
+      >
+         </a
+      ><a name="887" class="Symbol"
+      >(</a
+      ><a name="888" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >:</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="898" class="Symbol"
+      >)</a
+      ><a name="899"
+      >
+         </a
+      ><a name="909" class="Symbol"
+      >(</a
+      ><a name="910" href="Definition.LogicalRelation.Substitution.Weakening.html#910" class="Bound"
+      >[F]</a
+      ><a name="913"
+      > </a
+      ><a name="914" class="Symbol"
+      >:</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Definition.LogicalRelation.Substitution.Weakening.html#875" class="Bound"
+      >l</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Definition.LogicalRelation.Substitution.Weakening.html#871" class="Bound"
+      >F</a
+      ><a name="927"
+      > </a
+      ><a name="928" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="933" class="Symbol"
+      >)</a
+      ><a name="934"
+      >
+         </a
+      ><a name="944" class="Symbol"
+      >(</a
+      ><a name="945" href="Definition.LogicalRelation.Substitution.Weakening.html#945" class="Bound"
+      >[A]</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >:</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="952"
+      > </a
+      ><a name="953" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="956"
+      > </a
+      ><a name="957" href="Definition.LogicalRelation.Substitution.Weakening.html#875" class="Bound"
+      >l</a
+      ><a name="958"
+      > </a
+      ><a name="959" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="960"
+      > </a
+      ><a name="961" href="Definition.LogicalRelation.Substitution.Weakening.html#867" class="Bound"
+      >A</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="964"
+      > </a
+      ><a name="965" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="968" class="Symbol"
+      >)</a
+      ><a name="969"
+      >
+         </a
+      ><a name="979" class="Symbol"
+      >(</a
+      ><a name="980" href="Definition.LogicalRelation.Substitution.Weakening.html#980" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="985"
+      > </a
+      ><a name="986" class="Symbol"
+      >:</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="993"
+      > </a
+      ><a name="994" href="Definition.LogicalRelation.Substitution.Weakening.html#875" class="Bound"
+      >l</a
+      ><a name="995"
+      > </a
+      ><a name="996" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Definition.LogicalRelation.Substitution.Weakening.html#867" class="Bound"
+      >A</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Definition.LogicalRelation.Substitution.Weakening.html#869" class="Bound"
+      >B</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Definition.LogicalRelation.Substitution.Weakening.html#945" class="Bound"
+      >[A]</a
+      ><a name="1015" class="Symbol"
+      >)</a
+      ><a name="1016"
+      >
+       </a
+      ><a name="1024" class="Symbol"
+      >&#8594;</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Definition.LogicalRelation.Substitution.Weakening.html#873" class="Bound"
+      >&#915;</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Definition.LogicalRelation.Substitution.Weakening.html#871" class="Bound"
+      >F</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Definition.LogicalRelation.Substitution.Weakening.html#875" class="Bound"
+      >l</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" href="Definition.Untyped.html#3624" class="Function"
+      >wk1</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Definition.LogicalRelation.Substitution.Weakening.html#867" class="Bound"
+      >A</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="Definition.Untyped.html#3624" class="Function"
+      >wk1</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Definition.LogicalRelation.Substitution.Weakening.html#869" class="Bound"
+      >B</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" href="Definition.LogicalRelation.Substitution.html#328" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" href="Definition.LogicalRelation.Substitution.Weakening.html#910" class="Bound"
+      >[F]</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Definition.LogicalRelation.Substitution.Weakening.html#350" class="Function"
+      >wk1&#8347;</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" class="Symbol"
+      >{</a
+      ><a name="1074" href="Definition.LogicalRelation.Substitution.Weakening.html#867" class="Bound"
+      >A</a
+      ><a name="1075" class="Symbol"
+      >}</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" class="Symbol"
+      >{</a
+      ><a name="1078" href="Definition.LogicalRelation.Substitution.Weakening.html#871" class="Bound"
+      >F</a
+      ><a name="1079" class="Symbol"
+      >}</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" href="Definition.LogicalRelation.Substitution.Weakening.html#888" class="Bound"
+      >[&#915;]</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Definition.LogicalRelation.Substitution.Weakening.html#910" class="Bound"
+      >[F]</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" href="Definition.LogicalRelation.Substitution.Weakening.html#945" class="Bound"
+      >[A]</a
+      ><a name="1092"
+      >
+</a
+      ><a name="1093" href="Definition.LogicalRelation.Substitution.Weakening.html#855" class="Function"
+      >wk1Eq&#8347;</a
+      ><a name="1099"
+      > </a
+      ><a name="1100" class="Symbol"
+      >{</a
+      ><a name="1101" href="Definition.LogicalRelation.Substitution.Weakening.html#1101" class="Bound"
+      >A</a
+      ><a name="1102" class="Symbol"
+      >}</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" class="Symbol"
+      >{</a
+      ><a name="1105" href="Definition.LogicalRelation.Substitution.Weakening.html#1105" class="Bound"
+      >B</a
+      ><a name="1106" class="Symbol"
+      >}</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Definition.LogicalRelation.Substitution.Weakening.html#1108" class="Bound"
+      >[&#915;]</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Definition.LogicalRelation.Substitution.Weakening.html#1112" class="Bound"
+      >[F]</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Definition.LogicalRelation.Substitution.Weakening.html#1116" class="Bound"
+      >[A]</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Definition.LogicalRelation.Substitution.Weakening.html#1120" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Definition.LogicalRelation.Substitution.Weakening.html#1126" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1128"
+      > </a
+      ><a name="1129" href="Definition.LogicalRelation.Substitution.Weakening.html#1129" class="Bound"
+      >[&#963;]</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" class="Symbol"
+      >=</a
+      ><a name="1134"
+      >
+  </a
+      ><a name="1137" class="Keyword"
+      >let</a
+      ><a name="1140"
+      > </a
+      ><a name="1141" href="Definition.LogicalRelation.Substitution.Weakening.html#1141" class="Bound"
+      >[&#963;A]</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" class="Symbol"
+      >=</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1153"
+      > </a
+      ><a name="1154" class="Symbol"
+      >(</a
+      ><a name="1155" href="Definition.LogicalRelation.Substitution.Weakening.html#1116" class="Bound"
+      >[A]</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Definition.LogicalRelation.Substitution.Weakening.html#1126" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" class="Symbol"
+      >(</a
+      ><a name="1163" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Definition.LogicalRelation.Substitution.Weakening.html#1129" class="Bound"
+      >[&#963;]</a
+      ><a name="1172" class="Symbol"
+      >))</a
+      ><a name="1174"
+      >
+      </a
+      ><a name="1181" href="Definition.LogicalRelation.Substitution.Weakening.html#1181" class="Bound"
+      >[&#963;A]'</a
+      ><a name="1186"
+      > </a
+      ><a name="1187" class="Symbol"
+      >=</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" class="Symbol"
+      >(</a
+      ><a name="1203" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" class="Symbol"
+      >(</a
+      ><a name="1211" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Definition.LogicalRelation.Substitution.Weakening.html#1101" class="Bound"
+      >A</a
+      ><a name="1221" class="Symbol"
+      >))</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Definition.LogicalRelation.Substitution.Weakening.html#1141" class="Bound"
+      >[&#963;A]</a
+      ><a name="1228"
+      >
+  </a
+      ><a name="1231" class="Keyword"
+      >in</a
+      ><a name="1233"
+      >  </a
+      ><a name="1235" href="Definition.LogicalRelation.Irrelevance.html#1198" class="Function"
+      >irrelevanceEq''</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" class="Symbol"
+      >(</a
+      ><a name="1252" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" class="Symbol"
+      >(</a
+      ><a name="1260" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" href="Definition.LogicalRelation.Substitution.Weakening.html#1101" class="Bound"
+      >A</a
+      ><a name="1270" class="Symbol"
+      >))</a
+      ><a name="1272"
+      >
+                      </a
+      ><a name="1295" class="Symbol"
+      >(</a
+      ><a name="1296" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" class="Symbol"
+      >(</a
+      ><a name="1304" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="1312"
+      > </a
+      ><a name="1313" href="Definition.LogicalRelation.Substitution.Weakening.html#1105" class="Bound"
+      >B</a
+      ><a name="1314" class="Symbol"
+      >))</a
+      ><a name="1316"
+      >
+                      </a
+      ><a name="1339" href="Definition.LogicalRelation.Substitution.Weakening.html#1141" class="Bound"
+      >[&#963;A]</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="Definition.LogicalRelation.Substitution.Weakening.html#1181" class="Bound"
+      >[&#963;A]'</a
+      ><a name="1349"
+      >
+                      </a
+      ><a name="1372" class="Symbol"
+      >(</a
+      ><a name="1373" href="Definition.LogicalRelation.Substitution.Weakening.html#1120" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1378"
+      > </a
+      ><a name="1379" href="Definition.LogicalRelation.Substitution.Weakening.html#1126" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" class="Symbol"
+      >(</a
+      ><a name="1383" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" href="Definition.LogicalRelation.Substitution.Weakening.html#1129" class="Bound"
+      >[&#963;]</a
+      ><a name="1392" class="Symbol"
+      >))</a
+      ><a name="1394"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

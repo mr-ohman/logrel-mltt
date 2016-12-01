@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Everything</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Comment"
+      >-- A Logical Relation for Dependent Type Theory Formalized in Agda</a
+      ><a name="2"
+      >
+</a
+      ><a name="3" class="Comment"
+      >-- Git repository: </a
+      ><a name="4" href="https://github.com/mr-ohman/logrel-mltt"
+      >https://github.com/mr-ohman/logrel-mltt</a><a name="67"
+      >
+
+</a
+      ><a name="69" class="Keyword"
+      >module</a
+      ><a name="75"
+      > </a
+      ><a name="76" href="Everything.html#1" class="Module"
+      >Everything</a
+      ><a name="86"
+      > </a
+      ><a name="87" class="Keyword"
+      >where</a
+      ><a name="92"
+      >
+
+</a
+      ><a name="94" class="Keyword"
+      >import</a
+      ><a name="100"
+      > </a
+      ><a name="101" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="112"
+      >
+</a
+      ><a name="113" class="Keyword"
+      >import</a
+      ><a name="119"
+      > </a
+      ><a name="120" href="Tools.Unit.html#1" class="Module"
+      >Tools.Unit</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Keyword"
+      >import</a
+      ><a name="137"
+      > </a
+      ><a name="138" href="Tools.Nat.html#1" class="Module"
+      >Tools.Nat</a
+      ><a name="147"
+      >
+</a
+      ><a name="148" class="Keyword"
+      >import</a
+      ><a name="154"
+      > </a
+      ><a name="155" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="168"
+      >
+</a
+      ><a name="169" class="Keyword"
+      >import</a
+      ><a name="175"
+      > </a
+      ><a name="176" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="203"
+      >
+</a
+      ><a name="204" class="Keyword"
+      >import</a
+      ><a name="210"
+      > </a
+      ><a name="211" href="Tools.HeterogeneousEquality.html#1" class="Module"
+      >Tools.HeterogeneousEquality</a
+      ><a name="238"
+      >
+</a
+      ><a name="239" class="Keyword"
+      >import</a
+      ><a name="245"
+      > </a
+      ><a name="246" href="Tools.Context.html#1" class="Module"
+      >Tools.Context</a
+      ><a name="259"
+      >
+
+</a
+      ><a name="261" class="Keyword"
+      >import</a
+      ><a name="267"
+      > </a
+      ><a name="268" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="286"
+      >
+</a
+      ><a name="287" class="Keyword"
+      >import</a
+      ><a name="293"
+      > </a
+      ><a name="294" href="Definition.Untyped.Indexed.html#1" class="Module"
+      >Definition.Untyped.Indexed</a
+      ><a name="320"
+      >
+</a
+      ><a name="321" class="Keyword"
+      >import</a
+      ><a name="327"
+      > </a
+      ><a name="328" href="Definition.Untyped.Properties.html#1" class="Module"
+      >Definition.Untyped.Properties</a
+      ><a name="357"
+      >
+
+</a
+      ><a name="359" class="Keyword"
+      >import</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="382"
+      >
+</a
+      ><a name="383" class="Keyword"
+      >import</a
+      ><a name="389"
+      > </a
+      ><a name="390" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="417"
+      >
+</a
+      ><a name="418" class="Keyword"
+      >import</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="451"
+      >
+
+</a
+      ><a name="453" class="Keyword"
+      >import</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="486"
+      >
+</a
+      ><a name="487" class="Keyword"
+      >import</a
+      ><a name="493"
+      > </a
+      ><a name="494" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="527"
+      >
+</a
+      ><a name="528" class="Keyword"
+      >import</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="573"
+      >
+</a
+      ><a name="574" class="Keyword"
+      >import</a
+      ><a name="580"
+      > </a
+      ><a name="581" href="Definition.LogicalRelation.Weakening.html#1" class="Module"
+      >Definition.LogicalRelation.Weakening</a
+      ><a name="617"
+      >
+</a
+      ><a name="618" class="Keyword"
+      >import</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="662"
+      >
+
+</a
+      ><a name="664" class="Keyword"
+      >import</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="710"
+      >
+</a
+      ><a name="711" class="Keyword"
+      >import</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="Definition.LogicalRelation.Substitution.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Properties</a
+      ><a name="768"
+      >
+</a
+      ><a name="769" class="Keyword"
+      >import</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.LogicalRelation.Substitution.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Irrelevance</a
+      ><a name="827"
+      >
+</a
+      ><a name="828" class="Keyword"
+      >import</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Definition.LogicalRelation.Substitution.Conversion.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Conversion</a
+      ><a name="885"
+      >
+</a
+      ><a name="886" class="Keyword"
+      >import</a
+      ><a name="892"
+      > </a
+      ><a name="893" href="Definition.LogicalRelation.Substitution.Reduction.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Reduction</a
+      ><a name="942"
+      >
+</a
+      ><a name="943" class="Keyword"
+      >import</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="Definition.LogicalRelation.Substitution.Reflexivity.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Reflexivity</a
+      ><a name="1001"
+      >
+</a
+      ><a name="1002" class="Keyword"
+      >import</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Definition.LogicalRelation.Substitution.Weakening.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Weakening</a
+      ><a name="1058"
+      >
+</a
+      ><a name="1059" class="Keyword"
+      >import</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.LogicalRelation.Substitution.Introductions.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Introductions</a
+      ><a name="1119"
+      >
+
+</a
+      ><a name="1121" class="Keyword"
+      >import</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Definition.LogicalRelation.Fundamental.html#1" class="Module"
+      >Definition.LogicalRelation.Fundamental</a
+      ><a name="1166"
+      >
+</a
+      ><a name="1167" class="Keyword"
+      >import</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" href="Definition.LogicalRelation.Consequences.Canonicity.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Canonicity</a
+      ><a name="1224"
+      >
+</a
+      ><a name="1225" class="Keyword"
+      >import</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Definition.LogicalRelation.Consequences.Injectivity.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Injectivity</a
+      ><a name="1283"
+      >
+</a
+      ><a name="1284" class="Keyword"
+      >import</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Definition.LogicalRelation.Consequences.Syntactic.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Syntactic</a
+      ><a name="1340"
+      >
+</a
+      ><a name="1341" class="Keyword"
+      >import</a
+      ><a name="1347"
+      > </a
+      ><a name="1348" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.SingleSubst</a
+      ><a name="1399"
+      >
+</a
+      ><a name="1400" class="Keyword"
+      >import</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" href="Definition.LogicalRelation.Consequences.Inversion.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Inversion</a
+      ><a name="1456"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

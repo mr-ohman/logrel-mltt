@@ -1,0 +1,1095 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Consequences.Inversion</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Consequences.Inversion.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Inversion</a
+      ><a name="57"
+      > </a
+      ><a name="58" class="Keyword"
+      >where</a
+      ><a name="63"
+      >
+
+</a
+      ><a name="65" class="Keyword"
+      >open</a
+      ><a name="69"
+      > </a
+      ><a name="70" class="Keyword"
+      >import</a
+      ><a name="76"
+      > </a
+      ><a name="77" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="95"
+      >
+</a
+      ><a name="96" class="Keyword"
+      >open</a
+      ><a name="100"
+      > </a
+      ><a name="101" class="Keyword"
+      >import</a
+      ><a name="107"
+      > </a
+      ><a name="108" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="124"
+      >
+</a
+      ><a name="125" class="Keyword"
+      >open</a
+      ><a name="129"
+      > </a
+      ><a name="130" class="Keyword"
+      >import</a
+      ><a name="136"
+      > </a
+      ><a name="137" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="164"
+      >
+
+</a
+      ><a name="166" class="Keyword"
+      >open</a
+      ><a name="170"
+      > </a
+      ><a name="171" class="Keyword"
+      >import</a
+      ><a name="177"
+      > </a
+      ><a name="178" href="Definition.LogicalRelation.Consequences.Syntactic.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Syntactic</a
+      ><a name="227"
+      >
+</a
+      ><a name="228" class="Keyword"
+      >open</a
+      ><a name="232"
+      > </a
+      ><a name="233" class="Keyword"
+      >import</a
+      ><a name="239"
+      > </a
+      ><a name="240" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.SingleSubst</a
+      ><a name="291"
+      >
+
+</a
+      ><a name="293" class="Keyword"
+      >open</a
+      ><a name="297"
+      > </a
+      ><a name="298" class="Keyword"
+      >import</a
+      ><a name="304"
+      > </a
+      ><a name="305" href="Tools.Context.html#1" class="Module"
+      >Tools.Context</a
+      ><a name="318"
+      >
+</a
+      ><a name="319" class="Keyword"
+      >open</a
+      ><a name="323"
+      > </a
+      ><a name="324" class="Keyword"
+      >import</a
+      ><a name="330"
+      > </a
+      ><a name="331" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="344"
+      >
+
+
+</a
+      ><a name="347" href="Definition.LogicalRelation.Consequences.Inversion.html#347" class="Function"
+      >inversion-zero</a
+      ><a name="361"
+      > </a
+      ><a name="362" class="Symbol"
+      >:</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Symbol"
+      >&#8704;</a
+      ><a name="365"
+      > </a
+      ><a name="366" class="Symbol"
+      >{</a
+      ><a name="367" href="Definition.LogicalRelation.Consequences.Inversion.html#367" class="Bound"
+      >&#915;</a
+      ><a name="368"
+      > </a
+      ><a name="369" href="Definition.LogicalRelation.Consequences.Inversion.html#369" class="Bound"
+      >C</a
+      ><a name="370" class="Symbol"
+      >}</a
+      ><a name="371"
+      > </a
+      ><a name="372" class="Symbol"
+      >&#8594;</a
+      ><a name="373"
+      > </a
+      ><a name="374" href="Definition.LogicalRelation.Consequences.Inversion.html#367" class="Bound"
+      >&#915;</a
+      ><a name="375"
+      > </a
+      ><a name="376" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="377"
+      > </a
+      ><a name="378" href="Definition.Untyped.html#561" class="InductiveConstructor"
+      >zero</a
+      ><a name="382"
+      > </a
+      ><a name="383" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="384"
+      > </a
+      ><a name="385" href="Definition.LogicalRelation.Consequences.Inversion.html#369" class="Bound"
+      >C</a
+      ><a name="386"
+      > </a
+      ><a name="387" class="Symbol"
+      >&#8594;</a
+      ><a name="388"
+      > </a
+      ><a name="389" href="Definition.LogicalRelation.Consequences.Inversion.html#367" class="Bound"
+      >&#915;</a
+      ><a name="390"
+      > </a
+      ><a name="391" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="392"
+      > </a
+      ><a name="393" href="Definition.LogicalRelation.Consequences.Inversion.html#369" class="Bound"
+      >C</a
+      ><a name="394"
+      > </a
+      ><a name="395" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="396"
+      > </a
+      ><a name="397" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="398"
+      >
+</a
+      ><a name="399" href="Definition.LogicalRelation.Consequences.Inversion.html#347" class="Function"
+      >inversion-zero</a
+      ><a name="413"
+      > </a
+      ><a name="414" class="Symbol"
+      >(</a
+      ><a name="415" href="Definition.Typed.html#1318" class="InductiveConstructor"
+      >zero</a
+      ><a name="419"
+      > </a
+      ><a name="420" href="Definition.LogicalRelation.Consequences.Inversion.html#420" class="Bound"
+      >x</a
+      ><a name="421" class="Symbol"
+      >)</a
+      ><a name="422"
+      > </a
+      ><a name="423" class="Symbol"
+      >=</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="429"
+      > </a
+      ><a name="430" class="Symbol"
+      >(</a
+      ><a name="431" href="Definition.Typed.html#589" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="432"
+      > </a
+      ><a name="433" href="Definition.LogicalRelation.Consequences.Inversion.html#420" class="Bound"
+      >x</a
+      ><a name="434" class="Symbol"
+      >)</a
+      ><a name="435"
+      >
+</a
+      ><a name="436" href="Definition.LogicalRelation.Consequences.Inversion.html#347" class="Function"
+      >inversion-zero</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Symbol"
+      >(</a
+      ><a name="452" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="456"
+      > </a
+      ><a name="457" href="Definition.LogicalRelation.Consequences.Inversion.html#457" class="Bound"
+      >x</a
+      ><a name="458"
+      > </a
+      ><a name="459" href="Definition.LogicalRelation.Consequences.Inversion.html#459" class="Bound"
+      >x&#8321;</a
+      ><a name="461" class="Symbol"
+      >)</a
+      ><a name="462"
+      > </a
+      ><a name="463" class="Symbol"
+      >=</a
+      ><a name="464"
+      > </a
+      ><a name="465" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="470"
+      > </a
+      ><a name="471" class="Symbol"
+      >(</a
+      ><a name="472" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Definition.LogicalRelation.Consequences.Inversion.html#459" class="Bound"
+      >x&#8321;</a
+      ><a name="478" class="Symbol"
+      >)</a
+      ><a name="479"
+      > </a
+      ><a name="480" class="Symbol"
+      >(</a
+      ><a name="481" href="Definition.LogicalRelation.Consequences.Inversion.html#347" class="Function"
+      >inversion-zero</a
+      ><a name="495"
+      > </a
+      ><a name="496" href="Definition.LogicalRelation.Consequences.Inversion.html#457" class="Bound"
+      >x</a
+      ><a name="497" class="Symbol"
+      >)</a
+      ><a name="498"
+      >
+
+</a
+      ><a name="500" href="Definition.LogicalRelation.Consequences.Inversion.html#500" class="Function"
+      >inversion-suc</a
+      ><a name="513"
+      > </a
+      ><a name="514" class="Symbol"
+      >:</a
+      ><a name="515"
+      > </a
+      ><a name="516" class="Symbol"
+      >&#8704;</a
+      ><a name="517"
+      > </a
+      ><a name="518" class="Symbol"
+      >{</a
+      ><a name="519" href="Definition.LogicalRelation.Consequences.Inversion.html#519" class="Bound"
+      >&#915;</a
+      ><a name="520"
+      > </a
+      ><a name="521" href="Definition.LogicalRelation.Consequences.Inversion.html#521" class="Bound"
+      >t</a
+      ><a name="522"
+      > </a
+      ><a name="523" href="Definition.LogicalRelation.Consequences.Inversion.html#523" class="Bound"
+      >C</a
+      ><a name="524" class="Symbol"
+      >}</a
+      ><a name="525"
+      > </a
+      ><a name="526" class="Symbol"
+      >&#8594;</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Definition.LogicalRelation.Consequences.Inversion.html#519" class="Bound"
+      >&#915;</a
+      ><a name="529"
+      > </a
+      ><a name="530" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Definition.Untyped.html#577" class="InductiveConstructor"
+      >suc</a
+      ><a name="535"
+      > </a
+      ><a name="536" href="Definition.LogicalRelation.Consequences.Inversion.html#521" class="Bound"
+      >t</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Definition.LogicalRelation.Consequences.Inversion.html#523" class="Bound"
+      >C</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >&#8594;</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Definition.LogicalRelation.Consequences.Inversion.html#519" class="Bound"
+      >&#915;</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="547"
+      > </a
+      ><a name="548" href="Definition.LogicalRelation.Consequences.Inversion.html#523" class="Bound"
+      >C</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="551"
+      > </a
+      ><a name="552" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="553"
+      >
+</a
+      ><a name="554" href="Definition.LogicalRelation.Consequences.Inversion.html#500" class="Function"
+      >inversion-suc</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >(</a
+      ><a name="569" href="Definition.Typed.html#1361" class="InductiveConstructor"
+      >suc</a
+      ><a name="572"
+      > </a
+      ><a name="573" href="Definition.LogicalRelation.Consequences.Inversion.html#573" class="Bound"
+      >x</a
+      ><a name="574" class="Symbol"
+      >)</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Symbol"
+      >=</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="582"
+      > </a
+      ><a name="583" class="Symbol"
+      >(</a
+      ><a name="584" href="Definition.Typed.html#589" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="585"
+      > </a
+      ><a name="586" class="Symbol"
+      >(</a
+      ><a name="587" href="Definition.Typed.Properties.html#389" class="Function"
+      >wfTerm</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Definition.LogicalRelation.Consequences.Inversion.html#573" class="Bound"
+      >x</a
+      ><a name="595" class="Symbol"
+      >))</a
+      ><a name="597"
+      >
+</a
+      ><a name="598" href="Definition.LogicalRelation.Consequences.Inversion.html#500" class="Function"
+      >inversion-suc</a
+      ><a name="611"
+      > </a
+      ><a name="612" class="Symbol"
+      >(</a
+      ><a name="613" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="617"
+      > </a
+      ><a name="618" href="Definition.LogicalRelation.Consequences.Inversion.html#618" class="Bound"
+      >x</a
+      ><a name="619"
+      > </a
+      ><a name="620" href="Definition.LogicalRelation.Consequences.Inversion.html#620" class="Bound"
+      >x&#8321;</a
+      ><a name="622" class="Symbol"
+      >)</a
+      ><a name="623"
+      > </a
+      ><a name="624" class="Symbol"
+      >=</a
+      ><a name="625"
+      > </a
+      ><a name="626" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="631"
+      > </a
+      ><a name="632" class="Symbol"
+      >(</a
+      ><a name="633" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="636"
+      > </a
+      ><a name="637" href="Definition.LogicalRelation.Consequences.Inversion.html#620" class="Bound"
+      >x&#8321;</a
+      ><a name="639" class="Symbol"
+      >)</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Symbol"
+      >(</a
+      ><a name="642" href="Definition.LogicalRelation.Consequences.Inversion.html#500" class="Function"
+      >inversion-suc</a
+      ><a name="655"
+      > </a
+      ><a name="656" href="Definition.LogicalRelation.Consequences.Inversion.html#618" class="Bound"
+      >x</a
+      ><a name="657" class="Symbol"
+      >)</a
+      ><a name="658"
+      >
+
+</a
+      ><a name="660" href="Definition.LogicalRelation.Consequences.Inversion.html#660" class="Function"
+      >inversion-natrec</a
+      ><a name="676"
+      > </a
+      ><a name="677" class="Symbol"
+      >:</a
+      ><a name="678"
+      > </a
+      ><a name="679" class="Symbol"
+      >&#8704;</a
+      ><a name="680"
+      > </a
+      ><a name="681" class="Symbol"
+      >{</a
+      ><a name="682" href="Definition.LogicalRelation.Consequences.Inversion.html#682" class="Bound"
+      >&#915;</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Definition.LogicalRelation.Consequences.Inversion.html#684" class="Bound"
+      >c</a
+      ><a name="685"
+      > </a
+      ><a name="686" href="Definition.LogicalRelation.Consequences.Inversion.html#686" class="Bound"
+      >g</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="Definition.LogicalRelation.Consequences.Inversion.html#688" class="Bound"
+      >n</a
+      ><a name="689"
+      > </a
+      ><a name="690" href="Definition.LogicalRelation.Consequences.Inversion.html#690" class="Bound"
+      >A</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="Definition.LogicalRelation.Consequences.Inversion.html#692" class="Bound"
+      >C</a
+      ><a name="693" class="Symbol"
+      >}</a
+      ><a name="694"
+      > </a
+      ><a name="695" class="Symbol"
+      >&#8594;</a
+      ><a name="696"
+      > </a
+      ><a name="697" href="Definition.LogicalRelation.Consequences.Inversion.html#682" class="Bound"
+      >&#915;</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Definition.Untyped.html#600" class="InductiveConstructor"
+      >natrec</a
+      ><a name="707"
+      > </a
+      ><a name="708" href="Definition.LogicalRelation.Consequences.Inversion.html#692" class="Bound"
+      >C</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Definition.LogicalRelation.Consequences.Inversion.html#684" class="Bound"
+      >c</a
+      ><a name="711"
+      > </a
+      ><a name="712" href="Definition.LogicalRelation.Consequences.Inversion.html#686" class="Bound"
+      >g</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="Definition.LogicalRelation.Consequences.Inversion.html#688" class="Bound"
+      >n</a
+      ><a name="715"
+      > </a
+      ><a name="716" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="Definition.LogicalRelation.Consequences.Inversion.html#690" class="Bound"
+      >A</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >&#8594;</a
+      ><a name="721"
+      > </a
+      ><a name="722" href="Definition.LogicalRelation.Consequences.Inversion.html#682" class="Bound"
+      >&#915;</a
+      ><a name="723"
+      > </a
+      ><a name="724" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Definition.LogicalRelation.Consequences.Inversion.html#690" class="Bound"
+      >A</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Definition.LogicalRelation.Consequences.Inversion.html#692" class="Bound"
+      >C</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Definition.LogicalRelation.Consequences.Inversion.html#688" class="Bound"
+      >n</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="737"
+      >
+</a
+      ><a name="738" href="Definition.LogicalRelation.Consequences.Inversion.html#660" class="Function"
+      >inversion-natrec</a
+      ><a name="754"
+      > </a
+      ><a name="755" class="Symbol"
+      >(</a
+      ><a name="756" href="Definition.Typed.html#1434" class="InductiveConstructor"
+      >natrec</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="Definition.LogicalRelation.Consequences.Inversion.html#763" class="Bound"
+      >x</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Definition.LogicalRelation.Consequences.Inversion.html#765" class="Bound"
+      >d</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Definition.LogicalRelation.Consequences.Inversion.html#767" class="Bound"
+      >d&#8321;</a
+      ><a name="769"
+      > </a
+      ><a name="770" href="Definition.LogicalRelation.Consequences.Inversion.html#770" class="Bound"
+      >n</a
+      ><a name="771" class="Symbol"
+      >)</a
+      ><a name="772"
+      > </a
+      ><a name="773" class="Symbol"
+      >=</a
+      ><a name="774"
+      > </a
+      ><a name="775" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="779"
+      > </a
+      ><a name="780" class="Symbol"
+      >(</a
+      ><a name="781" href="Definition.LogicalRelation.Consequences.SingleSubst.html#567" class="Function"
+      >substType</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="Definition.LogicalRelation.Consequences.Inversion.html#763" class="Bound"
+      >x</a
+      ><a name="792"
+      > </a
+      ><a name="793" href="Definition.LogicalRelation.Consequences.Inversion.html#770" class="Bound"
+      >n</a
+      ><a name="794" class="Symbol"
+      >)</a
+      ><a name="795"
+      >
+</a
+      ><a name="796" href="Definition.LogicalRelation.Consequences.Inversion.html#660" class="Function"
+      >inversion-natrec</a
+      ><a name="812"
+      > </a
+      ><a name="813" class="Symbol"
+      >(</a
+      ><a name="814" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="818"
+      > </a
+      ><a name="819" href="Definition.LogicalRelation.Consequences.Inversion.html#819" class="Bound"
+      >d</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Definition.LogicalRelation.Consequences.Inversion.html#821" class="Bound"
+      >x</a
+      ><a name="822" class="Symbol"
+      >)</a
+      ><a name="823"
+      > </a
+      ><a name="824" class="Symbol"
+      >=</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="831"
+      > </a
+      ><a name="832" class="Symbol"
+      >(</a
+      ><a name="833" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Definition.LogicalRelation.Consequences.Inversion.html#821" class="Bound"
+      >x</a
+      ><a name="838" class="Symbol"
+      >)</a
+      ><a name="839"
+      > </a
+      ><a name="840" class="Symbol"
+      >(</a
+      ><a name="841" href="Definition.LogicalRelation.Consequences.Inversion.html#660" class="Function"
+      >inversion-natrec</a
+      ><a name="857"
+      > </a
+      ><a name="858" href="Definition.LogicalRelation.Consequences.Inversion.html#819" class="Bound"
+      >d</a
+      ><a name="859" class="Symbol"
+      >)</a
+      ><a name="860"
+      >
+
+</a
+      ><a name="862" href="Definition.LogicalRelation.Consequences.Inversion.html#862" class="Function"
+      >inversion-app</a
+      ><a name="875"
+      > </a
+      ><a name="876" class="Symbol"
+      >:</a
+      ><a name="877"
+      >  </a
+      ><a name="879" class="Symbol"
+      >&#8704;</a
+      ><a name="880"
+      > </a
+      ><a name="881" class="Symbol"
+      >{</a
+      ><a name="882" href="Definition.LogicalRelation.Consequences.Inversion.html#882" class="Bound"
+      >&#915;</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Definition.LogicalRelation.Consequences.Inversion.html#884" class="Bound"
+      >f</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Definition.LogicalRelation.Consequences.Inversion.html#886" class="Bound"
+      >a</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.LogicalRelation.Consequences.Inversion.html#888" class="Bound"
+      >A</a
+      ><a name="889" class="Symbol"
+      >}</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="Symbol"
+      >&#8594;</a
+      ><a name="892"
+      > </a
+      ><a name="893" href="Definition.LogicalRelation.Consequences.Inversion.html#882" class="Bound"
+      >&#915;</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="896"
+      > </a
+      ><a name="897" class="Symbol"
+      >(</a
+      ><a name="898" href="Definition.LogicalRelation.Consequences.Inversion.html#884" class="Bound"
+      >f</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Definition.Untyped.html#531" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Definition.LogicalRelation.Consequences.Inversion.html#886" class="Bound"
+      >a</a
+      ><a name="903" class="Symbol"
+      >)</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="Definition.LogicalRelation.Consequences.Inversion.html#888" class="Bound"
+      >A</a
+      ><a name="908"
+      > </a
+      ><a name="909" class="Symbol"
+      >&#8594;</a
+      ><a name="910"
+      >
+  </a
+      ><a name="913" href="Tools.Product.html#219" class="Function"
+      >&#8707;&#8322;</a
+      ><a name="915"
+      > </a
+      ><a name="916" class="Symbol"
+      >&#955;</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Definition.LogicalRelation.Consequences.Inversion.html#918" class="Bound"
+      >F</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="Definition.LogicalRelation.Consequences.Inversion.html#920" class="Bound"
+      >G</a
+      ><a name="921"
+      > </a
+      ><a name="922" class="Symbol"
+      >&#8594;</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Definition.LogicalRelation.Consequences.Inversion.html#882" class="Bound"
+      >&#915;</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="927"
+      > </a
+      ><a name="928" href="Definition.LogicalRelation.Consequences.Inversion.html#884" class="Bound"
+      >f</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Definition.LogicalRelation.Consequences.Inversion.html#918" class="Bound"
+      >F</a
+      ><a name="935"
+      > </a
+      ><a name="936" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Definition.LogicalRelation.Consequences.Inversion.html#920" class="Bound"
+      >G</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Definition.LogicalRelation.Consequences.Inversion.html#882" class="Bound"
+      >&#915;</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="945"
+      > </a
+      ><a name="946" href="Definition.LogicalRelation.Consequences.Inversion.html#886" class="Bound"
+      >a</a
+      ><a name="947"
+      > </a
+      ><a name="948" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="Definition.LogicalRelation.Consequences.Inversion.html#918" class="Bound"
+      >F</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Definition.LogicalRelation.Consequences.Inversion.html#882" class="Bound"
+      >&#915;</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Definition.LogicalRelation.Consequences.Inversion.html#888" class="Bound"
+      >A</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Definition.LogicalRelation.Consequences.Inversion.html#920" class="Bound"
+      >G</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="Definition.LogicalRelation.Consequences.Inversion.html#886" class="Bound"
+      >a</a
+      ><a name="967"
+      > </a
+      ><a name="968" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="969"
+      >
+</a
+      ><a name="970" href="Definition.LogicalRelation.Consequences.Inversion.html#862" class="Function"
+      >inversion-app</a
+      ><a name="983"
+      > </a
+      ><a name="984" class="Symbol"
+      >(</a
+      ><a name="985" href="Definition.LogicalRelation.Consequences.Inversion.html#985" class="Bound"
+      >d</a
+      ><a name="986"
+      > </a
+      ><a name="987" href="Definition.Typed.html#1200" class="InductiveConstructor Operator"
+      >&#8728;</a
+      ><a name="988"
+      > </a
+      ><a name="989" href="Definition.LogicalRelation.Consequences.Inversion.html#989" class="Bound"
+      >d&#8321;</a
+      ><a name="991" class="Symbol"
+      >)</a
+      ><a name="992"
+      > </a
+      ><a name="993" class="Symbol"
+      >=</a
+      ><a name="994"
+      > </a
+      ><a name="995" class="Symbol"
+      >_</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="998"
+      > </a
+      ><a name="999" class="Symbol"
+      >_</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="Definition.LogicalRelation.Consequences.Inversion.html#985" class="Bound"
+      >d</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Definition.LogicalRelation.Consequences.Inversion.html#989" class="Bound"
+      >d&#8321;</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="1016"
+      > </a
+      ><a name="1017" class="Symbol"
+      >(</a
+      ><a name="1018" href="Definition.LogicalRelation.Consequences.SingleSubst.html#886" class="Function"
+      >substType&#928;</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" class="Symbol"
+      >(</a
+      ><a name="1030" href="Definition.LogicalRelation.Consequences.Syntactic.html#564" class="Function"
+      >syntacticTerm</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Definition.LogicalRelation.Consequences.Inversion.html#985" class="Bound"
+      >d</a
+      ><a name="1045" class="Symbol"
+      >)</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Definition.LogicalRelation.Consequences.Inversion.html#989" class="Bound"
+      >d&#8321;</a
+      ><a name="1049" class="Symbol"
+      >)</a
+      ><a name="1050"
+      >
+</a
+      ><a name="1051" href="Definition.LogicalRelation.Consequences.Inversion.html#862" class="Function"
+      >inversion-app</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" class="Symbol"
+      >(</a
+      ><a name="1066" href="Definition.Typed.html#1651" class="InductiveConstructor"
+      >conv</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" href="Definition.LogicalRelation.Consequences.Inversion.html#1071" class="Bound"
+      >d</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Definition.LogicalRelation.Consequences.Inversion.html#1073" class="Bound"
+      >x</a
+      ><a name="1074" class="Symbol"
+      >)</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" class="Symbol"
+      >=</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" class="Keyword"
+      >let</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="Definition.LogicalRelation.Consequences.Inversion.html#1082" class="Bound"
+      >a</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" href="Definition.LogicalRelation.Consequences.Inversion.html#1086" class="Bound"
+      >b</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="Definition.LogicalRelation.Consequences.Inversion.html#1090" class="Bound"
+      >c</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Definition.LogicalRelation.Consequences.Inversion.html#1094" class="Bound"
+      >d</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1097"
+      > </a
+      ><a name="1098" href="Definition.LogicalRelation.Consequences.Inversion.html#1098" class="Bound"
+      >e</a
+      ><a name="1099"
+      > </a
+      ><a name="1100" class="Symbol"
+      >=</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" href="Definition.LogicalRelation.Consequences.Inversion.html#862" class="Function"
+      >inversion-app</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Definition.LogicalRelation.Consequences.Inversion.html#1071" class="Bound"
+      >d</a
+      ><a name="1117"
+      >
+                           </a
+      ><a name="1145" class="Keyword"
+      >in</a
+      ><a name="1147"
+      >  </a
+      ><a name="1149" href="Definition.LogicalRelation.Consequences.Inversion.html#1082" class="Bound"
+      >a</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Definition.LogicalRelation.Consequences.Inversion.html#1086" class="Bound"
+      >b</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" href="Definition.LogicalRelation.Consequences.Inversion.html#1090" class="Bound"
+      >c</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Definition.LogicalRelation.Consequences.Inversion.html#1094" class="Bound"
+      >d</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" class="Symbol"
+      >(</a
+      ><a name="1172" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" href="Definition.LogicalRelation.Consequences.Inversion.html#1073" class="Bound"
+      >x</a
+      ><a name="1177" class="Symbol"
+      >)</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" href="Definition.LogicalRelation.Consequences.Inversion.html#1098" class="Bound"
+      >e</a
+      ><a name="1180"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

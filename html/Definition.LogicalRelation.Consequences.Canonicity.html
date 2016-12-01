@@ -1,0 +1,1413 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Consequences.Canonicity</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Consequences.Canonicity.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Canonicity</a
+      ><a name="58"
+      > </a
+      ><a name="59" class="Keyword"
+      >where</a
+      ><a name="64"
+      >
+
+</a
+      ><a name="66" class="Keyword"
+      >open</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="Keyword"
+      >import</a
+      ><a name="77"
+      > </a
+      ><a name="78" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="96"
+      > </a
+      ><a name="97" class="Keyword"
+      >hiding</a
+      ><a name="103"
+      > </a
+      ><a name="104" class="Symbol"
+      >(</a
+      ><a name="105" href="Definition.Untyped.html#3297" class="Function"
+      >wk</a
+      ><a name="107" class="Symbol"
+      >)</a
+      ><a name="108"
+      >
+</a
+      ><a name="109" class="Keyword"
+      >import</a
+      ><a name="115"
+      > </a
+      ><a name="116" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="134"
+      > </a
+      ><a name="135" class="Symbol"
+      >as</a
+      ><a name="137"
+      > </a
+      ><a name="138" class="Module"
+      >U</a
+      ><a name="139"
+      >
+</a
+      ><a name="140" class="Keyword"
+      >open</a
+      ><a name="144"
+      > </a
+      ><a name="145" class="Keyword"
+      >import</a
+      ><a name="151"
+      > </a
+      ><a name="152" href="Definition.Untyped.Properties.html#1" class="Module"
+      >Definition.Untyped.Properties</a
+      ><a name="181"
+      >
+
+</a
+      ><a name="183" class="Keyword"
+      >open</a
+      ><a name="187"
+      > </a
+      ><a name="188" class="Keyword"
+      >import</a
+      ><a name="194"
+      > </a
+      ><a name="195" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="211"
+      >
+</a
+      ><a name="212" class="Keyword"
+      >open</a
+      ><a name="216"
+      > </a
+      ><a name="217" class="Keyword"
+      >import</a
+      ><a name="223"
+      > </a
+      ><a name="224" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="250"
+      >
+</a
+      ><a name="251" class="Keyword"
+      >open</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Keyword"
+      >import</a
+      ><a name="262"
+      > </a
+      ><a name="263" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="290"
+      >
+</a
+      ><a name="291" class="Keyword"
+      >open</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Keyword"
+      >import</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Definition.Typed.RedSteps.html#1" class="Module"
+      >Definition.Typed.RedSteps</a
+      ><a name="328"
+      >
+
+</a
+      ><a name="330" class="Keyword"
+      >open</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Keyword"
+      >import</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="368"
+      >
+</a
+      ><a name="369" class="Keyword"
+      >import</a
+      ><a name="375"
+      > </a
+      ><a name="376" href="Definition.LogicalRelation.Weakening.html#1" class="Module"
+      >Definition.LogicalRelation.Weakening</a
+      ><a name="412"
+      > </a
+      ><a name="413" class="Symbol"
+      >as</a
+      ><a name="415"
+      > </a
+      ><a name="416" class="Module"
+      >LR</a
+      ><a name="418"
+      >
+</a
+      ><a name="419" class="Keyword"
+      >open</a
+      ><a name="423"
+      > </a
+      ><a name="424" class="Keyword"
+      >import</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="469"
+      >
+</a
+      ><a name="470" class="Keyword"
+      >open</a
+      ><a name="474"
+      > </a
+      ><a name="475" class="Keyword"
+      >import</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="515"
+      >
+</a
+      ><a name="516" class="Keyword"
+      >open</a
+      ><a name="520"
+      > </a
+      ><a name="521" class="Keyword"
+      >import</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="565"
+      >
+</a
+      ><a name="566" class="Keyword"
+      >open</a
+      ><a name="570"
+      > </a
+      ><a name="571" class="Keyword"
+      >import</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="617"
+      >
+</a
+      ><a name="618" class="Keyword"
+      >open</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Keyword"
+      >import</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="Definition.LogicalRelation.Substitution.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Properties</a
+      ><a name="680"
+      >
+</a
+      ><a name="681" class="Keyword"
+      >open</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Keyword"
+      >import</a
+      ><a name="692"
+      > </a
+      ><a name="693" href="Definition.LogicalRelation.Fundamental.html#1" class="Module"
+      >Definition.LogicalRelation.Fundamental</a
+      ><a name="731"
+      >
+
+</a
+      ><a name="733" class="Keyword"
+      >open</a
+      ><a name="737"
+      > </a
+      ><a name="738" class="Keyword"
+      >import</a
+      ><a name="744"
+      > </a
+      ><a name="745" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="756"
+      >
+</a
+      ><a name="757" class="Keyword"
+      >open</a
+      ><a name="761"
+      > </a
+      ><a name="762" class="Keyword"
+      >import</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Tools.Unit.html#1" class="Module"
+      >Tools.Unit</a
+      ><a name="779"
+      >
+</a
+      ><a name="780" class="Keyword"
+      >open</a
+      ><a name="784"
+      > </a
+      ><a name="785" class="Keyword"
+      >import</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Tools.Nat.html#1" class="Module"
+      >Tools.Nat</a
+      ><a name="801"
+      >
+</a
+      ><a name="802" class="Keyword"
+      >open</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Keyword"
+      >import</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="827"
+      >
+
+</a
+      ><a name="829" class="Keyword"
+      >import</a
+      ><a name="835"
+      > </a
+      ><a name="836" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >as</a
+      ><a name="866"
+      > </a
+      ><a name="867" class="Module"
+      >PE</a
+      ><a name="869"
+      >
+
+
+</a
+      ><a name="872" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="Symbol"
+      >:</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Agda.Builtin.Nat.html#69" class="Datatype"
+      >Nat</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >&#8594;</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="889"
+      >
+</a
+      ><a name="890" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Symbol"
+      >=</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Definition.Untyped.html#561" class="InductiveConstructor"
+      >zero</a
+      ><a name="906"
+      >
+</a
+      ><a name="907" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="911"
+      > </a
+      ><a name="912" class="Symbol"
+      >(</a
+      ><a name="913" href="Agda.Builtin.Nat.html#100" class="InductiveConstructor"
+      >suc</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.LogicalRelation.Consequences.Canonicity.html#917" class="Bound"
+      >n</a
+      ><a name="918" class="Symbol"
+      >)</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >=</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Definition.Untyped.html#577" class="InductiveConstructor"
+      >suc</a
+      ><a name="925"
+      > </a
+      ><a name="926" class="Symbol"
+      >(</a
+      ><a name="927" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Definition.LogicalRelation.Consequences.Canonicity.html#917" class="Bound"
+      >n</a
+      ><a name="933" class="Symbol"
+      >)</a
+      ><a name="934"
+      >
+
+</a
+      ><a name="936" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >:</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >&#8704;</a
+      ><a name="952"
+      > </a
+      ><a name="953" class="Symbol"
+      >{</a
+      ><a name="954" href="Definition.LogicalRelation.Consequences.Canonicity.html#954" class="Bound"
+      >t</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Definition.LogicalRelation.Consequences.Canonicity.html#956" class="Bound"
+      >l</a
+      ><a name="957" class="Symbol"
+      >}</a
+      ><a name="958"
+      >
+             </a
+      ><a name="972" class="Symbol"
+      >&#8594;</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Symbol"
+      >(</a
+      ><a name="975" href="Definition.LogicalRelation.Consequences.Canonicity.html#975" class="Bound"
+      >[&#8469;]</a
+      ><a name="978"
+      > </a
+      ><a name="979" class="Symbol"
+      >:</a
+      ><a name="980"
+      > </a
+      ><a name="981" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="982"
+      > </a
+      ><a name="983" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Definition.LogicalRelation.Consequences.Canonicity.html#956" class="Bound"
+      >l</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#10217;&#8469;</a
+      ><a name="990"
+      > </a
+      ><a name="991" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="992" class="Symbol"
+      >)</a
+      ><a name="993"
+      >
+             </a
+      ><a name="1007" class="Symbol"
+      >&#8594;</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Definition.LogicalRelation.Consequences.Canonicity.html#956" class="Bound"
+      >l</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Definition.LogicalRelation.Consequences.Canonicity.html#954" class="Bound"
+      >t</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Definition.LogicalRelation.Consequences.Canonicity.html#975" class="Bound"
+      >[&#8469;]</a
+      ><a name="1036"
+      >
+             </a
+      ><a name="1050" class="Symbol"
+      >&#8594;</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" class="Symbol"
+      >&#955;</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Definition.LogicalRelation.Consequences.Canonicity.html#1056" class="Bound"
+      >k</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" class="Symbol"
+      >&#8594;</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" href="Definition.LogicalRelation.Consequences.Canonicity.html#954" class="Bound"
+      >t</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Definition.LogicalRelation.Consequences.Canonicity.html#1056" class="Bound"
+      >k</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1078"
+      >
+</a
+      ><a name="1079" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >{</a
+      ><a name="1093" class="Argument"
+      >l</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" class="Symbol"
+      >=</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" href="Definition.LogicalRelation.Consequences.Canonicity.html#1097" class="Bound"
+      >l</a
+      ><a name="1098" class="Symbol"
+      >}</a
+      ><a name="1099"
+      > </a
+      ><a name="1100" class="Symbol"
+      >(</a
+      ><a name="1101" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="Definition.LogicalRelation.Consequences.Canonicity.html#1107" class="Bound"
+      >D</a
+      ><a name="1108" class="Symbol"
+      >)</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" class="Symbol"
+      >(</a
+      ><a name="1111" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" class="Symbol"
+      >_</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Definition.LogicalRelation.Consequences.Canonicity.html#1116" class="Bound"
+      >d</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Definition.Untyped.html#1275" class="InductiveConstructor"
+      >suc</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="Definition.LogicalRelation.Consequences.Canonicity.html#1122" class="Bound"
+      >prop</a
+      ><a name="1126" class="Symbol"
+      >)</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" class="Symbol"
+      >=</a
+      ><a name="1129"
+      >
+  </a
+      ><a name="1132" class="Keyword"
+      >let</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Definition.LogicalRelation.Consequences.Canonicity.html#1136" class="Bound"
+      >a</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" href="Definition.LogicalRelation.Consequences.Canonicity.html#1140" class="Bound"
+      >b</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Symbol"
+      >=</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" class="Symbol"
+      >{</a
+      ><a name="1158" class="Argument"
+      >l</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" class="Symbol"
+      >=</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" href="Definition.LogicalRelation.Consequences.Canonicity.html#1097" class="Bound"
+      >l</a
+      ><a name="1163" class="Symbol"
+      >}</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" class="Symbol"
+      >(</a
+      ><a name="1166" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Definition.LogicalRelation.Consequences.Canonicity.html#1107" class="Bound"
+      >D</a
+      ><a name="1173" class="Symbol"
+      >)</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" href="Definition.LogicalRelation.Consequences.Canonicity.html#1122" class="Bound"
+      >prop</a
+      ><a name="1179"
+      >
+  </a
+      ><a name="1182" class="Keyword"
+      >in</a
+      ><a name="1184"
+      >  </a
+      ><a name="1186" href="Agda.Builtin.Nat.html#100" class="InductiveConstructor"
+      >suc</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Definition.LogicalRelation.Consequences.Canonicity.html#1136" class="Bound"
+      >a</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Definition.Typed.html#2510" class="InductiveConstructor"
+      >trans</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" class="Symbol"
+      >(</a
+      ><a name="1201" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" class="Symbol"
+      >(</a
+      ><a name="1214" href="Definition.Typed.html#7561" class="Field"
+      >red&#8348;</a
+      ><a name="1218"
+      > </a
+      ><a name="1219" href="Definition.LogicalRelation.Consequences.Canonicity.html#1116" class="Bound"
+      >d</a
+      ><a name="1220" class="Symbol"
+      >))</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" class="Symbol"
+      >(</a
+      ><a name="1224" href="Definition.Typed.html#3520" class="InductiveConstructor"
+      >suc-cong</a
+      ><a name="1232"
+      > </a
+      ><a name="1233" href="Definition.LogicalRelation.Consequences.Canonicity.html#1140" class="Bound"
+      >b</a
+      ><a name="1234" class="Symbol"
+      >)</a
+      ><a name="1235"
+      >
+</a
+      ><a name="1236" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" class="Symbol"
+      >(</a
+      ><a name="1250" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Definition.LogicalRelation.Consequences.Canonicity.html#1256" class="Bound"
+      >D</a
+      ><a name="1257" class="Symbol"
+      >)</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" class="Symbol"
+      >(</a
+      ><a name="1260" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1262"
+      > </a
+      ><a name="1263" class="DottedPattern Symbol"
+      >.</a
+      ><a name="1264" href="Definition.Untyped.html#561" class="DottedPattern InductiveConstructor"
+      >zero</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" href="Definition.LogicalRelation.Consequences.Canonicity.html#1269" class="Bound"
+      >d</a
+      ><a name="1270"
+      > </a
+      ><a name="1271" href="Definition.Untyped.html#1320" class="InductiveConstructor"
+      >zero</a
+      ><a name="1275"
+      > </a
+      ><a name="1276" href="Definition.LogicalRelation.Consequences.Canonicity.html#1276" class="Bound"
+      >prop</a
+      ><a name="1280" class="Symbol"
+      >)</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >=</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Definition.Typed.Properties.html#2054" class="Function"
+      >subset*Term</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" class="Symbol"
+      >(</a
+      ><a name="1304" href="Definition.Typed.html#7561" class="Field"
+      >red&#8348;</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" href="Definition.LogicalRelation.Consequences.Canonicity.html#1269" class="Bound"
+      >d</a
+      ><a name="1310" class="Symbol"
+      >)</a
+      ><a name="1311"
+      >
+</a
+      ><a name="1312" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >(</a
+      ><a name="1326" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" href="Definition.LogicalRelation.Consequences.Canonicity.html#1332" class="Bound"
+      >D</a
+      ><a name="1333" class="Symbol"
+      >)</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" class="Symbol"
+      >(</a
+      ><a name="1336" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" href="Definition.LogicalRelation.Consequences.Canonicity.html#1339" class="Bound"
+      >n</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" href="Definition.LogicalRelation.Consequences.Canonicity.html#1341" class="Bound"
+      >d</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" class="Symbol"
+      >(</a
+      ><a name="1344" href="Definition.Untyped.html#1362" class="InductiveConstructor"
+      >ne</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Definition.LogicalRelation.Consequences.Canonicity.html#1347" class="Bound"
+      >x</a
+      ><a name="1348" class="Symbol"
+      >)</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Definition.LogicalRelation.Consequences.Canonicity.html#1350" class="Bound"
+      >prop</a
+      ><a name="1354" class="Symbol"
+      >)</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" class="Symbol"
+      >=</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" class="Symbol"
+      >(</a
+      ><a name="1366" href="Definition.Typed.Properties.html#3180" class="Function"
+      >noNe</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" href="Definition.LogicalRelation.Consequences.Canonicity.html#1350" class="Bound"
+      >prop</a
+      ><a name="1375"
+      > </a
+      ><a name="1376" href="Definition.LogicalRelation.Consequences.Canonicity.html#1347" class="Bound"
+      >x</a
+      ><a name="1377" class="Symbol"
+      >)</a
+      ><a name="1378"
+      >
+</a
+      ><a name="1379" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" class="Symbol"
+      >(</a
+      ><a name="1393" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" href="Definition.LogicalRelation.Consequences.Canonicity.html#1401" class="Bound"
+      >x</a
+      ><a name="1402" class="Symbol"
+      >)</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Definition.LogicalRelation.Consequences.Canonicity.html#1404" class="Bound"
+      >[t]</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" class="Symbol"
+      >=</a
+      ><a name="1409"
+      > </a
+      ><a name="1410" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" href="Definition.LogicalRelation.Consequences.Canonicity.html#1401" class="Bound"
+      >x</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Definition.LogicalRelation.Consequences.Canonicity.html#1404" class="Bound"
+      >[t]</a
+      ><a name="1428"
+      >
+
+</a
+      ><a name="1430" href="Definition.LogicalRelation.Consequences.Canonicity.html#1430" class="Function"
+      >canonicity'</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" class="Symbol"
+      >:</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" class="Symbol"
+      >&#8704;</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >{</a
+      ><a name="1447" href="Definition.LogicalRelation.Consequences.Canonicity.html#1447" class="Bound"
+      >t</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" href="Definition.LogicalRelation.Consequences.Canonicity.html#1449" class="Bound"
+      >l</a
+      ><a name="1450" class="Symbol"
+      >}</a
+      ><a name="1451"
+      >
+            </a
+      ><a name="1464" class="Symbol"
+      >&#8594;</a
+      ><a name="1465"
+      > </a
+      ><a name="1466" class="Symbol"
+      >(</a
+      ><a name="1467" href="Definition.LogicalRelation.Consequences.Canonicity.html#1467" class="Bound"
+      >[&#8469;]</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" class="Symbol"
+      >:</a
+      ><a name="1472"
+      > </a
+      ><a name="1473" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1474"
+      > </a
+      ><a name="1475" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="Definition.LogicalRelation.Consequences.Canonicity.html#1449" class="Bound"
+      >l</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1483" class="Symbol"
+      >)</a
+      ><a name="1484"
+      >
+            </a
+      ><a name="1497" class="Symbol"
+      >&#8594;</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Definition.LogicalRelation.Consequences.Canonicity.html#1449" class="Bound"
+      >l</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Definition.LogicalRelation.Consequences.Canonicity.html#1447" class="Bound"
+      >t</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Definition.LogicalRelation.Consequences.Canonicity.html#1467" class="Bound"
+      >[&#8469;]</a
+      ><a name="1519"
+      >
+            </a
+      ><a name="1532" class="Symbol"
+      >&#8594;</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="1535"
+      > </a
+      ><a name="1536" class="Symbol"
+      >&#955;</a
+      ><a name="1537"
+      > </a
+      ><a name="1538" href="Definition.LogicalRelation.Consequences.Canonicity.html#1538" class="Bound"
+      >k</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" class="Symbol"
+      >&#8594;</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1543"
+      > </a
+      ><a name="1544" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1545"
+      > </a
+      ><a name="1546" href="Definition.LogicalRelation.Consequences.Canonicity.html#1447" class="Bound"
+      >t</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="1554"
+      > </a
+      ><a name="1555" href="Definition.LogicalRelation.Consequences.Canonicity.html#1538" class="Bound"
+      >k</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1560"
+      >
+</a
+      ><a name="1561" href="Definition.LogicalRelation.Consequences.Canonicity.html#1430" class="Function"
+      >canonicity'</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" href="Definition.LogicalRelation.Consequences.Canonicity.html#1573" class="Bound"
+      >[&#8469;]</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" href="Definition.LogicalRelation.Consequences.Canonicity.html#1577" class="Bound"
+      >[t]</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" class="Symbol"
+      >=</a
+      ><a name="1582"
+      >
+  </a
+      ><a name="1585" href="Definition.LogicalRelation.Consequences.Canonicity.html#936" class="Function"
+      >canonicity''</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" class="Symbol"
+      >(</a
+      ><a name="1599" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" href="Definition.LogicalRelation.Consequences.Canonicity.html#1573" class="Bound"
+      >[&#8469;]</a
+      ><a name="1609" class="Symbol"
+      >)</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" class="Symbol"
+      >(</a
+      ><a name="1612" href="Definition.LogicalRelation.Irrelevance.html#3313" class="Function"
+      >irrelevanceTerm</a
+      ><a name="1627"
+      > </a
+      ><a name="1628" href="Definition.LogicalRelation.Consequences.Canonicity.html#1573" class="Bound"
+      >[&#8469;]</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" class="Symbol"
+      >(</a
+      ><a name="1633" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" class="Symbol"
+      >(</a
+      ><a name="1641" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" href="Definition.LogicalRelation.Consequences.Canonicity.html#1573" class="Bound"
+      >[&#8469;]</a
+      ><a name="1651" class="Symbol"
+      >))</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" href="Definition.LogicalRelation.Consequences.Canonicity.html#1577" class="Bound"
+      >[t]</a
+      ><a name="1657" class="Symbol"
+      >)</a
+      ><a name="1658"
+      >
+
+</a
+      ><a name="1660" href="Definition.LogicalRelation.Consequences.Canonicity.html#1660" class="Function"
+      >canonicity</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" class="Symbol"
+      >:</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" class="Symbol"
+      >&#8704;</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" class="Symbol"
+      >{</a
+      ><a name="1676" href="Definition.LogicalRelation.Consequences.Canonicity.html#1676" class="Bound"
+      >t</a
+      ><a name="1677" class="Symbol"
+      >}</a
+      ><a name="1678"
+      > </a
+      ><a name="1679" class="Symbol"
+      >&#8594;</a
+      ><a name="1680"
+      > </a
+      ><a name="1681" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1682"
+      > </a
+      ><a name="1683" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1684"
+      > </a
+      ><a name="1685" href="Definition.LogicalRelation.Consequences.Canonicity.html#1676" class="Bound"
+      >t</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" class="Symbol"
+      >&#8594;</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" class="Symbol"
+      >&#955;</a
+      ><a name="1696"
+      > </a
+      ><a name="1697" href="Definition.LogicalRelation.Consequences.Canonicity.html#1697" class="Bound"
+      >k</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" class="Symbol"
+      >&#8594;</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Definition.Untyped.html#254" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1702"
+      > </a
+      ><a name="1703" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1704"
+      > </a
+      ><a name="1705" href="Definition.LogicalRelation.Consequences.Canonicity.html#1676" class="Bound"
+      >t</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" href="Definition.LogicalRelation.Consequences.Canonicity.html#872" class="Function"
+      >suc&#7503;</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Definition.LogicalRelation.Consequences.Canonicity.html#1697" class="Bound"
+      >k</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Definition.Typed.html#2272" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1719"
+      >
+</a
+      ><a name="1720" href="Definition.LogicalRelation.Consequences.Canonicity.html#1660" class="Function"
+      >canonicity</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" href="Definition.LogicalRelation.Consequences.Canonicity.html#1731" class="Bound"
+      >&#8866;t</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" class="Keyword"
+      >with</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Definition.LogicalRelation.Fundamental.html#5983" class="Function"
+      >fundamentalTerm</a
+      ><a name="1754"
+      > </a
+      ><a name="1755" href="Definition.LogicalRelation.Consequences.Canonicity.html#1731" class="Bound"
+      >&#8866;t</a
+      ><a name="1757"
+      >
+</a
+      ><a name="1758" href="Definition.LogicalRelation.Consequences.Canonicity.html#1660" class="Function"
+      >canonicity</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" href="Definition.LogicalRelation.Consequences.Canonicity.html#1769" class="Bound"
+      >&#8866;t</a
+      ><a name="1771"
+      > </a
+      ><a name="1772" class="Symbol"
+      >|</a
+      ><a name="1773"
+      > </a
+      ><a name="1774" href="Definition.LogicalRelation.Substitution.html#315" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Definition.LogicalRelation.Consequences.Canonicity.html#1778" class="Bound"
+      >[&#8469;]</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" href="Definition.LogicalRelation.Consequences.Canonicity.html#1784" class="Bound"
+      >[t]</a
+      ><a name="1787"
+      > </a
+      ><a name="1788" class="Symbol"
+      >=</a
+      ><a name="1789"
+      >
+  </a
+      ><a name="1792" class="Keyword"
+      >let</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" href="Definition.LogicalRelation.Consequences.Canonicity.html#1796" class="Bound"
+      >[&#8469;]'</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" class="Symbol"
+      >=</a
+      ><a name="1802"
+      > </a
+      ><a name="1803" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" class="Symbol"
+      >(</a
+      ><a name="1810" href="Definition.LogicalRelation.Consequences.Canonicity.html#1778" class="Bound"
+      >[&#8469;]</a
+      ><a name="1813"
+      > </a
+      ><a name="1814" class="Symbol"
+      >{</a
+      ><a name="1815" class="Argument"
+      >&#963;</a
+      ><a name="1816"
+      > </a
+      ><a name="1817" class="Symbol"
+      >=</a
+      ><a name="1818"
+      > </a
+      ><a name="1819" href="Definition.Untyped.html#5299" class="Function"
+      >idSubst</a
+      ><a name="1826" class="Symbol"
+      >}</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" href="Definition.Typed.html#441" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1832" class="Symbol"
+      >)</a
+      ><a name="1833"
+      >
+      </a
+      ><a name="1840" href="Definition.LogicalRelation.Consequences.Canonicity.html#1840" class="Bound"
+      >[t]'</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" class="Symbol"
+      >=</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" href="Definition.LogicalRelation.Irrelevance.html#3744" class="Function"
+      >irrelevanceTerm''</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="1872"
+      > </a
+      ><a name="1873" class="Symbol"
+      >(</a
+      ><a name="1874" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="1883"
+      > </a
+      ><a name="1884" class="Symbol"
+      >_)</a
+      ><a name="1886"
+      > </a
+      ><a name="1887" href="Definition.LogicalRelation.Consequences.Canonicity.html#1796" class="Bound"
+      >[&#8469;]'</a
+      ><a name="1891"
+      > </a
+      ><a name="1892" href="Definition.LogicalRelation.Consequences.Canonicity.html#1796" class="Bound"
+      >[&#8469;]'</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" class="Symbol"
+      >(</a
+      ><a name="1898" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1903"
+      > </a
+      ><a name="1904" class="Symbol"
+      >(</a
+      ><a name="1905" href="Definition.LogicalRelation.Consequences.Canonicity.html#1784" class="Bound"
+      >[t]</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" href="Definition.Typed.html#441" class="InductiveConstructor"
+      >&#949;</a
+      ><a name="1910"
+      > </a
+      ><a name="1911" href="Agda.Builtin.Unit.html#78" class="InductiveConstructor"
+      >tt</a
+      ><a name="1913" class="Symbol"
+      >))</a
+      ><a name="1915"
+      >
+  </a
+      ><a name="1918" class="Keyword"
+      >in</a
+      ><a name="1920"
+      >  </a
+      ><a name="1922" href="Definition.LogicalRelation.Consequences.Canonicity.html#1430" class="Function"
+      >canonicity'</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" href="Definition.LogicalRelation.Consequences.Canonicity.html#1796" class="Bound"
+      >[&#8469;]'</a
+      ><a name="1938"
+      > </a
+      ><a name="1939" href="Definition.LogicalRelation.Consequences.Canonicity.html#1840" class="Bound"
+      >[t]'</a
+      ><a name="1943"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

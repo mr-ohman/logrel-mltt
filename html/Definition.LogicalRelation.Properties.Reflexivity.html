@@ -1,0 +1,1534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Reflexivity</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Reflexivity.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Reflexivity</a
+      ><a name="57"
+      > </a
+      ><a name="58" class="Keyword"
+      >where</a
+      ><a name="63"
+      >
+
+</a
+      ><a name="65" class="Keyword"
+      >open</a
+      ><a name="69"
+      > </a
+      ><a name="70" class="Keyword"
+      >import</a
+      ><a name="76"
+      > </a
+      ><a name="77" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="95"
+      >
+</a
+      ><a name="96" class="Keyword"
+      >open</a
+      ><a name="100"
+      > </a
+      ><a name="101" class="Keyword"
+      >import</a
+      ><a name="107"
+      > </a
+      ><a name="108" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="124"
+      >
+</a
+      ><a name="125" class="Keyword"
+      >open</a
+      ><a name="129"
+      > </a
+      ><a name="130" class="Keyword"
+      >import</a
+      ><a name="136"
+      > </a
+      ><a name="137" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="163"
+      >
+
+</a
+      ><a name="165" class="Keyword"
+      >open</a
+      ><a name="169"
+      > </a
+      ><a name="170" class="Keyword"
+      >import</a
+      ><a name="176"
+      > </a
+      ><a name="177" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="190"
+      >
+</a
+      ><a name="191" class="Keyword"
+      >import</a
+      ><a name="197"
+      > </a
+      ><a name="198" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="225"
+      > </a
+      ><a name="226" class="Symbol"
+      >as</a
+      ><a name="228"
+      > </a
+      ><a name="229" class="Module"
+      >PE</a
+      ><a name="231"
+      >
+
+
+</a
+      ><a name="234" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="240"
+      > </a
+      ><a name="241" class="Symbol"
+      >:</a
+      ><a name="242"
+      > </a
+      ><a name="243" class="Symbol"
+      >&#8704;</a
+      ><a name="244"
+      > </a
+      ><a name="245" class="Symbol"
+      >{</a
+      ><a name="246" href="Definition.LogicalRelation.Properties.Reflexivity.html#246" class="Bound"
+      >l</a
+      ><a name="247"
+      > </a
+      ><a name="248" href="Definition.LogicalRelation.Properties.Reflexivity.html#248" class="Bound"
+      >&#915;</a
+      ><a name="249"
+      > </a
+      ><a name="250" href="Definition.LogicalRelation.Properties.Reflexivity.html#250" class="Bound"
+      >A</a
+      ><a name="251" class="Symbol"
+      >}</a
+      ><a name="252"
+      > </a
+      ><a name="253" class="Symbol"
+      >(</a
+      ><a name="254" href="Definition.LogicalRelation.Properties.Reflexivity.html#254" class="Bound"
+      >[A]</a
+      ><a name="257"
+      > </a
+      ><a name="258" class="Symbol"
+      >:</a
+      ><a name="259"
+      > </a
+      ><a name="260" href="Definition.LogicalRelation.Properties.Reflexivity.html#248" class="Bound"
+      >&#915;</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="264"
+      > </a
+      ><a name="265" href="Definition.LogicalRelation.Properties.Reflexivity.html#246" class="Bound"
+      >l</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="268"
+      > </a
+      ><a name="269" href="Definition.LogicalRelation.Properties.Reflexivity.html#250" class="Bound"
+      >A</a
+      ><a name="270" class="Symbol"
+      >)</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Symbol"
+      >&#8594;</a
+      ><a name="273"
+      > </a
+      ><a name="274" href="Definition.LogicalRelation.Properties.Reflexivity.html#248" class="Bound"
+      >&#915;</a
+      ><a name="275"
+      > </a
+      ><a name="276" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="Definition.LogicalRelation.Properties.Reflexivity.html#246" class="Bound"
+      >l</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="282"
+      > </a
+      ><a name="283" href="Definition.LogicalRelation.Properties.Reflexivity.html#250" class="Bound"
+      >A</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="286"
+      > </a
+      ><a name="287" href="Definition.LogicalRelation.Properties.Reflexivity.html#250" class="Bound"
+      >A</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Definition.LogicalRelation.Properties.Reflexivity.html#254" class="Bound"
+      >[A]</a
+      ><a name="294"
+      >
+</a
+      ><a name="295" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="301"
+      > </a
+      ><a name="302" class="Symbol"
+      >(</a
+      ><a name="303" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="305"
+      > </a
+      ><a name="306" href="Definition.LogicalRelation.Properties.Reflexivity.html#306" class="Bound"
+      >l'</a
+      ><a name="308"
+      > </a
+      ><a name="309" href="Definition.LogicalRelation.Properties.Reflexivity.html#309" class="Bound"
+      >l&lt;</a
+      ><a name="311"
+      > </a
+      ><a name="312" href="Definition.LogicalRelation.Properties.Reflexivity.html#312" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="314" class="Symbol"
+      >)</a
+      ><a name="315"
+      > </a
+      ><a name="316" class="Symbol"
+      >=</a
+      ><a name="317"
+      > </a
+      ><a name="318" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="325"
+      >
+</a
+      ><a name="326" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="332"
+      > </a
+      ><a name="333" class="Symbol"
+      >(</a
+      ><a name="334" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="335"
+      > </a
+      ><a name="336" href="Definition.LogicalRelation.Properties.Reflexivity.html#336" class="Bound"
+      >D</a
+      ><a name="337" class="Symbol"
+      >)</a
+      ><a name="338"
+      > </a
+      ><a name="339" class="Symbol"
+      >=</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="344"
+      > </a
+      ><a name="345" href="Definition.LogicalRelation.Properties.Reflexivity.html#336" class="Bound"
+      >D</a
+      ><a name="346"
+      >
+</a
+      ><a name="347" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="353"
+      > </a
+      ><a name="354" class="Symbol"
+      >(</a
+      ><a name="355" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="358"
+      > </a
+      ><a name="359" href="Definition.LogicalRelation.Properties.Reflexivity.html#359" class="Bound"
+      >K</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="362"
+      > </a
+      ><a name="363" href="Definition.LogicalRelation.Properties.Reflexivity.html#363" class="Bound"
+      >&#8866;A</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="367"
+      > </a
+      ><a name="368" href="Definition.LogicalRelation.Properties.Reflexivity.html#368" class="Bound"
+      >&#8866;B</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="372"
+      > </a
+      ><a name="373" href="Definition.LogicalRelation.Properties.Reflexivity.html#373" class="Bound"
+      >D</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.LogicalRelation.Properties.Reflexivity.html#377" class="Bound"
+      >neK</a
+      ><a name="380" class="Symbol"
+      >)</a
+      ><a name="381"
+      > </a
+      ><a name="382" class="Symbol"
+      >=</a
+      ><a name="383"
+      >
+  </a
+      ><a name="386" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="389"
+      > </a
+      ><a name="390" class="Symbol"
+      >_</a
+      ><a name="391"
+      > </a
+      ><a name="392" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Definition.LogicalRelation.Properties.Reflexivity.html#363" class="Bound"
+      >&#8866;A</a
+      ><a name="396"
+      > </a
+      ><a name="397" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="398"
+      > </a
+      ><a name="399" href="Definition.LogicalRelation.Properties.Reflexivity.html#368" class="Bound"
+      >&#8866;B</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="403"
+      > </a
+      ><a name="404" href="Definition.LogicalRelation.Properties.Reflexivity.html#373" class="Bound"
+      >D</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Definition.LogicalRelation.Properties.Reflexivity.html#377" class="Bound"
+      >neK</a
+      ><a name="411"
+      > </a
+      ><a name="412" class="Symbol"
+      >(</a
+      ><a name="413" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="417"
+      > </a
+      ><a name="418" href="Definition.LogicalRelation.Properties.Reflexivity.html#368" class="Bound"
+      >&#8866;B</a
+      ><a name="420" class="Symbol"
+      >)</a
+      ><a name="421"
+      >
+</a
+      ><a name="422" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >(</a
+      ><a name="430" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="432"
+      > </a
+      ><a name="433" href="Definition.LogicalRelation.Properties.Reflexivity.html#433" class="Bound"
+      >F</a
+      ><a name="434"
+      > </a
+      ><a name="435" href="Definition.LogicalRelation.Properties.Reflexivity.html#435" class="Bound"
+      >G</a
+      ><a name="436"
+      > </a
+      ><a name="437" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="438"
+      > </a
+      ><a name="439" href="Definition.LogicalRelation.Properties.Reflexivity.html#439" class="Bound"
+      >&#8866;A</a
+      ><a name="441"
+      > </a
+      ><a name="442" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Definition.LogicalRelation.Properties.Reflexivity.html#444" class="Bound"
+      >&#8866;B</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="448"
+      > </a
+      ><a name="449" href="Definition.LogicalRelation.Properties.Reflexivity.html#449" class="Bound"
+      >D</a
+      ><a name="450"
+      > </a
+      ><a name="451" href="Definition.Typed.html#7262" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="452"
+      > </a
+      ><a name="453" href="Definition.LogicalRelation.Properties.Reflexivity.html#453" class="Bound"
+      >&#8866;F</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Definition.LogicalRelation.Properties.Reflexivity.html#456" class="Bound"
+      >&#8866;G</a
+      ><a name="458"
+      > </a
+      ><a name="459" href="Definition.LogicalRelation.Properties.Reflexivity.html#459" class="Bound"
+      >[F]</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Definition.LogicalRelation.Properties.Reflexivity.html#463" class="Bound"
+      >[G]</a
+      ><a name="466"
+      > </a
+      ><a name="467" href="Definition.LogicalRelation.Properties.Reflexivity.html#467" class="Bound"
+      >G-ext</a
+      ><a name="472" class="Symbol"
+      >)</a
+      ><a name="473"
+      > </a
+      ><a name="474" class="Symbol"
+      >=</a
+      ><a name="475"
+      >
+  </a
+      ><a name="478" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="480"
+      > </a
+      ><a name="481" class="Symbol"
+      >_</a
+      ><a name="482"
+      > </a
+      ><a name="483" class="Symbol"
+      >_</a
+      ><a name="484"
+      > </a
+      ><a name="485" href="Definition.LogicalRelation.Properties.Reflexivity.html#449" class="Bound"
+      >D</a
+      ><a name="486"
+      > </a
+      ><a name="487" class="Symbol"
+      >(</a
+      ><a name="488" href="Definition.Typed.html#1888" class="InductiveConstructor"
+      >refl</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Definition.LogicalRelation.Properties.Reflexivity.html#439" class="Bound"
+      >&#8866;A</a
+      ><a name="495" class="Symbol"
+      >)</a
+      ><a name="496"
+      >
+     </a
+      ><a name="502" class="Symbol"
+      >(&#955;</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Definition.LogicalRelation.Properties.Reflexivity.html#505" class="Bound"
+      >&#961;</a
+      ><a name="506"
+      > </a
+      ><a name="507" href="Definition.LogicalRelation.Properties.Reflexivity.html#507" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Symbol"
+      >&#8594;</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="518"
+      > </a
+      ><a name="519" class="Symbol"
+      >(</a
+      ><a name="520" href="Definition.LogicalRelation.Properties.Reflexivity.html#459" class="Bound"
+      >[F]</a
+      ><a name="523"
+      > </a
+      ><a name="524" href="Definition.LogicalRelation.Properties.Reflexivity.html#505" class="Bound"
+      >&#961;</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Definition.LogicalRelation.Properties.Reflexivity.html#507" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="528" class="Symbol"
+      >))</a
+      ><a name="530"
+      >
+     </a
+      ><a name="536" class="Symbol"
+      >(&#955;</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Definition.LogicalRelation.Properties.Reflexivity.html#539" class="Bound"
+      >&#961;</a
+      ><a name="540"
+      > </a
+      ><a name="541" href="Definition.LogicalRelation.Properties.Reflexivity.html#541" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Definition.LogicalRelation.Properties.Reflexivity.html#544" class="Bound"
+      >[a]</a
+      ><a name="547"
+      > </a
+      ><a name="548" class="Symbol"
+      >&#8594;</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="556"
+      > </a
+      ><a name="557" class="Symbol"
+      >(</a
+      ><a name="558" href="Definition.LogicalRelation.Properties.Reflexivity.html#463" class="Bound"
+      >[G]</a
+      ><a name="561"
+      > </a
+      ><a name="562" href="Definition.LogicalRelation.Properties.Reflexivity.html#539" class="Bound"
+      >&#961;</a
+      ><a name="563"
+      > </a
+      ><a name="564" href="Definition.LogicalRelation.Properties.Reflexivity.html#541" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="566"
+      > </a
+      ><a name="567" href="Definition.LogicalRelation.Properties.Reflexivity.html#544" class="Bound"
+      >[a]</a
+      ><a name="570" class="Symbol"
+      >))</a
+      ><a name="572"
+      >
+</a
+      ><a name="573" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="579"
+      > </a
+      ><a name="580" class="Symbol"
+      >(</a
+      ><a name="581" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="584"
+      > </a
+      ><a name="585" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="588"
+      > </a
+      ><a name="589" href="Definition.LogicalRelation.Properties.Reflexivity.html#589" class="Bound"
+      >[A]</a
+      ><a name="592" class="Symbol"
+      >)</a
+      ><a name="593"
+      > </a
+      ><a name="594" class="Symbol"
+      >=</a
+      ><a name="595"
+      > </a
+      ><a name="596" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="Definition.LogicalRelation.Properties.Reflexivity.html#589" class="Bound"
+      >[A]</a
+      ><a name="606"
+      >
+
+</a
+      ><a name="608" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >:</a
+      ><a name="626"
+      > </a
+      ><a name="627" class="Symbol"
+      >&#8704;</a
+      ><a name="628"
+      > </a
+      ><a name="629" class="Symbol"
+      >{</a
+      ><a name="630" href="Definition.LogicalRelation.Properties.Reflexivity.html#630" class="Bound"
+      >&#915;</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Definition.LogicalRelation.Properties.Reflexivity.html#632" class="Bound"
+      >n</a
+      ><a name="633" class="Symbol"
+      >}</a
+      ><a name="634"
+      > </a
+      ><a name="635" class="Symbol"
+      >(</a
+      ><a name="636" href="Definition.LogicalRelation.Properties.Reflexivity.html#636" class="Bound"
+      >natN</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Symbol"
+      >:</a
+      ><a name="642"
+      > </a
+      ><a name="643" href="Definition.Untyped.html#1246" class="Datatype"
+      >Natural</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="Definition.LogicalRelation.Properties.Reflexivity.html#632" class="Bound"
+      >n</a
+      ><a name="652" class="Symbol"
+      >)</a
+      ><a name="653"
+      >
+                 </a
+      ><a name="671" class="Symbol"
+      >&#8594;</a
+      ><a name="672"
+      > </a
+      ><a name="673" href="Definition.LogicalRelation.html#1200" class="Function"
+      >natural-prop</a
+      ><a name="685"
+      > </a
+      ><a name="686" href="Definition.LogicalRelation.Properties.Reflexivity.html#630" class="Bound"
+      >&#915;</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="Definition.LogicalRelation.Properties.Reflexivity.html#632" class="Bound"
+      >n</a
+      ><a name="689"
+      > </a
+      ><a name="690" href="Definition.LogicalRelation.Properties.Reflexivity.html#636" class="Bound"
+      >natN</a
+      ><a name="694"
+      >
+                 </a
+      ><a name="712" class="Symbol"
+      >&#8594;</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="Definition.LogicalRelation.html#1613" class="Datatype"
+      >[Natural]-prop</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Definition.LogicalRelation.Properties.Reflexivity.html#630" class="Bound"
+      >&#915;</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Definition.LogicalRelation.Properties.Reflexivity.html#632" class="Bound"
+      >n</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Definition.LogicalRelation.Properties.Reflexivity.html#632" class="Bound"
+      >n</a
+      ><a name="734"
+      >
+</a
+      ><a name="735" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Definition.Untyped.html#1275" class="InductiveConstructor"
+      >suc</a
+      ><a name="755"
+      > </a
+      ><a name="756" class="Symbol"
+      >(</a
+      ><a name="757" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Definition.LogicalRelation.Properties.Reflexivity.html#760" class="Bound"
+      >n</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Definition.LogicalRelation.Properties.Reflexivity.html#762" class="Bound"
+      >d</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Definition.LogicalRelation.Properties.Reflexivity.html#764" class="Bound"
+      >natN</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Definition.LogicalRelation.Properties.Reflexivity.html#769" class="Bound"
+      >prop</a
+      ><a name="773" class="Symbol"
+      >)</a
+      ><a name="774"
+      > </a
+      ><a name="775" class="Symbol"
+      >=</a
+      ><a name="776"
+      >
+  </a
+      ><a name="779" href="Definition.LogicalRelation.html#1675" class="InductiveConstructor"
+      >suc</a
+      ><a name="782"
+      > </a
+      ><a name="783" class="Symbol"
+      >(</a
+      ><a name="784" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Definition.LogicalRelation.Properties.Reflexivity.html#760" class="Bound"
+      >n</a
+      ><a name="789"
+      > </a
+      ><a name="790" href="Definition.LogicalRelation.Properties.Reflexivity.html#760" class="Bound"
+      >n</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Definition.LogicalRelation.Properties.Reflexivity.html#762" class="Bound"
+      >d</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.LogicalRelation.Properties.Reflexivity.html#762" class="Bound"
+      >d</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >(</a
+      ><a name="797" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="801"
+      > </a
+      ><a name="802" class="Symbol"
+      >(</a
+      ><a name="803" href="Definition.Typed.html#7523" class="Field"
+      >_&#8866;_:&#8658;*:_&#8759;_.&#8866;t</a
+      ><a name="816"
+      > </a
+      ><a name="817" href="Definition.LogicalRelation.Properties.Reflexivity.html#762" class="Bound"
+      >d</a
+      ><a name="818" class="Symbol"
+      >))</a
+      ><a name="820"
+      >
+           </a
+      ><a name="832" class="Symbol"
+      >(</a
+      ><a name="833" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="849"
+      > </a
+      ><a name="850" href="Definition.LogicalRelation.Properties.Reflexivity.html#764" class="Bound"
+      >natN</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Definition.LogicalRelation.Properties.Reflexivity.html#769" class="Bound"
+      >prop</a
+      ><a name="859" class="Symbol"
+      >))</a
+      ><a name="861"
+      >
+</a
+      ><a name="862" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Definition.Untyped.html#1320" class="InductiveConstructor"
+      >zero</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Definition.LogicalRelation.Properties.Reflexivity.html#884" class="Bound"
+      >t</a
+      ><a name="885"
+      > </a
+      ><a name="886" class="Symbol"
+      >=</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.LogicalRelation.html#1747" class="InductiveConstructor"
+      >zero</a
+      ><a name="892"
+      >
+</a
+      ><a name="893" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="909"
+      > </a
+      ><a name="910" class="Symbol"
+      >(</a
+      ><a name="911" href="Definition.Untyped.html#1362" class="InductiveConstructor"
+      >ne</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Definition.LogicalRelation.Properties.Reflexivity.html#914" class="Bound"
+      >x</a
+      ><a name="915" class="Symbol"
+      >)</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.LogicalRelation.Properties.Reflexivity.html#917" class="Bound"
+      >n</a
+      ><a name="918"
+      > </a
+      ><a name="919" class="Symbol"
+      >=</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Definition.LogicalRelation.html#1785" class="InductiveConstructor"
+      >ne</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Definition.LogicalRelation.Properties.Reflexivity.html#914" class="Bound"
+      >x</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Definition.LogicalRelation.Properties.Reflexivity.html#914" class="Bound"
+      >x</a
+      ><a name="927"
+      > </a
+      ><a name="928" class="Symbol"
+      >(</a
+      ><a name="929" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Definition.LogicalRelation.Properties.Reflexivity.html#917" class="Bound"
+      >n</a
+      ><a name="935" class="Symbol"
+      >)</a
+      ><a name="936"
+      >
+
+</a
+      ><a name="938" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >:</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >&#8704;</a
+      ><a name="952"
+      > </a
+      ><a name="953" class="Symbol"
+      >{</a
+      ><a name="954" href="Definition.LogicalRelation.Properties.Reflexivity.html#954" class="Bound"
+      >l</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Definition.LogicalRelation.Properties.Reflexivity.html#956" class="Bound"
+      >&#915;</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Definition.LogicalRelation.Properties.Reflexivity.html#958" class="Bound"
+      >A</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Definition.LogicalRelation.Properties.Reflexivity.html#960" class="Bound"
+      >t</a
+      ><a name="961" class="Symbol"
+      >}</a
+      ><a name="962"
+      > </a
+      ><a name="963" class="Symbol"
+      >(</a
+      ><a name="964" href="Definition.LogicalRelation.Properties.Reflexivity.html#964" class="Bound"
+      >[A]</a
+      ><a name="967"
+      > </a
+      ><a name="968" class="Symbol"
+      >:</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Definition.LogicalRelation.Properties.Reflexivity.html#956" class="Bound"
+      >&#915;</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Definition.LogicalRelation.Properties.Reflexivity.html#954" class="Bound"
+      >l</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="978"
+      > </a
+      ><a name="979" href="Definition.LogicalRelation.Properties.Reflexivity.html#958" class="Bound"
+      >A</a
+      ><a name="980" class="Symbol"
+      >)</a
+      ><a name="981"
+      >
+           </a
+      ><a name="993" class="Symbol"
+      >&#8594;</a
+      ><a name="994"
+      > </a
+      ><a name="995" href="Definition.LogicalRelation.Properties.Reflexivity.html#956" class="Bound"
+      >&#915;</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Definition.LogicalRelation.Properties.Reflexivity.html#954" class="Bound"
+      >l</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#10217;</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Definition.LogicalRelation.Properties.Reflexivity.html#960" class="Bound"
+      >t</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >&#8759;</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" href="Definition.LogicalRelation.Properties.Reflexivity.html#958" class="Bound"
+      >A</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Definition.LogicalRelation.html#9086" class="Function Operator"
+      >/</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Definition.LogicalRelation.Properties.Reflexivity.html#964" class="Bound"
+      >[A]</a
+      ><a name="1015"
+      >
+           </a
+      ><a name="1027" class="Symbol"
+      >&#8594;</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" href="Definition.LogicalRelation.Properties.Reflexivity.html#956" class="Bound"
+      >&#915;</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Definition.LogicalRelation.Properties.Reflexivity.html#954" class="Bound"
+      >l</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Definition.LogicalRelation.Properties.Reflexivity.html#960" class="Bound"
+      >t</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" href="Definition.LogicalRelation.Properties.Reflexivity.html#960" class="Bound"
+      >t</a
+      ><a name="1043"
+      > </a
+      ><a name="1044" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" href="Definition.LogicalRelation.Properties.Reflexivity.html#958" class="Bound"
+      >A</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Definition.LogicalRelation.Properties.Reflexivity.html#964" class="Bound"
+      >[A]</a
+      ><a name="1053"
+      >
+</a
+      ><a name="1054" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" class="Symbol"
+      >(</a
+      ><a name="1066" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Definition.LogicalRelation.Properties.Reflexivity.html#1075" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1077" class="Symbol"
+      >)</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" class="Symbol"
+      >(</a
+      ><a name="1080" href="Definition.LogicalRelation.html#2940" class="InductiveConstructor"
+      >U&#8348;</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Definition.LogicalRelation.Properties.Reflexivity.html#1083" class="Bound"
+      >&#8866;t</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" href="Definition.LogicalRelation.Properties.Reflexivity.html#1086" class="Bound"
+      >&#8873;t</a
+      ><a name="1088" class="Symbol"
+      >)</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" class="Symbol"
+      >=</a
+      ><a name="1091"
+      >
+  </a
+      ><a name="1094" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="1097"
+      > </a
+      ><a name="1098" href="Definition.LogicalRelation.Properties.Reflexivity.html#1083" class="Bound"
+      >&#8866;t</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Definition.LogicalRelation.Properties.Reflexivity.html#1083" class="Bound"
+      >&#8866;t</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" class="Symbol"
+      >(</a
+      ><a name="1105" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" href="Definition.LogicalRelation.Properties.Reflexivity.html#1083" class="Bound"
+      >&#8866;t</a
+      ><a name="1112" class="Symbol"
+      >)</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="Definition.LogicalRelation.Properties.Reflexivity.html#1086" class="Bound"
+      >&#8873;t</a
+      ><a name="1116"
+      > </a
+      ><a name="1117" href="Definition.LogicalRelation.Properties.Reflexivity.html#1086" class="Bound"
+      >&#8873;t</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" class="Symbol"
+      >(</a
+      ><a name="1121" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Definition.LogicalRelation.Properties.Reflexivity.html#1086" class="Bound"
+      >&#8873;t</a
+      ><a name="1130" class="Symbol"
+      >)</a
+      ><a name="1131"
+      >
+</a
+      ><a name="1132" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" class="Symbol"
+      >(</a
+      ><a name="1144" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Definition.LogicalRelation.Properties.Reflexivity.html#1146" class="Bound"
+      >D</a
+      ><a name="1147" class="Symbol"
+      >)</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" class="Symbol"
+      >(</a
+      ><a name="1150" href="Definition.LogicalRelation.html#1080" class="InductiveConstructor"
+      >&#8469;&#8348;</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Definition.LogicalRelation.Properties.Reflexivity.html#1153" class="Bound"
+      >n</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" href="Definition.LogicalRelation.Properties.Reflexivity.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" href="Definition.LogicalRelation.Properties.Reflexivity.html#1162" class="Bound"
+      >&#8866;u</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" href="Definition.LogicalRelation.Properties.Reflexivity.html#1167" class="Bound"
+      >d</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" href="Definition.LogicalRelation.Properties.Reflexivity.html#1171" class="Bound"
+      >natN</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" href="Definition.LogicalRelation.Properties.Reflexivity.html#1176" class="Bound"
+      >prop</a
+      ><a name="1180" class="Symbol"
+      >)</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" class="Symbol"
+      >=</a
+      ><a name="1183"
+      >
+  </a
+      ><a name="1186" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Definition.LogicalRelation.Properties.Reflexivity.html#1153" class="Bound"
+      >n</a
+      ><a name="1191"
+      > </a
+      ><a name="1192" href="Definition.LogicalRelation.Properties.Reflexivity.html#1153" class="Bound"
+      >n</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1195"
+      > </a
+      ><a name="1196" href="Definition.LogicalRelation.Properties.Reflexivity.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Definition.LogicalRelation.Properties.Reflexivity.html#1162" class="Bound"
+      >&#8866;u</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Definition.LogicalRelation.Properties.Reflexivity.html#1167" class="Bound"
+      >d</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" href="Definition.LogicalRelation.Properties.Reflexivity.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1214"
+      > </a
+      ><a name="1215" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1216"
+      > </a
+      ><a name="1217" href="Definition.LogicalRelation.Properties.Reflexivity.html#1162" class="Bound"
+      >&#8866;u</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1221"
+      > </a
+      ><a name="1222" href="Definition.LogicalRelation.Properties.Reflexivity.html#1167" class="Bound"
+      >d</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Definition.Typed.html#7503" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" class="Symbol"
+      >(</a
+      ><a name="1227" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Definition.LogicalRelation.Properties.Reflexivity.html#1157" class="Bound"
+      >&#8866;t</a
+      ><a name="1234" class="Symbol"
+      >)</a
+      ><a name="1235"
+      >
+      </a
+      ><a name="1242" class="Symbol"
+      >(</a
+      ><a name="1243" href="Definition.LogicalRelation.Properties.Reflexivity.html#608" class="Function"
+      >reflNatural-prop</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Definition.LogicalRelation.Properties.Reflexivity.html#1171" class="Bound"
+      >natN</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Definition.LogicalRelation.Properties.Reflexivity.html#1176" class="Bound"
+      >prop</a
+      ><a name="1269" class="Symbol"
+      >)</a
+      ><a name="1270"
+      >
+</a
+      ><a name="1271" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" class="Symbol"
+      >(</a
+      ><a name="1283" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" href="Definition.LogicalRelation.Properties.Reflexivity.html#1287" class="Bound"
+      >K</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Definition.LogicalRelation.Properties.Reflexivity.html#1289" class="Bound"
+      >D</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Definition.LogicalRelation.Properties.Reflexivity.html#1291" class="Bound"
+      >neK</a
+      ><a name="1294" class="Symbol"
+      >)</a
+      ><a name="1295"
+      > </a
+      ><a name="1296" href="Definition.LogicalRelation.Properties.Reflexivity.html#1296" class="Bound"
+      >t</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" class="Symbol"
+      >=</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" href="Definition.LogicalRelation.Properties.Reflexivity.html#1296" class="Bound"
+      >t</a
+      ><a name="1306"
+      >
+</a
+      ><a name="1307" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1317"
+      > </a
+      ><a name="1318" class="Symbol"
+      >(</a
+      ><a name="1319" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" href="Definition.LogicalRelation.Properties.Reflexivity.html#1322" class="Bound"
+      >F</a
+      ><a name="1323"
+      > </a
+      ><a name="1324" href="Definition.LogicalRelation.Properties.Reflexivity.html#1324" class="Bound"
+      >G</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" href="Definition.LogicalRelation.Properties.Reflexivity.html#1326" class="Bound"
+      >D</a
+      ><a name="1327"
+      > </a
+      ><a name="1328" href="Definition.LogicalRelation.Properties.Reflexivity.html#1328" class="Bound"
+      >&#8866;F</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Definition.LogicalRelation.Properties.Reflexivity.html#1331" class="Bound"
+      >&#8866;G</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" href="Definition.LogicalRelation.Properties.Reflexivity.html#1334" class="Bound"
+      >[F]</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Definition.LogicalRelation.Properties.Reflexivity.html#1338" class="Bound"
+      >[G]</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" href="Definition.LogicalRelation.Properties.Reflexivity.html#1342" class="Bound"
+      >G-ext</a
+      ><a name="1347" class="Symbol"
+      >)</a
+      ><a name="1348"
+      > </a
+      ><a name="1349" class="Symbol"
+      >(</a
+      ><a name="1350" href="Definition.LogicalRelation.html#8169" class="InductiveConstructor"
+      >&#928;&#8348;</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Definition.LogicalRelation.Properties.Reflexivity.html#1353" class="Bound"
+      >&#8866;t</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" href="Definition.LogicalRelation.Properties.Reflexivity.html#1356" class="Bound"
+      >[t]</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" href="Definition.LogicalRelation.Properties.Reflexivity.html#1360" class="Bound"
+      >[t]&#8321;</a
+      ><a name="1364" class="Symbol"
+      >)</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" class="Symbol"
+      >=</a
+      ><a name="1367"
+      >
+  </a
+      ><a name="1370" href="Definition.LogicalRelation.html#8198" class="InductiveConstructor"
+      >&#928;&#8348;&#8332;</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" class="Symbol"
+      >(</a
+      ><a name="1375" href="Definition.Typed.html#2332" class="InductiveConstructor"
+      >refl</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Definition.LogicalRelation.Properties.Reflexivity.html#1353" class="Bound"
+      >&#8866;t</a
+      ><a name="1382" class="Symbol"
+      >)</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" class="Symbol"
+      >(</a
+      ><a name="1385" href="Definition.LogicalRelation.html#8169" class="InductiveConstructor"
+      >&#928;&#8348;</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" href="Definition.LogicalRelation.Properties.Reflexivity.html#1353" class="Bound"
+      >&#8866;t</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" href="Definition.LogicalRelation.Properties.Reflexivity.html#1356" class="Bound"
+      >[t]</a
+      ><a name="1394"
+      > </a
+      ><a name="1395" href="Definition.LogicalRelation.Properties.Reflexivity.html#1360" class="Bound"
+      >[t]&#8321;</a
+      ><a name="1399" class="Symbol"
+      >)</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" class="Symbol"
+      >(</a
+      ><a name="1402" href="Definition.LogicalRelation.html#8169" class="InductiveConstructor"
+      >&#928;&#8348;</a
+      ><a name="1404"
+      > </a
+      ><a name="1405" href="Definition.LogicalRelation.Properties.Reflexivity.html#1353" class="Bound"
+      >&#8866;t</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" href="Definition.LogicalRelation.Properties.Reflexivity.html#1356" class="Bound"
+      >[t]</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" href="Definition.LogicalRelation.Properties.Reflexivity.html#1360" class="Bound"
+      >[t]&#8321;</a
+      ><a name="1416" class="Symbol"
+      >)</a
+      ><a name="1417"
+      >
+      </a
+      ><a name="1424" class="Symbol"
+      >(&#955;</a
+      ><a name="1426"
+      > </a
+      ><a name="1427" href="Definition.LogicalRelation.Properties.Reflexivity.html#1427" class="Bound"
+      >&#961;</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" href="Definition.LogicalRelation.Properties.Reflexivity.html#1429" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" href="Definition.LogicalRelation.Properties.Reflexivity.html#1432" class="Bound"
+      >[a]</a
+      ><a name="1435"
+      > </a
+      ><a name="1436" class="Symbol"
+      >&#8594;</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="Definition.LogicalRelation.Properties.Reflexivity.html#1356" class="Bound"
+      >[t]</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" href="Definition.LogicalRelation.Properties.Reflexivity.html#1427" class="Bound"
+      >&#961;</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" href="Definition.LogicalRelation.Properties.Reflexivity.html#1429" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" href="Definition.LogicalRelation.Properties.Reflexivity.html#1432" class="Bound"
+      >[a]</a
+      ><a name="1450"
+      > </a
+      ><a name="1451" href="Definition.LogicalRelation.Properties.Reflexivity.html#1432" class="Bound"
+      >[a]</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" class="Symbol"
+      >(</a
+      ><a name="1456" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1466"
+      > </a
+      ><a name="1467" class="Symbol"
+      >(</a
+      ><a name="1468" href="Definition.LogicalRelation.Properties.Reflexivity.html#1334" class="Bound"
+      >[F]</a
+      ><a name="1471"
+      > </a
+      ><a name="1472" href="Definition.LogicalRelation.Properties.Reflexivity.html#1427" class="Bound"
+      >&#961;</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" href="Definition.LogicalRelation.Properties.Reflexivity.html#1429" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1476" class="Symbol"
+      >)</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="Definition.LogicalRelation.Properties.Reflexivity.html#1432" class="Bound"
+      >[a]</a
+      ><a name="1481" class="Symbol"
+      >))</a
+      ><a name="1483"
+      >
+</a
+      ><a name="1484" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" class="Symbol"
+      >(</a
+      ><a name="1496" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Definition.LogicalRelation.Properties.Reflexivity.html#1504" class="Bound"
+      >[A]</a
+      ><a name="1507" class="Symbol"
+      >)</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" href="Definition.LogicalRelation.Properties.Reflexivity.html#1509" class="Bound"
+      >t</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" class="Symbol"
+      >=</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Definition.LogicalRelation.Properties.Reflexivity.html#1504" class="Bound"
+      >[A]</a
+      ><a name="1527"
+      > </a
+      ><a name="1528" href="Definition.LogicalRelation.Properties.Reflexivity.html#1509" class="Bound"
+      >t</a
+      ><a name="1529"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

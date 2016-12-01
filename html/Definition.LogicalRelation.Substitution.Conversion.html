@@ -1,0 +1,1684 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Substitution.Conversion</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Substitution.Conversion.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Conversion</a
+      ><a name="58"
+      > </a
+      ><a name="59" class="Keyword"
+      >where</a
+      ><a name="64"
+      >
+
+</a
+      ><a name="66" class="Keyword"
+      >open</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="Keyword"
+      >import</a
+      ><a name="77"
+      > </a
+      ><a name="78" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="116"
+      >
+</a
+      ><a name="117" class="Keyword"
+      >open</a
+      ><a name="121"
+      > </a
+      ><a name="122" class="Keyword"
+      >import</a
+      ><a name="128"
+      > </a
+      ><a name="129" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="166"
+      >
+</a
+      ><a name="167" class="Keyword"
+      >open</a
+      ><a name="171"
+      > </a
+      ><a name="172" class="Keyword"
+      >import</a
+      ><a name="178"
+      > </a
+      ><a name="179" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="218"
+      >
+
+</a
+      ><a name="220" class="Keyword"
+      >open</a
+      ><a name="224"
+      > </a
+      ><a name="225" class="Keyword"
+      >import</a
+      ><a name="231"
+      > </a
+      ><a name="232" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="245"
+      >
+
+
+</a
+      ><a name="248" href="Definition.LogicalRelation.Substitution.Conversion.html#248" class="Function"
+      >conv&#8347;</a
+      ><a name="253"
+      > </a
+      ><a name="254" class="Symbol"
+      >:</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Symbol"
+      >&#8704;</a
+      ><a name="257"
+      > </a
+      ><a name="258" class="Symbol"
+      >{</a
+      ><a name="259" href="Definition.LogicalRelation.Substitution.Conversion.html#259" class="Bound"
+      >t</a
+      ><a name="260"
+      > </a
+      ><a name="261" href="Definition.LogicalRelation.Substitution.Conversion.html#261" class="Bound"
+      >A</a
+      ><a name="262"
+      > </a
+      ><a name="263" href="Definition.LogicalRelation.Substitution.Conversion.html#263" class="Bound"
+      >B</a
+      ><a name="264"
+      > </a
+      ><a name="265" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="268" class="Symbol"
+      >}</a
+      ><a name="269"
+      >
+        </a
+      ><a name="278" class="Symbol"
+      >(</a
+      ><a name="279" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="282"
+      > </a
+      ><a name="283" class="Symbol"
+      >:</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="287"
+      > </a
+      ><a name="288" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="289" class="Symbol"
+      >)</a
+      ><a name="290"
+      >
+        </a
+      ><a name="299" class="Symbol"
+      >(</a
+      ><a name="300" href="Definition.LogicalRelation.Substitution.Conversion.html#300" class="Bound"
+      >[A]</a
+      ><a name="303"
+      >  </a
+      ><a name="305" class="Symbol"
+      >:</a
+      ><a name="306"
+      > </a
+      ><a name="307" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="308"
+      > </a
+      ><a name="309" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="314"
+      > </a
+      ><a name="315" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="Definition.LogicalRelation.Substitution.Conversion.html#261" class="Bound"
+      >A</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="320"
+      > </a
+      ><a name="321" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="324" class="Symbol"
+      >)</a
+      ><a name="325"
+      >
+        </a
+      ><a name="334" class="Symbol"
+      >(</a
+      ><a name="335" href="Definition.LogicalRelation.Substitution.Conversion.html#335" class="Bound"
+      >[B]</a
+      ><a name="338"
+      >  </a
+      ><a name="340" class="Symbol"
+      >:</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="343"
+      > </a
+      ><a name="344" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="347"
+      > </a
+      ><a name="348" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="349"
+      > </a
+      ><a name="350" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="351"
+      > </a
+      ><a name="352" href="Definition.LogicalRelation.Substitution.Conversion.html#263" class="Bound"
+      >B</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="355"
+      > </a
+      ><a name="356" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="359" class="Symbol"
+      >)</a
+      ><a name="360"
+      >
+      </a
+      ><a name="367" class="Symbol"
+      >&#8594;</a
+      ><a name="368"
+      > </a
+      ><a name="369" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="378"
+      >  </a
+      ><a name="380" href="Definition.LogicalRelation.Substitution.Conversion.html#261" class="Bound"
+      >A</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Definition.LogicalRelation.Substitution.Conversion.html#263" class="Bound"
+      >B</a
+      ><a name="385"
+      > </a
+      ><a name="386" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="391"
+      > </a
+      ><a name="392" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Definition.LogicalRelation.Substitution.Conversion.html#300" class="Bound"
+      >[A]</a
+      ><a name="397"
+      >
+      </a
+      ><a name="404" class="Symbol"
+      >&#8594;</a
+      ><a name="405"
+      > </a
+      ><a name="406" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="407"
+      > </a
+      ><a name="408" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="411"
+      > </a
+      ><a name="412" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Definition.LogicalRelation.Substitution.Conversion.html#259" class="Bound"
+      >t</a
+      ><a name="418"
+      > </a
+      ><a name="419" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="420"
+      > </a
+      ><a name="421" href="Definition.LogicalRelation.Substitution.Conversion.html#261" class="Bound"
+      >A</a
+      ><a name="422"
+      > </a
+      ><a name="423" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="428"
+      > </a
+      ><a name="429" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Definition.LogicalRelation.Substitution.Conversion.html#300" class="Bound"
+      >[A]</a
+      ><a name="434"
+      >
+      </a
+      ><a name="441" class="Symbol"
+      >&#8594;</a
+      ><a name="442"
+      > </a
+      ><a name="443" href="Definition.LogicalRelation.Substitution.Conversion.html#265" class="Bound"
+      >&#915;</a
+      ><a name="444"
+      > </a
+      ><a name="445" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="448"
+      > </a
+      ><a name="449" href="Definition.LogicalRelation.Substitution.Conversion.html#267" class="Bound"
+      >l</a
+      ><a name="450"
+      > </a
+      ><a name="451" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Definition.LogicalRelation.Substitution.Conversion.html#259" class="Bound"
+      >t</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="457"
+      > </a
+      ><a name="458" href="Definition.LogicalRelation.Substitution.Conversion.html#263" class="Bound"
+      >B</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Definition.LogicalRelation.Substitution.Conversion.html#279" class="Bound"
+      >[&#915;]</a
+      ><a name="465"
+      > </a
+      ><a name="466" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Definition.LogicalRelation.Substitution.Conversion.html#335" class="Bound"
+      >[B]</a
+      ><a name="471"
+      >
+</a
+      ><a name="472" href="Definition.LogicalRelation.Substitution.Conversion.html#248" class="Function"
+      >conv&#8347;</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Definition.LogicalRelation.Substitution.Conversion.html#478" class="Bound"
+      >[&#915;]</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Definition.LogicalRelation.Substitution.Conversion.html#482" class="Bound"
+      >[A]</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Definition.LogicalRelation.Substitution.Conversion.html#486" class="Bound"
+      >[B]</a
+      ><a name="489"
+      > </a
+      ><a name="490" href="Definition.LogicalRelation.Substitution.Conversion.html#490" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="495"
+      > </a
+      ><a name="496" href="Definition.LogicalRelation.Substitution.Conversion.html#496" class="Bound"
+      >[t]</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="502"
+      > </a
+      ><a name="503" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="506"
+      > </a
+      ><a name="507" class="Symbol"
+      >=</a
+      ><a name="508"
+      >
+  </a
+      ><a name="511" class="Keyword"
+      >let</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Definition.LogicalRelation.Substitution.Conversion.html#515" class="Bound"
+      >[&#963;A]</a
+      ><a name="519"
+      >     </a
+      ><a name="524" class="Symbol"
+      >=</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="531"
+      > </a
+      ><a name="532" class="Symbol"
+      >(</a
+      ><a name="533" href="Definition.LogicalRelation.Substitution.Conversion.html#482" class="Bound"
+      >[A]</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="543" class="Symbol"
+      >)</a
+      ><a name="544"
+      >
+      </a
+      ><a name="551" href="Definition.LogicalRelation.Substitution.Conversion.html#551" class="Bound"
+      >[&#963;B]</a
+      ><a name="555"
+      >     </a
+      ><a name="560" class="Symbol"
+      >=</a
+      ><a name="561"
+      > </a
+      ><a name="562" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >(</a
+      ><a name="569" href="Definition.LogicalRelation.Substitution.Conversion.html#486" class="Bound"
+      >[B]</a
+      ><a name="572"
+      > </a
+      ><a name="573" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="575"
+      > </a
+      ><a name="576" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="579" class="Symbol"
+      >)</a
+      ><a name="580"
+      >
+      </a
+      ><a name="587" href="Definition.LogicalRelation.Substitution.Conversion.html#587" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="594"
+      >  </a
+      ><a name="596" class="Symbol"
+      >=</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="611"
+      > </a
+      ><a name="612" href="Definition.LogicalRelation.Substitution.Conversion.html#515" class="Bound"
+      >[&#963;A]</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="Definition.LogicalRelation.Substitution.Conversion.html#515" class="Bound"
+      >[&#963;A]</a
+      ><a name="621"
+      > </a
+      ><a name="622" class="Symbol"
+      >(</a
+      ><a name="623" href="Definition.LogicalRelation.Substitution.Conversion.html#490" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="628"
+      > </a
+      ><a name="629" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="635" class="Symbol"
+      >)</a
+      ><a name="636"
+      >
+      </a
+      ><a name="643" href="Definition.LogicalRelation.Substitution.Conversion.html#643" class="Bound"
+      >[&#963;t]</a
+      ><a name="647"
+      >     </a
+      ><a name="652" class="Symbol"
+      >=</a
+      ><a name="653"
+      > </a
+      ><a name="654" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="659"
+      > </a
+      ><a name="660" class="Symbol"
+      >(</a
+      ><a name="661" href="Definition.LogicalRelation.Substitution.Conversion.html#496" class="Bound"
+      >[t]</a
+      ><a name="664"
+      > </a
+      ><a name="665" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="667"
+      > </a
+      ><a name="668" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="671" class="Symbol"
+      >)</a
+      ><a name="672"
+      >
+      </a
+      ><a name="679" href="Definition.LogicalRelation.Substitution.Conversion.html#679" class="Bound"
+      >[&#963;t&#8801;&#963;'t]</a
+      ><a name="687"
+      > </a
+      ><a name="688" class="Symbol"
+      >=</a
+      ><a name="689"
+      > </a
+      ><a name="690" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Symbol"
+      >(</a
+      ><a name="697" href="Definition.LogicalRelation.Substitution.Conversion.html#496" class="Bound"
+      >[t]</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Definition.LogicalRelation.Substitution.Conversion.html#500" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="703"
+      > </a
+      ><a name="704" href="Definition.LogicalRelation.Substitution.Conversion.html#503" class="Bound"
+      >[&#963;]</a
+      ><a name="707" class="Symbol"
+      >)</a
+      ><a name="708"
+      >
+  </a
+      ><a name="711" class="Keyword"
+      >in</a
+      ><a name="713"
+      >  </a
+      ><a name="715" href="Definition.LogicalRelation.Properties.Conversion.html#4822" class="Function"
+      >convTerm&#8321;</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Definition.LogicalRelation.Substitution.Conversion.html#515" class="Bound"
+      >[&#963;A]</a
+      ><a name="729"
+      > </a
+      ><a name="730" href="Definition.LogicalRelation.Substitution.Conversion.html#551" class="Bound"
+      >[&#963;B]</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Definition.LogicalRelation.Substitution.Conversion.html#587" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Definition.LogicalRelation.Substitution.Conversion.html#643" class="Bound"
+      >[&#963;t]</a
+      ><a name="747"
+      >
+  </a
+      ><a name="750" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="751"
+      >   </a
+      ><a name="754" class="Symbol"
+      >&#955;</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Definition.LogicalRelation.Substitution.Conversion.html#756" class="Bound"
+      >[&#963;']</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Definition.LogicalRelation.Substitution.Conversion.html#761" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="767"
+      > </a
+      ><a name="768" class="Symbol"
+      >&#8594;</a
+      ><a name="769"
+      > </a
+      ><a name="770" href="Definition.LogicalRelation.Properties.Conversion.html#8929" class="Function"
+      >convEqTerm&#8321;</a
+      ><a name="781"
+      > </a
+      ><a name="782" href="Definition.LogicalRelation.Substitution.Conversion.html#515" class="Bound"
+      >[&#963;A]</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Definition.LogicalRelation.Substitution.Conversion.html#551" class="Bound"
+      >[&#963;B]</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Definition.LogicalRelation.Substitution.Conversion.html#587" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="799"
+      > </a
+      ><a name="800" class="Symbol"
+      >(</a
+      ><a name="801" href="Definition.LogicalRelation.Substitution.Conversion.html#679" class="Bound"
+      >[&#963;t&#8801;&#963;'t]</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Definition.LogicalRelation.Substitution.Conversion.html#756" class="Bound"
+      >[&#963;']</a
+      ><a name="814"
+      > </a
+      ><a name="815" href="Definition.LogicalRelation.Substitution.Conversion.html#761" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="821" class="Symbol"
+      >)</a
+      ><a name="822"
+      >
+
+</a
+      ><a name="824" href="Definition.LogicalRelation.Substitution.Conversion.html#824" class="Function"
+      >conv&#8322;&#8347;</a
+      ><a name="830"
+      > </a
+      ><a name="831" class="Symbol"
+      >:</a
+      ><a name="832"
+      > </a
+      ><a name="833" class="Symbol"
+      >&#8704;</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="Symbol"
+      >{</a
+      ><a name="836" href="Definition.LogicalRelation.Substitution.Conversion.html#836" class="Bound"
+      >t</a
+      ><a name="837"
+      > </a
+      ><a name="838" href="Definition.LogicalRelation.Substitution.Conversion.html#838" class="Bound"
+      >A</a
+      ><a name="839"
+      > </a
+      ><a name="840" href="Definition.LogicalRelation.Substitution.Conversion.html#840" class="Bound"
+      >B</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="843"
+      > </a
+      ><a name="844" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="845" class="Symbol"
+      >}</a
+      ><a name="846"
+      >
+         </a
+      ><a name="856" class="Symbol"
+      >(</a
+      ><a name="857" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="860"
+      > </a
+      ><a name="861" class="Symbol"
+      >:</a
+      ><a name="862"
+      > </a
+      ><a name="863" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="865"
+      > </a
+      ><a name="866" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="867" class="Symbol"
+      >)</a
+      ><a name="868"
+      >
+         </a
+      ><a name="878" class="Symbol"
+      >(</a
+      ><a name="879" href="Definition.LogicalRelation.Substitution.Conversion.html#879" class="Bound"
+      >[A]</a
+      ><a name="882"
+      >  </a
+      ><a name="884" class="Symbol"
+      >:</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="893"
+      > </a
+      ><a name="894" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="895"
+      > </a
+      ><a name="896" href="Definition.LogicalRelation.Substitution.Conversion.html#838" class="Bound"
+      >A</a
+      ><a name="897"
+      > </a
+      ><a name="898" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="903" class="Symbol"
+      >)</a
+      ><a name="904"
+      >
+         </a
+      ><a name="914" class="Symbol"
+      >(</a
+      ><a name="915" href="Definition.LogicalRelation.Substitution.Conversion.html#915" class="Bound"
+      >[B]</a
+      ><a name="918"
+      >  </a
+      ><a name="920" class="Symbol"
+      >:</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="927"
+      > </a
+      ><a name="928" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Definition.LogicalRelation.Substitution.Conversion.html#840" class="Bound"
+      >B</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="935"
+      > </a
+      ><a name="936" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="939" class="Symbol"
+      >)</a
+      ><a name="940"
+      >
+       </a
+      ><a name="948" class="Symbol"
+      >&#8594;</a
+      ><a name="949"
+      > </a
+      ><a name="950" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="959"
+      >  </a
+      ><a name="961" href="Definition.LogicalRelation.Substitution.Conversion.html#838" class="Bound"
+      >A</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="964"
+      > </a
+      ><a name="965" href="Definition.LogicalRelation.Substitution.Conversion.html#840" class="Bound"
+      >B</a
+      ><a name="966"
+      > </a
+      ><a name="967" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="972"
+      > </a
+      ><a name="973" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Definition.LogicalRelation.Substitution.Conversion.html#879" class="Bound"
+      >[A]</a
+      ><a name="978"
+      >
+       </a
+      ><a name="986" class="Symbol"
+      >&#8594;</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="993"
+      > </a
+      ><a name="994" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="995"
+      > </a
+      ><a name="996" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Definition.LogicalRelation.Substitution.Conversion.html#836" class="Bound"
+      >t</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="Definition.LogicalRelation.Substitution.Conversion.html#840" class="Bound"
+      >B</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" href="Definition.LogicalRelation.Substitution.Conversion.html#915" class="Bound"
+      >[B]</a
+      ><a name="1016"
+      >
+       </a
+      ><a name="1024" class="Symbol"
+      >&#8594;</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Definition.LogicalRelation.Substitution.Conversion.html#842" class="Bound"
+      >&#915;</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Definition.LogicalRelation.Substitution.Conversion.html#844" class="Bound"
+      >l</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="Definition.LogicalRelation.Substitution.Conversion.html#836" class="Bound"
+      >t</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Definition.LogicalRelation.Substitution.Conversion.html#838" class="Bound"
+      >A</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" href="Definition.LogicalRelation.Substitution.Conversion.html#857" class="Bound"
+      >[&#915;]</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Definition.LogicalRelation.Substitution.Conversion.html#879" class="Bound"
+      >[A]</a
+      ><a name="1054"
+      >
+</a
+      ><a name="1055" href="Definition.LogicalRelation.Substitution.Conversion.html#824" class="Function"
+      >conv&#8322;&#8347;</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" href="Definition.LogicalRelation.Substitution.Conversion.html#1062" class="Bound"
+      >[&#915;]</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Definition.LogicalRelation.Substitution.Conversion.html#1066" class="Bound"
+      >[A]</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Definition.LogicalRelation.Substitution.Conversion.html#1070" class="Bound"
+      >[B]</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Definition.LogicalRelation.Substitution.Conversion.html#1074" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Definition.LogicalRelation.Substitution.Conversion.html#1080" class="Bound"
+      >[t]</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1090"
+      > </a
+      ><a name="1091" class="Symbol"
+      >=</a
+      ><a name="1092"
+      >
+  </a
+      ><a name="1095" class="Keyword"
+      >let</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Definition.LogicalRelation.Substitution.Conversion.html#1099" class="Bound"
+      >[&#963;A]</a
+      ><a name="1103"
+      >     </a
+      ><a name="1108" class="Symbol"
+      >=</a
+      ><a name="1109"
+      > </a
+      ><a name="1110" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >(</a
+      ><a name="1117" href="Definition.LogicalRelation.Substitution.Conversion.html#1066" class="Bound"
+      >[A]</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1123"
+      > </a
+      ><a name="1124" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1127" class="Symbol"
+      >)</a
+      ><a name="1128"
+      >
+      </a
+      ><a name="1135" href="Definition.LogicalRelation.Substitution.Conversion.html#1135" class="Bound"
+      >[&#963;B]</a
+      ><a name="1139"
+      >     </a
+      ><a name="1144" class="Symbol"
+      >=</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" class="Symbol"
+      >(</a
+      ><a name="1153" href="Definition.LogicalRelation.Substitution.Conversion.html#1070" class="Bound"
+      >[B]</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1163" class="Symbol"
+      >)</a
+      ><a name="1164"
+      >
+      </a
+      ><a name="1171" href="Definition.LogicalRelation.Substitution.Conversion.html#1171" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="1178"
+      >  </a
+      ><a name="1180" class="Symbol"
+      >=</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="1195"
+      > </a
+      ><a name="1196" href="Definition.LogicalRelation.Substitution.Conversion.html#1099" class="Bound"
+      >[&#963;A]</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Definition.LogicalRelation.Substitution.Conversion.html#1099" class="Bound"
+      >[&#963;A]</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" class="Symbol"
+      >(</a
+      ><a name="1207" href="Definition.LogicalRelation.Substitution.Conversion.html#1074" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1219" class="Symbol"
+      >)</a
+      ><a name="1220"
+      >
+      </a
+      ><a name="1227" href="Definition.LogicalRelation.Substitution.Conversion.html#1227" class="Bound"
+      >[&#963;t]</a
+      ><a name="1231"
+      >     </a
+      ><a name="1236" class="Symbol"
+      >=</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1243"
+      > </a
+      ><a name="1244" class="Symbol"
+      >(</a
+      ><a name="1245" href="Definition.LogicalRelation.Substitution.Conversion.html#1080" class="Bound"
+      >[t]</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1251"
+      > </a
+      ><a name="1252" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1255" class="Symbol"
+      >)</a
+      ><a name="1256"
+      >
+      </a
+      ><a name="1263" href="Definition.LogicalRelation.Substitution.Conversion.html#1263" class="Bound"
+      >[&#963;t&#8801;&#963;'t]</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >=</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="1279"
+      > </a
+      ><a name="1280" class="Symbol"
+      >(</a
+      ><a name="1281" href="Definition.LogicalRelation.Substitution.Conversion.html#1080" class="Bound"
+      >[t]</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" href="Definition.LogicalRelation.Substitution.Conversion.html#1084" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1287"
+      > </a
+      ><a name="1288" href="Definition.LogicalRelation.Substitution.Conversion.html#1087" class="Bound"
+      >[&#963;]</a
+      ><a name="1291" class="Symbol"
+      >)</a
+      ><a name="1292"
+      >
+  </a
+      ><a name="1295" class="Keyword"
+      >in</a
+      ><a name="1297"
+      >  </a
+      ><a name="1299" href="Definition.LogicalRelation.Properties.Conversion.html#5070" class="Function"
+      >convTerm&#8322;</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" href="Definition.LogicalRelation.Substitution.Conversion.html#1099" class="Bound"
+      >[&#963;A]</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="Definition.LogicalRelation.Substitution.Conversion.html#1135" class="Bound"
+      >[&#963;B]</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Definition.LogicalRelation.Substitution.Conversion.html#1171" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" href="Definition.LogicalRelation.Substitution.Conversion.html#1227" class="Bound"
+      >[&#963;t]</a
+      ><a name="1331"
+      >
+  </a
+      ><a name="1334" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1335"
+      >   </a
+      ><a name="1338" class="Symbol"
+      >&#955;</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" href="Definition.LogicalRelation.Substitution.Conversion.html#1340" class="Bound"
+      >[&#963;']</a
+      ><a name="1344"
+      > </a
+      ><a name="1345" href="Definition.LogicalRelation.Substitution.Conversion.html#1345" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" class="Symbol"
+      >&#8594;</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="Definition.LogicalRelation.Properties.Conversion.html#9203" class="Function"
+      >convEqTerm&#8322;</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Definition.LogicalRelation.Substitution.Conversion.html#1099" class="Bound"
+      >[&#963;A]</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" href="Definition.LogicalRelation.Substitution.Conversion.html#1135" class="Bound"
+      >[&#963;B]</a
+      ><a name="1375"
+      > </a
+      ><a name="1376" href="Definition.LogicalRelation.Substitution.Conversion.html#1171" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" class="Symbol"
+      >(</a
+      ><a name="1385" href="Definition.LogicalRelation.Substitution.Conversion.html#1263" class="Bound"
+      >[&#963;t&#8801;&#963;'t]</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" href="Definition.LogicalRelation.Substitution.Conversion.html#1340" class="Bound"
+      >[&#963;']</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="Definition.LogicalRelation.Substitution.Conversion.html#1345" class="Bound"
+      >[&#963;&#8801;&#963;']</a
+      ><a name="1405" class="Symbol"
+      >)</a
+      ><a name="1406"
+      >
+
+</a
+      ><a name="1408" href="Definition.LogicalRelation.Substitution.Conversion.html#1408" class="Function"
+      >convEq&#8347;</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" class="Symbol"
+      >:</a
+      ><a name="1417"
+      > </a
+      ><a name="1418" class="Symbol"
+      >&#8704;</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" class="Symbol"
+      >{</a
+      ><a name="1421" href="Definition.LogicalRelation.Substitution.Conversion.html#1421" class="Bound"
+      >t</a
+      ><a name="1422"
+      > </a
+      ><a name="1423" href="Definition.LogicalRelation.Substitution.Conversion.html#1423" class="Bound"
+      >u</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Definition.LogicalRelation.Substitution.Conversion.html#1425" class="Bound"
+      >A</a
+      ><a name="1426"
+      > </a
+      ><a name="1427" href="Definition.LogicalRelation.Substitution.Conversion.html#1427" class="Bound"
+      >B</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1430"
+      > </a
+      ><a name="1431" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1432" class="Symbol"
+      >}</a
+      ><a name="1433"
+      >
+        </a
+      ><a name="1442" class="Symbol"
+      >(</a
+      ><a name="1443" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1446"
+      > </a
+      ><a name="1447" class="Symbol"
+      >:</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1453" class="Symbol"
+      >)</a
+      ><a name="1454"
+      >
+        </a
+      ><a name="1463" class="Symbol"
+      >(</a
+      ><a name="1464" href="Definition.LogicalRelation.Substitution.Conversion.html#1464" class="Bound"
+      >[A]</a
+      ><a name="1467"
+      >  </a
+      ><a name="1469" class="Symbol"
+      >:</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1472"
+      > </a
+      ><a name="1473" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Definition.LogicalRelation.Substitution.Conversion.html#1425" class="Bound"
+      >A</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1488" class="Symbol"
+      >)</a
+      ><a name="1489"
+      >
+        </a
+      ><a name="1498" class="Symbol"
+      >(</a
+      ><a name="1499" href="Definition.LogicalRelation.Substitution.Conversion.html#1499" class="Bound"
+      >[B]</a
+      ><a name="1502"
+      >  </a
+      ><a name="1504" class="Symbol"
+      >:</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Definition.LogicalRelation.Substitution.Conversion.html#1427" class="Bound"
+      >B</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1523" class="Symbol"
+      >)</a
+      ><a name="1524"
+      >
+      </a
+      ><a name="1531" class="Symbol"
+      >&#8594;</a
+      ><a name="1532"
+      > </a
+      ><a name="1533" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1534"
+      > </a
+      ><a name="1535" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="1542"
+      >  </a
+      ><a name="1544" href="Definition.LogicalRelation.Substitution.Conversion.html#1425" class="Bound"
+      >A</a
+      ><a name="1545"
+      > </a
+      ><a name="1546" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Definition.LogicalRelation.Substitution.Conversion.html#1427" class="Bound"
+      >B</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" href="Definition.LogicalRelation.Substitution.Conversion.html#1464" class="Bound"
+      >[A]</a
+      ><a name="1561"
+      >
+      </a
+      ><a name="1568" class="Symbol"
+      >&#8594;</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1575"
+      > </a
+      ><a name="1576" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1577"
+      > </a
+      ><a name="1578" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#10217;t'</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Definition.LogicalRelation.Substitution.Conversion.html#1421" class="Bound"
+      >t</a
+      ><a name="1583"
+      > </a
+      ><a name="1584" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8801;</a
+      ><a name="1585"
+      > </a
+      ><a name="1586" href="Definition.LogicalRelation.Substitution.Conversion.html#1423" class="Bound"
+      >u</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8759;</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" href="Definition.LogicalRelation.Substitution.Conversion.html#1425" class="Bound"
+      >A</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="1599"
+      > </a
+      ><a name="1600" href="Definition.LogicalRelation.Substitution.Conversion.html#1464" class="Bound"
+      >[A]</a
+      ><a name="1603"
+      >
+      </a
+      ><a name="1610" class="Symbol"
+      >&#8594;</a
+      ><a name="1611"
+      > </a
+      ><a name="1612" href="Definition.LogicalRelation.Substitution.Conversion.html#1429" class="Bound"
+      >&#915;</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" href="Definition.LogicalRelation.Substitution.Conversion.html#1431" class="Bound"
+      >l</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#10217;t'</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" href="Definition.LogicalRelation.Substitution.Conversion.html#1421" class="Bound"
+      >t</a
+      ><a name="1625"
+      > </a
+      ><a name="1626" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8801;</a
+      ><a name="1627"
+      > </a
+      ><a name="1628" href="Definition.LogicalRelation.Substitution.Conversion.html#1423" class="Bound"
+      >u</a
+      ><a name="1629"
+      > </a
+      ><a name="1630" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8759;</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" href="Definition.LogicalRelation.Substitution.Conversion.html#1427" class="Bound"
+      >B</a
+      ><a name="1633"
+      > </a
+      ><a name="1634" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="1635"
+      > </a
+      ><a name="1636" href="Definition.LogicalRelation.Substitution.Conversion.html#1443" class="Bound"
+      >[&#915;]</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" href="Definition.LogicalRelation.Substitution.Conversion.html#1499" class="Bound"
+      >[B]</a
+      ><a name="1645"
+      >
+</a
+      ><a name="1646" href="Definition.LogicalRelation.Substitution.Conversion.html#1408" class="Function"
+      >convEq&#8347;</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" href="Definition.LogicalRelation.Substitution.Conversion.html#1654" class="Bound"
+      >[&#915;]</a
+      ><a name="1657"
+      > </a
+      ><a name="1658" href="Definition.LogicalRelation.Substitution.Conversion.html#1658" class="Bound"
+      >[A]</a
+      ><a name="1661"
+      > </a
+      ><a name="1662" href="Definition.LogicalRelation.Substitution.Conversion.html#1662" class="Bound"
+      >[B]</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="Definition.LogicalRelation.Substitution.Conversion.html#1666" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Definition.LogicalRelation.Substitution.Conversion.html#1672" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="1677"
+      > </a
+      ><a name="1678" href="Definition.LogicalRelation.Substitution.Conversion.html#1678" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1680"
+      > </a
+      ><a name="1681" href="Definition.LogicalRelation.Substitution.Conversion.html#1681" class="Bound"
+      >[&#963;]</a
+      ><a name="1684"
+      > </a
+      ><a name="1685" class="Symbol"
+      >=</a
+      ><a name="1686"
+      >
+  </a
+      ><a name="1689" class="Keyword"
+      >let</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Definition.LogicalRelation.Substitution.Conversion.html#1693" class="Bound"
+      >[&#963;A]</a
+      ><a name="1697"
+      >     </a
+      ><a name="1702" class="Symbol"
+      >=</a
+      ><a name="1703"
+      > </a
+      ><a name="1704" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" class="Symbol"
+      >(</a
+      ><a name="1711" href="Definition.LogicalRelation.Substitution.Conversion.html#1658" class="Bound"
+      >[A]</a
+      ><a name="1714"
+      > </a
+      ><a name="1715" href="Definition.LogicalRelation.Substitution.Conversion.html#1678" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="Definition.LogicalRelation.Substitution.Conversion.html#1681" class="Bound"
+      >[&#963;]</a
+      ><a name="1721" class="Symbol"
+      >)</a
+      ><a name="1722"
+      >
+      </a
+      ><a name="1729" href="Definition.LogicalRelation.Substitution.Conversion.html#1729" class="Bound"
+      >[&#963;B]</a
+      ><a name="1733"
+      >     </a
+      ><a name="1738" class="Symbol"
+      >=</a
+      ><a name="1739"
+      > </a
+      ><a name="1740" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1745"
+      > </a
+      ><a name="1746" class="Symbol"
+      >(</a
+      ><a name="1747" href="Definition.LogicalRelation.Substitution.Conversion.html#1662" class="Bound"
+      >[B]</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Definition.LogicalRelation.Substitution.Conversion.html#1678" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1753"
+      > </a
+      ><a name="1754" href="Definition.LogicalRelation.Substitution.Conversion.html#1681" class="Bound"
+      >[&#963;]</a
+      ><a name="1757" class="Symbol"
+      >)</a
+      ><a name="1758"
+      >
+      </a
+      ><a name="1765" href="Definition.LogicalRelation.Substitution.Conversion.html#1765" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="1772"
+      >  </a
+      ><a name="1774" class="Symbol"
+      >=</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="Definition.LogicalRelation.Substitution.Conversion.html#1693" class="Bound"
+      >[&#963;A]</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" href="Definition.LogicalRelation.Substitution.Conversion.html#1693" class="Bound"
+      >[&#963;A]</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" class="Symbol"
+      >(</a
+      ><a name="1801" href="Definition.LogicalRelation.Substitution.Conversion.html#1666" class="Bound"
+      >[A&#8801;B]</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Definition.LogicalRelation.Substitution.Conversion.html#1678" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Definition.LogicalRelation.Substitution.Conversion.html#1681" class="Bound"
+      >[&#963;]</a
+      ><a name="1813" class="Symbol"
+      >)</a
+      ><a name="1814"
+      >
+  </a
+      ><a name="1817" class="Keyword"
+      >in</a
+      ><a name="1819"
+      >  </a
+      ><a name="1821" href="Definition.LogicalRelation.Properties.Conversion.html#8929" class="Function"
+      >convEqTerm&#8321;</a
+      ><a name="1832"
+      > </a
+      ><a name="1833" href="Definition.LogicalRelation.Substitution.Conversion.html#1693" class="Bound"
+      >[&#963;A]</a
+      ><a name="1837"
+      > </a
+      ><a name="1838" href="Definition.LogicalRelation.Substitution.Conversion.html#1729" class="Bound"
+      >[&#963;B]</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Definition.LogicalRelation.Substitution.Conversion.html#1765" class="Bound"
+      >[&#963;A&#8801;&#963;B]</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" class="Symbol"
+      >(</a
+      ><a name="1852" href="Definition.LogicalRelation.Substitution.Conversion.html#1672" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="1857"
+      > </a
+      ><a name="1858" href="Definition.LogicalRelation.Substitution.Conversion.html#1678" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" href="Definition.LogicalRelation.Substitution.Conversion.html#1681" class="Bound"
+      >[&#963;]</a
+      ><a name="1864" class="Symbol"
+      >)</a
+      ><a name="1865"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

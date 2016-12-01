@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Consequences.SingleSubst</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.SingleSubst</a
+      ><a name="59"
+      > </a
+      ><a name="60" class="Keyword"
+      >where</a
+      ><a name="65"
+      >
+
+</a
+      ><a name="67" class="Keyword"
+      >open</a
+      ><a name="71"
+      > </a
+      ><a name="72" class="Keyword"
+      >import</a
+      ><a name="78"
+      > </a
+      ><a name="79" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="97"
+      >
+
+</a
+      ><a name="99" class="Keyword"
+      >open</a
+      ><a name="103"
+      > </a
+      ><a name="104" class="Keyword"
+      >import</a
+      ><a name="110"
+      > </a
+      ><a name="111" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="127"
+      >
+
+</a
+      ><a name="129" class="Keyword"
+      >open</a
+      ><a name="133"
+      > </a
+      ><a name="134" class="Keyword"
+      >import</a
+      ><a name="140"
+      > </a
+      ><a name="141" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="167"
+      >
+</a
+      ><a name="168" class="Keyword"
+      >open</a
+      ><a name="172"
+      > </a
+      ><a name="173" class="Keyword"
+      >import</a
+      ><a name="179"
+      > </a
+      ><a name="180" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="219"
+      >
+</a
+      ><a name="220" class="Keyword"
+      >open</a
+      ><a name="224"
+      > </a
+      ><a name="225" class="Keyword"
+      >import</a
+      ><a name="231"
+      > </a
+      ><a name="232" href="Definition.LogicalRelation.Substitution.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Wellformed</a
+      ><a name="282"
+      >
+</a
+      ><a name="283" class="Keyword"
+      >import</a
+      ><a name="289"
+      > </a
+      ><a name="290" href="Definition.LogicalRelation.Substitution.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Irrelevance</a
+      ><a name="341"
+      > </a
+      ><a name="342" class="Symbol"
+      >as</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Module"
+      >S</a
+      ><a name="346"
+      >
+</a
+      ><a name="347" class="Keyword"
+      >open</a
+      ><a name="351"
+      > </a
+      ><a name="352" class="Keyword"
+      >import</a
+      ><a name="358"
+      > </a
+      ><a name="359" href="Definition.LogicalRelation.Substitution.Introductions.SingleSubst.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Introductions.SingleSubst</a
+      ><a name="424"
+      >
+</a
+      ><a name="425" class="Keyword"
+      >open</a
+      ><a name="429"
+      > </a
+      ><a name="430" class="Keyword"
+      >import</a
+      ><a name="436"
+      > </a
+      ><a name="437" href="Definition.LogicalRelation.Fundamental.html#1" class="Module"
+      >Definition.LogicalRelation.Fundamental</a
+      ><a name="475"
+      >
+</a
+      ><a name="476" class="Keyword"
+      >open</a
+      ><a name="480"
+      > </a
+      ><a name="481" class="Keyword"
+      >import</a
+      ><a name="487"
+      > </a
+      ><a name="488" href="Definition.LogicalRelation.Consequences.Syntactic.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Syntactic</a
+      ><a name="537"
+      >
+
+</a
+      ><a name="539" class="Keyword"
+      >open</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Keyword"
+      >import</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="564"
+      >
+
+
+</a
+      ><a name="567" href="Definition.LogicalRelation.Consequences.SingleSubst.html#567" class="Function"
+      >substType</a
+      ><a name="576"
+      > </a
+      ><a name="577" class="Symbol"
+      >:</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="Symbol"
+      >&#8704;</a
+      ><a name="580"
+      > </a
+      ><a name="581" class="Symbol"
+      >{</a
+      ><a name="582" href="Definition.LogicalRelation.Consequences.SingleSubst.html#582" class="Bound"
+      >t</a
+      ><a name="583"
+      > </a
+      ><a name="584" href="Definition.LogicalRelation.Consequences.SingleSubst.html#584" class="Bound"
+      >F</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Definition.LogicalRelation.Consequences.SingleSubst.html#586" class="Bound"
+      >G</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Definition.LogicalRelation.Consequences.SingleSubst.html#588" class="Bound"
+      >&#915;</a
+      ><a name="589" class="Symbol"
+      >}</a
+      ><a name="590"
+      > </a
+      ><a name="591" class="Symbol"
+      >&#8594;</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Definition.LogicalRelation.Consequences.SingleSubst.html#588" class="Bound"
+      >&#915;</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="596"
+      > </a
+      ><a name="597" href="Definition.LogicalRelation.Consequences.SingleSubst.html#584" class="Bound"
+      >F</a
+      ><a name="598"
+      > </a
+      ><a name="599" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="Definition.LogicalRelation.Consequences.SingleSubst.html#586" class="Bound"
+      >G</a
+      ><a name="602"
+      > </a
+      ><a name="603" class="Symbol"
+      >&#8594;</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.LogicalRelation.Consequences.SingleSubst.html#588" class="Bound"
+      >&#915;</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Definition.LogicalRelation.Consequences.SingleSubst.html#582" class="Bound"
+      >t</a
+      ><a name="610"
+      > </a
+      ><a name="611" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Definition.LogicalRelation.Consequences.SingleSubst.html#584" class="Bound"
+      >F</a
+      ><a name="614"
+      > </a
+      ><a name="615" class="Symbol"
+      >&#8594;</a
+      ><a name="616"
+      > </a
+      ><a name="617" href="Definition.LogicalRelation.Consequences.SingleSubst.html#588" class="Bound"
+      >&#915;</a
+      ><a name="618"
+      > </a
+      ><a name="619" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="620"
+      > </a
+      ><a name="621" href="Definition.LogicalRelation.Consequences.SingleSubst.html#586" class="Bound"
+      >G</a
+      ><a name="622"
+      > </a
+      ><a name="623" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="Definition.LogicalRelation.Consequences.SingleSubst.html#582" class="Bound"
+      >t</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="628"
+      >
+</a
+      ><a name="629" href="Definition.LogicalRelation.Consequences.SingleSubst.html#567" class="Function"
+      >substType</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="Definition.LogicalRelation.Consequences.SingleSubst.html#639" class="Bound"
+      >&#8866;G</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Definition.LogicalRelation.Consequences.SingleSubst.html#642" class="Bound"
+      >&#8866;t</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Keyword"
+      >with</a
+      ><a name="649"
+      > </a
+      ><a name="650" href="Definition.LogicalRelation.Fundamental.html#1165" class="Function"
+      >fundamental</a
+      ><a name="661"
+      > </a
+      ><a name="662" href="Definition.LogicalRelation.Consequences.SingleSubst.html#639" class="Bound"
+      >&#8866;G</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >|</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="Definition.LogicalRelation.Fundamental.html#5983" class="Function"
+      >fundamentalTerm</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Definition.LogicalRelation.Consequences.SingleSubst.html#642" class="Bound"
+      >&#8866;t</a
+      ><a name="685"
+      >
+</a
+      ><a name="686" href="Definition.LogicalRelation.Consequences.SingleSubst.html#567" class="Function"
+      >substType</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Symbol"
+      >{</a
+      ><a name="697" href="Definition.LogicalRelation.Consequences.SingleSubst.html#697" class="Bound"
+      >t</a
+      ><a name="698" class="Symbol"
+      >}</a
+      ><a name="699"
+      > </a
+      ><a name="700" class="Symbol"
+      >{</a
+      ><a name="701" href="Definition.LogicalRelation.Consequences.SingleSubst.html#701" class="Bound"
+      >F</a
+      ><a name="702" class="Symbol"
+      >}</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >{</a
+      ><a name="705" href="Definition.LogicalRelation.Consequences.SingleSubst.html#705" class="Bound"
+      >G</a
+      ><a name="706" class="Symbol"
+      >}</a
+      ><a name="707"
+      > </a
+      ><a name="708" href="Definition.LogicalRelation.Consequences.SingleSubst.html#708" class="Bound"
+      >&#8866;G</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Definition.LogicalRelation.Consequences.SingleSubst.html#711" class="Bound"
+      >&#8866;t</a
+      ><a name="713"
+      > </a
+      ><a name="714" class="Symbol"
+      >|</a
+      ><a name="715"
+      > </a
+      ><a name="716" href="Definition.LogicalRelation.Consequences.SingleSubst.html#716" class="Bound"
+      >[&#915;]</a
+      ><a name="719"
+      > </a
+      ><a name="720" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="721"
+      > </a
+      ><a name="722" href="Definition.LogicalRelation.Consequences.SingleSubst.html#722" class="Bound"
+      >[G]</a
+      ><a name="725"
+      > </a
+      ><a name="726" class="Symbol"
+      >|</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Definition.LogicalRelation.Consequences.SingleSubst.html#728" class="Bound"
+      >[&#915;]'</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Definition.LogicalRelation.Consequences.SingleSubst.html#735" class="Bound"
+      >[F]</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="740"
+      > </a
+      ><a name="741" href="Definition.LogicalRelation.Consequences.SingleSubst.html#741" class="Bound"
+      >[t]</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >=</a
+      ><a name="746"
+      >
+  </a
+      ><a name="749" class="Keyword"
+      >let</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Definition.LogicalRelation.Consequences.SingleSubst.html#753" class="Bound"
+      >[G]'</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >=</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Definition.LogicalRelation.Substitution.Irrelevance.html#1908" class="Function"
+      >S.irrelevance</a
+      ><a name="773"
+      > </a
+      ><a name="774" class="Symbol"
+      >{</a
+      ><a name="775" class="Argument"
+      >A</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >=</a
+      ><a name="778"
+      > </a
+      ><a name="779" href="Definition.LogicalRelation.Consequences.SingleSubst.html#705" class="Bound"
+      >G</a
+      ><a name="780" class="Symbol"
+      >}</a
+      ><a name="781"
+      > </a
+      ><a name="782" href="Definition.LogicalRelation.Consequences.SingleSubst.html#716" class="Bound"
+      >[&#915;]</a
+      ><a name="785"
+      > </a
+      ><a name="786" class="Symbol"
+      >(</a
+      ><a name="787" href="Definition.LogicalRelation.Consequences.SingleSubst.html#728" class="Bound"
+      >[&#915;]'</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Definition.LogicalRelation.Substitution.html#328" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.LogicalRelation.Consequences.SingleSubst.html#735" class="Bound"
+      >[F]</a
+      ><a name="797" class="Symbol"
+      >)</a
+      ><a name="798"
+      > </a
+      ><a name="799" href="Definition.LogicalRelation.Consequences.SingleSubst.html#722" class="Bound"
+      >[G]</a
+      ><a name="802"
+      >
+      </a
+      ><a name="809" href="Definition.LogicalRelation.Consequences.SingleSubst.html#809" class="Bound"
+      >[G[t]]</a
+      ><a name="815"
+      > </a
+      ><a name="816" class="Symbol"
+      >=</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Definition.LogicalRelation.Substitution.Introductions.SingleSubst.html#996" class="Function"
+      >substS</a
+      ><a name="824"
+      > </a
+      ><a name="825" class="Symbol"
+      >{</a
+      ><a name="826" href="Definition.LogicalRelation.Consequences.SingleSubst.html#701" class="Bound"
+      >F</a
+      ><a name="827" class="Symbol"
+      >}</a
+      ><a name="828"
+      > </a
+      ><a name="829" class="Symbol"
+      >{</a
+      ><a name="830" href="Definition.LogicalRelation.Consequences.SingleSubst.html#705" class="Bound"
+      >G</a
+      ><a name="831" class="Symbol"
+      >}</a
+      ><a name="832"
+      > </a
+      ><a name="833" class="Symbol"
+      >{</a
+      ><a name="834" href="Definition.LogicalRelation.Consequences.SingleSubst.html#697" class="Bound"
+      >t</a
+      ><a name="835" class="Symbol"
+      >}</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Definition.LogicalRelation.Consequences.SingleSubst.html#728" class="Bound"
+      >[&#915;]'</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="Definition.LogicalRelation.Consequences.SingleSubst.html#735" class="Bound"
+      >[F]</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Definition.LogicalRelation.Consequences.SingleSubst.html#753" class="Bound"
+      >[G]'</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Definition.LogicalRelation.Consequences.SingleSubst.html#741" class="Bound"
+      >[t]</a
+      ><a name="854"
+      >
+  </a
+      ><a name="857" class="Keyword"
+      >in</a
+      ><a name="859"
+      >  </a
+      ><a name="861" href="Definition.LogicalRelation.Substitution.Wellformed.html#454" class="Function"
+      >wellformed&#8347;</a
+      ><a name="872"
+      > </a
+      ><a name="873" href="Definition.LogicalRelation.Consequences.SingleSubst.html#728" class="Bound"
+      >[&#915;]'</a
+      ><a name="877"
+      > </a
+      ><a name="878" href="Definition.LogicalRelation.Consequences.SingleSubst.html#809" class="Bound"
+      >[G[t]]</a
+      ><a name="884"
+      >
+
+</a
+      ><a name="886" href="Definition.LogicalRelation.Consequences.SingleSubst.html#886" class="Function"
+      >substType&#928;</a
+      ><a name="896"
+      > </a
+      ><a name="897" class="Symbol"
+      >:</a
+      ><a name="898"
+      > </a
+      ><a name="899" class="Symbol"
+      >&#8704;</a
+      ><a name="900"
+      > </a
+      ><a name="901" class="Symbol"
+      >{</a
+      ><a name="902" href="Definition.LogicalRelation.Consequences.SingleSubst.html#902" class="Bound"
+      >t</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Definition.LogicalRelation.Consequences.SingleSubst.html#904" class="Bound"
+      >F</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="Definition.LogicalRelation.Consequences.SingleSubst.html#906" class="Bound"
+      >G</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Definition.LogicalRelation.Consequences.SingleSubst.html#908" class="Bound"
+      >&#915;</a
+      ><a name="909" class="Symbol"
+      >}</a
+      ><a name="910"
+      > </a
+      ><a name="911" class="Symbol"
+      >&#8594;</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Definition.LogicalRelation.Consequences.SingleSubst.html#908" class="Bound"
+      >&#915;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="918"
+      > </a
+      ><a name="919" href="Definition.LogicalRelation.Consequences.SingleSubst.html#904" class="Bound"
+      >F</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Definition.LogicalRelation.Consequences.SingleSubst.html#906" class="Bound"
+      >G</a
+      ><a name="924"
+      > </a
+      ><a name="925" class="Symbol"
+      >&#8594;</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Definition.LogicalRelation.Consequences.SingleSubst.html#908" class="Bound"
+      >&#915;</a
+      ><a name="928"
+      > </a
+      ><a name="929" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="930"
+      > </a
+      ><a name="931" href="Definition.LogicalRelation.Consequences.SingleSubst.html#902" class="Bound"
+      >t</a
+      ><a name="932"
+      > </a
+      ><a name="933" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="Definition.LogicalRelation.Consequences.SingleSubst.html#904" class="Bound"
+      >F</a
+      ><a name="936"
+      > </a
+      ><a name="937" class="Symbol"
+      >&#8594;</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Definition.LogicalRelation.Consequences.SingleSubst.html#908" class="Bound"
+      >&#915;</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="942"
+      > </a
+      ><a name="943" href="Definition.LogicalRelation.Consequences.SingleSubst.html#906" class="Bound"
+      >G</a
+      ><a name="944"
+      > </a
+      ><a name="945" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="Definition.LogicalRelation.Consequences.SingleSubst.html#902" class="Bound"
+      >t</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="950"
+      >
+</a
+      ><a name="951" href="Definition.LogicalRelation.Consequences.SingleSubst.html#886" class="Function"
+      >substType&#928;</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Definition.LogicalRelation.Consequences.SingleSubst.html#962" class="Bound"
+      >&#928;FG</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="Definition.LogicalRelation.Consequences.SingleSubst.html#966" class="Bound"
+      >t</a
+      ><a name="967"
+      > </a
+      ><a name="968" class="Keyword"
+      >with</a
+      ><a name="972"
+      > </a
+      ><a name="973" href="Definition.LogicalRelation.Consequences.Syntactic.html#977" class="Function"
+      >syntactic&#928;</a
+      ><a name="983"
+      > </a
+      ><a name="984" href="Definition.LogicalRelation.Consequences.SingleSubst.html#962" class="Bound"
+      >&#928;FG</a
+      ><a name="987"
+      >
+</a
+      ><a name="988" href="Definition.LogicalRelation.Consequences.SingleSubst.html#886" class="Function"
+      >substType&#928;</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Definition.LogicalRelation.Consequences.SingleSubst.html#999" class="Bound"
+      >&#928;FG</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1003" class="Bound"
+      >t</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" class="Symbol"
+      >|</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1007" class="Bound"
+      >F</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1011" class="Bound"
+      >G</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" class="Symbol"
+      >=</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" href="Definition.LogicalRelation.Consequences.SingleSubst.html#567" class="Function"
+      >substType</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1011" class="Bound"
+      >G</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" href="Definition.LogicalRelation.Consequences.SingleSubst.html#1003" class="Bound"
+      >t</a
+      ><a name="1028"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,2474 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Consequences.Injectivity</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Consequences.Injectivity.html#1" class="Module"
+      >Definition.LogicalRelation.Consequences.Injectivity</a
+      ><a name="59"
+      > </a
+      ><a name="60" class="Keyword"
+      >where</a
+      ><a name="65"
+      >
+
+</a
+      ><a name="67" class="Keyword"
+      >open</a
+      ><a name="71"
+      > </a
+      ><a name="72" class="Keyword"
+      >import</a
+      ><a name="78"
+      > </a
+      ><a name="79" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="97"
+      > </a
+      ><a name="98" class="Keyword"
+      >hiding</a
+      ><a name="104"
+      > </a
+      ><a name="105" class="Symbol"
+      >(</a
+      ><a name="106" href="Definition.Untyped.html#3297" class="Function"
+      >wk</a
+      ><a name="108" class="Symbol"
+      >)</a
+      ><a name="109"
+      >
+</a
+      ><a name="110" class="Keyword"
+      >import</a
+      ><a name="116"
+      > </a
+      ><a name="117" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="135"
+      > </a
+      ><a name="136" class="Symbol"
+      >as</a
+      ><a name="138"
+      > </a
+      ><a name="139" class="Module"
+      >U</a
+      ><a name="140"
+      >
+</a
+      ><a name="141" class="Keyword"
+      >open</a
+      ><a name="145"
+      > </a
+      ><a name="146" class="Keyword"
+      >import</a
+      ><a name="152"
+      > </a
+      ><a name="153" href="Definition.Untyped.Properties.html#1" class="Module"
+      >Definition.Untyped.Properties</a
+      ><a name="182"
+      >
+
+</a
+      ><a name="184" class="Keyword"
+      >open</a
+      ><a name="188"
+      > </a
+      ><a name="189" class="Keyword"
+      >import</a
+      ><a name="195"
+      > </a
+      ><a name="196" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="212"
+      >
+</a
+      ><a name="213" class="Keyword"
+      >open</a
+      ><a name="217"
+      > </a
+      ><a name="218" class="Keyword"
+      >import</a
+      ><a name="224"
+      > </a
+      ><a name="225" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="251"
+      >
+</a
+      ><a name="252" class="Keyword"
+      >open</a
+      ><a name="256"
+      > </a
+      ><a name="257" class="Keyword"
+      >import</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="291"
+      >
+</a
+      ><a name="292" class="Keyword"
+      >open</a
+      ><a name="296"
+      > </a
+      ><a name="297" class="Keyword"
+      >import</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Definition.Typed.RedSteps.html#1" class="Module"
+      >Definition.Typed.RedSteps</a
+      ><a name="329"
+      >
+
+</a
+      ><a name="331" class="Keyword"
+      >open</a
+      ><a name="335"
+      > </a
+      ><a name="336" class="Keyword"
+      >import</a
+      ><a name="342"
+      > </a
+      ><a name="343" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="369"
+      >
+</a
+      ><a name="370" class="Keyword"
+      >import</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.LogicalRelation.Weakening.html#1" class="Module"
+      >Definition.LogicalRelation.Weakening</a
+      ><a name="413"
+      > </a
+      ><a name="414" class="Symbol"
+      >as</a
+      ><a name="416"
+      > </a
+      ><a name="417" class="Module"
+      >LR</a
+      ><a name="419"
+      >
+</a
+      ><a name="420" class="Keyword"
+      >open</a
+      ><a name="424"
+      > </a
+      ><a name="425" class="Keyword"
+      >import</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="470"
+      >
+</a
+      ><a name="471" class="Keyword"
+      >open</a
+      ><a name="475"
+      > </a
+      ><a name="476" class="Keyword"
+      >import</a
+      ><a name="482"
+      > </a
+      ><a name="483" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="516"
+      >
+</a
+      ><a name="517" class="Keyword"
+      >open</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Keyword"
+      >import</a
+      ><a name="528"
+      > </a
+      ><a name="529" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="566"
+      >
+</a
+      ><a name="567" class="Keyword"
+      >open</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Keyword"
+      >import</a
+      ><a name="578"
+      > </a
+      ><a name="579" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="618"
+      >
+</a
+      ><a name="619" class="Keyword"
+      >open</a
+      ><a name="623"
+      > </a
+      ><a name="624" class="Keyword"
+      >import</a
+      ><a name="630"
+      > </a
+      ><a name="631" href="Definition.LogicalRelation.Substitution.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Properties</a
+      ><a name="681"
+      >
+</a
+      ><a name="682" class="Keyword"
+      >open</a
+      ><a name="686"
+      > </a
+      ><a name="687" class="Keyword"
+      >import</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Definition.LogicalRelation.Substitution.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Wellformed</a
+      ><a name="744"
+      >
+</a
+      ><a name="745" class="Keyword"
+      >import</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Definition.LogicalRelation.Substitution.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Irrelevance</a
+      ><a name="803"
+      > </a
+      ><a name="804" class="Symbol"
+      >as</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Module"
+      >S</a
+      ><a name="808"
+      >
+</a
+      ><a name="809" class="Keyword"
+      >open</a
+      ><a name="813"
+      > </a
+      ><a name="814" class="Keyword"
+      >import</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Definition.LogicalRelation.Substitution.Introductions.SingleSubst.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Introductions.SingleSubst</a
+      ><a name="886"
+      >
+</a
+      ><a name="887" class="Keyword"
+      >open</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Keyword"
+      >import</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="Definition.LogicalRelation.Fundamental.html#1" class="Module"
+      >Definition.LogicalRelation.Fundamental</a
+      ><a name="937"
+      >
+
+</a
+      ><a name="939" class="Keyword"
+      >open</a
+      ><a name="943"
+      > </a
+      ><a name="944" class="Keyword"
+      >import</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="962"
+      >
+</a
+      ><a name="963" class="Keyword"
+      >open</a
+      ><a name="967"
+      > </a
+      ><a name="968" class="Keyword"
+      >import</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Tools.Unit.html#1" class="Module"
+      >Tools.Unit</a
+      ><a name="985"
+      >
+</a
+      ><a name="986" class="Keyword"
+      >open</a
+      ><a name="990"
+      > </a
+      ><a name="991" class="Keyword"
+      >import</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Tools.Nat.html#1" class="Module"
+      >Tools.Nat</a
+      ><a name="1007"
+      >
+</a
+      ><a name="1008" class="Keyword"
+      >open</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" class="Keyword"
+      >import</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="1033"
+      >
+
+</a
+      ><a name="1035" class="Keyword"
+      >import</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" class="Symbol"
+      >as</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" class="Module"
+      >PE</a
+      ><a name="1075"
+      >
+
+
+</a
+      ><a name="1078" href="Definition.LogicalRelation.Consequences.Injectivity.html#1078" class="Function"
+      >substVar0Id'</a
+      ><a name="1090"
+      > </a
+      ><a name="1091" class="Symbol"
+      >:</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" class="Symbol"
+      >&#8704;</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" href="Definition.LogicalRelation.Consequences.Injectivity.html#1095" class="Bound"
+      >x</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" class="Symbol"
+      >&#8594;</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" class="Symbol"
+      >(</a
+      ><a name="1100" href="Definition.Untyped.html#5661" class="Function"
+      >purge</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" class="Symbol"
+      >(</a
+      ><a name="1107" href="Definition.Untyped.html#2843" class="InductiveConstructor"
+      >lift</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" class="Symbol"
+      >(</a
+      ><a name="1113" href="Definition.Untyped.html#2824" class="InductiveConstructor"
+      >step</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Definition.Untyped.html#2811" class="InductiveConstructor"
+      >id</a
+      ><a name="1120" class="Symbol"
+      >))</a
+      ><a name="1122"
+      > </a
+      ><a name="1123" class="Symbol"
+      >(</a
+      ><a name="1124" href="Definition.Untyped.html#6260" class="Function"
+      >consSubst</a
+      ><a name="1133"
+      > </a
+      ><a name="1134" href="Definition.Untyped.html#5299" class="Function"
+      >idSubst</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Symbol"
+      >(</a
+      ><a name="1143" href="Definition.Untyped.html#452" class="InductiveConstructor"
+      >var</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1151" class="Symbol"
+      >)))</a
+      ><a name="1154"
+      >
+       </a
+      ><a name="1162" href="Definition.LogicalRelation.Consequences.Injectivity.html#1095" class="Bound"
+      >x</a
+      ><a name="1163"
+      >
+       </a
+      ><a name="1171" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >PE.&#8801;</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" href="Definition.Untyped.html#5299" class="Function"
+      >idSubst</a
+      ><a name="1183"
+      > </a
+      ><a name="1184" href="Definition.LogicalRelation.Consequences.Injectivity.html#1095" class="Bound"
+      >x</a
+      ><a name="1185"
+      >
+</a
+      ><a name="1186" href="Definition.LogicalRelation.Consequences.Injectivity.html#1078" class="Function"
+      >substVar0Id'</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" class="Symbol"
+      >=</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="1213"
+      >
+</a
+      ><a name="1214" href="Definition.LogicalRelation.Consequences.Injectivity.html#1078" class="Function"
+      >substVar0Id'</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" class="Symbol"
+      >(</a
+      ><a name="1228" href="Agda.Builtin.Nat.html#100" class="InductiveConstructor"
+      >suc</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Definition.LogicalRelation.Consequences.Injectivity.html#1232" class="Bound"
+      >x</a
+      ><a name="1233" class="Symbol"
+      >)</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" class="Symbol"
+      >=</a
+      ><a name="1236"
+      > </a
+      ><a name="1237" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="1244"
+      >
+
+</a
+      ><a name="1246" href="Definition.LogicalRelation.Consequences.Injectivity.html#1246" class="Function"
+      >substVar0Id</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" class="Symbol"
+      >:</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >&#8704;</a
+      ><a name="1261"
+      > </a
+      ><a name="1262" href="Definition.LogicalRelation.Consequences.Injectivity.html#1262" class="Bound"
+      >F</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >&#8594;</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" class="Symbol"
+      >(</a
+      ><a name="1267" href="Definition.Untyped.html#3297" class="Function"
+      >U.wk</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >(</a
+      ><a name="1273" href="Definition.Untyped.html#2843" class="InductiveConstructor"
+      >lift</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" class="Symbol"
+      >(</a
+      ><a name="1279" href="Definition.Untyped.html#2824" class="InductiveConstructor"
+      >step</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Definition.Untyped.html#2811" class="InductiveConstructor"
+      >id</a
+      ><a name="1286" class="Symbol"
+      >))</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" href="Definition.LogicalRelation.Consequences.Injectivity.html#1262" class="Bound"
+      >F</a
+      ><a name="1290" class="Symbol"
+      >)</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="1293"
+      > </a
+      ><a name="1294" href="Definition.Untyped.html#452" class="InductiveConstructor"
+      >var</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >PE.&#8801;</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" href="Definition.LogicalRelation.Consequences.Injectivity.html#1262" class="Bound"
+      >F</a
+      ><a name="1311"
+      >
+</a
+      ><a name="1312" href="Definition.LogicalRelation.Consequences.Injectivity.html#1246" class="Function"
+      >substVar0Id</a
+      ><a name="1323"
+      > </a
+      ><a name="1324" href="Definition.LogicalRelation.Consequences.Injectivity.html#1324" class="Bound"
+      >F</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" class="Symbol"
+      >=</a
+      ><a name="1327"
+      > </a
+      ><a name="1328" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="1336"
+      > </a
+      ><a name="1337" class="Symbol"
+      >(</a
+      ><a name="1338" href="Definition.Untyped.Properties.html#6273" class="Function"
+      >subst-wk</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Definition.LogicalRelation.Consequences.Injectivity.html#1324" class="Bound"
+      >F</a
+      ><a name="1348" class="Symbol"
+      >)</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" class="Symbol"
+      >(</a
+      ><a name="1351" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" class="Symbol"
+      >(</a
+      ><a name="1361" href="Definition.Untyped.Properties.html#4039" class="Function"
+      >substEq</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" href="Definition.LogicalRelation.Consequences.Injectivity.html#1078" class="Function"
+      >substVar0Id'</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Definition.LogicalRelation.Consequences.Injectivity.html#1324" class="Bound"
+      >F</a
+      ><a name="1383" class="Symbol"
+      >)</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" class="Symbol"
+      >(</a
+      ><a name="1386" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Definition.LogicalRelation.Consequences.Injectivity.html#1324" class="Bound"
+      >F</a
+      ><a name="1397" class="Symbol"
+      >))</a
+      ><a name="1399"
+      >
+
+</a
+      ><a name="1401" href="Definition.LogicalRelation.Consequences.Injectivity.html#1401" class="Function"
+      >injectivity''</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" class="Symbol"
+      >:</a
+      ><a name="1416"
+      > </a
+      ><a name="1417" class="Symbol"
+      >&#8704;</a
+      ><a name="1418"
+      > </a
+      ><a name="1419" class="Symbol"
+      >{</a
+      ><a name="1420" href="Definition.LogicalRelation.Consequences.Injectivity.html#1420" class="Bound"
+      >F</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Definition.LogicalRelation.Consequences.Injectivity.html#1422" class="Bound"
+      >G</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" href="Definition.LogicalRelation.Consequences.Injectivity.html#1424" class="Bound"
+      >H</a
+      ><a name="1425"
+      > </a
+      ><a name="1426" href="Definition.LogicalRelation.Consequences.Injectivity.html#1426" class="Bound"
+      >E</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" href="Definition.LogicalRelation.Consequences.Injectivity.html#1428" class="Bound"
+      >&#915;</a
+      ><a name="1429"
+      > </a
+      ><a name="1430" href="Definition.LogicalRelation.Consequences.Injectivity.html#1430" class="Bound"
+      >l</a
+      ><a name="1431" class="Symbol"
+      >}</a
+      ><a name="1432"
+      >
+               </a
+      ><a name="1448" class="Symbol"
+      >(</a
+      ><a name="1449" href="Definition.LogicalRelation.Consequences.Injectivity.html#1449" class="Bound"
+      >[&#928;FG]</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" class="Symbol"
+      >:</a
+      ><a name="1456"
+      > </a
+      ><a name="1457" href="Definition.LogicalRelation.Consequences.Injectivity.html#1428" class="Bound"
+      >&#915;</a
+      ><a name="1458"
+      > </a
+      ><a name="1459" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" href="Definition.LogicalRelation.Consequences.Injectivity.html#1430" class="Bound"
+      >l</a
+      ><a name="1463"
+      > </a
+      ><a name="1464" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#10217;&#928;</a
+      ><a name="1466"
+      > </a
+      ><a name="1467" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="1468"
+      > </a
+      ><a name="1469" href="Definition.LogicalRelation.Consequences.Injectivity.html#1420" class="Bound"
+      >F</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="1472"
+      > </a
+      ><a name="1473" href="Definition.LogicalRelation.Consequences.Injectivity.html#1422" class="Bound"
+      >G</a
+      ><a name="1474" class="Symbol"
+      >)</a
+      ><a name="1475"
+      >
+             </a
+      ><a name="1489" class="Symbol"
+      >&#8594;</a
+      ><a name="1490"
+      > </a
+      ><a name="1491" href="Definition.LogicalRelation.Consequences.Injectivity.html#1428" class="Bound"
+      >&#915;</a
+      ><a name="1492"
+      > </a
+      ><a name="1493" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Definition.LogicalRelation.Consequences.Injectivity.html#1430" class="Bound"
+      >l</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Definition.LogicalRelation.Consequences.Injectivity.html#1420" class="Bound"
+      >F</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Definition.LogicalRelation.Consequences.Injectivity.html#1422" class="Bound"
+      >G</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Definition.LogicalRelation.Consequences.Injectivity.html#1424" class="Bound"
+      >H</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Definition.LogicalRelation.Consequences.Injectivity.html#1426" class="Bound"
+      >E</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" href="Definition.LogicalRelation.Consequences.Injectivity.html#1449" class="Bound"
+      >[&#928;FG]</a
+      ><a name="1532"
+      >
+             </a
+      ><a name="1546" class="Symbol"
+      >&#8594;</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Definition.LogicalRelation.Consequences.Injectivity.html#1428" class="Bound"
+      >&#915;</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Definition.LogicalRelation.Consequences.Injectivity.html#1420" class="Bound"
+      >F</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="Definition.LogicalRelation.Consequences.Injectivity.html#1424" class="Bound"
+      >H</a
+      ><a name="1557"
+      >
+             </a
+      ><a name="1571" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" href="Definition.LogicalRelation.Consequences.Injectivity.html#1428" class="Bound"
+      >&#915;</a
+      ><a name="1574"
+      > </a
+      ><a name="1575" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" href="Definition.LogicalRelation.Consequences.Injectivity.html#1420" class="Bound"
+      >F</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" href="Definition.LogicalRelation.Consequences.Injectivity.html#1422" class="Bound"
+      >G</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Definition.LogicalRelation.Consequences.Injectivity.html#1426" class="Bound"
+      >E</a
+      ><a name="1586"
+      >
+</a
+      ><a name="1587" href="Definition.LogicalRelation.Consequences.Injectivity.html#1401" class="Function"
+      >injectivity''</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" class="Symbol"
+      >(</a
+      ><a name="1602" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" class="Symbol"
+      >(</a
+      ><a name="1609" href="Definition.LogicalRelation.html#5186" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" href="Definition.LogicalRelation.Consequences.Injectivity.html#1611" class="Bound"
+      >F</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" href="Definition.LogicalRelation.Consequences.Injectivity.html#1613" class="Bound"
+      >G</a
+      ><a name="1614"
+      > </a
+      ><a name="1615" href="Definition.LogicalRelation.Consequences.Injectivity.html#1615" class="Bound"
+      >D</a
+      ><a name="1616"
+      > </a
+      ><a name="1617" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" href="Definition.LogicalRelation.Consequences.Injectivity.html#1620" class="Bound"
+      >&#8866;G</a
+      ><a name="1622"
+      > </a
+      ><a name="1623" href="Definition.LogicalRelation.Consequences.Injectivity.html#1623" class="Bound"
+      >[F]</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" href="Definition.LogicalRelation.Consequences.Injectivity.html#1627" class="Bound"
+      >[G]</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Definition.LogicalRelation.Consequences.Injectivity.html#1631" class="Bound"
+      >G-ext</a
+      ><a name="1636" class="Symbol"
+      >))</a
+      ><a name="1638"
+      >
+         </a
+      ><a name="1648" class="Symbol"
+      >(</a
+      ><a name="1649" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="1651"
+      > </a
+      ><a name="1652" href="Definition.LogicalRelation.Consequences.Injectivity.html#1652" class="Bound"
+      >F'</a
+      ><a name="1654"
+      > </a
+      ><a name="1655" href="Definition.LogicalRelation.Consequences.Injectivity.html#1655" class="Bound"
+      >G'</a
+      ><a name="1657"
+      > </a
+      ><a name="1658" href="Definition.LogicalRelation.Consequences.Injectivity.html#1658" class="Bound"
+      >D'</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" href="Definition.LogicalRelation.Consequences.Injectivity.html#1661" class="Bound"
+      >A&#8801;B</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Definition.LogicalRelation.Consequences.Injectivity.html#1665" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Definition.LogicalRelation.Consequences.Injectivity.html#1672" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="1678" class="Symbol"
+      >)</a
+      ><a name="1679"
+      > </a
+      ><a name="1680" class="Symbol"
+      >=</a
+      ><a name="1681"
+      >
+  </a
+      ><a name="1684" class="Keyword"
+      >let</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" href="Definition.LogicalRelation.Consequences.Injectivity.html#1688" class="Bound"
+      >F&#8801;F&#8321;</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" href="Definition.LogicalRelation.Consequences.Injectivity.html#1695" class="Bound"
+      >G&#8801;G&#8321;</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" class="Symbol"
+      >=</a
+      ><a name="1701"
+      > </a
+      ><a name="1702" href="Definition.Typed.Properties.html#7615" class="Function"
+      >&#928;-PE-injectivity</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" class="Symbol"
+      >(</a
+      ><a name="1720" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" class="Symbol"
+      >(</a
+      ><a name="1731" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1734"
+      > </a
+      ><a name="1735" href="Definition.LogicalRelation.Consequences.Injectivity.html#1615" class="Bound"
+      >D</a
+      ><a name="1736" class="Symbol"
+      >)</a
+      ><a name="1737"
+      > </a
+      ><a name="1738" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1739" class="Symbol"
+      >)</a
+      ><a name="1740"
+      >
+      </a
+      ><a name="1747" href="Definition.LogicalRelation.Consequences.Injectivity.html#1747" class="Bound"
+      >H&#8801;F'</a
+      ><a name="1751"
+      > </a
+      ><a name="1752" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1753"
+      > </a
+      ><a name="1754" href="Definition.LogicalRelation.Consequences.Injectivity.html#1754" class="Bound"
+      >E&#8801;G'</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" class="Symbol"
+      >=</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="Definition.Typed.Properties.html#7615" class="Function"
+      >&#928;-PE-injectivity</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" class="Symbol"
+      >(</a
+      ><a name="1779" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1788"
+      > </a
+      ><a name="1789" href="Definition.LogicalRelation.Consequences.Injectivity.html#1658" class="Bound"
+      >D'</a
+      ><a name="1791"
+      > </a
+      ><a name="1792" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1793" class="Symbol"
+      >)</a
+      ><a name="1794"
+      >
+      </a
+      ><a name="1801" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1803"
+      > </a
+      ><a name="1804" class="Symbol"
+      >=</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Definition.Typed.Properties.html#701" class="Function"
+      >wf</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="1811"
+      >
+      </a
+      ><a name="1818" href="Definition.LogicalRelation.Consequences.Injectivity.html#1818" class="Bound"
+      >[F]&#8321;</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" class="Symbol"
+      >=</a
+      ><a name="1824"
+      > </a
+      ><a name="1825" href="Definition.LogicalRelation.Consequences.Injectivity.html#1623" class="Bound"
+      >[F]</a
+      ><a name="1828"
+      > </a
+      ><a name="1829" href="Definition.Typed.Weakening.html#434" class="InductiveConstructor"
+      >id</a
+      ><a name="1831"
+      > </a
+      ><a name="1832" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1834"
+      >
+      </a
+      ><a name="1841" href="Definition.LogicalRelation.Consequences.Injectivity.html#1841" class="Bound"
+      >[F]'</a
+      ><a name="1845"
+      > </a
+      ><a name="1846" class="Symbol"
+      >=</a
+      ><a name="1847"
+      > </a
+      ><a name="1848" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" class="Symbol"
+      >(</a
+      ><a name="1862" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="1870"
+      > </a
+      ><a name="1871" class="Symbol"
+      >(</a
+      ><a name="1872" href="Definition.Untyped.Properties.html#753" class="Function"
+      >wk-id</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" class="Symbol"
+      >_</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1884" class="Symbol"
+      >)</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" class="Symbol"
+      >(</a
+      ><a name="1887" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" href="Definition.LogicalRelation.Consequences.Injectivity.html#1688" class="Bound"
+      >F&#8801;F&#8321;</a
+      ><a name="1898" class="Symbol"
+      >))</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="Definition.LogicalRelation.Consequences.Injectivity.html#1818" class="Bound"
+      >[F]&#8321;</a
+      ><a name="1905"
+      >
+      </a
+      ><a name="1912" href="Definition.LogicalRelation.Consequences.Injectivity.html#1912" class="Bound"
+      >[x&#8759;F]</a
+      ><a name="1917"
+      > </a
+      ><a name="1918" class="Symbol"
+      >=</a
+      ><a name="1919"
+      > </a
+      ><a name="1920" href="Definition.LogicalRelation.Properties.Neutral.html#1219" class="Function"
+      >neuTerm</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" class="Symbol"
+      >(</a
+      ><a name="1929" href="Definition.LogicalRelation.Consequences.Injectivity.html#1623" class="Bound"
+      >[F]</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" class="Symbol"
+      >(</a
+      ><a name="1934" href="Definition.Typed.Weakening.html#459" class="InductiveConstructor"
+      >step</a
+      ><a name="1938"
+      > </a
+      ><a name="1939" href="Definition.Typed.Weakening.html#434" class="InductiveConstructor"
+      >id</a
+      ><a name="1941" class="Symbol"
+      >)</a
+      ><a name="1942"
+      > </a
+      ><a name="1943" class="Symbol"
+      >(</a
+      ><a name="1944" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" href="Definition.Typed.html#455" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="1951" class="Symbol"
+      >))</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >(</a
+      ><a name="1955" href="Definition.Untyped.html#772" class="InductiveConstructor"
+      >var</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="1963" class="Symbol"
+      >)</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" class="Symbol"
+      >(</a
+      ><a name="1966" href="Definition.Typed.html#1002" class="InductiveConstructor"
+      >var</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" class="Symbol"
+      >(</a
+      ><a name="1971" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" href="Definition.Typed.html#455" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="1978" class="Symbol"
+      >)</a
+      ><a name="1979"
+      > </a
+      ><a name="1980" href="Definition.Typed.html#245" class="InductiveConstructor"
+      >here</a
+      ><a name="1984" class="Symbol"
+      >)</a
+      ><a name="1985"
+      >
+      </a
+      ><a name="1992" href="Definition.LogicalRelation.Consequences.Injectivity.html#1992" class="Bound"
+      >[G]&#8321;</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" class="Symbol"
+      >=</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" href="Definition.LogicalRelation.Consequences.Injectivity.html#1627" class="Bound"
+      >[G]</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" class="Symbol"
+      >(</a
+      ><a name="2004" href="Definition.Typed.Weakening.html#459" class="InductiveConstructor"
+      >step</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Definition.Typed.Weakening.html#434" class="InductiveConstructor"
+      >id</a
+      ><a name="2011" class="Symbol"
+      >)</a
+      ><a name="2012"
+      > </a
+      ><a name="2013" class="Symbol"
+      >(</a
+      ><a name="2014" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2016"
+      > </a
+      ><a name="2017" href="Definition.Typed.html#455" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="2021" class="Symbol"
+      >)</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" href="Definition.LogicalRelation.Consequences.Injectivity.html#1912" class="Bound"
+      >[x&#8759;F]</a
+      ><a name="2028"
+      >
+      </a
+      ><a name="2035" href="Definition.LogicalRelation.Consequences.Injectivity.html#2035" class="Bound"
+      >[G]'</a
+      ><a name="2039"
+      > </a
+      ><a name="2040" class="Symbol"
+      >=</a
+      ><a name="2041"
+      > </a
+      ><a name="2042" href="Tools.PropositionalEquality.html#946" class="Function"
+      >PE.subst&#8322;</a
+      ><a name="2051"
+      > </a
+      ><a name="2052" class="Symbol"
+      >(&#955;</a
+      ><a name="2054"
+      > </a
+      ><a name="2055" href="Definition.LogicalRelation.Consequences.Injectivity.html#2055" class="Bound"
+      >x</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" href="Definition.LogicalRelation.Consequences.Injectivity.html#2057" class="Bound"
+      >y</a
+      ><a name="2058"
+      > </a
+      ><a name="2059" class="Symbol"
+      >&#8594;</a
+      ><a name="2060"
+      > </a
+      ><a name="2061" class="Symbol"
+      >_</a
+      ><a name="2062"
+      > </a
+      ><a name="2063" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="2064"
+      > </a
+      ><a name="2065" href="Definition.LogicalRelation.Consequences.Injectivity.html#2057" class="Bound"
+      >y</a
+      ><a name="2066"
+      > </a
+      ><a name="2067" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" class="Symbol"
+      >_</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2073"
+      > </a
+      ><a name="2074" href="Definition.LogicalRelation.Consequences.Injectivity.html#2055" class="Bound"
+      >x</a
+      ><a name="2075" class="Symbol"
+      >)</a
+      ><a name="2076"
+      >
+                       </a
+      ><a name="2100" class="Symbol"
+      >(</a
+      ><a name="2101" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" class="Symbol"
+      >(</a
+      ><a name="2111" href="Definition.LogicalRelation.Consequences.Injectivity.html#1246" class="Function"
+      >substVar0Id</a
+      ><a name="2122"
+      > </a
+      ><a name="2123" class="Symbol"
+      >_)</a
+      ><a name="2125"
+      > </a
+      ><a name="2126" class="Symbol"
+      >(</a
+      ><a name="2127" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2133"
+      > </a
+      ><a name="2134" href="Definition.LogicalRelation.Consequences.Injectivity.html#1695" class="Bound"
+      >G&#8801;G&#8321;</a
+      ><a name="2138" class="Symbol"
+      >))</a
+      ><a name="2140"
+      >
+                       </a
+      ><a name="2164" class="Symbol"
+      >(</a
+      ><a name="2165" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" href="Definition.LogicalRelation.Consequences.Injectivity.html#1688" class="Bound"
+      >F&#8801;F&#8321;</a
+      ><a name="2176" class="Symbol"
+      >)</a
+      ><a name="2177"
+      > </a
+      ><a name="2178" href="Definition.LogicalRelation.Consequences.Injectivity.html#1992" class="Bound"
+      >[G]&#8321;</a
+      ><a name="2182"
+      >
+      </a
+      ><a name="2189" href="Definition.LogicalRelation.Consequences.Injectivity.html#2189" class="Bound"
+      >[F&#8801;H]&#8321;</a
+      ><a name="2195"
+      > </a
+      ><a name="2196" class="Symbol"
+      >=</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" href="Definition.LogicalRelation.Consequences.Injectivity.html#1665" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Definition.Typed.Weakening.html#434" class="InductiveConstructor"
+      >id</a
+      ><a name="2207"
+      > </a
+      ><a name="2208" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2210"
+      >
+      </a
+      ><a name="2217" href="Definition.LogicalRelation.Consequences.Injectivity.html#2217" class="Bound"
+      >[F&#8801;H]'</a
+      ><a name="2223"
+      > </a
+      ><a name="2224" class="Symbol"
+      >=</a
+      ><a name="2225"
+      > </a
+      ><a name="2226" href="Definition.LogicalRelation.Irrelevance.html#1198" class="Function"
+      >irrelevanceEq''</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" class="Symbol"
+      >(</a
+      ><a name="2243" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" class="Symbol"
+      >(</a
+      ><a name="2253" href="Definition.Untyped.Properties.html#753" class="Function"
+      >wk-id</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" class="Symbol"
+      >_</a
+      ><a name="2260"
+      > </a
+      ><a name="2261" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="2265" class="Symbol"
+      >)</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" class="Symbol"
+      >(</a
+      ><a name="2268" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2274"
+      > </a
+      ><a name="2275" href="Definition.LogicalRelation.Consequences.Injectivity.html#1688" class="Bound"
+      >F&#8801;F&#8321;</a
+      ><a name="2279" class="Symbol"
+      >))</a
+      ><a name="2281"
+      >
+                               </a
+      ><a name="2313" class="Symbol"
+      >(</a
+      ><a name="2314" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="2322"
+      > </a
+      ><a name="2323" class="Symbol"
+      >(</a
+      ><a name="2324" href="Definition.Untyped.Properties.html#753" class="Function"
+      >wk-id</a
+      ><a name="2329"
+      > </a
+      ><a name="2330" class="Symbol"
+      >_</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="Agda.Builtin.Nat.html#87" class="InductiveConstructor"
+      >zero</a
+      ><a name="2336" class="Symbol"
+      >)</a
+      ><a name="2337"
+      > </a
+      ><a name="2338" class="Symbol"
+      >(</a
+      ><a name="2339" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2345"
+      > </a
+      ><a name="2346" href="Definition.LogicalRelation.Consequences.Injectivity.html#1747" class="Bound"
+      >H&#8801;F'</a
+      ><a name="2350" class="Symbol"
+      >))</a
+      ><a name="2352"
+      >
+                               </a
+      ><a name="2384" href="Definition.LogicalRelation.Consequences.Injectivity.html#1818" class="Bound"
+      >[F]&#8321;</a
+      ><a name="2388"
+      > </a
+      ><a name="2389" href="Definition.LogicalRelation.Consequences.Injectivity.html#1841" class="Bound"
+      >[F]'</a
+      ><a name="2393"
+      > </a
+      ><a name="2394" href="Definition.LogicalRelation.Consequences.Injectivity.html#2189" class="Bound"
+      >[F&#8801;H]&#8321;</a
+      ><a name="2400"
+      >
+      </a
+      ><a name="2407" href="Definition.LogicalRelation.Consequences.Injectivity.html#2407" class="Bound"
+      >[G&#8801;E]&#8321;</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" class="Symbol"
+      >=</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="Definition.LogicalRelation.Consequences.Injectivity.html#1672" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="2422"
+      > </a
+      ><a name="2423" class="Symbol"
+      >(</a
+      ><a name="2424" href="Definition.Typed.Weakening.html#459" class="InductiveConstructor"
+      >step</a
+      ><a name="2428"
+      > </a
+      ><a name="2429" href="Definition.Typed.Weakening.html#434" class="InductiveConstructor"
+      >id</a
+      ><a name="2431" class="Symbol"
+      >)</a
+      ><a name="2432"
+      > </a
+      ><a name="2433" class="Symbol"
+      >(</a
+      ><a name="2434" href="Definition.LogicalRelation.Consequences.Injectivity.html#1801" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2436"
+      > </a
+      ><a name="2437" href="Definition.Typed.html#455" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="2438"
+      > </a
+      ><a name="2439" href="Definition.LogicalRelation.Consequences.Injectivity.html#1617" class="Bound"
+      >&#8866;F</a
+      ><a name="2441" class="Symbol"
+      >)</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" href="Definition.LogicalRelation.Consequences.Injectivity.html#1912" class="Bound"
+      >[x&#8759;F]</a
+      ><a name="2448"
+      >
+      </a
+      ><a name="2455" href="Definition.LogicalRelation.Consequences.Injectivity.html#2455" class="Bound"
+      >[G&#8801;E]'</a
+      ><a name="2461"
+      > </a
+      ><a name="2462" class="Symbol"
+      >=</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" href="Definition.LogicalRelation.Irrelevance.html#1631" class="Function"
+      >irrelevanceEqLift''</a
+      ><a name="2483"
+      > </a
+      ><a name="2484" class="Symbol"
+      >(</a
+      ><a name="2485" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="2493"
+      > </a
+      ><a name="2494" class="Symbol"
+      >(</a
+      ><a name="2495" href="Definition.LogicalRelation.Consequences.Injectivity.html#1246" class="Function"
+      >substVar0Id</a
+      ><a name="2506"
+      > </a
+      ><a name="2507" class="Symbol"
+      >_)</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" class="Symbol"
+      >(</a
+      ><a name="2511" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2517"
+      > </a
+      ><a name="2518" href="Definition.LogicalRelation.Consequences.Injectivity.html#1695" class="Bound"
+      >G&#8801;G&#8321;</a
+      ><a name="2522" class="Symbol"
+      >))</a
+      ><a name="2524"
+      >
+                                   </a
+      ><a name="2560" class="Symbol"
+      >(</a
+      ><a name="2561" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" class="Symbol"
+      >(</a
+      ><a name="2571" href="Definition.LogicalRelation.Consequences.Injectivity.html#1246" class="Function"
+      >substVar0Id</a
+      ><a name="2582"
+      > </a
+      ><a name="2583" class="Symbol"
+      >_)</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" class="Symbol"
+      >(</a
+      ><a name="2587" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2593"
+      > </a
+      ><a name="2594" href="Definition.LogicalRelation.Consequences.Injectivity.html#1754" class="Bound"
+      >E&#8801;G'</a
+      ><a name="2598" class="Symbol"
+      >))</a
+      ><a name="2600"
+      >
+                                   </a
+      ><a name="2636" class="Symbol"
+      >(</a
+      ><a name="2637" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" href="Definition.LogicalRelation.Consequences.Injectivity.html#1688" class="Bound"
+      >F&#8801;F&#8321;</a
+      ><a name="2648" class="Symbol"
+      >)</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" href="Definition.LogicalRelation.Consequences.Injectivity.html#1992" class="Bound"
+      >[G]&#8321;</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="Definition.LogicalRelation.Consequences.Injectivity.html#2035" class="Bound"
+      >[G]'</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" href="Definition.LogicalRelation.Consequences.Injectivity.html#2407" class="Bound"
+      >[G&#8801;E]&#8321;</a
+      ><a name="2666"
+      >
+  </a
+      ><a name="2669" class="Keyword"
+      >in</a
+      ><a name="2671"
+      >  </a
+      ><a name="2673" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="2685"
+      > </a
+      ><a name="2686" href="Definition.LogicalRelation.Consequences.Injectivity.html#1841" class="Bound"
+      >[F]'</a
+      ><a name="2690"
+      > </a
+      ><a name="2691" href="Definition.LogicalRelation.Consequences.Injectivity.html#2217" class="Bound"
+      >[F&#8801;H]'</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="2699"
+      > </a
+      ><a name="2700" href="Definition.LogicalRelation.Properties.Wellformed.html#529" class="Function"
+      >wellformedEq</a
+      ><a name="2712"
+      > </a
+      ><a name="2713" href="Definition.LogicalRelation.Consequences.Injectivity.html#2035" class="Bound"
+      >[G]'</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="Definition.LogicalRelation.Consequences.Injectivity.html#2455" class="Bound"
+      >[G&#8801;E]'</a
+      ><a name="2724"
+      >
+</a
+      ><a name="2725" href="Definition.LogicalRelation.Consequences.Injectivity.html#1401" class="Function"
+      >injectivity''</a
+      ><a name="2738"
+      > </a
+      ><a name="2739" class="Symbol"
+      >(</a
+      ><a name="2740" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2743"
+      > </a
+      ><a name="2744" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="Definition.LogicalRelation.Consequences.Injectivity.html#2748" class="Bound"
+      >x</a
+      ><a name="2749" class="Symbol"
+      >)</a
+      ><a name="2750"
+      > </a
+      ><a name="2751" href="Definition.LogicalRelation.Consequences.Injectivity.html#2751" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="2760"
+      > </a
+      ><a name="2761" class="Symbol"
+      >=</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" href="Definition.LogicalRelation.Consequences.Injectivity.html#1401" class="Function"
+      >injectivity''</a
+      ><a name="2776"
+      > </a
+      ><a name="2777" href="Definition.LogicalRelation.Consequences.Injectivity.html#2748" class="Bound"
+      >x</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Definition.LogicalRelation.Consequences.Injectivity.html#2751" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="2788"
+      >
+
+</a
+      ><a name="2790" href="Definition.LogicalRelation.Consequences.Injectivity.html#2790" class="Function"
+      >injectivity'</a
+      ><a name="2802"
+      > </a
+      ><a name="2803" class="Symbol"
+      >:</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" class="Symbol"
+      >&#8704;</a
+      ><a name="2806"
+      > </a
+      ><a name="2807" class="Symbol"
+      >{</a
+      ><a name="2808" href="Definition.LogicalRelation.Consequences.Injectivity.html#2808" class="Bound"
+      >F</a
+      ><a name="2809"
+      > </a
+      ><a name="2810" href="Definition.LogicalRelation.Consequences.Injectivity.html#2810" class="Bound"
+      >G</a
+      ><a name="2811"
+      > </a
+      ><a name="2812" href="Definition.LogicalRelation.Consequences.Injectivity.html#2812" class="Bound"
+      >H</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" href="Definition.LogicalRelation.Consequences.Injectivity.html#2814" class="Bound"
+      >E</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" href="Definition.LogicalRelation.Consequences.Injectivity.html#2816" class="Bound"
+      >&#915;</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" href="Definition.LogicalRelation.Consequences.Injectivity.html#2818" class="Bound"
+      >l</a
+      ><a name="2819" class="Symbol"
+      >}</a
+      ><a name="2820"
+      >
+               </a
+      ><a name="2836" class="Symbol"
+      >(</a
+      ><a name="2837" href="Definition.LogicalRelation.Consequences.Injectivity.html#2837" class="Bound"
+      >[&#928;FG]</a
+      ><a name="2842"
+      > </a
+      ><a name="2843" class="Symbol"
+      >:</a
+      ><a name="2844"
+      > </a
+      ><a name="2845" href="Definition.LogicalRelation.Consequences.Injectivity.html#2816" class="Bound"
+      >&#915;</a
+      ><a name="2846"
+      > </a
+      ><a name="2847" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="Definition.LogicalRelation.Consequences.Injectivity.html#2818" class="Bound"
+      >l</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2853"
+      > </a
+      ><a name="2854" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="Definition.LogicalRelation.Consequences.Injectivity.html#2808" class="Bound"
+      >F</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="2859"
+      > </a
+      ><a name="2860" href="Definition.LogicalRelation.Consequences.Injectivity.html#2810" class="Bound"
+      >G</a
+      ><a name="2861" class="Symbol"
+      >)</a
+      ><a name="2862"
+      >
+             </a
+      ><a name="2876" class="Symbol"
+      >&#8594;</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" href="Definition.LogicalRelation.Consequences.Injectivity.html#2816" class="Bound"
+      >&#915;</a
+      ><a name="2879"
+      > </a
+      ><a name="2880" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" href="Definition.LogicalRelation.Consequences.Injectivity.html#2818" class="Bound"
+      >l</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="2886"
+      > </a
+      ><a name="2887" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Definition.LogicalRelation.Consequences.Injectivity.html#2808" class="Bound"
+      >F</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="2892"
+      > </a
+      ><a name="2893" href="Definition.LogicalRelation.Consequences.Injectivity.html#2810" class="Bound"
+      >G</a
+      ><a name="2894"
+      > </a
+      ><a name="2895" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="2896"
+      > </a
+      ><a name="2897" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="2898"
+      > </a
+      ><a name="2899" href="Definition.LogicalRelation.Consequences.Injectivity.html#2812" class="Bound"
+      >H</a
+      ><a name="2900"
+      > </a
+      ><a name="2901" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="2902"
+      > </a
+      ><a name="2903" href="Definition.LogicalRelation.Consequences.Injectivity.html#2814" class="Bound"
+      >E</a
+      ><a name="2904"
+      > </a
+      ><a name="2905" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="2906"
+      > </a
+      ><a name="2907" href="Definition.LogicalRelation.Consequences.Injectivity.html#2837" class="Bound"
+      >[&#928;FG]</a
+      ><a name="2912"
+      >
+             </a
+      ><a name="2926" class="Symbol"
+      >&#8594;</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" href="Definition.LogicalRelation.Consequences.Injectivity.html#2816" class="Bound"
+      >&#915;</a
+      ><a name="2929"
+      > </a
+      ><a name="2930" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2931"
+      > </a
+      ><a name="2932" href="Definition.LogicalRelation.Consequences.Injectivity.html#2808" class="Bound"
+      >F</a
+      ><a name="2933"
+      > </a
+      ><a name="2934" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2935"
+      > </a
+      ><a name="2936" href="Definition.LogicalRelation.Consequences.Injectivity.html#2812" class="Bound"
+      >H</a
+      ><a name="2937"
+      >
+             </a
+      ><a name="2951" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="2952"
+      > </a
+      ><a name="2953" href="Definition.LogicalRelation.Consequences.Injectivity.html#2816" class="Bound"
+      >&#915;</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" href="Definition.LogicalRelation.Consequences.Injectivity.html#2808" class="Bound"
+      >F</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2960"
+      > </a
+      ><a name="2961" href="Definition.LogicalRelation.Consequences.Injectivity.html#2810" class="Bound"
+      >G</a
+      ><a name="2962"
+      > </a
+      ><a name="2963" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2964"
+      > </a
+      ><a name="2965" href="Definition.LogicalRelation.Consequences.Injectivity.html#2814" class="Bound"
+      >E</a
+      ><a name="2966"
+      >
+</a
+      ><a name="2967" href="Definition.LogicalRelation.Consequences.Injectivity.html#2790" class="Function"
+      >injectivity'</a
+      ><a name="2979"
+      > </a
+      ><a name="2980" href="Definition.LogicalRelation.Consequences.Injectivity.html#2980" class="Bound"
+      >[&#928;FG]</a
+      ><a name="2985"
+      > </a
+      ><a name="2986" href="Definition.LogicalRelation.Consequences.Injectivity.html#2986" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="2995"
+      > </a
+      ><a name="2996" class="Symbol"
+      >=</a
+      ><a name="2997"
+      >
+  </a
+      ><a name="3000" href="Definition.LogicalRelation.Consequences.Injectivity.html#1401" class="Function"
+      >injectivity''</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" class="Symbol"
+      >(</a
+      ><a name="3015" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="3021"
+      > </a
+      ><a name="3022" href="Definition.LogicalRelation.Consequences.Injectivity.html#2980" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3027" class="Symbol"
+      >)</a
+      ><a name="3028"
+      > </a
+      ><a name="3029" class="Symbol"
+      >(</a
+      ><a name="3030" href="Definition.LogicalRelation.Irrelevance.html#777" class="Function"
+      >irrelevanceEq</a
+      ><a name="3043"
+      > </a
+      ><a name="3044" href="Definition.LogicalRelation.Consequences.Injectivity.html#2980" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3049"
+      > </a
+      ><a name="3050" class="Symbol"
+      >(</a
+      ><a name="3051" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="3057"
+      > </a
+      ><a name="3058" class="Symbol"
+      >(</a
+      ><a name="3059" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="3065"
+      > </a
+      ><a name="3066" href="Definition.LogicalRelation.Consequences.Injectivity.html#2980" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3071" class="Symbol"
+      >))</a
+      ><a name="3073"
+      > </a
+      ><a name="3074" href="Definition.LogicalRelation.Consequences.Injectivity.html#2986" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="3083" class="Symbol"
+      >)</a
+      ><a name="3084"
+      >
+
+</a
+      ><a name="3086" href="Definition.LogicalRelation.Consequences.Injectivity.html#3086" class="Function"
+      >injectivity</a
+      ><a name="3097"
+      > </a
+      ><a name="3098" class="Symbol"
+      >:</a
+      ><a name="3099"
+      > </a
+      ><a name="3100" class="Symbol"
+      >&#8704;</a
+      ><a name="3101"
+      > </a
+      ><a name="3102" class="Symbol"
+      >{</a
+      ><a name="3103" href="Definition.LogicalRelation.Consequences.Injectivity.html#3103" class="Bound"
+      >&#915;</a
+      ><a name="3104"
+      > </a
+      ><a name="3105" href="Definition.LogicalRelation.Consequences.Injectivity.html#3105" class="Bound"
+      >F</a
+      ><a name="3106"
+      > </a
+      ><a name="3107" href="Definition.LogicalRelation.Consequences.Injectivity.html#3107" class="Bound"
+      >G</a
+      ><a name="3108"
+      > </a
+      ><a name="3109" href="Definition.LogicalRelation.Consequences.Injectivity.html#3109" class="Bound"
+      >H</a
+      ><a name="3110"
+      > </a
+      ><a name="3111" href="Definition.LogicalRelation.Consequences.Injectivity.html#3111" class="Bound"
+      >E</a
+      ><a name="3112" class="Symbol"
+      >}</a
+      ><a name="3113"
+      > </a
+      ><a name="3114" class="Symbol"
+      >&#8594;</a
+      ><a name="3115"
+      > </a
+      ><a name="3116" href="Definition.LogicalRelation.Consequences.Injectivity.html#3103" class="Bound"
+      >&#915;</a
+      ><a name="3117"
+      > </a
+      ><a name="3118" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3119"
+      > </a
+      ><a name="3120" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="3121"
+      > </a
+      ><a name="3122" href="Definition.LogicalRelation.Consequences.Injectivity.html#3105" class="Bound"
+      >F</a
+      ><a name="3123"
+      > </a
+      ><a name="3124" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="3125"
+      > </a
+      ><a name="3126" href="Definition.LogicalRelation.Consequences.Injectivity.html#3107" class="Bound"
+      >G</a
+      ><a name="3127"
+      > </a
+      ><a name="3128" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="3129"
+      > </a
+      ><a name="3130" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="3131"
+      > </a
+      ><a name="3132" href="Definition.LogicalRelation.Consequences.Injectivity.html#3109" class="Bound"
+      >H</a
+      ><a name="3133"
+      > </a
+      ><a name="3134" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="3135"
+      > </a
+      ><a name="3136" href="Definition.LogicalRelation.Consequences.Injectivity.html#3111" class="Bound"
+      >E</a
+      ><a name="3137"
+      > </a
+      ><a name="3138" class="Symbol"
+      >&#8594;</a
+      ><a name="3139"
+      > </a
+      ><a name="3140" href="Definition.LogicalRelation.Consequences.Injectivity.html#3103" class="Bound"
+      >&#915;</a
+      ><a name="3141"
+      > </a
+      ><a name="3142" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3143"
+      > </a
+      ><a name="3144" href="Definition.LogicalRelation.Consequences.Injectivity.html#3105" class="Bound"
+      >F</a
+      ><a name="3145"
+      > </a
+      ><a name="3146" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="3147"
+      > </a
+      ><a name="3148" href="Definition.LogicalRelation.Consequences.Injectivity.html#3109" class="Bound"
+      >H</a
+      ><a name="3149"
+      > </a
+      ><a name="3150" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="3151"
+      > </a
+      ><a name="3152" href="Definition.LogicalRelation.Consequences.Injectivity.html#3103" class="Bound"
+      >&#915;</a
+      ><a name="3153"
+      > </a
+      ><a name="3154" href="Definition.Untyped.html#268" class="InductiveConstructor Operator"
+      >&#8729;</a
+      ><a name="3155"
+      > </a
+      ><a name="3156" href="Definition.LogicalRelation.Consequences.Injectivity.html#3105" class="Bound"
+      >F</a
+      ><a name="3157"
+      > </a
+      ><a name="3158" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="3159"
+      > </a
+      ><a name="3160" href="Definition.LogicalRelation.Consequences.Injectivity.html#3107" class="Bound"
+      >G</a
+      ><a name="3161"
+      > </a
+      ><a name="3162" href="Definition.Typed.html#1766" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="3163"
+      > </a
+      ><a name="3164" href="Definition.LogicalRelation.Consequences.Injectivity.html#3111" class="Bound"
+      >E</a
+      ><a name="3165"
+      >
+</a
+      ><a name="3166" href="Definition.LogicalRelation.Consequences.Injectivity.html#3086" class="Function"
+      >injectivity</a
+      ><a name="3177"
+      > </a
+      ><a name="3178" href="Definition.LogicalRelation.Consequences.Injectivity.html#3178" class="Bound"
+      >&#8866;&#928;FG&#8801;&#928;HE</a
+      ><a name="3186"
+      > </a
+      ><a name="3187" class="Keyword"
+      >with</a
+      ><a name="3191"
+      > </a
+      ><a name="3192" href="Definition.LogicalRelation.Fundamental.html#1716" class="Function"
+      >fundamentalEq</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="Definition.LogicalRelation.Consequences.Injectivity.html#3178" class="Bound"
+      >&#8866;&#928;FG&#8801;&#928;HE</a
+      ><a name="3214"
+      >
+</a
+      ><a name="3215" href="Definition.LogicalRelation.Consequences.Injectivity.html#3086" class="Function"
+      >injectivity</a
+      ><a name="3226"
+      > </a
+      ><a name="3227" class="Symbol"
+      >{</a
+      ><a name="3228" href="Definition.LogicalRelation.Consequences.Injectivity.html#3228" class="Bound"
+      >&#915;</a
+      ><a name="3229" class="Symbol"
+      >}</a
+      ><a name="3230"
+      > </a
+      ><a name="3231" class="Symbol"
+      >{</a
+      ><a name="3232" href="Definition.LogicalRelation.Consequences.Injectivity.html#3232" class="Bound"
+      >F</a
+      ><a name="3233" class="Symbol"
+      >}</a
+      ><a name="3234"
+      > </a
+      ><a name="3235" class="Symbol"
+      >{</a
+      ><a name="3236" href="Definition.LogicalRelation.Consequences.Injectivity.html#3236" class="Bound"
+      >G</a
+      ><a name="3237" class="Symbol"
+      >}</a
+      ><a name="3238"
+      > </a
+      ><a name="3239" class="Symbol"
+      >{</a
+      ><a name="3240" href="Definition.LogicalRelation.Consequences.Injectivity.html#3240" class="Bound"
+      >H</a
+      ><a name="3241" class="Symbol"
+      >}</a
+      ><a name="3242"
+      > </a
+      ><a name="3243" class="Symbol"
+      >{</a
+      ><a name="3244" href="Definition.LogicalRelation.Consequences.Injectivity.html#3244" class="Bound"
+      >E</a
+      ><a name="3245" class="Symbol"
+      >}</a
+      ><a name="3246"
+      > </a
+      ><a name="3247" href="Definition.LogicalRelation.Consequences.Injectivity.html#3247" class="Bound"
+      >&#8866;&#928;FG&#8801;&#928;HE</a
+      ><a name="3255"
+      > </a
+      ><a name="3256" class="Symbol"
+      >|</a
+      ><a name="3257"
+      > </a
+      ><a name="3258" href="Definition.LogicalRelation.Consequences.Injectivity.html#3258" class="Bound"
+      >[&#915;]</a
+      ><a name="3261"
+      > </a
+      ><a name="3262" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" href="Definition.LogicalRelation.Consequences.Injectivity.html#3264" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3269"
+      > </a
+      ><a name="3270" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3271"
+      > </a
+      ><a name="3272" href="Definition.LogicalRelation.Consequences.Injectivity.html#3272" class="Bound"
+      >[&#928;HE]</a
+      ><a name="3277"
+      > </a
+      ><a name="3278" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3279"
+      > </a
+      ><a name="3280" href="Definition.LogicalRelation.Consequences.Injectivity.html#3280" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="3289"
+      > </a
+      ><a name="3290" class="Symbol"
+      >=</a
+      ><a name="3291"
+      >
+  </a
+      ><a name="3294" class="Keyword"
+      >let</a
+      ><a name="3297"
+      > </a
+      ><a name="3298" href="Definition.LogicalRelation.Consequences.Injectivity.html#3298" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="3300"
+      > </a
+      ><a name="3301" class="Symbol"
+      >=</a
+      ><a name="3302"
+      > </a
+      ><a name="3303" href="Definition.LogicalRelation.Substitution.Properties.html#4934" class="Function"
+      >soundContext</a
+      ><a name="3315"
+      > </a
+      ><a name="3316" href="Definition.LogicalRelation.Consequences.Injectivity.html#3258" class="Bound"
+      >[&#915;]</a
+      ><a name="3319"
+      >
+      </a
+      ><a name="3326" href="Definition.LogicalRelation.Consequences.Injectivity.html#3326" class="Bound"
+      >[id]</a
+      ><a name="3330"
+      > </a
+      ><a name="3331" class="Symbol"
+      >=</a
+      ><a name="3332"
+      > </a
+      ><a name="3333" href="Definition.LogicalRelation.Substitution.Properties.html#5228" class="Function"
+      >idSubstS</a
+      ><a name="3341"
+      > </a
+      ><a name="3342" href="Definition.LogicalRelation.Consequences.Injectivity.html#3258" class="Bound"
+      >[&#915;]</a
+      ><a name="3345"
+      >
+      </a
+      ><a name="3352" href="Definition.LogicalRelation.Consequences.Injectivity.html#3352" class="Bound"
+      >eq&#8321;</a
+      ><a name="3355"
+      > </a
+      ><a name="3356" class="Symbol"
+      >=</a
+      ><a name="3357"
+      > </a
+      ><a name="3358" href="Tools.PropositionalEquality.html#390" class="Function"
+      >PE.cong&#8322;</a
+      ><a name="3366"
+      > </a
+      ><a name="3367" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;_&#9657;_</a
+      ><a name="3371"
+      > </a
+      ><a name="3372" class="Symbol"
+      >(</a
+      ><a name="3373" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="3382"
+      > </a
+      ><a name="3383" href="Definition.LogicalRelation.Consequences.Injectivity.html#3232" class="Bound"
+      >F</a
+      ><a name="3384" class="Symbol"
+      >)</a
+      ><a name="3385"
+      > </a
+      ><a name="3386" class="Symbol"
+      >(</a
+      ><a name="3387" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="3395"
+      > </a
+      ><a name="3396" class="Symbol"
+      >(</a
+      ><a name="3397" href="Definition.Untyped.Properties.html#4039" class="Function"
+      >substEq</a
+      ><a name="3404"
+      > </a
+      ><a name="3405" href="Definition.Untyped.Properties.html#4610" class="Function"
+      >liftIdSubst</a
+      ><a name="3416"
+      > </a
+      ><a name="3417" href="Definition.LogicalRelation.Consequences.Injectivity.html#3236" class="Bound"
+      >G</a
+      ><a name="3418" class="Symbol"
+      >)</a
+      ><a name="3419"
+      > </a
+      ><a name="3420" class="Symbol"
+      >(</a
+      ><a name="3421" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="3430"
+      > </a
+      ><a name="3431" href="Definition.LogicalRelation.Consequences.Injectivity.html#3236" class="Bound"
+      >G</a
+      ><a name="3432" class="Symbol"
+      >))</a
+      ><a name="3434"
+      >
+      </a
+      ><a name="3441" href="Definition.LogicalRelation.Consequences.Injectivity.html#3441" class="Bound"
+      >eq&#8322;</a
+      ><a name="3444"
+      > </a
+      ><a name="3445" class="Symbol"
+      >=</a
+      ><a name="3446"
+      > </a
+      ><a name="3447" href="Tools.PropositionalEquality.html#390" class="Function"
+      >PE.cong&#8322;</a
+      ><a name="3455"
+      > </a
+      ><a name="3456" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;_&#9657;_</a
+      ><a name="3460"
+      > </a
+      ><a name="3461" class="Symbol"
+      >(</a
+      ><a name="3462" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="3471"
+      > </a
+      ><a name="3472" href="Definition.LogicalRelation.Consequences.Injectivity.html#3240" class="Bound"
+      >H</a
+      ><a name="3473" class="Symbol"
+      >)</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" class="Symbol"
+      >(</a
+      ><a name="3476" href="Tools.PropositionalEquality.html#231" class="Function"
+      >PE.trans</a
+      ><a name="3484"
+      > </a
+      ><a name="3485" class="Symbol"
+      >(</a
+      ><a name="3486" href="Definition.Untyped.Properties.html#4039" class="Function"
+      >substEq</a
+      ><a name="3493"
+      > </a
+      ><a name="3494" href="Definition.Untyped.Properties.html#4610" class="Function"
+      >liftIdSubst</a
+      ><a name="3505"
+      > </a
+      ><a name="3506" href="Definition.LogicalRelation.Consequences.Injectivity.html#3244" class="Bound"
+      >E</a
+      ><a name="3507" class="Symbol"
+      >)</a
+      ><a name="3508"
+      > </a
+      ><a name="3509" class="Symbol"
+      >(</a
+      ><a name="3510" href="Definition.Untyped.Properties.html#4722" class="Function"
+      >substIdEq</a
+      ><a name="3519"
+      > </a
+      ><a name="3520" href="Definition.LogicalRelation.Consequences.Injectivity.html#3244" class="Bound"
+      >E</a
+      ><a name="3521" class="Symbol"
+      >))</a
+      ><a name="3523"
+      >
+      </a
+      ><a name="3530" href="Definition.LogicalRelation.Consequences.Injectivity.html#3530" class="Bound"
+      >[&#928;FG]&#8321;</a
+      ><a name="3536"
+      > </a
+      ><a name="3537" class="Symbol"
+      >=</a
+      ><a name="3538"
+      > </a
+      ><a name="3539" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="3544"
+      > </a
+      ><a name="3545" class="Symbol"
+      >(</a
+      ><a name="3546" href="Definition.LogicalRelation.Consequences.Injectivity.html#3264" class="Bound"
+      >[&#928;FG]</a
+      ><a name="3551"
+      > </a
+      ><a name="3552" href="Definition.LogicalRelation.Consequences.Injectivity.html#3298" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="3554"
+      > </a
+      ><a name="3555" href="Definition.LogicalRelation.Consequences.Injectivity.html#3326" class="Bound"
+      >[id]</a
+      ><a name="3559" class="Symbol"
+      >)</a
+      ><a name="3560"
+      >
+      </a
+      ><a name="3567" href="Definition.LogicalRelation.Consequences.Injectivity.html#3567" class="Bound"
+      >[&#928;FG]'</a
+      ><a name="3573"
+      > </a
+      ><a name="3574" class="Symbol"
+      >=</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="3588"
+      > </a
+      ><a name="3589" href="Definition.LogicalRelation.Consequences.Injectivity.html#3352" class="Bound"
+      >eq&#8321;</a
+      ><a name="3592"
+      > </a
+      ><a name="3593" href="Definition.LogicalRelation.Consequences.Injectivity.html#3530" class="Bound"
+      >[&#928;FG]&#8321;</a
+      ><a name="3599"
+      >
+      </a
+      ><a name="3606" href="Definition.LogicalRelation.Consequences.Injectivity.html#3606" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]'</a
+      ><a name="3616"
+      > </a
+      ><a name="3617" class="Symbol"
+      >=</a
+      ><a name="3618"
+      > </a
+      ><a name="3619" href="Definition.LogicalRelation.Irrelevance.html#1198" class="Function"
+      >irrelevanceEq''</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" href="Definition.LogicalRelation.Consequences.Injectivity.html#3352" class="Bound"
+      >eq&#8321;</a
+      ><a name="3638"
+      > </a
+      ><a name="3639" href="Definition.LogicalRelation.Consequences.Injectivity.html#3441" class="Bound"
+      >eq&#8322;</a
+      ><a name="3642"
+      > </a
+      ><a name="3643" href="Definition.LogicalRelation.Consequences.Injectivity.html#3530" class="Bound"
+      >[&#928;FG]&#8321;</a
+      ><a name="3649"
+      > </a
+      ><a name="3650" href="Definition.LogicalRelation.Consequences.Injectivity.html#3567" class="Bound"
+      >[&#928;FG]'</a
+      ><a name="3656"
+      > </a
+      ><a name="3657" class="Symbol"
+      >(</a
+      ><a name="3658" href="Definition.LogicalRelation.Consequences.Injectivity.html#3280" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]</a
+      ><a name="3667"
+      > </a
+      ><a name="3668" href="Definition.LogicalRelation.Consequences.Injectivity.html#3298" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="3670"
+      > </a
+      ><a name="3671" href="Definition.LogicalRelation.Consequences.Injectivity.html#3326" class="Bound"
+      >[id]</a
+      ><a name="3675" class="Symbol"
+      >)</a
+      ><a name="3676"
+      >
+  </a
+      ><a name="3679" class="Keyword"
+      >in</a
+      ><a name="3681"
+      >  </a
+      ><a name="3683" href="Definition.LogicalRelation.Consequences.Injectivity.html#2790" class="Function"
+      >injectivity'</a
+      ><a name="3695"
+      > </a
+      ><a name="3696" href="Definition.LogicalRelation.Consequences.Injectivity.html#3567" class="Bound"
+      >[&#928;FG]'</a
+      ><a name="3702"
+      > </a
+      ><a name="3703" href="Definition.LogicalRelation.Consequences.Injectivity.html#3606" class="Bound"
+      >[&#928;FG&#8801;&#928;HE]'</a
+      ><a name="3713"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

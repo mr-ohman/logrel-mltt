@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Tools.Product</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="21"
+      > </a
+      ><a name="22" class="Keyword"
+      >where</a
+      ><a name="27"
+      >
+
+
+</a
+      ><a name="30" class="Keyword"
+      >infixr</a
+      ><a name="36"
+      > </a
+      ><a name="37" class="Number"
+      >4</a
+      ><a name="38"
+      > _,_
+</a
+      ><a name="43" class="Keyword"
+      >infixr</a
+      ><a name="49"
+      > </a
+      ><a name="50" class="Number"
+      >2</a
+      ><a name="51"
+      > _&#215;_
+
+</a
+      ><a name="57" class="Keyword"
+      >record</a
+      ><a name="63"
+      > </a
+      ><a name="64" href="Tools.Product.html#64" class="Record"
+      >&#931;</a
+      ><a name="65"
+      > </a
+      ><a name="66" class="Symbol"
+      >(</a
+      ><a name="67" href="Tools.Product.html#67" class="Bound"
+      >A</a
+      ><a name="68"
+      > </a
+      ><a name="69" class="Symbol"
+      >:</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="PrimitiveType"
+      >Set</a
+      ><a name="74" class="Symbol"
+      >)</a
+      ><a name="75"
+      > </a
+      ><a name="76" class="Symbol"
+      >(</a
+      ><a name="77" href="Tools.Product.html#77" class="Bound"
+      >B</a
+      ><a name="78"
+      > </a
+      ><a name="79" class="Symbol"
+      >:</a
+      ><a name="80"
+      > </a
+      ><a name="81" href="Tools.Product.html#67" class="Bound"
+      >A</a
+      ><a name="82"
+      > </a
+      ><a name="83" class="Symbol"
+      >&#8594;</a
+      ><a name="84"
+      > </a
+      ><a name="85" class="PrimitiveType"
+      >Set</a
+      ><a name="88" class="Symbol"
+      >)</a
+      ><a name="89"
+      > </a
+      ><a name="90" class="Symbol"
+      >:</a
+      ><a name="91"
+      > </a
+      ><a name="92" class="PrimitiveType"
+      >Set</a
+      ><a name="95"
+      > </a
+      ><a name="96" class="Keyword"
+      >where</a
+      ><a name="101"
+      >
+  </a
+      ><a name="104" class="Keyword"
+      >constructor</a
+      ><a name="115"
+      > </a
+      ><a name="116" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >_,_</a
+      ><a name="119"
+      >
+  </a
+      ><a name="122" class="Keyword"
+      >field</a
+      ><a name="127"
+      >
+    </a
+      ><a name="132" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="137"
+      > </a
+      ><a name="138" class="Symbol"
+      >:</a
+      ><a name="139"
+      > </a
+      ><a name="140" href="Tools.Product.html#67" class="Bound"
+      >A</a
+      ><a name="141"
+      >
+    </a
+      ><a name="146" href="Tools.Product.html#146" class="Field"
+      >proj&#8322;</a
+      ><a name="151"
+      > </a
+      ><a name="152" class="Symbol"
+      >:</a
+      ><a name="153"
+      > </a
+      ><a name="154" href="Tools.Product.html#77" class="Bound"
+      >B</a
+      ><a name="155"
+      > </a
+      ><a name="156" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="161"
+      >
+
+</a
+      ><a name="163" class="Keyword"
+      >open</a
+      ><a name="167"
+      > </a
+      ><a name="168" href="Tools.Product.html#64" class="Module"
+      >&#931;</a
+      ><a name="169"
+      > </a
+      ><a name="170" class="Keyword"
+      >public</a
+      ><a name="176"
+      >
+
+</a
+      ><a name="178" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="179"
+      > </a
+      ><a name="180" class="Symbol"
+      >:</a
+      ><a name="181"
+      > </a
+      ><a name="182" class="Symbol"
+      >{</a
+      ><a name="183" href="Tools.Product.html#183" class="Bound"
+      >A</a
+      ><a name="184"
+      > </a
+      ><a name="185" class="Symbol"
+      >:</a
+      ><a name="186"
+      > </a
+      ><a name="187" class="PrimitiveType"
+      >Set</a
+      ><a name="190" class="Symbol"
+      >}</a
+      ><a name="191"
+      > </a
+      ><a name="192" class="Symbol"
+      >&#8594;</a
+      ><a name="193"
+      > </a
+      ><a name="194" class="Symbol"
+      >(</a
+      ><a name="195" href="Tools.Product.html#183" class="Bound"
+      >A</a
+      ><a name="196"
+      > </a
+      ><a name="197" class="Symbol"
+      >&#8594;</a
+      ><a name="198"
+      > </a
+      ><a name="199" class="PrimitiveType"
+      >Set</a
+      ><a name="202" class="Symbol"
+      >)</a
+      ><a name="203"
+      > </a
+      ><a name="204" class="Symbol"
+      >&#8594;</a
+      ><a name="205"
+      > </a
+      ><a name="206" class="PrimitiveType"
+      >Set</a
+      ><a name="209"
+      >
+</a
+      ><a name="210" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="211"
+      > </a
+      ><a name="212" class="Symbol"
+      >=</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Tools.Product.html#64" class="Record"
+      >&#931;</a
+      ><a name="215"
+      > </a
+      ><a name="216" class="Symbol"
+      >_</a
+      ><a name="217"
+      >
+
+</a
+      ><a name="219" href="Tools.Product.html#219" class="Function"
+      >&#8707;&#8322;</a
+      ><a name="221"
+      > </a
+      ><a name="222" class="Symbol"
+      >:</a
+      ><a name="223"
+      > </a
+      ><a name="224" class="Symbol"
+      >{</a
+      ><a name="225" href="Tools.Product.html#225" class="Bound"
+      >A</a
+      ><a name="226"
+      > </a
+      ><a name="227" class="Symbol"
+      >:</a
+      ><a name="228"
+      > </a
+      ><a name="229" class="PrimitiveType"
+      >Set</a
+      ><a name="232" class="Symbol"
+      >}</a
+      ><a name="233"
+      > </a
+      ><a name="234" class="Symbol"
+      >{</a
+      ><a name="235" href="Tools.Product.html#235" class="Bound"
+      >B</a
+      ><a name="236"
+      > </a
+      ><a name="237" class="Symbol"
+      >:</a
+      ><a name="238"
+      > </a
+      ><a name="239" href="Tools.Product.html#225" class="Bound"
+      >A</a
+      ><a name="240"
+      > </a
+      ><a name="241" class="Symbol"
+      >&#8594;</a
+      ><a name="242"
+      > </a
+      ><a name="243" class="PrimitiveType"
+      >Set</a
+      ><a name="246" class="Symbol"
+      >}</a
+      ><a name="247"
+      >
+     </a
+      ><a name="253" class="Symbol"
+      >(</a
+      ><a name="254" href="Tools.Product.html#254" class="Bound"
+      >C</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Symbol"
+      >:</a
+      ><a name="257"
+      > </a
+      ><a name="258" class="Symbol"
+      >(</a
+      ><a name="259" href="Tools.Product.html#259" class="Bound"
+      >x</a
+      ><a name="260"
+      > </a
+      ><a name="261" class="Symbol"
+      >:</a
+      ><a name="262"
+      > </a
+      ><a name="263" href="Tools.Product.html#225" class="Bound"
+      >A</a
+      ><a name="264" class="Symbol"
+      >)</a
+      ><a name="265"
+      > </a
+      ><a name="266" class="Symbol"
+      >&#8594;</a
+      ><a name="267"
+      > </a
+      ><a name="268" href="Tools.Product.html#235" class="Bound"
+      >B</a
+      ><a name="269"
+      > </a
+      ><a name="270" href="Tools.Product.html#259" class="Bound"
+      >x</a
+      ><a name="271"
+      > </a
+      ><a name="272" class="Symbol"
+      >&#8594;</a
+      ><a name="273"
+      > </a
+      ><a name="274" class="PrimitiveType"
+      >Set</a
+      ><a name="277" class="Symbol"
+      >)</a
+      ><a name="278"
+      > </a
+      ><a name="279" class="Symbol"
+      >&#8594;</a
+      ><a name="280"
+      > </a
+      ><a name="281" class="PrimitiveType"
+      >Set</a
+      ><a name="284"
+      >
+</a
+      ><a name="285" href="Tools.Product.html#219" class="Function"
+      >&#8707;&#8322;</a
+      ><a name="287"
+      > </a
+      ><a name="288" href="Tools.Product.html#288" class="Bound"
+      >C</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Symbol"
+      >=</a
+      ><a name="291"
+      > </a
+      ><a name="292" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="293"
+      > </a
+      ><a name="294" class="Symbol"
+      >&#955;</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="Tools.Product.html#296" class="Bound"
+      >a</a
+      ><a name="297"
+      > </a
+      ><a name="298" class="Symbol"
+      >&#8594;</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="301"
+      > </a
+      ><a name="302" class="Symbol"
+      >&#955;</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Tools.Product.html#304" class="Bound"
+      >b</a
+      ><a name="305"
+      > </a
+      ><a name="306" class="Symbol"
+      >&#8594;</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Tools.Product.html#288" class="Bound"
+      >C</a
+      ><a name="309"
+      > </a
+      ><a name="310" href="Tools.Product.html#296" class="Bound"
+      >a</a
+      ><a name="311"
+      > </a
+      ><a name="312" href="Tools.Product.html#304" class="Bound"
+      >b</a
+      ><a name="313"
+      >
+
+</a
+      ><a name="315" href="Tools.Product.html#315" class="Function Operator"
+      >_&#215;_</a
+      ><a name="318"
+      > </a
+      ><a name="319" class="Symbol"
+      >:</a
+      ><a name="320"
+      > </a
+      ><a name="321" class="Symbol"
+      >(</a
+      ><a name="322" href="Tools.Product.html#322" class="Bound"
+      >A</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Tools.Product.html#324" class="Bound"
+      >B</a
+      ><a name="325"
+      > </a
+      ><a name="326" class="Symbol"
+      >:</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="PrimitiveType"
+      >Set</a
+      ><a name="331" class="Symbol"
+      >)</a
+      ><a name="332"
+      > </a
+      ><a name="333" class="Symbol"
+      >&#8594;</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="PrimitiveType"
+      >Set</a
+      ><a name="338"
+      >
+</a
+      ><a name="339" href="Tools.Product.html#339" class="Bound"
+      >A</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="Tools.Product.html#315" class="Function Operator"
+      >&#215;</a
+      ><a name="342"
+      > </a
+      ><a name="343" href="Tools.Product.html#343" class="Bound"
+      >B</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Symbol"
+      >=</a
+      ><a name="346"
+      > </a
+      ><a name="347" href="Tools.Product.html#64" class="Record"
+      >&#931;</a
+      ><a name="348"
+      > </a
+      ><a name="349" href="Tools.Product.html#339" class="Bound"
+      >A</a
+      ><a name="350"
+      > </a
+      ><a name="351" class="Symbol"
+      >(&#955;</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Tools.Product.html#354" class="Bound"
+      >x</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Symbol"
+      >&#8594;</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Tools.Product.html#343" class="Bound"
+      >B</a
+      ><a name="359" class="Symbol"
+      >)</a
+      ><a name="360"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

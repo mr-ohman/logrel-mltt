@@ -1,0 +1,2734 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Properties.Symmetry</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Properties.Symmetry.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Symmetry</a
+      ><a name="54"
+      > </a
+      ><a name="55" class="Keyword"
+      >where</a
+      ><a name="60"
+      >
+
+</a
+      ><a name="62" class="Keyword"
+      >open</a
+      ><a name="66"
+      > </a
+      ><a name="67" class="Keyword"
+      >import</a
+      ><a name="73"
+      > </a
+      ><a name="74" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="92"
+      > </a
+      ><a name="93" class="Symbol"
+      >as</a
+      ><a name="95"
+      > </a
+      ><a name="96" class="Module"
+      >U</a
+      ><a name="97"
+      >
+</a
+      ><a name="98" class="Keyword"
+      >open</a
+      ><a name="102"
+      > </a
+      ><a name="103" class="Keyword"
+      >import</a
+      ><a name="109"
+      > </a
+      ><a name="110" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="126"
+      >
+</a
+      ><a name="127" class="Keyword"
+      >open</a
+      ><a name="131"
+      > </a
+      ><a name="132" class="Keyword"
+      >import</a
+      ><a name="138"
+      > </a
+      ><a name="139" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="166"
+      >
+</a
+      ><a name="167" class="Keyword"
+      >open</a
+      ><a name="171"
+      > </a
+      ><a name="172" class="Keyword"
+      >import</a
+      ><a name="178"
+      > </a
+      ><a name="179" href="Definition.Typed.Weakening.html#1" class="Module"
+      >Definition.Typed.Weakening</a
+      ><a name="205"
+      >
+</a
+      ><a name="206" class="Keyword"
+      >open</a
+      ><a name="210"
+      > </a
+      ><a name="211" class="Keyword"
+      >import</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="244"
+      >
+</a
+      ><a name="245" class="Keyword"
+      >open</a
+      ><a name="249"
+      > </a
+      ><a name="250" class="Keyword"
+      >import</a
+      ><a name="256"
+      > </a
+      ><a name="257" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="290"
+      >
+</a
+      ><a name="291" class="Keyword"
+      >open</a
+      ><a name="295"
+      > </a
+      ><a name="296" class="Keyword"
+      >import</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="341"
+      >
+</a
+      ><a name="342" class="Keyword"
+      >open</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Keyword"
+      >import</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Definition.LogicalRelation.Properties.Conversion.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Conversion</a
+      ><a name="402"
+      >
+
+</a
+      ><a name="404" class="Keyword"
+      >open</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Keyword"
+      >import</a
+      ><a name="415"
+      > </a
+      ><a name="416" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="429"
+      >
+</a
+      ><a name="430" class="Keyword"
+      >import</a
+      ><a name="436"
+      > </a
+      ><a name="437" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="464"
+      > </a
+      ><a name="465" class="Symbol"
+      >as</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Module"
+      >PE</a
+      ><a name="470"
+      >
+
+
+</a
+      ><a name="473" class="Keyword"
+      >mutual</a
+      ><a name="479"
+      >
+  </a
+      ><a name="482" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="488"
+      > </a
+      ><a name="489" class="Symbol"
+      >:</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Symbol"
+      >&#8704;</a
+      ><a name="492"
+      > </a
+      ><a name="493" class="Symbol"
+      >{</a
+      ><a name="494" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="495"
+      > </a
+      ><a name="496" href="Definition.LogicalRelation.Properties.Symmetry.html#496" class="Bound"
+      >A</a
+      ><a name="497"
+      > </a
+      ><a name="498" href="Definition.LogicalRelation.Properties.Symmetry.html#498" class="Bound"
+      >B</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="Definition.LogicalRelation.Properties.Symmetry.html#500" class="Bound"
+      >l</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Definition.LogicalRelation.Properties.Symmetry.html#502" class="Bound"
+      >l'</a
+      ><a name="504" class="Symbol"
+      >}</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Symbol"
+      >{</a
+      ><a name="507" href="Definition.LogicalRelation.Properties.Symmetry.html#507" class="Bound"
+      >[A]</a
+      ><a name="510"
+      > </a
+      ><a name="511" class="Symbol"
+      >:</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Definition.LogicalRelation.Properties.Symmetry.html#500" class="Bound"
+      >l</a
+      ><a name="519"
+      > </a
+      ><a name="520" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Definition.LogicalRelation.Properties.Symmetry.html#496" class="Bound"
+      >A</a
+      ><a name="523" class="Symbol"
+      >}</a
+      ><a name="524"
+      > </a
+      ><a name="525" class="Symbol"
+      >{</a
+      ><a name="526" href="Definition.LogicalRelation.Properties.Symmetry.html#526" class="Bound"
+      >[B]</a
+      ><a name="529"
+      > </a
+      ><a name="530" class="Symbol"
+      >:</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="533"
+      > </a
+      ><a name="534" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Definition.LogicalRelation.Properties.Symmetry.html#502" class="Bound"
+      >l'</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="Definition.LogicalRelation.Properties.Symmetry.html#498" class="Bound"
+      >B</a
+      ><a name="543" class="Symbol"
+      >}</a
+      ><a name="544"
+      >
+         </a
+      ><a name="554" class="Symbol"
+      >&#8594;</a
+      ><a name="555"
+      > </a
+      ><a name="556" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="562"
+      > </a
+      ><a name="563" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="564"
+      > </a
+      ><a name="565" href="Definition.LogicalRelation.Properties.Symmetry.html#500" class="Bound"
+      >l</a
+      ><a name="566"
+      > </a
+      ><a name="567" href="Definition.LogicalRelation.Properties.Symmetry.html#502" class="Bound"
+      >l'</a
+      ><a name="569"
+      > </a
+      ><a name="570" href="Definition.LogicalRelation.Properties.Symmetry.html#496" class="Bound"
+      >A</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Definition.LogicalRelation.Properties.Symmetry.html#498" class="Bound"
+      >B</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Definition.LogicalRelation.Properties.Symmetry.html#507" class="Bound"
+      >[A]</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Definition.LogicalRelation.Properties.Symmetry.html#526" class="Bound"
+      >[B]</a
+      ><a name="581"
+      >
+         </a
+      ><a name="591" class="Symbol"
+      >&#8594;</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Definition.LogicalRelation.Properties.Symmetry.html#500" class="Bound"
+      >l</a
+      ><a name="599"
+      >  </a
+      ><a name="601" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="602"
+      > </a
+      ><a name="603" href="Definition.LogicalRelation.Properties.Symmetry.html#496" class="Bound"
+      >A</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Definition.LogicalRelation.Properties.Symmetry.html#498" class="Bound"
+      >B</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="610"
+      > </a
+      ><a name="611" href="Definition.LogicalRelation.Properties.Symmetry.html#507" class="Bound"
+      >[A]</a
+      ><a name="614"
+      >
+         </a
+      ><a name="624" class="Symbol"
+      >&#8594;</a
+      ><a name="625"
+      > </a
+      ><a name="626" href="Definition.LogicalRelation.Properties.Symmetry.html#494" class="Bound"
+      >&#915;</a
+      ><a name="627"
+      > </a
+      ><a name="628" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="630"
+      > </a
+      ><a name="631" href="Definition.LogicalRelation.Properties.Symmetry.html#502" class="Bound"
+      >l'</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="635"
+      > </a
+      ><a name="636" href="Definition.LogicalRelation.Properties.Symmetry.html#498" class="Bound"
+      >B</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Definition.LogicalRelation.Properties.Symmetry.html#496" class="Bound"
+      >A</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="643"
+      > </a
+      ><a name="644" href="Definition.LogicalRelation.Properties.Symmetry.html#526" class="Bound"
+      >[B]</a
+      ><a name="647"
+      >
+  </a
+      ><a name="650" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="656"
+      > </a
+      ><a name="657" class="Symbol"
+      >(</a
+      ><a name="658" href="Definition.LogicalRelation.Tactic.html#3303" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="659"
+      > </a
+      ><a name="660" href="Definition.LogicalRelation.Properties.Symmetry.html#660" class="Bound"
+      >D</a
+      ><a name="661"
+      > </a
+      ><a name="662" href="Definition.LogicalRelation.Properties.Symmetry.html#662" class="Bound"
+      >D'</a
+      ><a name="664" class="Symbol"
+      >)</a
+      ><a name="665"
+      > </a
+      ><a name="666" href="Definition.LogicalRelation.Properties.Symmetry.html#666" class="Bound"
+      >A&#8801;B</a
+      ><a name="669"
+      > </a
+      ><a name="670" class="Symbol"
+      >=</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Definition.LogicalRelation.Properties.Symmetry.html#660" class="Bound"
+      >D</a
+      ><a name="677"
+      >
+  </a
+      ><a name="680" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="686"
+      > </a
+      ><a name="687" class="Symbol"
+      >(</a
+      ><a name="688" href="Definition.LogicalRelation.Tactic.html#3362" class="InductiveConstructor"
+      >ne</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >(</a
+      ><a name="692" href="Definition.LogicalRelation.html#452" class="InductiveConstructor"
+      >ne</a
+      ><a name="694"
+      > </a
+      ><a name="695" href="Definition.LogicalRelation.Properties.Symmetry.html#695" class="Bound"
+      >K</a
+      ><a name="696"
+      > </a
+      ><a name="697" href="Definition.LogicalRelation.Properties.Symmetry.html#697" class="Bound"
+      >D</a
+      ><a name="698"
+      > </a
+      ><a name="699" href="Definition.LogicalRelation.Properties.Symmetry.html#699" class="Bound"
+      >neK</a
+      ><a name="702" class="Symbol"
+      >)</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >(</a
+      ><a name="705" href="Definition.LogicalRelation.html#452" class="InductiveConstructor"
+      >ne</a
+      ><a name="707"
+      > </a
+      ><a name="708" href="Definition.LogicalRelation.Properties.Symmetry.html#708" class="Bound"
+      >K&#8321;</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Definition.LogicalRelation.Properties.Symmetry.html#711" class="Bound"
+      >D&#8321;</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="Definition.LogicalRelation.Properties.Symmetry.html#714" class="Bound"
+      >neK&#8321;</a
+      ><a name="718" class="Symbol"
+      >))</a
+      ><a name="720"
+      > </a
+      ><a name="721" class="Symbol"
+      >(</a
+      ><a name="722" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Definition.LogicalRelation.Properties.Symmetry.html#726" class="Bound"
+      >M</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Definition.LogicalRelation.Properties.Symmetry.html#728" class="Bound"
+      >D'</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Definition.LogicalRelation.Properties.Symmetry.html#731" class="Bound"
+      >neM</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Definition.LogicalRelation.Properties.Symmetry.html#735" class="Bound"
+      >K&#8801;M</a
+      ><a name="738" class="Symbol"
+      >)</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >=</a
+      ><a name="741"
+      >
+    </a
+      ><a name="746" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="749"
+      > </a
+      ><a name="750" class="Symbol"
+      >_</a
+      ><a name="751"
+      >  </a
+      ><a name="753" href="Definition.LogicalRelation.Properties.Symmetry.html#697" class="Bound"
+      >D</a
+      ><a name="754"
+      >  </a
+      ><a name="756" href="Definition.LogicalRelation.Properties.Symmetry.html#699" class="Bound"
+      >neK</a
+      ><a name="759"
+      >
+        </a
+      ><a name="768" class="Symbol"
+      >(</a
+      ><a name="769" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="774"
+      > </a
+      ><a name="775" class="Symbol"
+      >(</a
+      ><a name="776" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="779"
+      > </a
+      ><a name="780" class="Symbol"
+      >(</a
+      ><a name="781" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="788"
+      > </a
+      ><a name="789" class="Symbol"
+      >(</a
+      ><a name="790" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.LogicalRelation.Properties.Symmetry.html#711" class="Bound"
+      >D&#8321;</a
+      ><a name="796" class="Symbol"
+      >)))</a
+      ><a name="799"
+      > </a
+      ><a name="800" class="Symbol"
+      >(</a
+      ><a name="801" href="Definition.Typed.html#2016" class="InductiveConstructor"
+      >trans</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Symbol"
+      >(</a
+      ><a name="808" href="Definition.Typed.Properties.html#2213" class="Function"
+      >subset*</a
+      ><a name="815"
+      > </a
+      ><a name="816" class="Symbol"
+      >(</a
+      ><a name="817" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Definition.LogicalRelation.Properties.Symmetry.html#728" class="Bound"
+      >D'</a
+      ><a name="823" class="Symbol"
+      >))</a
+      ><a name="825"
+      > </a
+      ><a name="826" class="Symbol"
+      >(</a
+      ><a name="827" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="830"
+      > </a
+      ><a name="831" href="Definition.LogicalRelation.Properties.Symmetry.html#735" class="Bound"
+      >K&#8801;M</a
+      ><a name="834" class="Symbol"
+      >)))</a
+      ><a name="837"
+      >
+  </a
+      ><a name="840" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="846"
+      > </a
+      ><a name="847" class="Symbol"
+      >(</a
+      ><a name="848" href="Definition.LogicalRelation.Tactic.html#3435" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="849"
+      > </a
+      ><a name="850" class="Symbol"
+      >(</a
+      ><a name="851" href="Definition.LogicalRelation.html#5186" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Definition.LogicalRelation.Properties.Symmetry.html#853" class="Bound"
+      >F</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Definition.LogicalRelation.Properties.Symmetry.html#855" class="Bound"
+      >G</a
+      ><a name="856"
+      > </a
+      ><a name="857" href="Definition.LogicalRelation.Properties.Symmetry.html#857" class="Bound"
+      >D</a
+      ><a name="858"
+      > </a
+      ><a name="859" href="Definition.LogicalRelation.Properties.Symmetry.html#859" class="Bound"
+      >&#8866;F</a
+      ><a name="861"
+      > </a
+      ><a name="862" href="Definition.LogicalRelation.Properties.Symmetry.html#862" class="Bound"
+      >&#8866;G</a
+      ><a name="864"
+      > </a
+      ><a name="865" href="Definition.LogicalRelation.Properties.Symmetry.html#865" class="Bound"
+      >[F]</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="Definition.LogicalRelation.Properties.Symmetry.html#869" class="Bound"
+      >[G]</a
+      ><a name="872"
+      > </a
+      ><a name="873" href="Definition.LogicalRelation.Properties.Symmetry.html#873" class="Bound"
+      >G-ext</a
+      ><a name="878" class="Symbol"
+      >)</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="Symbol"
+      >(</a
+      ><a name="881" href="Definition.LogicalRelation.html#5186" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Definition.LogicalRelation.Properties.Symmetry.html#883" class="Bound"
+      >F&#8321;</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Definition.LogicalRelation.Properties.Symmetry.html#886" class="Bound"
+      >G&#8321;</a
+      ><a name="888"
+      > </a
+      ><a name="889" href="Definition.LogicalRelation.Properties.Symmetry.html#889" class="Bound"
+      >D&#8321;</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Definition.LogicalRelation.Properties.Symmetry.html#892" class="Bound"
+      >&#8866;F&#8321;</a
+      ><a name="895"
+      > </a
+      ><a name="896" href="Definition.LogicalRelation.Properties.Symmetry.html#896" class="Bound"
+      >&#8866;G&#8321;</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Definition.LogicalRelation.Properties.Symmetry.html#900" class="Bound"
+      >[F]&#8321;</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Definition.LogicalRelation.Properties.Symmetry.html#905" class="Bound"
+      >[G]&#8321;</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Definition.LogicalRelation.Properties.Symmetry.html#910" class="Bound"
+      >G-ext&#8321;</a
+      ><a name="916" class="Symbol"
+      >))</a
+      ><a name="918"
+      >
+         </a
+      ><a name="928" class="Symbol"
+      >(</a
+      ><a name="929" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Definition.LogicalRelation.Properties.Symmetry.html#932" class="Bound"
+      >F'</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="Definition.LogicalRelation.Properties.Symmetry.html#935" class="Bound"
+      >G'</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Definition.LogicalRelation.Properties.Symmetry.html#938" class="Bound"
+      >D'</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Definition.LogicalRelation.Properties.Symmetry.html#941" class="Bound"
+      >A&#8801;B</a
+      ><a name="944"
+      > </a
+      ><a name="945" href="Definition.LogicalRelation.Properties.Symmetry.html#945" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="951"
+      > </a
+      ><a name="952" href="Definition.LogicalRelation.Properties.Symmetry.html#952" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="958" class="Symbol"
+      >)</a
+      ><a name="959"
+      > </a
+      ><a name="960" class="Symbol"
+      >=</a
+      ><a name="961"
+      >
+    </a
+      ><a name="966" class="Keyword"
+      >let</a
+      ><a name="969"
+      > </a
+      ><a name="970" href="Definition.LogicalRelation.Properties.Symmetry.html#970" class="Bound"
+      >F&#8321;&#8801;F'</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="977"
+      > </a
+      ><a name="978" href="Definition.LogicalRelation.Properties.Symmetry.html#978" class="Bound"
+      >G&#8321;&#8801;G'</a
+      ><a name="983"
+      > </a
+      ><a name="984" class="Symbol"
+      >=</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Definition.Typed.Properties.html#7615" class="Function"
+      >&#928;-PE-injectivity</a
+      ><a name="1002"
+      > </a
+      ><a name="1003" class="Symbol"
+      >(</a
+      ><a name="1004" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="1012"
+      > </a
+      ><a name="1013" class="Symbol"
+      >(</a
+      ><a name="1014" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Definition.LogicalRelation.Properties.Symmetry.html#889" class="Bound"
+      >D&#8321;</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1024" class="Symbol"
+      >)</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" class="Symbol"
+      >(</a
+      ><a name="1027" href="Definition.LogicalRelation.Properties.Symmetry.html#938" class="Bound"
+      >D'</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1033" class="Symbol"
+      >))</a
+      ><a name="1035"
+      >
+        </a
+      ><a name="1044" href="Definition.LogicalRelation.Properties.Symmetry.html#1044" class="Bound"
+      >[F&#8321;&#8801;F]</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" class="Symbol"
+      >:</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" class="Symbol"
+      >&#8704;</a
+      ><a name="1054"
+      > </a
+      ><a name="1055" class="Symbol"
+      >{</a
+      ><a name="1056" href="Definition.LogicalRelation.Properties.Symmetry.html#1056" class="Bound"
+      >&#916;</a
+      ><a name="1057" class="Symbol"
+      >}</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" href="Definition.LogicalRelation.Properties.Symmetry.html#1059" class="Bound"
+      >&#961;</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Definition.LogicalRelation.Properties.Symmetry.html#1061" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" class="Symbol"
+      >&#8594;</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" class="Symbol"
+      >_</a
+      ><a name="1067"
+      >
+        </a
+      ><a name="1076" href="Definition.LogicalRelation.Properties.Symmetry.html#1044" class="Bound"
+      >[F&#8321;&#8801;F]</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" class="Symbol"
+      >{</a
+      ><a name="1084" href="Definition.LogicalRelation.Properties.Symmetry.html#1084" class="Bound"
+      >&#916;</a
+      ><a name="1085" class="Symbol"
+      >}</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >=</a
+      ><a name="1093"
+      >
+          </a
+      ><a name="1104" class="Keyword"
+      >let</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Definition.LogicalRelation.Properties.Symmetry.html#1108" class="Bound"
+      >&#961;F'&#8801;&#961;F&#8321;</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Definition.LogicalRelation.Properties.Symmetry.html#1116" class="Bound"
+      >&#961;</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" class="Symbol"
+      >=</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Tools.PropositionalEquality.html#309" class="Function"
+      >PE.cong</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" class="Symbol"
+      >(</a
+      ><a name="1129" href="Definition.Untyped.html#3297" class="Function"
+      >U.wk</a
+      ><a name="1133"
+      > </a
+      ><a name="1134" href="Definition.LogicalRelation.Properties.Symmetry.html#1116" class="Bound"
+      >&#961;</a
+      ><a name="1135" class="Symbol"
+      >)</a
+      ><a name="1136"
+      > </a
+      ><a name="1137" class="Symbol"
+      >(</a
+      ><a name="1138" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" href="Definition.LogicalRelation.Properties.Symmetry.html#970" class="Bound"
+      >F&#8321;&#8801;F'</a
+      ><a name="1150" class="Symbol"
+      >)</a
+      ><a name="1151"
+      >
+              </a
+      ><a name="1166" href="Definition.LogicalRelation.Properties.Symmetry.html#1166" class="Bound"
+      >[&#961;F']</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Definition.LogicalRelation.Properties.Symmetry.html#1172" class="Bound"
+      >&#961;</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" href="Definition.LogicalRelation.Properties.Symmetry.html#1174" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" class="Symbol"
+      >=</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" href="Tools.PropositionalEquality.html#864" class="Function"
+      >PE.subst</a
+      ><a name="1187"
+      > </a
+      ><a name="1188" class="Symbol"
+      >(&#955;</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" href="Definition.LogicalRelation.Properties.Symmetry.html#1191" class="Bound"
+      >x</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" class="Symbol"
+      >&#8594;</a
+      ><a name="1194"
+      > </a
+      ><a name="1195" href="Definition.LogicalRelation.Properties.Symmetry.html#1084" class="Bound"
+      >&#916;</a
+      ><a name="1196"
+      > </a
+      ><a name="1197" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" class="Symbol"
+      >_</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="Definition.Typed.Weakening.html#707" class="Function"
+      >wk&#8348;</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Definition.LogicalRelation.Properties.Symmetry.html#1172" class="Bound"
+      >&#961;</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Definition.LogicalRelation.Properties.Symmetry.html#1191" class="Bound"
+      >x</a
+      ><a name="1211" class="Symbol"
+      >)</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" href="Definition.LogicalRelation.Properties.Symmetry.html#970" class="Bound"
+      >F&#8321;&#8801;F'</a
+      ><a name="1218"
+      > </a
+      ><a name="1219" class="Symbol"
+      >(</a
+      ><a name="1220" href="Definition.LogicalRelation.Properties.Symmetry.html#900" class="Bound"
+      >[F]&#8321;</a
+      ><a name="1224"
+      > </a
+      ><a name="1225" href="Definition.LogicalRelation.Properties.Symmetry.html#1172" class="Bound"
+      >&#961;</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" href="Definition.LogicalRelation.Properties.Symmetry.html#1174" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1229" class="Symbol"
+      >)</a
+      ><a name="1230"
+      >
+          </a
+      ><a name="1241" class="Keyword"
+      >in</a
+      ><a name="1243"
+      >  </a
+      ><a name="1245" href="Definition.LogicalRelation.Irrelevance.html#970" class="Function"
+      >irrelevanceEq'</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >{</a
+      ><a name="1261" href="Definition.LogicalRelation.Properties.Symmetry.html#1084" class="Bound"
+      >&#916;</a
+      ><a name="1262" class="Symbol"
+      >}</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >(</a
+      ><a name="1265" href="Definition.LogicalRelation.Properties.Symmetry.html#1108" class="Bound"
+      >&#961;F'&#8801;&#961;F&#8321;</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" class="Symbol"
+      >(</a
+      ><a name="1274" href="Definition.Typed.Weakening.html#584" class="Function"
+      >toWk</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1280" class="Symbol"
+      >))</a
+      ><a name="1282"
+      >
+                             </a
+      ><a name="1312" class="Symbol"
+      >(</a
+      ><a name="1313" href="Definition.LogicalRelation.Properties.Symmetry.html#1166" class="Bound"
+      >[&#961;F']</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1320"
+      > </a
+      ><a name="1321" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1323" class="Symbol"
+      >)</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >(</a
+      ><a name="1326" href="Definition.LogicalRelation.Properties.Symmetry.html#900" class="Bound"
+      >[F]&#8321;</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1335" class="Symbol"
+      >)</a
+      ><a name="1336"
+      >
+                             </a
+      ><a name="1366" class="Symbol"
+      >(</a
+      ><a name="1367" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" class="Symbol"
+      >(</a
+      ><a name="1374" href="Definition.LogicalRelation.Properties.Symmetry.html#865" class="Bound"
+      >[F]</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1382" class="Symbol"
+      >)</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" class="Symbol"
+      >(</a
+      ><a name="1385" href="Definition.LogicalRelation.Properties.Symmetry.html#1166" class="Bound"
+      >[&#961;F']</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1392"
+      > </a
+      ><a name="1393" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1395" class="Symbol"
+      >)</a
+      ><a name="1396"
+      >
+                                    </a
+      ><a name="1433" class="Symbol"
+      >(</a
+      ><a name="1434" href="Definition.LogicalRelation.Properties.Symmetry.html#945" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="1440"
+      > </a
+      ><a name="1441" href="Definition.LogicalRelation.Properties.Symmetry.html#1087" class="Bound"
+      >&#961;</a
+      ><a name="1442"
+      > </a
+      ><a name="1443" href="Definition.LogicalRelation.Properties.Symmetry.html#1089" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1445" class="Symbol"
+      >))</a
+      ><a name="1447"
+      >
+    </a
+      ><a name="1452" class="Keyword"
+      >in</a
+      ><a name="1454"
+      >  </a
+      ><a name="1456" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="1458"
+      > </a
+      ><a name="1459" class="Symbol"
+      >_</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" class="Symbol"
+      >_</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" class="Symbol"
+      >(</a
+      ><a name="1464" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" href="Definition.LogicalRelation.Properties.Symmetry.html#857" class="Bound"
+      >D</a
+      ><a name="1469" class="Symbol"
+      >)</a
+      ><a name="1470"
+      > </a
+      ><a name="1471" class="Symbol"
+      >(</a
+      ><a name="1472" href="Definition.Typed.html#1949" class="InductiveConstructor"
+      >sym</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" href="Definition.LogicalRelation.Properties.Symmetry.html#941" class="Bound"
+      >A&#8801;B</a
+      ><a name="1479" class="Symbol"
+      >)</a
+      ><a name="1480"
+      >
+          </a
+      ><a name="1491" href="Definition.LogicalRelation.Properties.Symmetry.html#1044" class="Bound"
+      >[F&#8321;&#8801;F]</a
+      ><a name="1497"
+      >
+          </a
+      ><a name="1508" class="Symbol"
+      >(&#955;</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Definition.LogicalRelation.Properties.Symmetry.html#1516" class="Bound"
+      >[a]</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" class="Symbol"
+      >&#8594;</a
+      ><a name="1521"
+      >
+               </a
+      ><a name="1537" class="Keyword"
+      >let</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" href="Definition.LogicalRelation.Properties.Symmetry.html#1541" class="Bound"
+      >&#961;G'a&#8801;&#961;G&#8321;'a</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" class="Symbol"
+      >=</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" href="Tools.PropositionalEquality.html#309" class="Function"
+      >PE.cong</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" class="Symbol"
+      >(&#955;</a
+      ><a name="1564"
+      > </a
+      ><a name="1565" href="Definition.LogicalRelation.Properties.Symmetry.html#1565" class="Bound"
+      >x</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" class="Symbol"
+      >&#8594;</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="Definition.LogicalRelation.Properties.Symmetry.html#1565" class="Bound"
+      >x</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" class="Symbol"
+      >_</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="1586" class="Symbol"
+      >)</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" class="Symbol"
+      >(</a
+      ><a name="1589" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" href="Definition.LogicalRelation.Properties.Symmetry.html#978" class="Bound"
+      >G&#8321;&#8801;G'</a
+      ><a name="1601" class="Symbol"
+      >)</a
+      ><a name="1602"
+      >
+                   </a
+      ><a name="1622" href="Definition.LogicalRelation.Properties.Symmetry.html#1622" class="Bound"
+      >[&#961;G'a]</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" class="Symbol"
+      >=</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Tools.PropositionalEquality.html#864" class="Function"
+      >PE.subst</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" class="Symbol"
+      >(&#955;</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Definition.LogicalRelation.Properties.Symmetry.html#1643" class="Bound"
+      >x</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" class="Symbol"
+      >&#8594;</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" class="Symbol"
+      >_</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1651"
+      > </a
+      ><a name="1652" class="Symbol"
+      >_</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1655"
+      > </a
+      ><a name="1656" href="Definition.Typed.Weakening.html#781" class="Function"
+      >wkLift&#8348;</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1665"
+      > </a
+      ><a name="1666" href="Definition.LogicalRelation.Properties.Symmetry.html#1643" class="Bound"
+      >x</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" href="Definition.Untyped.html#6509" class="Function Operator"
+      >[</a
+      ><a name="1669"
+      > </a
+      ><a name="1670" class="Symbol"
+      >_</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Definition.Untyped.html#6509" class="Function Operator"
+      >]</a
+      ><a name="1673" class="Symbol"
+      >)</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Definition.LogicalRelation.Properties.Symmetry.html#978" class="Bound"
+      >G&#8321;&#8801;G'</a
+      ><a name="1680"
+      >
+                                     </a
+      ><a name="1718" class="Symbol"
+      >(</a
+      ><a name="1719" href="Definition.LogicalRelation.Properties.Symmetry.html#905" class="Bound"
+      >[G]&#8321;</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1725"
+      > </a
+      ><a name="1726" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" href="Definition.LogicalRelation.Properties.Symmetry.html#1516" class="Bound"
+      >[a]</a
+      ><a name="1732" class="Symbol"
+      >)</a
+      ><a name="1733"
+      >
+                   </a
+      ><a name="1753" href="Definition.LogicalRelation.Properties.Symmetry.html#1753" class="Bound"
+      >[a]&#8321;</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" class="Symbol"
+      >=</a
+      ><a name="1759"
+      > </a
+      ><a name="1760" href="Definition.LogicalRelation.Properties.Conversion.html#4822" class="Function"
+      >convTerm&#8321;</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" class="Symbol"
+      >(</a
+      ><a name="1771" href="Definition.LogicalRelation.Properties.Symmetry.html#900" class="Bound"
+      >[F]&#8321;</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1780" class="Symbol"
+      >)</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" class="Symbol"
+      >(</a
+      ><a name="1783" href="Definition.LogicalRelation.Properties.Symmetry.html#865" class="Bound"
+      >[F]</a
+      ><a name="1786"
+      > </a
+      ><a name="1787" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1788"
+      > </a
+      ><a name="1789" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1791" class="Symbol"
+      >)</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" class="Symbol"
+      >(</a
+      ><a name="1794" href="Definition.LogicalRelation.Properties.Symmetry.html#1044" class="Bound"
+      >[F&#8321;&#8801;F]</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1802"
+      > </a
+      ><a name="1803" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1805" class="Symbol"
+      >)</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Definition.LogicalRelation.Properties.Symmetry.html#1516" class="Bound"
+      >[a]</a
+      ><a name="1810"
+      >
+               </a
+      ><a name="1826" class="Keyword"
+      >in</a
+      ><a name="1828"
+      >  </a
+      ><a name="1830" href="Definition.LogicalRelation.Irrelevance.html#970" class="Function"
+      >irrelevanceEq'</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" href="Definition.LogicalRelation.Properties.Symmetry.html#1541" class="Bound"
+      >&#961;G'a&#8801;&#961;G&#8321;'a</a
+      ><a name="1855"
+      >
+                                  </a
+      ><a name="1890" href="Definition.LogicalRelation.Properties.Symmetry.html#1622" class="Bound"
+      >[&#961;G'a]</a
+      ><a name="1896"
+      >
+                                  </a
+      ><a name="1931" class="Symbol"
+      >(</a
+      ><a name="1932" href="Definition.LogicalRelation.Properties.Symmetry.html#905" class="Bound"
+      >[G]&#8321;</a
+      ><a name="1936"
+      > </a
+      ><a name="1937" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1938"
+      > </a
+      ><a name="1939" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" href="Definition.LogicalRelation.Properties.Symmetry.html#1516" class="Bound"
+      >[a]</a
+      ><a name="1945" class="Symbol"
+      >)</a
+      ><a name="1946"
+      >
+                                  </a
+      ><a name="1981" class="Symbol"
+      >(</a
+      ><a name="1982" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="1987"
+      > </a
+      ><a name="1988" class="Symbol"
+      >(</a
+      ><a name="1989" href="Definition.LogicalRelation.Properties.Symmetry.html#869" class="Bound"
+      >[G]</a
+      ><a name="1992"
+      > </a
+      ><a name="1993" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="1994"
+      > </a
+      ><a name="1995" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Definition.LogicalRelation.Properties.Symmetry.html#1753" class="Bound"
+      >[a]&#8321;</a
+      ><a name="2002" class="Symbol"
+      >)</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="Definition.LogicalRelation.Properties.Symmetry.html#1622" class="Bound"
+      >[&#961;G'a]</a
+      ><a name="2010"
+      >
+                                         </a
+      ><a name="2052" class="Symbol"
+      >(</a
+      ><a name="2053" href="Definition.LogicalRelation.Properties.Symmetry.html#952" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Definition.LogicalRelation.Properties.Symmetry.html#1511" class="Bound"
+      >&#961;</a
+      ><a name="2061"
+      > </a
+      ><a name="2062" href="Definition.LogicalRelation.Properties.Symmetry.html#1513" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="2064"
+      > </a
+      ><a name="2065" href="Definition.LogicalRelation.Properties.Symmetry.html#1753" class="Bound"
+      >[a]&#8321;</a
+      ><a name="2069" class="Symbol"
+      >)))</a
+      ><a name="2072"
+      >
+  </a
+      ><a name="2075" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2081"
+      > </a
+      ><a name="2082" class="Symbol"
+      >(</a
+      ><a name="2083" href="Definition.LogicalRelation.Tactic.html#3248" class="InductiveConstructor"
+      >U</a
+      ><a name="2084"
+      > </a
+      ><a name="2085" class="Symbol"
+      >(</a
+      ><a name="2086" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="2087"
+      > </a
+      ><a name="2088" class="Symbol"
+      >_</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" class="Symbol"
+      >_</a
+      ><a name="2091"
+      > </a
+      ><a name="2092" class="Symbol"
+      >_)</a
+      ><a name="2094"
+      > </a
+      ><a name="2095" class="Symbol"
+      >(</a
+      ><a name="2096" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" class="Symbol"
+      >_</a
+      ><a name="2099"
+      > </a
+      ><a name="2100" class="Symbol"
+      >_</a
+      ><a name="2101"
+      > </a
+      ><a name="2102" class="Symbol"
+      >_))</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" href="Definition.LogicalRelation.Properties.Symmetry.html#2106" class="Bound"
+      >A&#8801;B</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" class="Symbol"
+      >=</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="2119"
+      >
+  </a
+      ><a name="2122" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2128"
+      > </a
+      ><a name="2129" class="Symbol"
+      >(</a
+      ><a name="2130" href="Definition.LogicalRelation.Tactic.html#3498" class="InductiveConstructor"
+      >emb&#8304;&#185;</a
+      ><a name="2135"
+      > </a
+      ><a name="2136" href="Definition.LogicalRelation.Properties.Symmetry.html#2136" class="Bound"
+      >x</a
+      ><a name="2137" class="Symbol"
+      >)</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" href="Definition.LogicalRelation.Properties.Symmetry.html#2139" class="Bound"
+      >A&#8801;B</a
+      ><a name="2142"
+      > </a
+      ><a name="2143" class="Symbol"
+      >=</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2151"
+      > </a
+      ><a name="2152" href="Definition.LogicalRelation.Properties.Symmetry.html#2136" class="Bound"
+      >x</a
+      ><a name="2153"
+      > </a
+      ><a name="2154" href="Definition.LogicalRelation.Properties.Symmetry.html#2139" class="Bound"
+      >A&#8801;B</a
+      ><a name="2157"
+      >
+  </a
+      ><a name="2160" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2166"
+      > </a
+      ><a name="2167" class="Symbol"
+      >(</a
+      ><a name="2168" href="Definition.LogicalRelation.Tactic.html#3594" class="InductiveConstructor"
+      >emb&#185;&#8304;</a
+      ><a name="2173"
+      > </a
+      ><a name="2174" href="Definition.LogicalRelation.Properties.Symmetry.html#2174" class="Bound"
+      >x</a
+      ><a name="2175" class="Symbol"
+      >)</a
+      ><a name="2176"
+      > </a
+      ><a name="2177" href="Definition.LogicalRelation.Properties.Symmetry.html#2177" class="Bound"
+      >A&#8801;B</a
+      ><a name="2180"
+      > </a
+      ><a name="2181" class="Symbol"
+      >=</a
+      ><a name="2182"
+      > </a
+      ><a name="2183" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2189"
+      > </a
+      ><a name="2190" href="Definition.LogicalRelation.Properties.Symmetry.html#2174" class="Bound"
+      >x</a
+      ><a name="2191"
+      > </a
+      ><a name="2192" href="Definition.LogicalRelation.Properties.Symmetry.html#2177" class="Bound"
+      >A&#8801;B</a
+      ><a name="2195"
+      >
+
+  </a
+      ><a name="2199" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" class="Symbol"
+      >:</a
+      ><a name="2206"
+      > </a
+      ><a name="2207" class="Symbol"
+      >&#8704;</a
+      ><a name="2208"
+      > </a
+      ><a name="2209" class="Symbol"
+      >{</a
+      ><a name="2210" href="Definition.LogicalRelation.Properties.Symmetry.html#2210" class="Bound"
+      >&#915;</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" href="Definition.LogicalRelation.Properties.Symmetry.html#2212" class="Bound"
+      >A</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="Definition.LogicalRelation.Properties.Symmetry.html#2214" class="Bound"
+      >B</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" href="Definition.LogicalRelation.Properties.Symmetry.html#2216" class="Bound"
+      >l</a
+      ><a name="2217"
+      > </a
+      ><a name="2218" href="Definition.LogicalRelation.Properties.Symmetry.html#2218" class="Bound"
+      >l'</a
+      ><a name="2220" class="Symbol"
+      >}</a
+      ><a name="2221"
+      > </a
+      ><a name="2222" class="Symbol"
+      >(</a
+      ><a name="2223" href="Definition.LogicalRelation.Properties.Symmetry.html#2223" class="Bound"
+      >[A]</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" class="Symbol"
+      >:</a
+      ><a name="2228"
+      > </a
+      ><a name="2229" href="Definition.LogicalRelation.Properties.Symmetry.html#2210" class="Bound"
+      >&#915;</a
+      ><a name="2230"
+      > </a
+      ><a name="2231" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2233"
+      > </a
+      ><a name="2234" href="Definition.LogicalRelation.Properties.Symmetry.html#2216" class="Bound"
+      >l</a
+      ><a name="2235"
+      > </a
+      ><a name="2236" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2237"
+      > </a
+      ><a name="2238" href="Definition.LogicalRelation.Properties.Symmetry.html#2212" class="Bound"
+      >A</a
+      ><a name="2239" class="Symbol"
+      >)</a
+      ><a name="2240"
+      > </a
+      ><a name="2241" class="Symbol"
+      >(</a
+      ><a name="2242" href="Definition.LogicalRelation.Properties.Symmetry.html#2242" class="Bound"
+      >[B]</a
+      ><a name="2245"
+      > </a
+      ><a name="2246" class="Symbol"
+      >:</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" href="Definition.LogicalRelation.Properties.Symmetry.html#2210" class="Bound"
+      >&#915;</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2252"
+      > </a
+      ><a name="2253" href="Definition.LogicalRelation.Properties.Symmetry.html#2218" class="Bound"
+      >l'</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2257"
+      > </a
+      ><a name="2258" href="Definition.LogicalRelation.Properties.Symmetry.html#2214" class="Bound"
+      >B</a
+      ><a name="2259" class="Symbol"
+      >)</a
+      ><a name="2260"
+      >
+        </a
+      ><a name="2269" class="Symbol"
+      >&#8594;</a
+      ><a name="2270"
+      > </a
+      ><a name="2271" href="Definition.LogicalRelation.Properties.Symmetry.html#2210" class="Bound"
+      >&#915;</a
+      ><a name="2272"
+      > </a
+      ><a name="2273" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" href="Definition.LogicalRelation.Properties.Symmetry.html#2216" class="Bound"
+      >l</a
+      ><a name="2277"
+      > </a
+      ><a name="2278" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" href="Definition.LogicalRelation.Properties.Symmetry.html#2212" class="Bound"
+      >A</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="2283"
+      > </a
+      ><a name="2284" href="Definition.LogicalRelation.Properties.Symmetry.html#2214" class="Bound"
+      >B</a
+      ><a name="2285"
+      > </a
+      ><a name="2286" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="2287"
+      > </a
+      ><a name="2288" href="Definition.LogicalRelation.Properties.Symmetry.html#2223" class="Bound"
+      >[A]</a
+      ><a name="2291"
+      >
+        </a
+      ><a name="2300" class="Symbol"
+      >&#8594;</a
+      ><a name="2301"
+      > </a
+      ><a name="2302" href="Definition.LogicalRelation.Properties.Symmetry.html#2210" class="Bound"
+      >&#915;</a
+      ><a name="2303"
+      > </a
+      ><a name="2304" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2306"
+      > </a
+      ><a name="2307" href="Definition.LogicalRelation.Properties.Symmetry.html#2218" class="Bound"
+      >l'</a
+      ><a name="2309"
+      > </a
+      ><a name="2310" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" href="Definition.LogicalRelation.Properties.Symmetry.html#2214" class="Bound"
+      >B</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="2315"
+      > </a
+      ><a name="2316" href="Definition.LogicalRelation.Properties.Symmetry.html#2212" class="Bound"
+      >A</a
+      ><a name="2317"
+      > </a
+      ><a name="2318" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="2319"
+      > </a
+      ><a name="2320" href="Definition.LogicalRelation.Properties.Symmetry.html#2242" class="Bound"
+      >[B]</a
+      ><a name="2323"
+      >
+  </a
+      ><a name="2326" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="Definition.LogicalRelation.Properties.Symmetry.html#2332" class="Bound"
+      >[A]</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" href="Definition.LogicalRelation.Properties.Symmetry.html#2336" class="Bound"
+      >[B]</a
+      ><a name="2339"
+      > </a
+      ><a name="2340" href="Definition.LogicalRelation.Properties.Symmetry.html#2340" class="Bound"
+      >A&#8801;B</a
+      ><a name="2343"
+      > </a
+      ><a name="2344" class="Symbol"
+      >=</a
+      ><a name="2345"
+      > </a
+      ><a name="2346" href="Definition.LogicalRelation.Properties.Symmetry.html#482" class="Function"
+      >symEqT</a
+      ><a name="2352"
+      > </a
+      ><a name="2353" class="Symbol"
+      >(</a
+      ><a name="2354" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="2363"
+      > </a
+      ><a name="2364" href="Definition.LogicalRelation.Properties.Symmetry.html#2332" class="Bound"
+      >[A]</a
+      ><a name="2367"
+      > </a
+      ><a name="2368" href="Definition.LogicalRelation.Properties.Symmetry.html#2336" class="Bound"
+      >[B]</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" href="Definition.LogicalRelation.Properties.Symmetry.html#2340" class="Bound"
+      >A&#8801;B</a
+      ><a name="2375" class="Symbol"
+      >)</a
+      ><a name="2376"
+      > </a
+      ><a name="2377" href="Definition.LogicalRelation.Properties.Symmetry.html#2340" class="Bound"
+      >A&#8801;B</a
+      ><a name="2380"
+      >
+
+</a
+      ><a name="2382" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2397"
+      > </a
+      ><a name="2398" class="Symbol"
+      >:</a
+      ><a name="2399"
+      > </a
+      ><a name="2400" class="Symbol"
+      >&#8704;</a
+      ><a name="2401"
+      > </a
+      ><a name="2402" class="Symbol"
+      >{</a
+      ><a name="2403" href="Definition.LogicalRelation.Properties.Symmetry.html#2403" class="Bound"
+      >&#915;</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" href="Definition.LogicalRelation.Properties.Symmetry.html#2405" class="Bound"
+      >k</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" href="Definition.LogicalRelation.Properties.Symmetry.html#2407" class="Bound"
+      >k'</a
+      ><a name="2409" class="Symbol"
+      >}</a
+      ><a name="2410"
+      >
+                </a
+      ><a name="2427" class="Symbol"
+      >&#8594;</a
+      ><a name="2428"
+      > </a
+      ><a name="2429" href="Definition.LogicalRelation.html#1613" class="Datatype"
+      >[Natural]-prop</a
+      ><a name="2443"
+      > </a
+      ><a name="2444" href="Definition.LogicalRelation.Properties.Symmetry.html#2403" class="Bound"
+      >&#915;</a
+      ><a name="2445"
+      > </a
+      ><a name="2446" href="Definition.LogicalRelation.Properties.Symmetry.html#2405" class="Bound"
+      >k</a
+      ><a name="2447"
+      > </a
+      ><a name="2448" href="Definition.LogicalRelation.Properties.Symmetry.html#2407" class="Bound"
+      >k'</a
+      ><a name="2450"
+      >
+                </a
+      ><a name="2467" class="Symbol"
+      >&#8594;</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" href="Definition.LogicalRelation.html#1613" class="Datatype"
+      >[Natural]-prop</a
+      ><a name="2483"
+      > </a
+      ><a name="2484" href="Definition.LogicalRelation.Properties.Symmetry.html#2403" class="Bound"
+      >&#915;</a
+      ><a name="2485"
+      > </a
+      ><a name="2486" href="Definition.LogicalRelation.Properties.Symmetry.html#2407" class="Bound"
+      >k'</a
+      ><a name="2488"
+      > </a
+      ><a name="2489" href="Definition.LogicalRelation.Properties.Symmetry.html#2405" class="Bound"
+      >k</a
+      ><a name="2490"
+      >
+</a
+      ><a name="2491" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2506"
+      > </a
+      ><a name="2507" class="Symbol"
+      >(</a
+      ><a name="2508" href="Definition.LogicalRelation.html#1675" class="InductiveConstructor"
+      >suc</a
+      ><a name="2511"
+      > </a
+      ><a name="2512" class="Symbol"
+      >(</a
+      ><a name="2513" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="2516"
+      > </a
+      ><a name="2517" href="Definition.LogicalRelation.Properties.Symmetry.html#2517" class="Bound"
+      >k</a
+      ><a name="2518"
+      > </a
+      ><a name="2519" href="Definition.LogicalRelation.Properties.Symmetry.html#2519" class="Bound"
+      >k'</a
+      ><a name="2521"
+      > </a
+      ><a name="2522" href="Definition.LogicalRelation.Properties.Symmetry.html#2522" class="Bound"
+      >d</a
+      ><a name="2523"
+      > </a
+      ><a name="2524" href="Definition.LogicalRelation.Properties.Symmetry.html#2524" class="Bound"
+      >d'</a
+      ><a name="2526"
+      > </a
+      ><a name="2527" href="Definition.LogicalRelation.Properties.Symmetry.html#2527" class="Bound"
+      >t&#8801;u</a
+      ><a name="2530"
+      > </a
+      ><a name="2531" href="Definition.LogicalRelation.Properties.Symmetry.html#2531" class="Bound"
+      >prop</a
+      ><a name="2535" class="Symbol"
+      >))</a
+      ><a name="2537"
+      > </a
+      ><a name="2538" class="Symbol"
+      >=</a
+      ><a name="2539"
+      >
+  </a
+      ><a name="2542" href="Definition.LogicalRelation.html#1675" class="InductiveConstructor"
+      >suc</a
+      ><a name="2545"
+      > </a
+      ><a name="2546" class="Symbol"
+      >(</a
+      ><a name="2547" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="2550"
+      > </a
+      ><a name="2551" href="Definition.LogicalRelation.Properties.Symmetry.html#2519" class="Bound"
+      >k'</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" href="Definition.LogicalRelation.Properties.Symmetry.html#2517" class="Bound"
+      >k</a
+      ><a name="2555"
+      > </a
+      ><a name="2556" href="Definition.LogicalRelation.Properties.Symmetry.html#2524" class="Bound"
+      >d'</a
+      ><a name="2558"
+      > </a
+      ><a name="2559" href="Definition.LogicalRelation.Properties.Symmetry.html#2522" class="Bound"
+      >d</a
+      ><a name="2560"
+      > </a
+      ><a name="2561" class="Symbol"
+      >(</a
+      ><a name="2562" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="2565"
+      > </a
+      ><a name="2566" href="Definition.LogicalRelation.Properties.Symmetry.html#2527" class="Bound"
+      >t&#8801;u</a
+      ><a name="2569" class="Symbol"
+      >)</a
+      ><a name="2570"
+      > </a
+      ><a name="2571" class="Symbol"
+      >(</a
+      ><a name="2572" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2587"
+      > </a
+      ><a name="2588" href="Definition.LogicalRelation.Properties.Symmetry.html#2531" class="Bound"
+      >prop</a
+      ><a name="2592" class="Symbol"
+      >))</a
+      ><a name="2594"
+      >
+</a
+      ><a name="2595" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2610"
+      > </a
+      ><a name="2611" href="Definition.LogicalRelation.html#1747" class="InductiveConstructor"
+      >zero</a
+      ><a name="2615"
+      > </a
+      ><a name="2616" class="Symbol"
+      >=</a
+      ><a name="2617"
+      > </a
+      ><a name="2618" href="Definition.LogicalRelation.html#1747" class="InductiveConstructor"
+      >zero</a
+      ><a name="2622"
+      >
+</a
+      ><a name="2623" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2638"
+      > </a
+      ><a name="2639" class="Symbol"
+      >(</a
+      ><a name="2640" href="Definition.LogicalRelation.html#1785" class="InductiveConstructor"
+      >ne</a
+      ><a name="2642"
+      > </a
+      ><a name="2643" href="Definition.LogicalRelation.Properties.Symmetry.html#2643" class="Bound"
+      >x</a
+      ><a name="2644"
+      > </a
+      ><a name="2645" href="Definition.LogicalRelation.Properties.Symmetry.html#2645" class="Bound"
+      >x&#8321;</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" href="Definition.LogicalRelation.Properties.Symmetry.html#2648" class="Bound"
+      >prop</a
+      ><a name="2652" class="Symbol"
+      >)</a
+      ><a name="2653"
+      > </a
+      ><a name="2654" class="Symbol"
+      >=</a
+      ><a name="2655"
+      > </a
+      ><a name="2656" href="Definition.LogicalRelation.html#1785" class="InductiveConstructor"
+      >ne</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="Definition.LogicalRelation.Properties.Symmetry.html#2645" class="Bound"
+      >x&#8321;</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="Definition.LogicalRelation.Properties.Symmetry.html#2643" class="Bound"
+      >x</a
+      ><a name="2663"
+      > </a
+      ><a name="2664" class="Symbol"
+      >(</a
+      ><a name="2665" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="2668"
+      > </a
+      ><a name="2669" href="Definition.LogicalRelation.Properties.Symmetry.html#2648" class="Bound"
+      >prop</a
+      ><a name="2673" class="Symbol"
+      >)</a
+      ><a name="2674"
+      >
+
+</a
+      ><a name="2676" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="2685"
+      > </a
+      ><a name="2686" class="Symbol"
+      >:</a
+      ><a name="2687"
+      > </a
+      ><a name="2688" class="Symbol"
+      >&#8704;</a
+      ><a name="2689"
+      > </a
+      ><a name="2690" class="Symbol"
+      >{</a
+      ><a name="2691" href="Definition.LogicalRelation.Properties.Symmetry.html#2691" class="Bound"
+      >l</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" href="Definition.LogicalRelation.Properties.Symmetry.html#2693" class="Bound"
+      >&#915;</a
+      ><a name="2694"
+      > </a
+      ><a name="2695" href="Definition.LogicalRelation.Properties.Symmetry.html#2695" class="Bound"
+      >A</a
+      ><a name="2696"
+      > </a
+      ><a name="2697" href="Definition.LogicalRelation.Properties.Symmetry.html#2697" class="Bound"
+      >t</a
+      ><a name="2698"
+      > </a
+      ><a name="2699" href="Definition.LogicalRelation.Properties.Symmetry.html#2699" class="Bound"
+      >u</a
+      ><a name="2700" class="Symbol"
+      >}</a
+      ><a name="2701"
+      > </a
+      ><a name="2702" class="Symbol"
+      >(</a
+      ><a name="2703" href="Definition.LogicalRelation.Properties.Symmetry.html#2703" class="Bound"
+      >[A]</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" class="Symbol"
+      >:</a
+      ><a name="2708"
+      > </a
+      ><a name="2709" href="Definition.LogicalRelation.Properties.Symmetry.html#2693" class="Bound"
+      >&#915;</a
+      ><a name="2710"
+      > </a
+      ><a name="2711" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2713"
+      > </a
+      ><a name="2714" href="Definition.LogicalRelation.Properties.Symmetry.html#2691" class="Bound"
+      >l</a
+      ><a name="2715"
+      > </a
+      ><a name="2716" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="Definition.LogicalRelation.Properties.Symmetry.html#2695" class="Bound"
+      >A</a
+      ><a name="2719" class="Symbol"
+      >)</a
+      ><a name="2720"
+      >
+          </a
+      ><a name="2731" class="Symbol"
+      >&#8594;</a
+      ><a name="2732"
+      > </a
+      ><a name="2733" href="Definition.LogicalRelation.Properties.Symmetry.html#2693" class="Bound"
+      >&#915;</a
+      ><a name="2734"
+      > </a
+      ><a name="2735" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2737"
+      > </a
+      ><a name="2738" href="Definition.LogicalRelation.Properties.Symmetry.html#2691" class="Bound"
+      >l</a
+      ><a name="2739"
+      > </a
+      ><a name="2740" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="2741"
+      > </a
+      ><a name="2742" href="Definition.LogicalRelation.Properties.Symmetry.html#2697" class="Bound"
+      >t</a
+      ><a name="2743"
+      > </a
+      ><a name="2744" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="2745"
+      > </a
+      ><a name="2746" href="Definition.LogicalRelation.Properties.Symmetry.html#2699" class="Bound"
+      >u</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="2749"
+      > </a
+      ><a name="2750" href="Definition.LogicalRelation.Properties.Symmetry.html#2695" class="Bound"
+      >A</a
+      ><a name="2751"
+      > </a
+      ><a name="2752" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="2753"
+      > </a
+      ><a name="2754" href="Definition.LogicalRelation.Properties.Symmetry.html#2703" class="Bound"
+      >[A]</a
+      ><a name="2757"
+      >
+          </a
+      ><a name="2768" class="Symbol"
+      >&#8594;</a
+      ><a name="2769"
+      > </a
+      ><a name="2770" href="Definition.LogicalRelation.Properties.Symmetry.html#2693" class="Bound"
+      >&#915;</a
+      ><a name="2771"
+      > </a
+      ><a name="2772" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2774"
+      > </a
+      ><a name="2775" href="Definition.LogicalRelation.Properties.Symmetry.html#2691" class="Bound"
+      >l</a
+      ><a name="2776"
+      > </a
+      ><a name="2777" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#10217;</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Definition.LogicalRelation.Properties.Symmetry.html#2699" class="Bound"
+      >u</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8801;</a
+      ><a name="2782"
+      > </a
+      ><a name="2783" href="Definition.LogicalRelation.Properties.Symmetry.html#2697" class="Bound"
+      >t</a
+      ><a name="2784"
+      > </a
+      ><a name="2785" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >&#8759;</a
+      ><a name="2786"
+      > </a
+      ><a name="2787" href="Definition.LogicalRelation.Properties.Symmetry.html#2695" class="Bound"
+      >A</a
+      ><a name="2788"
+      > </a
+      ><a name="2789" href="Definition.LogicalRelation.html#9231" class="Function Operator"
+      >/</a
+      ><a name="2790"
+      > </a
+      ><a name="2791" href="Definition.LogicalRelation.Properties.Symmetry.html#2703" class="Bound"
+      >[A]</a
+      ><a name="2794"
+      >
+</a
+      ><a name="2795" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="2804"
+      > </a
+      ><a name="2805" class="Symbol"
+      >(</a
+      ><a name="2806" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="2808"
+      > </a
+      ><a name="2809" class="DottedPattern Symbol"
+      >.</a
+      ><a name="2810" href="Definition.LogicalRelation.html#2065" class="DottedPattern InductiveConstructor"
+      >&#8304;</a
+      ><a name="2811"
+      > </a
+      ><a name="2812" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" href="Definition.LogicalRelation.Properties.Symmetry.html#2816" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2818" class="Symbol"
+      >)</a
+      ><a name="2819"
+      > </a
+      ><a name="2820" class="Symbol"
+      >(</a
+      ><a name="2821" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="2824"
+      > </a
+      ><a name="2825" href="Definition.LogicalRelation.Properties.Symmetry.html#2825" class="Bound"
+      >&#8866;t</a
+      ><a name="2827"
+      > </a
+      ><a name="2828" href="Definition.LogicalRelation.Properties.Symmetry.html#2828" class="Bound"
+      >&#8866;u</a
+      ><a name="2830"
+      > </a
+      ><a name="2831" href="Definition.LogicalRelation.Properties.Symmetry.html#2831" class="Bound"
+      >t&#8801;u</a
+      ><a name="2834"
+      > </a
+      ><a name="2835" href="Definition.LogicalRelation.Properties.Symmetry.html#2835" class="Bound"
+      >&#8873;t</a
+      ><a name="2837"
+      > </a
+      ><a name="2838" href="Definition.LogicalRelation.Properties.Symmetry.html#2838" class="Bound"
+      >&#8873;u</a
+      ><a name="2840"
+      > </a
+      ><a name="2841" href="Definition.LogicalRelation.Properties.Symmetry.html#2841" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="2846" class="Symbol"
+      >)</a
+      ><a name="2847"
+      > </a
+      ><a name="2848" class="Symbol"
+      >=</a
+      ><a name="2849"
+      >
+  </a
+      ><a name="2852" href="Definition.LogicalRelation.html#3116" class="InductiveConstructor"
+      >U&#8348;&#8332;</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="Definition.LogicalRelation.Properties.Symmetry.html#2828" class="Bound"
+      >&#8866;u</a
+      ><a name="2858"
+      > </a
+      ><a name="2859" href="Definition.LogicalRelation.Properties.Symmetry.html#2825" class="Bound"
+      >&#8866;t</a
+      ><a name="2861"
+      > </a
+      ><a name="2862" class="Symbol"
+      >(</a
+      ><a name="2863" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="2866"
+      > </a
+      ><a name="2867" href="Definition.LogicalRelation.Properties.Symmetry.html#2831" class="Bound"
+      >t&#8801;u</a
+      ><a name="2870" class="Symbol"
+      >)</a
+      ><a name="2871"
+      > </a
+      ><a name="2872" href="Definition.LogicalRelation.Properties.Symmetry.html#2838" class="Bound"
+      >&#8873;u</a
+      ><a name="2874"
+      > </a
+      ><a name="2875" href="Definition.LogicalRelation.Properties.Symmetry.html#2835" class="Bound"
+      >&#8873;t</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" class="Symbol"
+      >(</a
+      ><a name="2879" href="Definition.LogicalRelation.Properties.Symmetry.html#2199" class="Function"
+      >symEq</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Definition.LogicalRelation.Properties.Symmetry.html#2835" class="Bound"
+      >&#8873;t</a
+      ><a name="2887"
+      > </a
+      ><a name="2888" href="Definition.LogicalRelation.Properties.Symmetry.html#2838" class="Bound"
+      >&#8873;u</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Definition.LogicalRelation.Properties.Symmetry.html#2841" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="2896" class="Symbol"
+      >)</a
+      ><a name="2897"
+      >
+</a
+      ><a name="2898" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="2907"
+      > </a
+      ><a name="2908" class="Symbol"
+      >(</a
+      ><a name="2909" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="2910"
+      > </a
+      ><a name="2911" href="Definition.LogicalRelation.Properties.Symmetry.html#2911" class="Bound"
+      >D</a
+      ><a name="2912" class="Symbol"
+      >)</a
+      ><a name="2913"
+      > </a
+      ><a name="2914" class="Symbol"
+      >(</a
+      ><a name="2915" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="2918"
+      > </a
+      ><a name="2919" href="Definition.LogicalRelation.Properties.Symmetry.html#2919" class="Bound"
+      >k</a
+      ><a name="2920"
+      > </a
+      ><a name="2921" href="Definition.LogicalRelation.Properties.Symmetry.html#2921" class="Bound"
+      >k'</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Definition.LogicalRelation.Properties.Symmetry.html#2924" class="Bound"
+      >d</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" href="Definition.LogicalRelation.Properties.Symmetry.html#2926" class="Bound"
+      >d'</a
+      ><a name="2928"
+      > </a
+      ><a name="2929" href="Definition.LogicalRelation.Properties.Symmetry.html#2929" class="Bound"
+      >t&#8801;u</a
+      ><a name="2932"
+      > </a
+      ><a name="2933" href="Definition.LogicalRelation.Properties.Symmetry.html#2933" class="Bound"
+      >prop</a
+      ><a name="2937" class="Symbol"
+      >)</a
+      ><a name="2938"
+      > </a
+      ><a name="2939" class="Symbol"
+      >=</a
+      ><a name="2940"
+      >
+  </a
+      ><a name="2943" href="Definition.LogicalRelation.html#1447" class="InductiveConstructor"
+      >&#8469;&#8348;&#8332;</a
+      ><a name="2946"
+      > </a
+      ><a name="2947" href="Definition.LogicalRelation.Properties.Symmetry.html#2921" class="Bound"
+      >k'</a
+      ><a name="2949"
+      > </a
+      ><a name="2950" href="Definition.LogicalRelation.Properties.Symmetry.html#2919" class="Bound"
+      >k</a
+      ><a name="2951"
+      > </a
+      ><a name="2952" href="Definition.LogicalRelation.Properties.Symmetry.html#2926" class="Bound"
+      >d'</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="Definition.LogicalRelation.Properties.Symmetry.html#2924" class="Bound"
+      >d</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" class="Symbol"
+      >(</a
+      ><a name="2958" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="2961"
+      > </a
+      ><a name="2962" href="Definition.LogicalRelation.Properties.Symmetry.html#2929" class="Bound"
+      >t&#8801;u</a
+      ><a name="2965" class="Symbol"
+      >)</a
+      ><a name="2966"
+      > </a
+      ><a name="2967" class="Symbol"
+      >(</a
+      ><a name="2968" href="Definition.LogicalRelation.Properties.Symmetry.html#2382" class="Function"
+      >symNatural-prop</a
+      ><a name="2983"
+      > </a
+      ><a name="2984" href="Definition.LogicalRelation.Properties.Symmetry.html#2933" class="Bound"
+      >prop</a
+      ><a name="2988" class="Symbol"
+      >)</a
+      ><a name="2989"
+      >
+</a
+      ><a name="2990" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="2999"
+      > </a
+      ><a name="3000" class="Symbol"
+      >(</a
+      ><a name="3001" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="3004"
+      > </a
+      ><a name="3005" href="Definition.LogicalRelation.Properties.Symmetry.html#3005" class="Bound"
+      >K</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" href="Definition.LogicalRelation.Properties.Symmetry.html#3007" class="Bound"
+      >D</a
+      ><a name="3008"
+      > </a
+      ><a name="3009" href="Definition.LogicalRelation.Properties.Symmetry.html#3009" class="Bound"
+      >neK</a
+      ><a name="3012" class="Symbol"
+      >)</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" href="Definition.LogicalRelation.Properties.Symmetry.html#3014" class="Bound"
+      >t&#8801;u</a
+      ><a name="3017"
+      > </a
+      ><a name="3018" class="Symbol"
+      >=</a
+      ><a name="3019"
+      > </a
+      ><a name="3020" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="3023"
+      > </a
+      ><a name="3024" href="Definition.LogicalRelation.Properties.Symmetry.html#3014" class="Bound"
+      >t&#8801;u</a
+      ><a name="3027"
+      >
+</a
+      ><a name="3028" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="3037"
+      > </a
+      ><a name="3038" class="Symbol"
+      >(</a
+      ><a name="3039" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="3041"
+      > </a
+      ><a name="3042" href="Definition.LogicalRelation.Properties.Symmetry.html#3042" class="Bound"
+      >F</a
+      ><a name="3043"
+      > </a
+      ><a name="3044" href="Definition.LogicalRelation.Properties.Symmetry.html#3044" class="Bound"
+      >G</a
+      ><a name="3045"
+      > </a
+      ><a name="3046" href="Definition.LogicalRelation.Properties.Symmetry.html#3046" class="Bound"
+      >D</a
+      ><a name="3047"
+      > </a
+      ><a name="3048" href="Definition.LogicalRelation.Properties.Symmetry.html#3048" class="Bound"
+      >&#8866;F</a
+      ><a name="3050"
+      > </a
+      ><a name="3051" href="Definition.LogicalRelation.Properties.Symmetry.html#3051" class="Bound"
+      >&#8866;G</a
+      ><a name="3053"
+      > </a
+      ><a name="3054" href="Definition.LogicalRelation.Properties.Symmetry.html#3054" class="Bound"
+      >[F]</a
+      ><a name="3057"
+      > </a
+      ><a name="3058" href="Definition.LogicalRelation.Properties.Symmetry.html#3058" class="Bound"
+      >[G]</a
+      ><a name="3061"
+      > </a
+      ><a name="3062" href="Definition.LogicalRelation.Properties.Symmetry.html#3062" class="Bound"
+      >G-ext</a
+      ><a name="3067" class="Symbol"
+      >)</a
+      ><a name="3068"
+      > </a
+      ><a name="3069" class="Symbol"
+      >(</a
+      ><a name="3070" href="Definition.LogicalRelation.Properties.Symmetry.html#3070" class="Bound"
+      >t&#8801;u</a
+      ><a name="3073"
+      > </a
+      ><a name="3074" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3075"
+      > </a
+      ><a name="3076" href="Definition.LogicalRelation.Properties.Symmetry.html#3076" class="Bound"
+      >&#8873;t</a
+      ><a name="3078"
+      > </a
+      ><a name="3079" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3080"
+      > </a
+      ><a name="3081" href="Definition.LogicalRelation.Properties.Symmetry.html#3081" class="Bound"
+      >&#8873;u</a
+      ><a name="3083"
+      > </a
+      ><a name="3084" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3085"
+      > </a
+      ><a name="3086" href="Definition.LogicalRelation.Properties.Symmetry.html#3086" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="3091" class="Symbol"
+      >)</a
+      ><a name="3092"
+      > </a
+      ><a name="3093" class="Symbol"
+      >=</a
+      ><a name="3094"
+      >
+  </a
+      ><a name="3097" href="Definition.Typed.html#2418" class="InductiveConstructor"
+      >sym</a
+      ><a name="3100"
+      > </a
+      ><a name="3101" href="Definition.LogicalRelation.Properties.Symmetry.html#3070" class="Bound"
+      >t&#8801;u</a
+      ><a name="3104"
+      > </a
+      ><a name="3105" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3106"
+      > </a
+      ><a name="3107" href="Definition.LogicalRelation.Properties.Symmetry.html#3081" class="Bound"
+      >&#8873;u</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" href="Definition.LogicalRelation.Properties.Symmetry.html#3076" class="Bound"
+      >&#8873;t</a
+      ><a name="3114"
+      > </a
+      ><a name="3115" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3116"
+      > </a
+      ><a name="3117" class="Symbol"
+      >(&#955;</a
+      ><a name="3119"
+      > </a
+      ><a name="3120" href="Definition.LogicalRelation.Properties.Symmetry.html#3120" class="Bound"
+      >&#961;</a
+      ><a name="3121"
+      > </a
+      ><a name="3122" href="Definition.LogicalRelation.Properties.Symmetry.html#3122" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3124"
+      > </a
+      ><a name="3125" href="Definition.LogicalRelation.Properties.Symmetry.html#3125" class="Bound"
+      >[a]</a
+      ><a name="3128"
+      > </a
+      ><a name="3129" class="Symbol"
+      >&#8594;</a
+      ><a name="3130"
+      > </a
+      ><a name="3131" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="3140"
+      > </a
+      ><a name="3141" class="Symbol"
+      >(</a
+      ><a name="3142" href="Definition.LogicalRelation.Properties.Symmetry.html#3058" class="Bound"
+      >[G]</a
+      ><a name="3145"
+      > </a
+      ><a name="3146" href="Definition.LogicalRelation.Properties.Symmetry.html#3120" class="Bound"
+      >&#961;</a
+      ><a name="3147"
+      > </a
+      ><a name="3148" href="Definition.LogicalRelation.Properties.Symmetry.html#3122" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3150"
+      > </a
+      ><a name="3151" href="Definition.LogicalRelation.Properties.Symmetry.html#3125" class="Bound"
+      >[a]</a
+      ><a name="3154" class="Symbol"
+      >)</a
+      ><a name="3155"
+      > </a
+      ><a name="3156" class="Symbol"
+      >(</a
+      ><a name="3157" href="Definition.LogicalRelation.Properties.Symmetry.html#3086" class="Bound"
+      >[t&#8801;u]</a
+      ><a name="3162"
+      > </a
+      ><a name="3163" href="Definition.LogicalRelation.Properties.Symmetry.html#3120" class="Bound"
+      >&#961;</a
+      ><a name="3164"
+      > </a
+      ><a name="3165" href="Definition.LogicalRelation.Properties.Symmetry.html#3122" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="3167"
+      > </a
+      ><a name="3168" href="Definition.LogicalRelation.Properties.Symmetry.html#3125" class="Bound"
+      >[a]</a
+      ><a name="3171" class="Symbol"
+      >))</a
+      ><a name="3173"
+      >
+</a
+      ><a name="3174" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="3183"
+      > </a
+      ><a name="3184" class="Symbol"
+      >(</a
+      ><a name="3185" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="3188"
+      > </a
+      ><a name="3189" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="3192"
+      > </a
+      ><a name="3193" href="Definition.LogicalRelation.Properties.Symmetry.html#3193" class="Bound"
+      >x</a
+      ><a name="3194" class="Symbol"
+      >)</a
+      ><a name="3195"
+      > </a
+      ><a name="3196" href="Definition.LogicalRelation.Properties.Symmetry.html#3196" class="Bound"
+      >t&#8801;u</a
+      ><a name="3199"
+      > </a
+      ><a name="3200" class="Symbol"
+      >=</a
+      ><a name="3201"
+      > </a
+      ><a name="3202" href="Definition.LogicalRelation.Properties.Symmetry.html#2676" class="Function"
+      >symEqTerm</a
+      ><a name="3211"
+      > </a
+      ><a name="3212" href="Definition.LogicalRelation.Properties.Symmetry.html#3193" class="Bound"
+      >x</a
+      ><a name="3213"
+      > </a
+      ><a name="3214" href="Definition.LogicalRelation.Properties.Symmetry.html#3196" class="Bound"
+      >t&#8801;u</a
+      ><a name="3217"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Substitution.Reflexivity</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Substitution.Reflexivity.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Reflexivity</a
+      ><a name="59"
+      > </a
+      ><a name="60" class="Keyword"
+      >where</a
+      ><a name="65"
+      >
+
+</a
+      ><a name="67" class="Keyword"
+      >open</a
+      ><a name="71"
+      > </a
+      ><a name="72" class="Keyword"
+      >import</a
+      ><a name="78"
+      > </a
+      ><a name="79" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="116"
+      >
+</a
+      ><a name="117" class="Keyword"
+      >open</a
+      ><a name="121"
+      > </a
+      ><a name="122" class="Keyword"
+      >import</a
+      ><a name="128"
+      > </a
+      ><a name="129" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="168"
+      >
+
+</a
+      ><a name="170" class="Keyword"
+      >open</a
+      ><a name="174"
+      > </a
+      ><a name="175" class="Keyword"
+      >import</a
+      ><a name="181"
+      > </a
+      ><a name="182" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="195"
+      >
+
+
+</a
+      ><a name="198" href="Definition.LogicalRelation.Substitution.Reflexivity.html#198" class="Function"
+      >refl&#8347;</a
+      ><a name="203"
+      > </a
+      ><a name="204" class="Symbol"
+      >:</a
+      ><a name="205"
+      > </a
+      ><a name="206" class="Symbol"
+      >&#8704;</a
+      ><a name="207"
+      > </a
+      ><a name="208" class="Symbol"
+      >{</a
+      ><a name="209" href="Definition.LogicalRelation.Substitution.Reflexivity.html#209" class="Bound"
+      >A</a
+      ><a name="210"
+      > </a
+      ><a name="211" href="Definition.LogicalRelation.Substitution.Reflexivity.html#211" class="Bound"
+      >&#915;</a
+      ><a name="212"
+      > </a
+      ><a name="213" href="Definition.LogicalRelation.Substitution.Reflexivity.html#213" class="Bound"
+      >l</a
+      ><a name="214" class="Symbol"
+      >}</a
+      ><a name="215"
+      >
+        </a
+      ><a name="224" class="Symbol"
+      >(</a
+      ><a name="225" href="Definition.LogicalRelation.Substitution.Reflexivity.html#225" class="Bound"
+      >[&#915;]</a
+      ><a name="228"
+      > </a
+      ><a name="229" class="Symbol"
+      >:</a
+      ><a name="230"
+      > </a
+      ><a name="231" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="233"
+      > </a
+      ><a name="234" href="Definition.LogicalRelation.Substitution.Reflexivity.html#211" class="Bound"
+      >&#915;</a
+      ><a name="235" class="Symbol"
+      >)</a
+      ><a name="236"
+      >
+        </a
+      ><a name="245" class="Symbol"
+      >(</a
+      ><a name="246" href="Definition.LogicalRelation.Substitution.Reflexivity.html#246" class="Bound"
+      >[A]</a
+      ><a name="249"
+      > </a
+      ><a name="250" class="Symbol"
+      >:</a
+      ><a name="251"
+      > </a
+      ><a name="252" href="Definition.LogicalRelation.Substitution.Reflexivity.html#211" class="Bound"
+      >&#915;</a
+      ><a name="253"
+      > </a
+      ><a name="254" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="Definition.LogicalRelation.Substitution.Reflexivity.html#213" class="Bound"
+      >l</a
+      ><a name="259"
+      > </a
+      ><a name="260" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Definition.LogicalRelation.Substitution.Reflexivity.html#209" class="Bound"
+      >A</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="265"
+      > </a
+      ><a name="266" href="Definition.LogicalRelation.Substitution.Reflexivity.html#225" class="Bound"
+      >[&#915;]</a
+      ><a name="269" class="Symbol"
+      >)</a
+      ><a name="270"
+      >
+      </a
+      ><a name="277" class="Symbol"
+      >&#8594;</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="Definition.LogicalRelation.Substitution.Reflexivity.html#211" class="Bound"
+      >&#915;</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Definition.LogicalRelation.Substitution.Reflexivity.html#213" class="Bound"
+      >l</a
+      ><a name="286"
+      > </a
+      ><a name="287" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#10217;</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Definition.LogicalRelation.Substitution.Reflexivity.html#209" class="Bound"
+      >A</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >&#8801;</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Definition.LogicalRelation.Substitution.Reflexivity.html#209" class="Bound"
+      >A</a
+      ><a name="294"
+      > </a
+      ><a name="295" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="296"
+      > </a
+      ><a name="297" href="Definition.LogicalRelation.Substitution.Reflexivity.html#225" class="Bound"
+      >[&#915;]</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Definition.LogicalRelation.Substitution.html#1950" class="Function Operator"
+      >/</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Definition.LogicalRelation.Substitution.Reflexivity.html#246" class="Bound"
+      >[A]</a
+      ><a name="306"
+      >
+</a
+      ><a name="307" href="Definition.LogicalRelation.Substitution.Reflexivity.html#198" class="Function"
+      >refl&#8347;</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Definition.LogicalRelation.Substitution.Reflexivity.html#313" class="Bound"
+      >[&#915;]</a
+      ><a name="316"
+      > </a
+      ><a name="317" href="Definition.LogicalRelation.Substitution.Reflexivity.html#317" class="Bound"
+      >[A]</a
+      ><a name="320"
+      > </a
+      ><a name="321" href="Definition.LogicalRelation.Substitution.Reflexivity.html#321" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Definition.LogicalRelation.Substitution.Reflexivity.html#324" class="Bound"
+      >[&#963;]</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="Symbol"
+      >=</a
+      ><a name="329"
+      >
+  </a
+      ><a name="332" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="338"
+      > </a
+      ><a name="339" class="Symbol"
+      >(</a
+      ><a name="340" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="345"
+      > </a
+      ><a name="346" class="Symbol"
+      >(</a
+      ><a name="347" href="Definition.LogicalRelation.Substitution.Reflexivity.html#317" class="Bound"
+      >[A]</a
+      ><a name="350"
+      > </a
+      ><a name="351" href="Definition.LogicalRelation.Substitution.Reflexivity.html#321" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Definition.LogicalRelation.Substitution.Reflexivity.html#324" class="Bound"
+      >[&#963;]</a
+      ><a name="357" class="Symbol"
+      >))</a
+      ><a name="359"
+      >
+
+</a
+      ><a name="361" href="Definition.LogicalRelation.Substitution.Reflexivity.html#361" class="Function"
+      >refl&#8348;&#8347;</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Symbol"
+      >:</a
+      ><a name="369"
+      > </a
+      ><a name="370" class="Symbol"
+      >&#8704;</a
+      ><a name="371"
+      > </a
+      ><a name="372" class="Symbol"
+      >{</a
+      ><a name="373" href="Definition.LogicalRelation.Substitution.Reflexivity.html#373" class="Bound"
+      >A</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Definition.LogicalRelation.Substitution.Reflexivity.html#375" class="Bound"
+      >t</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Definition.LogicalRelation.Substitution.Reflexivity.html#377" class="Bound"
+      >&#915;</a
+      ><a name="378"
+      > </a
+      ><a name="379" href="Definition.LogicalRelation.Substitution.Reflexivity.html#379" class="Bound"
+      >l</a
+      ><a name="380" class="Symbol"
+      >}</a
+      ><a name="381"
+      >
+         </a
+      ><a name="391" class="Symbol"
+      >(</a
+      ><a name="392" href="Definition.LogicalRelation.Substitution.Reflexivity.html#392" class="Bound"
+      >[&#915;]</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Symbol"
+      >:</a
+      ><a name="397"
+      > </a
+      ><a name="398" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="400"
+      > </a
+      ><a name="401" href="Definition.LogicalRelation.Substitution.Reflexivity.html#377" class="Bound"
+      >&#915;</a
+      ><a name="402" class="Symbol"
+      >)</a
+      ><a name="403"
+      >
+         </a
+      ><a name="413" class="Symbol"
+      >(</a
+      ><a name="414" href="Definition.LogicalRelation.Substitution.Reflexivity.html#414" class="Bound"
+      >[A]</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Symbol"
+      >:</a
+      ><a name="419"
+      > </a
+      ><a name="420" href="Definition.LogicalRelation.Substitution.Reflexivity.html#377" class="Bound"
+      >&#915;</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Definition.LogicalRelation.Substitution.Reflexivity.html#379" class="Bound"
+      >l</a
+      ><a name="427"
+      > </a
+      ><a name="428" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="429"
+      > </a
+      ><a name="430" href="Definition.LogicalRelation.Substitution.Reflexivity.html#373" class="Bound"
+      >A</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="433"
+      > </a
+      ><a name="434" href="Definition.LogicalRelation.Substitution.Reflexivity.html#392" class="Bound"
+      >[&#915;]</a
+      ><a name="437" class="Symbol"
+      >)</a
+      ><a name="438"
+      >
+         </a
+      ><a name="448" class="Symbol"
+      >(</a
+      ><a name="449" href="Definition.LogicalRelation.Substitution.Reflexivity.html#449" class="Bound"
+      >[t]</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="Symbol"
+      >:</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Definition.LogicalRelation.Substitution.Reflexivity.html#377" class="Bound"
+      >&#915;</a
+      ><a name="456"
+      > </a
+      ><a name="457" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="460"
+      > </a
+      ><a name="461" href="Definition.LogicalRelation.Substitution.Reflexivity.html#379" class="Bound"
+      >l</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="465"
+      > </a
+      ><a name="466" href="Definition.LogicalRelation.Substitution.Reflexivity.html#375" class="Bound"
+      >t</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.LogicalRelation.Substitution.Reflexivity.html#373" class="Bound"
+      >A</a
+      ><a name="471"
+      > </a
+      ><a name="472" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Definition.LogicalRelation.Substitution.Reflexivity.html#392" class="Bound"
+      >[&#915;]</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="Definition.LogicalRelation.Substitution.Reflexivity.html#414" class="Bound"
+      >[A]</a
+      ><a name="483" class="Symbol"
+      >)</a
+      ><a name="484"
+      >
+       </a
+      ><a name="492" class="Symbol"
+      >&#8594;</a
+      ><a name="493"
+      > </a
+      ><a name="494" href="Definition.LogicalRelation.Substitution.Reflexivity.html#377" class="Bound"
+      >&#915;</a
+      ><a name="495"
+      > </a
+      ><a name="496" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="Definition.LogicalRelation.Substitution.Reflexivity.html#379" class="Bound"
+      >l</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#10217;t'</a
+      ><a name="505"
+      > </a
+      ><a name="506" href="Definition.LogicalRelation.Substitution.Reflexivity.html#375" class="Bound"
+      >t</a
+      ><a name="507"
+      > </a
+      ><a name="508" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8801;</a
+      ><a name="509"
+      > </a
+      ><a name="510" href="Definition.LogicalRelation.Substitution.Reflexivity.html#375" class="Bound"
+      >t</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >&#8759;</a
+      ><a name="513"
+      > </a
+      ><a name="514" href="Definition.LogicalRelation.Substitution.Reflexivity.html#373" class="Bound"
+      >A</a
+      ><a name="515"
+      > </a
+      ><a name="516" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Definition.LogicalRelation.Substitution.Reflexivity.html#392" class="Bound"
+      >[&#915;]</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Definition.LogicalRelation.Substitution.html#2612" class="Function Operator"
+      >/</a
+      ><a name="523"
+      > </a
+      ><a name="524" href="Definition.LogicalRelation.Substitution.Reflexivity.html#414" class="Bound"
+      >[A]</a
+      ><a name="527"
+      >
+</a
+      ><a name="528" href="Definition.LogicalRelation.Substitution.Reflexivity.html#361" class="Function"
+      >refl&#8348;&#8347;</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Definition.LogicalRelation.Substitution.Reflexivity.html#535" class="Bound"
+      >[&#915;]</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Definition.LogicalRelation.Substitution.Reflexivity.html#539" class="Bound"
+      >[A]</a
+      ><a name="542"
+      > </a
+      ><a name="543" href="Definition.LogicalRelation.Substitution.Reflexivity.html#543" class="Bound"
+      >[t]</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Definition.LogicalRelation.Substitution.Reflexivity.html#547" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Definition.LogicalRelation.Substitution.Reflexivity.html#550" class="Bound"
+      >[&#963;]</a
+      ><a name="553"
+      > </a
+      ><a name="554" class="Symbol"
+      >=</a
+      ><a name="555"
+      >
+  </a
+      ><a name="558" href="Definition.LogicalRelation.Properties.Reflexivity.html#938" class="Function"
+      >reflEqTerm</a
+      ><a name="568"
+      > </a
+      ><a name="569" class="Symbol"
+      >(</a
+      ><a name="570" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Symbol"
+      >(</a
+      ><a name="577" href="Definition.LogicalRelation.Substitution.Reflexivity.html#539" class="Bound"
+      >[A]</a
+      ><a name="580"
+      > </a
+      ><a name="581" href="Definition.LogicalRelation.Substitution.Reflexivity.html#547" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="583"
+      > </a
+      ><a name="584" href="Definition.LogicalRelation.Substitution.Reflexivity.html#550" class="Bound"
+      >[&#963;]</a
+      ><a name="587" class="Symbol"
+      >))</a
+      ><a name="589"
+      > </a
+      ><a name="590" class="Symbol"
+      >(</a
+      ><a name="591" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="596"
+      > </a
+      ><a name="597" class="Symbol"
+      >(</a
+      ><a name="598" href="Definition.LogicalRelation.Substitution.Reflexivity.html#543" class="Bound"
+      >[t]</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Definition.LogicalRelation.Substitution.Reflexivity.html#547" class="Bound"
+      >&#8866;&#916;</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Definition.LogicalRelation.Substitution.Reflexivity.html#550" class="Bound"
+      >[&#963;]</a
+      ><a name="608" class="Symbol"
+      >))</a
+      ><a name="610"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

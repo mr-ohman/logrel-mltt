@@ -1,0 +1,6264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Tactic</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Tactic.html#1" class="Module"
+      >Definition.LogicalRelation.Tactic</a
+      ><a name="41"
+      > </a
+      ><a name="42" class="Keyword"
+      >where</a
+      ><a name="47"
+      >
+
+</a
+      ><a name="49" class="Keyword"
+      >open</a
+      ><a name="53"
+      > </a
+      ><a name="54" class="Keyword"
+      >import</a
+      ><a name="60"
+      > </a
+      ><a name="61" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="79"
+      >
+</a
+      ><a name="80" class="Keyword"
+      >open</a
+      ><a name="84"
+      > </a
+      ><a name="85" class="Keyword"
+      >import</a
+      ><a name="91"
+      > </a
+      ><a name="92" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="108"
+      >
+</a
+      ><a name="109" class="Keyword"
+      >open</a
+      ><a name="113"
+      > </a
+      ><a name="114" class="Keyword"
+      >import</a
+      ><a name="120"
+      > </a
+      ><a name="121" href="Definition.Typed.Properties.html#1" class="Module"
+      >Definition.Typed.Properties</a
+      ><a name="148"
+      >
+</a
+      ><a name="149" class="Keyword"
+      >open</a
+      ><a name="153"
+      > </a
+      ><a name="154" class="Keyword"
+      >import</a
+      ><a name="160"
+      > </a
+      ><a name="161" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="187"
+      >
+</a
+      ><a name="188" class="Keyword"
+      >open</a
+      ><a name="192"
+      > </a
+      ><a name="193" class="Keyword"
+      >import</a
+      ><a name="199"
+      > </a
+      ><a name="200" href="Definition.LogicalRelation.Properties.Reflexivity.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Reflexivity</a
+      ><a name="249"
+      >
+</a
+      ><a name="250" class="Keyword"
+      >open</a
+      ><a name="254"
+      > </a
+      ><a name="255" class="Keyword"
+      >import</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Definition.LogicalRelation.Properties.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Properties.Wellformed</a
+      ><a name="310"
+      >
+
+</a
+      ><a name="312" class="Keyword"
+      >open</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="Keyword"
+      >import</a
+      ><a name="323"
+      > </a
+      ><a name="324" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="337"
+      >
+</a
+      ><a name="338" class="Keyword"
+      >open</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Keyword"
+      >import</a
+      ><a name="349"
+      > </a
+      ><a name="350" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="361"
+      > </a
+      ><a name="362" class="Keyword"
+      >using</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Symbol"
+      >(</a
+      ><a name="369" href="Tools.Empty.html#32" class="Datatype"
+      >&#8869;</a
+      ><a name="370" class="Symbol"
+      >;</a
+      ><a name="371"
+      > </a
+      ><a name="372" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="378" class="Symbol"
+      >)</a
+      ><a name="379"
+      >
+</a
+      ><a name="380" class="Keyword"
+      >import</a
+      ><a name="386"
+      > </a
+      ><a name="387" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="414"
+      > </a
+      ><a name="415" class="Symbol"
+      >as</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Module"
+      >PE</a
+      ><a name="420"
+      >
+</a
+      ><a name="421" class="Comment"
+      >--open import Relation.Nullary</a
+      ><a name="451"
+      >
+
+
+</a
+      ><a name="454" class="Keyword"
+      >data</a
+      ><a name="458"
+      > </a
+      ><a name="459" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Symbol"
+      >:</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="479"
+      > </a
+      ><a name="480" class="Symbol"
+      >&#8594;</a
+      ><a name="481"
+      > </a
+      ><a name="482" class="Symbol"
+      >(</a
+      ><a name="483" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="492"
+      > </a
+      ><a name="493" class="Symbol"
+      >&#8594;</a
+      ><a name="494"
+      > </a
+      ><a name="495" class="PrimitiveType"
+      >Set</a
+      ><a name="498" class="Symbol"
+      >)</a
+      ><a name="499"
+      > </a
+      ><a name="500" class="Symbol"
+      >&#8594;</a
+      ><a name="501"
+      > </a
+      ><a name="502" class="PrimitiveType"
+      >Set</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Keyword"
+      >where</a
+      ><a name="511"
+      >
+  </a
+      ><a name="514" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="519"
+      > </a
+      ><a name="520" class="Symbol"
+      >:</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Symbol"
+      >&#8704;</a
+      ><a name="523"
+      > </a
+      ><a name="524" class="Symbol"
+      >{</a
+      ><a name="525" href="Definition.LogicalRelation.Tactic.html#525" class="Bound"
+      >l</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="Definition.LogicalRelation.Tactic.html#527" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="531" class="Symbol"
+      >}</a
+      ><a name="532"
+      > </a
+      ><a name="533" class="Symbol"
+      >&#8594;</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Definition.LogicalRelation.Tactic.html#527" class="Bound Operator"
+      >&#8873;&#10216;</a
+      ><a name="537"
+      > </a
+      ><a name="538" href="Definition.LogicalRelation.Tactic.html#525" class="Bound"
+      >l</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Definition.LogicalRelation.Tactic.html#527" class="Bound Operator"
+      >&#10217;</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >&#8594;</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="552"
+      > </a
+      ><a name="553" href="Definition.LogicalRelation.Tactic.html#525" class="Bound"
+      >l</a
+      ><a name="554"
+      > </a
+      ><a name="555" href="Definition.LogicalRelation.Tactic.html#527" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="559"
+      >
+  </a
+      ><a name="562" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="565"
+      >   </a
+      ><a name="568" class="Symbol"
+      >:</a
+      ><a name="569"
+      > </a
+      ><a name="570" class="Symbol"
+      >&#8704;</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Symbol"
+      >{</a
+      ><a name="573" href="Definition.LogicalRelation.Tactic.html#573" class="Bound"
+      >l</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="Definition.LogicalRelation.Tactic.html#575" class="Bound"
+      >l'</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Definition.LogicalRelation.Tactic.html#578" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="582" class="Symbol"
+      >}</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >&#8594;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Definition.LogicalRelation.Tactic.html#575" class="Bound"
+      >l'</a
+      ><a name="588"
+      > </a
+      ><a name="589" href="Definition.LogicalRelation.html#2101" class="Datatype Operator"
+      >&lt;</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="Definition.LogicalRelation.Tactic.html#573" class="Bound"
+      >l</a
+      ><a name="592"
+      > </a
+      ><a name="593" class="Symbol"
+      >&#8594;</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="603"
+      > </a
+      ><a name="604" href="Definition.LogicalRelation.Tactic.html#575" class="Bound"
+      >l'</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Definition.LogicalRelation.Tactic.html#578" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="611"
+      > </a
+      ><a name="612" class="Symbol"
+      >&#8594;</a
+      ><a name="613"
+      > </a
+      ><a name="614" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="622"
+      > </a
+      ><a name="623" href="Definition.LogicalRelation.Tactic.html#573" class="Bound"
+      >l</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="Definition.LogicalRelation.Tactic.html#578" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="629"
+      >
+
+</a
+      ><a name="631" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >_&#8873;&#10216;_&#10217;U</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="Symbol"
+      >:</a
+      ><a name="639"
+      > </a
+      ><a name="640" class="Symbol"
+      >(</a
+      ><a name="641" href="Definition.LogicalRelation.Tactic.html#641" class="Bound"
+      >&#915;</a
+      ><a name="642"
+      > </a
+      ><a name="643" class="Symbol"
+      >:</a
+      ><a name="644"
+      > </a
+      ><a name="645" href="Definition.Untyped.html#226" class="Datatype"
+      >Con</a
+      ><a name="648"
+      > </a
+      ><a name="649" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="653" class="Symbol"
+      >)</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >(</a
+      ><a name="656" href="Definition.LogicalRelation.Tactic.html#656" class="Bound"
+      >l</a
+      ><a name="657"
+      > </a
+      ><a name="658" class="Symbol"
+      >:</a
+      ><a name="659"
+      > </a
+      ><a name="660" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="669" class="Symbol"
+      >)</a
+      ><a name="670"
+      > </a
+      ><a name="671" class="Symbol"
+      >&#8594;</a
+      ><a name="672"
+      > </a
+      ><a name="673" class="PrimitiveType"
+      >Set</a
+      ><a name="676"
+      >
+</a
+      ><a name="677" href="Definition.LogicalRelation.Tactic.html#677" class="Bound"
+      >&#915;</a
+      ><a name="678"
+      > </a
+      ><a name="679" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="681"
+      > </a
+      ><a name="682" href="Definition.LogicalRelation.Tactic.html#682" class="Bound"
+      >l</a
+      ><a name="683"
+      > </a
+      ><a name="684" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#10217;U</a
+      ><a name="686"
+      > </a
+      ><a name="687" class="Symbol"
+      >=</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="697"
+      > </a
+      ><a name="698" href="Definition.LogicalRelation.Tactic.html#682" class="Bound"
+      >l</a
+      ><a name="699"
+      > </a
+      ><a name="700" class="Symbol"
+      >(&#955;</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Definition.LogicalRelation.Tactic.html#703" class="Bound"
+      >l'</a
+      ><a name="705"
+      > </a
+      ><a name="706" class="Symbol"
+      >&#8594;</a
+      ><a name="707"
+      > </a
+      ><a name="708" href="Definition.LogicalRelation.Tactic.html#677" class="Bound"
+      >&#915;</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Definition.LogicalRelation.html#8637" class="Function Operator"
+      >&#8873;'&#10216;</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="Definition.LogicalRelation.Tactic.html#703" class="Bound"
+      >l'</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="Definition.LogicalRelation.html#8637" class="Function Operator"
+      >&#10217;U</a
+      ><a name="719" class="Symbol"
+      >)</a
+      ><a name="720"
+      >
+
+</a
+      ><a name="722" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >_&#8873;&#10216;_&#10217;&#8469;_</a
+      ><a name="729"
+      > </a
+      ><a name="730" class="Symbol"
+      >:</a
+      ><a name="731"
+      > </a
+      ><a name="732" class="Symbol"
+      >(</a
+      ><a name="733" href="Definition.LogicalRelation.Tactic.html#733" class="Bound"
+      >&#915;</a
+      ><a name="734"
+      > </a
+      ><a name="735" class="Symbol"
+      >:</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Definition.Untyped.html#226" class="Datatype"
+      >Con</a
+      ><a name="740"
+      > </a
+      ><a name="741" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="745" class="Symbol"
+      >)</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >(</a
+      ><a name="748" href="Definition.LogicalRelation.Tactic.html#748" class="Bound"
+      >l</a
+      ><a name="749"
+      > </a
+      ><a name="750" class="Symbol"
+      >:</a
+      ><a name="751"
+      > </a
+      ><a name="752" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="761" class="Symbol"
+      >)</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >(</a
+      ><a name="764" href="Definition.LogicalRelation.Tactic.html#764" class="Bound"
+      >A</a
+      ><a name="765"
+      > </a
+      ><a name="766" class="Symbol"
+      >:</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="772" class="Symbol"
+      >)</a
+      ><a name="773"
+      > </a
+      ><a name="774" class="Symbol"
+      >&#8594;</a
+      ><a name="775"
+      > </a
+      ><a name="776" class="PrimitiveType"
+      >Set</a
+      ><a name="779"
+      >
+</a
+      ><a name="780" href="Definition.LogicalRelation.Tactic.html#780" class="Bound"
+      >&#915;</a
+      ><a name="781"
+      > </a
+      ><a name="782" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="784"
+      > </a
+      ><a name="785" href="Definition.LogicalRelation.Tactic.html#785" class="Bound"
+      >l</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#10217;&#8469;</a
+      ><a name="789"
+      > </a
+      ><a name="790" href="Definition.LogicalRelation.Tactic.html#790" class="Bound"
+      >A</a
+      ><a name="791"
+      > </a
+      ><a name="792" class="Symbol"
+      >=</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="Definition.LogicalRelation.Tactic.html#785" class="Bound"
+      >l</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="Symbol"
+      >(&#955;</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Definition.LogicalRelation.Tactic.html#808" class="Bound"
+      >l'</a
+      ><a name="810"
+      > </a
+      ><a name="811" class="Symbol"
+      >&#8594;</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Definition.LogicalRelation.Tactic.html#780" class="Bound"
+      >&#915;</a
+      ><a name="814"
+      > </a
+      ><a name="815" href="Definition.LogicalRelation.html#887" class="Function Operator"
+      >&#8873;&#8469;</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Definition.LogicalRelation.Tactic.html#790" class="Bound"
+      >A</a
+      ><a name="819" class="Symbol"
+      >)</a
+      ><a name="820"
+      >
+
+</a
+      ><a name="822" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >_&#8873;&#10216;_&#10217;ne_</a
+      ><a name="830"
+      > </a
+      ><a name="831" class="Symbol"
+      >:</a
+      ><a name="832"
+      > </a
+      ><a name="833" class="Symbol"
+      >(</a
+      ><a name="834" href="Definition.LogicalRelation.Tactic.html#834" class="Bound"
+      >&#915;</a
+      ><a name="835"
+      > </a
+      ><a name="836" class="Symbol"
+      >:</a
+      ><a name="837"
+      > </a
+      ><a name="838" href="Definition.Untyped.html#226" class="Datatype"
+      >Con</a
+      ><a name="841"
+      > </a
+      ><a name="842" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="846" class="Symbol"
+      >)</a
+      ><a name="847"
+      > </a
+      ><a name="848" class="Symbol"
+      >(</a
+      ><a name="849" href="Definition.LogicalRelation.Tactic.html#849" class="Bound"
+      >l</a
+      ><a name="850"
+      > </a
+      ><a name="851" class="Symbol"
+      >:</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="862" class="Symbol"
+      >)</a
+      ><a name="863"
+      > </a
+      ><a name="864" class="Symbol"
+      >(</a
+      ><a name="865" href="Definition.LogicalRelation.Tactic.html#865" class="Bound"
+      >A</a
+      ><a name="866"
+      > </a
+      ><a name="867" class="Symbol"
+      >:</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="873" class="Symbol"
+      >)</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="Symbol"
+      >&#8594;</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="PrimitiveType"
+      >Set</a
+      ><a name="880"
+      >
+</a
+      ><a name="881" href="Definition.LogicalRelation.Tactic.html#881" class="Bound"
+      >&#915;</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Definition.LogicalRelation.Tactic.html#886" class="Bound"
+      >l</a
+      ><a name="887"
+      > </a
+      ><a name="888" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#10217;ne</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Definition.LogicalRelation.Tactic.html#892" class="Bound"
+      >A</a
+      ><a name="893"
+      > </a
+      ><a name="894" class="Symbol"
+      >=</a
+      ><a name="895"
+      > </a
+      ><a name="896" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Definition.LogicalRelation.Tactic.html#886" class="Bound"
+      >l</a
+      ><a name="906"
+      > </a
+      ><a name="907" class="Symbol"
+      >(&#955;</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Definition.LogicalRelation.Tactic.html#910" class="Bound"
+      >l'</a
+      ><a name="912"
+      > </a
+      ><a name="913" class="Symbol"
+      >&#8594;</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Definition.LogicalRelation.Tactic.html#881" class="Bound"
+      >&#915;</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Definition.LogicalRelation.html#394" class="Record Operator"
+      >&#8873;ne</a
+      ><a name="920"
+      > </a
+      ><a name="921" href="Definition.LogicalRelation.Tactic.html#892" class="Bound"
+      >A</a
+      ><a name="922" class="Symbol"
+      >)</a
+      ><a name="923"
+      >
+
+</a
+      ><a name="925" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >_&#8873;&#10216;_&#10217;&#928;_</a
+      ><a name="932"
+      > </a
+      ><a name="933" class="Symbol"
+      >:</a
+      ><a name="934"
+      > </a
+      ><a name="935" class="Symbol"
+      >(</a
+      ><a name="936" href="Definition.LogicalRelation.Tactic.html#936" class="Bound"
+      >&#915;</a
+      ><a name="937"
+      > </a
+      ><a name="938" class="Symbol"
+      >:</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Definition.Untyped.html#226" class="Datatype"
+      >Con</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="948" class="Symbol"
+      >)</a
+      ><a name="949"
+      > </a
+      ><a name="950" class="Symbol"
+      >(</a
+      ><a name="951" href="Definition.LogicalRelation.Tactic.html#951" class="Bound"
+      >l</a
+      ><a name="952"
+      > </a
+      ><a name="953" class="Symbol"
+      >:</a
+      ><a name="954"
+      > </a
+      ><a name="955" href="Definition.LogicalRelation.html#2041" class="Datatype"
+      >TypeLevel</a
+      ><a name="964" class="Symbol"
+      >)</a
+      ><a name="965"
+      > </a
+      ><a name="966" class="Symbol"
+      >(</a
+      ><a name="967" href="Definition.LogicalRelation.Tactic.html#967" class="Bound"
+      >A</a
+      ><a name="968"
+      > </a
+      ><a name="969" class="Symbol"
+      >:</a
+      ><a name="970"
+      > </a
+      ><a name="971" href="Definition.Untyped.html#324" class="Datatype"
+      >Term</a
+      ><a name="975" class="Symbol"
+      >)</a
+      ><a name="976"
+      > </a
+      ><a name="977" class="Symbol"
+      >&#8594;</a
+      ><a name="978"
+      > </a
+      ><a name="979" class="PrimitiveType"
+      >Set</a
+      ><a name="982"
+      >
+</a
+      ><a name="983" href="Definition.LogicalRelation.Tactic.html#983" class="Bound"
+      >&#915;</a
+      ><a name="984"
+      > </a
+      ><a name="985" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="987"
+      > </a
+      ><a name="988" href="Definition.LogicalRelation.Tactic.html#988" class="Bound"
+      >l</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#10217;&#928;</a
+      ><a name="992"
+      > </a
+      ><a name="993" href="Definition.LogicalRelation.Tactic.html#993" class="Bound"
+      >A</a
+      ><a name="994"
+      > </a
+      ><a name="995" class="Symbol"
+      >=</a
+      ><a name="996"
+      > </a
+      ><a name="997" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" href="Definition.LogicalRelation.Tactic.html#988" class="Bound"
+      >l</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" class="Symbol"
+      >(&#955;</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Definition.LogicalRelation.Tactic.html#1011" class="Bound"
+      >l'</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" class="Symbol"
+      >&#8594;</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" href="Definition.LogicalRelation.Tactic.html#983" class="Bound"
+      >&#915;</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Definition.LogicalRelation.html#8732" class="Function Operator"
+      >&#8873;'&#10216;</a
+      ><a name="1021"
+      > </a
+      ><a name="1022" href="Definition.LogicalRelation.Tactic.html#1011" class="Bound"
+      >l'</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" href="Definition.LogicalRelation.html#8732" class="Function Operator"
+      >&#10217;&#928;</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Definition.LogicalRelation.Tactic.html#993" class="Bound"
+      >A</a
+      ><a name="1029" class="Symbol"
+      >)</a
+      ><a name="1030"
+      >
+
+</a
+      ><a name="1032" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >:</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" class="Symbol"
+      >&#8704;</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" class="Symbol"
+      >{</a
+      ><a name="1044" href="Definition.LogicalRelation.Tactic.html#1044" class="Bound"
+      >&#915;</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" href="Definition.LogicalRelation.Tactic.html#1046" class="Bound"
+      >l</a
+      ><a name="1047" class="Symbol"
+      >}</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="Symbol"
+      >&#8594;</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Definition.LogicalRelation.Tactic.html#1044" class="Bound"
+      >&#915;</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Definition.LogicalRelation.Tactic.html#1046" class="Bound"
+      >l</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#10217;U</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" class="Symbol"
+      >&#8594;</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Definition.LogicalRelation.Tactic.html#1044" class="Bound"
+      >&#915;</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Definition.LogicalRelation.Tactic.html#1046" class="Bound"
+      >l</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="1073"
+      >
+</a
+      ><a name="1074" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" class="Symbol"
+      >(</a
+      ><a name="1082" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" href="Definition.LogicalRelation.Tactic.html#1088" class="Bound"
+      >x</a
+      ><a name="1089" class="Symbol"
+      >)</a
+      ><a name="1090"
+      > </a
+      ><a name="1091" class="Symbol"
+      >=</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" href="Definition.LogicalRelation.Tactic.html#1088" class="Bound"
+      >x</a
+      ><a name="1096"
+      >
+</a
+      ><a name="1097" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" class="Symbol"
+      >(</a
+      ><a name="1105" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" href="Definition.LogicalRelation.Tactic.html#1113" class="Bound"
+      >x</a
+      ><a name="1114" class="Symbol"
+      >)</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="Symbol"
+      >=</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" class="Symbol"
+      >(</a
+      ><a name="1127" href="Definition.LogicalRelation.Tactic.html#1032" class="Function"
+      >U-intr</a
+      ><a name="1133"
+      > </a
+      ><a name="1134" href="Definition.LogicalRelation.Tactic.html#1113" class="Bound"
+      >x</a
+      ><a name="1135" class="Symbol"
+      >)</a
+      ><a name="1136"
+      >
+
+</a
+      ><a name="1138" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" class="Symbol"
+      >:</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" class="Symbol"
+      >&#8704;</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" class="Symbol"
+      >{</a
+      ><a name="1150" href="Definition.LogicalRelation.Tactic.html#1150" class="Bound"
+      >A</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" href="Definition.LogicalRelation.Tactic.html#1152" class="Bound"
+      >&#915;</a
+      ><a name="1153"
+      > </a
+      ><a name="1154" href="Definition.LogicalRelation.Tactic.html#1154" class="Bound"
+      >l</a
+      ><a name="1155" class="Symbol"
+      >}</a
+      ><a name="1156"
+      > </a
+      ><a name="1157" class="Symbol"
+      >&#8594;</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Definition.LogicalRelation.Tactic.html#1152" class="Bound"
+      >&#915;</a
+      ><a name="1160"
+      > </a
+      ><a name="1161" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" href="Definition.LogicalRelation.Tactic.html#1154" class="Bound"
+      >l</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#10217;&#8469;</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Definition.LogicalRelation.Tactic.html#1150" class="Bound"
+      >A</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" class="Symbol"
+      >&#8594;</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" href="Definition.LogicalRelation.Tactic.html#1152" class="Bound"
+      >&#915;</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1177"
+      > </a
+      ><a name="1178" href="Definition.LogicalRelation.Tactic.html#1154" class="Bound"
+      >l</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Definition.LogicalRelation.Tactic.html#1150" class="Bound"
+      >A</a
+      ><a name="1183"
+      >
+</a
+      ><a name="1184" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" class="Symbol"
+      >(</a
+      ><a name="1192" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1197"
+      > </a
+      ><a name="1198" href="Definition.LogicalRelation.Tactic.html#1198" class="Bound"
+      >x</a
+      ><a name="1199" class="Symbol"
+      >)</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" class="Symbol"
+      >=</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1204"
+      > </a
+      ><a name="1205" href="Definition.LogicalRelation.Tactic.html#1198" class="Bound"
+      >x</a
+      ><a name="1206"
+      >
+</a
+      ><a name="1207" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1213"
+      > </a
+      ><a name="1214" class="Symbol"
+      >(</a
+      ><a name="1215" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1218"
+      > </a
+      ><a name="1219" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1222"
+      > </a
+      ><a name="1223" href="Definition.LogicalRelation.Tactic.html#1223" class="Bound"
+      >x</a
+      ><a name="1224" class="Symbol"
+      >)</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" class="Symbol"
+      >=</a
+      ><a name="1227"
+      > </a
+      ><a name="1228" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" class="Symbol"
+      >(</a
+      ><a name="1237" href="Definition.LogicalRelation.Tactic.html#1138" class="Function"
+      >&#8469;-intr</a
+      ><a name="1243"
+      > </a
+      ><a name="1244" href="Definition.LogicalRelation.Tactic.html#1223" class="Bound"
+      >x</a
+      ><a name="1245" class="Symbol"
+      >)</a
+      ><a name="1246"
+      >
+
+</a
+      ><a name="1248" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" class="Symbol"
+      >:</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" class="Symbol"
+      >&#8704;</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >{</a
+      ><a name="1261" href="Definition.LogicalRelation.Tactic.html#1261" class="Bound"
+      >A</a
+      ><a name="1262"
+      > </a
+      ><a name="1263" href="Definition.LogicalRelation.Tactic.html#1263" class="Bound"
+      >&#915;</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" href="Definition.LogicalRelation.Tactic.html#1265" class="Bound"
+      >l</a
+      ><a name="1266" class="Symbol"
+      >}</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" class="Symbol"
+      >&#8594;</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" href="Definition.LogicalRelation.Tactic.html#1263" class="Bound"
+      >&#915;</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1274"
+      > </a
+      ><a name="1275" href="Definition.LogicalRelation.Tactic.html#1265" class="Bound"
+      >l</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#10217;ne</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Definition.LogicalRelation.Tactic.html#1261" class="Bound"
+      >A</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >&#8594;</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" href="Definition.LogicalRelation.Tactic.html#1263" class="Bound"
+      >&#915;</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1289"
+      > </a
+      ><a name="1290" href="Definition.LogicalRelation.Tactic.html#1265" class="Bound"
+      >l</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1293"
+      > </a
+      ><a name="1294" href="Definition.LogicalRelation.Tactic.html#1261" class="Bound"
+      >A</a
+      ><a name="1295"
+      >
+</a
+      ><a name="1296" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" class="Symbol"
+      >(</a
+      ><a name="1305" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1310"
+      > </a
+      ><a name="1311" href="Definition.LogicalRelation.Tactic.html#1311" class="Bound"
+      >x</a
+      ><a name="1312" class="Symbol"
+      >)</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" class="Symbol"
+      >=</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="1318"
+      > </a
+      ><a name="1319" href="Definition.LogicalRelation.Tactic.html#1311" class="Bound"
+      >x</a
+      ><a name="1320"
+      >
+</a
+      ><a name="1321" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" class="Symbol"
+      >(</a
+      ><a name="1330" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Definition.LogicalRelation.Tactic.html#1338" class="Bound"
+      >x</a
+      ><a name="1339" class="Symbol"
+      >)</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" class="Symbol"
+      >=</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" class="Symbol"
+      >(</a
+      ><a name="1352" href="Definition.LogicalRelation.Tactic.html#1248" class="Function"
+      >ne-intr</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" href="Definition.LogicalRelation.Tactic.html#1338" class="Bound"
+      >x</a
+      ><a name="1361" class="Symbol"
+      >)</a
+      ><a name="1362"
+      >
+
+</a
+      ><a name="1364" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" class="Symbol"
+      >:</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" class="Symbol"
+      >&#8704;</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" class="Symbol"
+      >{</a
+      ><a name="1376" href="Definition.LogicalRelation.Tactic.html#1376" class="Bound"
+      >A</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" href="Definition.LogicalRelation.Tactic.html#1378" class="Bound"
+      >&#915;</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Definition.LogicalRelation.Tactic.html#1380" class="Bound"
+      >l</a
+      ><a name="1381" class="Symbol"
+      >}</a
+      ><a name="1382"
+      > </a
+      ><a name="1383" class="Symbol"
+      >&#8594;</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" href="Definition.LogicalRelation.Tactic.html#1378" class="Bound"
+      >&#915;</a
+      ><a name="1386"
+      > </a
+      ><a name="1387" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" href="Definition.LogicalRelation.Tactic.html#1380" class="Bound"
+      >l</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#10217;&#928;</a
+      ><a name="1394"
+      > </a
+      ><a name="1395" href="Definition.LogicalRelation.Tactic.html#1376" class="Bound"
+      >A</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" class="Symbol"
+      >&#8594;</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="Definition.LogicalRelation.Tactic.html#1378" class="Bound"
+      >&#915;</a
+      ><a name="1400"
+      > </a
+      ><a name="1401" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1403"
+      > </a
+      ><a name="1404" href="Definition.LogicalRelation.Tactic.html#1380" class="Bound"
+      >l</a
+      ><a name="1405"
+      > </a
+      ><a name="1406" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" href="Definition.LogicalRelation.Tactic.html#1376" class="Bound"
+      >A</a
+      ><a name="1409"
+      >
+</a
+      ><a name="1410" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="1416"
+      > </a
+      ><a name="1417" class="Symbol"
+      >(</a
+      ><a name="1418" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" href="Definition.LogicalRelation.Tactic.html#1424" class="Bound"
+      >x</a
+      ><a name="1425" class="Symbol"
+      >)</a
+      ><a name="1426"
+      > </a
+      ><a name="1427" class="Symbol"
+      >=</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="1430"
+      > </a
+      ><a name="1431" href="Definition.LogicalRelation.Tactic.html#1424" class="Bound"
+      >x</a
+      ><a name="1432"
+      >
+</a
+      ><a name="1433" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" class="Symbol"
+      >(</a
+      ><a name="1441" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1444"
+      > </a
+      ><a name="1445" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1448"
+      > </a
+      ><a name="1449" href="Definition.LogicalRelation.Tactic.html#1449" class="Bound"
+      >x</a
+      ><a name="1450" class="Symbol"
+      >)</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" class="Symbol"
+      >=</a
+      ><a name="1453"
+      > </a
+      ><a name="1454" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" class="Symbol"
+      >(</a
+      ><a name="1463" href="Definition.LogicalRelation.Tactic.html#1364" class="Function"
+      >&#928;-intr</a
+      ><a name="1469"
+      > </a
+      ><a name="1470" href="Definition.LogicalRelation.Tactic.html#1449" class="Bound"
+      >x</a
+      ><a name="1471" class="Symbol"
+      >)</a
+      ><a name="1472"
+      >
+
+</a
+      ><a name="1474" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" class="Symbol"
+      >:</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" class="Symbol"
+      >&#8704;</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" class="Symbol"
+      >{</a
+      ><a name="1486" href="Definition.LogicalRelation.Tactic.html#1486" class="Bound"
+      >&#915;</a
+      ><a name="1487"
+      > </a
+      ><a name="1488" href="Definition.LogicalRelation.Tactic.html#1488" class="Bound"
+      >l</a
+      ><a name="1489" class="Symbol"
+      >}</a
+      ><a name="1490"
+      > </a
+      ><a name="1491" class="Symbol"
+      >&#8594;</a
+      ><a name="1492"
+      > </a
+      ><a name="1493" href="Definition.LogicalRelation.Tactic.html#1486" class="Bound"
+      >&#915;</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1497"
+      > </a
+      ><a name="1498" href="Definition.LogicalRelation.Tactic.html#1488" class="Bound"
+      >l</a
+      ><a name="1499"
+      > </a
+      ><a name="1500" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="1503"
+      > </a
+      ><a name="1504" class="Symbol"
+      >&#8594;</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Definition.LogicalRelation.Tactic.html#1486" class="Bound"
+      >&#915;</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" href="Definition.LogicalRelation.Tactic.html#1488" class="Bound"
+      >l</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" href="Definition.LogicalRelation.Tactic.html#631" class="Function Operator"
+      >&#10217;U</a
+      ><a name="1515"
+      >
+</a
+      ><a name="1516" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1522"
+      > </a
+      ><a name="1523" class="Symbol"
+      >(</a
+      ><a name="1524" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="1526"
+      > </a
+      ><a name="1527" href="Definition.LogicalRelation.Tactic.html#1527" class="Bound"
+      >l'</a
+      ><a name="1529"
+      > </a
+      ><a name="1530" href="Definition.LogicalRelation.Tactic.html#1530" class="Bound"
+      >l&lt;</a
+      ><a name="1532"
+      > </a
+      ><a name="1533" href="Definition.LogicalRelation.Tactic.html#1533" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1535" class="Symbol"
+      >)</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" class="Symbol"
+      >=</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1544"
+      > </a
+      ><a name="1545" class="Symbol"
+      >(</a
+      ><a name="1546" href="Definition.LogicalRelation.html#2715" class="InductiveConstructor"
+      >U</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Definition.LogicalRelation.Tactic.html#1527" class="Bound"
+      >l'</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" href="Definition.LogicalRelation.Tactic.html#1530" class="Bound"
+      >l&lt;</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" href="Definition.LogicalRelation.Tactic.html#1533" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1556" class="Symbol"
+      >)</a
+      ><a name="1557"
+      >
+</a
+      ><a name="1558" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1564"
+      > </a
+      ><a name="1565" class="Symbol"
+      >(</a
+      ><a name="1566" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" href="Definition.LogicalRelation.Tactic.html#1568" class="Bound"
+      >D</a
+      ><a name="1569" class="Symbol"
+      >)</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" class="Symbol"
+      >=</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="1579"
+      > </a
+      ><a name="1580" class="Symbol"
+      >(</a
+      ><a name="1581" href="Definition.Typed.Properties.html#7142" class="Function"
+      >U&#8802;&#8469;</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" class="Symbol"
+      >(</a
+      ><a name="1586" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" class="Symbol"
+      >(</a
+      ><a name="1597" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Definition.LogicalRelation.Tactic.html#1568" class="Bound"
+      >D</a
+      ><a name="1602" class="Symbol"
+      >)</a
+      ><a name="1603"
+      > </a
+      ><a name="1604" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="1605" class="Symbol"
+      >))</a
+      ><a name="1607"
+      >
+</a
+      ><a name="1608" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1614"
+      > </a
+      ><a name="1615" class="Symbol"
+      >(</a
+      ><a name="1616" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1619"
+      > </a
+      ><a name="1620" href="Definition.LogicalRelation.Tactic.html#1620" class="Bound"
+      >K</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" href="Definition.LogicalRelation.Tactic.html#1622" class="Bound"
+      >D</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" href="Definition.LogicalRelation.Tactic.html#1624" class="Bound"
+      >neK</a
+      ><a name="1627" class="Symbol"
+      >)</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" class="Symbol"
+      >=</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="1637"
+      > </a
+      ><a name="1638" class="Symbol"
+      >(</a
+      ><a name="1639" href="Definition.Typed.Properties.html#7214" class="Function"
+      >U&#8802;ne</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" href="Definition.LogicalRelation.Tactic.html#1624" class="Bound"
+      >neK</a
+      ><a name="1647"
+      > </a
+      ><a name="1648" class="Symbol"
+      >(</a
+      ><a name="1649" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" class="Symbol"
+      >(</a
+      ><a name="1660" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Definition.LogicalRelation.Tactic.html#1622" class="Bound"
+      >D</a
+      ><a name="1665" class="Symbol"
+      >)</a
+      ><a name="1666"
+      > </a
+      ><a name="1667" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="1668" class="Symbol"
+      >))</a
+      ><a name="1670"
+      >
+</a
+      ><a name="1671" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1677"
+      > </a
+      ><a name="1678" class="Symbol"
+      >(</a
+      ><a name="1679" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="1681"
+      > </a
+      ><a name="1682" href="Definition.LogicalRelation.Tactic.html#1682" class="Bound"
+      >F</a
+      ><a name="1683"
+      > </a
+      ><a name="1684" href="Definition.LogicalRelation.Tactic.html#1684" class="Bound"
+      >G</a
+      ><a name="1685"
+      > </a
+      ><a name="1686" href="Definition.LogicalRelation.Tactic.html#1686" class="Bound"
+      >D</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" href="Definition.LogicalRelation.Tactic.html#1688" class="Bound"
+      >&#8866;F</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" href="Definition.LogicalRelation.Tactic.html#1691" class="Bound"
+      >&#8866;G</a
+      ><a name="1693"
+      > </a
+      ><a name="1694" href="Definition.LogicalRelation.Tactic.html#1694" class="Bound"
+      >[F]</a
+      ><a name="1697"
+      > </a
+      ><a name="1698" href="Definition.LogicalRelation.Tactic.html#1698" class="Bound"
+      >[G]</a
+      ><a name="1701"
+      > </a
+      ><a name="1702" href="Definition.LogicalRelation.Tactic.html#1702" class="Bound"
+      >G-ext</a
+      ><a name="1707" class="Symbol"
+      >)</a
+      ><a name="1708"
+      > </a
+      ><a name="1709" class="Symbol"
+      >=</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" class="Symbol"
+      >(</a
+      ><a name="1719" href="Definition.Typed.Properties.html#7170" class="Function"
+      >U&#8802;&#928;</a
+      ><a name="1722"
+      > </a
+      ><a name="1723" class="Symbol"
+      >(</a
+      ><a name="1724" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" class="Symbol"
+      >(</a
+      ><a name="1735" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Definition.LogicalRelation.Tactic.html#1686" class="Bound"
+      >D</a
+      ><a name="1740" class="Symbol"
+      >)</a
+      ><a name="1741"
+      > </a
+      ><a name="1742" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="1743" class="Symbol"
+      >))</a
+      ><a name="1745"
+      >
+</a
+      ><a name="1746" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" class="Symbol"
+      >(</a
+      ><a name="1754" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1761"
+      > </a
+      ><a name="1762" href="Definition.LogicalRelation.Tactic.html#1762" class="Bound"
+      >x</a
+      ><a name="1763" class="Symbol"
+      >)</a
+      ><a name="1764"
+      > </a
+      ><a name="1765" class="Keyword"
+      >with</a
+      ><a name="1769"
+      > </a
+      ><a name="1770" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" href="Definition.LogicalRelation.Tactic.html#1762" class="Bound"
+      >x</a
+      ><a name="1778"
+      >
+</a
+      ><a name="1779" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" class="Symbol"
+      >(</a
+      ><a name="1787" class="InductiveConstructor"
+      >emb</a
+      ><a name="1790"
+      > </a
+      ><a name="1791" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1794"
+      > </a
+      ><a name="1795" href="Definition.LogicalRelation.Tactic.html#1795" class="Bound"
+      >x</a
+      ><a name="1796" class="Symbol"
+      >)</a
+      ><a name="1797"
+      > </a
+      ><a name="1798" class="Symbol"
+      >|</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Definition.LogicalRelation.Tactic.html#1806" class="Bound"
+      >x&#8321;</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" class="Symbol"
+      >=</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1818"
+      > </a
+      ><a name="1819" class="Symbol"
+      >(</a
+      ><a name="1820" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" href="Definition.LogicalRelation.Tactic.html#1806" class="Bound"
+      >x&#8321;</a
+      ><a name="1828" class="Symbol"
+      >)</a
+      ><a name="1829"
+      >
+</a
+      ><a name="1830" href="Definition.LogicalRelation.Tactic.html#1474" class="Function"
+      >U-elim</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" class="Symbol"
+      >(</a
+      ><a name="1838" class="InductiveConstructor"
+      >emb</a
+      ><a name="1841"
+      > </a
+      ><a name="1842" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="1845"
+      > </a
+      ><a name="1846" href="Definition.LogicalRelation.Tactic.html#1846" class="Bound"
+      >x</a
+      ><a name="1847" class="Symbol"
+      >)</a
+      ><a name="1848"
+      > </a
+      ><a name="1849" class="Symbol"
+      >|</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="1854"
+      > </a
+      ><a name="1855" class="Symbol"
+      >()</a
+      ><a name="1857"
+      > </a
+      ><a name="1858" href="Definition.LogicalRelation.Tactic.html#1858" class="Bound"
+      >x&#8321;</a
+      ><a name="1860"
+      >
+
+</a
+      ><a name="1862" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1868"
+      > </a
+      ><a name="1869" class="Symbol"
+      >:</a
+      ><a name="1870"
+      > </a
+      ><a name="1871" class="Symbol"
+      >&#8704;</a
+      ><a name="1872"
+      > </a
+      ><a name="1873" class="Symbol"
+      >{</a
+      ><a name="1874" href="Definition.LogicalRelation.Tactic.html#1874" class="Bound"
+      >&#915;</a
+      ><a name="1875"
+      > </a
+      ><a name="1876" href="Definition.LogicalRelation.Tactic.html#1876" class="Bound"
+      >l</a
+      ><a name="1877" class="Symbol"
+      >}</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" class="Symbol"
+      >&#8594;</a
+      ><a name="1880"
+      > </a
+      ><a name="1881" href="Definition.LogicalRelation.Tactic.html#1874" class="Bound"
+      >&#915;</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" href="Definition.LogicalRelation.Tactic.html#1876" class="Bound"
+      >l</a
+      ><a name="1887"
+      > </a
+      ><a name="1888" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="1889"
+      > </a
+      ><a name="1890" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1891"
+      > </a
+      ><a name="1892" class="Symbol"
+      >&#8594;</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" href="Definition.LogicalRelation.Tactic.html#1874" class="Bound"
+      >&#915;</a
+      ><a name="1895"
+      > </a
+      ><a name="1896" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="1898"
+      > </a
+      ><a name="1899" href="Definition.LogicalRelation.Tactic.html#1876" class="Bound"
+      >l</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" href="Definition.LogicalRelation.Tactic.html#722" class="Function Operator"
+      >&#10217;&#8469;</a
+      ><a name="1903"
+      > </a
+      ><a name="1904" href="Definition.Untyped.html#436" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1905"
+      >
+</a
+      ><a name="1906" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" class="Symbol"
+      >(</a
+      ><a name="1914" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1915"
+      > </a
+      ><a name="1916" href="Definition.LogicalRelation.Tactic.html#1916" class="Bound"
+      >D</a
+      ><a name="1917" class="Symbol"
+      >)</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" class="Symbol"
+      >=</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" href="Definition.LogicalRelation.Tactic.html#1916" class="Bound"
+      >D</a
+      ><a name="1928"
+      >
+</a
+      ><a name="1929" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1935"
+      > </a
+      ><a name="1936" class="Symbol"
+      >(</a
+      ><a name="1937" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="1940"
+      > </a
+      ><a name="1941" href="Definition.LogicalRelation.Tactic.html#1941" class="Bound"
+      >K</a
+      ><a name="1942"
+      > </a
+      ><a name="1943" href="Definition.LogicalRelation.Tactic.html#1943" class="Bound"
+      >D</a
+      ><a name="1944"
+      > </a
+      ><a name="1945" href="Definition.LogicalRelation.Tactic.html#1945" class="Bound"
+      >neK</a
+      ><a name="1948" class="Symbol"
+      >)</a
+      ><a name="1949"
+      > </a
+      ><a name="1950" class="Symbol"
+      >=</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" class="Symbol"
+      >(</a
+      ><a name="1960" href="Definition.Typed.Properties.html#7311" class="Function"
+      >&#8469;&#8802;ne</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" href="Definition.LogicalRelation.Tactic.html#1945" class="Bound"
+      >neK</a
+      ><a name="1968"
+      > </a
+      ><a name="1969" class="Symbol"
+      >(</a
+      ><a name="1970" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="1979"
+      > </a
+      ><a name="1980" class="Symbol"
+      >(</a
+      ><a name="1981" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Definition.LogicalRelation.Tactic.html#1943" class="Bound"
+      >D</a
+      ><a name="1986" class="Symbol"
+      >)</a
+      ><a name="1987"
+      > </a
+      ><a name="1988" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="1989" class="Symbol"
+      >))</a
+      ><a name="1991"
+      >
+</a
+      ><a name="1992" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" class="Symbol"
+      >(</a
+      ><a name="2000" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" href="Definition.LogicalRelation.Tactic.html#2003" class="Bound"
+      >F</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" href="Definition.LogicalRelation.Tactic.html#2005" class="Bound"
+      >G</a
+      ><a name="2006"
+      > </a
+      ><a name="2007" href="Definition.LogicalRelation.Tactic.html#2007" class="Bound"
+      >D</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Definition.LogicalRelation.Tactic.html#2009" class="Bound"
+      >&#8866;F</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" href="Definition.LogicalRelation.Tactic.html#2012" class="Bound"
+      >&#8866;G</a
+      ><a name="2014"
+      > </a
+      ><a name="2015" href="Definition.LogicalRelation.Tactic.html#2015" class="Bound"
+      >[F]</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Definition.LogicalRelation.Tactic.html#2019" class="Bound"
+      >[G]</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" href="Definition.LogicalRelation.Tactic.html#2023" class="Bound"
+      >G-ext</a
+      ><a name="2028" class="Symbol"
+      >)</a
+      ><a name="2029"
+      > </a
+      ><a name="2030" class="Symbol"
+      >=</a
+      ><a name="2031"
+      > </a
+      ><a name="2032" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" class="Symbol"
+      >(</a
+      ><a name="2040" href="Definition.Typed.Properties.html#7267" class="Function"
+      >&#8469;&#8802;&#928;</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" class="Symbol"
+      >(</a
+      ><a name="2045" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="2054"
+      > </a
+      ><a name="2055" class="Symbol"
+      >(</a
+      ><a name="2056" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" href="Definition.LogicalRelation.Tactic.html#2007" class="Bound"
+      >D</a
+      ><a name="2061" class="Symbol"
+      >)</a
+      ><a name="2062"
+      > </a
+      ><a name="2063" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="2064" class="Symbol"
+      >))</a
+      ><a name="2066"
+      >
+</a
+      ><a name="2067" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="2073"
+      > </a
+      ><a name="2074" class="Symbol"
+      >(</a
+      ><a name="2075" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="2078"
+      > </a
+      ><a name="2079" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2082"
+      > </a
+      ><a name="2083" href="Definition.LogicalRelation.Tactic.html#2083" class="Bound"
+      >x</a
+      ><a name="2084" class="Symbol"
+      >)</a
+      ><a name="2085"
+      > </a
+      ><a name="2086" class="Keyword"
+      >with</a
+      ><a name="2090"
+      > </a
+      ><a name="2091" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" href="Definition.LogicalRelation.Tactic.html#2083" class="Bound"
+      >x</a
+      ><a name="2099"
+      >
+</a
+      ><a name="2100" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" class="Symbol"
+      >(</a
+      ><a name="2108" class="InductiveConstructor"
+      >emb</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2115"
+      > </a
+      ><a name="2116" href="Definition.LogicalRelation.Tactic.html#2116" class="Bound"
+      >x</a
+      ><a name="2117" class="Symbol"
+      >)</a
+      ><a name="2118"
+      > </a
+      ><a name="2119" class="Symbol"
+      >|</a
+      ><a name="2120"
+      > </a
+      ><a name="2121" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2126"
+      > </a
+      ><a name="2127" href="Definition.LogicalRelation.Tactic.html#2127" class="Bound"
+      >x&#8321;</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" class="Symbol"
+      >=</a
+      ><a name="2131"
+      > </a
+      ><a name="2132" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2135"
+      > </a
+      ><a name="2136" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2139"
+      > </a
+      ><a name="2140" class="Symbol"
+      >(</a
+      ><a name="2141" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2146"
+      > </a
+      ><a name="2147" href="Definition.LogicalRelation.Tactic.html#2127" class="Bound"
+      >x&#8321;</a
+      ><a name="2149" class="Symbol"
+      >)</a
+      ><a name="2150"
+      >
+</a
+      ><a name="2151" href="Definition.LogicalRelation.Tactic.html#1862" class="Function"
+      >&#8469;-elim</a
+      ><a name="2157"
+      > </a
+      ><a name="2158" class="Symbol"
+      >(</a
+      ><a name="2159" class="InductiveConstructor"
+      >emb</a
+      ><a name="2162"
+      > </a
+      ><a name="2163" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2166"
+      > </a
+      ><a name="2167" href="Definition.LogicalRelation.Tactic.html#2167" class="Bound"
+      >x</a
+      ><a name="2168" class="Symbol"
+      >)</a
+      ><a name="2169"
+      > </a
+      ><a name="2170" class="Symbol"
+      >|</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2175"
+      > </a
+      ><a name="2176" class="Symbol"
+      >()</a
+      ><a name="2178"
+      > </a
+      ><a name="2179" href="Definition.LogicalRelation.Tactic.html#2179" class="Bound"
+      >x&#8322;</a
+      ><a name="2181"
+      >
+
+</a
+      ><a name="2183" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2190"
+      > </a
+      ><a name="2191" class="Symbol"
+      >:</a
+      ><a name="2192"
+      > </a
+      ><a name="2193" class="Symbol"
+      >&#8704;</a
+      ><a name="2194"
+      > </a
+      ><a name="2195" class="Symbol"
+      >{</a
+      ><a name="2196" href="Definition.LogicalRelation.Tactic.html#2196" class="Bound"
+      >&#915;</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" href="Definition.LogicalRelation.Tactic.html#2198" class="Bound"
+      >l</a
+      ><a name="2199"
+      > </a
+      ><a name="2200" href="Definition.LogicalRelation.Tactic.html#2200" class="Bound"
+      >K</a
+      ><a name="2201" class="Symbol"
+      >}</a
+      ><a name="2202"
+      > </a
+      ><a name="2203" class="Symbol"
+      >&#8594;</a
+      ><a name="2204"
+      > </a
+      ><a name="2205" href="Definition.LogicalRelation.Tactic.html#2196" class="Bound"
+      >&#915;</a
+      ><a name="2206"
+      > </a
+      ><a name="2207" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" href="Definition.LogicalRelation.Tactic.html#2198" class="Bound"
+      >l</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="Definition.LogicalRelation.Tactic.html#2200" class="Bound"
+      >K</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" class="Symbol"
+      >&#8594;</a
+      ><a name="2217"
+      > </a
+      ><a name="2218" href="Definition.Untyped.html#743" class="Datatype"
+      >Neutral</a
+      ><a name="2225"
+      > </a
+      ><a name="2226" href="Definition.LogicalRelation.Tactic.html#2200" class="Bound"
+      >K</a
+      ><a name="2227"
+      > </a
+      ><a name="2228" class="Symbol"
+      >&#8594;</a
+      ><a name="2229"
+      > </a
+      ><a name="2230" href="Definition.LogicalRelation.Tactic.html#2196" class="Bound"
+      >&#915;</a
+      ><a name="2231"
+      > </a
+      ><a name="2232" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2234"
+      > </a
+      ><a name="2235" href="Definition.LogicalRelation.Tactic.html#2198" class="Bound"
+      >l</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="Definition.LogicalRelation.Tactic.html#822" class="Function Operator"
+      >&#10217;ne</a
+      ><a name="2240"
+      > </a
+      ><a name="2241" href="Definition.LogicalRelation.Tactic.html#2200" class="Bound"
+      >K</a
+      ><a name="2242"
+      >
+</a
+      ><a name="2243" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2250"
+      > </a
+      ><a name="2251" class="Symbol"
+      >(</a
+      ><a name="2252" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="2254"
+      > </a
+      ><a name="2255" href="Definition.LogicalRelation.Tactic.html#2255" class="Bound"
+      >l'</a
+      ><a name="2257"
+      > </a
+      ><a name="2258" href="Definition.LogicalRelation.Tactic.html#2258" class="Bound"
+      >l&lt;</a
+      ><a name="2260"
+      > </a
+      ><a name="2261" href="Definition.LogicalRelation.Tactic.html#2261" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="2263" class="Symbol"
+      >)</a
+      ><a name="2264"
+      > </a
+      ><a name="2265" class="Symbol"
+      >()</a
+      ><a name="2267"
+      >
+</a
+      ><a name="2268" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" class="Symbol"
+      >(</a
+      ><a name="2277" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" href="Definition.LogicalRelation.Tactic.html#2279" class="Bound"
+      >D</a
+      ><a name="2280" class="Symbol"
+      >)</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" href="Definition.LogicalRelation.Tactic.html#2282" class="Bound"
+      >neK</a
+      ><a name="2285"
+      > </a
+      ><a name="2286" class="Symbol"
+      >=</a
+      ><a name="2287"
+      > </a
+      ><a name="2288" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="2294"
+      > </a
+      ><a name="2295" class="Symbol"
+      >(</a
+      ><a name="2296" href="Definition.Typed.Properties.html#7311" class="Function"
+      >&#8469;&#8802;ne</a
+      ><a name="2300"
+      > </a
+      ><a name="2301" href="Definition.LogicalRelation.Tactic.html#2282" class="Bound"
+      >neK</a
+      ><a name="2304"
+      > </a
+      ><a name="2305" class="Symbol"
+      >(</a
+      ><a name="2306" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2312"
+      > </a
+      ><a name="2313" class="Symbol"
+      >(</a
+      ><a name="2314" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="2323"
+      > </a
+      ><a name="2324" class="Symbol"
+      >(</a
+      ><a name="2325" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" href="Definition.LogicalRelation.Tactic.html#2279" class="Bound"
+      >D</a
+      ><a name="2330" class="Symbol"
+      >)</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" class="Symbol"
+      >(</a
+      ><a name="2333" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" href="Definition.LogicalRelation.Tactic.html#2282" class="Bound"
+      >neK</a
+      ><a name="2339" class="Symbol"
+      >))))</a
+      ><a name="2343"
+      >
+</a
+      ><a name="2344" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2351"
+      > </a
+      ><a name="2352" class="Symbol"
+      >{</a
+      ><a name="2353" class="Argument"
+      >l</a
+      ><a name="2354"
+      > </a
+      ><a name="2355" class="Symbol"
+      >=</a
+      ><a name="2356"
+      > </a
+      ><a name="2357" href="Definition.LogicalRelation.Tactic.html#2357" class="Bound"
+      >l</a
+      ><a name="2358" class="Symbol"
+      >}</a
+      ><a name="2359"
+      > </a
+      ><a name="2360" class="Symbol"
+      >(</a
+      ><a name="2361" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="2364"
+      > </a
+      ><a name="2365" href="Definition.LogicalRelation.Tactic.html#2365" class="Bound"
+      >K</a
+      ><a name="2366"
+      > </a
+      ><a name="2367" href="Definition.LogicalRelation.Tactic.html#2367" class="Bound"
+      >D</a
+      ><a name="2368"
+      > </a
+      ><a name="2369" href="Definition.LogicalRelation.Tactic.html#2369" class="Bound"
+      >neK</a
+      ><a name="2372" class="Symbol"
+      >)</a
+      ><a name="2373"
+      > </a
+      ><a name="2374" href="Definition.LogicalRelation.Tactic.html#2374" class="Bound"
+      >neK&#8321;</a
+      ><a name="2378"
+      > </a
+      ><a name="2379" class="Symbol"
+      >=</a
+      ><a name="2380"
+      > </a
+      ><a name="2381" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2386"
+      > </a
+      ><a name="2387" class="Symbol"
+      >(</a
+      ><a name="2388" href="Definition.LogicalRelation.html#452" class="InductiveConstructor"
+      >ne</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" href="Definition.LogicalRelation.Tactic.html#2365" class="Bound"
+      >K</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" href="Definition.LogicalRelation.Tactic.html#2367" class="Bound"
+      >D</a
+      ><a name="2394"
+      > </a
+      ><a name="2395" href="Definition.LogicalRelation.Tactic.html#2369" class="Bound"
+      >neK</a
+      ><a name="2398" class="Symbol"
+      >)</a
+      ><a name="2399"
+      >
+</a
+      ><a name="2400" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2407"
+      > </a
+      ><a name="2408" class="Symbol"
+      >(</a
+      ><a name="2409" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="2411"
+      > </a
+      ><a name="2412" href="Definition.LogicalRelation.Tactic.html#2412" class="Bound"
+      >F</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" href="Definition.LogicalRelation.Tactic.html#2414" class="Bound"
+      >G</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="Definition.LogicalRelation.Tactic.html#2416" class="Bound"
+      >D</a
+      ><a name="2417"
+      > </a
+      ><a name="2418" href="Definition.LogicalRelation.Tactic.html#2418" class="Bound"
+      >&#8866;F</a
+      ><a name="2420"
+      > </a
+      ><a name="2421" href="Definition.LogicalRelation.Tactic.html#2421" class="Bound"
+      >&#8866;G</a
+      ><a name="2423"
+      > </a
+      ><a name="2424" href="Definition.LogicalRelation.Tactic.html#2424" class="Bound"
+      >[F]</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" href="Definition.LogicalRelation.Tactic.html#2428" class="Bound"
+      >[G]</a
+      ><a name="2431"
+      > </a
+      ><a name="2432" href="Definition.LogicalRelation.Tactic.html#2432" class="Bound"
+      >G-ext</a
+      ><a name="2437" class="Symbol"
+      >)</a
+      ><a name="2438"
+      > </a
+      ><a name="2439" href="Definition.LogicalRelation.Tactic.html#2439" class="Bound"
+      >neK</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" class="Symbol"
+      >=</a
+      ><a name="2444"
+      >
+  </a
+      ><a name="2447" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="2453"
+      > </a
+      ><a name="2454" class="Symbol"
+      >(</a
+      ><a name="2455" href="Definition.Typed.Properties.html#7364" class="Function"
+      >&#928;&#8802;ne</a
+      ><a name="2459"
+      > </a
+      ><a name="2460" href="Definition.LogicalRelation.Tactic.html#2439" class="Bound"
+      >neK</a
+      ><a name="2463"
+      > </a
+      ><a name="2464" class="Symbol"
+      >(</a
+      ><a name="2465" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2471"
+      > </a
+      ><a name="2472" class="Symbol"
+      >(</a
+      ><a name="2473" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="2482"
+      > </a
+      ><a name="2483" class="Symbol"
+      >(</a
+      ><a name="2484" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2487"
+      > </a
+      ><a name="2488" href="Definition.LogicalRelation.Tactic.html#2416" class="Bound"
+      >D</a
+      ><a name="2489" class="Symbol"
+      >)</a
+      ><a name="2490"
+      > </a
+      ><a name="2491" class="Symbol"
+      >(</a
+      ><a name="2492" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="2494"
+      > </a
+      ><a name="2495" href="Definition.LogicalRelation.Tactic.html#2439" class="Bound"
+      >neK</a
+      ><a name="2498" class="Symbol"
+      >))))</a
+      ><a name="2502"
+      >
+</a
+      ><a name="2503" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2510"
+      > </a
+      ><a name="2511" class="Symbol"
+      >(</a
+      ><a name="2512" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="2515"
+      > </a
+      ><a name="2516" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2519"
+      > </a
+      ><a name="2520" href="Definition.LogicalRelation.Tactic.html#2520" class="Bound"
+      >x</a
+      ><a name="2521" class="Symbol"
+      >)</a
+      ><a name="2522"
+      > </a
+      ><a name="2523" href="Definition.LogicalRelation.Tactic.html#2523" class="Bound"
+      >neK</a
+      ><a name="2526"
+      > </a
+      ><a name="2527" class="Keyword"
+      >with</a
+      ><a name="2531"
+      > </a
+      ><a name="2532" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2539"
+      > </a
+      ><a name="2540" href="Definition.LogicalRelation.Tactic.html#2520" class="Bound"
+      >x</a
+      ><a name="2541"
+      > </a
+      ><a name="2542" href="Definition.LogicalRelation.Tactic.html#2523" class="Bound"
+      >neK</a
+      ><a name="2545"
+      >
+</a
+      ><a name="2546" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" class="Symbol"
+      >(</a
+      ><a name="2555" class="InductiveConstructor"
+      >emb</a
+      ><a name="2558"
+      > </a
+      ><a name="2559" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2562"
+      > </a
+      ><a name="2563" href="Definition.LogicalRelation.Tactic.html#2563" class="Bound"
+      >x</a
+      ><a name="2564" class="Symbol"
+      >)</a
+      ><a name="2565"
+      > </a
+      ><a name="2566" href="Definition.LogicalRelation.Tactic.html#2566" class="Bound"
+      >neK</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" class="Symbol"
+      >|</a
+      ><a name="2571"
+      > </a
+      ><a name="2572" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2577"
+      > </a
+      ><a name="2578" href="Definition.LogicalRelation.Tactic.html#2578" class="Bound"
+      >x&#8321;</a
+      ><a name="2580"
+      > </a
+      ><a name="2581" class="Symbol"
+      >=</a
+      ><a name="2582"
+      > </a
+      ><a name="2583" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2586"
+      > </a
+      ><a name="2587" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2590"
+      > </a
+      ><a name="2591" class="Symbol"
+      >(</a
+      ><a name="2592" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2597"
+      > </a
+      ><a name="2598" href="Definition.LogicalRelation.Tactic.html#2578" class="Bound"
+      >x&#8321;</a
+      ><a name="2600" class="Symbol"
+      >)</a
+      ><a name="2601"
+      >
+</a
+      ><a name="2602" href="Definition.LogicalRelation.Tactic.html#2183" class="Function"
+      >ne-elim</a
+      ><a name="2609"
+      > </a
+      ><a name="2610" class="Symbol"
+      >(</a
+      ><a name="2611" class="InductiveConstructor"
+      >emb</a
+      ><a name="2614"
+      > </a
+      ><a name="2615" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2618"
+      > </a
+      ><a name="2619" href="Definition.LogicalRelation.Tactic.html#2619" class="Bound"
+      >x</a
+      ><a name="2620" class="Symbol"
+      >)</a
+      ><a name="2621"
+      > </a
+      ><a name="2622" href="Definition.LogicalRelation.Tactic.html#2622" class="Bound"
+      >neK</a
+      ><a name="2625"
+      > </a
+      ><a name="2626" class="Symbol"
+      >|</a
+      ><a name="2627"
+      > </a
+      ><a name="2628" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" class="Symbol"
+      >()</a
+      ><a name="2634"
+      > </a
+      ><a name="2635" href="Definition.LogicalRelation.Tactic.html#2635" class="Bound"
+      >x&#8322;</a
+      ><a name="2637"
+      >
+
+</a
+      ><a name="2639" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2645"
+      > </a
+      ><a name="2646" class="Symbol"
+      >:</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" class="Symbol"
+      >&#8704;</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" class="Symbol"
+      >{</a
+      ><a name="2651" href="Definition.LogicalRelation.Tactic.html#2651" class="Bound"
+      >&#915;</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" href="Definition.LogicalRelation.Tactic.html#2653" class="Bound"
+      >F</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="Definition.LogicalRelation.Tactic.html#2655" class="Bound"
+      >G</a
+      ><a name="2656"
+      > </a
+      ><a name="2657" href="Definition.LogicalRelation.Tactic.html#2657" class="Bound"
+      >l</a
+      ><a name="2658" class="Symbol"
+      >}</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" class="Symbol"
+      >&#8594;</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="Definition.LogicalRelation.Tactic.html#2651" class="Bound"
+      >&#915;</a
+      ><a name="2663"
+      > </a
+      ><a name="2664" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2666"
+      > </a
+      ><a name="2667" href="Definition.LogicalRelation.Tactic.html#2657" class="Bound"
+      >l</a
+      ><a name="2668"
+      > </a
+      ><a name="2669" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="2670"
+      > </a
+      ><a name="2671" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="2672"
+      > </a
+      ><a name="2673" href="Definition.LogicalRelation.Tactic.html#2653" class="Bound"
+      >F</a
+      ><a name="2674"
+      > </a
+      ><a name="2675" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="2676"
+      > </a
+      ><a name="2677" href="Definition.LogicalRelation.Tactic.html#2655" class="Bound"
+      >G</a
+      ><a name="2678"
+      > </a
+      ><a name="2679" class="Symbol"
+      >&#8594;</a
+      ><a name="2680"
+      > </a
+      ><a name="2681" href="Definition.LogicalRelation.Tactic.html#2651" class="Bound"
+      >&#915;</a
+      ><a name="2682"
+      > </a
+      ><a name="2683" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="2685"
+      > </a
+      ><a name="2686" href="Definition.LogicalRelation.Tactic.html#2657" class="Bound"
+      >l</a
+      ><a name="2687"
+      > </a
+      ><a name="2688" href="Definition.LogicalRelation.Tactic.html#925" class="Function Operator"
+      >&#10217;&#928;</a
+      ><a name="2690"
+      > </a
+      ><a name="2691" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#928;</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" href="Definition.LogicalRelation.Tactic.html#2653" class="Bound"
+      >F</a
+      ><a name="2694"
+      > </a
+      ><a name="2695" href="Definition.Untyped.html#359" class="InductiveConstructor Operator"
+      >&#9657;</a
+      ><a name="2696"
+      > </a
+      ><a name="2697" href="Definition.LogicalRelation.Tactic.html#2655" class="Bound"
+      >G</a
+      ><a name="2698"
+      >
+</a
+      ><a name="2699" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" class="Symbol"
+      >(</a
+      ><a name="2707" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="2708"
+      > </a
+      ><a name="2709" href="Definition.LogicalRelation.Tactic.html#2709" class="Bound"
+      >D</a
+      ><a name="2710" class="Symbol"
+      >)</a
+      ><a name="2711"
+      > </a
+      ><a name="2712" class="Symbol"
+      >=</a
+      ><a name="2713"
+      > </a
+      ><a name="2714" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="2720"
+      > </a
+      ><a name="2721" class="Symbol"
+      >(</a
+      ><a name="2722" href="Definition.Typed.Properties.html#7267" class="Function"
+      >&#8469;&#8802;&#928;</a
+      ><a name="2725"
+      > </a
+      ><a name="2726" class="Symbol"
+      >(</a
+      ><a name="2727" href="Tools.PropositionalEquality.html#172" class="Function"
+      >PE.sym</a
+      ><a name="2733"
+      > </a
+      ><a name="2734" class="Symbol"
+      >(</a
+      ><a name="2735" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="2744"
+      > </a
+      ><a name="2745" class="Symbol"
+      >(</a
+      ><a name="2746" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2749"
+      > </a
+      ><a name="2750" href="Definition.LogicalRelation.Tactic.html#2709" class="Bound"
+      >D</a
+      ><a name="2751" class="Symbol"
+      >)</a
+      ><a name="2752"
+      > </a
+      ><a name="2753" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="2754" class="Symbol"
+      >)))</a
+      ><a name="2757"
+      >
+</a
+      ><a name="2758" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2764"
+      > </a
+      ><a name="2765" class="Symbol"
+      >(</a
+      ><a name="2766" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="2769"
+      > </a
+      ><a name="2770" href="Definition.LogicalRelation.Tactic.html#2770" class="Bound"
+      >K</a
+      ><a name="2771"
+      > </a
+      ><a name="2772" href="Definition.LogicalRelation.Tactic.html#2772" class="Bound"
+      >D</a
+      ><a name="2773"
+      > </a
+      ><a name="2774" href="Definition.LogicalRelation.Tactic.html#2774" class="Bound"
+      >neK</a
+      ><a name="2777" class="Symbol"
+      >)</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" class="Symbol"
+      >=</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="2787"
+      > </a
+      ><a name="2788" class="Symbol"
+      >(</a
+      ><a name="2789" href="Definition.Typed.Properties.html#7364" class="Function"
+      >&#928;&#8802;ne</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" href="Definition.LogicalRelation.Tactic.html#2774" class="Bound"
+      >neK</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" class="Symbol"
+      >(</a
+      ><a name="2799" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="2808"
+      > </a
+      ><a name="2809" class="Symbol"
+      >(</a
+      ><a name="2810" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="2813"
+      > </a
+      ><a name="2814" href="Definition.LogicalRelation.Tactic.html#2772" class="Bound"
+      >D</a
+      ><a name="2815" class="Symbol"
+      >)</a
+      ><a name="2816"
+      > </a
+      ><a name="2817" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="2818" class="Symbol"
+      >))</a
+      ><a name="2820"
+      >
+</a
+      ><a name="2821" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2827"
+      > </a
+      ><a name="2828" class="Symbol"
+      >{</a
+      ><a name="2829" class="Argument"
+      >l</a
+      ><a name="2830"
+      > </a
+      ><a name="2831" class="Symbol"
+      >=</a
+      ><a name="2832"
+      > </a
+      ><a name="2833" href="Definition.LogicalRelation.Tactic.html#2833" class="Bound"
+      >l</a
+      ><a name="2834" class="Symbol"
+      >}</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" class="Symbol"
+      >(</a
+      ><a name="2837" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="2839"
+      > </a
+      ><a name="2840" href="Definition.LogicalRelation.Tactic.html#2840" class="Bound"
+      >F</a
+      ><a name="2841"
+      > </a
+      ><a name="2842" href="Definition.LogicalRelation.Tactic.html#2842" class="Bound"
+      >G</a
+      ><a name="2843"
+      > </a
+      ><a name="2844" href="Definition.LogicalRelation.Tactic.html#2844" class="Bound"
+      >D</a
+      ><a name="2845"
+      > </a
+      ><a name="2846" href="Definition.LogicalRelation.Tactic.html#2846" class="Bound"
+      >&#8866;F</a
+      ><a name="2848"
+      > </a
+      ><a name="2849" href="Definition.LogicalRelation.Tactic.html#2849" class="Bound"
+      >&#8866;G</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" href="Definition.LogicalRelation.Tactic.html#2852" class="Bound"
+      >[F]</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" href="Definition.LogicalRelation.Tactic.html#2856" class="Bound"
+      >[G]</a
+      ><a name="2859"
+      > </a
+      ><a name="2860" href="Definition.LogicalRelation.Tactic.html#2860" class="Bound"
+      >G-ext</a
+      ><a name="2865" class="Symbol"
+      >)</a
+      ><a name="2866"
+      > </a
+      ><a name="2867" class="Symbol"
+      >=</a
+      ><a name="2868"
+      >
+  </a
+      ><a name="2871" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2876"
+      > </a
+      ><a name="2877" class="Symbol"
+      >(</a
+      ><a name="2878" href="Definition.LogicalRelation.html#5186" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="2879"
+      > </a
+      ><a name="2880" href="Definition.LogicalRelation.Tactic.html#2840" class="Bound"
+      >F</a
+      ><a name="2881"
+      > </a
+      ><a name="2882" href="Definition.LogicalRelation.Tactic.html#2842" class="Bound"
+      >G</a
+      ><a name="2883"
+      > </a
+      ><a name="2884" href="Definition.LogicalRelation.Tactic.html#2844" class="Bound"
+      >D</a
+      ><a name="2885"
+      > </a
+      ><a name="2886" href="Definition.LogicalRelation.Tactic.html#2846" class="Bound"
+      >&#8866;F</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Definition.LogicalRelation.Tactic.html#2849" class="Bound"
+      >&#8866;G</a
+      ><a name="2891"
+      > </a
+      ><a name="2892" href="Definition.LogicalRelation.Tactic.html#2852" class="Bound"
+      >[F]</a
+      ><a name="2895"
+      > </a
+      ><a name="2896" href="Definition.LogicalRelation.Tactic.html#2856" class="Bound"
+      >[G]</a
+      ><a name="2899"
+      > </a
+      ><a name="2900" href="Definition.LogicalRelation.Tactic.html#2860" class="Bound"
+      >G-ext</a
+      ><a name="2905" class="Symbol"
+      >)</a
+      ><a name="2906"
+      >
+</a
+      ><a name="2907" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2913"
+      > </a
+      ><a name="2914" class="Symbol"
+      >(</a
+      ><a name="2915" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="2918"
+      > </a
+      ><a name="2919" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2922"
+      > </a
+      ><a name="2923" href="Definition.LogicalRelation.Tactic.html#2923" class="Bound"
+      >x</a
+      ><a name="2924" class="Symbol"
+      >)</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" class="Keyword"
+      >with</a
+      ><a name="2930"
+      > </a
+      ><a name="2931" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2937"
+      > </a
+      ><a name="2938" href="Definition.LogicalRelation.Tactic.html#2923" class="Bound"
+      >x</a
+      ><a name="2939"
+      >
+</a
+      ><a name="2940" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2946"
+      > </a
+      ><a name="2947" class="Symbol"
+      >(</a
+      ><a name="2948" class="InductiveConstructor"
+      >emb</a
+      ><a name="2951"
+      > </a
+      ><a name="2952" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2955"
+      > </a
+      ><a name="2956" href="Definition.LogicalRelation.Tactic.html#2956" class="Bound"
+      >x</a
+      ><a name="2957" class="Symbol"
+      >)</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" class="Symbol"
+      >|</a
+      ><a name="2960"
+      > </a
+      ><a name="2961" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2966"
+      > </a
+      ><a name="2967" href="Definition.LogicalRelation.Tactic.html#2967" class="Bound"
+      >x&#8321;</a
+      ><a name="2969"
+      > </a
+      ><a name="2970" class="Symbol"
+      >=</a
+      ><a name="2971"
+      > </a
+      ><a name="2972" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="2975"
+      > </a
+      ><a name="2976" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="2979"
+      > </a
+      ><a name="2980" class="Symbol"
+      >(</a
+      ><a name="2981" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="2986"
+      > </a
+      ><a name="2987" href="Definition.LogicalRelation.Tactic.html#2967" class="Bound"
+      >x&#8321;</a
+      ><a name="2989" class="Symbol"
+      >)</a
+      ><a name="2990"
+      >
+</a
+      ><a name="2991" href="Definition.LogicalRelation.Tactic.html#2639" class="Function"
+      >&#928;-elim</a
+      ><a name="2997"
+      > </a
+      ><a name="2998" class="Symbol"
+      >(</a
+      ><a name="2999" class="InductiveConstructor"
+      >emb</a
+      ><a name="3002"
+      > </a
+      ><a name="3003" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" href="Definition.LogicalRelation.Tactic.html#3007" class="Bound"
+      >x</a
+      ><a name="3008" class="Symbol"
+      >)</a
+      ><a name="3009"
+      > </a
+      ><a name="3010" class="Symbol"
+      >|</a
+      ><a name="3011"
+      > </a
+      ><a name="3012" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="3015"
+      > </a
+      ><a name="3016" class="Symbol"
+      >()</a
+      ><a name="3018"
+      > </a
+      ><a name="3019" href="Definition.LogicalRelation.Tactic.html#3019" class="Bound"
+      >x&#8322;</a
+      ><a name="3021"
+      >
+
+</a
+      ><a name="3023" href="Definition.LogicalRelation.Tactic.html#3023" class="Function"
+      >extractMaybeEmb</a
+      ><a name="3038"
+      > </a
+      ><a name="3039" class="Symbol"
+      >:</a
+      ><a name="3040"
+      > </a
+      ><a name="3041" class="Symbol"
+      >&#8704;</a
+      ><a name="3042"
+      > </a
+      ><a name="3043" class="Symbol"
+      >{</a
+      ><a name="3044" href="Definition.LogicalRelation.Tactic.html#3044" class="Bound"
+      >l</a
+      ><a name="3045"
+      > </a
+      ><a name="3046" href="Definition.LogicalRelation.Tactic.html#3046" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="3050" class="Symbol"
+      >}</a
+      ><a name="3051"
+      > </a
+      ><a name="3052" class="Symbol"
+      >&#8594;</a
+      ><a name="3053"
+      > </a
+      ><a name="3054" href="Definition.LogicalRelation.Tactic.html#459" class="Datatype"
+      >MaybeEmb</a
+      ><a name="3062"
+      > </a
+      ><a name="3063" href="Definition.LogicalRelation.Tactic.html#3044" class="Bound"
+      >l</a
+      ><a name="3064"
+      > </a
+      ><a name="3065" href="Definition.LogicalRelation.Tactic.html#3046" class="Bound Operator"
+      >&#8873;&#10216;_&#10217;</a
+      ><a name="3069"
+      > </a
+      ><a name="3070" class="Symbol"
+      >&#8594;</a
+      ><a name="3071"
+      > </a
+      ><a name="3072" href="Tools.Product.html#178" class="Function"
+      >&#8707;</a
+      ><a name="3073"
+      > </a
+      ><a name="3074" class="Symbol"
+      >&#955;</a
+      ><a name="3075"
+      > </a
+      ><a name="3076" href="Definition.LogicalRelation.Tactic.html#3076" class="Bound"
+      >l'</a
+      ><a name="3078"
+      > </a
+      ><a name="3079" class="Symbol"
+      >&#8594;</a
+      ><a name="3080"
+      > </a
+      ><a name="3081" href="Definition.LogicalRelation.Tactic.html#3046" class="Bound Operator"
+      >&#8873;&#10216;</a
+      ><a name="3083"
+      > </a
+      ><a name="3084" href="Definition.LogicalRelation.Tactic.html#3076" class="Bound"
+      >l'</a
+      ><a name="3086"
+      > </a
+      ><a name="3087" href="Definition.LogicalRelation.Tactic.html#3046" class="Bound Operator"
+      >&#10217;</a
+      ><a name="3088"
+      >
+</a
+      ><a name="3089" href="Definition.LogicalRelation.Tactic.html#3023" class="Function"
+      >extractMaybeEmb</a
+      ><a name="3104"
+      > </a
+      ><a name="3105" class="Symbol"
+      >(</a
+      ><a name="3106" href="Definition.LogicalRelation.Tactic.html#514" class="InductiveConstructor"
+      >noemb</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" href="Definition.LogicalRelation.Tactic.html#3112" class="Bound"
+      >x</a
+      ><a name="3113" class="Symbol"
+      >)</a
+      ><a name="3114"
+      > </a
+      ><a name="3115" class="Symbol"
+      >=</a
+      ><a name="3116"
+      > </a
+      ><a name="3117" class="Symbol"
+      >_</a
+      ><a name="3118"
+      > </a
+      ><a name="3119" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3120"
+      > </a
+      ><a name="3121" href="Definition.LogicalRelation.Tactic.html#3112" class="Bound"
+      >x</a
+      ><a name="3122"
+      >
+</a
+      ><a name="3123" href="Definition.LogicalRelation.Tactic.html#3023" class="Function"
+      >extractMaybeEmb</a
+      ><a name="3138"
+      > </a
+      ><a name="3139" class="Symbol"
+      >(</a
+      ><a name="3140" href="Definition.LogicalRelation.Tactic.html#562" class="InductiveConstructor"
+      >emb</a
+      ><a name="3143"
+      > </a
+      ><a name="3144" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="3147"
+      > </a
+      ><a name="3148" href="Definition.LogicalRelation.Tactic.html#3148" class="Bound"
+      >x</a
+      ><a name="3149" class="Symbol"
+      >)</a
+      ><a name="3150"
+      > </a
+      ><a name="3151" class="Symbol"
+      >=</a
+      ><a name="3152"
+      > </a
+      ><a name="3153" href="Definition.LogicalRelation.Tactic.html#3023" class="Function"
+      >extractMaybeEmb</a
+      ><a name="3168"
+      > </a
+      ><a name="3169" href="Definition.LogicalRelation.Tactic.html#3148" class="Bound"
+      >x</a
+      ><a name="3170"
+      >
+
+</a
+      ><a name="3172" class="Keyword"
+      >data</a
+      ><a name="3176"
+      > </a
+      ><a name="3177" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3183"
+      > </a
+      ><a name="3184" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3185"
+      > </a
+      ><a name="3186" class="Symbol"
+      >:</a
+      ><a name="3187"
+      > </a
+      ><a name="3188" class="Symbol"
+      >&#8704;</a
+      ><a name="3189"
+      > </a
+      ><a name="3190" href="Definition.LogicalRelation.Tactic.html#3190" class="Bound"
+      >l</a
+      ><a name="3191"
+      > </a
+      ><a name="3192" href="Definition.LogicalRelation.Tactic.html#3192" class="Bound"
+      >l'</a
+      ><a name="3194"
+      > </a
+      ><a name="3195" href="Definition.LogicalRelation.Tactic.html#3195" class="Bound"
+      >A</a
+      ><a name="3196"
+      > </a
+      ><a name="3197" href="Definition.LogicalRelation.Tactic.html#3197" class="Bound"
+      >B</a
+      ><a name="3198"
+      > </a
+      ><a name="3199" class="Symbol"
+      >(</a
+      ><a name="3200" href="Definition.LogicalRelation.Tactic.html#3200" class="Bound"
+      >p</a
+      ><a name="3201"
+      > </a
+      ><a name="3202" class="Symbol"
+      >:</a
+      ><a name="3203"
+      > </a
+      ><a name="3204" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3208"
+      > </a
+      ><a name="3209" href="Definition.LogicalRelation.Tactic.html#3190" class="Bound"
+      >l</a
+      ><a name="3210"
+      > </a
+      ><a name="3211" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="3212"
+      > </a
+      ><a name="3213" href="Definition.LogicalRelation.Tactic.html#3195" class="Bound"
+      >A</a
+      ><a name="3214" class="Symbol"
+      >)</a
+      ><a name="3215"
+      > </a
+      ><a name="3216" class="Symbol"
+      >(</a
+      ><a name="3217" href="Definition.LogicalRelation.Tactic.html#3217" class="Bound"
+      >q</a
+      ><a name="3218"
+      > </a
+      ><a name="3219" class="Symbol"
+      >:</a
+      ><a name="3220"
+      > </a
+      ><a name="3221" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3222"
+      > </a
+      ><a name="3223" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3225"
+      > </a
+      ><a name="3226" href="Definition.LogicalRelation.Tactic.html#3192" class="Bound"
+      >l'</a
+      ><a name="3228"
+      > </a
+      ><a name="3229" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="3230"
+      > </a
+      ><a name="3231" href="Definition.LogicalRelation.Tactic.html#3197" class="Bound"
+      >B</a
+      ><a name="3232" class="Symbol"
+      >)</a
+      ><a name="3233"
+      > </a
+      ><a name="3234" class="Symbol"
+      >&#8594;</a
+      ><a name="3235"
+      > </a
+      ><a name="3236" class="PrimitiveType"
+      >Set</a
+      ><a name="3239"
+      > </a
+      ><a name="3240" class="Keyword"
+      >where</a
+      ><a name="3245"
+      >
+  </a
+      ><a name="3248" href="Definition.LogicalRelation.Tactic.html#3248" class="InductiveConstructor"
+      >U</a
+      ><a name="3249"
+      > </a
+      ><a name="3250" class="Symbol"
+      >:</a
+      ><a name="3251"
+      > </a
+      ><a name="3252" class="Symbol"
+      >&#8704;</a
+      ><a name="3253"
+      > </a
+      ><a name="3254" class="Symbol"
+      >{</a
+      ><a name="3255" href="Definition.LogicalRelation.Tactic.html#3255" class="Bound"
+      >l</a
+      ><a name="3256"
+      > </a
+      ><a name="3257" href="Definition.LogicalRelation.Tactic.html#3257" class="Bound"
+      >l'</a
+      ><a name="3259" class="Symbol"
+      >}</a
+      ><a name="3260"
+      > </a
+      ><a name="3261" href="Definition.LogicalRelation.Tactic.html#3261" class="Bound"
+      >UA</a
+      ><a name="3263"
+      > </a
+      ><a name="3264" href="Definition.LogicalRelation.Tactic.html#3264" class="Bound"
+      >UB</a
+      ><a name="3266"
+      > </a
+      ><a name="3267" class="Symbol"
+      >&#8594;</a
+      ><a name="3268"
+      > </a
+      ><a name="3269" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3277"
+      > </a
+      ><a name="3278" href="Definition.LogicalRelation.Tactic.html#3255" class="Bound"
+      >l</a
+      ><a name="3279"
+      > </a
+      ><a name="3280" href="Definition.LogicalRelation.Tactic.html#3257" class="Bound"
+      >l'</a
+      ><a name="3282"
+      > </a
+      ><a name="3283" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="3284"
+      > </a
+      ><a name="3285" href="Definition.Untyped.html#343" class="InductiveConstructor"
+      >U</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" class="Symbol"
+      >(</a
+      ><a name="3288" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="3289"
+      > </a
+      ><a name="3290" href="Definition.LogicalRelation.Tactic.html#3261" class="Bound"
+      >UA</a
+      ><a name="3292" class="Symbol"
+      >)</a
+      ><a name="3293"
+      > </a
+      ><a name="3294" class="Symbol"
+      >(</a
+      ><a name="3295" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="3296"
+      > </a
+      ><a name="3297" href="Definition.LogicalRelation.Tactic.html#3264" class="Bound"
+      >UB</a
+      ><a name="3299" class="Symbol"
+      >)</a
+      ><a name="3300"
+      >
+  </a
+      ><a name="3303" href="Definition.LogicalRelation.Tactic.html#3303" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="3304"
+      > </a
+      ><a name="3305" class="Symbol"
+      >:</a
+      ><a name="3306"
+      > </a
+      ><a name="3307" class="Symbol"
+      >&#8704;</a
+      ><a name="3308"
+      > </a
+      ><a name="3309" class="Symbol"
+      >{</a
+      ><a name="3310" href="Definition.LogicalRelation.Tactic.html#3310" class="Bound"
+      >A</a
+      ><a name="3311"
+      > </a
+      ><a name="3312" href="Definition.LogicalRelation.Tactic.html#3312" class="Bound"
+      >B</a
+      ><a name="3313"
+      > </a
+      ><a name="3314" href="Definition.LogicalRelation.Tactic.html#3314" class="Bound"
+      >l</a
+      ><a name="3315"
+      > </a
+      ><a name="3316" href="Definition.LogicalRelation.Tactic.html#3316" class="Bound"
+      >l'</a
+      ><a name="3318" class="Symbol"
+      >}</a
+      ><a name="3319"
+      > </a
+      ><a name="3320" href="Definition.LogicalRelation.Tactic.html#3320" class="Bound"
+      >&#8469;A</a
+      ><a name="3322"
+      > </a
+      ><a name="3323" href="Definition.LogicalRelation.Tactic.html#3323" class="Bound"
+      >&#8469;B</a
+      ><a name="3325"
+      > </a
+      ><a name="3326" class="Symbol"
+      >&#8594;</a
+      ><a name="3327"
+      > </a
+      ><a name="3328" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3334"
+      > </a
+      ><a name="3335" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3336"
+      > </a
+      ><a name="3337" href="Definition.LogicalRelation.Tactic.html#3314" class="Bound"
+      >l</a
+      ><a name="3338"
+      > </a
+      ><a name="3339" href="Definition.LogicalRelation.Tactic.html#3316" class="Bound"
+      >l'</a
+      ><a name="3341"
+      > </a
+      ><a name="3342" href="Definition.LogicalRelation.Tactic.html#3310" class="Bound"
+      >A</a
+      ><a name="3343"
+      > </a
+      ><a name="3344" href="Definition.LogicalRelation.Tactic.html#3312" class="Bound"
+      >B</a
+      ><a name="3345"
+      > </a
+      ><a name="3346" class="Symbol"
+      >(</a
+      ><a name="3347" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="3348"
+      > </a
+      ><a name="3349" href="Definition.LogicalRelation.Tactic.html#3320" class="Bound"
+      >&#8469;A</a
+      ><a name="3351" class="Symbol"
+      >)</a
+      ><a name="3352"
+      > </a
+      ><a name="3353" class="Symbol"
+      >(</a
+      ><a name="3354" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="3355"
+      > </a
+      ><a name="3356" href="Definition.LogicalRelation.Tactic.html#3323" class="Bound"
+      >&#8469;B</a
+      ><a name="3358" class="Symbol"
+      >)</a
+      ><a name="3359"
+      >
+  </a
+      ><a name="3362" href="Definition.LogicalRelation.Tactic.html#3362" class="InductiveConstructor"
+      >ne</a
+      ><a name="3364"
+      >  </a
+      ><a name="3366" class="Symbol"
+      >:</a
+      ><a name="3367"
+      > </a
+      ><a name="3368" class="Symbol"
+      >&#8704;</a
+      ><a name="3369"
+      > </a
+      ><a name="3370" class="Symbol"
+      >{</a
+      ><a name="3371" href="Definition.LogicalRelation.Tactic.html#3371" class="Bound"
+      >A</a
+      ><a name="3372"
+      > </a
+      ><a name="3373" href="Definition.LogicalRelation.Tactic.html#3373" class="Bound"
+      >B</a
+      ><a name="3374"
+      > </a
+      ><a name="3375" href="Definition.LogicalRelation.Tactic.html#3375" class="Bound"
+      >l</a
+      ><a name="3376"
+      > </a
+      ><a name="3377" href="Definition.LogicalRelation.Tactic.html#3377" class="Bound"
+      >l'</a
+      ><a name="3379" class="Symbol"
+      >}</a
+      ><a name="3380"
+      > </a
+      ><a name="3381" href="Definition.LogicalRelation.Tactic.html#3381" class="Bound"
+      >neA</a
+      ><a name="3384"
+      > </a
+      ><a name="3385" href="Definition.LogicalRelation.Tactic.html#3385" class="Bound"
+      >neB</a
+      ><a name="3388"
+      >
+      </a
+      ><a name="3395" class="Symbol"
+      >&#8594;</a
+      ><a name="3396"
+      > </a
+      ><a name="3397" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3405"
+      > </a
+      ><a name="3406" href="Definition.LogicalRelation.Tactic.html#3375" class="Bound"
+      >l</a
+      ><a name="3407"
+      > </a
+      ><a name="3408" href="Definition.LogicalRelation.Tactic.html#3377" class="Bound"
+      >l'</a
+      ><a name="3410"
+      > </a
+      ><a name="3411" href="Definition.LogicalRelation.Tactic.html#3371" class="Bound"
+      >A</a
+      ><a name="3412"
+      > </a
+      ><a name="3413" href="Definition.LogicalRelation.Tactic.html#3373" class="Bound"
+      >B</a
+      ><a name="3414"
+      > </a
+      ><a name="3415" class="Symbol"
+      >(</a
+      ><a name="3416" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="3418"
+      > </a
+      ><a name="3419" href="Definition.LogicalRelation.Tactic.html#3381" class="Bound"
+      >neA</a
+      ><a name="3422" class="Symbol"
+      >)</a
+      ><a name="3423"
+      > </a
+      ><a name="3424" class="Symbol"
+      >(</a
+      ><a name="3425" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="3427"
+      > </a
+      ><a name="3428" href="Definition.LogicalRelation.Tactic.html#3385" class="Bound"
+      >neB</a
+      ><a name="3431" class="Symbol"
+      >)</a
+      ><a name="3432"
+      >
+  </a
+      ><a name="3435" href="Definition.LogicalRelation.Tactic.html#3435" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="3436"
+      > </a
+      ><a name="3437" class="Symbol"
+      >:</a
+      ><a name="3438"
+      > </a
+      ><a name="3439" class="Symbol"
+      >&#8704;</a
+      ><a name="3440"
+      > </a
+      ><a name="3441" class="Symbol"
+      >{</a
+      ><a name="3442" href="Definition.LogicalRelation.Tactic.html#3442" class="Bound"
+      >A</a
+      ><a name="3443"
+      > </a
+      ><a name="3444" href="Definition.LogicalRelation.Tactic.html#3444" class="Bound"
+      >B</a
+      ><a name="3445"
+      > </a
+      ><a name="3446" href="Definition.LogicalRelation.Tactic.html#3446" class="Bound"
+      >l</a
+      ><a name="3447"
+      > </a
+      ><a name="3448" href="Definition.LogicalRelation.Tactic.html#3448" class="Bound"
+      >l'</a
+      ><a name="3450" class="Symbol"
+      >}</a
+      ><a name="3451"
+      > </a
+      ><a name="3452" href="Definition.LogicalRelation.Tactic.html#3452" class="Bound"
+      >&#928;A</a
+      ><a name="3454"
+      > </a
+      ><a name="3455" href="Definition.LogicalRelation.Tactic.html#3455" class="Bound"
+      >&#928;B</a
+      ><a name="3457"
+      >
+    </a
+      ><a name="3462" class="Symbol"
+      >&#8594;</a
+      ><a name="3463"
+      > </a
+      ><a name="3464" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3470"
+      > </a
+      ><a name="3471" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3472"
+      > </a
+      ><a name="3473" href="Definition.LogicalRelation.Tactic.html#3446" class="Bound"
+      >l</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" href="Definition.LogicalRelation.Tactic.html#3448" class="Bound"
+      >l'</a
+      ><a name="3477"
+      > </a
+      ><a name="3478" href="Definition.LogicalRelation.Tactic.html#3442" class="Bound"
+      >A</a
+      ><a name="3479"
+      > </a
+      ><a name="3480" href="Definition.LogicalRelation.Tactic.html#3444" class="Bound"
+      >B</a
+      ><a name="3481"
+      > </a
+      ><a name="3482" class="Symbol"
+      >(</a
+      ><a name="3483" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="3484"
+      > </a
+      ><a name="3485" href="Definition.LogicalRelation.Tactic.html#3452" class="Bound"
+      >&#928;A</a
+      ><a name="3487" class="Symbol"
+      >)</a
+      ><a name="3488"
+      > </a
+      ><a name="3489" class="Symbol"
+      >(</a
+      ><a name="3490" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="3491"
+      > </a
+      ><a name="3492" href="Definition.LogicalRelation.Tactic.html#3455" class="Bound"
+      >&#928;B</a
+      ><a name="3494" class="Symbol"
+      >)</a
+      ><a name="3495"
+      >
+  </a
+      ><a name="3498" href="Definition.LogicalRelation.Tactic.html#3498" class="InductiveConstructor"
+      >emb&#8304;&#185;</a
+      ><a name="3503"
+      > </a
+      ><a name="3504" class="Symbol"
+      >:</a
+      ><a name="3505"
+      > </a
+      ><a name="3506" class="Symbol"
+      >&#8704;</a
+      ><a name="3507"
+      > </a
+      ><a name="3508" class="Symbol"
+      >{</a
+      ><a name="3509" href="Definition.LogicalRelation.Tactic.html#3509" class="Bound"
+      >A</a
+      ><a name="3510"
+      > </a
+      ><a name="3511" href="Definition.LogicalRelation.Tactic.html#3511" class="Bound"
+      >B</a
+      ><a name="3512"
+      > </a
+      ><a name="3513" href="Definition.LogicalRelation.Tactic.html#3513" class="Bound"
+      >l</a
+      ><a name="3514"
+      > </a
+      ><a name="3515" href="Definition.LogicalRelation.Tactic.html#3515" class="Bound"
+      >p</a
+      ><a name="3516"
+      > </a
+      ><a name="3517" href="Definition.LogicalRelation.Tactic.html#3517" class="Bound"
+      >q</a
+      ><a name="3518" class="Symbol"
+      >}</a
+      ><a name="3519"
+      >
+        </a
+      ><a name="3528" class="Symbol"
+      >&#8594;</a
+      ><a name="3529"
+      > </a
+      ><a name="3530" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3536"
+      > </a
+      ><a name="3537" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3538"
+      > </a
+      ><a name="3539" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="3540"
+      > </a
+      ><a name="3541" href="Definition.LogicalRelation.Tactic.html#3513" class="Bound"
+      >l</a
+      ><a name="3542"
+      > </a
+      ><a name="3543" href="Definition.LogicalRelation.Tactic.html#3509" class="Bound"
+      >A</a
+      ><a name="3544"
+      > </a
+      ><a name="3545" href="Definition.LogicalRelation.Tactic.html#3511" class="Bound"
+      >B</a
+      ><a name="3546"
+      > </a
+      ><a name="3547" href="Definition.LogicalRelation.Tactic.html#3515" class="Bound"
+      >p</a
+      ><a name="3548"
+      > </a
+      ><a name="3549" href="Definition.LogicalRelation.Tactic.html#3517" class="Bound"
+      >q</a
+      ><a name="3550"
+      >
+        </a
+      ><a name="3559" class="Symbol"
+      >&#8594;</a
+      ><a name="3560"
+      > </a
+      ><a name="3561" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3567"
+      > </a
+      ><a name="3568" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3569"
+      > </a
+      ><a name="3570" href="Definition.LogicalRelation.html#2081" class="InductiveConstructor"
+      >&#185;</a
+      ><a name="3571"
+      > </a
+      ><a name="3572" href="Definition.LogicalRelation.Tactic.html#3513" class="Bound"
+      >l</a
+      ><a name="3573"
+      > </a
+      ><a name="3574" href="Definition.LogicalRelation.Tactic.html#3509" class="Bound"
+      >A</a
+      ><a name="3575"
+      > </a
+      ><a name="3576" href="Definition.LogicalRelation.Tactic.html#3511" class="Bound"
+      >B</a
+      ><a name="3577"
+      > </a
+      ><a name="3578" class="Symbol"
+      >(</a
+      ><a name="3579" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="3582"
+      > </a
+      ><a name="3583" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="3586"
+      > </a
+      ><a name="3587" href="Definition.LogicalRelation.Tactic.html#3515" class="Bound"
+      >p</a
+      ><a name="3588" class="Symbol"
+      >)</a
+      ><a name="3589"
+      > </a
+      ><a name="3590" href="Definition.LogicalRelation.Tactic.html#3517" class="Bound"
+      >q</a
+      ><a name="3591"
+      >
+  </a
+      ><a name="3594" href="Definition.LogicalRelation.Tactic.html#3594" class="InductiveConstructor"
+      >emb&#185;&#8304;</a
+      ><a name="3599"
+      > </a
+      ><a name="3600" class="Symbol"
+      >:</a
+      ><a name="3601"
+      > </a
+      ><a name="3602" class="Symbol"
+      >&#8704;</a
+      ><a name="3603"
+      > </a
+      ><a name="3604" class="Symbol"
+      >{</a
+      ><a name="3605" href="Definition.LogicalRelation.Tactic.html#3605" class="Bound"
+      >A</a
+      ><a name="3606"
+      > </a
+      ><a name="3607" href="Definition.LogicalRelation.Tactic.html#3607" class="Bound"
+      >B</a
+      ><a name="3608"
+      > </a
+      ><a name="3609" href="Definition.LogicalRelation.Tactic.html#3609" class="Bound"
+      >l</a
+      ><a name="3610"
+      > </a
+      ><a name="3611" href="Definition.LogicalRelation.Tactic.html#3611" class="Bound"
+      >p</a
+      ><a name="3612"
+      > </a
+      ><a name="3613" href="Definition.LogicalRelation.Tactic.html#3613" class="Bound"
+      >q</a
+      ><a name="3614" class="Symbol"
+      >}</a
+      ><a name="3615"
+      >
+        </a
+      ><a name="3624" class="Symbol"
+      >&#8594;</a
+      ><a name="3625"
+      > </a
+      ><a name="3626" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3632"
+      > </a
+      ><a name="3633" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3634"
+      > </a
+      ><a name="3635" href="Definition.LogicalRelation.Tactic.html#3609" class="Bound"
+      >l</a
+      ><a name="3636"
+      > </a
+      ><a name="3637" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="3638"
+      > </a
+      ><a name="3639" href="Definition.LogicalRelation.Tactic.html#3605" class="Bound"
+      >A</a
+      ><a name="3640"
+      > </a
+      ><a name="3641" href="Definition.LogicalRelation.Tactic.html#3607" class="Bound"
+      >B</a
+      ><a name="3642"
+      > </a
+      ><a name="3643" href="Definition.LogicalRelation.Tactic.html#3611" class="Bound"
+      >p</a
+      ><a name="3644"
+      > </a
+      ><a name="3645" href="Definition.LogicalRelation.Tactic.html#3613" class="Bound"
+      >q</a
+      ><a name="3646"
+      >
+        </a
+      ><a name="3655" class="Symbol"
+      >&#8594;</a
+      ><a name="3656"
+      > </a
+      ><a name="3657" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3663"
+      > </a
+      ><a name="3664" href="Definition.LogicalRelation.Tactic.html#3184" class="Bound"
+      >&#915;</a
+      ><a name="3665"
+      > </a
+      ><a name="3666" href="Definition.LogicalRelation.Tactic.html#3609" class="Bound"
+      >l</a
+      ><a name="3667"
+      > </a
+      ><a name="3668" href="Definition.LogicalRelation.html#2081" class="InductiveConstructor"
+      >&#185;</a
+      ><a name="3669"
+      > </a
+      ><a name="3670" href="Definition.LogicalRelation.Tactic.html#3605" class="Bound"
+      >A</a
+      ><a name="3671"
+      > </a
+      ><a name="3672" href="Definition.LogicalRelation.Tactic.html#3607" class="Bound"
+      >B</a
+      ><a name="3673"
+      > </a
+      ><a name="3674" href="Definition.LogicalRelation.Tactic.html#3611" class="Bound"
+      >p</a
+      ><a name="3675"
+      > </a
+      ><a name="3676" class="Symbol"
+      >(</a
+      ><a name="3677" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="3680"
+      > </a
+      ><a name="3681" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="3684"
+      > </a
+      ><a name="3685" href="Definition.LogicalRelation.Tactic.html#3613" class="Bound"
+      >q</a
+      ><a name="3686" class="Symbol"
+      >)</a
+      ><a name="3687"
+      >
+
+</a
+      ><a name="3689" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="3698"
+      > </a
+      ><a name="3699" class="Symbol"
+      >:</a
+      ><a name="3700"
+      > </a
+      ><a name="3701" class="Symbol"
+      >&#8704;</a
+      ><a name="3702"
+      > </a
+      ><a name="3703" class="Symbol"
+      >{</a
+      ><a name="3704" href="Definition.LogicalRelation.Tactic.html#3704" class="Bound"
+      >l</a
+      ><a name="3705"
+      > </a
+      ><a name="3706" href="Definition.LogicalRelation.Tactic.html#3706" class="Bound"
+      >l'</a
+      ><a name="3708"
+      > </a
+      ><a name="3709" href="Definition.LogicalRelation.Tactic.html#3709" class="Bound"
+      >&#915;</a
+      ><a name="3710"
+      > </a
+      ><a name="3711" href="Definition.LogicalRelation.Tactic.html#3711" class="Bound"
+      >A</a
+      ><a name="3712"
+      > </a
+      ><a name="3713" href="Definition.LogicalRelation.Tactic.html#3713" class="Bound"
+      >B</a
+      ><a name="3714" class="Symbol"
+      >}</a
+      ><a name="3715"
+      > </a
+      ><a name="3716" class="Symbol"
+      >(</a
+      ><a name="3717" href="Definition.LogicalRelation.Tactic.html#3717" class="Bound"
+      >[A]</a
+      ><a name="3720"
+      > </a
+      ><a name="3721" class="Symbol"
+      >:</a
+      ><a name="3722"
+      > </a
+      ><a name="3723" href="Definition.LogicalRelation.Tactic.html#3709" class="Bound"
+      >&#915;</a
+      ><a name="3724"
+      > </a
+      ><a name="3725" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3727"
+      > </a
+      ><a name="3728" href="Definition.LogicalRelation.Tactic.html#3704" class="Bound"
+      >l</a
+      ><a name="3729"
+      > </a
+      ><a name="3730" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="3731"
+      > </a
+      ><a name="3732" href="Definition.LogicalRelation.Tactic.html#3711" class="Bound"
+      >A</a
+      ><a name="3733" class="Symbol"
+      >)</a
+      ><a name="3734"
+      > </a
+      ><a name="3735" class="Symbol"
+      >(</a
+      ><a name="3736" href="Definition.LogicalRelation.Tactic.html#3736" class="Bound"
+      >[B]</a
+      ><a name="3739"
+      > </a
+      ><a name="3740" class="Symbol"
+      >:</a
+      ><a name="3741"
+      > </a
+      ><a name="3742" href="Definition.LogicalRelation.Tactic.html#3709" class="Bound"
+      >&#915;</a
+      ><a name="3743"
+      > </a
+      ><a name="3744" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3746"
+      > </a
+      ><a name="3747" href="Definition.LogicalRelation.Tactic.html#3706" class="Bound"
+      >l'</a
+      ><a name="3749"
+      > </a
+      ><a name="3750" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="3751"
+      > </a
+      ><a name="3752" href="Definition.LogicalRelation.Tactic.html#3713" class="Bound"
+      >B</a
+      ><a name="3753" class="Symbol"
+      >)</a
+      ><a name="3754"
+      >
+          </a
+      ><a name="3765" class="Symbol"
+      >&#8594;</a
+      ><a name="3766"
+      > </a
+      ><a name="3767" href="Definition.LogicalRelation.Tactic.html#3709" class="Bound"
+      >&#915;</a
+      ><a name="3768"
+      > </a
+      ><a name="3769" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="3771"
+      > </a
+      ><a name="3772" href="Definition.LogicalRelation.Tactic.html#3704" class="Bound"
+      >l</a
+      ><a name="3773"
+      > </a
+      ><a name="3774" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#10217;</a
+      ><a name="3775"
+      > </a
+      ><a name="3776" href="Definition.LogicalRelation.Tactic.html#3711" class="Bound"
+      >A</a
+      ><a name="3777"
+      > </a
+      ><a name="3778" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >&#8801;</a
+      ><a name="3779"
+      > </a
+      ><a name="3780" href="Definition.LogicalRelation.Tactic.html#3713" class="Bound"
+      >B</a
+      ><a name="3781"
+      > </a
+      ><a name="3782" href="Definition.LogicalRelation.html#8941" class="Function Operator"
+      >/</a
+      ><a name="3783"
+      > </a
+      ><a name="3784" href="Definition.LogicalRelation.Tactic.html#3717" class="Bound"
+      >[A]</a
+      ><a name="3787"
+      > </a
+      ><a name="3788" class="Symbol"
+      >&#8594;</a
+      ><a name="3789"
+      > </a
+      ><a name="3790" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="3796"
+      > </a
+      ><a name="3797" href="Definition.LogicalRelation.Tactic.html#3709" class="Bound"
+      >&#915;</a
+      ><a name="3798"
+      > </a
+      ><a name="3799" href="Definition.LogicalRelation.Tactic.html#3704" class="Bound"
+      >l</a
+      ><a name="3800"
+      > </a
+      ><a name="3801" href="Definition.LogicalRelation.Tactic.html#3706" class="Bound"
+      >l'</a
+      ><a name="3803"
+      > </a
+      ><a name="3804" href="Definition.LogicalRelation.Tactic.html#3711" class="Bound"
+      >A</a
+      ><a name="3805"
+      > </a
+      ><a name="3806" href="Definition.LogicalRelation.Tactic.html#3713" class="Bound"
+      >B</a
+      ><a name="3807"
+      > </a
+      ><a name="3808" href="Definition.LogicalRelation.Tactic.html#3717" class="Bound"
+      >[A]</a
+      ><a name="3811"
+      > </a
+      ><a name="3812" href="Definition.LogicalRelation.Tactic.html#3736" class="Bound"
+      >[B]</a
+      ><a name="3815"
+      >
+</a
+      ><a name="3816" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="3825"
+      > </a
+      ><a name="3826" class="Symbol"
+      >(</a
+      ><a name="3827" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="3828"
+      > </a
+      ><a name="3829" href="Definition.LogicalRelation.Tactic.html#3829" class="Bound"
+      >UA</a
+      ><a name="3831" class="Symbol"
+      >)</a
+      ><a name="3832"
+      > </a
+      ><a name="3833" class="Symbol"
+      >(</a
+      ><a name="3834" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="3835"
+      > </a
+      ><a name="3836" href="Definition.LogicalRelation.Tactic.html#3836" class="Bound"
+      >UB</a
+      ><a name="3838" class="Symbol"
+      >)</a
+      ><a name="3839"
+      > </a
+      ><a name="3840" href="Definition.LogicalRelation.Tactic.html#3840" class="Bound"
+      >A&#8801;B</a
+      ><a name="3843"
+      > </a
+      ><a name="3844" class="Symbol"
+      >=</a
+      ><a name="3845"
+      > </a
+      ><a name="3846" href="Definition.LogicalRelation.Tactic.html#3248" class="InductiveConstructor"
+      >U</a
+      ><a name="3847"
+      > </a
+      ><a name="3848" href="Definition.LogicalRelation.Tactic.html#3829" class="Bound"
+      >UA</a
+      ><a name="3850"
+      > </a
+      ><a name="3851" href="Definition.LogicalRelation.Tactic.html#3836" class="Bound"
+      >UB</a
+      ><a name="3853"
+      >
+</a
+      ><a name="3854" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="3863"
+      > </a
+      ><a name="3864" class="Symbol"
+      >(</a
+      ><a name="3865" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="3867"
+      > </a
+      ><a name="3868" class="Symbol"
+      >_</a
+      ><a name="3869"
+      > </a
+      ><a name="3870" class="Symbol"
+      >_</a
+      ><a name="3871"
+      > </a
+      ><a name="3872" href="Definition.LogicalRelation.Tactic.html#3872" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="3874" class="Symbol"
+      >)</a
+      ><a name="3875"
+      > </a
+      ><a name="3876" class="Symbol"
+      >(</a
+      ><a name="3877" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="3878"
+      > </a
+      ><a name="3879" href="Definition.LogicalRelation.Tactic.html#3879" class="Bound"
+      >D</a
+      ><a name="3880" class="Symbol"
+      >)</a
+      ><a name="3881"
+      > </a
+      ><a name="3882" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="3889"
+      > </a
+      ><a name="3890" class="Symbol"
+      >=</a
+      ><a name="3891"
+      > </a
+      ><a name="3892" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="3898"
+      > </a
+      ><a name="3899" class="Symbol"
+      >(</a
+      ><a name="3900" href="Definition.Typed.Properties.html#7142" class="Function"
+      >U&#8802;&#8469;</a
+      ><a name="3903"
+      > </a
+      ><a name="3904" class="Symbol"
+      >(</a
+      ><a name="3905" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="3914"
+      > </a
+      ><a name="3915" class="Symbol"
+      >(</a
+      ><a name="3916" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="3919"
+      > </a
+      ><a name="3920" href="Definition.LogicalRelation.Tactic.html#3879" class="Bound"
+      >D</a
+      ><a name="3921" class="Symbol"
+      >)</a
+      ><a name="3922"
+      > </a
+      ><a name="3923" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="3924" class="Symbol"
+      >))</a
+      ><a name="3926"
+      >
+</a
+      ><a name="3927" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="3936"
+      > </a
+      ><a name="3937" class="Symbol"
+      >(</a
+      ><a name="3938" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="3940"
+      > </a
+      ><a name="3941" class="Symbol"
+      >_</a
+      ><a name="3942"
+      > </a
+      ><a name="3943" class="Symbol"
+      >_</a
+      ><a name="3944"
+      > </a
+      ><a name="3945" href="Definition.LogicalRelation.Tactic.html#3945" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="3947" class="Symbol"
+      >)</a
+      ><a name="3948"
+      > </a
+      ><a name="3949" class="Symbol"
+      >(</a
+      ><a name="3950" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="3953"
+      > </a
+      ><a name="3954" href="Definition.LogicalRelation.Tactic.html#3954" class="Bound"
+      >K</a
+      ><a name="3955"
+      > </a
+      ><a name="3956" href="Definition.LogicalRelation.Tactic.html#3956" class="Bound"
+      >D</a
+      ><a name="3957"
+      > </a
+      ><a name="3958" href="Definition.LogicalRelation.Tactic.html#3958" class="Bound"
+      >neK</a
+      ><a name="3961" class="Symbol"
+      >)</a
+      ><a name="3962"
+      > </a
+      ><a name="3963" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="3970"
+      > </a
+      ><a name="3971" class="Symbol"
+      >=</a
+      ><a name="3972"
+      > </a
+      ><a name="3973" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="3979"
+      > </a
+      ><a name="3980" class="Symbol"
+      >(</a
+      ><a name="3981" href="Definition.Typed.Properties.html#7214" class="Function"
+      >U&#8802;ne</a
+      ><a name="3985"
+      > </a
+      ><a name="3986" href="Definition.LogicalRelation.Tactic.html#3958" class="Bound"
+      >neK</a
+      ><a name="3989"
+      > </a
+      ><a name="3990" class="Symbol"
+      >(</a
+      ><a name="3991" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="4000"
+      > </a
+      ><a name="4001" class="Symbol"
+      >(</a
+      ><a name="4002" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" href="Definition.LogicalRelation.Tactic.html#3956" class="Bound"
+      >D</a
+      ><a name="4007" class="Symbol"
+      >)</a
+      ><a name="4008"
+      > </a
+      ><a name="4009" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="4010" class="Symbol"
+      >))</a
+      ><a name="4012"
+      >
+</a
+      ><a name="4013" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4022"
+      > </a
+      ><a name="4023" class="Symbol"
+      >(</a
+      ><a name="4024" href="Definition.LogicalRelation.html#8235" class="InductiveConstructor"
+      >U'</a
+      ><a name="4026"
+      > </a
+      ><a name="4027" class="Symbol"
+      >_</a
+      ><a name="4028"
+      > </a
+      ><a name="4029" class="Symbol"
+      >_</a
+      ><a name="4030"
+      > </a
+      ><a name="4031" href="Definition.LogicalRelation.Tactic.html#4031" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="4033" class="Symbol"
+      >)</a
+      ><a name="4034"
+      > </a
+      ><a name="4035" class="Symbol"
+      >(</a
+      ><a name="4036" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="4038"
+      > </a
+      ><a name="4039" href="Definition.LogicalRelation.Tactic.html#4039" class="Bound"
+      >F</a
+      ><a name="4040"
+      > </a
+      ><a name="4041" href="Definition.LogicalRelation.Tactic.html#4041" class="Bound"
+      >G</a
+      ><a name="4042"
+      > </a
+      ><a name="4043" href="Definition.LogicalRelation.Tactic.html#4043" class="Bound"
+      >D</a
+      ><a name="4044"
+      > </a
+      ><a name="4045" href="Definition.LogicalRelation.Tactic.html#4045" class="Bound"
+      >&#8866;F</a
+      ><a name="4047"
+      > </a
+      ><a name="4048" href="Definition.LogicalRelation.Tactic.html#4048" class="Bound"
+      >&#8866;G</a
+      ><a name="4050"
+      > </a
+      ><a name="4051" href="Definition.LogicalRelation.Tactic.html#4051" class="Bound"
+      >[F]</a
+      ><a name="4054"
+      > </a
+      ><a name="4055" href="Definition.LogicalRelation.Tactic.html#4055" class="Bound"
+      >[G]</a
+      ><a name="4058"
+      > </a
+      ><a name="4059" href="Definition.LogicalRelation.Tactic.html#4059" class="Bound"
+      >G-ext</a
+      ><a name="4064" class="Symbol"
+      >)</a
+      ><a name="4065"
+      > </a
+      ><a name="4066" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >PE.refl</a
+      ><a name="4073"
+      > </a
+      ><a name="4074" class="Symbol"
+      >=</a
+      ><a name="4075"
+      >
+  </a
+      ><a name="4078" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4084"
+      > </a
+      ><a name="4085" class="Symbol"
+      >(</a
+      ><a name="4086" href="Definition.Typed.Properties.html#7170" class="Function"
+      >U&#8802;&#928;</a
+      ><a name="4089"
+      > </a
+      ><a name="4090" class="Symbol"
+      >(</a
+      ><a name="4091" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="4100"
+      > </a
+      ><a name="4101" class="Symbol"
+      >(</a
+      ><a name="4102" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4105"
+      > </a
+      ><a name="4106" href="Definition.LogicalRelation.Tactic.html#4043" class="Bound"
+      >D</a
+      ><a name="4107" class="Symbol"
+      >)</a
+      ><a name="4108"
+      > </a
+      ><a name="4109" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="4110" class="Symbol"
+      >))</a
+      ><a name="4112"
+      >
+</a
+      ><a name="4113" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4122"
+      > </a
+      ><a name="4123" class="Symbol"
+      >(</a
+      ><a name="4124" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4125"
+      > </a
+      ><a name="4126" href="Definition.LogicalRelation.Tactic.html#4126" class="Bound"
+      >D</a
+      ><a name="4127" class="Symbol"
+      >)</a
+      ><a name="4128"
+      > </a
+      ><a name="4129" class="Symbol"
+      >(</a
+      ><a name="4130" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="4131"
+      > </a
+      ><a name="4132" href="Definition.LogicalRelation.Tactic.html#4132" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="4134" class="Symbol"
+      >)</a
+      ><a name="4135"
+      > </a
+      ><a name="4136" href="Definition.LogicalRelation.Tactic.html#4136" class="Bound"
+      >A&#8801;B</a
+      ><a name="4139"
+      > </a
+      ><a name="4140" class="Symbol"
+      >=</a
+      ><a name="4141"
+      > </a
+      ><a name="4142" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4148"
+      > </a
+      ><a name="4149" class="Symbol"
+      >(</a
+      ><a name="4150" href="Definition.Typed.Properties.html#7142" class="Function"
+      >U&#8802;&#8469;</a
+      ><a name="4153"
+      > </a
+      ><a name="4154" class="Symbol"
+      >(</a
+      ><a name="4155" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="4164"
+      > </a
+      ><a name="4165" href="Definition.LogicalRelation.Tactic.html#4136" class="Bound"
+      >A&#8801;B</a
+      ><a name="4168"
+      > </a
+      ><a name="4169" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="4170" class="Symbol"
+      >))</a
+      ><a name="4172"
+      >
+</a
+      ><a name="4173" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4182"
+      > </a
+      ><a name="4183" class="Symbol"
+      >(</a
+      ><a name="4184" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4185"
+      > </a
+      ><a name="4186" href="Definition.LogicalRelation.Tactic.html#4186" class="Bound"
+      >&#8469;A</a
+      ><a name="4188" class="Symbol"
+      >)</a
+      ><a name="4189"
+      > </a
+      ><a name="4190" class="Symbol"
+      >(</a
+      ><a name="4191" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4192"
+      > </a
+      ><a name="4193" href="Definition.LogicalRelation.Tactic.html#4193" class="Bound"
+      >&#8469;B</a
+      ><a name="4195" class="Symbol"
+      >)</a
+      ><a name="4196"
+      > </a
+      ><a name="4197" href="Definition.LogicalRelation.Tactic.html#4197" class="Bound"
+      >A&#8801;B</a
+      ><a name="4200"
+      > </a
+      ><a name="4201" class="Symbol"
+      >=</a
+      ><a name="4202"
+      > </a
+      ><a name="4203" href="Definition.LogicalRelation.Tactic.html#3303" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4204"
+      > </a
+      ><a name="4205" href="Definition.LogicalRelation.Tactic.html#4186" class="Bound"
+      >&#8469;A</a
+      ><a name="4207"
+      > </a
+      ><a name="4208" href="Definition.LogicalRelation.Tactic.html#4193" class="Bound"
+      >&#8469;B</a
+      ><a name="4210"
+      >
+</a
+      ><a name="4211" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4220"
+      > </a
+      ><a name="4221" class="Symbol"
+      >(</a
+      ><a name="4222" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4223"
+      > </a
+      ><a name="4224" href="Definition.LogicalRelation.Tactic.html#4224" class="Bound"
+      >D</a
+      ><a name="4225" class="Symbol"
+      >)</a
+      ><a name="4226"
+      > </a
+      ><a name="4227" class="Symbol"
+      >(</a
+      ><a name="4228" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="4231"
+      > </a
+      ><a name="4232" href="Definition.LogicalRelation.Tactic.html#4232" class="Bound"
+      >K</a
+      ><a name="4233"
+      > </a
+      ><a name="4234" href="Definition.LogicalRelation.Tactic.html#4234" class="Bound"
+      >D&#8321;</a
+      ><a name="4236"
+      > </a
+      ><a name="4237" href="Definition.LogicalRelation.Tactic.html#4237" class="Bound"
+      >neK</a
+      ><a name="4240" class="Symbol"
+      >)</a
+      ><a name="4241"
+      > </a
+      ><a name="4242" href="Definition.LogicalRelation.Tactic.html#4242" class="Bound"
+      >A&#8801;B</a
+      ><a name="4245"
+      > </a
+      ><a name="4246" class="Symbol"
+      >=</a
+      ><a name="4247"
+      >
+  </a
+      ><a name="4250" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4256"
+      > </a
+      ><a name="4257" class="Symbol"
+      >(</a
+      ><a name="4258" href="Definition.Typed.Properties.html#7311" class="Function"
+      >&#8469;&#8802;ne</a
+      ><a name="4262"
+      > </a
+      ><a name="4263" href="Definition.LogicalRelation.Tactic.html#4237" class="Bound"
+      >neK</a
+      ><a name="4266"
+      > </a
+      ><a name="4267" class="Symbol"
+      >(</a
+      ><a name="4268" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="4276"
+      > </a
+      ><a name="4277" class="Symbol"
+      >(</a
+      ><a name="4278" href="Definition.LogicalRelation.Tactic.html#4242" class="Bound"
+      >A&#8801;B</a
+      ><a name="4281"
+      > </a
+      ><a name="4282" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4283"
+      > </a
+      ><a name="4284" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4285" class="Symbol"
+      >)</a
+      ><a name="4286"
+      > </a
+      ><a name="4287" class="Symbol"
+      >(</a
+      ><a name="4288" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4291"
+      > </a
+      ><a name="4292" href="Definition.LogicalRelation.Tactic.html#4234" class="Bound"
+      >D&#8321;</a
+      ><a name="4294"
+      > </a
+      ><a name="4295" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4296"
+      > </a
+      ><a name="4297" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="4299"
+      > </a
+      ><a name="4300" href="Definition.LogicalRelation.Tactic.html#4237" class="Bound"
+      >neK</a
+      ><a name="4303" class="Symbol"
+      >)))</a
+      ><a name="4306"
+      >
+</a
+      ><a name="4307" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4316"
+      > </a
+      ><a name="4317" class="Symbol"
+      >(</a
+      ><a name="4318" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4319"
+      > </a
+      ><a name="4320" href="Definition.LogicalRelation.Tactic.html#4320" class="Bound"
+      >D</a
+      ><a name="4321" class="Symbol"
+      >)</a
+      ><a name="4322"
+      > </a
+      ><a name="4323" class="Symbol"
+      >(</a
+      ><a name="4324" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="4326"
+      > </a
+      ><a name="4327" href="Definition.LogicalRelation.Tactic.html#4327" class="Bound"
+      >F</a
+      ><a name="4328"
+      > </a
+      ><a name="4329" href="Definition.LogicalRelation.Tactic.html#4329" class="Bound"
+      >G</a
+      ><a name="4330"
+      > </a
+      ><a name="4331" href="Definition.LogicalRelation.Tactic.html#4331" class="Bound"
+      >D&#8321;</a
+      ><a name="4333"
+      > </a
+      ><a name="4334" href="Definition.LogicalRelation.Tactic.html#4334" class="Bound"
+      >&#8866;F</a
+      ><a name="4336"
+      > </a
+      ><a name="4337" href="Definition.LogicalRelation.Tactic.html#4337" class="Bound"
+      >&#8866;G</a
+      ><a name="4339"
+      > </a
+      ><a name="4340" href="Definition.LogicalRelation.Tactic.html#4340" class="Bound"
+      >[F]</a
+      ><a name="4343"
+      > </a
+      ><a name="4344" href="Definition.LogicalRelation.Tactic.html#4344" class="Bound"
+      >[G]</a
+      ><a name="4347"
+      > </a
+      ><a name="4348" href="Definition.LogicalRelation.Tactic.html#4348" class="Bound"
+      >G-ext</a
+      ><a name="4353" class="Symbol"
+      >)</a
+      ><a name="4354"
+      > </a
+      ><a name="4355" href="Definition.LogicalRelation.Tactic.html#4355" class="Bound"
+      >A&#8801;B</a
+      ><a name="4358"
+      > </a
+      ><a name="4359" class="Symbol"
+      >=</a
+      ><a name="4360"
+      >
+  </a
+      ><a name="4363" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4369"
+      > </a
+      ><a name="4370" class="Symbol"
+      >(</a
+      ><a name="4371" href="Definition.Typed.Properties.html#7267" class="Function"
+      >&#8469;&#8802;&#928;</a
+      ><a name="4374"
+      > </a
+      ><a name="4375" class="Symbol"
+      >(</a
+      ><a name="4376" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="4384"
+      > </a
+      ><a name="4385" class="Symbol"
+      >(</a
+      ><a name="4386" href="Definition.LogicalRelation.Tactic.html#4355" class="Bound"
+      >A&#8801;B</a
+      ><a name="4389"
+      > </a
+      ><a name="4390" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4391"
+      > </a
+      ><a name="4392" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4393" class="Symbol"
+      >)</a
+      ><a name="4394"
+      > </a
+      ><a name="4395" class="Symbol"
+      >(</a
+      ><a name="4396" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4399"
+      > </a
+      ><a name="4400" href="Definition.LogicalRelation.Tactic.html#4331" class="Bound"
+      >D&#8321;</a
+      ><a name="4402"
+      > </a
+      ><a name="4403" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4404"
+      > </a
+      ><a name="4405" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="4406" class="Symbol"
+      >)))</a
+      ><a name="4409"
+      >
+</a
+      ><a name="4410" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4419"
+      > </a
+      ><a name="4420" class="Symbol"
+      >(</a
+      ><a name="4421" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="4424"
+      > </a
+      ><a name="4425" href="Definition.LogicalRelation.Tactic.html#4425" class="Bound"
+      >K</a
+      ><a name="4426"
+      > </a
+      ><a name="4427" href="Definition.LogicalRelation.Tactic.html#4427" class="Bound"
+      >D</a
+      ><a name="4428"
+      > </a
+      ><a name="4429" href="Definition.LogicalRelation.Tactic.html#4429" class="Bound"
+      >neK</a
+      ><a name="4432" class="Symbol"
+      >)</a
+      ><a name="4433"
+      > </a
+      ><a name="4434" class="Symbol"
+      >(</a
+      ><a name="4435" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="4436"
+      > </a
+      ><a name="4437" href="Definition.LogicalRelation.Tactic.html#4437" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="4439" class="Symbol"
+      >)</a
+      ><a name="4440"
+      > </a
+      ><a name="4441" class="Symbol"
+      >(</a
+      ><a name="4442" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="4445"
+      > </a
+      ><a name="4446" href="Definition.LogicalRelation.Tactic.html#4446" class="Bound"
+      >M</a
+      ><a name="4447"
+      > </a
+      ><a name="4448" href="Definition.LogicalRelation.Tactic.html#4448" class="Bound"
+      >D'</a
+      ><a name="4450"
+      > </a
+      ><a name="4451" href="Definition.LogicalRelation.Tactic.html#4451" class="Bound"
+      >neM</a
+      ><a name="4454"
+      > </a
+      ><a name="4455" href="Definition.LogicalRelation.Tactic.html#4455" class="Bound"
+      >K&#8801;M</a
+      ><a name="4458" class="Symbol"
+      >)</a
+      ><a name="4459"
+      > </a
+      ><a name="4460" class="Symbol"
+      >=</a
+      ><a name="4461"
+      >
+  </a
+      ><a name="4464" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4470"
+      > </a
+      ><a name="4471" class="Symbol"
+      >(</a
+      ><a name="4472" href="Definition.Typed.Properties.html#7214" class="Function"
+      >U&#8802;ne</a
+      ><a name="4476"
+      > </a
+      ><a name="4477" href="Definition.LogicalRelation.Tactic.html#4451" class="Bound"
+      >neM</a
+      ><a name="4480"
+      > </a
+      ><a name="4481" class="Symbol"
+      >(</a
+      ><a name="4482" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="4491"
+      > </a
+      ><a name="4492" class="Symbol"
+      >(</a
+      ><a name="4493" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4496"
+      > </a
+      ><a name="4497" href="Definition.LogicalRelation.Tactic.html#4448" class="Bound"
+      >D'</a
+      ><a name="4499" class="Symbol"
+      >)</a
+      ><a name="4500"
+      > </a
+      ><a name="4501" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="4502" class="Symbol"
+      >))</a
+      ><a name="4504"
+      >
+</a
+      ><a name="4505" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4514"
+      > </a
+      ><a name="4515" class="Symbol"
+      >(</a
+      ><a name="4516" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="4519"
+      > </a
+      ><a name="4520" href="Definition.LogicalRelation.Tactic.html#4520" class="Bound"
+      >K</a
+      ><a name="4521"
+      > </a
+      ><a name="4522" href="Definition.LogicalRelation.Tactic.html#4522" class="Bound"
+      >D</a
+      ><a name="4523"
+      > </a
+      ><a name="4524" href="Definition.LogicalRelation.Tactic.html#4524" class="Bound"
+      >neK</a
+      ><a name="4527" class="Symbol"
+      >)</a
+      ><a name="4528"
+      > </a
+      ><a name="4529" class="Symbol"
+      >(</a
+      ><a name="4530" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4531"
+      > </a
+      ><a name="4532" href="Definition.LogicalRelation.Tactic.html#4532" class="Bound"
+      >D&#8321;</a
+      ><a name="4534" class="Symbol"
+      >)</a
+      ><a name="4535"
+      > </a
+      ><a name="4536" class="Symbol"
+      >(</a
+      ><a name="4537" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="4540"
+      > </a
+      ><a name="4541" href="Definition.LogicalRelation.Tactic.html#4541" class="Bound"
+      >M</a
+      ><a name="4542"
+      > </a
+      ><a name="4543" href="Definition.LogicalRelation.Tactic.html#4543" class="Bound"
+      >D'</a
+      ><a name="4545"
+      > </a
+      ><a name="4546" href="Definition.LogicalRelation.Tactic.html#4546" class="Bound"
+      >neM</a
+      ><a name="4549"
+      > </a
+      ><a name="4550" href="Definition.LogicalRelation.Tactic.html#4550" class="Bound"
+      >K&#8801;M</a
+      ><a name="4553" class="Symbol"
+      >)</a
+      ><a name="4554"
+      > </a
+      ><a name="4555" class="Symbol"
+      >=</a
+      ><a name="4556"
+      >
+  </a
+      ><a name="4559" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4565"
+      > </a
+      ><a name="4566" class="Symbol"
+      >(</a
+      ><a name="4567" href="Definition.Typed.Properties.html#7311" class="Function"
+      >&#8469;&#8802;ne</a
+      ><a name="4571"
+      > </a
+      ><a name="4572" href="Definition.LogicalRelation.Tactic.html#4546" class="Bound"
+      >neM</a
+      ><a name="4575"
+      > </a
+      ><a name="4576" class="Symbol"
+      >(</a
+      ><a name="4577" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="4585"
+      > </a
+      ><a name="4586" class="Symbol"
+      >(</a
+      ><a name="4587" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4590"
+      > </a
+      ><a name="4591" href="Definition.LogicalRelation.Tactic.html#4532" class="Bound"
+      >D&#8321;</a
+      ><a name="4593"
+      > </a
+      ><a name="4594" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4595"
+      > </a
+      ><a name="4596" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4597" class="Symbol"
+      >)</a
+      ><a name="4598"
+      > </a
+      ><a name="4599" class="Symbol"
+      >(</a
+      ><a name="4600" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4603"
+      > </a
+      ><a name="4604" href="Definition.LogicalRelation.Tactic.html#4543" class="Bound"
+      >D'</a
+      ><a name="4606"
+      > </a
+      ><a name="4607" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4608"
+      > </a
+      ><a name="4609" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="4611"
+      > </a
+      ><a name="4612" href="Definition.LogicalRelation.Tactic.html#4546" class="Bound"
+      >neM</a
+      ><a name="4615" class="Symbol"
+      >)))</a
+      ><a name="4618"
+      >
+</a
+      ><a name="4619" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4628"
+      > </a
+      ><a name="4629" class="Symbol"
+      >(</a
+      ><a name="4630" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="4632"
+      > </a
+      ><a name="4633" href="Definition.LogicalRelation.Tactic.html#4633" class="Bound"
+      >neA</a
+      ><a name="4636" class="Symbol"
+      >)</a
+      ><a name="4637"
+      > </a
+      ><a name="4638" class="Symbol"
+      >(</a
+      ><a name="4639" href="Definition.LogicalRelation.html#6860" class="InductiveConstructor"
+      >ne</a
+      ><a name="4641"
+      > </a
+      ><a name="4642" href="Definition.LogicalRelation.Tactic.html#4642" class="Bound"
+      >neB</a
+      ><a name="4645" class="Symbol"
+      >)</a
+      ><a name="4646"
+      > </a
+      ><a name="4647" href="Definition.LogicalRelation.Tactic.html#4647" class="Bound"
+      >A&#8801;B</a
+      ><a name="4650"
+      > </a
+      ><a name="4651" class="Symbol"
+      >=</a
+      ><a name="4652"
+      > </a
+      ><a name="4653" href="Definition.LogicalRelation.Tactic.html#3362" class="InductiveConstructor"
+      >ne</a
+      ><a name="4655"
+      > </a
+      ><a name="4656" href="Definition.LogicalRelation.Tactic.html#4633" class="Bound"
+      >neA</a
+      ><a name="4659"
+      > </a
+      ><a name="4660" href="Definition.LogicalRelation.Tactic.html#4642" class="Bound"
+      >neB</a
+      ><a name="4663"
+      >
+</a
+      ><a name="4664" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4673"
+      > </a
+      ><a name="4674" class="Symbol"
+      >(</a
+      ><a name="4675" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="4678"
+      > </a
+      ><a name="4679" href="Definition.LogicalRelation.Tactic.html#4679" class="Bound"
+      >K</a
+      ><a name="4680"
+      > </a
+      ><a name="4681" href="Definition.LogicalRelation.Tactic.html#4681" class="Bound"
+      >D</a
+      ><a name="4682"
+      > </a
+      ><a name="4683" href="Definition.LogicalRelation.Tactic.html#4683" class="Bound"
+      >neK</a
+      ><a name="4686" class="Symbol"
+      >)</a
+      ><a name="4687"
+      > </a
+      ><a name="4688" class="Symbol"
+      >(</a
+      ><a name="4689" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="4691"
+      > </a
+      ><a name="4692" href="Definition.LogicalRelation.Tactic.html#4692" class="Bound"
+      >F</a
+      ><a name="4693"
+      > </a
+      ><a name="4694" href="Definition.LogicalRelation.Tactic.html#4694" class="Bound"
+      >G</a
+      ><a name="4695"
+      > </a
+      ><a name="4696" href="Definition.LogicalRelation.Tactic.html#4696" class="Bound"
+      >D&#8321;</a
+      ><a name="4698"
+      > </a
+      ><a name="4699" href="Definition.LogicalRelation.Tactic.html#4699" class="Bound"
+      >&#8866;F</a
+      ><a name="4701"
+      > </a
+      ><a name="4702" href="Definition.LogicalRelation.Tactic.html#4702" class="Bound"
+      >&#8866;G</a
+      ><a name="4704"
+      > </a
+      ><a name="4705" href="Definition.LogicalRelation.Tactic.html#4705" class="Bound"
+      >[F]</a
+      ><a name="4708"
+      > </a
+      ><a name="4709" href="Definition.LogicalRelation.Tactic.html#4709" class="Bound"
+      >[G]</a
+      ><a name="4712"
+      > </a
+      ><a name="4713" href="Definition.LogicalRelation.Tactic.html#4713" class="Bound"
+      >G-ext</a
+      ><a name="4718" class="Symbol"
+      >)</a
+      ><a name="4719"
+      > </a
+      ><a name="4720" class="Symbol"
+      >(</a
+      ><a name="4721" href="Definition.LogicalRelation.html#609" class="InductiveConstructor"
+      >ne&#8332;</a
+      ><a name="4724"
+      > </a
+      ><a name="4725" href="Definition.LogicalRelation.Tactic.html#4725" class="Bound"
+      >M</a
+      ><a name="4726"
+      > </a
+      ><a name="4727" href="Definition.LogicalRelation.Tactic.html#4727" class="Bound"
+      >D'</a
+      ><a name="4729"
+      > </a
+      ><a name="4730" href="Definition.LogicalRelation.Tactic.html#4730" class="Bound"
+      >neM</a
+      ><a name="4733"
+      > </a
+      ><a name="4734" href="Definition.LogicalRelation.Tactic.html#4734" class="Bound"
+      >K&#8801;M</a
+      ><a name="4737" class="Symbol"
+      >)</a
+      ><a name="4738"
+      > </a
+      ><a name="4739" class="Symbol"
+      >=</a
+      ><a name="4740"
+      >
+  </a
+      ><a name="4743" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4749"
+      > </a
+      ><a name="4750" class="Symbol"
+      >(</a
+      ><a name="4751" href="Definition.Typed.Properties.html#7364" class="Function"
+      >&#928;&#8802;ne</a
+      ><a name="4755"
+      > </a
+      ><a name="4756" href="Definition.LogicalRelation.Tactic.html#4730" class="Bound"
+      >neM</a
+      ><a name="4759"
+      > </a
+      ><a name="4760" class="Symbol"
+      >(</a
+      ><a name="4761" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="4769"
+      > </a
+      ><a name="4770" class="Symbol"
+      >(</a
+      ><a name="4771" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4774"
+      > </a
+      ><a name="4775" href="Definition.LogicalRelation.Tactic.html#4696" class="Bound"
+      >D&#8321;</a
+      ><a name="4777"
+      > </a
+      ><a name="4778" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4779"
+      > </a
+      ><a name="4780" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="4781" class="Symbol"
+      >)</a
+      ><a name="4782"
+      > </a
+      ><a name="4783" class="Symbol"
+      >(</a
+      ><a name="4784" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="4787"
+      > </a
+      ><a name="4788" href="Definition.LogicalRelation.Tactic.html#4727" class="Bound"
+      >D'</a
+      ><a name="4790"
+      > </a
+      ><a name="4791" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="4792"
+      > </a
+      ><a name="4793" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="4795"
+      > </a
+      ><a name="4796" href="Definition.LogicalRelation.Tactic.html#4730" class="Bound"
+      >neM</a
+      ><a name="4799" class="Symbol"
+      >)))</a
+      ><a name="4802"
+      >
+</a
+      ><a name="4803" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4812"
+      > </a
+      ><a name="4813" class="Symbol"
+      >(</a
+      ><a name="4814" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="4816"
+      > </a
+      ><a name="4817" href="Definition.LogicalRelation.Tactic.html#4817" class="Bound"
+      >F</a
+      ><a name="4818"
+      > </a
+      ><a name="4819" href="Definition.LogicalRelation.Tactic.html#4819" class="Bound"
+      >G</a
+      ><a name="4820"
+      > </a
+      ><a name="4821" href="Definition.LogicalRelation.Tactic.html#4821" class="Bound"
+      >D</a
+      ><a name="4822"
+      > </a
+      ><a name="4823" href="Definition.LogicalRelation.Tactic.html#4823" class="Bound"
+      >&#8866;F</a
+      ><a name="4825"
+      > </a
+      ><a name="4826" href="Definition.LogicalRelation.Tactic.html#4826" class="Bound"
+      >&#8866;G</a
+      ><a name="4828"
+      > </a
+      ><a name="4829" href="Definition.LogicalRelation.Tactic.html#4829" class="Bound"
+      >[F]</a
+      ><a name="4832"
+      > </a
+      ><a name="4833" href="Definition.LogicalRelation.Tactic.html#4833" class="Bound"
+      >[G]</a
+      ><a name="4836"
+      > </a
+      ><a name="4837" href="Definition.LogicalRelation.Tactic.html#4837" class="Bound"
+      >G-ext</a
+      ><a name="4842" class="Symbol"
+      >)</a
+      ><a name="4843"
+      > </a
+      ><a name="4844" class="Symbol"
+      >(</a
+      ><a name="4845" href="Definition.LogicalRelation.html#6799" class="InductiveConstructor"
+      >U</a
+      ><a name="4846"
+      > </a
+      ><a name="4847" href="Definition.LogicalRelation.Tactic.html#4847" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="4849" class="Symbol"
+      >)</a
+      ><a name="4850"
+      >
+          </a
+      ><a name="4861" class="Symbol"
+      >(</a
+      ><a name="4862" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="4864"
+      > </a
+      ><a name="4865" href="Definition.LogicalRelation.Tactic.html#4865" class="Bound"
+      >F'</a
+      ><a name="4867"
+      > </a
+      ><a name="4868" href="Definition.LogicalRelation.Tactic.html#4868" class="Bound"
+      >G'</a
+      ><a name="4870"
+      > </a
+      ><a name="4871" href="Definition.LogicalRelation.Tactic.html#4871" class="Bound"
+      >D'</a
+      ><a name="4873"
+      > </a
+      ><a name="4874" href="Definition.LogicalRelation.Tactic.html#4874" class="Bound"
+      >A&#8801;B</a
+      ><a name="4877"
+      > </a
+      ><a name="4878" href="Definition.LogicalRelation.Tactic.html#4878" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="4884"
+      > </a
+      ><a name="4885" href="Definition.LogicalRelation.Tactic.html#4885" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="4891" class="Symbol"
+      >)</a
+      ><a name="4892"
+      > </a
+      ><a name="4893" class="Symbol"
+      >=</a
+      ><a name="4894"
+      >
+  </a
+      ><a name="4897" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="4903"
+      > </a
+      ><a name="4904" class="Symbol"
+      >(</a
+      ><a name="4905" href="Definition.Typed.Properties.html#7170" class="Function"
+      >U&#8802;&#928;</a
+      ><a name="4908"
+      > </a
+      ><a name="4909" class="Symbol"
+      >(</a
+      ><a name="4910" href="Definition.Typed.Properties.html#4668" class="Function"
+      >whnfRed*'</a
+      ><a name="4919"
+      > </a
+      ><a name="4920" href="Definition.LogicalRelation.Tactic.html#4871" class="Bound"
+      >D'</a
+      ><a name="4922"
+      > </a
+      ><a name="4923" href="Definition.Untyped.html#998" class="InductiveConstructor"
+      >U</a
+      ><a name="4924" class="Symbol"
+      >))</a
+      ><a name="4926"
+      >
+</a
+      ><a name="4927" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="4936"
+      > </a
+      ><a name="4937" class="Symbol"
+      >(</a
+      ><a name="4938" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="4940"
+      > </a
+      ><a name="4941" href="Definition.LogicalRelation.Tactic.html#4941" class="Bound"
+      >F</a
+      ><a name="4942"
+      > </a
+      ><a name="4943" href="Definition.LogicalRelation.Tactic.html#4943" class="Bound"
+      >G</a
+      ><a name="4944"
+      > </a
+      ><a name="4945" href="Definition.LogicalRelation.Tactic.html#4945" class="Bound"
+      >D</a
+      ><a name="4946"
+      > </a
+      ><a name="4947" href="Definition.LogicalRelation.Tactic.html#4947" class="Bound"
+      >&#8866;F</a
+      ><a name="4949"
+      > </a
+      ><a name="4950" href="Definition.LogicalRelation.Tactic.html#4950" class="Bound"
+      >&#8866;G</a
+      ><a name="4952"
+      > </a
+      ><a name="4953" href="Definition.LogicalRelation.Tactic.html#4953" class="Bound"
+      >[F]</a
+      ><a name="4956"
+      > </a
+      ><a name="4957" href="Definition.LogicalRelation.Tactic.html#4957" class="Bound"
+      >[G]</a
+      ><a name="4960"
+      > </a
+      ><a name="4961" href="Definition.LogicalRelation.Tactic.html#4961" class="Bound"
+      >G-ext</a
+      ><a name="4966" class="Symbol"
+      >)</a
+      ><a name="4967"
+      > </a
+      ><a name="4968" class="Symbol"
+      >(</a
+      ><a name="4969" href="Definition.LogicalRelation.html#6825" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="4970"
+      > </a
+      ><a name="4971" href="Definition.LogicalRelation.Tactic.html#4971" class="Bound"
+      >D&#8321;</a
+      ><a name="4973" class="Symbol"
+      >)</a
+      ><a name="4974"
+      >
+          </a
+      ><a name="4985" class="Symbol"
+      >(</a
+      ><a name="4986" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="4988"
+      > </a
+      ><a name="4989" href="Definition.LogicalRelation.Tactic.html#4989" class="Bound"
+      >F'</a
+      ><a name="4991"
+      > </a
+      ><a name="4992" href="Definition.LogicalRelation.Tactic.html#4992" class="Bound"
+      >G'</a
+      ><a name="4994"
+      > </a
+      ><a name="4995" href="Definition.LogicalRelation.Tactic.html#4995" class="Bound"
+      >D'</a
+      ><a name="4997"
+      > </a
+      ><a name="4998" href="Definition.LogicalRelation.Tactic.html#4998" class="Bound"
+      >A&#8801;B</a
+      ><a name="5001"
+      > </a
+      ><a name="5002" href="Definition.LogicalRelation.Tactic.html#5002" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="5008"
+      > </a
+      ><a name="5009" href="Definition.LogicalRelation.Tactic.html#5009" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="5015" class="Symbol"
+      >)</a
+      ><a name="5016"
+      > </a
+      ><a name="5017" class="Symbol"
+      >=</a
+      ><a name="5018"
+      >
+  </a
+      ><a name="5021" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="5027"
+      > </a
+      ><a name="5028" class="Symbol"
+      >(</a
+      ><a name="5029" href="Definition.Typed.Properties.html#7267" class="Function"
+      >&#8469;&#8802;&#928;</a
+      ><a name="5032"
+      > </a
+      ><a name="5033" class="Symbol"
+      >(</a
+      ><a name="5034" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="5042"
+      > </a
+      ><a name="5043" class="Symbol"
+      >(</a
+      ><a name="5044" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="5047"
+      > </a
+      ><a name="5048" href="Definition.LogicalRelation.Tactic.html#4971" class="Bound"
+      >D&#8321;</a
+      ><a name="5050"
+      > </a
+      ><a name="5051" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="5052"
+      > </a
+      ><a name="5053" href="Definition.Untyped.html#1042" class="InductiveConstructor"
+      >&#8469;</a
+      ><a name="5054" class="Symbol"
+      >)</a
+      ><a name="5055"
+      > </a
+      ><a name="5056" class="Symbol"
+      >(</a
+      ><a name="5057" href="Definition.LogicalRelation.Tactic.html#4995" class="Bound"
+      >D'</a
+      ><a name="5059"
+      > </a
+      ><a name="5060" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="5061"
+      > </a
+      ><a name="5062" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="5063" class="Symbol"
+      >)))</a
+      ><a name="5066"
+      >
+</a
+      ><a name="5067" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5076"
+      > </a
+      ><a name="5077" class="Symbol"
+      >(</a
+      ><a name="5078" href="Definition.LogicalRelation.html#8301" class="InductiveConstructor"
+      >&#928;'</a
+      ><a name="5080"
+      > </a
+      ><a name="5081" href="Definition.LogicalRelation.Tactic.html#5081" class="Bound"
+      >F</a
+      ><a name="5082"
+      > </a
+      ><a name="5083" href="Definition.LogicalRelation.Tactic.html#5083" class="Bound"
+      >G</a
+      ><a name="5084"
+      > </a
+      ><a name="5085" href="Definition.LogicalRelation.Tactic.html#5085" class="Bound"
+      >D</a
+      ><a name="5086"
+      > </a
+      ><a name="5087" href="Definition.LogicalRelation.Tactic.html#5087" class="Bound"
+      >&#8866;F</a
+      ><a name="5089"
+      > </a
+      ><a name="5090" href="Definition.LogicalRelation.Tactic.html#5090" class="Bound"
+      >&#8866;G</a
+      ><a name="5092"
+      > </a
+      ><a name="5093" href="Definition.LogicalRelation.Tactic.html#5093" class="Bound"
+      >[F]</a
+      ><a name="5096"
+      > </a
+      ><a name="5097" href="Definition.LogicalRelation.Tactic.html#5097" class="Bound"
+      >[G]</a
+      ><a name="5100"
+      > </a
+      ><a name="5101" href="Definition.LogicalRelation.Tactic.html#5101" class="Bound"
+      >G-ext</a
+      ><a name="5106" class="Symbol"
+      >)</a
+      ><a name="5107"
+      > </a
+      ><a name="5108" class="Symbol"
+      >(</a
+      ><a name="5109" href="Definition.LogicalRelation.html#8267" class="InductiveConstructor"
+      >ne'</a
+      ><a name="5112"
+      > </a
+      ><a name="5113" href="Definition.LogicalRelation.Tactic.html#5113" class="Bound"
+      >K</a
+      ><a name="5114"
+      > </a
+      ><a name="5115" href="Definition.LogicalRelation.Tactic.html#5115" class="Bound"
+      >D&#8321;</a
+      ><a name="5117"
+      > </a
+      ><a name="5118" href="Definition.LogicalRelation.Tactic.html#5118" class="Bound"
+      >neK</a
+      ><a name="5121" class="Symbol"
+      >)</a
+      ><a name="5122"
+      >
+          </a
+      ><a name="5133" class="Symbol"
+      >(</a
+      ><a name="5134" href="Definition.LogicalRelation.html#5532" class="InductiveConstructor"
+      >&#928;&#8332;</a
+      ><a name="5136"
+      > </a
+      ><a name="5137" href="Definition.LogicalRelation.Tactic.html#5137" class="Bound"
+      >F'</a
+      ><a name="5139"
+      > </a
+      ><a name="5140" href="Definition.LogicalRelation.Tactic.html#5140" class="Bound"
+      >G'</a
+      ><a name="5142"
+      > </a
+      ><a name="5143" href="Definition.LogicalRelation.Tactic.html#5143" class="Bound"
+      >D'</a
+      ><a name="5145"
+      > </a
+      ><a name="5146" href="Definition.LogicalRelation.Tactic.html#5146" class="Bound"
+      >A&#8801;B</a
+      ><a name="5149"
+      > </a
+      ><a name="5150" href="Definition.LogicalRelation.Tactic.html#5150" class="Bound"
+      >[F&#8801;F']</a
+      ><a name="5156"
+      > </a
+      ><a name="5157" href="Definition.LogicalRelation.Tactic.html#5157" class="Bound"
+      >[G&#8801;G']</a
+      ><a name="5163" class="Symbol"
+      >)</a
+      ><a name="5164"
+      > </a
+      ><a name="5165" class="Symbol"
+      >=</a
+      ><a name="5166"
+      >
+  </a
+      ><a name="5169" href="Tools.Empty.html#47" class="Function"
+      >&#8869;-elim</a
+      ><a name="5175"
+      > </a
+      ><a name="5176" class="Symbol"
+      >(</a
+      ><a name="5177" href="Definition.Typed.Properties.html#7364" class="Function"
+      >&#928;&#8802;ne</a
+      ><a name="5181"
+      > </a
+      ><a name="5182" href="Definition.LogicalRelation.Tactic.html#5118" class="Bound"
+      >neK</a
+      ><a name="5185"
+      > </a
+      ><a name="5186" class="Symbol"
+      >(</a
+      ><a name="5187" href="Definition.Typed.Properties.html#6644" class="Function"
+      >whrDet*'</a
+      ><a name="5195"
+      > </a
+      ><a name="5196" class="Symbol"
+      >(</a
+      ><a name="5197" href="Definition.LogicalRelation.Tactic.html#5143" class="Bound"
+      >D'</a
+      ><a name="5199"
+      > </a
+      ><a name="5200" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="5201"
+      > </a
+      ><a name="5202" href="Definition.Untyped.html#1011" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="5203" class="Symbol"
+      >)</a
+      ><a name="5204"
+      > </a
+      ><a name="5205" class="Symbol"
+      >(</a
+      ><a name="5206" href="Definition.Typed.html#7312" class="Field"
+      >red</a
+      ><a name="5209"
+      > </a
+      ><a name="5210" href="Definition.LogicalRelation.Tactic.html#5115" class="Bound"
+      >D&#8321;</a
+      ><a name="5212"
+      > </a
+      ><a name="5213" href="Tools.Product.html#116" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="5214"
+      > </a
+      ><a name="5215" href="Definition.Untyped.html#1131" class="InductiveConstructor"
+      >ne</a
+      ><a name="5217"
+      > </a
+      ><a name="5218" href="Definition.LogicalRelation.Tactic.html#5118" class="Bound"
+      >neK</a
+      ><a name="5221" class="Symbol"
+      >)))</a
+      ><a name="5224"
+      >
+</a
+      ><a name="5225" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5234"
+      > </a
+      ><a name="5235" class="Symbol"
+      >(</a
+      ><a name="5236" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="5237"
+      > </a
+      ><a name="5238" href="Definition.LogicalRelation.Tactic.html#5238" class="Bound"
+      >&#928;A</a
+      ><a name="5240" class="Symbol"
+      >)</a
+      ><a name="5241"
+      > </a
+      ><a name="5242" class="Symbol"
+      >(</a
+      ><a name="5243" href="Definition.LogicalRelation.html#6896" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="5244"
+      > </a
+      ><a name="5245" href="Definition.LogicalRelation.Tactic.html#5245" class="Bound"
+      >&#928;B</a
+      ><a name="5247" class="Symbol"
+      >)</a
+      ><a name="5248"
+      > </a
+      ><a name="5249" href="Definition.LogicalRelation.Tactic.html#5249" class="Bound"
+      >A&#8801;B</a
+      ><a name="5252"
+      > </a
+      ><a name="5253" class="Symbol"
+      >=</a
+      ><a name="5254"
+      > </a
+      ><a name="5255" href="Definition.LogicalRelation.Tactic.html#3435" class="InductiveConstructor"
+      >&#928;</a
+      ><a name="5256"
+      > </a
+      ><a name="5257" href="Definition.LogicalRelation.Tactic.html#5238" class="Bound"
+      >&#928;A</a
+      ><a name="5259"
+      > </a
+      ><a name="5260" href="Definition.LogicalRelation.Tactic.html#5245" class="Bound"
+      >&#928;B</a
+      ><a name="5262"
+      >
+</a
+      ><a name="5263" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5272"
+      > </a
+      ><a name="5273" class="Symbol"
+      >{</a
+      ><a name="5274" href="Definition.LogicalRelation.Tactic.html#5274" class="Bound"
+      >l</a
+      ><a name="5275" class="Symbol"
+      >}</a
+      ><a name="5276"
+      > </a
+      ><a name="5277" href="Definition.LogicalRelation.Tactic.html#5277" class="Bound"
+      >[A]</a
+      ><a name="5280"
+      > </a
+      ><a name="5281" class="Symbol"
+      >(</a
+      ><a name="5282" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="5285"
+      > </a
+      ><a name="5286" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="5289"
+      > </a
+      ><a name="5290" href="Definition.LogicalRelation.Tactic.html#5290" class="Bound"
+      >x</a
+      ><a name="5291" class="Symbol"
+      >)</a
+      ><a name="5292"
+      > </a
+      ><a name="5293" href="Definition.LogicalRelation.Tactic.html#5293" class="Bound"
+      >A&#8801;B</a
+      ><a name="5296"
+      > </a
+      ><a name="5297" class="Symbol"
+      >=</a
+      ><a name="5298"
+      >
+  </a
+      ><a name="5301" href="Definition.LogicalRelation.Tactic.html#3594" class="InductiveConstructor"
+      >emb&#185;&#8304;</a
+      ><a name="5306"
+      > </a
+      ><a name="5307" class="Symbol"
+      >(</a
+      ><a name="5308" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5317"
+      > </a
+      ><a name="5318" class="Symbol"
+      >{</a
+      ><a name="5319" href="Definition.LogicalRelation.Tactic.html#5274" class="Bound"
+      >l</a
+      ><a name="5320" class="Symbol"
+      >}</a
+      ><a name="5321"
+      > </a
+      ><a name="5322" class="Symbol"
+      >{</a
+      ><a name="5323" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="5324" class="Symbol"
+      >}</a
+      ><a name="5325"
+      > </a
+      ><a name="5326" href="Definition.LogicalRelation.Tactic.html#5277" class="Bound"
+      >[A]</a
+      ><a name="5329"
+      > </a
+      ><a name="5330" href="Definition.LogicalRelation.Tactic.html#5290" class="Bound"
+      >x</a
+      ><a name="5331"
+      > </a
+      ><a name="5332" href="Definition.LogicalRelation.Tactic.html#5293" class="Bound"
+      >A&#8801;B</a
+      ><a name="5335" class="Symbol"
+      >)</a
+      ><a name="5336"
+      >
+</a
+      ><a name="5337" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5346"
+      > </a
+      ><a name="5347" class="Symbol"
+      >{</a
+      ><a name="5348" class="Argument"
+      >l'</a
+      ><a name="5350"
+      > </a
+      ><a name="5351" class="Symbol"
+      >=</a
+      ><a name="5352"
+      > </a
+      ><a name="5353" href="Definition.LogicalRelation.Tactic.html#5353" class="Bound"
+      >l</a
+      ><a name="5354" class="Symbol"
+      >}</a
+      ><a name="5355"
+      > </a
+      ><a name="5356" class="Symbol"
+      >(</a
+      ><a name="5357" href="Definition.LogicalRelation.html#6932" class="InductiveConstructor"
+      >emb</a
+      ><a name="5360"
+      > </a
+      ><a name="5361" href="Definition.LogicalRelation.html#2140" class="InductiveConstructor"
+      >0&lt;1</a
+      ><a name="5364"
+      > </a
+      ><a name="5365" href="Definition.LogicalRelation.Tactic.html#5365" class="Bound"
+      >x</a
+      ><a name="5366" class="Symbol"
+      >)</a
+      ><a name="5367"
+      > </a
+      ><a name="5368" href="Definition.LogicalRelation.Tactic.html#5368" class="Bound"
+      >[B]</a
+      ><a name="5371"
+      > </a
+      ><a name="5372" href="Definition.LogicalRelation.Tactic.html#5372" class="Bound"
+      >A&#8801;B</a
+      ><a name="5375"
+      > </a
+      ><a name="5376" class="Symbol"
+      >=</a
+      ><a name="5377"
+      >
+  </a
+      ><a name="5380" href="Definition.LogicalRelation.Tactic.html#3498" class="InductiveConstructor"
+      >emb&#8304;&#185;</a
+      ><a name="5385"
+      > </a
+      ><a name="5386" class="Symbol"
+      >(</a
+      ><a name="5387" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5396"
+      > </a
+      ><a name="5397" class="Symbol"
+      >{</a
+      ><a name="5398" href="Definition.LogicalRelation.html#2065" class="InductiveConstructor"
+      >&#8304;</a
+      ><a name="5399" class="Symbol"
+      >}</a
+      ><a name="5400"
+      > </a
+      ><a name="5401" class="Symbol"
+      >{</a
+      ><a name="5402" href="Definition.LogicalRelation.Tactic.html#5353" class="Bound"
+      >l</a
+      ><a name="5403" class="Symbol"
+      >}</a
+      ><a name="5404"
+      > </a
+      ><a name="5405" href="Definition.LogicalRelation.Tactic.html#5365" class="Bound"
+      >x</a
+      ><a name="5406"
+      > </a
+      ><a name="5407" href="Definition.LogicalRelation.Tactic.html#5368" class="Bound"
+      >[B]</a
+      ><a name="5410"
+      > </a
+      ><a name="5411" href="Definition.LogicalRelation.Tactic.html#5372" class="Bound"
+      >A&#8801;B</a
+      ><a name="5414" class="Symbol"
+      >)</a
+      ><a name="5415"
+      >
+
+</a
+      ><a name="5417" href="Definition.LogicalRelation.Tactic.html#5417" class="Function"
+      >goodCasesRefl</a
+      ><a name="5430"
+      > </a
+      ><a name="5431" class="Symbol"
+      >:</a
+      ><a name="5432"
+      > </a
+      ><a name="5433" class="Symbol"
+      >&#8704;</a
+      ><a name="5434"
+      > </a
+      ><a name="5435" class="Symbol"
+      >{</a
+      ><a name="5436" href="Definition.LogicalRelation.Tactic.html#5436" class="Bound"
+      >l</a
+      ><a name="5437"
+      > </a
+      ><a name="5438" href="Definition.LogicalRelation.Tactic.html#5438" class="Bound"
+      >l'</a
+      ><a name="5440"
+      > </a
+      ><a name="5441" href="Definition.LogicalRelation.Tactic.html#5441" class="Bound"
+      >&#915;</a
+      ><a name="5442"
+      > </a
+      ><a name="5443" href="Definition.LogicalRelation.Tactic.html#5443" class="Bound"
+      >A</a
+      ><a name="5444" class="Symbol"
+      >}</a
+      ><a name="5445"
+      > </a
+      ><a name="5446" class="Symbol"
+      >(</a
+      ><a name="5447" href="Definition.LogicalRelation.Tactic.html#5447" class="Bound"
+      >[A]</a
+      ><a name="5450"
+      > </a
+      ><a name="5451" class="Symbol"
+      >:</a
+      ><a name="5452"
+      > </a
+      ><a name="5453" href="Definition.LogicalRelation.Tactic.html#5441" class="Bound"
+      >&#915;</a
+      ><a name="5454"
+      > </a
+      ><a name="5455" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="5457"
+      > </a
+      ><a name="5458" href="Definition.LogicalRelation.Tactic.html#5436" class="Bound"
+      >l</a
+      ><a name="5459"
+      > </a
+      ><a name="5460" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="5461"
+      > </a
+      ><a name="5462" href="Definition.LogicalRelation.Tactic.html#5443" class="Bound"
+      >A</a
+      ><a name="5463" class="Symbol"
+      >)</a
+      ><a name="5464"
+      > </a
+      ><a name="5465" class="Symbol"
+      >(</a
+      ><a name="5466" href="Definition.LogicalRelation.Tactic.html#5466" class="Bound"
+      >[A']</a
+      ><a name="5470"
+      > </a
+      ><a name="5471" class="Symbol"
+      >:</a
+      ><a name="5472"
+      > </a
+      ><a name="5473" href="Definition.LogicalRelation.Tactic.html#5441" class="Bound"
+      >&#915;</a
+      ><a name="5474"
+      > </a
+      ><a name="5475" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#8873;&#10216;</a
+      ><a name="5477"
+      > </a
+      ><a name="5478" href="Definition.LogicalRelation.Tactic.html#5438" class="Bound"
+      >l'</a
+      ><a name="5480"
+      > </a
+      ><a name="5481" href="Definition.LogicalRelation.html#8839" class="Function Operator"
+      >&#10217;</a
+      ><a name="5482"
+      > </a
+      ><a name="5483" href="Definition.LogicalRelation.Tactic.html#5443" class="Bound"
+      >A</a
+      ><a name="5484" class="Symbol"
+      >)</a
+      ><a name="5485"
+      >
+              </a
+      ><a name="5500" class="Symbol"
+      >&#8594;</a
+      ><a name="5501"
+      > </a
+      ><a name="5502" href="Definition.LogicalRelation.Tactic.html#3177" class="Datatype"
+      >Tactic</a
+      ><a name="5508"
+      > </a
+      ><a name="5509" href="Definition.LogicalRelation.Tactic.html#5441" class="Bound"
+      >&#915;</a
+      ><a name="5510"
+      > </a
+      ><a name="5511" href="Definition.LogicalRelation.Tactic.html#5436" class="Bound"
+      >l</a
+      ><a name="5512"
+      > </a
+      ><a name="5513" href="Definition.LogicalRelation.Tactic.html#5438" class="Bound"
+      >l'</a
+      ><a name="5515"
+      > </a
+      ><a name="5516" href="Definition.LogicalRelation.Tactic.html#5443" class="Bound"
+      >A</a
+      ><a name="5517"
+      > </a
+      ><a name="5518" href="Definition.LogicalRelation.Tactic.html#5443" class="Bound"
+      >A</a
+      ><a name="5519"
+      > </a
+      ><a name="5520" href="Definition.LogicalRelation.Tactic.html#5447" class="Bound"
+      >[A]</a
+      ><a name="5523"
+      > </a
+      ><a name="5524" href="Definition.LogicalRelation.Tactic.html#5466" class="Bound"
+      >[A']</a
+      ><a name="5528"
+      >
+</a
+      ><a name="5529" href="Definition.LogicalRelation.Tactic.html#5417" class="Function"
+      >goodCasesRefl</a
+      ><a name="5542"
+      > </a
+      ><a name="5543" href="Definition.LogicalRelation.Tactic.html#5543" class="Bound"
+      >[A]</a
+      ><a name="5546"
+      > </a
+      ><a name="5547" href="Definition.LogicalRelation.Tactic.html#5547" class="Bound"
+      >[A']</a
+      ><a name="5551"
+      > </a
+      ><a name="5552" class="Symbol"
+      >=</a
+      ><a name="5553"
+      > </a
+      ><a name="5554" href="Definition.LogicalRelation.Tactic.html#3689" class="Function"
+      >goodCases</a
+      ><a name="5563"
+      > </a
+      ><a name="5564" href="Definition.LogicalRelation.Tactic.html#5543" class="Bound"
+      >[A]</a
+      ><a name="5567"
+      > </a
+      ><a name="5568" href="Definition.LogicalRelation.Tactic.html#5547" class="Bound"
+      >[A']</a
+      ><a name="5572"
+      > </a
+      ><a name="5573" class="Symbol"
+      >(</a
+      ><a name="5574" href="Definition.LogicalRelation.Properties.Reflexivity.html#234" class="Function"
+      >reflEq</a
+      ><a name="5580"
+      > </a
+      ><a name="5581" href="Definition.LogicalRelation.Tactic.html#5543" class="Bound"
+      >[A]</a
+      ><a name="5584" class="Symbol"
+      >)</a
+      ><a name="5585"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

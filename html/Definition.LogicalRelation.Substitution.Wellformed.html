@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Definition.LogicalRelation.Substitution.Wellformed</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Definition.LogicalRelation.Substitution.Wellformed.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Wellformed</a
+      ><a name="58"
+      > </a
+      ><a name="59" class="Keyword"
+      >where</a
+      ><a name="64"
+      >
+
+</a
+      ><a name="66" class="Keyword"
+      >open</a
+      ><a name="70"
+      > </a
+      ><a name="71" class="Keyword"
+      >import</a
+      ><a name="77"
+      > </a
+      ><a name="78" href="Definition.Untyped.html#1" class="Module"
+      >Definition.Untyped</a
+      ><a name="96"
+      >
+</a
+      ><a name="97" class="Keyword"
+      >open</a
+      ><a name="101"
+      > </a
+      ><a name="102" class="Keyword"
+      >import</a
+      ><a name="108"
+      > </a
+      ><a name="109" href="Definition.Untyped.Properties.html#1" class="Module"
+      >Definition.Untyped.Properties</a
+      ><a name="138"
+      >
+
+</a
+      ><a name="140" class="Keyword"
+      >open</a
+      ><a name="144"
+      > </a
+      ><a name="145" class="Keyword"
+      >import</a
+      ><a name="151"
+      > </a
+      ><a name="152" href="Definition.Typed.html#1" class="Module"
+      >Definition.Typed</a
+      ><a name="168"
+      >
+
+</a
+      ><a name="170" class="Keyword"
+      >open</a
+      ><a name="174"
+      > </a
+      ><a name="175" class="Keyword"
+      >import</a
+      ><a name="181"
+      > </a
+      ><a name="182" href="Definition.LogicalRelation.html#1" class="Module"
+      >Definition.LogicalRelation</a
+      ><a name="208"
+      >
+</a
+      ><a name="209" class="Keyword"
+      >open</a
+      ><a name="213"
+      > </a
+      ><a name="214" class="Keyword"
+      >import</a
+      ><a name="220"
+      > </a
+      ><a name="221" href="Definition.LogicalRelation.Irrelevance.html#1" class="Module"
+      >Definition.LogicalRelation.Irrelevance</a
+      ><a name="259"
+      >
+</a
+      ><a name="260" class="Keyword"
+      >open</a
+      ><a name="264"
+      > </a
+      ><a name="265" class="Keyword"
+      >import</a
+      ><a name="271"
+      > </a
+      ><a name="272" href="Definition.LogicalRelation.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Properties</a
+      ><a name="309"
+      >
+</a
+      ><a name="310" class="Keyword"
+      >open</a
+      ><a name="314"
+      > </a
+      ><a name="315" class="Keyword"
+      >import</a
+      ><a name="321"
+      > </a
+      ><a name="322" href="Definition.LogicalRelation.Substitution.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution</a
+      ><a name="361"
+      >
+</a
+      ><a name="362" class="Keyword"
+      >open</a
+      ><a name="366"
+      > </a
+      ><a name="367" class="Keyword"
+      >import</a
+      ><a name="373"
+      > </a
+      ><a name="374" href="Definition.LogicalRelation.Substitution.Properties.html#1" class="Module"
+      >Definition.LogicalRelation.Substitution.Properties</a
+      ><a name="424"
+      >
+
+</a
+      ><a name="426" class="Keyword"
+      >open</a
+      ><a name="430"
+      > </a
+      ><a name="431" class="Keyword"
+      >import</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Tools.Product.html#1" class="Module"
+      >Tools.Product</a
+      ><a name="451"
+      >
+
+
+</a
+      ><a name="454" href="Definition.LogicalRelation.Substitution.Wellformed.html#454" class="Function"
+      >wellformed&#8347;</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >:</a
+      ><a name="467"
+      > </a
+      ><a name="468" class="Symbol"
+      >&#8704;</a
+      ><a name="469"
+      > </a
+      ><a name="470" class="Symbol"
+      >{</a
+      ><a name="471" href="Definition.LogicalRelation.Substitution.Wellformed.html#471" class="Bound"
+      >A</a
+      ><a name="472"
+      > </a
+      ><a name="473" href="Definition.LogicalRelation.Substitution.Wellformed.html#473" class="Bound"
+      >l</a
+      ><a name="474"
+      > </a
+      ><a name="475" href="Definition.LogicalRelation.Substitution.Wellformed.html#475" class="Bound"
+      >&#915;</a
+      ><a name="476" class="Symbol"
+      >}</a
+      ><a name="477"
+      > </a
+      ><a name="478" class="Symbol"
+      >(</a
+      ><a name="479" href="Definition.LogicalRelation.Substitution.Wellformed.html#479" class="Bound"
+      >[&#915;]</a
+      ><a name="482"
+      > </a
+      ><a name="483" class="Symbol"
+      >:</a
+      ><a name="484"
+      > </a
+      ><a name="485" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="487"
+      > </a
+      ><a name="488" href="Definition.LogicalRelation.Substitution.Wellformed.html#475" class="Bound"
+      >&#915;</a
+      ><a name="489" class="Symbol"
+      >)</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Symbol"
+      >&#8594;</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Definition.LogicalRelation.Substitution.Wellformed.html#475" class="Bound"
+      >&#915;</a
+      ><a name="494"
+      > </a
+      ><a name="495" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="Definition.LogicalRelation.Substitution.Wellformed.html#473" class="Bound"
+      >l</a
+      ><a name="500"
+      > </a
+      ><a name="501" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="502"
+      > </a
+      ><a name="503" href="Definition.LogicalRelation.Substitution.Wellformed.html#471" class="Bound"
+      >A</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="506"
+      > </a
+      ><a name="507" href="Definition.LogicalRelation.Substitution.Wellformed.html#479" class="Bound"
+      >[&#915;]</a
+      ><a name="510"
+      > </a
+      ><a name="511" class="Symbol"
+      >&#8594;</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="Definition.LogicalRelation.Substitution.Wellformed.html#475" class="Bound"
+      >&#915;</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Definition.Typed.html#547" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="516"
+      > </a
+      ><a name="517" href="Definition.LogicalRelation.Substitution.Wellformed.html#471" class="Bound"
+      >A</a
+      ><a name="518"
+      >
+</a
+      ><a name="519" href="Definition.LogicalRelation.Substitution.Wellformed.html#454" class="Function"
+      >wellformed&#8347;</a
+      ><a name="530"
+      > </a
+      ><a name="531" href="Definition.LogicalRelation.Substitution.Wellformed.html#531" class="Bound"
+      >[&#915;]</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Definition.LogicalRelation.Substitution.Wellformed.html#535" class="Bound"
+      >[A]</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="Symbol"
+      >=</a
+      ><a name="540"
+      >
+  </a
+      ><a name="543" class="Keyword"
+      >let</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Definition.LogicalRelation.Substitution.Wellformed.html#547" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="549"
+      > </a
+      ><a name="550" class="Symbol"
+      >=</a
+      ><a name="551"
+      > </a
+      ><a name="552" href="Definition.LogicalRelation.Substitution.Properties.html#4934" class="Function"
+      >soundContext</a
+      ><a name="564"
+      > </a
+      ><a name="565" href="Definition.LogicalRelation.Substitution.Wellformed.html#531" class="Bound"
+      >[&#915;]</a
+      ><a name="568"
+      >
+      </a
+      ><a name="575" href="Definition.LogicalRelation.Substitution.Wellformed.html#575" class="Bound"
+      >idSubst</a
+      ><a name="582"
+      > </a
+      ><a name="583" class="Symbol"
+      >=</a
+      ><a name="584"
+      > </a
+      ><a name="585" href="Definition.LogicalRelation.Substitution.Properties.html#5228" class="Function"
+      >idSubstS</a
+      ><a name="593"
+      > </a
+      ><a name="594" href="Definition.LogicalRelation.Substitution.Wellformed.html#531" class="Bound"
+      >[&#915;]</a
+      ><a name="597"
+      >
+  </a
+      ><a name="600" class="Keyword"
+      >in</a
+      ><a name="602"
+      >  </a
+      ><a name="604" href="Definition.LogicalRelation.Properties.Wellformed.html#273" class="Function"
+      >wellformed</a
+      ><a name="614"
+      > </a
+      ><a name="615" class="Symbol"
+      >(</a
+      ><a name="616" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="628"
+      > </a
+      ><a name="629" class="Symbol"
+      >(</a
+      ><a name="630" href="Definition.Untyped.Properties.html#2061" class="Function"
+      >idSubst-lemma&#8320;</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Symbol"
+      >_)</a
+      ><a name="647"
+      > </a
+      ><a name="648" class="Symbol"
+      >(</a
+      ><a name="649" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >(</a
+      ><a name="656" href="Definition.LogicalRelation.Substitution.Wellformed.html#535" class="Bound"
+      >[A]</a
+      ><a name="659"
+      > </a
+      ><a name="660" href="Definition.LogicalRelation.Substitution.Wellformed.html#547" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Definition.LogicalRelation.Substitution.Wellformed.html#575" class="Bound"
+      >idSubst</a
+      ><a name="670" class="Symbol"
+      >)))</a
+      ><a name="673"
+      >
+
+</a
+      ><a name="675" href="Definition.LogicalRelation.Substitution.Wellformed.html#675" class="Function"
+      >wellformedTerm&#8347;</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >:</a
+      ><a name="692"
+      > </a
+      ><a name="693" class="Symbol"
+      >&#8704;</a
+      ><a name="694"
+      > </a
+      ><a name="695" class="Symbol"
+      >{</a
+      ><a name="696" href="Definition.LogicalRelation.Substitution.Wellformed.html#696" class="Bound"
+      >t</a
+      ><a name="697"
+      > </a
+      ><a name="698" href="Definition.LogicalRelation.Substitution.Wellformed.html#698" class="Bound"
+      >A</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="Definition.LogicalRelation.Substitution.Wellformed.html#700" class="Bound"
+      >l</a
+      ><a name="701"
+      > </a
+      ><a name="702" href="Definition.LogicalRelation.Substitution.Wellformed.html#702" class="Bound"
+      >&#915;</a
+      ><a name="703" class="Symbol"
+      >}</a
+      ><a name="704"
+      > </a
+      ><a name="705" class="Symbol"
+      >(</a
+      ><a name="706" href="Definition.LogicalRelation.Substitution.Wellformed.html#706" class="Bound"
+      >[&#915;]</a
+      ><a name="709"
+      > </a
+      ><a name="710" class="Symbol"
+      >:</a
+      ><a name="711"
+      > </a
+      ><a name="712" href="Definition.LogicalRelation.Substitution.html#284" class="Datatype Operator"
+      >&#8873;&#8347;</a
+      ><a name="714"
+      > </a
+      ><a name="715" href="Definition.LogicalRelation.Substitution.Wellformed.html#702" class="Bound"
+      >&#915;</a
+      ><a name="716" class="Symbol"
+      >)</a
+      ><a name="717"
+      > </a
+      ><a name="718" class="Symbol"
+      >(</a
+      ><a name="719" href="Definition.LogicalRelation.Substitution.Wellformed.html#719" class="Bound"
+      >[A]</a
+      ><a name="722"
+      > </a
+      ><a name="723" class="Symbol"
+      >:</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Definition.LogicalRelation.Substitution.Wellformed.html#702" class="Bound"
+      >&#915;</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Definition.LogicalRelation.Substitution.Wellformed.html#700" class="Bound"
+      >l</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >&#10217;</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Definition.LogicalRelation.Substitution.Wellformed.html#698" class="Bound"
+      >A</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Definition.LogicalRelation.Substitution.html#399" class="Function Operator"
+      >/</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Definition.LogicalRelation.Substitution.Wellformed.html#706" class="Bound"
+      >[&#915;]</a
+      ><a name="742" class="Symbol"
+      >)</a
+      ><a name="743"
+      >
+               </a
+      ><a name="759" class="Symbol"
+      >&#8594;</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Definition.LogicalRelation.Substitution.Wellformed.html#702" class="Bound"
+      >&#915;</a
+      ><a name="762"
+      > </a
+      ><a name="763" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8873;&#8347;&#10216;</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Definition.LogicalRelation.Substitution.Wellformed.html#700" class="Bound"
+      >l</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#10217;t</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Definition.LogicalRelation.Substitution.Wellformed.html#696" class="Bound"
+      >t</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >&#8759;</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Definition.LogicalRelation.Substitution.Wellformed.html#698" class="Bound"
+      >A</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="Definition.LogicalRelation.Substitution.Wellformed.html#706" class="Bound"
+      >[&#915;]</a
+      ><a name="783"
+      > </a
+      ><a name="784" href="Definition.LogicalRelation.Substitution.html#1535" class="Function Operator"
+      >/</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Definition.LogicalRelation.Substitution.Wellformed.html#719" class="Bound"
+      >[A]</a
+      ><a name="789"
+      > </a
+      ><a name="790" class="Symbol"
+      >&#8594;</a
+      ><a name="791"
+      > </a
+      ><a name="792" href="Definition.LogicalRelation.Substitution.Wellformed.html#702" class="Bound"
+      >&#915;</a
+      ><a name="793"
+      > </a
+      ><a name="794" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="795"
+      > </a
+      ><a name="796" href="Definition.LogicalRelation.Substitution.Wellformed.html#696" class="Bound"
+      >t</a
+      ><a name="797"
+      > </a
+      ><a name="798" href="Definition.Typed.html#814" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="799"
+      > </a
+      ><a name="800" href="Definition.LogicalRelation.Substitution.Wellformed.html#698" class="Bound"
+      >A</a
+      ><a name="801"
+      >
+</a
+      ><a name="802" href="Definition.LogicalRelation.Substitution.Wellformed.html#675" class="Function"
+      >wellformedTerm&#8347;</a
+      ><a name="817"
+      > </a
+      ><a name="818" href="Definition.LogicalRelation.Substitution.Wellformed.html#818" class="Bound"
+      >[&#915;]</a
+      ><a name="821"
+      > </a
+      ><a name="822" href="Definition.LogicalRelation.Substitution.Wellformed.html#822" class="Bound"
+      >[A]</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Definition.LogicalRelation.Substitution.Wellformed.html#826" class="Bound"
+      >[t]</a
+      ><a name="829"
+      > </a
+      ><a name="830" class="Symbol"
+      >=</a
+      ><a name="831"
+      >
+  </a
+      ><a name="834" class="Keyword"
+      >let</a
+      ><a name="837"
+      > </a
+      ><a name="838" href="Definition.LogicalRelation.Substitution.Wellformed.html#838" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="840"
+      > </a
+      ><a name="841" class="Symbol"
+      >=</a
+      ><a name="842"
+      > </a
+      ><a name="843" href="Definition.LogicalRelation.Substitution.Properties.html#4934" class="Function"
+      >soundContext</a
+      ><a name="855"
+      > </a
+      ><a name="856" href="Definition.LogicalRelation.Substitution.Wellformed.html#818" class="Bound"
+      >[&#915;]</a
+      ><a name="859"
+      >
+      </a
+      ><a name="866" href="Definition.LogicalRelation.Substitution.Wellformed.html#866" class="Bound"
+      >idSubst</a
+      ><a name="873"
+      > </a
+      ><a name="874" class="Symbol"
+      >=</a
+      ><a name="875"
+      > </a
+      ><a name="876" href="Definition.LogicalRelation.Substitution.Properties.html#5228" class="Function"
+      >idSubstS</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Definition.LogicalRelation.Substitution.Wellformed.html#818" class="Bound"
+      >[&#915;]</a
+      ><a name="888"
+      >
+      </a
+      ><a name="895" href="Definition.LogicalRelation.Substitution.Wellformed.html#895" class="Bound"
+      >[idA]</a
+      ><a name="900"
+      >  </a
+      ><a name="902" class="Symbol"
+      >=</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="909"
+      > </a
+      ><a name="910" class="Symbol"
+      >(</a
+      ><a name="911" href="Definition.LogicalRelation.Substitution.Wellformed.html#822" class="Bound"
+      >[A]</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Definition.LogicalRelation.Substitution.Wellformed.html#838" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Definition.LogicalRelation.Substitution.Wellformed.html#866" class="Bound"
+      >idSubst</a
+      ><a name="925" class="Symbol"
+      >)</a
+      ><a name="926"
+      >
+      </a
+      ><a name="933" href="Definition.LogicalRelation.Substitution.Wellformed.html#933" class="Bound"
+      >[idA]'</a
+      ><a name="939"
+      > </a
+      ><a name="940" class="Symbol"
+      >=</a
+      ><a name="941"
+      > </a
+      ><a name="942" href="Definition.LogicalRelation.Irrelevance.html#448" class="Function"
+      >irrelevance'</a
+      ><a name="954"
+      > </a
+      ><a name="955" class="Symbol"
+      >(</a
+      ><a name="956" href="Definition.Untyped.Properties.html#2061" class="Function"
+      >idSubst-lemma&#8320;</a
+      ><a name="970"
+      > </a
+      ><a name="971" class="Symbol"
+      >_)</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Symbol"
+      >(</a
+      ><a name="975" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="980"
+      > </a
+      ><a name="981" class="Symbol"
+      >(</a
+      ><a name="982" href="Definition.LogicalRelation.Substitution.Wellformed.html#822" class="Bound"
+      >[A]</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Definition.LogicalRelation.Substitution.Wellformed.html#838" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="988"
+      > </a
+      ><a name="989" href="Definition.LogicalRelation.Substitution.Wellformed.html#866" class="Bound"
+      >idSubst</a
+      ><a name="996" class="Symbol"
+      >))</a
+      ><a name="998"
+      >
+  </a
+      ><a name="1001" class="Keyword"
+      >in</a
+      ><a name="1003"
+      >  </a
+      ><a name="1005" href="Definition.LogicalRelation.Properties.Wellformed.html#1011" class="Function"
+      >wellformedTerm</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Definition.LogicalRelation.Substitution.Wellformed.html#933" class="Bound"
+      >[idA]'</a
+      ><a name="1026"
+      >
+                    </a
+      ><a name="1047" class="Symbol"
+      >(</a
+      ><a name="1048" href="Definition.LogicalRelation.Irrelevance.html#3744" class="Function"
+      >irrelevanceTerm''</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" class="Symbol"
+      >(</a
+      ><a name="1067" href="Definition.Untyped.Properties.html#2061" class="Function"
+      >idSubst-lemma&#8320;</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" class="Symbol"
+      >_)</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" class="Symbol"
+      >(</a
+      ><a name="1086" href="Definition.Untyped.Properties.html#2061" class="Function"
+      >idSubst-lemma&#8320;</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" class="Symbol"
+      >_)</a
+      ><a name="1103"
+      >
+                                       </a
+      ><a name="1143" href="Definition.LogicalRelation.Substitution.Wellformed.html#895" class="Bound"
+      >[idA]</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="Definition.LogicalRelation.Substitution.Wellformed.html#933" class="Bound"
+      >[idA]'</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" class="Symbol"
+      >(</a
+      ><a name="1157" href="Tools.Product.html#132" class="Field"
+      >proj&#8321;</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" class="Symbol"
+      >(</a
+      ><a name="1164" href="Definition.LogicalRelation.Substitution.Wellformed.html#826" class="Bound"
+      >[t]</a
+      ><a name="1167"
+      > </a
+      ><a name="1168" href="Definition.LogicalRelation.Substitution.Wellformed.html#838" class="Bound"
+      >&#8866;&#915;</a
+      ><a name="1170"
+      > </a
+      ><a name="1171" href="Definition.LogicalRelation.Substitution.Wellformed.html#866" class="Bound"
+      >idSubst</a
+      ><a name="1178" class="Symbol"
+      >)))</a
+      ><a name="1181"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

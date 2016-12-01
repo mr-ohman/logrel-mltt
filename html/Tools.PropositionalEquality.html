@@ -1,0 +1,1508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Tools.PropositionalEquality</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Tools.PropositionalEquality.html#1" class="Module"
+      >Tools.PropositionalEquality</a
+      ><a name="35"
+      > </a
+      ><a name="36" class="Keyword"
+      >where</a
+      ><a name="41"
+      >
+
+
+</a
+      ><a name="44" class="Keyword"
+      >open</a
+      ><a name="48"
+      > </a
+      ><a name="49" class="Keyword"
+      >import</a
+      ><a name="55"
+      > </a
+      ><a name="56" href="Agda.Builtin.Equality.html#1" class="Module"
+      >Agda.Builtin.Equality</a
+      ><a name="77"
+      > </a
+      ><a name="78" class="Keyword"
+      >public</a
+      ><a name="84"
+      >
+</a
+      ><a name="85" class="Keyword"
+      >open</a
+      ><a name="89"
+      > </a
+      ><a name="90" class="Keyword"
+      >import</a
+      ><a name="96"
+      > </a
+      ><a name="97" href="Tools.Empty.html#1" class="Module"
+      >Tools.Empty</a
+      ><a name="108"
+      >
+
+</a
+      ><a name="110" class="Keyword"
+      >infix</a
+      ><a name="115"
+      > </a
+      ><a name="116" class="Number"
+      >4</a
+      ><a name="117"
+      > _&#8802;_
+
+</a
+      ><a name="123" href="Tools.PropositionalEquality.html#123" class="Function Operator"
+      >_&#8802;_</a
+      ><a name="126"
+      > </a
+      ><a name="127" class="Symbol"
+      >:</a
+      ><a name="128"
+      > </a
+      ><a name="129" class="Symbol"
+      >{</a
+      ><a name="130" href="Tools.PropositionalEquality.html#130" class="Bound"
+      >A</a
+      ><a name="131"
+      > </a
+      ><a name="132" class="Symbol"
+      >:</a
+      ><a name="133"
+      > </a
+      ><a name="134" class="PrimitiveType"
+      >Set</a
+      ><a name="137" class="Symbol"
+      >}</a
+      ><a name="138"
+      > </a
+      ><a name="139" class="Symbol"
+      >&#8594;</a
+      ><a name="140"
+      > </a
+      ><a name="141" href="Tools.PropositionalEquality.html#130" class="Bound"
+      >A</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="Symbol"
+      >&#8594;</a
+      ><a name="144"
+      > </a
+      ><a name="145" href="Tools.PropositionalEquality.html#130" class="Bound"
+      >A</a
+      ><a name="146"
+      > </a
+      ><a name="147" class="Symbol"
+      >&#8594;</a
+      ><a name="148"
+      > </a
+      ><a name="149" class="PrimitiveType"
+      >Set</a
+      ><a name="152"
+      >
+</a
+      ><a name="153" href="Tools.PropositionalEquality.html#153" class="Bound"
+      >a</a
+      ><a name="154"
+      > </a
+      ><a name="155" href="Tools.PropositionalEquality.html#123" class="Function Operator"
+      >&#8802;</a
+      ><a name="156"
+      > </a
+      ><a name="157" href="Tools.PropositionalEquality.html#157" class="Bound"
+      >b</a
+      ><a name="158"
+      > </a
+      ><a name="159" class="Symbol"
+      >=</a
+      ><a name="160"
+      > </a
+      ><a name="161" href="Tools.PropositionalEquality.html#153" class="Bound"
+      >a</a
+      ><a name="162"
+      > </a
+      ><a name="163" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="164"
+      > </a
+      ><a name="165" href="Tools.PropositionalEquality.html#157" class="Bound"
+      >b</a
+      ><a name="166"
+      > </a
+      ><a name="167" class="Symbol"
+      >&#8594;</a
+      ><a name="168"
+      > </a
+      ><a name="169" href="Tools.Empty.html#32" class="Datatype"
+      >&#8869;</a
+      ><a name="170"
+      >
+
+</a
+      ><a name="172" href="Tools.PropositionalEquality.html#172" class="Function"
+      >sym</a
+      ><a name="175"
+      > </a
+      ><a name="176" class="Symbol"
+      >:</a
+      ><a name="177"
+      > </a
+      ><a name="178" class="Symbol"
+      >{</a
+      ><a name="179" href="Tools.PropositionalEquality.html#179" class="Bound"
+      >A</a
+      ><a name="180"
+      > </a
+      ><a name="181" class="Symbol"
+      >:</a
+      ><a name="182"
+      > </a
+      ><a name="183" class="PrimitiveType"
+      >Set</a
+      ><a name="186" class="Symbol"
+      >}</a
+      ><a name="187"
+      > </a
+      ><a name="188" class="Symbol"
+      >{</a
+      ><a name="189" href="Tools.PropositionalEquality.html#189" class="Bound"
+      >a</a
+      ><a name="190"
+      > </a
+      ><a name="191" href="Tools.PropositionalEquality.html#191" class="Bound"
+      >b</a
+      ><a name="192"
+      > </a
+      ><a name="193" class="Symbol"
+      >:</a
+      ><a name="194"
+      > </a
+      ><a name="195" href="Tools.PropositionalEquality.html#179" class="Bound"
+      >A</a
+      ><a name="196" class="Symbol"
+      >}</a
+      ><a name="197"
+      > </a
+      ><a name="198" class="Symbol"
+      >&#8594;</a
+      ><a name="199"
+      > </a
+      ><a name="200" href="Tools.PropositionalEquality.html#189" class="Bound"
+      >a</a
+      ><a name="201"
+      > </a
+      ><a name="202" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="203"
+      > </a
+      ><a name="204" href="Tools.PropositionalEquality.html#191" class="Bound"
+      >b</a
+      ><a name="205"
+      > </a
+      ><a name="206" class="Symbol"
+      >&#8594;</a
+      ><a name="207"
+      > </a
+      ><a name="208" href="Tools.PropositionalEquality.html#191" class="Bound"
+      >b</a
+      ><a name="209"
+      > </a
+      ><a name="210" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="211"
+      > </a
+      ><a name="212" href="Tools.PropositionalEquality.html#189" class="Bound"
+      >a</a
+      ><a name="213"
+      >
+</a
+      ><a name="214" href="Tools.PropositionalEquality.html#172" class="Function"
+      >sym</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="222"
+      > </a
+      ><a name="223" class="Symbol"
+      >=</a
+      ><a name="224"
+      > </a
+      ><a name="225" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="229"
+      >
+
+</a
+      ><a name="231" href="Tools.PropositionalEquality.html#231" class="Function"
+      >trans</a
+      ><a name="236"
+      > </a
+      ><a name="237" class="Symbol"
+      >:</a
+      ><a name="238"
+      > </a
+      ><a name="239" class="Symbol"
+      >{</a
+      ><a name="240" href="Tools.PropositionalEquality.html#240" class="Bound"
+      >A</a
+      ><a name="241"
+      > </a
+      ><a name="242" class="Symbol"
+      >:</a
+      ><a name="243"
+      > </a
+      ><a name="244" class="PrimitiveType"
+      >Set</a
+      ><a name="247" class="Symbol"
+      >}</a
+      ><a name="248"
+      > </a
+      ><a name="249" class="Symbol"
+      >{</a
+      ><a name="250" href="Tools.PropositionalEquality.html#250" class="Bound"
+      >a</a
+      ><a name="251"
+      > </a
+      ><a name="252" href="Tools.PropositionalEquality.html#252" class="Bound"
+      >b</a
+      ><a name="253"
+      > </a
+      ><a name="254" href="Tools.PropositionalEquality.html#254" class="Bound"
+      >c</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Symbol"
+      >:</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="Tools.PropositionalEquality.html#240" class="Bound"
+      >A</a
+      ><a name="259" class="Symbol"
+      >}</a
+      ><a name="260"
+      > </a
+      ><a name="261" class="Symbol"
+      >&#8594;</a
+      ><a name="262"
+      > </a
+      ><a name="263" href="Tools.PropositionalEquality.html#250" class="Bound"
+      >a</a
+      ><a name="264"
+      > </a
+      ><a name="265" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Tools.PropositionalEquality.html#252" class="Bound"
+      >b</a
+      ><a name="268"
+      > </a
+      ><a name="269" class="Symbol"
+      >&#8594;</a
+      ><a name="270"
+      > </a
+      ><a name="271" href="Tools.PropositionalEquality.html#252" class="Bound"
+      >b</a
+      ><a name="272"
+      > </a
+      ><a name="273" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="274"
+      > </a
+      ><a name="275" href="Tools.PropositionalEquality.html#254" class="Bound"
+      >c</a
+      ><a name="276"
+      > </a
+      ><a name="277" class="Symbol"
+      >&#8594;</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="Tools.PropositionalEquality.html#250" class="Bound"
+      >a</a
+      ><a name="280"
+      > </a
+      ><a name="281" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="282"
+      > </a
+      ><a name="283" href="Tools.PropositionalEquality.html#254" class="Bound"
+      >c</a
+      ><a name="284"
+      >
+</a
+      ><a name="285" href="Tools.PropositionalEquality.html#231" class="Function"
+      >trans</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="300"
+      > </a
+      ><a name="301" class="Symbol"
+      >=</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="307"
+      >
+
+</a
+      ><a name="309" href="Tools.PropositionalEquality.html#309" class="Function"
+      >cong</a
+      ><a name="313"
+      > </a
+      ><a name="314" class="Symbol"
+      >:</a
+      ><a name="315"
+      > </a
+      ><a name="316" class="Symbol"
+      >{</a
+      ><a name="317" href="Tools.PropositionalEquality.html#317" class="Bound"
+      >A</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Tools.PropositionalEquality.html#319" class="Bound"
+      >B</a
+      ><a name="320"
+      > </a
+      ><a name="321" class="Symbol"
+      >:</a
+      ><a name="322"
+      > </a
+      ><a name="323" class="PrimitiveType"
+      >Set</a
+      ><a name="326" class="Symbol"
+      >}</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="Symbol"
+      >{</a
+      ><a name="329" href="Tools.PropositionalEquality.html#329" class="Bound"
+      >a</a
+      ><a name="330"
+      > </a
+      ><a name="331" href="Tools.PropositionalEquality.html#331" class="Bound"
+      >b</a
+      ><a name="332"
+      > </a
+      ><a name="333" class="Symbol"
+      >:</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="Tools.PropositionalEquality.html#317" class="Bound"
+      >A</a
+      ><a name="336" class="Symbol"
+      >}</a
+      ><a name="337"
+      > </a
+      ><a name="338" class="Symbol"
+      >(</a
+      ><a name="339" href="Tools.PropositionalEquality.html#339" class="Bound"
+      >f</a
+      ><a name="340"
+      > </a
+      ><a name="341" class="Symbol"
+      >:</a
+      ><a name="342"
+      > </a
+      ><a name="343" href="Tools.PropositionalEquality.html#317" class="Bound"
+      >A</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Symbol"
+      >&#8594;</a
+      ><a name="346"
+      > </a
+      ><a name="347" href="Tools.PropositionalEquality.html#319" class="Bound"
+      >B</a
+      ><a name="348" class="Symbol"
+      >)</a
+      ><a name="349"
+      > </a
+      ><a name="350" class="Symbol"
+      >&#8594;</a
+      ><a name="351"
+      > </a
+      ><a name="352" href="Tools.PropositionalEquality.html#329" class="Bound"
+      >a</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="355"
+      > </a
+      ><a name="356" href="Tools.PropositionalEquality.html#331" class="Bound"
+      >b</a
+      ><a name="357"
+      > </a
+      ><a name="358" class="Symbol"
+      >&#8594;</a
+      ><a name="359"
+      > </a
+      ><a name="360" href="Tools.PropositionalEquality.html#339" class="Bound"
+      >f</a
+      ><a name="361"
+      > </a
+      ><a name="362" href="Tools.PropositionalEquality.html#329" class="Bound"
+      >a</a
+      ><a name="363"
+      > </a
+      ><a name="364" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="365"
+      > </a
+      ><a name="366" href="Tools.PropositionalEquality.html#339" class="Bound"
+      >f</a
+      ><a name="367"
+      > </a
+      ><a name="368" href="Tools.PropositionalEquality.html#331" class="Bound"
+      >b</a
+      ><a name="369"
+      >
+</a
+      ><a name="370" href="Tools.PropositionalEquality.html#309" class="Function"
+      >cong</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Tools.PropositionalEquality.html#375" class="Bound"
+      >f</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="381"
+      > </a
+      ><a name="382" class="Symbol"
+      >=</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="388"
+      >
+
+</a
+      ><a name="390" href="Tools.PropositionalEquality.html#390" class="Function"
+      >cong&#8322;</a
+      ><a name="395"
+      > </a
+      ><a name="396" class="Symbol"
+      >:</a
+      ><a name="397"
+      > </a
+      ><a name="398" class="Symbol"
+      >&#8704;</a
+      ><a name="399"
+      > </a
+      ><a name="400" class="Symbol"
+      >{</a
+      ><a name="401" href="Tools.PropositionalEquality.html#401" class="Bound"
+      >A</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Tools.PropositionalEquality.html#403" class="Bound"
+      >B</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Tools.PropositionalEquality.html#405" class="Bound"
+      >C</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Symbol"
+      >:</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="PrimitiveType"
+      >Set</a
+      ><a name="412" class="Symbol"
+      >}</a
+      ><a name="413"
+      > </a
+      ><a name="414" class="Symbol"
+      >{</a
+      ><a name="415" href="Tools.PropositionalEquality.html#415" class="Bound"
+      >a</a
+      ><a name="416"
+      > </a
+      ><a name="417" href="Tools.PropositionalEquality.html#417" class="Bound"
+      >a'</a
+      ><a name="419"
+      > </a
+      ><a name="420" href="Tools.PropositionalEquality.html#420" class="Bound"
+      >b</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Tools.PropositionalEquality.html#422" class="Bound"
+      >b'</a
+      ><a name="424" class="Symbol"
+      >}</a
+      ><a name="425"
+      >
+        </a
+      ><a name="434" class="Symbol"
+      >(</a
+      ><a name="435" href="Tools.PropositionalEquality.html#435" class="Bound"
+      >f</a
+      ><a name="436"
+      > </a
+      ><a name="437" class="Symbol"
+      >:</a
+      ><a name="438"
+      > </a
+      ><a name="439" href="Tools.PropositionalEquality.html#401" class="Bound"
+      >A</a
+      ><a name="440"
+      > </a
+      ><a name="441" class="Symbol"
+      >&#8594;</a
+      ><a name="442"
+      > </a
+      ><a name="443" href="Tools.PropositionalEquality.html#403" class="Bound"
+      >B</a
+      ><a name="444"
+      > </a
+      ><a name="445" class="Symbol"
+      >&#8594;</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="Tools.PropositionalEquality.html#405" class="Bound"
+      >C</a
+      ><a name="448" class="Symbol"
+      >)</a
+      ><a name="449"
+      > </a
+      ><a name="450" class="Symbol"
+      >&#8594;</a
+      ><a name="451"
+      > </a
+      ><a name="452" href="Tools.PropositionalEquality.html#415" class="Bound"
+      >a</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Tools.PropositionalEquality.html#417" class="Bound"
+      >a'</a
+      ><a name="458"
+      > </a
+      ><a name="459" class="Symbol"
+      >&#8594;</a
+      ><a name="460"
+      > </a
+      ><a name="461" href="Tools.PropositionalEquality.html#420" class="Bound"
+      >b</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="464"
+      > </a
+      ><a name="465" href="Tools.PropositionalEquality.html#422" class="Bound"
+      >b'</a
+      ><a name="467"
+      >
+      </a
+      ><a name="474" class="Symbol"
+      >&#8594;</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Tools.PropositionalEquality.html#435" class="Bound"
+      >f</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Tools.PropositionalEquality.html#415" class="Bound"
+      >a</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="Tools.PropositionalEquality.html#420" class="Bound"
+      >b</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="Tools.PropositionalEquality.html#435" class="Bound"
+      >f</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Tools.PropositionalEquality.html#417" class="Bound"
+      >a'</a
+      ><a name="488"
+      > </a
+      ><a name="489" href="Tools.PropositionalEquality.html#422" class="Bound"
+      >b'</a
+      ><a name="491"
+      >
+</a
+      ><a name="492" href="Tools.PropositionalEquality.html#390" class="Function"
+      >cong&#8322;</a
+      ><a name="497"
+      > </a
+      ><a name="498" href="Tools.PropositionalEquality.html#498" class="Bound"
+      >f</a
+      ><a name="499"
+      > </a
+      ><a name="500" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="509"
+      > </a
+      ><a name="510" class="Symbol"
+      >=</a
+      ><a name="511"
+      > </a
+      ><a name="512" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="516"
+      >
+
+</a
+      ><a name="518" href="Tools.PropositionalEquality.html#518" class="Function"
+      >cong&#8323;</a
+      ><a name="523"
+      > </a
+      ><a name="524" class="Symbol"
+      >:</a
+      ><a name="525"
+      > </a
+      ><a name="526" class="Symbol"
+      >&#8704;</a
+      ><a name="527"
+      > </a
+      ><a name="528" class="Symbol"
+      >{</a
+      ><a name="529" href="Tools.PropositionalEquality.html#529" class="Bound"
+      >A</a
+      ><a name="530"
+      > </a
+      ><a name="531" href="Tools.PropositionalEquality.html#531" class="Bound"
+      >B</a
+      ><a name="532"
+      > </a
+      ><a name="533" href="Tools.PropositionalEquality.html#533" class="Bound"
+      >C</a
+      ><a name="534"
+      > </a
+      ><a name="535" href="Tools.PropositionalEquality.html#535" class="Bound"
+      >D</a
+      ><a name="536"
+      > </a
+      ><a name="537" class="Symbol"
+      >:</a
+      ><a name="538"
+      > </a
+      ><a name="539" class="PrimitiveType"
+      >Set</a
+      ><a name="542" class="Symbol"
+      >}</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >{</a
+      ><a name="545" href="Tools.PropositionalEquality.html#545" class="Bound"
+      >a</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Tools.PropositionalEquality.html#547" class="Bound"
+      >a'</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Tools.PropositionalEquality.html#550" class="Bound"
+      >b</a
+      ><a name="551"
+      > </a
+      ><a name="552" href="Tools.PropositionalEquality.html#552" class="Bound"
+      >b'</a
+      ><a name="554"
+      > </a
+      ><a name="555" href="Tools.PropositionalEquality.html#555" class="Bound"
+      >c</a
+      ><a name="556"
+      > </a
+      ><a name="557" href="Tools.PropositionalEquality.html#557" class="Bound"
+      >c'</a
+      ><a name="559" class="Symbol"
+      >}</a
+      ><a name="560"
+      >
+        </a
+      ><a name="569" class="Symbol"
+      >(</a
+      ><a name="570" href="Tools.PropositionalEquality.html#570" class="Bound"
+      >f</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Symbol"
+      >:</a
+      ><a name="573"
+      > </a
+      ><a name="574" href="Tools.PropositionalEquality.html#529" class="Bound"
+      >A</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Symbol"
+      >&#8594;</a
+      ><a name="577"
+      > </a
+      ><a name="578" href="Tools.PropositionalEquality.html#531" class="Bound"
+      >B</a
+      ><a name="579"
+      > </a
+      ><a name="580" class="Symbol"
+      >&#8594;</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Tools.PropositionalEquality.html#533" class="Bound"
+      >C</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >&#8594;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Tools.PropositionalEquality.html#535" class="Bound"
+      >D</a
+      ><a name="587" class="Symbol"
+      >)</a
+      ><a name="588"
+      > </a
+      ><a name="589" class="Symbol"
+      >&#8594;</a
+      ><a name="590"
+      > </a
+      ><a name="591" href="Tools.PropositionalEquality.html#545" class="Bound"
+      >a</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Tools.PropositionalEquality.html#547" class="Bound"
+      >a'</a
+      ><a name="597"
+      > </a
+      ><a name="598" class="Symbol"
+      >&#8594;</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Tools.PropositionalEquality.html#550" class="Bound"
+      >b</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="603"
+      > </a
+      ><a name="604" href="Tools.PropositionalEquality.html#552" class="Bound"
+      >b'</a
+      ><a name="606"
+      > </a
+      ><a name="607" class="Symbol"
+      >&#8594;</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Tools.PropositionalEquality.html#555" class="Bound"
+      >c</a
+      ><a name="610"
+      > </a
+      ><a name="611" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Tools.PropositionalEquality.html#557" class="Bound"
+      >c'</a
+      ><a name="615"
+      >
+      </a
+      ><a name="622" class="Symbol"
+      >&#8594;</a
+      ><a name="623"
+      > </a
+      ><a name="624" href="Tools.PropositionalEquality.html#570" class="Bound"
+      >f</a
+      ><a name="625"
+      > </a
+      ><a name="626" href="Tools.PropositionalEquality.html#545" class="Bound"
+      >a</a
+      ><a name="627"
+      > </a
+      ><a name="628" href="Tools.PropositionalEquality.html#550" class="Bound"
+      >b</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="Tools.PropositionalEquality.html#555" class="Bound"
+      >c</a
+      ><a name="631"
+      > </a
+      ><a name="632" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Tools.PropositionalEquality.html#570" class="Bound"
+      >f</a
+      ><a name="635"
+      > </a
+      ><a name="636" href="Tools.PropositionalEquality.html#547" class="Bound"
+      >a'</a
+      ><a name="638"
+      > </a
+      ><a name="639" href="Tools.PropositionalEquality.html#552" class="Bound"
+      >b'</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Tools.PropositionalEquality.html#557" class="Bound"
+      >c'</a
+      ><a name="644"
+      >
+</a
+      ><a name="645" href="Tools.PropositionalEquality.html#518" class="Function"
+      >cong&#8323;</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="Tools.PropositionalEquality.html#651" class="Bound"
+      >f</a
+      ><a name="652"
+      > </a
+      ><a name="653" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="657"
+      > </a
+      ><a name="658" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="662"
+      > </a
+      ><a name="663" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="667"
+      > </a
+      ><a name="668" class="Symbol"
+      >=</a
+      ><a name="669"
+      > </a
+      ><a name="670" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="674"
+      >
+
+</a
+      ><a name="676" href="Tools.PropositionalEquality.html#676" class="Function"
+      >cong&#8324;</a
+      ><a name="681"
+      > </a
+      ><a name="682" class="Symbol"
+      >:</a
+      ><a name="683"
+      > </a
+      ><a name="684" class="Symbol"
+      >&#8704;</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >{</a
+      ><a name="687" href="Tools.PropositionalEquality.html#687" class="Bound"
+      >A</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="Tools.PropositionalEquality.html#689" class="Bound"
+      >B</a
+      ><a name="690"
+      > </a
+      ><a name="691" href="Tools.PropositionalEquality.html#691" class="Bound"
+      >C</a
+      ><a name="692"
+      > </a
+      ><a name="693" href="Tools.PropositionalEquality.html#693" class="Bound"
+      >D</a
+      ><a name="694"
+      > </a
+      ><a name="695" href="Tools.PropositionalEquality.html#695" class="Bound"
+      >E</a
+      ><a name="696"
+      > </a
+      ><a name="697" class="Symbol"
+      >:</a
+      ><a name="698"
+      > </a
+      ><a name="699" class="PrimitiveType"
+      >Set</a
+      ><a name="702" class="Symbol"
+      >}</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >{</a
+      ><a name="705" href="Tools.PropositionalEquality.html#705" class="Bound"
+      >a</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Tools.PropositionalEquality.html#707" class="Bound"
+      >a'</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Tools.PropositionalEquality.html#710" class="Bound"
+      >b</a
+      ><a name="711"
+      > </a
+      ><a name="712" href="Tools.PropositionalEquality.html#712" class="Bound"
+      >b'</a
+      ><a name="714"
+      > </a
+      ><a name="715" href="Tools.PropositionalEquality.html#715" class="Bound"
+      >c</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="Tools.PropositionalEquality.html#717" class="Bound"
+      >c'</a
+      ><a name="719"
+      > </a
+      ><a name="720" href="Tools.PropositionalEquality.html#720" class="Bound"
+      >d</a
+      ><a name="721"
+      > </a
+      ><a name="722" href="Tools.PropositionalEquality.html#722" class="Bound"
+      >d'</a
+      ><a name="724" class="Symbol"
+      >}</a
+      ><a name="725"
+      >
+        </a
+      ><a name="734" class="Symbol"
+      >(</a
+      ><a name="735" href="Tools.PropositionalEquality.html#735" class="Bound"
+      >f</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Symbol"
+      >:</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Tools.PropositionalEquality.html#687" class="Bound"
+      >A</a
+      ><a name="740"
+      > </a
+      ><a name="741" class="Symbol"
+      >&#8594;</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Tools.PropositionalEquality.html#689" class="Bound"
+      >B</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >&#8594;</a
+      ><a name="746"
+      > </a
+      ><a name="747" href="Tools.PropositionalEquality.html#691" class="Bound"
+      >C</a
+      ><a name="748"
+      > </a
+      ><a name="749" class="Symbol"
+      >&#8594;</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Tools.PropositionalEquality.html#693" class="Bound"
+      >D</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >&#8594;</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Tools.PropositionalEquality.html#695" class="Bound"
+      >E</a
+      ><a name="756" class="Symbol"
+      >)</a
+      ><a name="757"
+      > </a
+      ><a name="758" class="Symbol"
+      >&#8594;</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Tools.PropositionalEquality.html#705" class="Bound"
+      >a</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Tools.PropositionalEquality.html#707" class="Bound"
+      >a'</a
+      ><a name="766"
+      > </a
+      ><a name="767" class="Symbol"
+      >&#8594;</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Tools.PropositionalEquality.html#710" class="Bound"
+      >b</a
+      ><a name="770"
+      > </a
+      ><a name="771" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Tools.PropositionalEquality.html#712" class="Bound"
+      >b'</a
+      ><a name="775"
+      > </a
+      ><a name="776" class="Symbol"
+      >&#8594;</a
+      ><a name="777"
+      > </a
+      ><a name="778" href="Tools.PropositionalEquality.html#715" class="Bound"
+      >c</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="781"
+      > </a
+      ><a name="782" href="Tools.PropositionalEquality.html#717" class="Bound"
+      >c'</a
+      ><a name="784"
+      > </a
+      ><a name="785" class="Symbol"
+      >&#8594;</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Tools.PropositionalEquality.html#720" class="Bound"
+      >d</a
+      ><a name="788"
+      > </a
+      ><a name="789" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="Tools.PropositionalEquality.html#722" class="Bound"
+      >d'</a
+      ><a name="793"
+      >
+      </a
+      ><a name="800" class="Symbol"
+      >&#8594;</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="Tools.PropositionalEquality.html#735" class="Bound"
+      >f</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Tools.PropositionalEquality.html#705" class="Bound"
+      >a</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Tools.PropositionalEquality.html#710" class="Bound"
+      >b</a
+      ><a name="807"
+      > </a
+      ><a name="808" href="Tools.PropositionalEquality.html#715" class="Bound"
+      >c</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Tools.PropositionalEquality.html#720" class="Bound"
+      >d</a
+      ><a name="811"
+      > </a
+      ><a name="812" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="Tools.PropositionalEquality.html#735" class="Bound"
+      >f</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Tools.PropositionalEquality.html#707" class="Bound"
+      >a'</a
+      ><a name="818"
+      > </a
+      ><a name="819" href="Tools.PropositionalEquality.html#712" class="Bound"
+      >b'</a
+      ><a name="821"
+      > </a
+      ><a name="822" href="Tools.PropositionalEquality.html#717" class="Bound"
+      >c'</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Tools.PropositionalEquality.html#722" class="Bound"
+      >d'</a
+      ><a name="827"
+      >
+</a
+      ><a name="828" href="Tools.PropositionalEquality.html#676" class="Function"
+      >cong&#8324;</a
+      ><a name="833"
+      > </a
+      ><a name="834" href="Tools.PropositionalEquality.html#834" class="Bound"
+      >f</a
+      ><a name="835"
+      > </a
+      ><a name="836" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="840"
+      > </a
+      ><a name="841" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="855"
+      > </a
+      ><a name="856" class="Symbol"
+      >=</a
+      ><a name="857"
+      > </a
+      ><a name="858" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="862"
+      >
+
+</a
+      ><a name="864" href="Tools.PropositionalEquality.html#864" class="Function"
+      >subst</a
+      ><a name="869"
+      > </a
+      ><a name="870" class="Symbol"
+      >:</a
+      ><a name="871"
+      > </a
+      ><a name="872" class="Symbol"
+      >{</a
+      ><a name="873" href="Tools.PropositionalEquality.html#873" class="Bound"
+      >A</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="Symbol"
+      >:</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="PrimitiveType"
+      >Set</a
+      ><a name="880" class="Symbol"
+      >}</a
+      ><a name="881"
+      > </a
+      ><a name="882" class="Symbol"
+      >{</a
+      ><a name="883" href="Tools.PropositionalEquality.html#883" class="Bound"
+      >a</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Tools.PropositionalEquality.html#885" class="Bound"
+      >b</a
+      ><a name="886"
+      > </a
+      ><a name="887" class="Symbol"
+      >:</a
+      ><a name="888"
+      > </a
+      ><a name="889" href="Tools.PropositionalEquality.html#873" class="Bound"
+      >A</a
+      ><a name="890" class="Symbol"
+      >}</a
+      ><a name="891"
+      > </a
+      ><a name="892" class="Symbol"
+      >(</a
+      ><a name="893" href="Tools.PropositionalEquality.html#893" class="Bound"
+      >F</a
+      ><a name="894"
+      > </a
+      ><a name="895" class="Symbol"
+      >:</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Tools.PropositionalEquality.html#873" class="Bound"
+      >A</a
+      ><a name="898"
+      > </a
+      ><a name="899" class="Symbol"
+      >&#8594;</a
+      ><a name="900"
+      > </a
+      ><a name="901" class="PrimitiveType"
+      >Set</a
+      ><a name="904" class="Symbol"
+      >)</a
+      ><a name="905"
+      > </a
+      ><a name="906" class="Symbol"
+      >&#8594;</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Tools.PropositionalEquality.html#883" class="Bound"
+      >a</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="911"
+      > </a
+      ><a name="912" href="Tools.PropositionalEquality.html#885" class="Bound"
+      >b</a
+      ><a name="913"
+      > </a
+      ><a name="914" class="Symbol"
+      >&#8594;</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="Tools.PropositionalEquality.html#893" class="Bound"
+      >F</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Tools.PropositionalEquality.html#883" class="Bound"
+      >a</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >&#8594;</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Tools.PropositionalEquality.html#893" class="Bound"
+      >F</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Tools.PropositionalEquality.html#885" class="Bound"
+      >b</a
+      ><a name="925"
+      >
+</a
+      ><a name="926" href="Tools.PropositionalEquality.html#864" class="Function"
+      >subst</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Tools.PropositionalEquality.html#932" class="Bound"
+      >F</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="938"
+      > </a
+      ><a name="939" href="Tools.PropositionalEquality.html#939" class="Bound"
+      >f</a
+      ><a name="940"
+      > </a
+      ><a name="941" class="Symbol"
+      >=</a
+      ><a name="942"
+      > </a
+      ><a name="943" href="Tools.PropositionalEquality.html#939" class="Bound"
+      >f</a
+      ><a name="944"
+      >
+
+</a
+      ><a name="946" href="Tools.PropositionalEquality.html#946" class="Function"
+      >subst&#8322;</a
+      ><a name="952"
+      > </a
+      ><a name="953" class="Symbol"
+      >:</a
+      ><a name="954"
+      > </a
+      ><a name="955" class="Symbol"
+      >&#8704;</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >{</a
+      ><a name="958" href="Tools.PropositionalEquality.html#958" class="Bound"
+      >A</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Tools.PropositionalEquality.html#960" class="Bound"
+      >B</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >:</a
+      ><a name="963"
+      > </a
+      ><a name="964" class="PrimitiveType"
+      >Set</a
+      ><a name="967" class="Symbol"
+      >}</a
+      ><a name="968"
+      > </a
+      ><a name="969" class="Symbol"
+      >{</a
+      ><a name="970" href="Tools.PropositionalEquality.html#970" class="Bound"
+      >a</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Tools.PropositionalEquality.html#972" class="Bound"
+      >a'</a
+      ><a name="974"
+      > </a
+      ><a name="975" href="Tools.PropositionalEquality.html#975" class="Bound"
+      >b</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Tools.PropositionalEquality.html#977" class="Bound"
+      >b'</a
+      ><a name="979" class="Symbol"
+      >}</a
+      ><a name="980"
+      > </a
+      ><a name="981" class="Symbol"
+      >(</a
+      ><a name="982" href="Tools.PropositionalEquality.html#982" class="Bound"
+      >F</a
+      ><a name="983"
+      > </a
+      ><a name="984" class="Symbol"
+      >:</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Tools.PropositionalEquality.html#958" class="Bound"
+      >A</a
+      ><a name="987"
+      > </a
+      ><a name="988" class="Symbol"
+      >&#8594;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Tools.PropositionalEquality.html#960" class="Bound"
+      >B</a
+      ><a name="991"
+      > </a
+      ><a name="992" class="Symbol"
+      >&#8594;</a
+      ><a name="993"
+      > </a
+      ><a name="994" class="PrimitiveType"
+      >Set</a
+      ><a name="997" class="Symbol"
+      >)</a
+      ><a name="998"
+      >
+       </a
+      ><a name="1006" class="Symbol"
+      >&#8594;</a
+      ><a name="1007"
+      > </a
+      ><a name="1008" href="Tools.PropositionalEquality.html#970" class="Bound"
+      >a</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Tools.PropositionalEquality.html#972" class="Bound"
+      >a'</a
+      ><a name="1014"
+      > </a
+      ><a name="1015" class="Symbol"
+      >&#8594;</a
+      ><a name="1016"
+      > </a
+      ><a name="1017" href="Tools.PropositionalEquality.html#975" class="Bound"
+      >b</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Agda.Builtin.Equality.html#55" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Tools.PropositionalEquality.html#977" class="Bound"
+      >b'</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >&#8594;</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Tools.PropositionalEquality.html#982" class="Bound"
+      >F</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" href="Tools.PropositionalEquality.html#970" class="Bound"
+      >a</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Tools.PropositionalEquality.html#975" class="Bound"
+      >b</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" class="Symbol"
+      >&#8594;</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Tools.PropositionalEquality.html#982" class="Bound"
+      >F</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Tools.PropositionalEquality.html#972" class="Bound"
+      >a'</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Tools.PropositionalEquality.html#977" class="Bound"
+      >b'</a
+      ><a name="1041"
+      >
+</a
+      ><a name="1042" href="Tools.PropositionalEquality.html#946" class="Function"
+      >subst&#8322;</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Tools.PropositionalEquality.html#1049" class="Bound"
+      >F</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Agda.Builtin.Equality.html#112" class="InductiveConstructor"
+      >refl</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Tools.PropositionalEquality.html#1061" class="Bound"
+      >f</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" class="Symbol"
+      >=</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" href="Tools.PropositionalEquality.html#1061" class="Bound"
+      >f</a
+      ><a name="1066"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
