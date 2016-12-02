@@ -67,8 +67,6 @@ mutual
     yes (T , var x₁ x₄)
   dec~ (var x₁ x₂) (var x₃ x₄) (var m) (var n) | no ¬p =
     no (λ { (A , x) → ¬p (lemx x) })
-  dec~ k (conv l x₃) (var m) (var x) = dec~ k l (var m) (var x)
-  dec~ (conv k x) l (var m) (var n) = dec~ k l (var m) (var n)
 
   dec~ k₁ l (var n) (_∘_ neL) = no (λ { (_ , ()) })
   dec~ k₁ l (var n) (natrec neL) = no (λ { (_ , ()) })
@@ -79,8 +77,6 @@ mutual
     {!!}
   dec~ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | no ¬p =
     no (λ { (_ , app k~l x x₁) → ¬p (_ , k~l) })
-  dec~ k (conv l x) (_∘_ neK) (_∘_ neL) = dec~ k l (_∘_ neK) (_∘_ neL)
-  dec~ (conv k x) l (_∘_ neK) (_∘_ neL) = dec~ k l (_∘_ neK) (_∘_ neL)
 
   dec~ k₂ l (_∘_ neK) (natrec neL) = no (λ { (_ , ()) })
   dec~ k₂ l (natrec neK) (var n) = no (λ { (_ , ()) })
@@ -92,8 +88,9 @@ mutual
     | yes (A , k~l) = {!!}
   dec~ (natrec x k₁ k₂ k₃) (natrec x₁ l l₁ l₂) (natrec neK) (natrec neL)
     | no ¬p = no (λ { (_ , natrec k~l x₂ x₃ x₄ x₅) → ¬p (ℕ , k~l) })
-  dec~ k (conv l x₁) (natrec neK) (natrec neL) = dec~ k l (natrec neK) (natrec neL)
-  dec~ (conv k x) l (natrec neK) (natrec neL) = dec~ k l (natrec neK) (natrec neL)
+
+  dec~ k (conv l x) neK neL = dec~ k l neK neL
+  dec~ (conv k x) l neK neL = dec~ k l neK neL
 
 
   decConv : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A [conv] B)
