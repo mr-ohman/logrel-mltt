@@ -8,7 +8,9 @@ open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.Injectivity
 open import Definition.LogicalRelation.Consequences.SingleSubst
+open import Definition.LogicalRelation.Consequences.Inversion
 
+open import Tools.Empty
 open import Tools.Nat
 open import Tools.Product
 open import Tools.Nullary
@@ -25,13 +27,19 @@ natrec-subst* F z s (x ⇨ y) =
   (conv* (natrec-subst* F z s y)
          (sym (substTypeEq (refl F) (subsetTerm x))))
 
+ℕOnlyInU : ∀ {A Γ} → A PE.≢ U → Γ ⊢ ℕ ∷ A → ⊥
+ℕOnlyInU A≢U (ℕ x) = ⊥-elim (A≢U PE.refl)
+ℕOnlyInU A≢U (conv ⊢ℕ x) = {!!}
+
 lemma2 : ∀ {a A Γ} → Γ ⊢ A → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a ⇒* b ∷ A
 lemma2 A (ℕ x) = ℕ , ℕ , id (ℕ x)
 lemma2 A (Π a ▹ a₁) = Π _ ▹ _ , Π , id (Π a ▹ a₁)
 lemma2 A (var x₁ x₂) = var _ , ne (var _) , id (var x₁ x₂)
 lemma2 A (lam x a) = lam _ , lam , id (lam x a)
 lemma2 A (a₁ ∘ a₂) with lemma2 (syntacticTerm a₁) a₁
-lemma2 A (a₁ ∘ a₂) | .U , U , proj₃ = {!!} -- refutable
+lemma2 A (a₁ ∘ a₂) | .U , U , proj₃ =
+  let _ , _ , q = syntacticRedTerm proj₃
+  in  ⊥-elim (UnotInA q)
 lemma2 A₁ (a₁ ∘ a₂) | _ , Π , proj₃ = {!!} -- refutable
 lemma2 A (a₁ ∘ a₂) | .ℕ , ℕ , proj₃ = {!!} -- refutable
 lemma2 A (a₁ ∘ a₂) | _ , lam , red =
@@ -85,4 +93,19 @@ lemma3 x t∷A (conv t∷B x₃) = let q = lemma3 x t∷A t∷B
 lemma4 : ∀ {v k R T Γ}
        → Neutral k → Γ ⊢ v ∷ R → Γ ⊢ v ∷ T → Γ ⊢ v ⇒ k ∷ R
        → Γ ⊢ T ≡ R
-lemma4 = {!!}
+lemma4 neK v∷R v∷T (conv d x) =
+  let q = lemma4 neK (conv v∷R (sym x)) v∷T d
+  in  trans q x
+lemma4 (_∘_ neU) v∷R v∷T (app-subst d x) =
+  let F , G , t , a , A≡G[a] = inversion-app v∷T
+      q = lemma4 neU (redFirstTerm d) t d
+      w , r = injectivity q
+  in  trans A≡G[a] (substTypeEq r (refl a))
+lemma4 neK v∷R v∷T (β-red x x₁ x₂) =
+  let F , G , t , a , A≡G[a] = inversion-app v∷T
+      q = lemma3 {!{- Neutral (t [ a ]) → Neutral t -}!}
+                 {!{- Γ ⊢ lam t ∷ Π F ▹ G → Γ ∙ F ⊢ t ∷ G -}!} x₁
+  in  trans A≡G[a] (substTypeEq q (refl x₂))
+lemma4 neK v∷R v∷T (natrec-subst x x₁ x₂ d) = inversion-natrec v∷T
+lemma4 neK v∷R v∷T (natrec-zero x x₁ x₂) = inversion-natrec v∷T
+lemma4 neK v∷R v∷T (natrec-suc x x₁ x₂ x₃) = inversion-natrec v∷T
