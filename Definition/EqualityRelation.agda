@@ -4,14 +4,23 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
+open import Tools.Nat
+
 record EqRelSet : Set₁ where
   constructor eqRel
   field
     _⊢_≅_   : Con Term → (A B : Term)   → Set
     _⊢_≅_∷_ : Con Term → (t u A : Term) → Set
 
-    ≅-Urefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ U ≅ U
-    ≅-ℕrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ
+    ≅-Urefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ U ≅ U
+    ≅-ℕrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ
+    ≅ₜ-ℕrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ ∷ U
+    ≅-Πrefl   : ∀ {F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ G → Γ ⊢ Π F ▹ G ≅ Π F ▹ G
+    ≅ₜ-Πrefl  : ∀ {F G Γ} → Γ ⊢ F ∷ U → Γ ∙ F ⊢ G ∷ U → Γ ⊢ Π F ▹ G ≅ Π F ▹ G ∷ U
+    ≅-nerefl  : ∀ {K Γ} → Γ ⊢ K → Neutral K → Γ ⊢ K ≅ K
+    ≅ₜ-nerefl : ∀ {k A Γ} → Γ ⊢ k ∷ A → Neutral k → Γ ⊢ k ≅ k ∷ A
+    ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
+    ≅ₜ-lamrefl : ∀ {f F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ f ∷ G → Γ ⊢ lam f ≅ lam f ∷ Π F ▹ G
 
     ≅-sym  : ∀ {A B Γ}   → Γ ⊢ A ≅ B     → Γ ⊢ B ≅ A
     ≅ₜ-sym : ∀ {t u A Γ} → Γ ⊢ t ≅ u ∷ A → Γ ⊢ u ≅ t ∷ A
@@ -52,3 +61,47 @@ record EqRelSet : Set₁ where
            → Γ ⊢ t ≅ u ∷ A
            → Γ ⊢ A ≅ B
            → Γ ⊢ t ≅ u ∷ B
+
+    ≅-univ : ∀ {A B Γ}
+           → Γ ⊢ A ≅ B ∷ U
+           → Γ ⊢ A ≅ B
+
+    ≅-app-cong : ∀ {a b f g F G Γ}
+               → Γ ⊢ f ≅ g ∷ Π F ▹ G
+               → Γ ⊢ a ≅ b ∷ F
+               → Γ ⊢ f ∘ a ≅ g ∘ b ∷ G [ a ]
+
+    ≅-app-subst : ∀ {a f g F G Γ}
+                → Γ ⊢ f ≅ g ∷ Π F ▹ G
+                → Γ ⊢ a ∷ F
+                → Γ ⊢ f ∘ a ≅ g ∘ a ∷ G [ a ]
+
+    ≅-suc-cong : ∀ {m n Γ}
+               → Γ ⊢ m ≅ n ∷ ℕ
+               → Γ ⊢ suc m ≅ suc n ∷ ℕ
+
+    ≅-Π-cong  : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H
+              → Γ ∙ F ⊢ G ≅ E
+              → Γ ⊢ Π F ▹ G ≅ Π H ▹ E
+
+    ≅ₜ-Π-cong : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ∙ F ⊢ G ≅ E ∷ U
+              → Γ ⊢ Π F ▹ G ≅ Π H ▹ E ∷ U
+
+    ≅-natrec-cong : ∀ {z z' s s' n n' F F' Γ}
+                  → Γ ∙ ℕ ⊢ F ≅ F'
+                  → Γ     ⊢ z ≅ z' ∷ F [ zero ]
+                  → Γ     ⊢ s ≅ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                  → Γ     ⊢ n ≅ n' ∷ ℕ
+                  → Γ     ⊢ natrec F z s n ≅ natrec F' z' s' n' ∷ F [ n ]
+
+    ≅-fun-ext : ∀ {f g F G Γ}
+              → Γ ⊢ F
+              → Γ ⊢ f ∷ Π F ▹ G
+              → Γ ⊢ g ∷ Π F ▹ G
+              → Γ ∙ F ⊢ wk1 f ∘ var zero ≅ wk1 g ∘ var zero ∷ G
+              → Γ ⊢ f ≅ g ∷ Π F ▹ G

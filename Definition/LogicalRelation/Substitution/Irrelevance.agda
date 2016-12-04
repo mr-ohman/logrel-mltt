@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Irrelevance where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Irrelevance {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Typed

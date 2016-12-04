@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Conversion where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Conversion {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties

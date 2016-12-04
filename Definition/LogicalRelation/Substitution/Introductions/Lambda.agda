@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Introductions.Lambda where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Introductions.Lambda {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties
@@ -28,17 +31,21 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
-      _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext =
+      _ , Π F' G' D' ⊢F' ⊢G' A≡A' [F]' [G]' G-ext =
         extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ ¹ ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
         let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
             [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
-            _ , Π F' G' D' ⊢F' ⊢G' [F]' [G]' G-ext =
+            _ , Π F' G' D' ⊢F' ⊢G' A≡A' [F]' [G]' G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  (lam ⊢F
               (wellformedTerm (proj₁ ([G] (⊢Δ ∙ ⊢F)
+                                         (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ])))
+                             (proj₁ ([t] (⊢Δ ∙ ⊢F)
+                                         (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
+        ,   ≅ₜ-lamrefl ⊢F (wellformedTerm (proj₁ ([G] (⊢Δ ∙ ⊢F)
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ])))
                              (proj₁ ([t] (⊢Δ ∙ ⊢F)
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))))
@@ -126,7 +133,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   in  lamt ⊢Δ [σ]
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
-             _ , Π F'' G'' D'' ⊢F'' ⊢G'' [F]'' [G]'' G-ext' =
+             _ , Π F'' G'' D'' ⊢F'' ⊢G'' A≡A'' [F]'' [G]'' G-ext' =
                extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ'])))
              ⊢F' = wellformed (proj₁ ([F] ⊢Δ [σ']))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
@@ -230,10 +237,10 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                 in  transEqTerm G[a] [σlamt∘a≡σt[a]]
                                 (transEqTerm G[a] [σt[a]≡σ't[a]]
                                              [σ't[a]≡σ'lamt∘a])
-         in  fun-ext ⊢F (lam ⊢F ⊢t)
+         in  ≅-fun-ext ⊢F (lam ⊢F ⊢t)
                      (conv (lam ⊢F' ⊢t')
-                           (sym (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
-                                             [σΠFG≡σ'ΠFG])))
+                           (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
+                                             [σΠFG≡σ'ΠFG]))))
                      (wellformedTermEq
                        (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                        (irrelevanceEqTerm'
@@ -267,7 +274,7 @@ fun-extₛ : ∀ {f g F G Γ l}
 fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
   let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , Π F' G' D' ⊢F ⊢G [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
+      _ , Π F' G' D' ⊢F ⊢G A≡A [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       ⊢σf = wellformedTerm [σΠFG] (proj₁ ([f] ⊢Δ [σ]))
       ⊢σg = wellformedTerm [σΠFG] (proj₁ ([g] ⊢Δ [σ]))
@@ -276,11 +283,11 @@ fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0' =
         PE.subst₂
-          (λ x y → Δ ∙ subst σ F ⊢ x ≡ y ∷ subst (liftSubst σ) G)
+          (λ x y → Δ ∙ subst σ F ⊢ x ≅ y ∷ subst (liftSubst σ) G)
           (PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl)
           (PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl)
           σf0≡σg0
-  in  fun-ext ⊢F ⊢σf ⊢σg σf0≡σg0' , proj₁ ([f] ⊢Δ [σ]) , proj₁ ([g] ⊢Δ [σ])
+  in  ≅-fun-ext ⊢F ⊢σf ⊢σg σf0≡σg0' , proj₁ ([f] ⊢Δ [σ]) , proj₁ ([g] ⊢Δ [σ])
   ,   (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
          let [a]' = irrelevanceTerm'
                       (wk-subst F) ([F]' ρ ⊢Δ₁)

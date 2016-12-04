@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Properties where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Properties {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties
@@ -102,7 +105,7 @@ liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡�
       [tailσ≡σ'] = wk1SubstSEq [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ']
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
   in  [tailσ≡σ'] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
-                         (var0 , var0 , refl var0)
+                         var0 var0 (≅ₜ-nerefl var0 (var zero))
 
 mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ

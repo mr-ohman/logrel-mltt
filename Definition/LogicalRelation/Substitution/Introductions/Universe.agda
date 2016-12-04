@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Introductions.Universe where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Introductions.Universe {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.LogicalRelation

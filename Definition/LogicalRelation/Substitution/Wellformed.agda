@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Wellformed where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Wellformed {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties

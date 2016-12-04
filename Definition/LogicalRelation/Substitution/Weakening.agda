@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Weakening where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Weakening {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties

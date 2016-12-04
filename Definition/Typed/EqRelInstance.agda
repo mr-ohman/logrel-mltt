@@ -18,9 +18,14 @@ reductionₜ D d d' a'≡b' =
               (trans a'≡b' (sym (subset*Term d'))))
        (sym (subset* D))
 
-eqRelInstance : EqRelSet
+instance eqRelInstance : EqRelSet
 eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_
-                      (λ x → refl (U x)) (λ x → refl (ℕ x))
+                      (λ x → refl (U x)) (λ x → refl (ℕ x)) (λ x → refl (ℕ x))
+                      (λ x x₁ → refl (Π x ▹ x₁)) (λ x x₁ → refl (Π x ▹ x₁))
+                      (λ x x₁ → refl x) (λ x x₁ → refl x)
+                      (λ x → refl (zero x)) (λ x x₁ → refl (lam x x₁))
                       sym sym trans trans
                       reduction reductionₜ wkEq wkEqTerm
-                      (λ x → x) (λ x → x) conv
+                      (λ x → x) (λ x → x) conv univ
+                      app-cong (λ x x₁ → app-cong x (refl x₁))
+                      suc-cong Π-cong Π-cong natrec-cong fun-ext

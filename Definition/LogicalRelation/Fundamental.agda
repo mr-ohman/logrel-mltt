@@ -2,9 +2,13 @@ module Definition.LogicalRelation.Fundamental where
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
+
 open import Definition.Typed
 import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
+
+open import Definition.Typed.EqRelInstance
+
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Irrelevance
