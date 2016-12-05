@@ -71,8 +71,7 @@ lemma1 (univ x) = let a , b , c = lemma2 (U (wfTerm x)) x
 
 lemy : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
 lemy here here = PE.refl
-lemy (there n∷R) (there n∷T) with lemy n∷R n∷T
-lemy (there n∷R) (there n∷T) | PE.refl = PE.refl
+lemy (there n∷R) (there n∷T) rewrite lemy n∷R n∷T = PE.refl
 
 lem4 : ∀ {x A B Γ} → Γ ⊢ A → Γ ⊢ B → x ∷ A ∈ Γ → x ∷ B ∈ Γ → Γ ⊢ A ≡ B
 lem4 A B x∷A x∷B rewrite lemy x∷A x∷B = refl A

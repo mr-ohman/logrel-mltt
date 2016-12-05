@@ -13,8 +13,7 @@ infix 10 _⊢_[conv]_∷_
 mutual
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
     var    : ∀ {x A}
-           → ⊢ Γ
-           → x ∷ A ∈ Γ
+           → Γ ⊢ var x ∷ A
            → Γ ⊢ var x ~ var x ↑ A
     app    : ∀ {k l t v F G}
            → Γ ⊢ k ~ l ↑ Π F ▹ G
@@ -48,6 +47,7 @@ mutual
               → Neutral L
               → Γ ⊢ K [conv] L
     Π-cong    : ∀ {F G H E}
+              → Γ ⊢ F
               → Γ ⊢ F [conv] H
               → Γ ∙ F ⊢ G [conv] E
               → Γ ⊢ Π F ▹ G [conv] Π H ▹ E
@@ -80,6 +80,7 @@ mutual
               → Γ ⊢ m [conv] n ∷ ℕ
               → Γ ⊢ suc m [conv] suc n ∷ ℕ
     fun-ext   : ∀ {f g F G}
+              → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
               → Γ ∙ F ⊢ wk1 f ∘ var zero [conv] wk1 g ∘ var zero ∷ G

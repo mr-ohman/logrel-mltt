@@ -14,7 +14,7 @@ import Tools.PropositionalEquality as PE
 
 mutual
   ~-subset : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
-  ~-subset (var x x₁) = refl (var x x₁)
+  ~-subset (var x) = refl x
   ~-subset (app k~l x x₁) = app-cong (~-subset k~l) (convSubsetTerm x₁)
   ~-subset (suc k~l x) = suc-cong (~-subset k~l)
   ~-subset (natrec k~l x x₁ x₂ x₃) =
@@ -27,10 +27,8 @@ mutual
   convSubset (U-refl ⊢Γ) = refl (U ⊢Γ)
   convSubset (ℕ-refl ⊢Γ) = refl (ℕ ⊢Γ)
   convSubset (ne x x₁ x₂ x₃) = univ (~-subset x)
-  convSubset (Π-cong c c₁) =
-    let x = convSubset c
-        F = proj₁ (syntacticEq x)
-    in  Π-cong F x (convSubset c₁)
+  convSubset (Π-cong F c c₁) =
+    Π-cong F (convSubset c) (convSubset c₁)
 
   convSubsetTerm : ∀ {a b A Γ} → Γ ⊢ a [conv] b ∷ A → Γ ⊢ a ≡ b ∷ A
   convSubsetTerm (reduction x x₁ x₂ c) =
@@ -44,18 +42,12 @@ mutual
   convSubsetTerm (univ x x₁ x₂) = {!!}
   convSubsetTerm (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   convSubsetTerm (suc-cong c) = suc-cong (convSubsetTerm c)
-  convSubsetTerm (fun-ext x x₁ c) =
-    let q = proj₁ (syntacticΠ (syntacticTerm x))
-    in  fun-ext q x x₁ (convSubsetTerm c)
+  convSubsetTerm (fun-ext F x x₁ c) =
+    fun-ext F x x₁ (convSubsetTerm c)
 
 
 lemx : ∀ {m n A Γ} → Γ ⊢ var n ~ var m ↑ A → m PE.≡ n
-lemx (var x x₁) = PE.refl
-
-lemy : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
-lemy here here = PE.refl
-lemy (there n∷R) (there n∷T) with lemy n∷R n∷T
-lemy (there n∷R) (there n∷T) | PE.refl = PE.refl
+lemx (var x) = PE.refl
 
 mutual
   dec~ : ∀ {k l R T Γ}
@@ -64,7 +56,7 @@ mutual
        → Dec (∃ λ A → Γ ⊢ k ~ l ↑ A)
   dec~ (var x₁ x₂) (var x₃ x₄) (var m) (var n) with m ≟ n
   dec~ {T = T} (var x₁ x₂) (var x₃ x₄) (var n) (var .n) | yes PE.refl =
-    yes (T , var x₁ x₄)
+    yes (T , var (var x₃ x₄))
   dec~ (var x₁ x₂) (var x₃ x₄) (var m) (var n) | no ¬p =
     no (λ { (A , x) → ¬p (lemx x) })
 
