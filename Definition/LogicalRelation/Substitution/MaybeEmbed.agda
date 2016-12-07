@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.MaybeEmbed where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.MaybeEmbed {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance

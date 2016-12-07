@@ -3,6 +3,7 @@ module Definition.LogicalRelation.Consequences.Substitution where
 open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
+open import Definition.Typed.EqRelInstance
 import Definition.Typed.Weakening as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
@@ -43,7 +44,7 @@ wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
 
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ∷ Γ / ⊢Γ / ⊢Δ
-      → ∃ λ [Γ] → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
+      → ∃ λ [Γ] → _⊩ₛ_∷_/_/_ {{eqRelInstance}} Δ σ Γ [Γ] ⊢Δ
 fundamentalSubst ε ⊢Δ [σ] = ε , [σ]
 fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
   let [Γ] , [A] = fundamental ⊢A

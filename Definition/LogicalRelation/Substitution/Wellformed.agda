@@ -24,7 +24,7 @@ wellformedₛ [Γ] [A] =
   in  wellformed (irrelevance' (idSubst-lemma₀ _) (proj₁ ([A] ⊢Γ idSubst)))
 
 wellformedEqₛ : ∀ {A B l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-              → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≡ B
+              → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≅ B
 wellformedEqₛ [Γ] [A] [A≡B] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]

@@ -39,3 +39,4 @@ import Definition.LogicalRelation.Consequences.Injectivity
 import Definition.LogicalRelation.Consequences.Syntactic
 import Definition.LogicalRelation.Consequences.SingleSubst
 import Definition.LogicalRelation.Consequences.Inversion
+import Definition.LogicalRelation.Consequences.Substitution
