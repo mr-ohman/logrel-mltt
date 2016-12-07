@@ -105,6 +105,12 @@ lemma4 neK v∷R v∷T (β-red x x₁ x₂) =
       q = lemma3 {!{- Neutral (t [ a ]) → Neutral t -}!}
                  {!{- Γ ⊢ lam t ∷ Π F ▹ G → Γ ∙ F ⊢ t ∷ G -}!} x₁
   in  trans A≡G[a] (substTypeEq q (refl x₂))
-lemma4 neK v∷R v∷T (natrec-subst x x₁ x₂ d) = inversion-natrec v∷T
-lemma4 neK v∷R v∷T (natrec-zero x x₁ x₂) = inversion-natrec v∷T
-lemma4 neK v∷R v∷T (natrec-suc x x₁ x₂ x₃) = inversion-natrec v∷T
+lemma4 neK v∷R v∷T (natrec-subst x x₁ x₂ d) =
+  let _ , _ , _ , _ , d = inversion-natrec v∷T
+  in  d
+lemma4 neK v∷R v∷T (natrec-zero x x₁ x₂) =
+  let _ , _ , _ , _ , d = inversion-natrec v∷T
+  in  d
+lemma4 neK v∷R v∷T (natrec-suc x x₁ x₂ x₃) =
+  let _ , _ , _ , _ , d = inversion-natrec v∷T
+  in  d
