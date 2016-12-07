@@ -94,53 +94,69 @@ mutual
               → Δ ⊢ k ~ l ↑ A
   stability~ Γ≡Δ (var x) =
     var (stabilityTerm Γ≡Δ x)
-  stability~ Γ≡Δ (app k~l x x₁) =
-    app (stability~ Γ≡Δ k~l) (stabilityTerm Γ≡Δ x) (stabilityConvTerm Γ≡Δ x₁)
-  stability~ Γ≡Δ (suc k~l x) =
-    suc (stability~ Γ≡Δ k~l) (stabilityTerm Γ≡Δ x)
-  stability~ Γ≡Δ (natrec k~l x x₁ x₂ x₃) =
+  stability~ Γ≡Δ (app k~l x) =
+    app (stability~↓ Γ≡Δ k~l) (stabilityConvTerm↑ Γ≡Δ x)
+  stability~ Γ≡Δ (natrec x₁ x₂ x₃ k~l) =
     let [ ⊢Γ , _ , _ ] = substx Γ≡Δ
-    in natrec (stability~ Γ≡Δ k~l)
-              (stabilityTerm Γ≡Δ x)
-              (stabilityConv (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x₁)
-              (stabilityConvTerm Γ≡Δ x₂)
-              (stabilityConvTerm Γ≡Δ x₃)
+    in natrec (stabilityConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x₁)
+              (stabilityConvTerm↑ Γ≡Δ x₂)
+              (stabilityConvTerm↑ Γ≡Δ x₃)
+              (stability~↓ Γ≡Δ k~l)
+
+  stability~↓ : ∀ {k l A Γ Δ}
+              → ⊢ Γ ≡ Δ
+              → Γ ⊢ k ~ l ↓ A
+              → Δ ⊢ k ~ l ↓ A
+  stability~↓ Γ≡Δ ([~] A D whnfA k~l) =
+    [~] A (stabilityRed* Γ≡Δ D) whnfA (stability~ Γ≡Δ k~l)
+
+  stabilityConv↑ : ∀ {A B Γ Δ}
+                 → ⊢ Γ ≡ Δ
+                 → Γ ⊢ A [conv↑] B
+                 → Δ ⊢ A [conv↑] B
+  stabilityConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
+    [↑] A' B' (stabilityRed* Γ≡Δ D) (stabilityRed* Γ≡Δ D') whnfA' whnfB'
+        (stabilityConv Γ≡Δ A'<>B')
 
   stabilityConv : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
-                 → Γ ⊢ A [conv] B
-                 → Δ ⊢ A [conv] B
-  stabilityConv Γ≡Δ (reduction x x₁ A<>B) =
-    reduction (stabilityRed* Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) (stabilityConv Γ≡Δ A<>B)
+                 → Γ ⊢ A [conv↓] B
+                 → Δ ⊢ A [conv↓] B
   stabilityConv Γ≡Δ (U-refl x) =
     let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
     in  U-refl ⊢Δ
   stabilityConv Γ≡Δ (ℕ-refl x) =
     let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
     in  ℕ-refl ⊢Δ
-  stabilityConv Γ≡Δ (ne x x₁ x₂ x₃) =
-    ne (stability~ Γ≡Δ x) (stability Γ≡Δ x₁) x₂ x₃
+  stabilityConv Γ≡Δ (ne x) =
+    ne (stability~ Γ≡Δ x)
   stabilityConv Γ≡Δ (Π-cong F A<>B A<>B₁) =
-    Π-cong (stability Γ≡Δ F) (stabilityConv Γ≡Δ A<>B)
-           (stabilityConv (Γ≡Δ ∙ refl F) A<>B₁)
+    Π-cong (stability Γ≡Δ F) (stabilityConv↑ Γ≡Δ A<>B)
+           (stabilityConv↑ (Γ≡Δ ∙ refl F) A<>B₁)
+
+  stabilityConvTerm↑ : ∀ {t u A Γ Δ}
+                     → ⊢ Γ ≡ Δ
+                     → Γ ⊢ t [conv↑] u ∷ A
+                     → Δ ⊢ t [conv↑] u ∷ A
+  stabilityConvTerm↑ Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
+    [↑]ₜ B t' u' (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d)
+                 (stabilityRed*Term Γ≡Δ d') whnfB whnft' whnfu'
+                 (stabilityConvTerm Γ≡Δ t<>u)
 
   stabilityConvTerm : ∀ {t u A Γ Δ}
                      → ⊢ Γ ≡ Δ
-                     → Γ ⊢ t [conv] u ∷ A
-                     → Δ ⊢ t [conv] u ∷ A
-  stabilityConvTerm Γ≡Δ (reduction x x₁ x₂ t<>u) =
-    reduction (stabilityRed* Γ≡Δ x) (stabilityRed*Term Γ≡Δ x₁)
-              (stabilityRed*Term Γ≡Δ x₂) (stabilityConvTerm Γ≡Δ t<>u)
-  stabilityConvTerm Γ≡Δ (ℕ-ins x x₁ x₂) =
-    ℕ-ins (stability~ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) (stabilityTerm Γ≡Δ x₂)
-  stabilityConvTerm Γ≡Δ (ne-ins x x₁ x₂ x₃) =
-    ne-ins (stability~ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) (stabilityTerm Γ≡Δ x₂) x₃
+                     → Γ ⊢ t [conv↓] u ∷ A
+                     → Δ ⊢ t [conv↓] u ∷ A
+  stabilityConvTerm Γ≡Δ (ℕ-ins x x₁) =
+    ℕ-ins (stability~ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁)
+  stabilityConvTerm Γ≡Δ (ne-ins x x₁ x₃) =
+    ne-ins (stability~ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) x₃
   stabilityConvTerm Γ≡Δ (univ x x₁ x₂) =
-    univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv Γ≡Δ x₂)
+    univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv↑ Γ≡Δ x₂)
   stabilityConvTerm Γ≡Δ (zero-refl x) =
     let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
     in  zero-refl ⊢Δ
-  stabilityConvTerm Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConvTerm Γ≡Δ t<>u)
+  stabilityConvTerm Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConvTerm↑ Γ≡Δ t<>u)
   stabilityConvTerm Γ≡Δ (fun-ext F x x₁ t<>u) =
     fun-ext (stability Γ≡Δ F) (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)
-            (stabilityConvTerm (Γ≡Δ ∙ refl F) t<>u)
+            (stabilityConvTerm↑ (Γ≡Δ ∙ refl F) t<>u)
