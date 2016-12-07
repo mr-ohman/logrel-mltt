@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Introductions.Application where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Introductions.Application {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped hiding (wk)
 import Definition.Untyped as U
@@ -26,7 +29,7 @@ appTerm' : ∀ {F G t u Γ l l'}
           ([t] : Γ ⊩⟨ l ⟩ t ∷ Π F ▹ G / Π-intr [ΠFG])
           ([u] : Γ ⊩⟨ l' ⟩ u ∷ F / [F])
         → Γ ⊩⟨ l' ⟩ t ∘ u ∷ G [ u ] / [G[u]]
-appTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G [F'] [G'] G-ext)) (_ , _ , [t]) [u] =
+appTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F'] [G'] G-ext)) (_ , _ , _ , [t]) [u] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F≡idF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
       idG'ᵤ≡Gᵤ = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
@@ -57,8 +60,8 @@ app-congTerm' : ∀ {F G t t' u u' Γ l l'}
           ([u'] : Γ ⊩⟨ l' ⟩ u' ∷ F / [F])
           ([u≡u'] : Γ ⊩⟨ l' ⟩ u ≡ u' ∷ F / [F])
         → Γ ⊩⟨ l' ⟩ t ∘ u ≡ t' ∘ u' ∷ G [ u ] / [G[u]]
-app-congTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G [F]₁ [G] G-ext))
-              (t≡t' , [t] , (⊢t' , [t'a≡t'b] , [t'a]) , [ta≡t'a])
+app-congTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
+              (t≡t' , [t] , (⊢t' , t≡t , [t'a≡t'b] , [t'a]) , [ta≡t'a])
               [u] [u'] [u≡u'] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F≡wkidF' = PE.trans F≡F' (PE.sym (wk-id _ 0))

@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Properties.Conversion where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Properties.Conversion {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Typed
@@ -20,13 +23,16 @@ mutual
              → Γ ⊩⟨ l ⟩  t ∷ A / [A]
              → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
   convTermT₁ (ℕ D D') A≡B t = t
-  convTermT₁ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t =
-    conv t (wellformedEq {l} (ne' K D neK) A≡B)
-  convTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
-             (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (⊢t , ⊩t , [t]₁) =
+  convTermT₁ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B (neₜ ⊢t t≡t) =
+    let A≅B = wellformedEq {l} (ne' K D neK K≡K) A≡B
+    in  neₜ (conv ⊢t (≅-eq A≅B))
+            (≅-conv t≡t A≅B)
+  convTermT₁ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
+             (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (Πₜ ⊢t t≡t ⊩t [t]₁) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
-    in  conv ⊢t A≡B
+    in  conv ⊢t (≅-eq A≡B)
+    ,   ≅-conv t≡t A≡B
     ,   (λ ρ ⊢Δ [a] [b] [a≡b] →
                         -- TODO Add new irrelevance function for these cases,
                         --      since only the second part is relevant here.
@@ -60,13 +66,16 @@ mutual
            → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
   convTermT₂ (ℕ D D') A≡B t = t
-  convTermT₂ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t =
-    conv t (sym (wellformedEq {l} (ne' K D neK) A≡B))
-  convTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
-             (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (⊢t , ⊩t , [t]₁) =
+  convTermT₂ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B (neₜ ⊢t t≡t) =
+    let B≅A = ≅-sym (wellformedEq {l} (ne' K D neK K≡K) A≡B)
+    in  neₜ (conv ⊢t (≅-eq B≅A))
+            (≅-conv t≡t B≅A)
+  convTermT₂ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
+             (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (Πₜ ⊢t t≡t ⊩t [t]₁) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
-    in  conv ⊢t (sym A≡B)
+    in  conv ⊢t (sym (≅-eq A≡B))
+    ,   ≅-conv t≡t (≅-sym A≡B)
     ,   (λ ρ ⊢Δ [a] [b] [a≡b] →
            let [F≡F₁] = irrelevanceEqR' (PE.cong (wkₜ ρ) (PE.sym F₁≡F'))
                                         ([F] ρ ⊢Δ) ([F≡F'] ρ ⊢Δ)
@@ -119,16 +128,16 @@ mutual
                → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
                → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
   convEqTermT₁ (ℕ D D') A≡B t≡u = t≡u
-  convEqTermT₁ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t≡u =
-    conv t≡u (wellformedEq {l} (ne' K D neK) A≡B)
-  convEqTermT₁ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+  convEqTermT₁ {l} (ne (ne K D neK K≡K) (ne _ _ _ _)) A≡B t≡u =
+    ≅-conv t≡u (wellformedEq {l} (ne' K D neK K≡K) A≡B)
+  convEqTermT₁ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])
                (t≡u , ⊩t , ⊩u , [t≡u]) =
-    let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-        [B] = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+    let [A] = Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+        [B] = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)
         [A≡B] = (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])
-    in  conv t≡u A≡B , convTerm₁ [A] [B] [A≡B] ⊩t , convTerm₁ [A] [B] [A≡B] ⊩u
+    in  ≅-conv t≡u A≡B , convTerm₁ [A] [B] [A≡B] ⊩t , convTerm₁ [A] [B] [A≡B] ⊩u
      ,  (λ ρ ⊢Δ [a] →
            let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
                [F≡F₁] = irrelevanceEqR' (PE.cong (wkₜ ρ) (PE.sym F₁≡F'))
@@ -150,17 +159,17 @@ mutual
              → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
   convEqTermT₂ (ℕ D D') A≡B t≡u = t≡u
-  convEqTermT₂ {l} (ne (ne K D neK) (ne _ _ _)) A≡B t≡u =
-    conv t≡u (sym (wellformedEq {l} (ne' K D neK) A≡B))
-  convEqTermT₂ (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+  convEqTermT₂ {l} (ne (ne K D neK K≡K) (ne _ _ _ _)) A≡B t≡u =
+    ≅-conv t≡u (≅-sym (wellformedEq {l} (ne' K D neK K≡K) A≡B))
+  convEqTermT₂ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                  (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])
                (t≡u , ⊩t , ⊩u , [t≡u]) =
-    let [A] = Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-        [B] = Π (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁)
+    let [A] = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext
+        [B] = Π' F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁
         [A≡B] = (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])
-    in  conv t≡u (sym A≡B) , convTerm₂ [A] [B] [A≡B] ⊩t
-                           , convTerm₂ [A] [B] [A≡B] ⊩u
+    in  ≅-conv t≡u (≅-sym A≡B) , convTerm₂ [A] [B] [A≡B] ⊩t
+                               , convTerm₂ [A] [B] [A≡B] ⊩u
      ,  (λ ρ ⊢Δ [a] →
            let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
                [F≡F₁] = irrelevanceEqR' (PE.cong (wkₜ ρ) (PE.sym F₁≡F'))

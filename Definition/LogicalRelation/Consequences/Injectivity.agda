@@ -9,6 +9,8 @@ open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 
+open import Definition.Typed.EqRelInstance
+
 open import Definition.LogicalRelation
 import Definition.LogicalRelation.Weakening as LR
 open import Definition.LogicalRelation.Irrelevance
@@ -43,7 +45,7 @@ injectivity'' : ∀ {F G H E Γ l}
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-injectivity'' (noemb (Π F G D ⊢F ⊢G [F] [G] G-ext))
+injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)

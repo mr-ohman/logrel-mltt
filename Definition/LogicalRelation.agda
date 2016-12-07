@@ -1,7 +1,10 @@
-module Definition.LogicalRelation where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
-open import Definition.Typed
+open import Definition.Typed hiding (_⊢_≡_; _⊢_≡_∷_)
 open import Definition.Typed.Weakening
 
 open import Tools.Product
@@ -20,6 +23,7 @@ record _⊩ne_ (Γ : Con Term) (A : Term) : Set where
     K   : Term
     D   : Γ ⊢ A :⇒*: K
     neK : Neutral K
+    K≡K : Γ ⊢ K ≅ K
 
 record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
   constructor ne₌
@@ -28,13 +32,17 @@ record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
     M   : Term
     D'  : Γ ⊢ B :⇒*: M
     neM : Neutral M
-    K≡M : Γ ⊢ K ≡ M
+    K≡M : Γ ⊢ K ≅ M
 
-_⊩ne_∷_ : (Γ : Con Term) (t A : Term) → Set
-Γ ⊩ne t ∷ A = Γ ⊢ t ∷ A
+-- Make this a record
+record _⊩ne_∷_ (Γ : Con Term) (t A : Term) : Set where
+  constructor neₜ
+  field
+    ⊢t  : Γ ⊢ t ∷ A
+    t≡t : Γ ⊢ t ≅ t ∷ A
 
 _⊩ne_≡_∷_ : (Γ : Con Term) (t u A : Term) → Set
-Γ ⊩ne t ≡ u ∷ A = Γ ⊢ t ≡ u ∷ A
+Γ ⊩ne t ≡ u ∷ A = Γ ⊢ t ≅ u ∷ A
 
 -- Natural numbers
 
@@ -46,7 +54,7 @@ _⊩ℕ_≡_ : (Γ : Con Term) (A B : Term) → Set
 
 mutual
   data _⊩ℕ_∷ℕ (Γ : Con Term) (t : Term) : Set where
-    ℕₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ)
+    ℕₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ) (n≡n : Γ ⊢ n ≅ n ∷ ℕ)
          (natN : Natural n) (prop : natural-prop Γ n natN)
        → Γ ⊩ℕ t ∷ℕ
 
@@ -58,7 +66,7 @@ mutual
 mutual
   data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
     ℕₜ₌ : (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
-          (t≡u : Γ ⊢ t ≡ u ∷ ℕ)
+          (k≡k' : Γ ⊢ k ≅ k' ∷ ℕ)
           (prop : [Natural]-prop Γ k k') → Γ ⊩ℕ t ≡ u ∷ℕ
 
   data [Natural]-prop (Γ : Con Term) : (n n' : Term) → Set where
@@ -113,8 +121,9 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     constructor Uₜ
     open LogRelKit (rec l<)
     field
-      ⊢t : Γ ⊢ t ∷ U
-      ⊩t : Γ ⊩ t
+      ⊢t  : Γ ⊢ t ∷ U
+      t≡t : Γ ⊢ t ≅ t ∷ U
+      ⊩t  : Γ ⊩ t
 
   record _⊩¹U_≡_∷U/_ {l'} (Γ : Con Term) (t u : Term) (l< : l' < l) : Set where
     constructor Uₜ₌
@@ -122,7 +131,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     field
       ⊢t    : Γ ⊢ t ∷ U
       ⊢u    : Γ ⊢ u ∷ U
-      t≡u   : Γ ⊢ t ≡ u ∷ U
+      t≡u   : Γ ⊢ t ≅ u ∷ U
       ⊩t    : Γ ⊩ t
       ⊩u    : Γ ⊩ u
       [t≡u] : Γ ⊩ t ≡ u / ⊩t
@@ -180,6 +189,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         D : Γ ⊢ A :⇒*: Π F ▹ G
         ⊢F : Γ ⊢ F
         ⊢G : Γ ∙ F ⊢ G
+        A≡A : Γ ⊢ A ≅ A
         [F] : wk-prop¹ Γ F
         [G] : wk-subst-prop¹ Γ F G [F]
         G-ext : wk-substEq-prop¹ Γ F G [F] [G]
@@ -192,7 +202,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         F'     : Term
         G'     : Term
         D'     : Γ ⊢ B ⇒* Π F' ▹ G'
-        A≡B    : Γ ⊢ A ≡ B
+        A≡B    : Γ ⊢ A ≅ B
         [F≡F'] : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
         [G≡G'] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                        → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
@@ -200,15 +210,16 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     -- Issue: Agda complains about record use not being strictly positive.
     --        Therefore we have to use ×
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
-    Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G [F] [G] G-ext =
-      Γ ⊢ t ∷ A × wk-fun-ext-prop¹ Γ F G t [F] [G]
+    Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
+      Γ ⊢ t ∷ A × Γ ⊢ t ≅ t ∷ A
+                × wk-fun-ext-prop¹ Γ F G t [F] [G]
                 × wk-subst-prop-T¹ Γ F G [F] [G] t
 
     -- Issue: Same as above.
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹Π A) → Set
-    Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G [F] [G] G-ext =
-      let [A] = Π F G D ⊢F ⊢G [F] [G] G-ext
-      in  Γ ⊢ t ≡ u ∷ A
+    Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
+      let [A] = Π F G D ⊢F ⊢G A≡A [F] [G] G-ext
+      in  Γ ⊢ t ≅ u ∷ A
       ×   Γ ⊩¹Π t ∷ A / [A]
       ×   Γ ⊩¹Π u ∷ A / [A]
       ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
@@ -256,12 +267,12 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
 open LogRel public using (U; ℕ; ne; Π; emb; Uₜ; Uₜ₌; Π₌)
 
 -- Patterns for the non-records of Π
-pattern Πₜ a b c = a , b , c
+pattern Πₜ a b c d = a , b , c , d
 pattern Πₜ₌ a b c d = a , b , c , d
 
 pattern U'  a b c = U (U a b c)
-pattern ne' a b c = ne (ne a b c)
-pattern Π'  a b c d e f g h = Π (Π a b c d e f g h)
+pattern ne' a b c d = ne (ne a b c d)
+pattern Π'  a b c d e f g h i = Π (Π a b c d e f g h i)
 
 logRelRec : ∀ l {l'} → l' < l → LogRelKit
 logRelRec ⁰ = λ ()

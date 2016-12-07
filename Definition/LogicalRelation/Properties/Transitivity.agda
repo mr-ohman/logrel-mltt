@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Properties.Transitivity where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Properties.Transitivity {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped as U
 open import Definition.Typed
@@ -22,16 +25,18 @@ mutual
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
   transEqT (ℕ D D') (ℕ _ D'') A≡B B≡C = B≡C
-  transEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne ._ (ne K₂ D₂ neK₂))
-           (ne₌ M D' neM K≡M) (ne₌ M₁ D'' neM₁ K≡M₁) =
+  transEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne ._ (ne K₂ D₂ neK₂ K≡K₂))
+           (ne₌ M D' neM K≡M) (ne₌ M₁ D'' neM₁ K≡M₁)
+           rewrite whrDet*' (red D₁ , ne neK₁) (red D' , ne neM)
+                 | whrDet*' (red D₂ , ne neK₂) (red D'' , ne neM₁) =
     ne₌ M₁  D''  neM₁
-        (trans K≡M (trans (trans (sym (subset* (red D')))
-                                 (subset* (red D₁)))
-                           K≡M₁))
+        (≅-trans K≡M K≡M₁) --(trans K≡M (trans (trans (sym (subset* (red D')))
+          --                       (subset* (red D₁)))
+          --                 K≡M₁))
   transEqT {Γ} {l = l} {l' = l′} {l'' = l″}
-           (Π (Π F G D ⊢F ⊢G [F] [G] G-ext)
-              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
-           (Π ._ (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ [F]₂ [G]₂ G-ext₂))
+           (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
+           (Π ._ (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
            (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
            (Π₌ F″ G″ D″ A≡B₁ [F≡F′]₁ [G≡G′]₁) =
     let F₁≡F′  , G₁≡G′  = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D′  , Π))
@@ -68,7 +73,7 @@ mutual
           in  irrelevanceEq' (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) G₁≡G′)
                              ([G]₁ ρ ⊢Δ [a]₁) ([G′] ρ ⊢Δ [a′])
                              ([G≡G′]₁ ρ ⊢Δ [a]₁)
-    in  Π₌ F″ G″ D″ (trans A≡B A≡B₁)
+    in  Π₌ F″ G″ D″ (≅-trans A≡B A≡B₁)
            (λ ρ ⊢Δ → transEq ([F] ρ ⊢Δ) ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ)
                              ([F≡F′] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ))
            (λ ρ ⊢Δ [a] →
@@ -108,7 +113,7 @@ mutual
         k'Whnf = naturalWhnf (proj₂ (split prop))
         k₁≡k' = whrDet* (redₜ d₁ , k₁Whnf) (redₜ d' , k'Whnf)
         prop' = PE.subst (λ x → [Natural]-prop _ x _) k₁≡k' prop₁
-    in  ℕₜ₌ k k'' d d'' (trans t≡u t≡u₁)
+    in  ℕₜ₌ k k'' d d'' (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k' t≡u₁))
             (transNatural-prop prop prop')
 
   transNatural-prop : ∀ {Γ k k' k''}
@@ -120,7 +125,7 @@ mutual
   transNatural-prop zero prop₁ = prop₁
   transNatural-prop prop zero = prop
   transNatural-prop (ne x () x₂) (suc x₃)
-  transNatural-prop (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (trans x₂ x₅)
+  transNatural-prop (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (≅ₜ-trans x₂ x₅)
 
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -130,14 +135,14 @@ transEqTerm : ∀ {l Γ A t u v}
 transEqTerm (U' .⁰ 0<1 ⊢Γ)
             (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u])
             (Uₜ₌ ⊢t₁ ⊢u₁ t≡u₁ ⊩t₁ ⊩u₁ [t≡u]₁) =
-  Uₜ₌ ⊢t ⊢u₁ (trans t≡u t≡u₁) ⊩t ⊩u₁
+  Uₜ₌ ⊢t ⊢u₁ (≅ₜ-trans t≡u t≡u₁) ⊩t ⊩u₁
       (transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁))
 transEqTerm (ℕ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
-transEqTerm (ne' _ _ _) t≡u u≡v = trans t≡u u≡v
-transEqTerm (Π' F G D ⊢F ⊢G [F] [G] G-ext)
+transEqTerm (ne' _ _ _ _) t≡u u≡v = ≅ₜ-trans t≡u u≡v
+transEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (t≡u , ⊩t , ⊩u , [t≡u])
             (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =
-  trans t≡u t≡u₁ , ⊩t , ⊩u₁
+  ≅ₜ-trans t≡u t≡u₁ , ⊩t , ⊩u₁
     , (λ ρ ⊢Δ [a] → transEqTerm ([G] ρ ⊢Δ [a])
                                 ([t≡u] ρ ⊢Δ [a])
                                 ([t≡u]₁ ρ ⊢Δ [a]))

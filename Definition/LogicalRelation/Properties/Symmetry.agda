@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Properties.Symmetry where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Properties.Symmetry {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped as U
 open import Definition.Typed
@@ -19,10 +22,11 @@ mutual
          → Γ ⊩⟨ l  ⟩ A ≡ B / [A]
          → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEqT (ℕ D D') A≡B = red D
-  symEqT (ne (ne K D neK) (ne K₁ D₁ neK₁)) (ne₌ M D' neM K≡M) =
-    ne₌ _  D  neK
-        (trans (sym (subset* (red D₁))) (trans (subset* (red D')) (sym K≡M)))
-  symEqT (Π (Π F G D ⊢F ⊢G [F] [G] G-ext) (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ [F]₁ [G]₁ G-ext₁))
+  symEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D' neM K≡M)
+         rewrite whrDet*' (red D' , ne neM) (red D₁ , ne neK₁) =
+    ne₌ _ D neK
+        (≅-sym K≡M) --(trans (sym (subset* (red D₁))) (trans (subset* (red D')) (sym K≡M)))
+  symEqT (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
         [F₁≡F] : ∀ {Δ} ρ ⊢Δ → _
@@ -33,7 +37,7 @@ mutual
                              ([ρF'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ)
                              (symEq ([F] ρ ⊢Δ) ([ρF'] ρ ⊢Δ)
                                     ([F≡F'] ρ ⊢Δ))
-    in  Π₌ _ _ (red D) (sym A≡B)
+    in  Π₌ _ _ (red D) (≅-sym A≡B)
           [F₁≡F]
           (λ ρ ⊢Δ [a] →
                let ρG'a≡ρG₁'a = PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')
@@ -58,18 +62,18 @@ symNatural-prop : ∀ {Γ k k'}
                 → [Natural]-prop Γ k k'
                 → [Natural]-prop Γ k' k
 symNatural-prop (suc (ℕₜ₌ k k' d d' t≡u prop)) =
-  suc (ℕₜ₌ k' k d' d (sym t≡u) (symNatural-prop prop))
+  suc (ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop))
 symNatural-prop zero = zero
-symNatural-prop (ne x x₁ prop) = ne x₁ x (sym prop)
+symNatural-prop (ne x x₁ prop) = ne x₁ x (≅ₜ-sym prop)
 
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
 symEqTerm (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
-  Uₜ₌ ⊢u ⊢t (sym t≡u) ⊩u ⊩t (symEq ⊩t ⊩u [t≡u])
+  Uₜ₌ ⊢u ⊢t (≅ₜ-sym t≡u) ⊩u ⊩t (symEq ⊩t ⊩u [t≡u])
 symEqTerm (ℕ D) (ℕₜ₌ k k' d d' t≡u prop) =
-  ℕₜ₌ k' k d' d (sym t≡u) (symNatural-prop prop)
-symEqTerm (ne' K D neK) t≡u = sym t≡u
-symEqTerm (Π' F G D ⊢F ⊢G [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
-  sym t≡u , ⊩u , ⊩t , (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]))
+  ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop)
+symEqTerm (ne' K D neK K≡K) t≡u = ≅ₜ-sym t≡u
+symEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
+  ≅ₜ-sym t≡u , ⊩u , ⊩t , (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

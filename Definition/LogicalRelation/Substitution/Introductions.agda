@@ -1,4 +1,6 @@
-module Definition.LogicalRelation.Substitution.Introductions where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Introductions {{eqrel : EqRelSet}} where
 
 open import Definition.LogicalRelation.Substitution.Introductions.Application public
 open import Definition.LogicalRelation.Substitution.Introductions.Lambda public
