@@ -5,6 +5,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.LogicalRelation.Consequences.InverseUniv
 
 open import Tools.Nat
 open import Tools.Product
@@ -48,7 +49,7 @@ mutual
   --   in  conv (trans x₁' (trans c' (sym x₂'))) (sym x')
   convSubsetTerm (ℕ-ins x x₁) = conv (~-subset x) {!!}
   convSubsetTerm (ne-ins x x₁ x₂) = conv (~-subset x) {!!}
-  convSubsetTerm (univ x x₁ x₂) = {!!}
+  convSubsetTerm (univ x x₁ x₂) = inverseUnivEq x (convSubset↑ x₂)
   convSubsetTerm (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   convSubsetTerm (suc-cong c) = suc-cong (convSubsetTerm↑ c)
   convSubsetTerm (fun-ext F x x₁ c) =
