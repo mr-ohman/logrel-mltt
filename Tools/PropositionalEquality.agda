@@ -39,3 +39,7 @@ subst F refl f = f
 subst₂ : ∀ {A B : Set} {a a' b b'} (F : A → B → Set)
        → a ≡ a' → b ≡ b' → F a b → F a' b'
 subst₂ F refl refl f = f
+
+subst₃ : ∀ {A B C : Set} {a a' b b' c c'} (F : A → B → C → Set)
+       → a ≡ a' → b ≡ b' → c ≡ c' → F a b c → F a' b' c'
+subst₃ F refl refl refl f = f

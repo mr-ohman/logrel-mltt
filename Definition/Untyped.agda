@@ -166,6 +166,15 @@ wkNatural ρ suc = suc
 wkNatural ρ zero = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
+wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
+wkWhnf ρ U = U
+wkWhnf ρ Π = Π
+wkWhnf ρ ℕ = ℕ
+wkWhnf ρ lam = lam
+wkWhnf ρ zero = zero
+wkWhnf ρ suc = suc
+wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
+
 -- Weakening of an instance of the [Natural] view.
 
 -- wk[Natural] : ∀ {t u} ρ
