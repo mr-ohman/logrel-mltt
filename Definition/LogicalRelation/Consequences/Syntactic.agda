@@ -3,6 +3,7 @@ module Definition.LogicalRelation.Consequences.Syntactic where
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
+open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Wellformed
