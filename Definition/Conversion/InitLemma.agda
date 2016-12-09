@@ -9,6 +9,7 @@ open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.Injectivity
 open import Definition.LogicalRelation.Consequences.SingleSubst
 open import Definition.LogicalRelation.Consequences.Inversion
+import Definition.LogicalRelation.Consequences.Inequality as WF
 
 open import Tools.Empty
 open import Tools.Nat
@@ -27,10 +28,6 @@ natrec-subst* F z s (x ⇨ y) =
   (conv* (natrec-subst* F z s y)
          (sym (substTypeEq (refl F) (subsetTerm x))))
 
-ℕOnlyInU : ∀ {A Γ} → A PE.≢ U → Γ ⊢ ℕ ∷ A → ⊥
-ℕOnlyInU A≢U (ℕ x) = ⊥-elim (A≢U PE.refl)
-ℕOnlyInU A≢U (conv ⊢ℕ x) = {!!}
-
 lemma2 : ∀ {a A Γ} → Γ ⊢ A → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a ⇒* b ∷ A
 lemma2 A (ℕ x) = ℕ , ℕ , id (ℕ x)
 lemma2 A (Π a ▹ a₁) = Π _ ▹ _ , Π , id (Π a ▹ a₁)
@@ -40,21 +37,46 @@ lemma2 A (a₁ ∘ a₂) with lemma2 (syntacticTerm a₁) a₁
 lemma2 A (a₁ ∘ a₂) | .U , U , proj₃ =
   let _ , _ , q = syntacticRedTerm proj₃
   in  ⊥-elim (UnotInA q)
-lemma2 A₁ (a₁ ∘ a₂) | _ , Π , proj₃ = {!!} -- refutable
-lemma2 A (a₁ ∘ a₂) | .ℕ , ℕ , proj₃ = {!!} -- refutable
+lemma2 A₁ (a₁ ∘ a₂) | _ , Π , proj₃ =
+  let _ , _ , Π∷Π = syntacticRedTerm proj₃
+      Π≡U = inversion-Π Π∷Π
+  in  ⊥-elim (WF.U≢Π (sym Π≡U))
+lemma2 A (a₁ ∘ a₂) | .ℕ , ℕ , proj₃ =
+  let _ , _ , ℕ∷Π = syntacticRedTerm proj₃
+      Π≡U = inversion-ℕ ℕ∷Π
+  in  ⊥-elim (WF.U≢Π (sym Π≡U))
 lemma2 A (a₁ ∘ a₂) | _ , lam , red =
-  let q , w , e = lemma2 {!!} {!!}
+  let _ , _ , y = syntacticRedTerm red
+      _ , _ , r , t = inversion-lam y
+      q , w , e = lemma2 {!!} {!!}
   in  q , w , (app-subst* red a₂ ⇨∷* (β-red (syntacticTerm a₂) {!!} a₂ ⇨ e))
-lemma2 A (a₁ ∘ a₂) | .zero , zero , proj₃ = {!!} -- refutable
-lemma2 A (a₁ ∘ a₂) | _ , suc , proj₃ = {!!} -- refutable
+lemma2 A (a₁ ∘ a₂) | .zero , zero , proj₃ =
+  let _ , _ , zero∷Π = syntacticRedTerm proj₃
+      Π≡ℕ = inversion-zero zero∷Π
+  in  ⊥-elim (WF.ℕ≢Π (sym Π≡ℕ))
+lemma2 A (a₁ ∘ a₂) | _ , suc , proj₃ =
+  let _ , _ , suc∷Π = syntacticRedTerm proj₃
+      Π≡ℕ = inversion-suc suc∷Π
+  in  ⊥-elim (WF.ℕ≢Π (sym Π≡ℕ))
 lemma2 A (a₁ ∘ a₂) | n , ne x , red = _ , ne (_∘_ x) , app-subst* red a₂
 lemma2 A (zero x) = zero , zero , id (zero x)
 lemma2 A (suc a) = suc _ , suc , id (suc a)
 lemma2 A (natrec x a a₁ a₂) with lemma2 (syntacticTerm a₂) a₂
-lemma2 A (natrec x a a₁ a₂) | .U , U , proj₃ = {!!} -- refutable
-lemma2 A₁ (natrec x a a₁ a₂) | _ , Π , proj₃ = {!!} -- refutable
-lemma2 A (natrec x a a₁ a₂) | .ℕ , ℕ , proj₃ = {!!} -- refutable
-lemma2 A (natrec x a a₁ a₂) | _ , lam , proj₃ = {!!} -- refutable
+lemma2 A (natrec x a a₁ a₂) | .U , U , proj₃ =
+  let _ , _ , q = syntacticRedTerm proj₃
+  in  ⊥-elim (UnotInA q)
+lemma2 A₁ (natrec x a a₁ a₂) | _ , Π , proj₃ =
+  let _ , _ , Π∷ℕ = syntacticRedTerm proj₃
+      ℕ≡U = inversion-Π Π∷ℕ
+  in  ⊥-elim (WF.U≢ℕ (sym ℕ≡U))
+lemma2 A (natrec x a a₁ a₂) | .ℕ , ℕ , proj₃ =
+  let _ , _ , ℕ∷ℕ = syntacticRedTerm proj₃
+      ℕ≡U = inversion-ℕ ℕ∷ℕ
+  in  ⊥-elim (WF.U≢ℕ (sym ℕ≡U))
+lemma2 A (natrec x a a₁ a₂) | _ , lam , proj₃ =
+  let _ , _ , lam∷ℕ = syntacticRedTerm proj₃
+      _ , _ , _ , ℕ≡Π = inversion-lam lam∷ℕ
+  in  ⊥-elim (WF.ℕ≢Π ℕ≡Π)
 lemma2 A (natrec x a a₁ a₂) | .zero , zero , proj₃ = {!!}
 lemma2 A (natrec x a a₁ a₂) | _ , suc , proj₃ = {!!}
 lemma2 A (natrec x₁ a a₁ a₂) | n , ne x , proj₃ =
