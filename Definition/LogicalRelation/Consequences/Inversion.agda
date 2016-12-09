@@ -12,6 +12,14 @@ open import Tools.Context
 open import Tools.Product
 
 
+inversion-ℕ : ∀ {Γ C} → Γ ⊢ ℕ ∷ C → Γ ⊢ C ≡ U
+inversion-ℕ (ℕ x) = refl (U x)
+inversion-ℕ (conv x x₁) = trans (sym x₁) (inversion-ℕ x)
+
+inversion-Π : ∀ {F G Γ C} → Γ ⊢ Π F ▹ G ∷ C → Γ ⊢ C ≡ U
+inversion-Π (Π x ▹ x₁) = refl (U (wfTerm x))
+inversion-Π (conv x x₁) = trans (sym x₁) (inversion-Π x)
+
 inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
 inversion-zero (zero x) = refl (ℕ x)
 inversion-zero (conv x x₁) = trans (sym x₁) (inversion-zero x)
