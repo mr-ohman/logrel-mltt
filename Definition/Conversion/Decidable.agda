@@ -18,6 +18,36 @@ import Tools.PropositionalEquality as PE
 lemx : ∀ {m n A Γ} → Γ ⊢ var n ~ var m ↑ A → n PE.≡ m
 lemx (var x) = PE.refl
 
+decNeutral : (t : Term) → Dec (Neutral t)
+decNeutral U = no (λ ())
+decNeutral (Π t ▹ t₁) = no (λ ())
+decNeutral ℕ = no (λ ())
+decNeutral (var x) = yes (var x)
+decNeutral (lam t) = no (λ ())
+decNeutral (t ∘ t₁) with decNeutral t
+decNeutral (t ∘ t₁) | yes p = yes (_∘_ p)
+decNeutral (t ∘ t₁) | no ¬p = no (λ { (_∘_ x) → ¬p x })
+decNeutral zero = no (λ ())
+decNeutral (suc t) = no (λ ())
+decNeutral (natrec t t₁ t₂ t₃) with decNeutral t₃
+decNeutral (natrec t t₁ t₂ t₃) | yes p = yes (natrec p)
+decNeutral (natrec t t₁ t₂ t₃) | no ¬p = no (λ { (natrec x) → ¬p x })
+
+decWhnf : (t : Term) → Dec (Whnf t)
+decWhnf U = yes U
+decWhnf (Π t ▹ t₁) = yes Π
+decWhnf ℕ = yes ℕ
+decWhnf (var x) = yes (ne (var x))
+decWhnf (lam t) = yes lam
+decWhnf (t ∘ t₁) with decNeutral (t ∘ t₁)
+decWhnf (t ∘ t₁) | yes p = yes (ne p)
+decWhnf (t ∘ t₁) | no ¬p = no (λ { (ne x) → ¬p x })
+decWhnf zero = yes zero
+decWhnf (suc t) = yes suc
+decWhnf (natrec t t₁ t₂ t₃) with decNeutral (natrec t t₁ t₂ t₃)
+decWhnf (natrec t t₁ t₂ t₃) | yes p = yes (ne p)
+decWhnf (natrec t t₁ t₂ t₃) | no ¬p = no (λ { (ne x) → ¬p x })
+
 mutual
   dec~↑ : ∀ {k l R T Γ}
        → Γ ⊢ k ∷ R → Γ ⊢ l ∷ T
@@ -63,22 +93,33 @@ mutual
 
 
   decConv↑ : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A [conv↑] B)
-  decConv↑ A B = {!!}
+  decConv↑ A B with decConv↓ A B {!!} {!!}
+  decConv↑ A B | yes p = {!!}
+  decConv↑ A B | no ¬p =
+    no (λ { ([↑] A' B' D D' whnfA' whnfB' A'<>B') → ¬p {!!} })
 
-  decConv↓ : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A [conv↓] B)
-  decConv↓ A B = {!!}
+  decConv↓ : ∀ {A B Γ}
+           → Γ ⊢ A → Γ ⊢ B
+           → Whnf A → Whnf B
+           → Dec (Γ ⊢ A [conv↓] B)
+  decConv↓ A B whnfA whnfB = {!!}
 
 
-  decConvTerm↑ : ∀ {t u A Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t [conv↑] u ∷ A)
-  decConvTerm↑ t u = {!!}
+  decConv↑Term : ∀ {t u A Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t [conv↑] u ∷ A)
+  decConv↑Term t u with decConv↓Term t u {!!} {!!} {!!}
+  decConv↑Term t₁ u₁ | yes p = {!!}
+  decConv↑Term t₁ u₁ | no ¬p =
+    no (λ { ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) → ¬p {!!} } )
 
-  decConvTerm↓ : ∀ {t u A Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t [conv↓] u ∷ A)
-  decConvTerm↓ t u = {!!}
+  decConv↓Term : ∀ {t u A Γ}
+               → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A
+               → Whnf t → Whnf u → Whnf A
+               → Dec (Γ ⊢ t [conv↓] u ∷ A)
+  decConv↓Term t u = {!!}
 
 
-  decConv' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
-           → Dec (Γ ⊢ A [conv↓] B) × Dec (Γ ⊢ t [conv↓] u ∷ A)
-  decConv' t u with decConv↓ (syntacticTerm t) (syntacticTerm u)
-  decConv' t u | yes p = yes p , decConvTerm↓ t (conv u (sym (soundnessConv↓ p)))
-  decConv' t u | no ¬p = no ¬p , {!!}
-
+  -- decConv' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
+  --          → Dec (Γ ⊢ A [conv↓] B) × Dec (Γ ⊢ t [conv↓] u ∷ A)
+  -- decConv' t u with decConv↓ (syntacticTerm t) (syntacticTerm u)
+  -- decConv' t u | yes p = yes p , decConv↓Term t (conv u (sym (soundnessConv↓ p)))
+  -- decConv' t u | no ¬p = no ¬p , {!!}
