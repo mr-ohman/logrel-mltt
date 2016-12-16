@@ -58,13 +58,18 @@ mutual
         → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEq [A] [B] A≡B = symEqT (goodCases [A] [B] A≡B) A≡B
 
+symNeutralTerm : ∀ {t u A Γ}
+               → Γ ⊩neNf t ≡ u ∷ A
+               → Γ ⊩neNf u ≡ t ∷ A
+symNeutralTerm (neNfₜ₌ neK neM k≡m) = neNfₜ₌ neM neK (≅ₜ-sym k≡m)
+
 symNatural-prop : ∀ {Γ k k'}
                 → [Natural]-prop Γ k k'
                 → [Natural]-prop Γ k' k
 symNatural-prop (suc (ℕₜ₌ k k' d d' t≡u prop)) =
   suc (ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop))
 symNatural-prop zero = zero
-symNatural-prop (ne x x₁ prop) = ne x₁ x (≅ₜ-sym prop)
+symNatural-prop (ne prop) = ne (symNeutralTerm prop)
 
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
@@ -73,7 +78,7 @@ symEqTerm (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
   Uₜ₌ ⊢u ⊢t (≅ₜ-sym t≡u) ⊩u ⊩t (symEq ⊩t ⊩u [t≡u])
 symEqTerm (ℕ D) (ℕₜ₌ k k' d d' t≡u prop) =
   ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop)
-symEqTerm (ne' K D neK K≡K) t≡u = ≅ₜ-sym t≡u
+symEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' nf) = neₜ₌ m k d' d (symNeutralTerm nf)
 symEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
   ≅ₜ-sym t≡u , ⊩u , ⊩t , (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

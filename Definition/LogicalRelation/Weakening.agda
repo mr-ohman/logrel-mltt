@@ -16,6 +16,16 @@ open import Tools.Product
 open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
+wkTermNe : ∀ {Γ Δ k A} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+         → Γ ⊩neNf k ∷ A → Δ ⊩neNf wkₜ ρ k ∷ wkₜ ρ A
+wkTermNe ρ ⊢Δ (neNfₜ neK ⊢k k≡k) =
+  neNfₜ (wkNeutral (toWk ρ) neK) (T.wkTerm ρ ⊢Δ ⊢k) (≅ₜ-wk ρ ⊢Δ k≡k)
+
+wkEqTermNe : ∀ {Γ Δ k k' A} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+           → Γ ⊩neNf k ≡ k' ∷ A → Δ ⊩neNf wkₜ ρ k ≡ wkₜ ρ k' ∷ wkₜ ρ A
+wkEqTermNe ρ ⊢Δ (neNfₜ₌ neK neM k≡m) =
+  neNfₜ₌ (wkNeutral (toWk ρ) neK) (wkNeutral (toWk ρ) neM) (≅ₜ-wk ρ ⊢Δ k≡m)
+
 mutual
   wkTermℕ : ∀ {Γ Δ n} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
           → Γ ⊩ℕ n ∷ℕ → Δ ⊩ℕ U.wk (toWk ρ) n ∷ℕ
@@ -29,7 +39,7 @@ mutual
                  → natural-prop Δ (wkₜ ρ n) (wkNatural (toWk ρ) natN)
   wkNatural-prop ρ ⊢Δ suc n = wkTermℕ ρ ⊢Δ n
   wkNatural-prop ρ ⊢Δ zero n = n
-  wkNatural-prop ρ ⊢Δ (ne x) (neₜ ⊢t t≡t) = neₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t)
+  wkNatural-prop ρ ⊢Δ (ne x) nf = wkTermNe ρ ⊢Δ nf
 
 mutual
   wkEqTermℕ : ∀ {Γ Δ t u} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
@@ -45,8 +55,7 @@ mutual
                    → [Natural]-prop Δ (U.wk (toWk ρ) n) (U.wk (toWk ρ) n')
   wk[Natural]-prop ρ ⊢Δ (suc [n≡n']) = suc (wkEqTermℕ ρ ⊢Δ [n≡n'])
   wk[Natural]-prop ρ ⊢Δ zero = zero
-  wk[Natural]-prop ρ ⊢Δ (ne x x₁ n≡n') =
-    ne (wkNeutral (toWk ρ) x) (wkNeutral (toWk ρ) x₁) (≅ₜ-wk ρ ⊢Δ n≡n')
+  wk[Natural]-prop ρ ⊢Δ (ne x) = ne (wkEqTermNe ρ ⊢Δ x)
 
 wk : ∀ {l Γ Δ A} → (ρ : Γ ⊆ Δ) → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ wkₜ ρ A
 wk ρ ⊢Δ (U' l' l< ⊢Γ) = U (U l' l< ⊢Δ)
@@ -132,8 +141,8 @@ wkTerm : ∀ {l Γ Δ A t} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
 wkTerm ρ ⊢Δ (U' .⁰ 0<1 ⊢Γ) (Uₜ ⊢t t≡t ⊩t) =
   Uₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t) (wk ρ ⊢Δ ⊩t)
 wkTerm ρ ⊢Δ (ℕ D) [t] = wkTermℕ ρ ⊢Δ [t]
-wkTerm ρ ⊢Δ (ne' K D neK K≡K) (neₜ ⊢t t≡t) =
-  neₜ (T.wkTerm ρ ⊢Δ ⊢t) (≅ₜ-wk ρ ⊢Δ t≡t)
+wkTerm ρ ⊢Δ (ne' K D neK K≡K) (neₜ k d nf) =
+  neₜ (U.wk (toWk ρ) k) (wkRed:*:Term ρ ⊢Δ d) (wkTermNe ρ ⊢Δ nf)
 wkTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ ⊢t t≡t [ta≡tb] [ta]) =
   T.wkTerm ρ ⊢Δ ⊢t
   , ≅ₜ-wk ρ ⊢Δ t≡t
@@ -172,7 +181,10 @@ wkEqTerm ρ ⊢Δ (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]
   Uₜ₌ (T.wkTerm ρ ⊢Δ ⊢t) (T.wkTerm ρ ⊢Δ ⊢u) (≅ₜ-wk ρ ⊢Δ t≡u)
       (wk ρ ⊢Δ ⊩t) (wk ρ ⊢Δ ⊩u) (wkEq ρ ⊢Δ ⊩t [t≡u])
 wkEqTerm ρ ⊢Δ (ℕ D) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
-wkEqTerm ρ ⊢Δ (ne' _ _ _ _) t≡u = ≅ₜ-wk ρ ⊢Δ t≡u
+wkEqTerm ρ ⊢Δ (ne' K D neK K≡K) (neₜ₌ k m d d' nf) =
+  neₜ₌ (U.wk (toWk ρ) k) (U.wk (toWk ρ) m)
+       (wkRed:*:Term ρ ⊢Δ d) (wkRed:*:Term ρ ⊢Δ d')
+       (wkEqTermNe ρ ⊢Δ nf)
 wkEqTerm ρ ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ₌ t≡u ⊩t ⊩u [t≡u]) =
   -- TODO Minimize duplicates
   let [A] = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext

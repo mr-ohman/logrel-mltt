@@ -102,6 +102,14 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ C  / [A]
   transEq' PE.refl PE.refl [A] [B] [C] A≡B B≡C = transEq [A] [B] [C] A≡B B≡C
 
+
+transEqTermNe : ∀ {Γ n n' n'' A}
+              → Γ ⊩neNf n  ≡ n'  ∷ A
+              → Γ ⊩neNf n' ≡ n'' ∷ A
+              → Γ ⊩neNf n  ≡ n'' ∷ A
+transEqTermNe (neNfₜ₌ neK neM k≡m) (neNfₜ₌ neK₁ neM₁ k≡m₁) =
+  neNfₜ₌ neK neM₁ (≅ₜ-trans k≡m k≡m₁)
+
 mutual
   transEqTermℕ : ∀ {Γ n n' n''}
                → Γ ⊩ℕ n  ≡ n'  ∷ℕ
@@ -121,11 +129,11 @@ mutual
                     → [Natural]-prop Γ k' k''
                     → [Natural]-prop Γ k k''
   transNatural-prop (suc x) (suc x₁) = suc (transEqTermℕ x x₁)
-  transNatural-prop (suc x) (ne () x₂ x₃)
+  transNatural-prop (suc x) (ne (neNfₜ₌ () neM k≡m))
   transNatural-prop zero prop₁ = prop₁
   transNatural-prop prop zero = prop
-  transNatural-prop (ne x () x₂) (suc x₃)
-  transNatural-prop (ne x x₁ x₂) (ne x₃ x₄ x₅) = ne x x₄ (≅ₜ-trans x₂ x₅)
+  transNatural-prop (ne (neNfₜ₌ neK () k≡m)) (suc x₃)
+  transNatural-prop (ne [k≡k']) (ne [k'≡k'']) = ne (transEqTermNe [k≡k'] [k'≡k''])
 
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -138,7 +146,12 @@ transEqTerm (U' .⁰ 0<1 ⊢Γ)
   Uₜ₌ ⊢t ⊢u₁ (≅ₜ-trans t≡u t≡u₁) ⊩t ⊩u₁
       (transEq ⊩t ⊩u ⊩u₁ [t≡u] (irrelevanceEq ⊩t₁ ⊩u [t≡u]₁))
 transEqTerm (ℕ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
-transEqTerm (ne' _ _ _ _) t≡u u≡v = ≅ₜ-trans t≡u u≡v
+transEqTerm (ne (ne K D neK K≡K)) (neₜ₌ k m d d' (neNfₜ₌ neK₁ neM k≡m))
+                                  (neₜ₌ k₁ m₁ d₁ d'' (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
+  let k₁≡m = whrDet* (redₜ d₁ , ne neK₂) (redₜ d' , ne neM)
+  in  neₜ₌ k m₁ d d''
+           (neNfₜ₌ neK₁ neM₁
+                   (≅ₜ-trans k≡m (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡m k≡m₁)))
 transEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (t≡u , ⊩t , ⊩u , [t≡u])
             (t≡u₁ , ⊩t₁ , ⊩u₁ , [t≡u]₁) =

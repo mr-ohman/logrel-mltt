@@ -28,7 +28,7 @@ reflNatural-prop suc (ℕₜ n d t≡t natN prop) =
   suc (ℕₜ₌ n n d d t≡t
            (reflNatural-prop natN prop))
 reflNatural-prop zero t = zero
-reflNatural-prop (ne x) (neₜ ⊢t t≡t) = ne x x t≡t
+reflNatural-prop (ne x) (neNfₜ neK ⊢k k≡k) = ne (neNfₜ₌ neK neK k≡k)
 
 reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
@@ -38,7 +38,8 @@ reflEqTerm (U' ⁰ 0<1 ⊢Γ) (Uₜ ⊢t t≡t ⊩t) =
 reflEqTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t natN prop) =
   ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
       (reflNatural-prop natN prop)
-reflEqTerm (ne (ne K D neK K≡K)) (neₜ ⊢t t≡t) = t≡t
+reflEqTerm (ne' K D neK K≡K) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
+  neₜ₌ k k d d (neNfₜ₌ neK₁ neK₁ k≡k)
 reflEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ ⊢t t≡t [t] [t]₁) =
   Πₜ₌ t≡t (Πₜ ⊢t t≡t [t] [t]₁) (Πₜ ⊢t t≡t [t] [t]₁)
       (λ ρ ⊢Δ [a] → [t] ρ ⊢Δ [a] [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))

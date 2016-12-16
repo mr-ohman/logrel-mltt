@@ -34,15 +34,37 @@ record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
     neM : Neutral M
     K≡M : Γ ⊢ K ≅ M
 
--- Make this a record
+record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
+  inductive
+  constructor neNfₜ
+  field
+    neK  : Neutral k
+    ⊢k   : Γ ⊢ k ∷ A
+    k≡k  : Γ ⊢ k ≅ k ∷ A
+
 record _⊩ne_∷_ (Γ : Con Term) (t A : Term) : Set where
+  inductive
   constructor neₜ
   field
-    ⊢t  : Γ ⊢ t ∷ A
-    t≡t : Γ ⊢ t ≅ t ∷ A
+    k   : Term
+    d   : Γ ⊢ t :⇒*: k ∷ A
+    nf  : Γ ⊩neNf k ∷ A
 
-_⊩ne_≡_∷_ : (Γ : Con Term) (t u A : Term) → Set
-Γ ⊩ne t ≡ u ∷ A = Γ ⊢ t ≅ u ∷ A
+record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
+  inductive
+  constructor neNfₜ₌
+  field
+    neK  : Neutral k
+    neM  : Neutral m
+    k≡m  : Γ ⊢ k ≅ m ∷ A
+
+record _⊩ne_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
+  constructor neₜ₌
+  field
+    k m : Term
+    d   : Γ ⊢ t :⇒*: k ∷ A
+    d'  : Γ ⊢ u :⇒*: m ∷ A
+    nf  : Γ ⊩neNf k ≡ m ∷ A
 
 -- Natural numbers
 
@@ -61,7 +83,7 @@ mutual
   natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
   natural-prop Γ .(suc n) (suc {n}) = Γ ⊩ℕ n ∷ℕ
   natural-prop Γ .zero zero = ⊤
-  natural-prop Γ n (ne x) = Γ ⊩ne n ∷ ℕ
+  natural-prop Γ n (ne x) = Γ ⊩neNf n ∷ ℕ
 
 mutual
   data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
@@ -72,12 +94,12 @@ mutual
   data [Natural]-prop (Γ : Con Term) : (n n' : Term) → Set where
     suc : ∀ {n n'} → Γ ⊩ℕ n ≡ n' ∷ℕ → [Natural]-prop Γ (suc n) (suc n')
     zero : [Natural]-prop Γ zero zero
-    ne : ∀ {n n'} → Neutral n → Neutral n' → Γ ⊩ne n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
+    ne : ∀ {n n'} → Γ ⊩neNf n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
 
 split : ∀ {Γ a b} → [Natural]-prop Γ a b → Natural a × Natural b
 split (suc x) = suc , suc
 split zero = zero , zero
-split (ne x x₁ x₂) = ne x , ne x₁
+split (ne (neNfₜ₌ neK neM k≡m)) = ne neK , ne neM
 
 
 -- Type levels

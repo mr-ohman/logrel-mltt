@@ -5,6 +5,7 @@ open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Typed
+open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
@@ -23,10 +24,11 @@ mutual
              → Γ ⊩⟨ l ⟩  t ∷ A / [A]
              → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
   convTermT₁ (ℕ D D') A≡B t = t
-  convTermT₁ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B (neₜ ⊢t t≡t) =
+  convTermT₁ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B
+             (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₂ ⊢k k≡k)) =
     let A≅B = wellformedEq {l} (ne' K D neK K≡K) A≡B
-    in  neₜ (conv ⊢t (≅-eq A≅B))
-            (≅-conv t≡t A≅B)
+    in  neₜ k [ conv ⊢t (≅-eq A≅B) , conv ⊢u (≅-eq A≅B) , conv* d (≅-eq A≅B) ]
+            (neNfₜ neK₂ (conv ⊢k (≅-eq A≅B)) (≅-conv k≡k A≅B))
   convTermT₁ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                 (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
              (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (Πₜ ⊢t t≡t ⊩t [t]₁) =
@@ -66,10 +68,11 @@ mutual
            → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
   convTermT₂ (ℕ D D') A≡B t = t
-  convTermT₂ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B (neₜ ⊢t t≡t) =
+  convTermT₂ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B
+             (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₂ ⊢k k≡k)) =
     let B≅A = ≅-sym (wellformedEq {l} (ne' K D neK K≡K) A≡B)
-    in  neₜ (conv ⊢t (≅-eq B≅A))
-            (≅-conv t≡t B≅A)
+    in  neₜ k [ conv ⊢t (≅-eq B≅A) , conv ⊢u (≅-eq B≅A) , conv* d (≅-eq B≅A) ]
+            (neNfₜ neK₂ (conv ⊢k (≅-eq B≅A)) (≅-conv k≡k B≅A))
   convTermT₂ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                 (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
              (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) (Πₜ ⊢t t≡t ⊩t [t]₁) =
@@ -128,8 +131,13 @@ mutual
                → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
                → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
   convEqTermT₁ (ℕ D D') A≡B t≡u = t≡u
-  convEqTermT₁ {l} (ne (ne K D neK K≡K) (ne _ _ _ _)) A≡B t≡u =
-    ≅-conv t≡u (wellformedEq {l} (ne' K D neK K≡K) A≡B)
+  convEqTermT₁ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B
+               (neₜ₌ k m [ ⊢t , ⊢u , d ] [ ⊢t₁ , ⊢u₁ , d₁ ] (neNfₜ₌ neK₂ neM k≡m)) =
+    let A≅B = wellformedEq {l} (ne' K D neK K≡K) A≡B
+        A≡B' = ≅-eq A≅B
+    in  neₜ₌ k m [ conv ⊢t  A≡B' , conv ⊢u  A≡B' , conv* d  A≡B' ]
+                 [ conv ⊢t₁ A≡B' , conv ⊢u₁ A≡B' , conv* d₁ A≡B' ]
+                 (neNfₜ₌ neK₂ neM (≅-conv k≡m A≅B))
   convEqTermT₁ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                   (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])
@@ -159,8 +167,13 @@ mutual
              → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
   convEqTermT₂ (ℕ D D') A≡B t≡u = t≡u
-  convEqTermT₂ {l} (ne (ne K D neK K≡K) (ne _ _ _ _)) A≡B t≡u =
-    ≅-conv t≡u (≅-sym (wellformedEq {l} (ne' K D neK K≡K) A≡B))
+  convEqTermT₂ {l} (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) A≡B
+               (neₜ₌ k m [ ⊢t , ⊢u , d ] [ ⊢t₁ , ⊢u₁ , d₁ ] (neNfₜ₌ neK₂ neM k≡m)) =
+    let B≅A = ≅-sym (wellformedEq {l} (ne' K D neK K≡K) A≡B)
+        B≡A' = ≅-eq B≅A
+    in  neₜ₌ k m [ conv ⊢t  B≡A' , conv ⊢u  B≡A' , conv* d  B≡A' ]
+                 [ conv ⊢t₁ B≡A' , conv ⊢u₁ B≡A' , conv* d₁ B≡A' ]
+                 (neNfₜ₌ neK₂ neM (≅-conv k≡m B≅A))
   convEqTermT₂ (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                   (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
                (Π₌ F' G' D' A≡B [F≡F'] [G≡G'])

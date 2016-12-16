@@ -64,9 +64,10 @@ redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] n≡n natN prop) =
   in  ℕₜ n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] n≡n natN prop
   ,   ℕₜ₌ n n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] [ ⊢u , ⊢n , d ]
           n≡n (reflNatural-prop natN prop)
-redSubst*Term t⇒u (ne (ne K D neK K≡K)) (neₜ ⊢t t≡t) =
-  (neₜ (redFirst*Term t⇒u) (≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u t⇒u t≡t))
-  , ≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u (id ⊢t) t≡t --redFirst*Term t⇒u , subset*Term t⇒u
+redSubst*Term t⇒u (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
+  let [d]  = [ ⊢t , ⊢u , d ]
+      [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
+  in  neₜ k [d'] (neNfₜ neK₁ ⊢k k≡k) , neₜ₌ k k [d'] [d] (neNfₜ₌ neK₁ neK₁ k≡k)
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
               (Πₜ proj₁' t≡t proj₂' proj₃') =
   let A≡ΠFG = subset* (red D)

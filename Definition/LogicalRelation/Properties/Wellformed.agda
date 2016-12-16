@@ -38,7 +38,7 @@ wellformedTerm : ∀ {l Γ A t} → ([A] : Γ ⊩⟨ l ⟩ A)
 wellformedTerm (U' l' l< ⊢Γ) (Uₜ ⊢t t≡t ⊩t) = ⊢t
 wellformedTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t natN prop) =
   conv ⊢t (sym (subset* (red D)))
-wellformedTerm (ne (ne K D neK K≡K)) (neₜ ⊢t t≡t) = ⊢t
+wellformedTerm (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] nf) = ⊢t
 wellformedTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ ⊢t t≡t [t] [t]₁) = ⊢t
 wellformedTerm (emb 0<1 A) t = wellformedTerm A t
 
@@ -49,6 +49,7 @@ wellformedTermEq (U' l' l< ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) = 
 wellformedTermEq (ℕ D) (ℕₜ₌ k k' d d' k≡k' prop) =
   ≅ₜ-red (red D) (redₜ d) (redₜ d') k≡k'
   --{!conv t≡u (sym (subset* (red D)))!}
-wellformedTermEq (ne' K D neK K≡K) t≡u = t≡u
+wellformedTermEq (ne' K [ ⊢A , ⊢B , D ] neK K≡K) (neₜ₌ k m d d' (neNfₜ₌ neT neU t≡u)) =
+  ≅ₜ-red (id ⊢A) (redₜ d) (redₜ d') t≡u
 wellformedTermEq (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ₌ t≡u ⊩t ⊩u [t≡u]) = t≡u
 wellformedTermEq (emb 0<1 A) t≡u = wellformedTermEq A t≡u

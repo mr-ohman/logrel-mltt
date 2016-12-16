@@ -50,8 +50,9 @@ mutual
     let A≡ℕ = subset* (red D)
         A≅ℕ = ≅-sym (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) (≅-ℕrefl (wfTerm n)))
         n≡n = ≅-conv (≅ₜ-nerefl n neN) A≅ℕ
-    in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) n≡n (ne neN) (neₜ (conv n A≡ℕ) n≡n)
-  neuTerm (ne' K D neK K≡K) neN n = neₜ n (≅ₜ-nerefl n neN)
+    in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) n≡n (ne neN) (neNfₜ neN (conv n A≡ℕ) n≡n)
+  neuTerm (ne' K D neK K≡K) neN n =
+    neₜ _ (idRedTerm:*: n) (neNfₜ neN n (≅ₜ-nerefl n neN))
   neuTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) neN n = n
     , ≅ₜ-nerefl n neN
     , (λ ρ ⊢Δ [a] [b] [a≡b] →
@@ -91,8 +92,9 @@ mutual
     let A≡ℕ = subset* (red D)
         A≅ℕ = ≅-sym (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) (≅-ℕrefl (wfTerm n)))
     in  ℕₜ₌ _ _ (idRedTerm:*: (conv n A≡ℕ)) (idRedTerm:*: (conv n' A≡ℕ))
-            (≅-conv n≡n' A≅ℕ) (ne neN neN' (≅-conv n≡n' A≅ℕ))
-  neuEqTerm (ne' K D neK K≡K) neN neN' n n' n≡n' = n≡n'
+            (≅-conv n≡n' A≅ℕ) (ne (neNfₜ₌ neN neN' (≅-conv n≡n' A≅ℕ)))
+  neuEqTerm (ne' K D neK K≡K) neN neN' n n' n≡n' =
+    neₜ₌ _ _ (idRedTerm:*: n) (idRedTerm:*: n') (neNfₜ₌ neN neN' n≡n')
   neuEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) neN neN' n n' n≡n' =
     let [ΠFG] = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext
     in  n≡n' , neuTerm [ΠFG] neN n , neuTerm [ΠFG] neN' n'

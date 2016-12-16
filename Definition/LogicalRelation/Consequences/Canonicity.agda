@@ -40,7 +40,7 @@ canonicity'' {l = l} (noemb D) (ℕₜ _ d _ suc prop) =
   let a , b = canonicity'' {l = l} (noemb D) prop
   in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
 canonicity'' (noemb D) (ℕₜ .zero d _ zero prop) = zero , subset*Term (redₜ d)
-canonicity'' (noemb D) (ℕₜ n d _ (ne x) (neₜ prop _)) = ⊥-elim (noNe prop x)
+canonicity'' (noemb D) (ℕₜ n d _ (ne x) (neNfₜ _ prop _)) = ⊥-elim (noNe prop x)
 canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
 
 canonicity' : ∀ {t l}
