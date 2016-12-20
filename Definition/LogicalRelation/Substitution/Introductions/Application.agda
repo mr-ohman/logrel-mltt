@@ -29,7 +29,8 @@ appTerm' : ∀ {F G t u Γ l l'}
           ([t] : Γ ⊩⟨ l ⟩ t ∷ Π F ▹ G / Π-intr [ΠFG])
           ([u] : Γ ⊩⟨ l' ⟩ u ∷ F / [F])
         → Γ ⊩⟨ l' ⟩ t ∘ u ∷ G [ u ] / [G[u]]
-appTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F'] [G'] G-ext)) (_ , _ , _ , [t]) [u] =
+appTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F'] [G'] G-ext))
+         (Πₜ f d funcF f≡f [f] [f]₁) [u] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F≡idF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
       idG'ᵤ≡Gᵤ = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
@@ -37,7 +38,7 @@ appTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F'] [G'] G-ext)) (_ , _ , 
       ⊢Γ = wf ⊢F
       [u]' = irrelevanceTerm' F≡idF' [F] ([F'] T.id ⊢Γ) [u]
   in  irrelevanceTerm'' idG'ᵤ≡Gᵤ idt∘u≡t∘u
-                        ([G'] T.id ⊢Γ [u]') [G[u]] ([t] T.id ⊢Γ [u]')
+                        ([G'] T.id ⊢Γ [u]') [G[u]] ([f]₁ T.id ⊢Γ [u]')
 appTerm' [F] [G[u]] (emb 0<1 x) [t] [u] = appTerm' [F] [G[u]] x [t] [u]
 
 appTerm : ∀ {F G t u Γ l l'}
@@ -61,8 +62,8 @@ app-congTerm' : ∀ {F G t t' u u' Γ l l'}
           ([u≡u'] : Γ ⊩⟨ l' ⟩ u ≡ u' ∷ F / [F])
         → Γ ⊩⟨ l' ⟩ t ∘ u ≡ t' ∘ u' ∷ G [ u ] / [G[u]]
 app-congTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
-              (t≡t' , [t] , (⊢t' , t≡t , [t'a≡t'b] , [t'a]) , [ta≡t'a])
-              [u] [u'] [u≡u'] =
+              (Πₜ₌ f g d d' funcF funcG t≡u [t] (Πₜ _ _ _ _ [u] [u]₁) [t≡u])
+              [a] [a'] [a≡a'] =
   let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
       F≡wkidF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
       t∘x≡wkidt∘x : {a b : Term} → U.wk id a Term.∘ b PE.≡ a ∘ b
@@ -70,15 +71,15 @@ app-congTerm' [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
       wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ])
                                (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf ⊢F
-      [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u]
-      [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u']
-      [u≡u']' = irrelevanceEqTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [u≡u']
+      [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [a]
+      [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [a']
+      [u≡u']' = irrelevanceEqTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [a≡a']
       [tu≡t'u] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
                                      ([G] T.id ⊢Γ [u]') [G[u]]
-                                     ([ta≡t'a] T.id ⊢Γ [u]')
+                                     ([t≡u] T.id ⊢Γ [u]')
       [t'u≡t'u'] = irrelevanceEqTerm'' t∘x≡wkidt∘x t∘x≡wkidt∘x wkidG₁[u]≡G[u]
                                        ([G] T.id ⊢Γ [u]') [G[u]]
-                                       ([t'a≡t'b] T.id ⊢Γ [u]' [u']' [u≡u']')
+                                       ([u] T.id ⊢Γ [u]' [u']' [u≡u']')
   in  transEqTerm [G[u]] [tu≡t'u] [t'u≡t'u']
 app-congTerm' [F] [G[u]] (emb 0<1 x) [t≡t'] [u] [u'] [u≡u'] =
   app-congTerm' [F] [G[u]] x [t≡t'] [u] [u'] [u≡u']

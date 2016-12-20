@@ -143,20 +143,25 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     constructor Uₜ
     open LogRelKit (rec l<)
     field
-      ⊢t  : Γ ⊢ t ∷ U
-      t≡t : Γ ⊢ t ≅ t ∷ U
-      ⊩t  : Γ ⊩ t
+      A     : Term
+      d     : Γ ⊢ t :⇒*: A ∷ U
+      typeA : Type A
+      A≡A   : Γ ⊢ A ≅ A ∷ U
+      [t]   : Γ ⊩ t
 
   record _⊩¹U_≡_∷U/_ {l'} (Γ : Con Term) (t u : Term) (l< : l' < l) : Set where
     constructor Uₜ₌
     open LogRelKit (rec l<)
     field
-      ⊢t    : Γ ⊢ t ∷ U
-      ⊢u    : Γ ⊢ u ∷ U
-      t≡u   : Γ ⊢ t ≅ u ∷ U
-      ⊩t    : Γ ⊩ t
-      ⊩u    : Γ ⊩ u
-      [t≡u] : Γ ⊩ t ≡ u / ⊩t
+      A B   : Term
+      d     : Γ ⊢ t :⇒*: A ∷ U
+      d'    : Γ ⊢ u :⇒*: B ∷ U
+      typeA : Type A
+      typeB : Type B
+      A≡B   : Γ ⊢ A ≅ B ∷ U
+      [t]   : Γ ⊩ t
+      [u]   : Γ ⊩ u
+      [t≡u] : Γ ⊩ t ≡ u / [t]
 
   mutual
     -- Helping functions for logical relation
@@ -169,11 +174,11 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
               → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ]
 
-    wk-subst-prop-T¹ : (Γ : Con Term) (F G : Term)
+    wk-subst-prop-T¹ : (Γ : Con Term) (F G t : Term)
                        ([F] : wk-prop¹ Γ F)
-                       ([G] : wk-subst-prop¹ Γ F G [F]) (t : Term)
+                       ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
-    wk-subst-prop-T¹ Γ F G [F] [G] t =
+    wk-subst-prop-T¹ Γ F G t [F] [G] =
       ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
               → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
               → Δ ⊩¹ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
@@ -200,6 +205,13 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                   ([a≡b] : Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                 → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
 
+    wk-fun-ext-prop¹' : (Γ : Con Term) (F G f g : Term)
+                        ([F] : wk-prop¹ Γ F)
+                        ([G] : wk-subst-prop¹ Γ F G [F])
+                      → Set
+    wk-fun-ext-prop¹' Γ F G f g [F] [G] =
+      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
+              → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ g ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
     -- Pi-type
 
     record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where
@@ -233,19 +245,25 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     --        Therefore we have to use ×
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
     Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
-      Γ ⊢ t ∷ A × Γ ⊢ t ≅ t ∷ A
-                × wk-fun-ext-prop¹ Γ F G t [F] [G]
-                × wk-subst-prop-T¹ Γ F G [F] [G] t
+      ∃ λ f → Γ ⊢ t :⇒*: f ∷ A
+            × Function f
+            × Γ ⊢ t ≅ t ∷ A
+            × wk-fun-ext-prop¹ Γ F G t [F] [G]
+            × wk-subst-prop-T¹ Γ F G t [F] [G]
 
     -- Issue: Same as above.
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹Π A) → Set
     Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
       let [A] = Π F G D ⊢F ⊢G A≡A [F] [G] G-ext
-      in  Γ ⊢ t ≅ u ∷ A
+      in  ∃₂ λ f g →
+          Γ ⊢ t :⇒*: f ∷ A
+      ×   Γ ⊢ u :⇒*: g ∷ A
+      ×   Function f
+      ×   Function g
+      ×   Γ ⊢ t ≅ u ∷ A
       ×   Γ ⊩¹Π t ∷ A / [A]
       ×   Γ ⊩¹Π u ∷ A / [A]
-      ×   (∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                 → Δ ⊩¹ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+      ×   wk-fun-ext-prop¹' Γ F G t u [F] [G]
 
 
     -- Logical relation definition
@@ -289,8 +307,8 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
 open LogRel public using (U; ℕ; ne; Π; emb; Uₜ; Uₜ₌; Π₌)
 
 -- Patterns for the non-records of Π
-pattern Πₜ a b c d = a , b , c , d
-pattern Πₜ₌ a b c d = a , b , c , d
+pattern Πₜ a b c d e f = a , b , c , d , e , f
+pattern Πₜ₌ a b c d e f g h i j = a , b , c , d , e , f , g , h , i , j
 
 pattern U'  a b c = U (U a b c)
 pattern ne' a b c d = ne (ne a b c d)

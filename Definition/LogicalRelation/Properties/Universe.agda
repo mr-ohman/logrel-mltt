@@ -15,7 +15,7 @@ open import Tools.Empty
 
 
 univEq' : ∀ {l Γ A} ([U] : Γ ⊩⟨ l ⟩U) → Γ ⊩⟨ l ⟩ A ∷ U / U-intr [U] → Γ ⊩⟨ ⁰ ⟩ A
-univEq' (noemb (U .⁰ 0<1 ⊢Γ)) (Uₜ proj₁ t≡t proj₂) = proj₂
+univEq' (noemb (U .⁰ 0<1 ⊢Γ)) (Uₜ A₁ d typeA A≡A [A]) = [A]
 univEq' (emb 0<1 x) [A] = univEq' x [A]
 
 univEq : ∀ {l Γ A} ([U] : Γ ⊩⟨ l ⟩ U) → Γ ⊩⟨ l ⟩ A ∷ U / [U] → Γ ⊩⟨ ⁰ ⟩ A
@@ -25,8 +25,9 @@ univEq [U] [A] = univEq' (U-elim [U])
 univEqEq' : ∀ {l l' Γ A B} ([U] : Γ ⊩⟨ l ⟩U) ([A] : _⊩⟨_⟩_ {{eqrel}} Γ l' A)
          → Γ ⊩⟨ l ⟩ A ≡ B ∷ U / U-intr [U]
          → Γ ⊩⟨ l' ⟩ A ≡ B / [A]
-univEqEq' (noemb (U .⁰ 0<1 ⊢Γ)) [A] (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
-  irrelevanceEq ⊩t [A] [t≡u]
+univEqEq' (noemb (U .⁰ 0<1 ⊢Γ)) [A]
+          (Uₜ₌ A₁ B₁ d d' typeA typeB A≡B [t] [u] [t≡u]) =
+  irrelevanceEq [t] [A] [t≡u]
 univEqEq' (emb 0<1 x) [A] [A≡B] = univEqEq' x [A] [A≡B]
 
 univEqEq : ∀ {l l' Γ A B} ([U] : Γ ⊩⟨ l ⟩ U) ([A] : Γ ⊩⟨ l' ⟩ A)

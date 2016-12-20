@@ -196,8 +196,9 @@ import Tools.PropositionalEquality as PE
                    (λ {Δ} {σ} → Uₛ (_∙_ {A = F} [Γ] [F]₀) {Δ} {σ})
                    (λ {Δ} {σ} → [Gₜ]' {Δ} {σ})
       [ΠFG] = (Πₛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ]
-  in  Uₜ (Π ⊢Fₜ ▹ ⊢Gₜ) (≅ₜ-Πrefl ⊢Fₜ ⊢Gₜ) (proj₁ [ΠFG])
-  ,   (λ [σ'] [σ≡σ'] →
+  in  Uₜ (Π subst σ F ▹ subst (liftSubst σ) G) (idRedTerm:*: (Π ⊢Fₜ ▹ ⊢Gₜ))
+         Π (≅ₜ-Πrefl ⊢Fₜ ⊢Gₜ) (proj₁ [ΠFG])
+  ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
              [wk1σ] = wk1SubstS [Γ] ⊢Δ ⊢F [σ]
              [wk1σ'] = wk1SubstS [Γ] ⊢Δ ⊢F [σ']
@@ -219,7 +220,11 @@ import Tools.PropositionalEquality as PE
                                      (proj₂ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]) [liftσ']'
                                             (liftSubstSEq {F = F} [Γ] ⊢Δ [F] [σ] [σ≡σ']))
              [ΠFG]' = (Πₛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ']
-         in  Uₜ₌ (Π ⊢Fₜ ▹ ⊢Gₜ) (Π ⊢Fₜ' ▹ ⊢Gₜ') (≅ₜ-Π-cong ⊢F ⊢F≡F' ⊢G≡G')
+         in  Uₜ₌ (Π subst σ F ▹ subst (liftSubst σ) G)
+                 (Π subst σ' F ▹ subst (liftSubst σ') G)
+                 (idRedTerm:*: (Π ⊢Fₜ ▹ ⊢Gₜ))
+                 (idRedTerm:*: (Π ⊢Fₜ' ▹ ⊢Gₜ'))
+                 Π Π (≅ₜ-Π-cong ⊢F ⊢F≡F' ⊢G≡G')
                  (proj₁ [ΠFG]) (proj₁ [ΠFG]') (proj₂ [ΠFG] [σ'] [σ≡σ']))
 
 Π-congₜₛ : ∀ {F G H E Γ}
@@ -239,7 +244,7 @@ import Tools.PropositionalEquality as PE
                                   / (λ {Δ} {σ} → [UF] {Δ} {σ}))
          → Γ ⊩ₛ⟨ ¹ ⟩t' Π F ▹ G ≡ Π H ▹ E ∷ U / [Γ] / Uₛ [Γ]
 Π-congₜₛ {F} {G} {H} {E}
-         [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ ⊢Δ [σ] =
+         [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ {Δ} {σ} ⊢Δ [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       ⊢H = wellformed (proj₁ ([H] ⊢Δ [σ]))
       [liftFσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
@@ -258,15 +263,19 @@ import Tools.PropositionalEquality as PE
                                (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁ [G]ᵤ
                  (univEqₛ {G} {E} (_∙_ {A = F} [Γ] [F])
                           (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ᵤ₁ [G≡E]ₜ)
-  in  Uₜ₌ (Π wellformedTerm {l = ¹} (U' ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
-           ▹ wellformedTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
-                           (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ])))
-          (Π wellformedTerm {l = ¹} (U' ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
-           ▹ wellformedTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ]))
-                            (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ])))
+      ΠFGₜ = Π wellformedTerm {l = ¹} (U' ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
+             ▹ wellformedTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
+                              (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
+      ΠHEₜ = Π wellformedTerm {l = ¹} (U' ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
+             ▹ wellformedTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ]))
+                              (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ]))
+  in  Uₜ₌ (Π subst σ F ▹ subst (liftSubst σ) G)
+          (Π subst σ H ▹ subst (liftSubst σ) E)
+          (idRedTerm:*: ΠFGₜ) (idRedTerm:*: ΠHEₜ)
+          Π Π
           (≅ₜ-Π-cong ⊢F (wellformedTermEq (U' ⁰ 0<1 ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
-                     (wellformedTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
-                                       ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ])))
+                        (wellformedTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
+                                          ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ])))
           (proj₁ (Πₛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ]))
           (proj₁ (Πₛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))
           (Π-congₛ {F} {G} {H} {E} [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ])

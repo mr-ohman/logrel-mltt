@@ -22,8 +22,9 @@ open import Tools.Product
     → Γ ⊩ₛ⟨ ¹ ⟩t ℕ ∷ U / [Γ] / Uₛ [Γ]
 ℕₜₛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
                      [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
-                 in  Uₜ ⊢ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
-                 ,   (λ _ x₁ → Uₜ₌ ⊢ℕ ⊢ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
+                 in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
+                 ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕ ℕ
+                                   (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]

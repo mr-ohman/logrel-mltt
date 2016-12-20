@@ -51,12 +51,12 @@ redSubst*Term : ∀ {A t u l Γ}
               → Γ ⊩⟨ l ⟩ u ∷ A / [A]
               → Γ ⊩⟨ l ⟩ t ∷ A / [A]
               × Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
-redSubst*Term t⇒u (U' .⁰ 0<1 ⊢Γ) (Uₜ ⊢u u≡u ⊩u) =
-  let ⊢t = redFirst*Term t⇒u
-      q = redSubst* (univ* t⇒u) (univEq (U' ⁰ 0<1 ⊢Γ) (Uₜ ⊢u u≡u ⊩u))
-  in  Uₜ ⊢t (≅ₜ-red (id (U ⊢Γ)) t⇒u t⇒u u≡u) (proj₁ q)
-  ,   Uₜ₌ ⊢t ⊢u (≅ₜ-red (id (U ⊢Γ)) t⇒u (id ⊢u) u≡u)
-          (proj₁ q) ⊩u (proj₂ q)
+redSubst*Term t⇒u (U' .⁰ 0<1 ⊢Γ) (Uₜ A [ ⊢t , ⊢u , d ] typeA A≡A [u]) =
+  let [d]  = [ ⊢t , ⊢u , d ]
+      [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
+      q = redSubst* (univ* t⇒u) (univEq (U' ⁰ 0<1 ⊢Γ) (Uₜ A [d] typeA A≡A [u]))
+  in Uₜ A [d'] typeA A≡A (proj₁ q)
+  ,  Uₜ₌ A A [d'] [d] typeA typeA A≡A (proj₁ q) [u] (proj₂ q)
 redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] n≡n natN prop) =
   let A≡ℕ  = subset* (red D)
       ⊢t   = conv (redFirst*Term t⇒u) A≡ℕ
@@ -69,10 +69,11 @@ redSubst*Term t⇒u (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ ne
       [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
   in  neₜ k [d'] (neNfₜ neK₁ ⊢k k≡k) , neₜ₌ k k [d'] [d] (neNfₜ₌ neK₁ neK₁ k≡k)
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-              (Πₜ proj₁' t≡t proj₂' proj₃') =
+                  (Πₜ f [ ⊢t , ⊢u , d ] funcF f≡f [f] [f]₁) =
   let A≡ΠFG = subset* (red D)
-      ⊢t    = redFirst*Term t⇒u
       t⇒u'  = conv* t⇒u A≡ΠFG
+      [d]  = [ ⊢t , ⊢u , d ]
+      [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
       ta×ta≡ua : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                  ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
                → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
@@ -80,7 +81,7 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ex
                  wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
       ta×ta≡ua ρ ⊢Δ [a] = let ⊢a = wellformedTerm ([F] ρ ⊢Δ) [a]
                           in  redSubst*Term (app-subst* (wkRed*Term ρ ⊢Δ t⇒u') ⊢a)
-                                            ([G] ρ ⊢Δ [a]) (proj₃' ρ ⊢Δ [a])
+                                            ([G] ρ ⊢Δ [a]) ([f]₁ ρ ⊢Δ [a])
       ta : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
            ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
          → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
@@ -98,16 +99,17 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ex
               wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
       ta≡tb ρ ⊢Δ [a] [b] [a≡b] =
         transEqTerm ([G] ρ ⊢Δ [a]) (ta≡ua ρ ⊢Δ [a])
-          (transEqTerm ([G] ρ ⊢Δ [a]) (proj₂' ρ ⊢Δ [a] [b] [a≡b])
+          (transEqTerm ([G] ρ ⊢Δ [a]) ([f] ρ ⊢Δ [a] [b] [a≡b])
             (convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [b])
                          (G-ext ρ ⊢Δ [a] [b] [a≡b])
                          (symEqTerm ([G] ρ ⊢Δ [b]) (ta≡ua ρ ⊢Δ [b]))))
-  in  Πₜ ⊢t (≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u t⇒u t≡t) ta≡tb ta
-  ,   Πₜ₌ (≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u (id proj₁') t≡t)
-          (Πₜ ⊢t (≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u t⇒u t≡t) ta≡tb ta)
-          (Πₜ proj₁' t≡t proj₂' proj₃')
+      t≡t = ≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u t⇒u f≡f
+      t≡u = ≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u (id ⊢t) f≡f
+  in  Πₜ f [d'] funcF t≡t ta≡tb ta
+  ,   Πₜ₌ f f [d'] [d] funcF funcF t≡u
+          (Πₜ f [d'] funcF t≡t ta≡tb ta)
+          (Πₜ f [d] funcF f≡f [f] [f]₁)
           ta≡ua
-  --,   subset*Term t⇒u , (⊢t , ta≡tb , ta) , (proj₁' , proj₂' , proj₃') , ta≡ua
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 redSubst : ∀ {A B l Γ}

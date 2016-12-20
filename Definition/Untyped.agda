@@ -60,6 +60,15 @@ data Natural : Term → Set where
   zero :                     Natural zero
   ne   : ∀ {n} → Neutral n → Natural n
 
+data Type : Term → Set where
+  Π : ∀ {A B} → Type (Π A ▹ B)
+  ℕ : Type ℕ
+  ne : ∀{n} → Neutral n → Type n
+
+data Function : Term → Set where
+  lam : ∀{t} → Function (lam t)
+  ne : ∀{n} → Neutral n → Function n
+
 -- Natural is a subset of Whnf
 
 naturalWhnf : ∀ {n} → Natural n → Whnf n
@@ -67,6 +76,14 @@ naturalWhnf suc = suc
 naturalWhnf zero = zero
 naturalWhnf (ne x) = ne x
 
+typeWhnf : ∀ {A} → Type A → Whnf A
+typeWhnf Π = Π
+typeWhnf ℕ = ℕ
+typeWhnf (ne x) = ne x
+
+functionWhnf : ∀ {f} → Function f → Whnf f
+functionWhnf lam = lam
+functionWhnf (ne x) = ne x
 
 -- A partial view on two whnfs of natural number terms.
 -- Note: not inductive.
@@ -165,6 +182,15 @@ wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
 wkNatural ρ suc = suc
 wkNatural ρ zero = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
+
+wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
+wkType ρ Π = Π
+wkType ρ ℕ = ℕ
+wkType ρ (ne x) = ne (wkNeutral ρ x)
+
+wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
+wkFunction ρ lam = lam
+wkFunction ρ (ne x) = ne (wkNeutral ρ x)
 
 wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ U = U

@@ -74,11 +74,13 @@ symNatural-prop (ne prop) = ne (symNeutralTerm prop)
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
-symEqTerm (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ ⊢t ⊢u t≡u ⊩t ⊩u [t≡u]) =
-  Uₜ₌ ⊢u ⊢t (≅ₜ-sym t≡u) ⊩u ⊩t (symEq ⊩t ⊩u [t≡u])
+symEqTerm (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ A B d d' typeA typeB A≡B [A] [B] [A≡B]) =
+  Uₜ₌ B A d' d typeB typeA (≅ₜ-sym A≡B) [B] [A] (symEq [A] [B] [A≡B])
 symEqTerm (ℕ D) (ℕₜ₌ k k' d d' t≡u prop) =
   ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop)
 symEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' nf) = neₜ₌ m k d' d (symNeutralTerm nf)
-symEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (t≡u , ⊩t , ⊩u , [t≡u]) =
-  ≅ₜ-sym t≡u , ⊩u , ⊩t , (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([t≡u] ρ ⊢Δ [a]))
+symEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+          (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g]) =
+  Πₜ₌ g f d' d funcG funcF (≅ₜ-sym f≡g) [g] [f]
+      (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([f≡g] ρ ⊢Δ [a]))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u
