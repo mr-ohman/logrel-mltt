@@ -36,7 +36,7 @@ mutual
     field
       A     : Term
       D     : Γ ⊢ A ⇒* B
-      whnfA : Whnf B
+      whnfB : Whnf B
       k~l   : Γ ⊢ k ~ l ↑ A
 
   record _⊢_[conv↑]_ (Γ : Con Term) (A B : Term) : Set where
