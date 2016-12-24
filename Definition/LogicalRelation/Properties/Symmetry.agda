@@ -29,26 +29,26 @@ mutual
   symEqT (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
     let F₁≡F' , G₁≡G' = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D' , Π))
-        [F₁≡F] : ∀ {Δ} ρ ⊢Δ → _
-        [F₁≡F] {Δ} ρ ⊢Δ =
+        [F₁≡F] : ∀ {Δ} {ρ} [ρ] ⊢Δ → _
+        [F₁≡F] {Δ} {ρ} [ρ] ⊢Δ =
           let ρF'≡ρF₁ ρ = PE.cong (U.wk ρ) (PE.sym F₁≡F')
-              [ρF'] ρ ⊢Δ = PE.subst (λ x → Δ ⊩⟨ _ ⟩ wkₜ ρ x) F₁≡F' ([F]₁ ρ ⊢Δ)
-          in  irrelevanceEq' {Δ} (ρF'≡ρF₁ (toWk ρ))
-                             ([ρF'] ρ ⊢Δ) ([F]₁ ρ ⊢Δ)
-                             (symEq ([F] ρ ⊢Δ) ([ρF'] ρ ⊢Δ)
-                                    ([F≡F'] ρ ⊢Δ))
+              [ρF'] {ρ} [ρ] ⊢Δ = PE.subst (λ x → Δ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F' ([F]₁ [ρ] ⊢Δ)
+          in  irrelevanceEq' {Δ} (ρF'≡ρF₁ ρ)
+                             ([ρF'] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ)
+                             (symEq ([F] [ρ] ⊢Δ) ([ρF'] [ρ] ⊢Δ)
+                                    ([F≡F'] [ρ] ⊢Δ))
     in  Π₌ _ _ (red D) (≅-sym A≡B)
           [F₁≡F]
-          (λ ρ ⊢Δ [a] →
-               let ρG'a≡ρG₁'a = PE.cong (λ x → wkLiftₜ ρ x [ _ ]) (PE.sym G₁≡G')
-                   [ρG'a] = PE.subst (λ x → _ ⊩⟨ _ ⟩ wkLiftₜ ρ x [ _ ]) G₁≡G'
-                                     ([G]₁ ρ ⊢Δ [a])
-                   [a]₁ = convTerm₁ ([F]₁ ρ ⊢Δ) ([F] ρ ⊢Δ) ([F₁≡F] ρ ⊢Δ) [a]
+          (λ {ρ} [ρ] ⊢Δ [a] →
+               let ρG'a≡ρG₁'a = PE.cong (λ x → U.wk (lift ρ) x [ _ ]) (PE.sym G₁≡G')
+                   [ρG'a] = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk (lift ρ) x [ _ ]) G₁≡G'
+                                     ([G]₁ [ρ] ⊢Δ [a])
+                   [a]₁ = convTerm₁ ([F]₁ [ρ] ⊢Δ) ([F] [ρ] ⊢Δ) ([F₁≡F] [ρ] ⊢Δ) [a]
                in  irrelevanceEq' ρG'a≡ρG₁'a
                                   [ρG'a]
-                                  ([G]₁ ρ ⊢Δ [a])
-                                  (symEq ([G] ρ ⊢Δ [a]₁) [ρG'a]
-                                         ([G≡G'] ρ ⊢Δ [a]₁)))
+                                  ([G]₁ [ρ] ⊢Δ [a])
+                                  (symEq ([G] [ρ] ⊢Δ [a]₁) [ρG'a]
+                                         ([G≡G'] [ρ] ⊢Δ [a]₁)))
   symEqT (U (U _ _ _) (U _ _ _)) A≡B = PE.refl
   symEqT (emb⁰¹ x) A≡B = symEqT x A≡B
   symEqT (emb¹⁰ x) A≡B = symEqT x A≡B

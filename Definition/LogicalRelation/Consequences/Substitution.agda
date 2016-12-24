@@ -4,7 +4,7 @@ open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.EqRelInstance
-import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
@@ -84,10 +84,10 @@ substitutionTerm t [ ⊢Γ , ⊢Δ , σ ] | [Γ] , [A] , [t] | [Γ]' , [σ] =
   let [σ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
   in  wellformedTerm (proj₁ ([A] ⊢Δ [σ]')) (proj₁ ([t] ⊢Δ [σ]'))
 
-wkSubst' : ∀ {σ Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
-           (ρ : Δ T.⊆ Δ')
+wkSubst' : ∀ {ρ σ Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+           ([ρ] : ρ ∷ Δ ⊆ Δ')
            ([σ] : Δ ⊢ₛ σ ∷ Γ / ⊢Γ / ⊢Δ)
-         → Δ' ⊢ₛ wkSubst (T.toWk ρ) σ ∷ Γ / ⊢Γ / ⊢Δ'
+         → Δ' ⊢ₛ wkSubst ρ σ ∷ Γ / ⊢Γ / ⊢Δ'
 wkSubst' ⊢Γ ⊢Δ ⊢Δ' ρ σ with fundamentalSubst ⊢Γ ⊢Δ σ
 ... | [Γ] , [σ] =
   let q , w = wellformedSubst [Γ] ⊢Δ' (wkSubstS [Γ] ⊢Δ ⊢Δ' ρ [σ])

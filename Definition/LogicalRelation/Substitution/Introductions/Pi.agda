@@ -3,10 +3,10 @@ open import Definition.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.Pi {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped hiding (wk)
+open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
@@ -38,55 +38,56 @@ import Tools.PropositionalEquality as PE
                            (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ'])
       ⊢G {σ'} [σ'] = wellformed (proj₁ ([G]σ {σ'} [σ']))
       ⊢ΠF▹G = Π ⊢F [σ] ▹ ⊢G [σ]
-      [G]a : ∀ {Δ₁} a (ρ : Δ T.⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
-             ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst (T.toWk ρ) σ) F
-                / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])))
-           → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst (T.toWk ρ) σ) a) G)
+      [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
+             ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst ρ σ) F
+                / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])))
+           → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst ρ σ) a) G)
                (λ [Aσ] →
                {σ' : Nat → Term} →
                (Σ (Δ₁ ⊩ₛ tail σ' ∷ Γ / [Γ] / ⊢Δ₁)
                (λ [tailσ] →
                   Δ₁ ⊩⟨ l ⟩ head σ' ∷ subst (tail σ') F / proj₁ ([F] ⊢Δ₁ [tailσ]))) →
-               Δ₁ ⊩ₛ consSubst (wkSubst (T.toWk ρ) σ) a ≡ σ' ∷ Γ ∙ F /
+               Δ₁ ⊩ₛ consSubst (wkSubst ρ σ) a ≡ σ' ∷ Γ ∙ F /
                [Γ] ∙ [F] / ⊢Δ₁ /
-               consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]) [F]
+               consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]) [F]
                [a] →
-               Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst (T.toWk ρ) σ) a) G ≡
+               Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst ρ σ) a) G ≡
                subst σ' G / [Aσ])
-      [G]a a ρ ⊢Δ₁ [a] = ([G] {σ = consSubst (wkSubst (T.toWk ρ) σ) a} ⊢Δ₁
+      [G]a {ρ} a [ρ] ⊢Δ₁ [a] = ([G] {σ = consSubst (wkSubst ρ σ) a} ⊢Δ₁
                               (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
-                                          (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
+                                          (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])
                                           [F] [a]))
-      [G]a' : ∀ {Δ₁} a (ρ : Δ T.⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
-            → Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst (T.toWk ρ) σ) F
-                 / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))
-            → Δ₁ ⊩⟨ l ⟩ T.wkLiftₜ ρ (subst (liftSubst σ) G) [ a ]
+      [G]a' : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
+            → Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst ρ σ) F
+                 / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))
+            → Δ₁ ⊩⟨ l ⟩ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]
       [G]a' a ρ ⊢Δ₁ [a] = irrelevance' (PE.sym (G-substWkLemma a σ G))
                                    (proj₁ ([G]a a ρ ⊢Δ₁ [a]))
   in Π' (subst σ F) (subst (liftSubst σ) G)
-        (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (≅-Πrefl (⊢F [σ]) (⊢G [σ])) (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
-        (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
+        (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (≅-Πrefl (⊢F [σ]) (⊢G [σ]))
+        (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
+        (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
            let [a]' = irrelevanceTerm'
-                        (wk-subst F) (wk ρ ⊢Δ₁ [σF])
-                        (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
-           in  [G]a' a ρ ⊢Δ₁ [a]')
-        (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
-           let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+                        (wk-subst F) (wk [ρ] ⊢Δ₁ [σF])
+                        (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))) [a]
+           in  [G]a' a [ρ] ⊢Δ₁ [a]')
+        (λ {ρ} {Δ₁} {a} {b} [ρ] ⊢Δ₁ [a] [b] [a≡b] →
+           let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
                [a]' = irrelevanceTerm'
-                        (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                        (wk-subst F) (wk [ρ] ⊢Δ₁ [σF])
                         (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
                [b]' = irrelevanceTerm'
-                        (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                        (wk-subst F) (wk [ρ] ⊢Δ₁ [σF])
                         (proj₁ ([F] ⊢Δ₁ [ρσ])) [b]
                [a≡b]' = irrelevanceEqTerm'
-                          (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+                          (wk-subst F) (wk [ρ] ⊢Δ₁ [σF])
                           (proj₁ ([F] ⊢Δ₁ [ρσ])) [a≡b]
            in  irrelevanceEq''
                  (PE.sym (G-substWkLemma a σ G))
                  (PE.sym (G-substWkLemma b σ G))
-                 (proj₁ ([G]a a ρ ⊢Δ₁ [a]'))
-                 ([G]a' a ρ ⊢Δ₁ [a]')
-                 (proj₂ ([G]a a ρ ⊢Δ₁ [a]')
+                 (proj₁ ([G]a a [ρ] ⊢Δ₁ [a]'))
+                 ([G]a' a [ρ] ⊢Δ₁ [a]')
+                 (proj₂ ([G]a a [ρ] ⊢Δ₁ [a]')
                         ([ρσ] , [b]')
                         (reflSubst [Γ] ⊢Δ₁ [ρσ] , [a≡b]')))
   ,  (λ {σ'} [σ'] [σ≡σ'] →
@@ -110,26 +111,26 @@ import Tools.PropositionalEquality as PE
                          ([wk1σ≡wk1σ'] , neuEqTerm [F][wk1σ]
                            (var zero) (var zero) var0 var0 (≅ₜ-nerefl var0 (var zero))))))
                (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']))
-               (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
-                  let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
-                      [ρσ'] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']
-                      [a]' = irrelevanceTerm' (wk-subst F) (wk ρ ⊢Δ₁ [σF])
+               (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
+                  let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
+                      [ρσ'] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ']
+                      [a]' = irrelevanceTerm' (wk-subst F) (wk [ρ] ⊢Δ₁ [σF])
                                  (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
                       [a]'' = convTerm₁ (proj₁ ([F] ⊢Δ₁ [ρσ]))
                                         (proj₁ ([F] ⊢Δ₁ [ρσ']))
                                         (proj₂ ([F] ⊢Δ₁ [ρσ]) [ρσ']
-                                               (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ']))
+                                               (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] [σ≡σ']))
                                         [a]'
                       [ρσa≡ρσ'a] = consSubstSEq {t = a} {A = F} [Γ] ⊢Δ₁
-                                                (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ])
-                                                (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ'])
+                                                (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])
+                                                (wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] [σ≡σ'])
                                                 [F] [a]'
                   in  irrelevanceEq'' (PE.sym (G-substWkLemma a σ G))
                                       (PE.sym (G-substWkLemma a σ' G))
-                                      (proj₁ ([G]a a ρ ⊢Δ₁ [a]'))
-                                      ([G]a' a ρ ⊢Δ₁ [a]')
-                                      (proj₂ ([G]a a ρ ⊢Δ₁ [a]')
-                                             (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ'] , [a]'')
+                                      (proj₁ ([G]a a [ρ] ⊢Δ₁ [a]'))
+                                      ([G]a' a [ρ] ⊢Δ₁ [a]')
+                                      (proj₂ ([G]a a [ρ] ⊢Δ₁ [a]')
+                                             (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ'] , [a]'')
                                              [ρσa≡ρσ'a])))
 
 Π-congₛ : ∀ {F G H E Γ l}
@@ -162,16 +163,16 @@ import Tools.PropositionalEquality as PE
                                         (proj₁ ([F] ⊢Δ₁ [ρσ]))
                                         ([F]' ρ ⊢Δ₁)
                                         ([F≡H] ⊢Δ₁ [ρσ]))
-         (λ {Δ} {a} ρ ⊢Δ₁ [a] →
-            let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+         (λ {ρ} {Δ} {a} [ρ] ⊢Δ₁ [a] →
+            let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
                 [a]' = irrelevanceTerm' (wk-subst F)
-                                        ([F]' ρ ⊢Δ₁)
+                                        ([F]' [ρ] ⊢Δ₁)
                                         (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
                 [aρσ] = consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]'
             in  irrelevanceEq'' (PE.sym (G-substWkLemma a σ G))
                                 (PE.sym (G-substWkLemma a σ E))
                                 (proj₁ ([G] ⊢Δ₁ [aρσ]))
-                                ([G]' ρ ⊢Δ₁ [a])
+                                ([G]' [ρ] ⊢Δ₁ [a])
                                 ([G≡E] ⊢Δ₁ [aρσ]))
 
 Πₜₛ : ∀ {F G Γ} ([Γ] : ⊩ₛ Γ)

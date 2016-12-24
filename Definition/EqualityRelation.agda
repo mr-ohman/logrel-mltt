@@ -1,6 +1,6 @@
 module Definition.EqualityRelation where
 
-open import Definition.Untyped
+open import Definition.Untyped as U
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
@@ -41,14 +41,16 @@ record EqRelSet : Set₁ where
            → Γ ⊢ a' ≅ b' ∷ B
            → Γ ⊢ a  ≅ b  ∷ A
 
-    ≅-wk  : ∀ {A B Γ Δ} (ρ : Γ ⊆ Δ)
+    ≅-wk  : ∀ {A B ρ Γ Δ}
+          → ρ ∷ Γ ⊆ Δ
           → ⊢ Δ
           → Γ ⊢ A ≅ B
-          → Δ ⊢ wkₜ ρ A ≅ wkₜ ρ B
-    ≅ₜ-wk : ∀ {t u A Γ Δ} (ρ : Γ ⊆ Δ)
+          → Δ ⊢ U.wk ρ A ≅ U.wk ρ B
+    ≅ₜ-wk : ∀ {t u A ρ Γ Δ}
+          → ρ ∷ Γ ⊆ Δ
           → ⊢ Δ
           → Γ ⊢ t ≅ u ∷ A
-          → Δ ⊢ wkₜ ρ t ≅ wkₜ ρ u ∷ wkₜ ρ A
+          → Δ ⊢ U.wk ρ t ≅ U.wk ρ u ∷ U.wk ρ A
 
     ≅-eq  : ∀ {A B Γ}
           → Γ ⊢ A ≅ B

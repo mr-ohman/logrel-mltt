@@ -3,7 +3,7 @@ open import Definition.EqualityRelation
 module Definition.LogicalRelation {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped as U
 open import Definition.Typed hiding (_⊢_≡_; _⊢_≡_∷_)
 open import Definition.Typed.Weakening
 
@@ -167,51 +167,52 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     -- Helping functions for logical relation
 
     wk-prop¹ : (Γ : Con Term) (F : Term) → Set
-    wk-prop¹ Γ F = ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F
+    wk-prop¹ Γ F = ∀ {ρ Δ} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ) → Δ ⊩¹ U.wk ρ F
 
     wk-subst-prop¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) → Set
     wk-subst-prop¹ Γ F G [F] =
-      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              → Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ → Δ ⊩¹ wkLiftₜ ρ G [ a ]
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                → Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ → Δ ⊩¹ U.wk (lift ρ) G [ a ]
 
     wk-subst-prop-T¹ : (Γ : Con Term) (F G t : Term)
                        ([F] : wk-prop¹ Γ F)
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-subst-prop-T¹ Γ F G t [F] [G] =
-      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-              → Δ ⊩¹ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                → Δ ⊩¹ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
 
     wk-substEq-prop¹ : (Γ : Con Term) (F G : Term)
                        ([F] : wk-prop¹ Γ F)
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-substEq-prop¹ Γ F G [F] [G] =
-      ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                → ([b] : Δ ⊩¹ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                → Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ
-                → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G [ b ] / [G] ρ ⊢Δ [a]
+      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                  → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                  → ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                  → Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ
+                  → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G [ b ] / [G] [ρ] ⊢Δ [a]
 
     wk-fun-ext-prop¹ : (Γ : Con Term) (F G f : Term)
                        ([F] : wk-prop¹ Γ F)
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-fun-ext-prop¹ Γ F G f [F] [G] =
-      ∀ {Δ a b} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                  ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                  ([b] : Δ ⊩¹ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                  ([a≡b] : Δ ⊩¹ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ f ∘ b ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                    ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                    ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                    ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                  → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ f ∘ b ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
 
     wk-fun-ext-prop¹' : (Γ : Con Term) (F G f g : Term)
                         ([F] : wk-prop¹ Γ F)
                         ([G] : wk-subst-prop¹ Γ F G [F])
                       → Set
     wk-fun-ext-prop¹' Γ F G f g [F] [G] =
-      ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-              → Δ ⊩¹ wkₜ ρ f ∘ a ≡ wkₜ ρ g ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a]
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
     -- Pi-type
 
     record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where
@@ -237,9 +238,13 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         G'     : Term
         D'     : Γ ⊢ B ⇒* Π F' ▹ G'
         A≡B    : Γ ⊢ A ≅ B
-        [F≡F'] : ∀ {Δ} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) → Δ ⊩¹ wkₜ ρ F ≡ wkₜ ρ F' / [F] ρ ⊢Δ
-        [G≡G'] : ∀ {Δ a} → (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ) ([a] : Δ ⊩¹ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-                       → Δ ⊩¹ wkLiftₜ ρ G [ a ] ≡ wkLiftₜ ρ G' [ a ] / [G] ρ ⊢Δ [a]
+        [F≡F'] : ∀ {ρ Δ}
+               → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+               → Δ ⊩¹ U.wk ρ F ≡ U.wk ρ F' / [F] [ρ] ⊢Δ
+        [G≡G'] : ∀ {ρ Δ a}
+               → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+               → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+               → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G' [ a ] / [G] [ρ] ⊢Δ [a]
 
     -- Issue: Agda complains about record use not being strictly positive.
     --        Therefore we have to use ×

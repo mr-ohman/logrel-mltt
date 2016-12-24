@@ -3,7 +3,7 @@ open import Definition.EqualityRelation
 module Definition.LogicalRelation.Properties.Reduction {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped as U
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
@@ -74,29 +74,29 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ex
       t⇒u'  = conv* t⇒u A≡ΠFG
       [d]  = [ ⊢t , ⊢u , d ]
       [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
-      ta×ta≡ua : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                 ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-               → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
-               × (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷
-                 wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+      ta×ta≡ua : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+                 ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+               → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G]  [ρ] ⊢Δ [a])
+               × (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ u ∘ a ∷
+                 U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
       ta×ta≡ua ρ ⊢Δ [a] = let ⊢a = wellformedTerm ([F] ρ ⊢Δ) [a]
                           in  redSubst*Term (app-subst* (wkRed*Term ρ ⊢Δ t⇒u') ⊢a)
                                             ([G] ρ ⊢Δ [a]) ([f]₁ ρ ⊢Δ [a])
-      ta : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-           ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-         → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ∷ wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+      ta : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+           ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+         → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
       ta ρ ⊢Δ [a] = proj₁ (ta×ta≡ua ρ ⊢Δ [a])
-      ta≡ua : ∀ {Δ a} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-            → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ≡ wkₜ ρ u ∘ a ∷
-              wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+      ta≡ua : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+              ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+            → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ u ∘ a ∷
+              U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
       ta≡ua ρ ⊢Δ [a] = proj₂ (ta×ta≡ua ρ ⊢Δ [a])
-      ta≡tb : ∀ {Δ a b} (ρ : Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              ([a] : Δ ⊩⟨ l ⟩ a ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-              ([b] : Δ ⊩⟨ l ⟩ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-              ([a≡b] : Δ ⊩⟨ l ⟩ a ≡ b ∷ wkₜ ρ F / [F] ρ ⊢Δ)
-            → (Δ ⊩⟨ l ⟩ wkₜ ρ t ∘ a ≡ wkₜ ρ t ∘ b ∷
-              wkLiftₜ ρ G [ a ] / [G] ρ ⊢Δ [a])
+      ta≡tb : ∀ {ρ Δ a b} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+              ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              ([b] : Δ ⊩⟨ l ⟩ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              ([a≡b] : Δ ⊩⟨ l ⟩ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+            → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ t ∘ b ∷
+              U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
       ta≡tb ρ ⊢Δ [a] [b] [a≡b] =
         transEqTerm ([G] ρ ⊢Δ [a]) (ta≡ua ρ ⊢Δ [a])
           (transEqTerm ([G] ρ ⊢Δ [a]) ([f] ρ ⊢Δ [a] [b] [a≡b])

@@ -93,6 +93,11 @@ wk-comp-comm p q (natrec t t₁ t₂ t₃) =
                (wk-comp-comm p q t₂)
                (wk-comp-comm p q t₃)
 
+wk-comp-comm-subst : ∀ {a} ρ ρ' G
+                   → wk (lift (ρ • ρ')) G [ a ] PE.≡ wk (lift ρ) (wk (lift ρ') G) [ a ]
+wk-comp-comm-subst {a} ρ ρ' G =
+  PE.cong (λ x → x [ a ]) (PE.sym (wk-comp-comm (lift ρ) (lift ρ') G))
+
 wkIndex-step : ∀ {A} pr → wk1 (wk pr A) ≡ wk (step pr) A
 wkIndex-step pr = wk-comp-comm (step id) pr _
 

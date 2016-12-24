@@ -3,11 +3,11 @@ open import Definition.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.Lambda {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped as U
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
-import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
@@ -48,7 +48,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lam ⊢F ⊢t)) lam
                (≅ₜ-lamrefl ⊢F ⊢t)
-               (λ {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
+               (λ {_} {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)
                                               (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
@@ -102,7 +102,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                                                G[b] t[b])))
                   in  transEqTerm G[a] lamt∘a≡t[a]
                              (transEqTerm G[a] t[a]≡t[b] t[b]≡lamt∘b))
-               (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
+               (λ {_} {Δ₁} {a} ρ ⊢Δ₁ [a] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)
                                               (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
@@ -142,13 +142,13 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
              ⊢t' = wellformedTerm [G]₁' (proj₁ ([t] (⊢Δ ∙ ⊢F') [liftσ']))
              neuVar = neuTerm ([F]' (T.step T.id) (⊢Δ ∙ ⊢F))
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
-             σlamt∘a≡σ'lamt∘a : ∀ {Δ₁ a} → (ρ : Δ T.⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
-                 → ([a] : Δ₁ ⊩⟨ ¹ ⟩ a ∷ T.wkₜ ρ (subst σ F) / [F]' ρ ⊢Δ₁)
-                 → Δ₁ ⊩⟨ ¹ ⟩ T.wkₜ ρ (subst σ (lam t)) ∘ a
-                           ≡ T.wkₜ ρ (subst σ' (lam t)) ∘ a
-                           ∷ T.wkLiftₜ ρ (subst (liftSubst σ) G) [ a ]
-                           / [G]' ρ ⊢Δ₁ [a]
-             σlamt∘a≡σ'lamt∘a {Δ₁} {a} ρ ⊢Δ₁ [a] =
+             σlamt∘a≡σ'lamt∘a : ∀ {ρ Δ₁ a} → ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
+                 → ([a] : Δ₁ ⊩⟨ ¹ ⟩ a ∷ U.wk ρ (subst σ F) / [F]' [ρ] ⊢Δ₁)
+                 → Δ₁ ⊩⟨ ¹ ⟩ U.wk ρ (subst σ (lam t)) ∘ a
+                           ≡ U.wk ρ (subst σ' (lam t)) ∘ a
+                           ∷ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]
+                           / [G]' [ρ] ⊢Δ₁ [a]
+             σlamt∘a≡σ'lamt∘a {_} {Δ₁} {a} ρ ⊢Δ₁ [a] =
                 let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                     [ρσ'] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ']
                     [ρσ≡ρσ'] = wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ']
@@ -304,19 +304,19 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
           (≅-fun-ext ⊢F ⊢t ⊢t₁ σf0≡σg0')
           (Πₜ f₁ [d] funcF f≡f [f] [f]₁)
           (Πₜ g₁ [d'] funcG g≡g [g] [g]₁)
-          (λ {Δ₁} {a} ρ ⊢Δ₁ [a] →
+          (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
              let [a]' = irrelevanceTerm'
-                          (wk-subst F) ([F]' ρ ⊢Δ₁)
-                          (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]))) [a]
+                          (wk-subst F) ([F]' [ρ] ⊢Δ₁)
+                          (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))) [a]
                  fEq = PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl
                  gEq = PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl
                  GEq = PE.sym (PE.trans (subst-wk (subst (liftSubst σ) G))
                                         (PE.trans (substCompEq G)
-                                                  (substEq (lemma4 (T.toWk ρ) σ a) G)))
+                                                  (substEq (lemma4 ρ σ a) G)))
              in  irrelevanceEqTerm'' fEq gEq GEq
-                                     (proj₁ ([G] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
-                                     ([G]' ρ ⊢Δ₁ [a])
-                                     ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ] , [a]')))
+                                     (proj₁ ([G] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
+                                     ([G]' [ρ] ⊢Δ₁ [a])
+                                     ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
 
 fun-extₛ : ∀ {f g F G Γ l}
            ([Γ] : ⊩ₛ Γ)

@@ -6,7 +6,7 @@ open EqRelSet {{...}}
 open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
-import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Substitution
 import Definition.LogicalRelation.Substitution.Irrelevance as S
@@ -37,10 +37,10 @@ consSubstSEq : ∀ {l σ σ' t A Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
 consSubstSEq [Γ] ⊢Δ [σ] [σ≡σ'] [A] [t] =
   [σ≡σ'] , reflEqTerm (proj₁ ([A] ⊢Δ [σ])) [t]
 
-wkSubstS : ∀ {σ Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
-           (ρ : Δ T.⊆ Δ')
+wkSubstS : ∀ {ρ σ Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+           ([ρ] : ρ ∷ Δ ⊆ Δ')
            ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-         → Δ' ⊩ₛ wkSubst (T.toWk ρ) σ ∷ Γ / [Γ] / ⊢Δ'
+         → Δ' ⊩ₛ wkSubst ρ σ ∷ Γ / [Γ] / ⊢Δ'
 wkSubstS ε ⊢Δ ⊢Δ' ρ [σ] = tt
 wkSubstS {σ = σ} {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
   let [tailσ] = wkSubstS [Γ] ⊢Δ ⊢Δ' ρ (proj₁ [σ])
@@ -50,12 +50,12 @@ wkSubstS {σ = σ} {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
         (proj₁ (x ⊢Δ' [tailσ]))
         (LR.wkTerm ρ ⊢Δ' (proj₁ (x ⊢Δ (proj₁ [σ]))) (proj₂ [σ]))
 
-wkSubstSEq : ∀ {σ σ' Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
-             (ρ : Δ T.⊆ Δ')
+wkSubstSEq : ∀ {ρ σ σ' Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+             ([ρ] : ρ ∷ Δ ⊆ Δ')
              ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
              ([σ≡σ'] : Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
-           → Δ' ⊩ₛ wkSubst (T.toWk ρ) σ ≡ wkSubst (T.toWk ρ) σ' ∷ Γ / [Γ]
-                / ⊢Δ' / wkSubstS [Γ] ⊢Δ ⊢Δ' ρ [σ]
+           → Δ' ⊩ₛ wkSubst ρ σ ≡ wkSubst ρ σ' ∷ Γ / [Γ]
+                / ⊢Δ' / wkSubstS [Γ] ⊢Δ ⊢Δ' [ρ] [σ]
 wkSubstSEq ε ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] = tt
 wkSubstSEq {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] =
   wkSubstSEq [Γ] ⊢Δ ⊢Δ' ρ (proj₁ [σ]) (proj₁ [σ≡σ'])

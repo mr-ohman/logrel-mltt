@@ -40,37 +40,37 @@ mutual
     let F₁≡F′  , G₁≡G′  = Π-PE-injectivity (whrDet*' (red D₁ , Π) (D′  , Π))
         F₂≡F″ , G₂≡G″ = Π-PE-injectivity (whrDet*' (red D₂ , Π) (D″ , Π))
         substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ U.wk (lift ρ) x [ a ]
-        [F′] : ∀ {Δ} ρ ⊢Δ → Δ ⊩⟨ l′ ⟩ wkₜ ρ F′
-        [F′] ρ ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wkₜ ρ x) F₁≡F′ ([F]₁ ρ ⊢Δ)
-        [F″] : ∀ {Δ} ρ ⊢Δ → Δ ⊩⟨ l″ ⟩ wkₜ ρ F″
-        [F″] ρ ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wkₜ ρ x) F₂≡F″ ([F]₂ ρ ⊢Δ)
-        [F′≡F″] : ∀ {Δ} ρ ⊢Δ → Δ ⊩⟨ l′ ⟩ wkₜ ρ F′ ≡ wkₜ ρ F″ / [F′] ρ ⊢Δ
-        [F′≡F″] ρ ⊢Δ = irrelevanceEq' (PE.cong (wkₜ ρ) F₁≡F′)
-                                      ([F]₁ ρ ⊢Δ) ([F′] ρ ⊢Δ) ([F≡F′]₁ ρ ⊢Δ)
-        [G′] : ∀ {Δ a} ρ ⊢Δ
-             → Δ ⊩⟨ l′ ⟩ a ∷ wkₜ ρ F′ / [F′] ρ ⊢Δ
-             → Δ ⊩⟨ l′ ⟩ wkLiftₜ ρ G′ [ a ]
-        [G′] ρ ⊢Δ [a] =
-          let [a′] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F′))
-                                      ([F′] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a]
-          in  PE.subst (substLift (toWk ρ)) G₁≡G′ ([G]₁ ρ ⊢Δ [a′])
-        [G″] : ∀ {Δ a} ρ ⊢Δ
-             → Δ ⊩⟨ l″ ⟩ a ∷ wkₜ ρ F″ / [F″] ρ ⊢Δ
-             → Δ ⊩⟨ l″ ⟩ wkLiftₜ ρ G″ [ a ]
-        [G″] ρ ⊢Δ [a] =
-          let [a″] = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₂≡F″))
-                                      ([F″] ρ ⊢Δ) ([F]₂ ρ ⊢Δ) [a]
-          in  PE.subst (substLift (toWk ρ)) G₂≡G″ ([G]₂ ρ ⊢Δ [a″])
-        [G′≡G″] : ∀ {Δ a} ρ ⊢Δ
-                  ([a] : Δ ⊩⟨ l′ ⟩ a ∷ wkₜ ρ F′ / [F′] ρ ⊢Δ)
-                → Δ ⊩⟨ l′ ⟩ wkLiftₜ ρ G′  [ a ]
-                          ≡ wkLiftₜ ρ G″ [ a ] / [G′] ρ ⊢Δ [a]
-        [G′≡G″] ρ ⊢Δ [a′] =
-          let [a]₁ = irrelevanceTerm' (PE.cong (wkₜ ρ) (PE.sym F₁≡F′))
-                                      ([F′] ρ ⊢Δ) ([F]₁ ρ ⊢Δ) [a′]
-          in  irrelevanceEq' (PE.cong (λ x → wkLiftₜ ρ x [ _ ]) G₁≡G′)
-                             ([G]₁ ρ ⊢Δ [a]₁) ([G′] ρ ⊢Δ [a′])
-                             ([G≡G′]₁ ρ ⊢Δ [a]₁)
+        [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′
+        [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
+        [F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l″ ⟩ U.wk ρ F″
+        [F″] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₂≡F″ ([F]₂ [ρ] ⊢Δ)
+        [F′≡F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′ ≡ U.wk ρ F″ / [F′] [ρ] ⊢Δ
+        [F′≡F″] {ρ} [ρ] ⊢Δ = irrelevanceEq' (PE.cong (U.wk ρ) F₁≡F′)
+                                      ([F]₁ [ρ] ⊢Δ) ([F′] [ρ] ⊢Δ) ([F≡F′]₁ [ρ] ⊢Δ)
+        [G′] : ∀ {ρ Δ a} [ρ] ⊢Δ
+             → Δ ⊩⟨ l′ ⟩ a ∷ U.wk ρ F′ / [F′] [ρ] ⊢Δ
+             → Δ ⊩⟨ l′ ⟩ U.wk (lift ρ) G′ [ a ]
+        [G′] {ρ} [ρ] ⊢Δ [a] =
+          let [a′] = irrelevanceTerm' (PE.cong (U.wk ρ) (PE.sym F₁≡F′))
+                                      ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a]
+          in  PE.subst (substLift ρ) G₁≡G′ ([G]₁ [ρ] ⊢Δ [a′])
+        [G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
+             → Δ ⊩⟨ l″ ⟩ a ∷ U.wk ρ F″ / [F″] [ρ] ⊢Δ
+             → Δ ⊩⟨ l″ ⟩ U.wk (lift ρ) G″ [ a ]
+        [G″] {ρ} [ρ] ⊢Δ [a] =
+          let [a″] = irrelevanceTerm' (PE.cong (U.wk ρ) (PE.sym F₂≡F″))
+                                      ([F″] [ρ] ⊢Δ) ([F]₂ [ρ] ⊢Δ) [a]
+          in  PE.subst (substLift ρ) G₂≡G″ ([G]₂ [ρ] ⊢Δ [a″])
+        [G′≡G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
+                  ([a] : Δ ⊩⟨ l′ ⟩ a ∷ U.wk ρ F′ / [F′] [ρ] ⊢Δ)
+                → Δ ⊩⟨ l′ ⟩ U.wk (lift ρ) G′  [ a ]
+                          ≡ U.wk (lift ρ) G″ [ a ] / [G′] [ρ] ⊢Δ [a]
+        [G′≡G″] {ρ} [ρ] ⊢Δ [a′] =
+          let [a]₁ = irrelevanceTerm' (PE.cong (U.wk ρ) (PE.sym F₁≡F′))
+                                      ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a′]
+          in  irrelevanceEq' (PE.cong (λ x → U.wk (lift ρ) x [ _ ]) G₁≡G′)
+                             ([G]₁ [ρ] ⊢Δ [a]₁) ([G′] [ρ] ⊢Δ [a′])
+                             ([G≡G′]₁ [ρ] ⊢Δ [a]₁)
     in  Π₌ F″ G″ D″ (≅-trans A≡B A≡B₁)
            (λ ρ ⊢Δ → transEq ([F] ρ ⊢Δ) ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ)
                              ([F≡F′] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ))

@@ -7,7 +7,7 @@ import Tools.Unit
 import Tools.Nat
 import Tools.Product
 import Tools.PropositionalEquality
-import Tools.HeterogeneousEquality
+--import Tools.HeterogeneousEquality
 import Tools.Context
 
 import Definition.Untyped
