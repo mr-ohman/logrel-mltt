@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.LogicalRelation.Consequences.Inequality where
 
 open import Definition.Untyped

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Tools.Nullary where
 
 open import Tools.Empty

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.LogicalRelation.Consequences.Reduction where
 
 open import Definition.Untyped

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.Arrows where
 
 -- This module might not be solvable without Π-injectivity or adjustments to type judgements.

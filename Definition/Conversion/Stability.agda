@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Conversion.Stability where
 
 open import Definition.Untyped

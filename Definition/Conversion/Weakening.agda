@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Conversion.Weakening where
 
 open import Definition.Untyped as U hiding (wk)

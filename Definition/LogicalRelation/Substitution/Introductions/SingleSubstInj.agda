@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.LogicalRelation.Substitution.Introductions.SingleSubstInj where
 
 open import Definition.Untyped as U hiding (wk)

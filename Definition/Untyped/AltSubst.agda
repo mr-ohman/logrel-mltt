@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Untyped.AltSubst where
 
 -- Alternative substitution, based on implementation from

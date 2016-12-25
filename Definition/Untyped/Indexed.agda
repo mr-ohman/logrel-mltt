@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Untyped.Indexed where
 
 open import Tools.Unit

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.LogicalRelation.Consequences.Injectivity where
 
 open import Definition.Untyped hiding (wk)

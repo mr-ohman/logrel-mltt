@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.LogicalRelation.Consequences.SingleSubst where
 
 open import Definition.Untyped

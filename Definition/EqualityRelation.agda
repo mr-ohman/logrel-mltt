@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.EqualityRelation where
 
 open import Definition.Untyped as U

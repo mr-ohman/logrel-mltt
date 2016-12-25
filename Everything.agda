@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 -- A Logical Relation for Dependent Type Theory Formalized in Agda
 
 module Everything where

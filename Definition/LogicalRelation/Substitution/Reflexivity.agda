@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 open import Definition.EqualityRelation
 
 module Definition.LogicalRelation.Substitution.Reflexivity {{eqrel : EqRelSet}} where

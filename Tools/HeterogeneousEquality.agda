@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Tools.HeterogeneousEquality where
 
 import Tools.PropositionalEquality as PE
