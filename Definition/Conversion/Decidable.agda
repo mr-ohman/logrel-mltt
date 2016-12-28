@@ -54,33 +54,39 @@ mutual
   dec~↑ : ∀ {k l R T Γ}
         → Γ ⊢ k ∷ R → Γ ⊢ l ∷ T
         → Neutral k → Neutral l
-        → Dec (∃ λ A → Γ ⊢ A × (Γ ⊢ k ~ l ↑ A))
+        → Dec (∃ λ A → Γ ⊢ k ~ l ↑ A)
   dec~↑ (var x₁ x₂) (var x₃ x₄) (var m) (var n) with m ≟ n
   dec~↑ {T = T} (var x₁ x₂) (var x₃ x₄) (var n) (var .n) | yes PE.refl =
-    yes (T , syntacticTerm (var x₃ x₄) , var (var x₃ x₄))
+    yes (T , var (var x₃ x₄))
   dec~↑ (var x₁ x₂) (var x₃ x₄) (var m) (var n) | no ¬p =
-    no (λ { (A , x) → ¬p {!!} })
+    no (λ { (A , x) → ¬p (lemx x) })
 
-  dec~↑ k₁ l (var n) (_∘_ neL) = no (λ { (_ , _ , ()) })
-  dec~↑ k₁ l (var n) (natrec neL) = no (λ { (_ , _ , ()) })
-  dec~↑ k₂ l (_∘_ neK) (var n) = no (λ { (_ , _ , ()) })
+  dec~↑ k₁ l (var n) (_∘_ neL) = no (λ { (_ , ()) })
+  dec~↑ k₁ l (var n) (natrec neL) = no (λ { (_ , ()) })
+  dec~↑ k₂ l (_∘_ neK) (var n) = no (λ { (_ , ()) })
 
   dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) with dec~↓ k₁ l neK neL
-  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) =
-    {!!}
+  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) with decConv↑' k₂ l₁
+  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) | yes p with decConv↑Term' k₂ l₁ p
+  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) | yes p | yes p₁ =
+    yes ({!!} , (app {!k~l!} p₁))
+  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) | yes p | no ¬p =
+    no (λ { (_ , app x x₁) → ¬p {!!} })
+  dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | yes (A , k~l) | no ¬p =
+    no (λ { (_ , app x x₁) → ¬p {!!} })
   dec~↑ (k₁ ∘ k₂) (l ∘ l₁) (_∘_ neK) (_∘_ neL) | no ¬p =
-    no (λ { (_ , _ , app k~l x) → ¬p (_ , k~l) })
+    no (λ { (_ , app k~l x) → ¬p (_ , k~l) })
 
-  dec~↑ k₂ l (_∘_ neK) (natrec neL) = no (λ { (_ , _ , ()) })
-  dec~↑ k₂ l (natrec neK) (var n) = no (λ { (_ , _ , ()) })
-  dec~↑ k₂ l (natrec neK) (_∘_ neL) = no (λ { (_ , _ , ()) })
+  dec~↑ k₂ l (_∘_ neK) (natrec neL) = no (λ { (_ , ()) })
+  dec~↑ k₂ l (natrec neK) (var n) = no (λ { (_ , ()) })
+  dec~↑ k₂ l (natrec neK) (_∘_ neL) = no (λ { (_ , ()) })
 
   dec~↑ (natrec x k₁ k₂ k₃) (natrec x₁ l l₁ l₂) (natrec neK) (natrec neL)
     with dec~↓ k₃ l₂ neK neL
   dec~↑ (natrec x k₁ k₂ k₃) (natrec x₁ l l₁ l₂) (natrec neK) (natrec neL)
     | yes (A , k~l) = {!!}
   dec~↑ (natrec x k₁ k₂ k₃) (natrec x₁ l l₁ l₂) (natrec neK) (natrec neL)
-    | no ¬p = no (λ { (_ , _ , natrec x₂ x₃ x₄ k~l) → ¬p (ℕ , k~l) })
+    | no ¬p = no (λ { (_ , natrec x₂ x₃ x₄ k~l) → ¬p (ℕ , k~l) })
 
   dec~↑ k (conv l x) neK neL = dec~↑ k l neK neL
   dec~↑ (conv k x) l neK neL = dec~↑ k l neK neL
@@ -90,11 +96,12 @@ mutual
         → Neutral k → Neutral l
         → Dec (∃ λ A → Γ ⊢ k ~ l ↓ A)
   dec~↓ k l neK neL with dec~↑ k l neK neL
-  dec~↓ k₁ l₁ neK neL | yes (A , ⊢A , k~l) =
-    let B , whnfB , D = fullyReducible ⊢A
+  dec~↓ k₁ l₁ neK neL | yes (A , k~l) =
+    let ⊢A = proj₁ (syntacticEqTerm (soundness~↑ k~l))
+        B , whnfB , D = fullyReducible ⊢A
     in  yes (B , [~] A (red D) whnfB k~l)
   dec~↓ k₁ l₁ neK neL | no ¬p =
-    no (λ { (A , [~] B D whnfA k~l) → ¬p (B , proj₁ (syntacticRed D) , k~l) })
+    no (λ { (A , [~] B D whnfA k~l) → ¬p (B , k~l) })
 
 
   decConv↑ : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A [conv↑] B)
@@ -147,11 +154,20 @@ mutual
                → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A
                → Whnf t → Whnf u → Whnf A
                → Dec (Γ ⊢ t [conv↓] u ∷ A)
-  decConv↓Term t u = {!!}
+  decConv↓Term t u whnfT whnfU whnfA = {!!}
 
+  decConv↑' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
+            → Dec (Γ ⊢ A [conv↑] B)
+  decConv↑' t u = decConv↑ (syntacticTerm t) (syntacticTerm u)
 
-  -- decConv' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
-  --          → Dec (Γ ⊢ A [conv↓] B) × Dec (Γ ⊢ t [conv↓] u ∷ A)
-  -- decConv' t u with decConv↓ (syntacticTerm t) (syntacticTerm u)
-  -- decConv' t u | yes p = yes p , decConv↓Term t (conv u (sym (soundnessConv↓ p)))
-  -- decConv' t u | no ¬p = no ¬p , {!!}
+  decConv↑Term' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
+                → Γ ⊢ A [conv↑] B → Dec (Γ ⊢ t [conv↑] u ∷ A)
+  decConv↑Term' t u A<>B = decConv↑Term t (conv u (sym (soundnessConv↑ A<>B)))
+
+  -- Agda checks does not terminate
+  -- decConv↑'' : ∀ {t u A B Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ B
+  --          → Dec (Γ ⊢ A [conv↑] B × (Γ ⊢ t [conv↑] u ∷ A))
+  -- decConv↑'' t u with decConv↑ (syntacticTerm t) (syntacticTerm u)
+  -- decConv↑'' t u | yes p with decConv↑Term t (conv u (sym (soundnessConv↑ p)))
+  -- ... | q  = {!!}
+  -- decConv↑'' t u | no ¬p | q = no (λ { (x , y) → ¬p x })
