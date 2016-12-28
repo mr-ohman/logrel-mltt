@@ -25,7 +25,7 @@ mutual
   soundnessConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ A ≡ B
   soundnessConv↓ (U-refl ⊢Γ) = refl (U ⊢Γ)
   soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕ ⊢Γ)
-  soundnessConv↓ (ne x) = univ (soundness~↑ x)
+  soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
 
@@ -39,8 +39,8 @@ mutual
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x x₁) = conv (soundness~↑ x) (subset* x₁)
   soundnessConv↓Term (ne-ins x x₁ x₂) = conv (soundness~↑ x) (subset* x₁)
-  soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↑ x₂)
+  soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
-  soundnessConv↓Term (fun-ext F x x₁ c) =
+  soundnessConv↓Term (fun-ext F x x₁ y y₁ c) =
     fun-ext F x x₁ (soundnessConv↑Term c)

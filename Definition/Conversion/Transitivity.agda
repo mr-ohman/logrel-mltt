@@ -11,6 +11,7 @@ open import Definition.Conversion.Stability
 open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.Injectivity
 import Definition.LogicalRelation.Consequences.Inequality as WF
+open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.Substitution
 open import Definition.LogicalRelation.Consequences.SingleSubst
 
@@ -115,17 +116,17 @@ mutual
   transConv↓ Γ≡Δ (U-refl x) (U-refl x₁) = U-refl x
   transConv↓ Γ≡Δ (ℕ-refl x) (ℕ-refl x₁) = ℕ-refl x
   transConv↓ Γ≡Δ (ne x) (ne x₁) =
-    let A~C , U≡U = trans~↑ Γ≡Δ x x₁
+    let A~C , U≡U = trans~↓ Γ≡Δ x x₁
     in  ne A~C
   transConv↓ Γ≡Δ (Π-cong x x₁ x₂) (Π-cong x₃ x₄ x₅) =
     Π-cong x (transConv↑ Γ≡Δ x₁ x₄) (transConv↑ (Γ≡Δ ∙ soundnessConv↑ x₁) x₂ x₅)
   -- Refutable cases
-  transConv↓ Γ≡Δ (U-refl x) (ne ())
-  transConv↓ Γ≡Δ (ℕ-refl x) (ne ())
-  transConv↓ Γ≡Δ (Π-cong x x₁ x₂) (ne ())
-  transConv↓ Γ≡Δ (ne ()) (U-refl x₁)
-  transConv↓ Γ≡Δ (ne ()) (ℕ-refl x₁)
-  transConv↓ Γ≡Δ (ne ()) (Π-cong x₁ x₂ x₃)
+  transConv↓ Γ≡Δ (U-refl x) (ne ([~] A D whnfB ()))
+  transConv↓ Γ≡Δ (ℕ-refl x) (ne ([~] A D whnfB ()))
+  transConv↓ Γ≡Δ (Π-cong x x₁ x₂) (ne ([~] A D whnfB ()))
+  transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (U-refl x₁)
+  transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (ℕ-refl x₁)
+  transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (Π-cong x₁ x₂ x₃)
 
   transConv↑Term : ∀ {t u v A B Γ Δ}
                 → ⊢ Γ ≡ Δ
@@ -158,41 +159,41 @@ mutual
   transConv↓Term Γ≡Δ A≡B (ne-ins x x₁ x₂) (ne-ins x₃ x₄ x₅) =
     ne-ins (proj₁ (trans~↑ Γ≡Δ x x₃)) x₁ x₂
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (univ x₃ x₄ x₅) =
-    univ x (stabilityTerm (symConEq Γ≡Δ) x₄) (transConv↑ Γ≡Δ x₂ x₅)
+    univ x (stabilityTerm (symConEq Γ≡Δ) x₄) (transConv↓ Γ≡Δ x₂ x₅)
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (zero-refl x₁) =
     zero-refl x
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (suc-cong x₁) =
     suc-cong (transConv↑Term Γ≡Δ A≡B x x₁)
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (fun-ext x₄ x₅ x₆ x₇) =
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (fun-ext x₄ x₅ x₆ y₂ y₃ x₇) =
     let F₁≡F , G₁≡G = injectivity A≡B
     in  fun-ext x x₁ (conv (stabilityTerm (symConEq Γ≡Δ) x₆) (sym A≡B))
-                (transConv↑Term (Γ≡Δ ∙ F₁≡F) G₁≡G x₃ x₇)
+                y y₃ (transConv↑Term (Γ≡Δ ∙ F₁≡F) G₁≡G x₃ x₇)
   -- Refutable cases
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x x₁) (ne-ins x₂ x₃ x₄) = ⊥-elim (WF.ℕ≢ne x₄ A≡B)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x x₁) (univ x₂ x₃ x₄) = ⊥-elim (WF.U≢ℕ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (ℕ-ins () x₁) (zero-refl x₂)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins () x₁) (suc-cong x₂)
-  transConv↓Term Γ≡Δ A≡B (ℕ-ins x x₁) (fun-ext x₂ x₃ x₄ x₅) = ⊥-elim (WF.ℕ≢Π A≡B)
+  transConv↓Term Γ≡Δ A≡B (ℕ-ins x x₁) (fun-ext x₂ x₃ x₄ y y₁ x₅) = ⊥-elim (WF.ℕ≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (ne-ins x x₁ x₂) (ℕ-ins x₃ x₄) = ⊥-elim (WF.ℕ≢ne x₂ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (ne-ins x x₁ x₂) (univ x₃ x₄ x₅) = ⊥-elim (WF.U≢ne x₂ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (ne-ins () x₁ x₂) (zero-refl x₃)
   transConv↓Term Γ≡Δ A≡B (ne-ins () x₁ x₂) (suc-cong x₃)
-  transConv↓Term Γ≡Δ A≡B (ne-ins x x₁ x₂) (fun-ext x₃ x₄ x₅ x₆) = ⊥-elim (WF.Π≢ne x₂ (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (ne-ins x x₁ x₂) (fun-ext x₃ x₄ x₅ y y₁ x₆) = ⊥-elim (WF.Π≢ne x₂ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (ℕ-ins x₃ x₄) = ⊥-elim (WF.U≢ℕ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (ne-ins x₃ x₄ x₅) = ⊥-elim (WF.U≢ne x₅ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (zero-refl x₃) = ⊥-elim (WF.U≢ℕ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (suc-cong x₃) = ⊥-elim (WF.U≢ℕ A≡B)
-  transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (fun-ext x₃ x₄ x₅ x₆) = ⊥-elim (WF.U≢Π A≡B)
+  transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (fun-ext x₃ x₄ x₅ y y₁ x₆) = ⊥-elim (WF.U≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (ℕ-ins () x₂)
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (ne-ins () x₂ x₃)
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (univ x₁ x₂ x₃) = ⊥-elim (WF.U≢ℕ (sym A≡B))
-  transConv↓Term Γ≡Δ A≡B (zero-refl x) (fun-ext x₁ x₂ x₃ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
+  transConv↓Term Γ≡Δ A≡B (zero-refl x) (fun-ext x₁ x₂ x₃ y y₁ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (ℕ-ins () x₂)
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (ne-ins () x₂ x₃)
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (univ x₁ x₂ x₃) = ⊥-elim (WF.U≢ℕ (sym A≡B))
-  transConv↓Term Γ≡Δ A≡B (suc-cong x) (fun-ext x₁ x₂ x₃ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (ℕ-ins x₄ x₅) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (ne-ins x₄ x₅ x₆) = ⊥-elim (WF.Π≢ne x₆ A≡B)
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (univ x₄ x₅ x₆) = ⊥-elim (WF.U≢Π (sym A≡B))
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (zero-refl x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
-  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ x₃) (suc-cong x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (suc-cong x) (fun-ext x₁ x₂ x₃ y y₁ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (ℕ-ins x₄ x₅) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (ne-ins x₄ x₅ x₆) = ⊥-elim (WF.Π≢ne x₆ A≡B)
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (univ x₄ x₅ x₆) = ⊥-elim (WF.U≢Π (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (zero-refl x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (suc-cong x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))

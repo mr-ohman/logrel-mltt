@@ -133,7 +133,7 @@ mutual
     let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
     in  ℕ-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ne x) =
-    ne (stability~↑ Γ≡Δ x)
+    ne (stability~↓ Γ≡Δ x)
   stabilityConv↓ Γ≡Δ (Π-cong F A<>B A<>B₁) =
     Π-cong (stability Γ≡Δ F) (stabilityConv↑ Γ≡Δ A<>B)
            (stabilityConv↑ (Γ≡Δ ∙ refl F) A<>B₁)
@@ -156,11 +156,11 @@ mutual
   stabilityConv↓Term Γ≡Δ (ne-ins x x₁ x₃) =
     ne-ins (stability~↑ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) x₃
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =
-    univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv↑ Γ≡Δ x₂)
+    univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv↓ Γ≡Δ x₂)
   stabilityConv↓Term Γ≡Δ (zero-refl x) =
     let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
     in  zero-refl ⊢Δ
   stabilityConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConv↑Term Γ≡Δ t<>u)
-  stabilityConv↓Term Γ≡Δ (fun-ext F x x₁ t<>u) =
+  stabilityConv↓Term Γ≡Δ (fun-ext F x x₁ y y₁ t<>u) =
     fun-ext (stability Γ≡Δ F) (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)
-            (stabilityConv↑Term (Γ≡Δ ∙ refl F) t<>u)
+            y y₁ (stabilityConv↑Term (Γ≡Δ ∙ refl F) t<>u)

@@ -29,7 +29,7 @@ mutual
   symConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ B [conv↓] A
   symConv↓ (U-refl x) = U-refl x
   symConv↓ (ℕ-refl x) = ℕ-refl x
-  symConv↓ (ne x) = ne (sym~↑ x)
+  symConv↓ (ne x) = ne (sym~↓ x)
   symConv↓ (Π-cong x A<>B A<>B₁) =
     let F≡H = soundnessConv↑ A<>B
         _ , ⊢H = syntacticEq F≡H
@@ -43,7 +43,7 @@ mutual
   symConv↓Term : ∀ {t u A Γ} → Γ ⊢ t [conv↓] u ∷ A → Γ ⊢ u [conv↓] t ∷ A
   symConv↓Term (ℕ-ins x x₁) = ℕ-ins (sym~↑ x) x₁
   symConv↓Term (ne-ins x x₁ x₂) = ne-ins (sym~↑ x) x₁ x₂
-  symConv↓Term (univ x x₁ x₂) = univ x₁ x (symConv↑ x₂)
+  symConv↓Term (univ x x₁ x₂) = univ x₁ x (symConv↓ x₂)
   symConv↓Term (zero-refl x) = zero-refl x
   symConv↓Term (suc-cong t<>u) = suc-cong (symConv↑Term t<>u)
-  symConv↓Term (fun-ext x x₁ x₂ t<>u) = fun-ext x x₂ x₁ (symConv↑Term t<>u)
+  symConv↓Term (fun-ext x x₁ x₂ y y₁ t<>u) = fun-ext x x₂ x₁ y₁ y (symConv↑Term t<>u)

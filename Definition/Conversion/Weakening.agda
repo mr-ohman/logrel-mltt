@@ -48,7 +48,7 @@ mutual
          → Δ ⊢ U.wk ρ A [conv↓] U.wk ρ B
   wkConv↓ ρ ⊢Δ (U-refl x) = U-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ℕ-refl x) = ℕ-refl ⊢Δ
-  wkConv↓ ρ ⊢Δ (ne x) = ne (wk~↑ ρ ⊢Δ x)
+  wkConv↓ ρ ⊢Δ (ne x) = ne (wk~↓ ρ ⊢Δ x)
   wkConv↓ ρ ⊢Δ (Π-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
     in  Π-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
@@ -70,12 +70,13 @@ mutual
   wkConv↓Term {ρ} [ρ] ⊢Δ (ne-ins x x₁ x₃) =
     ne-ins (wk~↑ [ρ] ⊢Δ x) (wkRed* [ρ] ⊢Δ x₁) (wkNeutral ρ x₃)
   wkConv↓Term ρ ⊢Δ (univ x x₁ x₂) =
-    univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↑ ρ ⊢Δ x₂)
+    univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↓ ρ ⊢Δ x₂)
   wkConv↓Term ρ ⊢Δ (zero-refl x) = zero-refl ⊢Δ
   wkConv↓Term ρ ⊢Δ (suc-cong t<>u) = suc-cong (wkConv↑Term ρ ⊢Δ t<>u)
-  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (fun-ext {F = F} {G = G} x x₁ x₂ t<>u) =
+  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (fun-ext {F = F} {G = G} x x₁ x₂ y y₁ t<>u) =
     let ⊢ρF = wk [ρ] ⊢Δ x
     in  fun-ext ⊢ρF (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
+                (wkWhnf ρ y) (wkWhnf ρ y₁)
                 (PE.subst₃ (λ x y z → Δ ∙ U.wk ρ F ⊢ x [conv↑] y ∷ z)
                            (PE.cong₂ _∘_ (PE.sym (wkIndex-lift _)) PE.refl)
                            (PE.cong₂ _∘_ (PE.sym (wkIndex-lift _)) PE.refl)

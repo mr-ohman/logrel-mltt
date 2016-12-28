@@ -59,7 +59,7 @@ mutual
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     ne        : ∀ {K L}
-              → Γ ⊢ K ~ L ↑ U
+              → Γ ⊢ K ~ L ↓ U
               -- → Γ ⊢ K
               -- → Neutral K
               -- → Neutral L
@@ -104,7 +104,7 @@ mutual
     univ      : ∀ {A B}
               → Γ ⊢ A ∷ U
               → Γ ⊢ B ∷ U
-              → Γ ⊢ A [conv↑] B
+              → Γ ⊢ A [conv↓] B
               → Γ ⊢ A [conv↓] B ∷ U
     zero-refl : ⊢ Γ → Γ ⊢ zero [conv↓] zero ∷ ℕ
     suc-cong  : ∀ {m n}
@@ -114,5 +114,7 @@ mutual
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
+              → Whnf f
+              → Whnf g
               → Γ ∙ F ⊢ wk1 f ∘ var zero [conv↑] wk1 g ∘ var zero ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
