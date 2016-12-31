@@ -41,8 +41,8 @@ mutual
     [↑]ₜ B u' t' D d' d whnfB whnfu' whnft' (symConv↓Term t<>u)
 
   symConv↓Term : ∀ {t u A Γ} → Γ ⊢ t [conv↓] u ∷ A → Γ ⊢ u [conv↓] t ∷ A
-  symConv↓Term (ℕ-ins x x₁) = ℕ-ins (sym~↑ x) x₁
-  symConv↓Term (ne-ins x x₁ x₂) = ne-ins (sym~↑ x) x₁ x₂
+  symConv↓Term (ℕ-ins x) = ℕ-ins (sym~↓ x)
+  symConv↓Term (ne-ins x x₁) = ne-ins (sym~↓ x) x₁
   symConv↓Term (univ x x₁ x₂) = univ x₁ x (symConv↓ x₂)
   symConv↓Term (zero-refl x) = zero-refl x
   symConv↓Term (suc-cong t<>u) = suc-cong (symConv↑Term t<>u)

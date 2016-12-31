@@ -90,15 +90,11 @@ mutual
     --           → Γ ⊢ b ⇒* b' ∷ B
     --           → Γ ⊢ a' [conv↑] b' ∷ B
     --           → Γ ⊢ a [conv↓] b ∷ A
-    ℕ-ins     : ∀ {k l A}
-              → Γ ⊢ k ~ l ↑ A
-              → Γ ⊢ A ⇒* ℕ
-              -- → Γ ⊢ k ∷ A
+    ℕ-ins     : ∀ {k l}
+              → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ k [conv↓] l ∷ ℕ
-    ne-ins    : ∀ {k l A M}
-              → Γ ⊢ k ~ l ↑ A
-              → Γ ⊢ A ⇒* M
-              -- → Γ ⊢ k ∷ A
+    ne-ins    : ∀ {k l M}
+              → Γ ⊢ k ~ l ↓ M
               → Neutral M
               → Γ ⊢ k [conv↓] l ∷ M
     univ      : ∀ {A B}

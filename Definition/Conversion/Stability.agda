@@ -151,10 +151,10 @@ mutual
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↓] u ∷ A
                      → Δ ⊢ t [conv↓] u ∷ A
-  stabilityConv↓Term Γ≡Δ (ℕ-ins x x₁) =
-    ℕ-ins (stability~↑ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁)
-  stabilityConv↓Term Γ≡Δ (ne-ins x x₁ x₃) =
-    ne-ins (stability~↑ Γ≡Δ x) (stabilityRed* Γ≡Δ x₁) x₃
+  stabilityConv↓Term Γ≡Δ (ℕ-ins x) =
+    ℕ-ins (stability~↓ Γ≡Δ x)
+  stabilityConv↓Term Γ≡Δ (ne-ins x x₁) =
+    ne-ins (stability~↓ Γ≡Δ x) x₁
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =
     univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv↓ Γ≡Δ x₂)
   stabilityConv↓Term Γ≡Δ (zero-refl x) =

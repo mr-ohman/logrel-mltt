@@ -37,8 +37,8 @@ mutual
          (sym (subset* D))
 
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
-  soundnessConv↓Term (ℕ-ins x x₁) = conv (soundness~↑ x) (subset* x₁)
-  soundnessConv↓Term (ne-ins x x₁ x₂) = conv (soundness~↑ x) (subset* x₁)
+  soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
+  soundnessConv↓Term (ne-ins x x₁) = soundness~↓ x
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)

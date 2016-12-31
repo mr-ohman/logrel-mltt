@@ -65,10 +65,10 @@ mutual
   wkConv↓Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
              → Γ ⊢ t [conv↓] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↓] U.wk ρ u ∷ U.wk ρ A
-  wkConv↓Term ρ ⊢Δ (ℕ-ins x x₁) =
-    ℕ-ins (wk~↑ ρ ⊢Δ x) (wkRed* ρ ⊢Δ x₁)
-  wkConv↓Term {ρ} [ρ] ⊢Δ (ne-ins x x₁ x₃) =
-    ne-ins (wk~↑ [ρ] ⊢Δ x) (wkRed* [ρ] ⊢Δ x₁) (wkNeutral ρ x₃)
+  wkConv↓Term ρ ⊢Δ (ℕ-ins x) =
+    ℕ-ins (wk~↓ ρ ⊢Δ x)
+  wkConv↓Term {ρ} [ρ] ⊢Δ (ne-ins x x₁) =
+    ne-ins (wk~↓ [ρ] ⊢Δ x) (wkNeutral ρ x₁)
   wkConv↓Term ρ ⊢Δ (univ x x₁ x₂) =
     univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↓ ρ ⊢Δ x₂)
   wkConv↓Term ρ ⊢Δ (zero-refl x) = zero-refl ⊢Δ

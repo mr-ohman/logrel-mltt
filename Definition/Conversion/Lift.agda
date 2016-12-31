@@ -48,10 +48,10 @@ whnfConv↓ (Π-cong x x₁ x₂) = Π , Π
 whnfConv↓Term : ∀ {t u A Γ}
               → Γ ⊢ t [conv↓] u ∷ A
               → Whnf A × Whnf t × Whnf u
-whnfConv↓Term (ℕ-ins x x₁) = let neT , neU = ne~↑ x
-                             in ℕ , ne neT , ne neU
-whnfConv↓Term (ne-ins x x₁ x₂) = let neT , neU = ne~↑ x
-                                 in ne x₂ , ne neT , ne neU
+whnfConv↓Term (ℕ-ins x) = let neT , neU = ne~↓ x
+                          in ℕ , ne neT , ne neU
+whnfConv↓Term (ne-ins x x₁) = let neT , neU = ne~↓ x
+                              in ne x₁ , ne neT , ne neU
 whnfConv↓Term (univ x x₁ x₂) = U , whnfConv↓ x₂
 whnfConv↓Term (zero-refl x) = ℕ , zero , zero
 whnfConv↓Term (suc-cong x) = ℕ , suc , suc
