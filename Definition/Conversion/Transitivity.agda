@@ -197,3 +197,21 @@ mutual
   transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (univ x₄ x₅ x₆) = ⊥-elim (WF.U≢Π (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (zero-refl x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (suc-cong x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
+
+transConv : ∀ {A B C Γ}
+          → Γ ⊢ A [conv↑] B
+          → Γ ⊢ B [conv↑] C
+          → Γ ⊢ A [conv↑] C
+transConv A<>B B<>C =
+  let Γ≡Γ = reflConEq (wfEq (soundnessConv↑ A<>B))
+  in  transConv↑ Γ≡Γ A<>B B<>C
+
+transConvTerm : ∀ {t u v A Γ}
+              → Γ ⊢ t [conv↑] u ∷ A
+              → Γ ⊢ u [conv↑] v ∷ A
+              → Γ ⊢ t [conv↑] v ∷ A
+transConvTerm t<>u u<>v =
+  let t≡u = soundnessConv↑Term t<>u
+      Γ≡Γ = reflConEq (wfEqTerm t≡u)
+      ⊢A , _ , _ = syntacticEqTerm t≡u
+  in  transConv↑Term Γ≡Γ (refl ⊢A) t<>u u<>v
