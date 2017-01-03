@@ -39,8 +39,8 @@ redSubst* D (ne' K [ ⊢B , ⊢K , D' ] neK K≡K) =
   ,   (ne₌ _ [ ⊢B , ⊢K , D' ] neK K≡K)
 redSubst* D (Π' F G [ ⊢B , ⊢ΠFG , D' ] ⊢F ⊢G A≡A [F] [G] G-ext) =
   let ⊢A = redFirst* D
-  in  (Π' F G [ ⊢A , ⊢ΠFG , D ⇨* D' ] ⊢F ⊢G (≅-red D D A≡A) [F] [G] G-ext)
-  ,   (Π₌ _ _ D' (≅-red D (id ⊢B) A≡A) (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
+  in  (Π' F G [ ⊢A , ⊢ΠFG , D ⇨* D' ] ⊢F ⊢G A≡A [F] [G] G-ext)
+  ,   (Π₌ _ _ D' A≡A (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
         (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a])))
 redSubst* D (emb 0<1 x) with redSubst* D x
 redSubst* D (emb 0<1 x) | y , y₁ = emb 0<1 y , y₁
@@ -65,15 +65,16 @@ redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] n≡n natN prop) =
   ,   ℕₜ₌ n n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] [ ⊢u , ⊢n , d ]
           n≡n (reflNatural-prop natN prop)
 redSubst*Term t⇒u (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
-  let [d]  = [ ⊢t , ⊢u , d ]
-      [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
+  let A≡K  = subset* (red D)
+      [d]  = [ ⊢t , ⊢u , d ]
+      [d'] = [ conv (redFirst*Term t⇒u) A≡K , ⊢u , conv* t⇒u A≡K ⇨∷* d ]
   in  neₜ k [d'] (neNfₜ neK₁ ⊢k k≡k) , neₜ₌ k k [d'] [d] (neNfₜ₌ neK₁ neK₁ k≡k)
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                   (Πₜ f [ ⊢t , ⊢u , d ] funcF f≡f [f] [f]₁) =
   let A≡ΠFG = subset* (red D)
       t⇒u'  = conv* t⇒u A≡ΠFG
       [d]  = [ ⊢t , ⊢u , d ]
-      [d'] = [ redFirst*Term t⇒u , ⊢u , t⇒u ⇨∷* d ]
+      [d'] = [ conv (redFirst*Term t⇒u) A≡ΠFG , ⊢u , conv* t⇒u A≡ΠFG ⇨∷* d ]
       ta×ta≡ua : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                  ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G]  [ρ] ⊢Δ [a])
@@ -103,11 +104,9 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ex
             (convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [b])
                          (G-ext ρ ⊢Δ [a] [b] [a≡b])
                          (symEqTerm ([G] ρ ⊢Δ [b]) (ta≡ua ρ ⊢Δ [b]))))
-      t≡t = ≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u t⇒u f≡f
-      t≡u = ≅ₜ-red (id (_⊢_:⇒*:_.⊢A D)) t⇒u (id ⊢t) f≡f
-  in  Πₜ f [d'] funcF t≡t ta≡tb ta
-  ,   Πₜ₌ f f [d'] [d] funcF funcF t≡u
-          (Πₜ f [d'] funcF t≡t ta≡tb ta)
+  in  Πₜ f [d'] funcF f≡f ta≡tb ta
+  ,   Πₜ₌ f f [d'] [d] funcF funcF f≡f
+          (Πₜ f [d'] funcF f≡f ta≡tb ta)
           (Πₜ f [d] funcF f≡f [f] [f]₁)
           ta≡ua
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]

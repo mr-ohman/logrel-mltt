@@ -42,13 +42,14 @@ record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
     ⊢k   : Γ ⊢ k ∷ A
     k≡k  : Γ ⊢ k ≅ k ∷ A
 
-record _⊩ne_∷_ (Γ : Con Term) (t A : Term) : Set where
+record _⊩ne_∷_/_ (Γ : Con Term) (t A : Term) ([A] : Γ ⊩ne A) : Set where
   inductive
   constructor neₜ
+  open _⊩ne_ [A]
   field
     k   : Term
-    d   : Γ ⊢ t :⇒*: k ∷ A
-    nf  : Γ ⊩neNf k ∷ A
+    d   : Γ ⊢ t :⇒*: k ∷ K
+    nf  : Γ ⊩neNf k ∷ K
 
 record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
   inductive
@@ -58,13 +59,14 @@ record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
     neM  : Neutral m
     k≡m  : Γ ⊢ k ≅ m ∷ A
 
-record _⊩ne_≡_∷_ (Γ : Con Term) (t u A : Term) : Set where
+record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set where
   constructor neₜ₌
+  open _⊩ne_ [A]
   field
     k m : Term
-    d   : Γ ⊢ t :⇒*: k ∷ A
-    d'  : Γ ⊢ u :⇒*: m ∷ A
-    nf  : Γ ⊩neNf k ≡ m ∷ A
+    d   : Γ ⊢ t :⇒*: k ∷ K
+    d'  : Γ ⊢ u :⇒*: m ∷ K
+    nf  : Γ ⊩neNf k ≡ m ∷ K
 
 -- Natural numbers
 
@@ -224,7 +226,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         D : Γ ⊢ A :⇒*: Π F ▹ G
         ⊢F : Γ ⊢ F
         ⊢G : Γ ∙ F ⊢ G
-        A≡A : Γ ⊢ A ≅ A
+        A≡A : Γ ⊢ Π F ▹ G ≅ Π F ▹ G
         [F] : wk-prop¹ Γ F
         [G] : wk-subst-prop¹ Γ F G [F]
         G-ext : wk-substEq-prop¹ Γ F G [F] [G]
@@ -237,7 +239,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         F'     : Term
         G'     : Term
         D'     : Γ ⊢ B ⇒* Π F' ▹ G'
-        A≡B    : Γ ⊢ A ≅ B
+        A≡B    : Γ ⊢ Π F ▹ G ≅ Π F' ▹ G'
         [F≡F'] : ∀ {ρ Δ}
                → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
                → Δ ⊩¹ U.wk ρ F ≡ U.wk ρ F' / [F] [ρ] ⊢Δ
@@ -250,9 +252,9 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     --        Therefore we have to use ×
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
     Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
-      ∃ λ f → Γ ⊢ t :⇒*: f ∷ A
+      ∃ λ f → Γ ⊢ t :⇒*: f ∷ Π F ▹ G
             × Function f
-            × Γ ⊢ t ≅ t ∷ A
+            × Γ ⊢ f ≅ f ∷ Π F ▹ G
             × wk-fun-ext-prop¹ Γ F G t [F] [G]
             × wk-subst-prop-T¹ Γ F G t [F] [G]
 
@@ -261,11 +263,11 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
       let [A] = Π F G D ⊢F ⊢G A≡A [F] [G] G-ext
       in  ∃₂ λ f g →
-          Γ ⊢ t :⇒*: f ∷ A
-      ×   Γ ⊢ u :⇒*: g ∷ A
+          Γ ⊢ t :⇒*: f ∷ Π F ▹ G
+      ×   Γ ⊢ u :⇒*: g ∷ Π F ▹ G
       ×   Function f
       ×   Function g
-      ×   Γ ⊢ t ≅ u ∷ A
+      ×   Γ ⊢ f ≅ g ∷ Π F ▹ G
       ×   Γ ⊩¹Π t ∷ A / [A]
       ×   Γ ⊩¹Π u ∷ A / [A]
       ×   wk-fun-ext-prop¹' Γ F G t u [F] [G]
@@ -292,7 +294,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ∷ .U / U (U l' l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
     Γ ⊩¹ t ∷ A / ℕ D = Γ ⊩ℕ t ∷ℕ
-    Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A
+    Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
     Γ ⊩¹ f ∷ A / Π ΠA  = Γ ⊩¹Π f ∷ A / ΠA
     Γ ⊩¹ t ∷ A / emb l< [A] = Γ ⊩ t ∷ A / [A]
       where open LogRelKit (rec l<)
@@ -300,7 +302,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ≡ u ∷ .U / U (U l' l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
     Γ ⊩¹ t ≡ u ∷ A / ℕ D = Γ ⊩ℕ t ≡ u ∷ℕ
-    Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A
+    Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
     Γ ⊩¹ t ≡ u ∷ A / Π ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
     Γ ⊩¹ t ≡ u ∷ A / emb l< [A] = Γ ⊩ t ≡ u ∷ A / [A]
       where open LogRelKit (rec l<)

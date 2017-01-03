@@ -31,8 +31,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       {!!}
                       {!!} {!!}
                       transConv transConvTerm
-                      (λ x x₁ x₂ → reductionConv↑ x x₁ {!!} {!!} x₂)
-                      (λ x x₁ x₂ x₃ → reductionConv↑Term x x₁ x₂ {!!} {!!} {!!} x₃)
+                      reductionConv↑ reductionConv↑Term
                       wkConv↑ wkConv↑Term
                       soundnessConv↑ soundnessConv↑Term
                       {!!} univConv↑
@@ -50,4 +49,4 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                          in  liftConvTerm (univ (Π F∷U ▹ G∷U) (Π H∷U ▹ E∷U')
                                                 (Π-cong x F<>H G<>E)))
                       {!!}
-                      (λ x x₁ x₂ x₃ → liftConvTerm (fun-ext x x₁ x₂ {!!} {!!} x₃))
+                      (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (fun-ext x x₁ x₂ x₃ x₄ x₅))

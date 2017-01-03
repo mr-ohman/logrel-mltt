@@ -17,9 +17,14 @@ record EqRelSet : Set₁ where
     ≅ₜ-ℕrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ ∷ U
     ≅-Πrefl   : ∀ {F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ G → Γ ⊢ Π F ▹ G ≅ Π F ▹ G
     ≅ₜ-Πrefl  : ∀ {F G Γ} → Γ ⊢ F ∷ U → Γ ∙ F ⊢ G ∷ U → Γ ⊢ Π F ▹ G ≅ Π F ▹ G ∷ U
+
+    -- Only used in neu in Neutral.agda
     ≅-nerefl  : ∀ {K Γ} → Γ ⊢ K → Neutral K → Γ ⊢ K ≅ K
+
     ≅ₜ-nerefl : ∀ {k A Γ} → Γ ⊢ k ∷ A → Neutral k → Γ ⊢ k ≅ k ∷ A
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
+
+    -- Only used in lamₛ in Lambda.agda
     ≅ₜ-lamrefl : ∀ {f F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ f ∷ G → Γ ⊢ lam f ≅ lam f ∷ Π F ▹ G
 
     ≅-sym  : ∀ {A B Γ}   → Γ ⊢ A ≅ B     → Γ ⊢ B ≅ A
@@ -31,6 +36,8 @@ record EqRelSet : Set₁ where
     ≅-red : ∀ {A A' B B' Γ}
           → Γ ⊢ A ⇒* A'
           → Γ ⊢ B ⇒* B'
+          → Whnf A'
+          → Whnf B'
           → Γ ⊢ A' ≅ B'
           → Γ ⊢ A  ≅ B
 
@@ -38,6 +45,9 @@ record EqRelSet : Set₁ where
            → Γ ⊢ A ⇒* B
            → Γ ⊢ a ⇒* a' ∷ B
            → Γ ⊢ b ⇒* b' ∷ B
+           → Whnf B
+           → Whnf a'
+           → Whnf b'
            → Γ ⊢ a' ≅ b' ∷ B
            → Γ ⊢ a  ≅ b  ∷ A
 
@@ -94,6 +104,7 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Π F ▹ G ≅ Π H ▹ E ∷ U
 
+    -- Only used for the neutral case of natrec-congTerm in Natrec.agda
     ≅-natrec-cong : ∀ {z z' s s' n n' F F' Γ}
                   → Γ ∙ ℕ ⊢ F ≅ F'
                   → Γ     ⊢ z ≅ z' ∷ F [ zero ]
@@ -105,5 +116,7 @@ record EqRelSet : Set₁ where
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
+              → Whnf f
+              → Whnf g
               → Γ ∙ F ⊢ wk1 f ∘ var zero ≅ wk1 g ∘ var zero ∷ G
               → Γ ⊢ f ≅ g ∷ Π F ▹ G

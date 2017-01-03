@@ -8,6 +8,7 @@ open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T
+open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
@@ -246,6 +247,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                       (conv (lam ⊢F' ⊢t')
                             (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                               [σΠFG≡σ'ΠFG]))))
+                      lam lam
                       (wellformedTermEq
                         (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                         (irrelevanceEqTerm'
@@ -292,16 +294,34 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
       _ , Π F' G' D' ⊢F ⊢G A≡A [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0 = wellformedTermEq [σG]
-                                ([f0≡g0] (⊢Δ ∙ ⊢F)
-                                         (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+                                 ([f0≡g0] (⊢Δ ∙ ⊢F)
+                                          (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0' =
         PE.subst₂
           (λ x y → Δ ∙ subst σ F ⊢ x ≅ y ∷ subst (liftSubst σ) G)
           (PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl)
           (PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl)
           σf0≡σg0
+      ⊢ΠFG = wellformed [σΠFG]
+      f≡f₁ = ≅ₜ-red (id ⊢ΠFG) d (id ⊢u) Π
+                    (functionWhnf funcF) (functionWhnf funcF) f≡f
+      g≡g₁ = ≅ₜ-red (id ⊢ΠFG) d₁ (id ⊢u₁) Π
+                    (functionWhnf funcG) (functionWhnf funcG) g≡g
+      Geq = PE.trans (subst-wk (subst (liftSubst σ) G))
+                     (PE.trans (substEq (λ { zero → PE.refl ; (suc x) → PE.refl })
+                                        (subst (liftSubst σ) G))
+                               (substIdEq (subst (liftSubst σ) G)))
+      eq   = PE.subst (λ x → _ ⊢ _ ≅ _ ∷ x)
+                      Geq
+                      (≅-app-subst (≅ₜ-wk (step id) (⊢Δ ∙ ⊢F) f≡f₁)
+                                   (var (⊢Δ ∙ ⊢F) here))
+      eq₁  = PE.subst (λ x → _ ⊢ _ ≅ _ ∷ x)
+                      Geq
+                      (≅-app-subst (≅ₜ-wk (step id) (⊢Δ ∙ ⊢F) g≡g₁)
+                                   (var (⊢Δ ∙ ⊢F) here))
   in  Πₜ₌ f₁ g₁ [d] [d'] funcF funcG
-          (≅-fun-ext ⊢F ⊢t ⊢t₁ σf0≡σg0')
+          (≅-fun-ext ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
+                     (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0' eq₁)))
           (Πₜ f₁ [d] funcF f≡f [f] [f]₁)
           (Πₜ g₁ [d'] funcG g≡g [g] [g]₁)
           (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →

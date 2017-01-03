@@ -26,8 +26,9 @@ neuEq' : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ne A)
        → Γ ⊢ A → Γ ⊢ B
        → Γ ⊢ A ≅ B
        → Γ ⊩⟨ l ⟩ A ≡ B / ne-intr [A]
-neuEq' (noemb (ne K D neK K≡K)) neB A B A≡B =
-  ne₌ _ (idRed:*: B) neB (≅-trans (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) K≡K) A≡B) --{!trans (sym (subset* (red D))) A≡B!}
+neuEq' (noemb (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neB A B A≡B =
+  ne₌ _ (idRed:*: B) neB
+      (≅-trans (≅-red (id ⊢B) D (ne neK) (ne neK) K≡K) A≡B)
 neuEq' (emb 0<1 x) neB A:≡:B = neuEq' x neB A:≡:B
 
 neuEq : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ A)
@@ -48,36 +49,39 @@ mutual
   neuTerm (U' .⁰ 0<1 ⊢Γ) neN n =
     Uₜ _ (idRedTerm:*: n) (ne neN) (≅ₜ-nerefl n neN) (neu neN (univ n))
     --Uₜ n (≅ₜ-nerefl n neN) (neu neN (univ n))
-  neuTerm (ℕ D) neN n =
-    let A≡ℕ = subset* (red D)
-        A≅ℕ = ≅-sym (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) (≅-ℕrefl (wfTerm n)))
+  neuTerm (ℕ [ ⊢A , ⊢B , D ]) neN n =
+    let A≡ℕ = subset* D
+        A≅ℕ = ≅-sym (≅-red (id ⊢B) D ℕ ℕ (≅-ℕrefl (wf ⊢B)))
         n≡n = ≅-conv (≅ₜ-nerefl n neN) A≅ℕ
     in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) n≡n (ne neN) (neNfₜ neN (conv n A≡ℕ) n≡n)
   neuTerm (ne' K D neK K≡K) neN n =
-    neₜ _ (idRedTerm:*: n) (neNfₜ neN n (≅ₜ-nerefl n neN))
+    let A≡K = subset* (red D)
+    in  neₜ _ (idRedTerm:*: (conv n A≡K)) (neNfₜ neN (conv n A≡K)
+            (≅ₜ-nerefl (conv n A≡K) neN))
   neuTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) neN n =
-    Πₜ _ (idRedTerm:*: n) (ne neN) (≅ₜ-nerefl n neN)
-       (λ {ρ} [ρ] ⊢Δ [a] [b] [a≡b] →
-          let A≡ΠFG = subset* (red D)
-              ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
-              G[a]≡G[b] = wellformedEq ([G] [ρ] ⊢Δ [b])
-                                      (symEq ([G] [ρ] ⊢Δ [a]) ([G] [ρ] ⊢Δ [b])
-                                             (G-ext [ρ] ⊢Δ [a] [b] [a≡b]))
-              a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
-              b = wellformedTerm ([F] [ρ] ⊢Δ) [b]
-              a≡b = wellformedTermEq ([F] [ρ] ⊢Δ) [a≡b]
-              ρn = conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG
-              neN∘a = _∘_ (wkNeutral ρ neN)
-              neN∘b = _∘_ (wkNeutral ρ neN)
-          in  neuEqTerm ([G] [ρ] ⊢Δ [a]) neN∘a neN∘b
-                        (ρn ∘ a)
-                        (conv (ρn ∘ b) (≅-eq G[a]≡G[b]))
-                        (≅-app-cong (≅ₜ-nerefl ρn (wkNeutral ρ neN)) a≡b))
-       (λ {ρ} [ρ] ⊢Δ [a] →
-          let ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
-              a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
-          in  neuTerm ([G] [ρ] ⊢Δ [a]) (_∘_ (wkNeutral ρ neN))
-                      (conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG ∘ a))
+    let A≡ΠFG = subset* (red D)
+    in  Πₜ _ (idRedTerm:*: (conv n A≡ΠFG)) (ne neN) (≅ₜ-nerefl (conv n A≡ΠFG) neN)
+           (λ {ρ} [ρ] ⊢Δ [a] [b] [a≡b] →
+              let A≡ΠFG = subset* (red D)
+                  ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
+                  G[a]≡G[b] = wellformedEq ([G] [ρ] ⊢Δ [b])
+                                          (symEq ([G] [ρ] ⊢Δ [a]) ([G] [ρ] ⊢Δ [b])
+                                                 (G-ext [ρ] ⊢Δ [a] [b] [a≡b]))
+                  a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
+                  b = wellformedTerm ([F] [ρ] ⊢Δ) [b]
+                  a≡b = wellformedTermEq ([F] [ρ] ⊢Δ) [a≡b]
+                  ρn = conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG
+                  neN∘a = _∘_ (wkNeutral ρ neN)
+                  neN∘b = _∘_ (wkNeutral ρ neN)
+              in  neuEqTerm ([G] [ρ] ⊢Δ [a]) neN∘a neN∘b
+                            (ρn ∘ a)
+                            (conv (ρn ∘ b) (≅-eq G[a]≡G[b]))
+                            (≅-app-cong (≅ₜ-nerefl ρn (wkNeutral ρ neN)) a≡b))
+           (λ {ρ} [ρ] ⊢Δ [a] →
+              let ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
+                  a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
+              in  neuTerm ([G] [ρ] ⊢Δ [a]) (_∘_ (wkNeutral ρ neN))
+                          (conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG ∘ a))
   neuTerm (emb 0<1 x) neN n = neuTerm x neN n
 
   neuEqTerm : ∀ {l Γ A n n'} ([A] : Γ ⊩⟨ l ⟩ A)
@@ -91,21 +95,25 @@ mutual
         [n'] = neu neN' (univ n')
     in  Uₜ₌ _ _ (idRedTerm:*: n) (idRedTerm:*: n') (ne neN) (ne neN')
             n≡n' [n] [n'] (neuEq [n] neN neN' (univ n) (univ n') (≅-univ n≡n'))
-  neuEqTerm (ℕ D) neN neN' n n' n≡n' =
-    let A≡ℕ = subset* (red D)
-        A≅ℕ = ≅-sym (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) (≅-ℕrefl (wfTerm n)))
+  neuEqTerm (ℕ [ ⊢A , ⊢B , D ]) neN neN' n n' n≡n' =
+    let A≡ℕ = subset* D
+        A≅ℕ = ≅-sym (≅-red (id ⊢B) D ℕ ℕ (≅-ℕrefl (wf ⊢B)))
     in  ℕₜ₌ _ _ (idRedTerm:*: (conv n A≡ℕ)) (idRedTerm:*: (conv n' A≡ℕ))
             (≅-conv n≡n' A≅ℕ) (ne (neNfₜ₌ neN neN' (≅-conv n≡n' A≅ℕ)))
-  neuEqTerm (ne' K D neK K≡K) neN neN' n n' n≡n' =
-    neₜ₌ _ _ (idRedTerm:*: n) (idRedTerm:*: n') (neNfₜ₌ neN neN' n≡n')
-  neuEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) neN neN' n n' n≡n' =
-    let [ΠFG] = Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext
-    in  Πₜ₌ _ _ (idRedTerm:*: n) (idRedTerm:*: n') (ne neN) (ne neN')
-            n≡n' (neuTerm [ΠFG] neN n) (neuTerm [ΠFG] neN' n')
+  neuEqTerm (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neN neN' n n' n≡n' =
+    let A≅K = ≅-red D (id ⊢B) (ne neK) (ne neK) K≡K
+        A≡K = ≅-eq A≅K
+    in  neₜ₌ _ _ (idRedTerm:*: (conv n A≡K)) (idRedTerm:*: (conv n' A≡K))
+             (neNfₜ₌ neN neN' (≅-conv n≡n' A≅K))
+  neuEqTerm (Π (Π F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext)) neN neN' n n' n≡n' =
+    let [ΠFG] = Π' F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext
+        A≅ΠFG = ≅-red D (id ⊢B) Π Π A≡A
+        A≡ΠFG = ≅-eq A≅ΠFG
+    in  Πₜ₌ _ _ (idRedTerm:*: (conv n A≡ΠFG)) (idRedTerm:*: (conv n' A≡ΠFG))
+            (ne neN) (ne neN') (≅-conv n≡n' A≅ΠFG)
+            (neuTerm [ΠFG] neN n) (neuTerm [ΠFG] neN' n')
             (λ {ρ} [ρ] ⊢Δ [a] →
-               let A≡ΠFG = subset* (red D)
-                   A≅ΠFG = ≅-sym (≅-red (id (_⊢_:⇒*:_.⊢B D)) (red D) (≅-Πrefl ⊢F ⊢G))
-                   ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
+               let ρA≡ρΠFG = wkEq [ρ] ⊢Δ A≡ΠFG
                    ρn = wkTerm [ρ] ⊢Δ n
                    ρn' = wkTerm [ρ] ⊢Δ n'
                    a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
@@ -114,5 +122,5 @@ mutual
                in  neuEqTerm ([G] [ρ] ⊢Δ [a]) neN∙a neN'∙a'
                              (conv ρn  ρA≡ρΠFG ∘ a)
                              (conv ρn' ρA≡ρΠFG ∘ a)
-                             (≅-app-subst ((≅ₜ-wk [ρ] ⊢Δ (≅-conv n≡n' A≅ΠFG))) a))
+                             (≅-app-subst (≅ₜ-wk [ρ] ⊢Δ (≅-conv n≡n' A≅ΠFG)) a))
   neuEqTerm (emb 0<1 x) neN neN' n:≡:n' = neuEqTerm x neN neN' n:≡:n'
