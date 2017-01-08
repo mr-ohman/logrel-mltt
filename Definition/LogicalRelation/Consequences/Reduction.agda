@@ -38,8 +38,10 @@ fullyReducibleTerm' : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l �
 fullyReducibleTerm' (U x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
 fullyReducibleTerm' (ℕ x) (ℕₜ n d n≡n natN prop) =
   n , naturalWhnf natN , convRed:*: d (sym (subset* (red x)))
-fullyReducibleTerm' (ne x) (neₜ k d (neNfₜ neK ⊢k k≡k)) = k , ne neK , d
-fullyReducibleTerm' (Π x) (Πₜ f d funcF f≡f [f] [f]₁) = f , functionWhnf funcF , d
+fullyReducibleTerm' (ne (ne K D neK K≡K)) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
+  k , ne neK₁ , convRed:*: d (sym (subset* (red D)))
+fullyReducibleTerm' (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
+  f , functionWhnf funcF , convRed:*: d (sym (subset* (red D)))
 fullyReducibleTerm' (emb 0<1 [A]) [a] = fullyReducibleTerm' [A] [a]
 
 fullyReducibleTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
