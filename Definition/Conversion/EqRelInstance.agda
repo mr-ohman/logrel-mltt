@@ -27,6 +27,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       (λ x → liftConvTerm (univ (ℕ x) (ℕ x) (ℕ-refl x)))
                       {!!} {!!}
                       {!!} {!!}
+                      (λ x → lift~toConv↑ (var x))
                       (λ x → liftConvTerm (zero-refl x))
                       {!!}
                       {!!} {!!}

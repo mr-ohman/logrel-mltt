@@ -22,6 +22,7 @@ record EqRelSet : Set₁ where
     ≅-nerefl  : ∀ {K Γ} → Γ ⊢ K → Neutral K → Γ ⊢ K ≅ K
 
     ≅ₜ-nerefl : ∀ {k A Γ} → Γ ⊢ k ∷ A → Neutral k → Γ ⊢ k ≅ k ∷ A
+    ≅ₜ-varrefl : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ≅ var x ∷ A
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
     -- Only used in lamₛ in Lambda.agda
@@ -78,11 +79,13 @@ record EqRelSet : Set₁ where
            → Γ ⊢ A ≅ B ∷ U
            → Γ ⊢ A ≅ B
 
+    -- Only used for neuTerm in Neutral.agda
     ≅-app-cong : ∀ {a b f g F G Γ}
                → Γ ⊢ f ≅ g ∷ Π F ▹ G
                → Γ ⊢ a ≅ b ∷ F
                → Γ ⊢ f ∘ a ≅ g ∘ b ∷ G [ a ]
 
+    -- Used for neuEqTerm in Neutral.agda and fun-extEqTerm in Lambda.agda
     ≅-app-subst : ∀ {a f g F G Γ}
                 → Γ ⊢ f ≅ g ∷ Π F ▹ G
                 → Γ ⊢ a ∷ F

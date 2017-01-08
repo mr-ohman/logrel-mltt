@@ -48,7 +48,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
             _ , Π F' G' D' ⊢F' ⊢G' A≡A' [F]' [G]' G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lam ⊢F ⊢t)) lam
-               (≅ₜ-lamrefl ⊢F ⊢t)
+               (≅ₜ-lamrefl ⊢F ⊢t) --(≅-fun-ext ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam {!!})
                (λ {_} {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)

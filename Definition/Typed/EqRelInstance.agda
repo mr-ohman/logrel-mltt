@@ -35,6 +35,7 @@ eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_
                       (λ x → refl (U x)) (λ x → refl (ℕ x)) (λ x → refl (ℕ x))
                       (λ x x₁ → refl (Π x ▹ x₁)) (λ x x₁ → refl (Π x ▹ x₁))
                       (λ x x₁ → refl x) (λ x x₁ → refl x)
+                      (λ x → refl x)
                       (λ x → refl (zero x)) (λ x x₁ → refl (lam x x₁))
                       sym sym trans trans
                       reduction reductionₜ
