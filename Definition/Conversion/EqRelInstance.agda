@@ -10,6 +10,8 @@ open import Definition.Conversion.Universe
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Lift
+open import Definition.Conversion.Conversion
+open import Definition.Conversion.Symmetry
 open import Definition.Conversion.Transitivity
 open import Definition.Conversion.Weakening
 open import Definition.EqualityRelation
@@ -30,7 +32,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       (λ x → lift~toConv↑ (var x))
                       (λ x → liftConvTerm (zero-refl x))
                       {!!}
-                      {!!} {!!}
+                      symConv symConvTerm
                       transConv transConvTerm
                       reductionConv↑ reductionConv↑Term
                       wkConv↑ wkConv↑Term
