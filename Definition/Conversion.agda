@@ -93,10 +93,12 @@ mutual
     ℕ-ins     : ∀ {k l}
               → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ k [conv↓] l ∷ ℕ
-    ne-ins    : ∀ {k l M}
+    ne-ins    : ∀ {k l M N}
+              → Γ ⊢ k ∷ N
+              → Γ ⊢ l ∷ N
+              → Neutral N
               → Γ ⊢ k ~ l ↓ M
-              → Neutral M
-              → Γ ⊢ k [conv↓] l ∷ M
+              → Γ ⊢ k [conv↓] l ∷ N
     univ      : ∀ {A B}
               → Γ ⊢ A ∷ U
               → Γ ⊢ B ∷ U

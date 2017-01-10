@@ -8,6 +8,7 @@ open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.Typed.EqRelInstance
 open import Definition.Conversion
+open import Definition.Conversion.Whnf
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Weakening
@@ -30,42 +31,6 @@ open import Tools.Product
 open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
-
-mutual
-  ne~↑ : ∀ {t u A Γ}
-       → Γ ⊢ t ~ u ↑ A
-       → Neutral t × Neutral u
-  ne~↑ (var x₁) = var _ , var _
-  ne~↑ (app x x₁) = let q , w = ne~↓ x
-                    in  _∘_ q , _∘_ w
-  ne~↑ (natrec x x₁ x₂ x₃) = let q , w = ne~↓ x₃
-                             in  natrec q , natrec w
-
-  ne~↓ : ∀ {t u A Γ}
-       → Γ ⊢ t ~ u ↓ A
-       → Neutral t × Neutral u
-  ne~↓ ([~] A₁ D whnfB k~l) = ne~↑ k~l
-
-whnfConv↓ : ∀ {A B Γ}
-          → Γ ⊢ A [conv↓] B
-          → Whnf A × Whnf B
-whnfConv↓ (U-refl x) = U , U
-whnfConv↓ (ℕ-refl x) = ℕ , ℕ
-whnfConv↓ (ne x) = let neA , neB = ne~↓ x
-                   in  ne neA , ne neB
-whnfConv↓ (Π-cong x x₁ x₂) = Π , Π
-
-whnfConv↓Term : ∀ {t u A Γ}
-              → Γ ⊢ t [conv↓] u ∷ A
-              → Whnf A × Whnf t × Whnf u
-whnfConv↓Term (ℕ-ins x) = let neT , neU = ne~↓ x
-                          in ℕ , ne neT , ne neU
-whnfConv↓Term (ne-ins x x₁) = let neT , neU = ne~↓ x
-                              in ne x₁ , ne neT , ne neU
-whnfConv↓Term (univ x x₁ x₂) = U , whnfConv↓ x₂
-whnfConv↓Term (zero-refl x) = ℕ , zero , zero
-whnfConv↓Term (suc-cong x) = ℕ , suc , suc
-whnfConv↓Term (fun-ext x x₁ x₂ y y₁ x₃) = Π , y , y₁
 
 liftConv : ∀ {A B Γ}
           → Γ ⊢ A [conv↓] B
@@ -99,7 +64,9 @@ mutual
     ℕ-ins ([~] A D₂ ℕ k~l)
   lift~toConv↓' (ne' K D neK K≡K) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet*' (red D , ne neK) (D₁ , whnfB)) =
-    ne-ins ([~] A D₂ (ne neK) k~l) neK
+    let _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↑ k~l)
+        A≡K = subset* D₂
+    in  ne-ins (conv ⊢t A≡K) (conv ⊢u A≡K) neK ([~] A D₂ (ne neK) k~l)
   lift~toConv↓' (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet*' (red D , Π) (D₁ , whnfB)) =
     let ⊢ΠFG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ ([~] A D₂ Π k~l))

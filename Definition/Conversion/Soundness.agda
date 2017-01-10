@@ -4,8 +4,12 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
+open import Definition.Conversion.InitLemma
+open import Definition.Conversion.Whnf
 open import Definition.LogicalRelation.Consequences.InverseUniv
+open import Definition.LogicalRelation.Consequences.Syntactic
 
+open import Tools.Product
 
 mutual
   soundness~↑ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
@@ -38,7 +42,11 @@ mutual
 
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
-  soundnessConv↓Term (ne-ins x x₁) = soundness~↓ x
+  soundnessConv↓Term (ne-ins t u x x₁) =
+    let _ , neA , _ = ne~↓ x₁
+        _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)
+        M≡A = lemma3 neA t∷M t
+    in  conv (soundness~↓ x₁) M≡A
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)

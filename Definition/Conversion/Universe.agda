@@ -14,7 +14,7 @@ import Tools.PropositionalEquality as PE
 univConv↓ : ∀ {A B Γ}
           → Γ ⊢ A [conv↓] B ∷ U
           → Γ ⊢ A [conv↓] B
-univConv↓ (ne-ins x ())
+univConv↓ (ne-ins t u () x)
 univConv↓ (univ x x₁ x₂) = x₂
 
 univConv↑ : ∀ {A B Γ}
