@@ -37,7 +37,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       reductionConv↑ reductionConv↑Term
                       wkConv↑ wkConv↑Term
                       soundnessConv↑ soundnessConv↑Term
-                      {!!} univConv↑
+                      convConvTerm univConv↑
                       {!!} {!!}
                       (λ x → liftConvTerm (suc-cong x))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))

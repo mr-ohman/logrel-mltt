@@ -60,7 +60,7 @@ mutual
                 (convConv↑Term (Γ≡Δ ∙ F≡F') G≡G' x₃)
 
 convConvTerm : ∀ {t u A B Γ}
-              → Γ ⊢ A ≡ B
               → Γ ⊢ t [conv↑] u ∷ A
+              → Γ ⊢ A ≡ B
               → Γ ⊢ t [conv↑] u ∷ B
-convConvTerm A≡B t<>u = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u
+convConvTerm t<>u A≡B = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u

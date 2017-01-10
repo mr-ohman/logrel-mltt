@@ -718,14 +718,14 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                             (singleSubstLift F zero)
                             (≅-conv (wellformedTermEq (proj₁ ([F₀] ⊢Δ [σ']))
                                                    ([z≡z'] ⊢Δ [σ']))
-                                  (≅-sym (wellformedEq (proj₁ ([F₀] ⊢Δ [σ]))
-                                                    (proj₂ ([F₀] ⊢Δ [σ]) [σ'] [σ≡σ']))))
+                                  (sym (≅-eq (wellformedEq (proj₁ ([F₀] ⊢Δ [σ]))
+                                                    (proj₂ ([F₀] ⊢Δ [σ]) [σ'] [σ≡σ'])))))
       ⊢σ's≡⊢σ's' = PE.subst (λ x → Δ ⊢ subst σ' s ≅ subst σ' s' ∷ x)
                             (natrecSucCase σ F)
                             (≅-conv (wellformedTermEq (proj₁ ([F₊] ⊢Δ [σ']))
                                                    ([s≡s'] ⊢Δ [σ']))
-                                  (≅-sym (wellformedEq (proj₁ ([F₊] ⊢Δ [σ]))
-                                                    (proj₂ ([F₊] ⊢Δ [σ]) [σ'] [σ≡σ']))))
+                                  (sym (≅-eq (wellformedEq (proj₁ ([F₊] ⊢Δ [σ]))
+                                                    (proj₂ ([F₊] ⊢Δ [σ]) [σ'] [σ≡σ'])))))
       ⊢F≡F' = ≅-trans ⊢σF≡σ'F ⊢σ'F≡⊢σ'F'
       ⊢z≡z' = ≅ₜ-trans ⊢σz≡σ'z ⊢σ'z≡⊢σ'z'
       ⊢s≡s' = ≅ₜ-trans ⊢σs≡σ's ⊢σ's≡⊢σ's'

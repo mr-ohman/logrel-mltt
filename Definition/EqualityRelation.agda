@@ -76,7 +76,7 @@ record EqRelSet : Set₁ where
 
     ≅-conv : ∀ {t u A B Γ}
            → Γ ⊢ t ≅ u ∷ A
-           → Γ ⊢ A ≅ B
+           → Γ ⊢ A ≡ B
            → Γ ⊢ t ≅ u ∷ B
 
     ≅-univ : ∀ {A B Γ}

@@ -35,7 +35,7 @@ mutual
         F≡F' , G≡G' = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ΠF'G'≡B A≡B)
     in  _ , substTypeEq G≡G' (soundnessConv↑Term x)
     ,   app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF'G'≡B u~t)
-            (convConvTerm (stabilityEq Γ≡Δ F≡F') (symConv↑Term Γ≡Δ x))
+            (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F'))
   sym~↑ Γ≡Δ (natrec x x₁ x₂ t~u) =
     let [ ⊢Γ , ⊢Δ , _ ] = substx Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
@@ -44,8 +44,8 @@ mutual
         F[0]≡G[0] = substTypeEq F≡G (refl (zero ⊢Δ))
     in  _ , substTypeEq (soundnessConv↑ x) (soundness~↓ t~u)
     ,   natrec (symConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x)
-               (convConvTerm F[0]≡G[0] (symConv↑Term Γ≡Δ x₁))
-               (convConvTerm (sucCong F≡G) (symConv↑Term Γ≡Δ x₂))
+               (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
+               (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
                (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
 
   sym~↓ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A
