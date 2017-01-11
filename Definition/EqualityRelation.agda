@@ -16,12 +16,6 @@ record EqRelSet : Set₁ where
     ≅-ℕrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ
     ≅ₜ-ℕrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ ∷ U
 
-    -- Only used for Πₛ in Pi.agda
-    ≅-Πrefl   : ∀ {F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ G → Γ ⊢ Π F ▹ G ≅ Π F ▹ G
-
-    -- Only used for Πₜₛ in Pi.agda
-    ≅ₜ-Πrefl  : ∀ {F G Γ} → Γ ⊢ F ∷ U → Γ ∙ F ⊢ G ∷ U → Γ ⊢ Π F ▹ G ≅ Π F ▹ G ∷ U
-
     -- Only used in neu in Neutral.agda
     ≅-nerefl  : ∀ {K Γ} → Γ ⊢ K → Neutral K → Γ ⊢ K ≅ K
 
