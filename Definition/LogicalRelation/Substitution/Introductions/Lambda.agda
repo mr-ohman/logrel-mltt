@@ -16,6 +16,7 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
+open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
 open import Tools.Nat
 open import Tools.Product
@@ -41,14 +42,27 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
         let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
             [σF] = proj₁ ([F] ⊢Δ [σ])
             ⊢F = wellformed [σF]
+            ⊢wk1F = T.wk (step id) (⊢Δ ∙ ⊢F) ⊢F
             [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
             ⊢G = wellformed [σG]
             [σt] = proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ])
             ⊢t = wellformedTerm [σG] [σt]
+            wk1t[0] = irrelevanceTerm''
+                        PE.refl
+                        (PE.sym (substVar0Id (subst (liftSubst σ) t)))
+                        [σG] [σG] [σt]
+            β-red' = PE.subst (λ x → _ ⊢ _ ⇒ _ ∷ x)
+                              (substVar0Id (subst (liftSubst σ) G))
+                              (β-red ⊢wk1F (T.wkTerm (lift (step id))
+                                                     (⊢Δ ∙ ⊢F ∙ ⊢wk1F) ⊢t)
+                                                     (var (⊢Δ ∙ ⊢F) here))
             _ , Π F' G' D' ⊢F' ⊢G' A≡A' [F]' [G]' G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lam ⊢F ⊢t)) lam
-               (≅ₜ-lamrefl ⊢F ⊢t) --(≅-fun-ext ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam {!!})
+               (≅-fun-ext ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam
+                          (wellformedTermEq [σG]
+                            (reflEqTerm [σG]
+                              (proj₁ (redSubstTerm β-red' [σG] wk1t[0])))))
                (λ {_} {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]' = irrelevanceTerm' (wk-subst F) ([F]' ρ ⊢Δ₁)

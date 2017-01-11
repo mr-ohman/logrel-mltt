@@ -31,7 +31,6 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       {!!} {!!}
                       (λ x → lift~toConv↑ (var x))
                       (λ x → liftConvTerm (zero-refl x))
-                      {!!}
                       symConv symConvTerm
                       transConv transConvTerm
                       reductionConv↑ reductionConv↑Term

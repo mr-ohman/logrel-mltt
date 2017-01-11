@@ -31,15 +31,6 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
-substVar0Id' : ∀ x → (purge (lift (step id)) (consSubst idSubst (var zero)))
-       x
-       PE.≡ idSubst x
-substVar0Id' zero = PE.refl
-substVar0Id' (suc x) = PE.refl
-
-substVar0Id : ∀ F → (U.wk (lift (step id)) F) [ var zero ] PE.≡ F
-substVar0Id F = PE.trans (subst-wk F) (PE.trans (substEq substVar0Id' F) (substIdEq F))
-
 injectivity'' : ∀ {F G H E Γ l}
                ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]

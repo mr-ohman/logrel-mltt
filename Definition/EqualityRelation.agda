@@ -29,9 +29,6 @@ record EqRelSet : Set₁ where
     ≅ₜ-varrefl : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ≅ var x ∷ A
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
-    -- Only used in lamₛ in Lambda.agda
-    ≅ₜ-lamrefl : ∀ {f F G Γ} → Γ ⊢ F → Γ ∙ F ⊢ f ∷ G → Γ ⊢ lam f ≅ lam f ∷ Π F ▹ G
-
     ≅-sym  : ∀ {A B Γ}   → Γ ⊢ A ≅ B     → Γ ⊢ B ≅ A
     ≅ₜ-sym : ∀ {t u A Γ} → Γ ⊢ t ≅ u ∷ A → Γ ⊢ u ≅ t ∷ A
 
