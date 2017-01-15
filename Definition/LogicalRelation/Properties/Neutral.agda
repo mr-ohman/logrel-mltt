@@ -10,6 +10,7 @@ open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
+open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Properties.Wellformed
 open import Definition.LogicalRelation.Properties.Symmetry
 
@@ -112,10 +113,12 @@ mutual
                    ρn = wkTerm [ρ] ⊢Δ n
                    ρn' = wkTerm [ρ] ⊢Δ n'
                    a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
+                   a≡a = wellformedTermEq ([F] [ρ] ⊢Δ)
+                                          (reflEqTerm ([F] [ρ] ⊢Δ) [a])
                    neN∙a   = _∘_ (wkNeutral ρ neN)
                    neN'∙a' = _∘_ (wkNeutral ρ neN')
                in  neuEqTerm ([G] [ρ] ⊢Δ [a]) neN∙a neN'∙a'
                              (conv ρn  ρA≡ρΠFG ∘ a)
                              (conv ρn' ρA≡ρΠFG ∘ a)
-                             (≅-app-subst (≅ₜ-wk [ρ] ⊢Δ (≅-conv n≡n' A≡ΠFG)) a))
+                             (≅-app-cong (≅ₜ-wk [ρ] ⊢Δ (≅-conv n≡n' A≡ΠFG)) a≡a))
   neuEqTerm (emb 0<1 x) neN neN' n:≡:n' = neuEqTerm x neN neN' n:≡:n'
