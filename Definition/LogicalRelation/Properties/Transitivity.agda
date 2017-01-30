@@ -25,12 +25,13 @@ mutual
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
   transEqT (ℕ D D') (ℕ _ D'') A≡B B≡C = B≡C
-  transEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne ._ (ne K₂ D₂ neK₂ K≡K₂))
+  transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁))
+           (ne ._ (ne K₂ D₂ neK₂ K≡K₂))
            (ne₌ M D' neM K≡M) (ne₌ M₁ D'' neM₁ K≡M₁)
            rewrite whrDet*' (red D₁ , ne neK₁) (red D' , ne neM)
                  | whrDet*' (red D₂ , ne neK₂) (red D'' , ne neM₁) =
-    ne₌ M₁  D''  neM₁
-        (≅-trans K≡M K≡M₁)
+    ne₌ M₁ D'' neM₁
+        (~-trans K≡M K≡M₁)
   transEqT {Γ} {l = l} {l' = l′} {l'' = l″}
            (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
               (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
@@ -107,7 +108,7 @@ transEqTermNe : ∀ {Γ n n' n'' A}
               → Γ ⊩neNf n' ≡ n'' ∷ A
               → Γ ⊩neNf n  ≡ n'' ∷ A
 transEqTermNe (neNfₜ₌ neK neM k≡m) (neNfₜ₌ neK₁ neM₁ k≡m₁) =
-  neNfₜ₌ neK neM₁ (≅ₜ-trans k≡m k≡m₁)
+  neNfₜ₌ neK neM₁ (~-trans k≡m k≡m₁)
 
 mutual
   transEqTermℕ : ∀ {Γ n n' n''}
@@ -132,7 +133,8 @@ mutual
   transNatural-prop zero prop₁ = prop₁
   transNatural-prop prop zero = prop
   transNatural-prop (ne (neNfₜ₌ neK () k≡m)) (suc x₃)
-  transNatural-prop (ne [k≡k']) (ne [k'≡k'']) = ne (transEqTermNe [k≡k'] [k'≡k''])
+  transNatural-prop (ne [k≡k']) (ne [k'≡k'']) =
+    ne (transEqTermNe [k≡k'] [k'≡k''])
 
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -151,7 +153,7 @@ transEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' (neNfₜ₌ neK₁ neM k≡m)
   let k₁≡m = whrDet* (redₜ d₁ , ne neK₂) (redₜ d' , ne neM)
   in  neₜ₌ k m₁ d d''
            (neNfₜ₌ neK₁ neM₁
-                   (≅ₜ-trans k≡m (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡m k≡m₁)))
+                   (~-trans k≡m (PE.subst (λ x → _ ⊢ x ~ _ ∷ _) k₁≡m k≡m₁)))
 transEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g])
             (Πₜ₌ f₁ g₁ d₁ d₁' funcF₁ funcG₁ f≡g₁ [f]₁ [g]₁ [f≡g]₁)

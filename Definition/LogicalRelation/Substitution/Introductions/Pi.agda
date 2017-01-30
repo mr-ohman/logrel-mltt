@@ -101,17 +101,18 @@ import Tools.PropositionalEquality as PE
             [wk1σ≡wk1σ'] = wk1SubstSEq [Γ] ⊢Δ (⊢F [σ]) [σ] [σ≡σ']
             [F][wk1σ] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
             [F][wk1σ'] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ'])
+            var0' = conv var0
+                         (≅-eq (wellformedEq [F][wk1σ]
+                                             (proj₂ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
+                                                    [wk1σ'] [wk1σ≡wk1σ'])))
         in  Π₌ _ _ (id (Π ⊢F [σ'] ▹ ⊢G [σ']))
                (≅-Π-cong (⊢F [σ])
                        (wellformedEq (proj₁ ([F] ⊢Δ [σ]))
                                     (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']))
                        (wellformedEq (proj₁ ([G]σ [σ])) (proj₂ ([G]σ [σ])
-                         ([wk1σ'] , neuTerm [F][wk1σ'] (var zero) (conv var0
-                           (≅-eq (wellformedEq [F][wk1σ]
-                                        (proj₂ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
-                                               [wk1σ'] [wk1σ≡wk1σ'])))))
+                         ([wk1σ'] , neuTerm [F][wk1σ'] (var zero) var0' (~-var var0'))
                          ([wk1σ≡wk1σ'] , neuEqTerm [F][wk1σ]
-                           (var zero) (var zero) var0 var0 (≅ₜ-nerefl var0 (var zero))))))
+                           (var zero) (var zero) var0 var0 (~-var var0)))))
                (λ ρ ⊢Δ₁ → wkEq ρ ⊢Δ₁ [σF] (proj₂ ([F] ⊢Δ [σ]) [σ'] [σ≡σ']))
                (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
@@ -210,14 +211,15 @@ import Tools.PropositionalEquality as PE
          let [liftσ'] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ']
              [wk1σ] = wk1SubstS [Γ] ⊢Δ ⊢F [σ]
              [wk1σ'] = wk1SubstS [Γ] ⊢Δ ⊢F [σ']
+             var0 = conv (var (⊢Δ ∙ ⊢F)
+                         (PE.subst (λ x → zero ∷ x ∈ (Δ ∙ subst σ F))
+                                   (wk-subst F) here))
+                    (≅-eq (wellformedEq (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ]))
+                                        (proj₂ ([F] (⊢Δ ∙ ⊢F) [wk1σ]) [wk1σ']
+                                               (wk1SubstSEq [Γ] ⊢Δ ⊢F [σ] [σ≡σ']))))
              [liftσ']' = [wk1σ']
                        , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ'])) (var zero)
-                           (conv (var (⊢Δ ∙ ⊢F)
-                                      (PE.subst (λ x → zero ∷ x ∈ (Δ ∙ subst σ F))
-                                                (wk-subst F) here))
-                                 (≅-eq (wellformedEq (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ]))
-                                              (proj₂ ([F] (⊢Δ ∙ ⊢F) [wk1σ]) [wk1σ']
-                                                     (wk1SubstSEq [Γ] ⊢Δ ⊢F [σ] [σ≡σ'])))))
+                                 var0 (~-var var0)
              ⊢F' = wellformed (proj₁ ([F] ⊢Δ [σ']))
              ⊢Fₜ' = wellformedTerm (U' ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ']))
              ⊢Gₜ' = wellformedTerm (proj₁ ([U] (⊢Δ ∙ ⊢F') [liftσ']))

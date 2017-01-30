@@ -4,7 +4,7 @@ module Definition.LogicalRelation {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
 open import Definition.Untyped as U
-open import Definition.Typed hiding (_⊢_≡_; _⊢_≡_∷_)
+open import Definition.Typed
 open import Definition.Typed.Weakening
 
 open import Tools.Product
@@ -23,7 +23,7 @@ record _⊩ne_ (Γ : Con Term) (A : Term) : Set where
     K   : Term
     D   : Γ ⊢ A :⇒*: K
     neK : Neutral K
-    K≡K : Γ ⊢ K ≅ K
+    K≡K : Γ ⊢ K ~ K ∷ U
 
 record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
   constructor ne₌
@@ -32,7 +32,7 @@ record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
     M   : Term
     D'  : Γ ⊢ B :⇒*: M
     neM : Neutral M
-    K≡M : Γ ⊢ K ≅ M
+    K≡M : Γ ⊢ K ~ M ∷ U
 
 record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
   inductive
@@ -40,7 +40,7 @@ record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
   field
     neK  : Neutral k
     ⊢k   : Γ ⊢ k ∷ A
-    k≡k  : Γ ⊢ k ≅ k ∷ A
+    k≡k  : Γ ⊢ k ~ k ∷ A
 
 record _⊩ne_∷_/_ (Γ : Con Term) (t A : Term) ([A] : Γ ⊩ne A) : Set where
   inductive
@@ -57,7 +57,7 @@ record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
   field
     neK  : Neutral k
     neM  : Neutral m
-    k≡m  : Γ ⊢ k ≅ m ∷ A
+    k≡m  : Γ ⊢ k ~ m ∷ A
 
 record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set where
   constructor neₜ₌

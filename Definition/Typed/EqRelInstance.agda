@@ -6,6 +6,8 @@ open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.EqualityRelation
 
+open import Tools.Product
+
 reduction : ∀ {A A' B B' Γ}
           → Γ ⊢ A ⇒* A'
           → Γ ⊢ B ⇒* B'
@@ -31,15 +33,15 @@ reductionₜ D d d' whnfB whnfA' whnfB' a'≡b' =
        (sym (subset* D))
 
 instance eqRelInstance : EqRelSet
-eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_
+eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_ _⊢_≡_∷_
+                      refl app-cong natrec-cong sym
+                      trans conv wkEqTerm (λ x → x)
                       (λ x → refl (U x)) (λ x → refl (ℕ x)) (λ x → refl (ℕ x))
-                      (λ x x₁ → refl x) (λ x x₁ → refl x)
-                      (λ x → refl x)
                       (λ x → refl (zero x))
                       sym sym trans trans
                       reduction reductionₜ
                       wkEq wkEqTerm
                       (λ x → x) (λ x → x) conv univ
-                      app-cong (λ x x₁ → app-cong x (refl x₁))
-                      suc-cong Π-cong Π-cong natrec-cong
+                      (λ x x₁ → app-cong x (refl x₁))
+                      suc-cong Π-cong Π-cong
                       (λ x x₁ x₂ x₃ x₄ x₅ → fun-ext x x₁ x₂ x₅)

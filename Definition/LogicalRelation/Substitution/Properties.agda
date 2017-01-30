@@ -88,9 +88,10 @@ liftSubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
 liftSubstS {F = F} {σ = σ} {Δ = Δ} [Γ] ⊢Δ [F] [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ]
+      var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
+                                     (wk-subst F) here)
   in  [tailσ] , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero)
-                        (var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
-                                                 (wk-subst F) here))
+                        var0 (~-var var0)
 
 liftSubstSEq : ∀ {l F σ σ' Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -105,7 +106,7 @@ liftSubstSEq {F = F} {σ = σ} {σ' = σ'} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡�
       [tailσ≡σ'] = wk1SubstSEq [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ']
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
   in  [tailσ≡σ'] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
-                         var0 var0 (≅ₜ-nerefl var0 (var zero))
+                         var0 var0 (~-var var0)
 
 mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ
@@ -127,14 +128,15 @@ mutual
                          (idSubstS [Γ])
         [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (idSubst-lemma₀ A))
                                       [Γ] [Γ] ⊢Γ∙A' ⊢Γ∙A [A]'
+        var0 = var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
+                                  (wk-subst A)
+                                  (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A)
+                                                     ∈ (Γ ∙ x))
+                                            (idSubst-lemma₀ A) here))
     in  [tailσ]
     ,   neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
                 (var zero)
-                (var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
-                                    (wk-subst A)
-                                    (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A)
-                                                       ∈ (Γ ∙ x))
-                                              (idSubst-lemma₀ A) here)))
+                var0 (~-var var0)
 
 reflSubst : ∀ {σ Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
             ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)

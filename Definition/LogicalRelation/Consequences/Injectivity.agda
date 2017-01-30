@@ -44,6 +44,7 @@ injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
       [F]₁ = [F] id ⊢Γ
       [F]' = irrelevance' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁
       [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
+                      (refl (var (⊢Γ ∙ ⊢F) here))
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G]' = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x)
                        (PE.trans (substVar0Id _) (PE.sym G≡G₁))

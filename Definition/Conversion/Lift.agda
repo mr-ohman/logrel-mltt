@@ -74,6 +74,7 @@ mutual
         neT , neU = ne~↑ k~l
         ⊢Γ = wf ⊢F
         var0 = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
+                       (refl (var (⊢Γ ∙ ⊢F) here))
         0≡0 = lift~toConv↑' ([F] (step id) (⊢Γ ∙ ⊢F)) (var (var (⊢Γ ∙ ⊢F) here))
         k∘0≡l∘0 = lift~toConv↑' ([G] (step id) (⊢Γ ∙ ⊢F) var0)
                                 (app (wk~↓ (step id) (⊢Γ ∙ ⊢F) ([~] A D₂ Π k~l))

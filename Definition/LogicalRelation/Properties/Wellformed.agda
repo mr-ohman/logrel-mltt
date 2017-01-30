@@ -26,7 +26,7 @@ wellformedEq : ∀ {l Γ A B} → ([A] : Γ ⊩⟨ l ⟩ A)
 wellformedEq (U' l' l< ⊢Γ) PE.refl = ≅-Urefl ⊢Γ
 wellformedEq (ℕ [ ⊢A , ⊢B , D ]) D' = ≅-red D D' ℕ ℕ (≅-ℕrefl (wf ⊢A))
 wellformedEq (ne' K D neK K≡K) (ne₌ M D' neM K≡M) =
-  ≅-red (red D) (red D') (ne neK) (ne neM) K≡M
+  ≅-red (red D) (red D') (ne neK) (ne neM) (~-to-≅ K≡M)
 wellformedEq (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
              (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   ≅-red (red D) D' Π Π A≡B
@@ -56,7 +56,8 @@ wellformedTermEq (ℕ D) (ℕₜ₌ k k' d d' k≡k' prop) =
              (naturalWhnf natK) (naturalWhnf natK') k≡k'
 wellformedTermEq (ne' K D neK K≡K)
                  (neₜ₌ k m d d' (neNfₜ₌ neT neU t≡u)) =
-  ≅ₜ-red (red D) (redₜ d) (redₜ d') (ne neK) (ne neT) (ne neU) t≡u
+  ≅ₜ-red (red D) (redₜ d) (redₜ d') (ne neK) (ne neT) (ne neU)
+         (~-to-≅ₜ t≡u)
 wellformedTermEq (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                  (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g]) =
   ≅ₜ-red (red D) (redₜ d) (redₜ d') Π (functionWhnf funcF) (functionWhnf funcG) f≡g

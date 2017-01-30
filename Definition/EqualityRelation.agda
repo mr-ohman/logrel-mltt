@@ -1,26 +1,56 @@
 module Definition.EqualityRelation where
 
-open import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Typed
-open import Definition.Typed.Weakening
+open import Definition.Typed.Weakening using (_∷_⊆_)
 
 open import Tools.Nat
+open import Tools.Product
 
 record EqRelSet : Set₁ where
   constructor eqRel
   field
     _⊢_≅_   : Con Term → (A B : Term)   → Set
     _⊢_≅_∷_ : Con Term → (t u A : Term) → Set
+    _⊢_~_∷_ : Con Term → (t u A : Term) → Set
+
+    ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
+    ~-app : ∀ {a b f g F G Γ}
+          → Γ ⊢ f ~ g ∷ Π F ▹ G
+          → Γ ⊢ a ≅ b ∷ F
+          → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
+    ~-natrec : ∀ {z z' s s' n n' F F' Γ}
+             → Γ ∙ ℕ ⊢ F ≅ F'
+             → Γ     ⊢ z ≅ z' ∷ F [ zero ]
+             → Γ     ⊢ s ≅ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+             → Γ     ⊢ n ~ n' ∷ ℕ
+             → Γ     ⊢ natrec F z s n ~ natrec F' z' s' n' ∷ F [ n ]
+
+    ~-sym   : ∀ {k l A Γ}
+            → Γ ⊢ k ~ l ∷ A
+            → Γ ⊢ l ~ k ∷ A
+    ~-trans : ∀ {k l m A Γ}
+            → Γ ⊢ k ~ l ∷ A
+            → Γ ⊢ l ~ m ∷ A
+            → Γ ⊢ k ~ m ∷ A
+    ~-conv  : ∀ {k l A B Γ}
+            → Γ ⊢ k ~ l ∷ A
+            → Γ ⊢ A ≡ B
+            → Γ ⊢ k ~ l ∷ B
+    ~-wk    : ∀ {k l A ρ Γ Δ}
+            → ρ ∷ Γ ⊆ Δ
+            → ⊢ Δ
+            → Γ ⊢ k ~ l ∷ A
+            → Δ ⊢ wk ρ k ~ wk ρ l ∷ wk ρ A
+
+    ~-to-≅ₜ : ∀ {k l A Γ}
+            → Γ ⊢ k ~ l ∷ A
+            → Γ ⊢ k ≅ l ∷ A
 
     ≅-Urefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ U ≅ U
     ≅-ℕrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ
     ≅ₜ-ℕrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ ∷ U
 
-    -- Only used in neu in Neutral.agda
-    ≅-nerefl  : ∀ {K Γ} → Γ ⊢ K → Neutral K → Γ ⊢ K ≅ K
-
-    ≅ₜ-nerefl : ∀ {k A Γ} → Γ ⊢ k ∷ A → Neutral k → Γ ⊢ k ≅ k ∷ A
-    ≅ₜ-varrefl : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ≅ var x ∷ A
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
     ≅-sym  : ∀ {A B Γ}   → Γ ⊢ A ≅ B     → Γ ⊢ B ≅ A
@@ -51,12 +81,12 @@ record EqRelSet : Set₁ where
           → ρ ∷ Γ ⊆ Δ
           → ⊢ Δ
           → Γ ⊢ A ≅ B
-          → Δ ⊢ U.wk ρ A ≅ U.wk ρ B
+          → Δ ⊢ wk ρ A ≅ wk ρ B
     ≅ₜ-wk : ∀ {t u A ρ Γ Δ}
           → ρ ∷ Γ ⊆ Δ
           → ⊢ Δ
           → Γ ⊢ t ≅ u ∷ A
-          → Δ ⊢ U.wk ρ t ≅ U.wk ρ u ∷ U.wk ρ A
+          → Δ ⊢ wk ρ t ≅ wk ρ u ∷ wk ρ A
 
     ≅-eq  : ∀ {A B Γ}
           → Γ ⊢ A ≅ B
@@ -73,12 +103,6 @@ record EqRelSet : Set₁ where
     ≅-univ : ∀ {A B Γ}
            → Γ ⊢ A ≅ B ∷ U
            → Γ ⊢ A ≅ B
-
-    -- Only used for neuTerm in Neutral.agda
-    ≅-app-cong : ∀ {a b f g F G Γ}
-               → Γ ⊢ f ≅ g ∷ Π F ▹ G
-               → Γ ⊢ a ≅ b ∷ F
-               → Γ ⊢ f ∘ a ≅ g ∘ b ∷ G [ a ]
 
     -- Used for neuEqTerm in Neutral.agda and fun-extEqTerm in Lambda.agda
     ≅-app-subst : ∀ {a f g F G Γ}
@@ -102,14 +126,6 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Π F ▹ G ≅ Π H ▹ E ∷ U
 
-    -- Only used for the neutral case of natrec-congTerm in Natrec.agda
-    ≅-natrec-cong : ∀ {z z' s s' n n' F F' Γ}
-                  → Γ ∙ ℕ ⊢ F ≅ F'
-                  → Γ     ⊢ z ≅ z' ∷ F [ zero ]
-                  → Γ     ⊢ s ≅ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-                  → Γ     ⊢ n ≅ n' ∷ ℕ
-                  → Γ     ⊢ natrec F z s n ≅ natrec F' z' s' n' ∷ F [ n ]
-
     ≅-fun-ext : ∀ {f g F G Γ}
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
@@ -118,3 +134,6 @@ record EqRelSet : Set₁ where
               → Whnf g
               → Γ ∙ F ⊢ wk1 f ∘ var zero ≅ wk1 g ∘ var zero ∷ G
               → Γ ⊢ f ≅ g ∷ Π F ▹ G
+
+  ~-to-≅ : ∀ {k l Γ} → Γ ⊢ k ~ l ∷ U → Γ ⊢ k ≅ l
+  ~-to-≅ k~l = ≅-univ (~-to-≅ₜ k~l)

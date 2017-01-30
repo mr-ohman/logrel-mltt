@@ -25,7 +25,7 @@ mutual
   symEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D' neM K≡M)
          rewrite whrDet*' (red D' , ne neM) (red D₁ , ne neK₁) =
     ne₌ _ D neK
-        (≅-sym K≡M) --(trans (sym (subset* (red D₁))) (trans (subset* (red D')) (sym K≡M)))
+        (~-sym K≡M)
   symEqT {Γ = Γ} (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                     (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
@@ -63,7 +63,7 @@ mutual
 symNeutralTerm : ∀ {t u A Γ}
                → Γ ⊩neNf t ≡ u ∷ A
                → Γ ⊩neNf u ≡ t ∷ A
-symNeutralTerm (neNfₜ₌ neK neM k≡m) = neNfₜ₌ neM neK (≅ₜ-sym k≡m)
+symNeutralTerm (neNfₜ₌ neK neM k≡m) = neNfₜ₌ neM neK (~-sym k≡m)
 
 symNatural-prop : ∀ {Γ k k'}
                 → [Natural]-prop Γ k k'
@@ -80,7 +80,8 @@ symEqTerm (U' .⁰ 0<1 ⊢Γ) (Uₜ₌ A B d d' typeA typeB A≡B [A] [B] [A≡B
   Uₜ₌ B A d' d typeB typeA (≅ₜ-sym A≡B) [B] [A] (symEq [A] [B] [A≡B])
 symEqTerm (ℕ D) (ℕₜ₌ k k' d d' t≡u prop) =
   ℕₜ₌ k' k d' d (≅ₜ-sym t≡u) (symNatural-prop prop)
-symEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' nf) = neₜ₌ m k d' d (symNeutralTerm nf)
+symEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' nf) =
+  neₜ₌ m k d' d (symNeutralTerm nf)
 symEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
           (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g]) =
   Πₜ₌ g f d' d funcG funcF (≅ₜ-sym f≡g) [g] [f]

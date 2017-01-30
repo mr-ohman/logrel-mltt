@@ -157,6 +157,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
              ⊢t' = wellformedTerm [G]₁' (proj₁ ([t] (⊢Δ ∙ ⊢F') [liftσ']))
              neuVar = neuTerm ([F]' (T.step T.id) (⊢Δ ∙ ⊢F))
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
+                              (~-var (var (⊢Δ ∙ ⊢F) here))
              σlamt∘a≡σ'lamt∘a : ∀ {ρ Δ₁ a} → ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
                  → ([a] : Δ₁ ⊩⟨ ¹ ⟩ a ∷ U.wk ρ (subst σ F) / [F]' [ρ] ⊢Δ₁)
                  → Δ₁ ⊩⟨ ¹ ⟩ U.wk ρ (subst σ (lam t)) ∘ a

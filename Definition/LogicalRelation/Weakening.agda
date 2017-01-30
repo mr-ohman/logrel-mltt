@@ -20,12 +20,12 @@ import Tools.PropositionalEquality as PE
 wkTermNe : ∀ {ρ Γ Δ k A} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)
          → Γ ⊩neNf k ∷ A → Δ ⊩neNf U.wk ρ k ∷ U.wk ρ A
 wkTermNe {ρ} [ρ] ⊢Δ (neNfₜ neK ⊢k k≡k) =
-  neNfₜ (wkNeutral ρ neK) (T.wkTerm [ρ] ⊢Δ ⊢k) (≅ₜ-wk [ρ] ⊢Δ k≡k)
+  neNfₜ (wkNeutral ρ neK) (T.wkTerm [ρ] ⊢Δ ⊢k) (~-wk [ρ] ⊢Δ k≡k)
 
 wkEqTermNe : ∀ {ρ Γ Δ k k' A} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)
            → Γ ⊩neNf k ≡ k' ∷ A → Δ ⊩neNf U.wk ρ k ≡ U.wk ρ k' ∷ U.wk ρ A
 wkEqTermNe {ρ} [ρ] ⊢Δ (neNfₜ₌ neK neM k≡m) =
-  neNfₜ₌ (wkNeutral ρ neK) (wkNeutral ρ neM) (≅ₜ-wk [ρ] ⊢Δ k≡m)
+  neNfₜ₌ (wkNeutral ρ neK) (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ k≡m)
 
 mutual
   wkTermℕ : ∀ {ρ Γ Δ n} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)
@@ -62,7 +62,7 @@ wk : ∀ {ρ Γ Δ A l} → ρ ∷ Γ ⊆ Δ → ⊢ Δ → Γ ⊩⟨ l ⟩ A �
 wk ρ ⊢Δ (U' l' l< ⊢Γ) = U (U l' l< ⊢Δ)
 wk ρ ⊢Δ (ℕ D) = ℕ (wkRed:*: ρ ⊢Δ D)
 wk {ρ} [ρ] ⊢Δ (ne' K D neK K≡K) =
-  ne' (U.wk ρ K) (wkRed:*: [ρ] ⊢Δ D) (wkNeutral ρ neK) (≅-wk [ρ] ⊢Δ K≡K)
+  ne' (U.wk ρ K) (wkRed:*: [ρ] ⊢Δ D) (wkNeutral ρ neK) (~-wk [ρ] ⊢Δ K≡K)
 wk {ρ} {Γ} {Δ} {A} {l} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
   let ⊢ρF = T.wk [ρ] ⊢Δ ⊢F
       [F]' : ∀ {ρ ρ' E} ([ρ] : ρ ∷ Δ ⊆ E) ([ρ'] : ρ' ∷ Γ ⊆ Δ) (⊢E : ⊢ E)
@@ -111,7 +111,7 @@ wkEq ρ ⊢Δ (U' _ _ _) PE.refl = PE.refl
 wkEq ρ ⊢Δ (ℕ D) A≡B = wkRed* ρ ⊢Δ A≡B
 wkEq {ρ} [ρ] ⊢Δ (ne' _ _ _ _) (ne₌ M D' neM K≡M) =
   ne₌ (U.wk ρ M) (wkRed:*: [ρ] ⊢Δ D')
-      (wkNeutral ρ neM) (≅-wk [ρ] ⊢Δ K≡M)
+      (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ K≡M)
 wkEq {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                 (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   -- TODO Minimize duplicates
