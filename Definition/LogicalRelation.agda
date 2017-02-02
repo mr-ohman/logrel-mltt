@@ -255,8 +255,8 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ∃ λ f → Γ ⊢ t :⇒*: f ∷ Π F ▹ G
             × Function f
             × Γ ⊢ f ≅ f ∷ Π F ▹ G
-            × wk-fun-ext-prop¹ Γ F G t [F] [G]
-            × wk-subst-prop-T¹ Γ F G t [F] [G]
+            × wk-fun-ext-prop¹ Γ F G f [F] [G]
+            × wk-subst-prop-T¹ Γ F G f [F] [G]
 
     -- Issue: Same as above.
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹Π A) → Set
@@ -270,7 +270,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ×   Γ ⊢ f ≅ g ∷ Π F ▹ G
       ×   Γ ⊩¹Π t ∷ A / [A]
       ×   Γ ⊩¹Π u ∷ A / [A]
-      ×   wk-fun-ext-prop¹' Γ F G t u [F] [G]
+      ×   wk-fun-ext-prop¹' Γ F G f g [F] [G]
 
 
     -- Logical relation definition

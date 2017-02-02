@@ -104,12 +104,6 @@ record EqRelSet : Set₁ where
            → Γ ⊢ A ≅ B ∷ U
            → Γ ⊢ A ≅ B
 
-    -- Used for neuEqTerm in Neutral.agda and fun-extEqTerm in Lambda.agda
-    ≅-app-subst : ∀ {a f g F G Γ}
-                → Γ ⊢ f ≅ g ∷ Π F ▹ G
-                → Γ ⊢ a ∷ F
-                → Γ ⊢ f ∘ a ≅ g ∘ a ∷ G [ a ]
-
     ≅-suc-cong : ∀ {m n Γ}
                → Γ ⊢ m ≅ n ∷ ℕ
                → Γ ⊢ suc m ≅ suc n ∷ ℕ

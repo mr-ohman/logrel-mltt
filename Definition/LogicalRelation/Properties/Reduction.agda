@@ -75,40 +75,11 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ex
       t⇒u'  = conv* t⇒u A≡ΠFG
       [d]  = [ ⊢t , ⊢u , d ]
       [d'] = [ conv (redFirst*Term t⇒u) A≡ΠFG , ⊢u , conv* t⇒u A≡ΠFG ⇨∷* d ]
-      ta×ta≡ua : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-                 ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-               → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G]  [ρ] ⊢Δ [a])
-               × (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ u ∘ a ∷
-                 U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
-      ta×ta≡ua ρ ⊢Δ [a] = let ⊢a = wellformedTerm ([F] ρ ⊢Δ) [a]
-                          in  redSubst*Term (app-subst* (wkRed*Term ρ ⊢Δ t⇒u') ⊢a)
-                                            ([G] ρ ⊢Δ [a]) ([f]₁ ρ ⊢Δ [a])
-      ta : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-           ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-         → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
-      ta ρ ⊢Δ [a] = proj₁ (ta×ta≡ua ρ ⊢Δ [a])
-      ta≡ua : ∀ {ρ Δ a} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-            → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ u ∘ a ∷
-              U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
-      ta≡ua ρ ⊢Δ [a] = proj₂ (ta×ta≡ua ρ ⊢Δ [a])
-      ta≡tb : ∀ {ρ Δ a b} ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
-              ([a] : Δ ⊩⟨ l ⟩ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-              ([b] : Δ ⊩⟨ l ⟩ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-              ([a≡b] : Δ ⊩⟨ l ⟩ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-            → (Δ ⊩⟨ l ⟩ U.wk ρ t ∘ a ≡ U.wk ρ t ∘ b ∷
-              U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
-      ta≡tb ρ ⊢Δ [a] [b] [a≡b] =
-        transEqTerm ([G] ρ ⊢Δ [a]) (ta≡ua ρ ⊢Δ [a])
-          (transEqTerm ([G] ρ ⊢Δ [a]) ([f] ρ ⊢Δ [a] [b] [a≡b])
-            (convEqTerm₂ ([G] ρ ⊢Δ [a]) ([G] ρ ⊢Δ [b])
-                         (G-ext ρ ⊢Δ [a] [b] [a≡b])
-                         (symEqTerm ([G] ρ ⊢Δ [b]) (ta≡ua ρ ⊢Δ [b]))))
-  in  Πₜ f [d'] funcF f≡f ta≡tb ta
+  in  Πₜ f [d'] funcF f≡f [f] [f]₁
   ,   Πₜ₌ f f [d'] [d] funcF funcF f≡f
-          (Πₜ f [d'] funcF f≡f ta≡tb ta)
+          (Πₜ f [d'] funcF f≡f [f] [f]₁)
           (Πₜ f [d] funcF f≡f [f] [f]₁)
-          ta≡ua
+          (λ [ρ] ⊢Δ [a] → reflEqTerm ([G] [ρ] ⊢Δ [a]) ([f]₁ [ρ] ⊢Δ [a]))
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 redSubst : ∀ {A B l Γ}

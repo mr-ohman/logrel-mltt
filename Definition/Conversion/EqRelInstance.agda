@@ -119,7 +119,6 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                       wkConv↑ wkConv↑Term
                       soundnessConv↑ soundnessConv↑Term
                       convConvTerm univConv↑
-                      {!!}
                       (λ x → liftConvTerm (suc-cong x))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →

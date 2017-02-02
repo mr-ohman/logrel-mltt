@@ -42,6 +42,5 @@ eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_ _⊢_≡_∷_
                       reduction reductionₜ
                       wkEq wkEqTerm
                       (λ x → x) (λ x → x) conv univ
-                      (λ x x₁ → app-cong x (refl x₁))
                       suc-cong Π-cong Π-cong
                       (λ x x₁ x₂ x₃ x₄ x₅ → fun-ext x x₁ x₂ x₅)

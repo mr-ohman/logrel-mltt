@@ -3,20 +3,22 @@ open import Definition.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.Lambda {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U
+open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
-open import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening as T hiding (wk; wkTerm; wkEqTerm)
 open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Irrelevance
+open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
+open import Definition.LogicalRelation.Substitution.Introductions.Application
 
 open import Tools.Nat
 open import Tools.Product
@@ -307,6 +309,12 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       _ , Π F' G' D' ⊢F ⊢G A≡A [F]' [G]' G-ext = extractMaybeEmb (Π-elim [σΠFG])
+      [σF] = proj₁ ([F] ⊢Δ [σ])
+      [wk1F] = wk (step id) (⊢Δ ∙ ⊢F) [σF]
+      var0' = var (⊢Δ ∙ ⊢F) here
+      var0 = neuTerm [wk1F] (var zero) var0' (~-var var0')
+      var0≡0 = neuEqTerm [wk1F] (var zero) (var zero) var0' var0' (~-var var0')
+      [σG]' = [G]' (step id) (⊢Δ ∙ ⊢F) var0
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0 = wellformedTermEq [σG]
                                  ([f0≡g0] (⊢Δ ∙ ⊢F)
@@ -318,40 +326,56 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
           (PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl)
           σf0≡σg0
       ⊢ΠFG = wellformed [σΠFG]
-      f≡f₁ = ≅ₜ-red (id ⊢ΠFG) d (id ⊢u) Π
-                    (functionWhnf funcF) (functionWhnf funcF) f≡f
-      g≡g₁ = ≅ₜ-red (id ⊢ΠFG) d₁ (id ⊢u₁) Π
-                    (functionWhnf funcG) (functionWhnf funcG) g≡g
+      f≡f₁' = proj₂ (redSubst*Term d [σΠFG] (Πₜ f₁ (idRedTerm:*: ⊢u) funcF f≡f [f] [f]₁))
+      g≡g₁' = proj₂ (redSubst*Term d₁ [σΠFG] (Πₜ g₁ (idRedTerm:*: ⊢u₁) funcG g≡g [g] [g]₁))
       Geq = PE.trans (subst-wk (subst (liftSubst σ) G))
                      (PE.trans (substEq (λ { zero → PE.refl ; (suc x) → PE.refl })
                                         (subst (liftSubst σ) G))
                                (substIdEq (subst (liftSubst σ) G)))
-      eq   = PE.subst (λ x → _ ⊢ _ ≅ _ ∷ x)
-                      Geq
-                      (≅-app-subst (≅ₜ-wk (step id) (⊢Δ ∙ ⊢F) f≡f₁)
-                                   (var (⊢Δ ∙ ⊢F) here))
-      eq₁  = PE.subst (λ x → _ ⊢ _ ≅ _ ∷ x)
-                      Geq
-                      (≅-app-subst (≅ₜ-wk (step id) (⊢Δ ∙ ⊢F) g≡g₁)
-                                   (var (⊢Δ ∙ ⊢F) here))
+      eq'  = irrelevanceEqTerm' Geq [σG]' [σG]
+                                (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
+                                              (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] f≡f₁') var0 var0 var0≡0)
+      eq₁' = irrelevanceEqTerm' Geq [σG]' [σG]
+                                (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
+                                              (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] g≡g₁') var0 var0 var0≡0)
+      eq   = wellformedTermEq [σG] eq'
+      eq₁  = wellformedTermEq [σG] eq₁'
   in  Πₜ₌ f₁ g₁ [d] [d'] funcF funcG
           (≅-fun-ext ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
                      (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0' eq₁)))
           (Πₜ f₁ [d] funcF f≡f [f] [f]₁)
           (Πₜ g₁ [d'] funcG g≡g [g] [g]₁)
           (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
-             let [a]' = irrelevanceTerm'
+             let [F]'' = proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))
+                 [a]' = irrelevanceTerm'
                           (wk-subst F) ([F]' [ρ] ⊢Δ₁)
-                          (proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))) [a]
+                          [F]'' [a]
                  fEq = PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl
                  gEq = PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl
                  GEq = PE.sym (PE.trans (subst-wk (subst (liftSubst σ) G))
                                         (PE.trans (substCompEq G)
                                                   (substEq (lemma4 ρ σ a) G)))
-             in  irrelevanceEqTerm'' fEq gEq GEq
-                                     (proj₁ ([G] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
-                                     ([G]' [ρ] ⊢Δ₁ [a])
-                                     ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
+                 f≡g = irrelevanceEqTerm'' fEq gEq GEq
+                         (proj₁ ([G] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
+                         ([G]' [ρ] ⊢Δ₁ [a])
+                         ([f0≡g0] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]'))
+                 [ρσΠFG] = wk [ρ] ⊢Δ₁ [σΠFG]
+                 [f]' : Δ ⊩⟨ _ ⟩ f₁ ∷ Π F' ▹ G' / [σΠFG]
+                 [f]' = Πₜ f₁ (idRedTerm:*: ⊢u) funcF f≡f [f] [f]₁
+                 [ρf]' = wkTerm [ρ] ⊢Δ₁ [σΠFG] [f]'
+                 [g]' : Δ ⊩⟨ _ ⟩ g₁ ∷ Π F' ▹ G' / [σΠFG]
+                 [g]' = Πₜ g₁ (idRedTerm:*: ⊢u₁) funcG g≡g [g] [g]₁
+                 [ρg]' = wkTerm [ρ] ⊢Δ₁ [σΠFG] [g]'
+                 [f∘u] = appTerm ([F]' [ρ] ⊢Δ₁) ([G]' [ρ] ⊢Δ₁ [a]) [ρσΠFG] [ρf]' [a]
+                 [g∘u] = appTerm ([F]' [ρ] ⊢Δ₁) ([G]' [ρ] ⊢Δ₁ [a]) [ρσΠFG] [ρg]' [a]
+                 [tu≡fu] = proj₂ (redSubst*Term (app-subst* (wkRed*Term [ρ] ⊢Δ₁ d)
+                                                            (wellformedTerm ([F]' [ρ] ⊢Δ₁) [a]))
+                                                ([G]' [ρ] ⊢Δ₁ [a]) [f∘u])
+                 [gu≡t'u] = proj₂ (redSubst*Term (app-subst* (wkRed*Term [ρ] ⊢Δ₁ d₁)
+                                                             (wellformedTerm ([F]' [ρ] ⊢Δ₁) [a]))
+                                                 ([G]' [ρ] ⊢Δ₁ [a]) [g∘u])
+             in  transEqTerm ([G]' [ρ] ⊢Δ₁ [a]) (symEqTerm ([G]' [ρ] ⊢Δ₁ [a]) [tu≡fu])
+                             (transEqTerm ([G]' [ρ] ⊢Δ₁ [a]) f≡g [gu≡t'u]))
 
 fun-extₛ : ∀ {f g F G Γ l}
            ([Γ] : ⊩ₛ Γ)
