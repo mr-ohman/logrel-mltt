@@ -43,3 +43,15 @@ wellformedTermₛ [Γ] [A] [t] =
   in  wellformedTerm [idA]'
                     (irrelevanceTerm'' (idSubst-lemma₀ _) (idSubst-lemma₀ _)
                                        [idA] [idA]' (proj₁ ([t] ⊢Γ idSubst)))
+
+wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+               → Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
+wellformedEqTermₛ [Γ] [A] [t≡u] =
+  let ⊢Γ = soundContext [Γ]
+      idSubst = idSubstS [Γ]
+      [idA]  = proj₁ ([A] ⊢Γ idSubst)
+      [idA]' = irrelevance' (idSubst-lemma₀ _) (proj₁ ([A] ⊢Γ idSubst))
+  in  wellformedTermEq [idA]'
+                       (irrelevanceEqTerm'' (idSubst-lemma₀ _) (idSubst-lemma₀ _)
+                                            (idSubst-lemma₀ _)
+                                            [idA] [idA]' ([t≡u] ⊢Γ idSubst))
