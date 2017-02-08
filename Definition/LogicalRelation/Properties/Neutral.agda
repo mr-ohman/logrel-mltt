@@ -43,9 +43,9 @@ neuEq : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ A)
       → Γ ⊢ A ~ B ∷ U
       → Γ ⊩⟨ l ⟩ A ≡ B / [A]
 neuEq [A] neA neB A B A~B =
-  irrelevanceEq (ne-intr (ne-elim [A] neA))
+  irrelevanceEq (ne-intr (ne-elim neA [A]))
                 [A]
-                (neuEq' (ne-elim [A] neA) neA neB A B A~B)
+                (neuEq' (ne-elim neA [A]) neA neB A B A~B)
 
 mutual
   neuTerm : ∀ {l Γ A n} ([A] : Γ ⊩⟨ l ⟩ A) (neN : Neutral n)

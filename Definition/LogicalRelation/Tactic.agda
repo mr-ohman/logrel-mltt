@@ -7,6 +7,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
+open import Definition.LogicalRelation.Properties.Wellformed
 open import Definition.LogicalRelation.Properties.Reflexivity
 
 open import Tools.Product
@@ -55,32 +56,47 @@ U-elim (emb 0<1 x) with U-elim x
 U-elim (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 U-elim (emb 0<1 x) | emb () x₁
 
-ℕ-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ ℕ → Γ ⊩⟨ l ⟩ℕ ℕ
-ℕ-elim (ℕ D) = noemb D
-ℕ-elim (ne' K D neK K≡K) = ⊥-elim (ℕ≢ne neK (whnfRed*' (red D) ℕ))
-ℕ-elim (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) = ⊥-elim (ℕ≢Π (whnfRed*' (red D) ℕ))
-ℕ-elim (emb 0<1 x) with ℕ-elim x
-ℕ-elim (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
-ℕ-elim (emb 0<1 x) | emb () x₂
+ℕ-elim' : ∀ {A Γ l} → Γ ⊢ A ⇒* ℕ → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩ℕ A
+ℕ-elim' D (U' l' l< ⊢Γ) = ⊥-elim (U≢ℕ (whrDet*' (id (U ⊢Γ) , U) (D , ℕ)))
+ℕ-elim' D (ℕ D') = noemb D'
+ℕ-elim' D (ne' K D' neK K≡K) =
+  ⊥-elim (ℕ≢ne neK (whrDet*' (D , ℕ) (red D' , ne neK)))
+ℕ-elim' D (Π' F G D' ⊢F ⊢G A≡A [F] [G] G-ext) =
+  ⊥-elim (ℕ≢Π (whrDet*' (D , ℕ) (red D' , Π)))
+ℕ-elim' D (emb 0<1 x) with ℕ-elim' D x
+ℕ-elim' D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+ℕ-elim' D (emb 0<1 x) | emb () x₂
 
-ne-elim : ∀ {Γ l K} → Γ ⊩⟨ l ⟩ K → Neutral K → Γ ⊩⟨ l ⟩ne K
-ne-elim (U' l' l< ⊢Γ) ()
-ne-elim (ℕ D) neK = ⊥-elim (ℕ≢ne neK (PE.sym (whnfRed*' (red D) (ne neK))))
-ne-elim {l = l} (ne' K D neK K≡K) neK₁ = noemb (ne K D neK K≡K)
-ne-elim (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) neK =
-  ⊥-elim (Π≢ne neK (PE.sym (whnfRed*' (red D) (ne neK))))
-ne-elim (emb 0<1 x) neK with ne-elim x neK
-ne-elim (emb 0<1 x) neK | noemb x₁ = emb 0<1 (noemb x₁)
-ne-elim (emb 0<1 x) neK | emb () x₂
+ℕ-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ ℕ → Γ ⊩⟨ l ⟩ℕ ℕ
+ℕ-elim [ℕ] = ℕ-elim' (id (wellformed [ℕ])) [ℕ]
+
+ne-elim' : ∀ {A Γ l K} → Γ ⊢ A ⇒* K → Neutral K  → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩ne A
+ne-elim' D neK (U' l' l< ⊢Γ) =
+  ⊥-elim (U≢ne neK (whrDet*' (id (U ⊢Γ) , U) (D , ne neK)))
+ne-elim' D neK (ℕ D') = ⊥-elim (ℕ≢ne neK (whrDet*' (red D' , ℕ) (D , ne neK)))
+ne-elim' D neK (ne' K D' neK' K≡K) = noemb (ne K D' neK' K≡K)
+ne-elim' D neK (Π' F G D' ⊢F ⊢G A≡A [F] [G] G-ext) =
+  ⊥-elim (Π≢ne neK (whrDet*' (red D' , Π) (D , ne neK)))
+ne-elim' D neK (emb 0<1 x) with ne-elim' D neK x
+ne-elim' D neK (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+ne-elim' D neK (emb 0<1 x) | emb () x₂
+
+ne-elim : ∀ {Γ l K} → Neutral K  → Γ ⊩⟨ l ⟩ K → Γ ⊩⟨ l ⟩ne K
+ne-elim neK [K] = ne-elim' (id (wellformed [K])) neK [K]
+
+Π-elim' : ∀ {A Γ F G l} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩Π A
+Π-elim' D (U' l' l< ⊢Γ) = ⊥-elim (U≢Π (whrDet*' (id (U ⊢Γ) , U) (D , Π)))
+Π-elim' D (ℕ D') = ⊥-elim (ℕ≢Π (whrDet*' (red D' , ℕ) (D , Π)))
+Π-elim' D (ne' K D' neK K≡K) =
+  ⊥-elim (Π≢ne neK (whrDet*' (D , Π) (red D' , ne neK)))
+Π-elim' D (Π' F G D' ⊢F ⊢G A≡A [F] [G] G-ext) =
+  noemb (Π F G D' ⊢F ⊢G A≡A [F] [G] G-ext)
+Π-elim' D (emb 0<1 x) with Π-elim' D x
+Π-elim' D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+Π-elim' D (emb 0<1 x) | emb () x₂
 
 Π-elim : ∀ {Γ F G l} → Γ ⊩⟨ l ⟩ Π F ▹ G → Γ ⊩⟨ l ⟩Π Π F ▹ G
-Π-elim (ℕ D) = ⊥-elim (ℕ≢Π (PE.sym (whnfRed*' (red D) Π)))
-Π-elim (ne' K D neK K≡K) = ⊥-elim (Π≢ne neK (whnfRed*' (red D) Π))
-Π-elim {l = l} (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
-  noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-Π-elim (emb 0<1 x) with Π-elim x
-Π-elim (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
-Π-elim (emb 0<1 x) | emb () x₂
+Π-elim [Π] = Π-elim' (id (wellformed [Π])) [Π]
 
 extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l' → ⊩⟨ l' ⟩
 extractMaybeEmb (noemb x) = _ , x
