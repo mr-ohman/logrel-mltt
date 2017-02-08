@@ -18,6 +18,8 @@ import Definition.Typed
 import Definition.Typed.Properties
 import Definition.Typed.Weakening
 
+import Definition.EqualityRelation
+
 import Definition.LogicalRelation
 import Definition.LogicalRelation.Tactic
 import Definition.LogicalRelation.Irrelevance
@@ -31,6 +33,7 @@ import Definition.LogicalRelation.Substitution.Conversion
 import Definition.LogicalRelation.Substitution.Reduction
 import Definition.LogicalRelation.Substitution.Reflexivity
 import Definition.LogicalRelation.Substitution.Weakening
+import Definition.LogicalRelation.Substitution.Soundness
 import Definition.LogicalRelation.Substitution.Introductions
 
 import Definition.LogicalRelation.Fundamental
@@ -41,3 +44,18 @@ import Definition.LogicalRelation.Consequences.SingleSubst
 import Definition.LogicalRelation.Consequences.Inversion
 import Definition.LogicalRelation.Consequences.Inequality
 import Definition.LogicalRelation.Consequences.Substitution
+import Definition.LogicalRelation.Consequences.Equality
+import Definition.LogicalRelation.Consequences.InverseUniv
+
+import Definition.Conversion
+import Definition.Conversion.Conversion
+import Definition.Conversion.Lift
+import Definition.Conversion.Reduction
+import Definition.Conversion.Soundness
+import Definition.Conversion.Symmetry
+import Definition.Conversion.Transitivity
+import Definition.Conversion.Universe
+import Definition.Conversion.Validity
+import Definition.Conversion.Weakening
+import Definition.Conversion.Whnf
+--import Definition.Conversion.Decidable

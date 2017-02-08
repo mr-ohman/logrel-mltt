@@ -27,6 +27,11 @@ noU (suc t) ()
 noU (natrec x t t₁ t₂) ()
 noU (conv t₁ x) ufull = noU t₁ ufull
 
+noUNe : ∀ {A} → Neutral A → ¬ (UFull A)
+noUNe (var n) ()
+noUNe (_∘_ neA) ()
+noUNe (natrec neA) ()
+
 pilem : ∀ {F G H E}
       → (¬ UFull (Π F ▹ G)) ⊎ (¬ UFull (Π H ▹ E))
       → (¬ UFull F) ⊎ (¬ UFull H) × (¬ UFull G) ⊎ (¬ UFull E)
@@ -38,6 +43,9 @@ inverseUniv q (ℕ x) = ℕ x
 inverseUniv q (U x) = ⊥-elim (q U)
 inverseUniv q (Π A ▹ A₁) = Π inverseUniv (λ x → q (Π₁ x)) A ▹ inverseUniv (λ x → q (Π₂ x)) A₁
 inverseUniv q (univ x) = x
+
+inverseUnivNe : ∀ {A Γ} → Neutral A → Γ ⊢ A → Γ ⊢ A ∷ U
+inverseUnivNe neA ⊢A = inverseUniv (noUNe neA) ⊢A
 
 inverseUnivEq' : ∀ {A B Γ} → (¬ (UFull A)) ⊎ (¬ (UFull B)) → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
 inverseUnivEq' q (univ x) = x
