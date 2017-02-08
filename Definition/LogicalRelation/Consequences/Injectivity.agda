@@ -17,7 +17,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Substitution.Wellformed
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
@@ -71,11 +71,6 @@ injectivity' [ΠFG] [ΠFG≡ΠHE] =
 injectivity : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 injectivity ⊢ΠFG≡ΠHE with fundamentalEq ⊢ΠFG≡ΠHE
 injectivity {Γ} {F} {G} {H} {E} ⊢ΠFG≡ΠHE | [Γ] , [ΠFG] , [ΠHE] , [ΠFG≡ΠHE] =
-  let ⊢Γ = soundContext [Γ]
-      [id] = idSubstS [Γ]
-      eq₁ = PE.cong₂ Π_▹_ (substIdEq F) (PE.trans (substEq liftIdSubst G) (substIdEq G))
-      eq₂ = PE.cong₂ Π_▹_ (substIdEq H) (PE.trans (substEq liftIdSubst E) (substIdEq E))
-      [ΠFG]₁ = proj₁ ([ΠFG] ⊢Γ [id])
-      [ΠFG]' = irrelevance' eq₁ [ΠFG]₁
-      [ΠFG≡ΠHE]' = irrelevanceEq'' eq₁ eq₂ [ΠFG]₁ [ΠFG]' ([ΠFG≡ΠHE] ⊢Γ [id])
+  let [ΠFG]' = soundness [Γ] [ΠFG]
+      [ΠFG≡ΠHE]' = soundnessEq {Π F ▹ G} {Π H ▹ E} [Γ] [ΠFG] [ΠFG≡ΠHE]
   in  injectivity' [ΠFG]' [ΠFG≡ΠHE]'

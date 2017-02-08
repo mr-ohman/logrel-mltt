@@ -8,7 +8,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
@@ -16,26 +16,22 @@ open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
 
-A≢B : {A B : Term} (_⊩'⟨_⟩A_ _⊩'⟨_⟩B_ : Con Term → TypeLevel → Term → Set)
-      (A-intr : ∀ {Γ l} → Γ ⊩'⟨ l ⟩A A → Γ ⊩⟨ l ⟩ A)
-      (B-intr : ∀ {Γ l} → Γ ⊩'⟨ l ⟩B B → Γ ⊩⟨ l ⟩ B)
-      (A-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ A → ∃ λ l' → Γ ⊩'⟨ l' ⟩A A)
-      (B-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ B → ∃ λ l' → Γ ⊩'⟨ l' ⟩B B)
-      (A≢B' : ∀ {Γ l l'} ([A] : Γ ⊩'⟨ l ⟩A A) ([B] : Γ ⊩'⟨ l' ⟩B B)
+A≢B : ∀ {A B Γ} (_⊩'⟨_⟩A_ _⊩'⟨_⟩B_ : Con Term → TypeLevel → Term → Set)
+      (A-intr : ∀ {l} → Γ ⊩'⟨ l ⟩A A → Γ ⊩⟨ l ⟩ A)
+      (B-intr : ∀ {l} → Γ ⊩'⟨ l ⟩B B → Γ ⊩⟨ l ⟩ B)
+      (A-elim : ∀ {l} → Γ ⊩⟨ l ⟩ A → ∃ λ l' → Γ ⊩'⟨ l' ⟩A A)
+      (B-elim : ∀ {l} → Γ ⊩⟨ l ⟩ B → ∃ λ l' → Γ ⊩'⟨ l' ⟩B B)
+      (A≢B' : ∀ {l l'} ([A] : Γ ⊩'⟨ l ⟩A A) ([B] : Γ ⊩'⟨ l' ⟩B B)
             → Tactic Γ l l' A B (A-intr [A]) (B-intr [B]) → ⊥)
-    → ∀ {Γ} → Γ ⊢ A ≡ B → ⊥
-A≢B _ _ A-intr B-intr A-elim B-elim A≢B' A≡B with fundamentalEq A≡B
-A≢B _ _ A-intr B-intr A-elim B-elim A≢B' A≡B | [Γ] , [A] , [B] , [A≡B] =
-  let ⊢Γ = soundContext [Γ]
-      id = idSubstS [Γ]
-      [idA] = proj₁ ([A] ⊢Γ id)
-      [idB] = proj₁ ([B] ⊢Γ id)
-      [idA≡B] = [A≡B] ⊢Γ id
-      idAlemma = idSubst-lemma₀ _
-      idBlemma = idSubst-lemma₀ _
-      _ , [A]' = A-elim (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) idAlemma [idA])
-      _ , [B]' = B-elim (PE.subst (λ x → _ ⊩⟨ _ ⟩ x) idBlemma [idB])
-      [idA≡B]' = irrelevanceEq'' idAlemma idBlemma [idA] (A-intr [A]') [idA≡B]
+    → Γ ⊢ A ≡ B → ⊥
+A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B' A≡B with fundamentalEq A≡B
+A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B' A≡B | [Γ] , [A] , [B] , [A≡B] =
+  let [idA] = soundness [Γ] [A]
+      [idB] = soundness [Γ] [B]
+      [idA≡B] = soundnessEq {A} {B} [Γ] [A] [A≡B]
+      _ , [A]' = A-elim ([idA])
+      _ , [B]' = B-elim ([idB])
+      [idA≡B]' = irrelevanceEq [idA] (A-intr [A]') [idA≡B]
   in  A≢B' [A]' [B]' (goodCases (A-intr [A]') (B-intr [B]') [idA≡B]')
 
 U≢ℕ' : ∀ {Γ l l'}

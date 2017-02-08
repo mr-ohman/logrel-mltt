@@ -9,7 +9,7 @@ open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
@@ -26,12 +26,7 @@ fullyReducible' (emb 0<1 [A]) = fullyReducible' [A]
 
 fullyReducible : ∀ {A Γ} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 fullyReducible a with fundamental a
-... | [Γ] , [A] =
-  let ⊢Γ = soundContext [Γ]
-      [id] = idSubstS [Γ]
-      B , whnfB , D = fullyReducible' (proj₁ ([A] ⊢Γ [id]))
-  in  B , whnfB
-  ,   PE.subst (λ x → _ ⊢ x :⇒*: B) (substIdEq _) D
+... | [Γ] , [A] = fullyReducible' (soundness [Γ] [A])
 
 fullyReducibleTerm' : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
                 → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
@@ -45,10 +40,6 @@ fullyReducibleTerm' (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f
 fullyReducibleTerm' (emb 0<1 [A]) [a] = fullyReducibleTerm' [A] [a]
 
 fullyReducibleTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
-fullyReducibleTerm a with fundamentalTerm a
+fullyReducibleTerm {a} {A} ⊢a with fundamentalTerm ⊢a
 ... | [Γ] , [A] , [a] =
-  let ⊢Γ = soundContext [Γ]
-      [id] = idSubstS [Γ]
-      b , whnfB , d = fullyReducibleTerm' (proj₁ ([A] ⊢Γ [id])) (proj₁ ([a] ⊢Γ [id]))
-  in  b , whnfB
-  ,   PE.subst₂ (λ x y → _ ⊢ x :⇒*: b ∷ y) (substIdEq _) (substIdEq _) d
+  fullyReducibleTerm' (soundness [Γ] [A]) (soundnessTerm {a} {A} [Γ] [A] [a])

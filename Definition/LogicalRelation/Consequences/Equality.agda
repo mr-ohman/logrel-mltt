@@ -10,6 +10,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
@@ -29,10 +30,8 @@ U≡A : ∀ {A Γ}
     → A PE.≡ U
 U≡A {A} U≡A with fundamentalEq U≡A
 U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
-  let ⊢Γ = soundContext [Γ]
-      [id] = idSubstS [Γ]
-      [U]' = proj₁ ([U] ⊢Γ [id])
-      [U≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _) [U]' [U]' ([U≡A] ⊢Γ [id])
+  let [U]' = soundness [Γ] [U]
+      [U≡A]' = soundnessEq {U} {A} [Γ] [U] [U≡A]
   in  U≡A' (U-elim [U]') (irrelevanceEq [U]' (U-intr (U-elim [U]')) [U≡A]')
 
 ℕ≡A' : ∀ {A Γ l} ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
@@ -48,10 +47,8 @@ U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
     → A PE.≡ ℕ
 ℕ≡A {A} ℕ≡A whnfA with fundamentalEq ℕ≡A
 ℕ≡A {A} ℕ≡A whnfA | [Γ] , [ℕ] , [A] , [ℕ≡A] =
-  let ⊢Γ = soundContext [Γ]
-      [id] = idSubstS [Γ]
-      [ℕ]' = proj₁ ([ℕ] ⊢Γ [id])
-      [ℕ≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _) [ℕ]' [ℕ]' ([ℕ≡A] ⊢Γ [id])
+  let [ℕ]' = soundness [Γ] [ℕ]
+      [ℕ≡A]' = soundnessEq {ℕ} {A} [Γ] [ℕ] [ℕ≡A]
   in  ℕ≡A' (ℕ-elim [ℕ]') (irrelevanceEq [ℕ]' (ℕ-intr (ℕ-elim [ℕ]')) [ℕ≡A]') whnfA
 
 ne≡A' : ∀ {A K Γ l}
@@ -73,9 +70,11 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
   let ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
       [ne]' = proj₁ ([ne] ⊢Γ [id])
-      [ne≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _) [ne]' [ne]' ([ne≡A] ⊢Γ [id])
+      [ne≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _)
+                                [ne]' [ne]' ([ne≡A] ⊢Γ [id])
       neK' = PE.subst Neutral (PE.sym (substIdEq _)) neK
-  in  ne≡A' (ne-elim [ne]' neK') (irrelevanceEq [ne]' (ne-intr (ne-elim [ne]' neK')) [ne≡A]') whnfA
+  in  ne≡A' (ne-elim neK' [ne]')
+            (irrelevanceEq [ne]' (ne-intr (ne-elim neK' [ne]')) [ne≡A]') whnfA
 
 Π≡A' : ∀ {A F G Γ l} ([Π] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
     → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l (Π F ▹ G) A (Π-intr [Π])
@@ -94,5 +93,6 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
   let ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
       [Π]' = proj₁ ([Π] ⊢Γ [id])
-      [Π≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _) [Π]' [Π]' ([Π≡A] ⊢Γ [id])
+      [Π≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _)
+                               [Π]' [Π]' ([Π≡A] ⊢Γ [id])
   in  Π≡A' (Π-elim [Π]') (irrelevanceEq [Π]' (Π-intr (Π-elim [Π]')) [Π≡A]') whnfA

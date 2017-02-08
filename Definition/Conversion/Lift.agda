@@ -17,7 +17,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Fundamental
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Consequences.Syntactic
 open import Definition.LogicalRelation.Consequences.Injectivity
 import Definition.LogicalRelation.Consequences.Inequality as WF
@@ -102,17 +102,10 @@ lift~toConv↓ : ∀ {t u A Γ}
              → Γ ⊢ t [conv↓] u ∷ A
 lift~toConv↓ ([~] A₁ D whnfB k~l) with fundamental (proj₁ (syntacticRed D))
 lift~toConv↓ ([~] A₁ D whnfB k~l) | [Γ] , [A₁] =
-  let ⊢Γ = soundContext [Γ]
-      idSubst = idSubstS [Γ]
-      [idA₁] = irrelevance' (idSubst-lemma₀ A₁) (proj₁ ([A₁] ⊢Γ idSubst))
-  in  lift~toConv↓' [idA₁] D ([~] A₁ D whnfB k~l)
+  lift~toConv↓' (soundness [Γ] [A₁]) D ([~] A₁ D whnfB k~l)
 
 lift~toConv↑ : ∀ {t u A Γ}
              → Γ ⊢ t ~ u ↑ A
              → Γ ⊢ t [conv↑] u ∷ A
 lift~toConv↑ t~u with fundamental (proj₁ (syntacticEqTerm (soundness~↑ t~u)))
-lift~toConv↑ t~u | [Γ] , [A] =
-  let ⊢Γ = soundContext [Γ]
-      idSubst = idSubstS [Γ]
-      [idA] = irrelevance' (idSubst-lemma₀ _) (proj₁ ([A] ⊢Γ idSubst))
-  in  lift~toConv↑' [idA] t~u
+lift~toConv↑ t~u | [Γ] , [A] = lift~toConv↑' (soundness [Γ] [A]) t~u
