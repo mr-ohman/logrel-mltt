@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Introductions.Nat where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Introductions.Nat {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Typed
@@ -19,15 +22,16 @@ open import Tools.Product
     → Γ ⊩ₛ⟨ ¹ ⟩t ℕ ∷ U / [Γ] / Uₛ [Γ]
 ℕₜₛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
                      [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
-                 in  Uₜ ⊢ℕ [ℕ]
-                 ,   (λ _ x₁ → Uₜ₌ ⊢ℕ ⊢ℕ (refl ⊢ℕ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
+                 in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
+                 ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕ ℕ
+                                   (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] =
-  ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) zero tt
+  ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) (≅ₜ-zerorefl ⊢Δ) zero tt
     , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
-                    (refl (zero ⊢Δ)) zero)
+                    (≅ₜ-zerorefl ⊢Δ) zero)
 
 sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])

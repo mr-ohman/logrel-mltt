@@ -1,4 +1,7 @@
-module Definition.LogicalRelation.Substitution.Reflexivity where
+open import Definition.EqualityRelation
+
+module Definition.LogicalRelation.Substitution.Reflexivity {{eqrel : EqRelSet}} where
+open EqRelSet {{...}}
 
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution

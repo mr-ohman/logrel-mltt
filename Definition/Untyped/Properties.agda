@@ -93,6 +93,11 @@ wk-comp-comm p q (natrec t t₁ t₂ t₃) =
                (wk-comp-comm p q t₂)
                (wk-comp-comm p q t₃)
 
+wk-comp-comm-subst : ∀ {a} ρ ρ' G
+                   → wk (lift (ρ • ρ')) G [ a ] PE.≡ wk (lift ρ) (wk (lift ρ') G) [ a ]
+wk-comp-comm-subst {a} ρ ρ' G =
+  PE.cong (λ x → x [ a ]) (PE.sym (wk-comp-comm (lift ρ) (lift ρ') G))
+
 wkIndex-step : ∀ {A} pr → wk1 (wk pr A) ≡ wk (step pr) A
 wkIndex-step pr = wk-comp-comm (step id) pr _
 
@@ -331,3 +336,13 @@ lemma2 : ∀ {σ t G}
 lemma2 {t = t} {G = G} =
   trans (substEq (λ { zero → sym (subst-wk t) ; (suc x) → refl }) G)
         (sym (substCompEq G))
+
+substVar0Id' : ∀ x
+             → (purge (lift (step id)) (consSubst idSubst (var zero))) x
+             ≡ idSubst x
+substVar0Id' zero = PE.refl
+substVar0Id' (suc x) = PE.refl
+
+substVar0Id : ∀ F → (wk (lift (step id)) F) [ var zero ] ≡ F
+substVar0Id F =
+  trans (subst-wk F) (trans (substEq substVar0Id' F) (substIdEq F))

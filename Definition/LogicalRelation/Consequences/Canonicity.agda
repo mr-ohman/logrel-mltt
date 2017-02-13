@@ -9,6 +9,8 @@ open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 
+open import Definition.Typed.EqRelInstance
+
 open import Definition.LogicalRelation
 import Definition.LogicalRelation.Weakening as LR
 open import Definition.LogicalRelation.Irrelevance
@@ -31,14 +33,14 @@ sucᵏ zero = zero
 sucᵏ (suc n) = suc (sucᵏ n)
 
 canonicity'' : ∀ {t l}
-             → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ)
+             → ([ℕ] : _⊩⟨_⟩ℕ_ {{eqRelInstance}} ε l ℕ)
              → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
              → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity'' {l = l} (noemb D) (ℕₜ _ d suc prop) =
+canonicity'' {l = l} (noemb D) (ℕₜ _ d _ suc prop) =
   let a , b = canonicity'' {l = l} (noemb D) prop
   in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
-canonicity'' (noemb D) (ℕₜ .zero d zero prop) = zero , subset*Term (redₜ d)
-canonicity'' (noemb D) (ℕₜ n d (ne x) prop) = ⊥-elim (noNe prop x)
+canonicity'' (noemb D) (ℕₜ .zero d _ zero prop) = zero , subset*Term (redₜ d)
+canonicity'' (noemb D) (ℕₜ n d _ (ne x) (neNfₜ _ prop _)) = ⊥-elim (noNe prop x)
 canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
 
 canonicity' : ∀ {t l}
