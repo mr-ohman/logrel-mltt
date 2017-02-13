@@ -58,4 +58,6 @@ import Definition.Conversion.Universe
 import Definition.Conversion.Validity
 import Definition.Conversion.Weakening
 import Definition.Conversion.Whnf
---import Definition.Conversion.Decidable
+import Definition.Conversion.Decidable
+
+import Definition.Typed.Decidable
