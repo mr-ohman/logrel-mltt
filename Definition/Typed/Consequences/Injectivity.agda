@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Injectivity where
+module Definition.Typed.Consequences.Injectivity where
 
 open import Definition.Untyped hiding (wk)
 import Definition.Untyped as U

@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Inequality where
+module Definition.Typed.Consequences.Inequality where
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties
@@ -10,7 +10,7 @@ open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Soundness
 open import Definition.LogicalRelation.Fundamental
-open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
 open import Tools.Empty

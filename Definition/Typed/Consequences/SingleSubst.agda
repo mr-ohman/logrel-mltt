@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.SingleSubst where
+module Definition.Typed.Consequences.SingleSubst where
 
 open import Definition.Untyped
 
@@ -14,7 +14,7 @@ open import Definition.LogicalRelation.Substitution.Weakening
 open import Definition.LogicalRelation.Substitution.MaybeEmbed
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Definition.LogicalRelation.Fundamental
-open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
 

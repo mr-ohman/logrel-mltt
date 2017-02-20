@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Syntactic where
+module Definition.Typed.Consequences.Syntactic where
 
 open import Definition.Untyped
 open import Definition.Typed
@@ -8,7 +8,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Wellformed
 open import Definition.LogicalRelation.Fundamental
-open import Definition.LogicalRelation.Consequences.Injectivity
+open import Definition.Typed.Consequences.Injectivity
 
 open import Tools.Product
 

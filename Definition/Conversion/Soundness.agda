@@ -6,8 +6,8 @@ open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Whnf
-open import Definition.LogicalRelation.Consequences.InverseUniv
-open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.Typed.Consequences.InverseUniv
+open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
 

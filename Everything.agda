@@ -2,24 +2,27 @@
 
 module Everything where
 
+-- Minimal library
 import Tools.Empty
 import Tools.Unit
 import Tools.Nat
+import Tools.Sum
 import Tools.Product
+import Tools.Nullary
 import Tools.PropositionalEquality
---import Tools.HeterogeneousEquality
-import Tools.Context
 
+-- Grammar of the language
 import Definition.Untyped
-import Definition.Untyped.Indexed
 import Definition.Untyped.Properties
 
+-- Typing and conversion rules of language
 import Definition.Typed
 import Definition.Typed.Properties
 import Definition.Typed.Weakening
+import Definition.Typed.EqualityRelation
+import Definition.Typed.EqRelInstance
 
-import Definition.EqualityRelation
-
+-- Logical relation
 import Definition.LogicalRelation
 import Definition.LogicalRelation.Tactic
 import Definition.LogicalRelation.Irrelevance
@@ -37,16 +40,19 @@ import Definition.LogicalRelation.Substitution.Soundness
 import Definition.LogicalRelation.Substitution.Introductions
 
 import Definition.LogicalRelation.Fundamental
-import Definition.LogicalRelation.Consequences.Canonicity
-import Definition.LogicalRelation.Consequences.Injectivity
-import Definition.LogicalRelation.Consequences.Syntactic
-import Definition.LogicalRelation.Consequences.SingleSubst
-import Definition.LogicalRelation.Consequences.Inversion
-import Definition.LogicalRelation.Consequences.Inequality
-import Definition.LogicalRelation.Consequences.Substitution
-import Definition.LogicalRelation.Consequences.Equality
-import Definition.LogicalRelation.Consequences.InverseUniv
 
+-- Consequences of the logical relation for typing and conversion
+import Definition.Typed.Consequences.Canonicity
+import Definition.Typed.Consequences.Injectivity
+import Definition.Typed.Consequences.Syntactic
+import Definition.Typed.Consequences.SingleSubst
+import Definition.Typed.Consequences.Inversion
+import Definition.Typed.Consequences.Inequality
+import Definition.Typed.Consequences.Substitution
+import Definition.Typed.Consequences.Equality
+import Definition.Typed.Consequences.InverseUniv
+
+-- Algorithmic equality with lemmas that depend on typing consequences
 import Definition.Conversion
 import Definition.Conversion.Conversion
 import Definition.Conversion.Lift
@@ -55,9 +61,13 @@ import Definition.Conversion.Soundness
 import Definition.Conversion.Symmetry
 import Definition.Conversion.Transitivity
 import Definition.Conversion.Universe
-import Definition.Conversion.Validity
 import Definition.Conversion.Weakening
 import Definition.Conversion.Whnf
 import Definition.Conversion.Decidable
+import Definition.Conversion.EqRelInstance
 
+-- Consequences of the logical relation for algorithmic equality
+import Definition.Conversion.Consequences.Validity
+
+-- Decidability of conversion
 import Definition.Typed.Decidable

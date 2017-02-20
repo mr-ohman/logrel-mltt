@@ -1,4 +1,4 @@
-module Definition.EqualityRelation where
+module Definition.Typed.EqualityRelation where
 
 open import Definition.Untyped
 open import Definition.Typed

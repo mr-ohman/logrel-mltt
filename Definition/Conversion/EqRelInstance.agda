@@ -15,12 +15,12 @@ open import Definition.Conversion.Conversion
 open import Definition.Conversion.Symmetry
 open import Definition.Conversion.Transitivity
 open import Definition.Conversion.Weakening
-open import Definition.EqualityRelation
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.SingleSubst
-open import Definition.LogicalRelation.Consequences.Injectivity
-open import Definition.LogicalRelation.Consequences.Equality
-open import Definition.LogicalRelation.Consequences.Reduction
+open import Definition.Typed.EqualityRelation
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Injectivity
+open import Definition.Typed.Consequences.Equality
+open import Definition.Typed.Consequences.Reduction
 
 open import Tools.Nat
 open import Tools.Product

@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Canonicity where
+module Definition.Typed.Consequences.Canonicity where
 
 open import Definition.Untyped hiding (wk)
 import Definition.Untyped as U

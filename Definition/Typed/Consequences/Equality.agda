@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Equality where
+module Definition.Typed.Consequences.Equality where
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties

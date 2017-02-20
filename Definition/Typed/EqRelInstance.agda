@@ -5,7 +5,7 @@ open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.Reduction
-open import Definition.EqualityRelation
+open import Definition.Typed.EqualityRelation
 
 open import Tools.Product
 

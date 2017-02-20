@@ -7,7 +7,7 @@ open import Definition.Conversion
 open import Definition.Conversion.Decidable
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Stability
-open import Definition.Conversion.Validity
+open import Definition.Conversion.Consequences.Validity
 
 open import Tools.Nullary
 

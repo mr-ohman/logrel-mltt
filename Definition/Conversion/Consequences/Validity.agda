@@ -1,4 +1,4 @@
-module Definition.Conversion.Validity where
+module Definition.Conversion.Consequences.Validity where
 
 open import Definition.Untyped
 open import Definition.Typed

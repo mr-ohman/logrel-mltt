@@ -5,8 +5,8 @@ open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Conversion
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.Substitution
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.Substitution
 
 open import Tools.Unit
 open import Tools.Product

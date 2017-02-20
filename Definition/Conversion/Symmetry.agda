@@ -9,12 +9,12 @@ open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Conversion
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.Equality
-open import Definition.LogicalRelation.Consequences.Reduction
-open import Definition.LogicalRelation.Consequences.Injectivity
-open import Definition.LogicalRelation.Consequences.SingleSubst
-open import Definition.LogicalRelation.Consequences.Substitution
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.Equality
+open import Definition.Typed.Consequences.Reduction
+open import Definition.Typed.Consequences.Injectivity
+open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Substitution
 
 open import Tools.Nat
 open import Tools.Product

@@ -1,8 +1,8 @@
-module Definition.LogicalRelation.Consequences.InverseUniv where
+module Definition.Typed.Consequences.InverseUniv where
 
 open import Definition.Untyped
 open import Definition.Typed
-open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.Typed.Consequences.Syntactic
 
 import Tools.Sum as Sum
 open import Tools.Sum using (_⊎_; inj₁; inj₂)

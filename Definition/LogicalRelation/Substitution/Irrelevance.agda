@@ -1,4 +1,4 @@
-open import Definition.EqualityRelation
+open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Substitution.Irrelevance {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}

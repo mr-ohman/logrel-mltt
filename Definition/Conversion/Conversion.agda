@@ -7,11 +7,11 @@ open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.Substitution
-open import Definition.LogicalRelation.Consequences.Injectivity
-open import Definition.LogicalRelation.Consequences.Equality
-open import Definition.LogicalRelation.Consequences.Reduction
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.Substitution
+open import Definition.Typed.Consequences.Injectivity
+open import Definition.Typed.Consequences.Equality
+open import Definition.Typed.Consequences.Reduction
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE

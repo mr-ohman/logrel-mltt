@@ -1,4 +1,4 @@
-module Definition.LogicalRelation.Consequences.Substitution where
+module Definition.Typed.Consequences.Substitution where
 
 open import Definition.Untyped
 open import Definition.Untyped.Properties

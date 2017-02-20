@@ -7,7 +7,7 @@ open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.Conversion
 open import Definition.Conversion.Stability
-open import Definition.LogicalRelation.Consequences.Syntactic
+open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Nat
 open import Tools.Product

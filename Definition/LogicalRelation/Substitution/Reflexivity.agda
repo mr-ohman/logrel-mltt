@@ -1,4 +1,4 @@
-open import Definition.EqualityRelation
+open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Substitution.Reflexivity {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}

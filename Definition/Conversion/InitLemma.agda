@@ -6,11 +6,11 @@ open import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.Conversion.Stability
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.Injectivity
-open import Definition.LogicalRelation.Consequences.SingleSubst
-open import Definition.LogicalRelation.Consequences.Inversion
-import Definition.LogicalRelation.Consequences.Inequality as WF
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.Injectivity
+open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Inversion
+import Definition.Typed.Consequences.Inequality as WF
 
 open import Tools.Empty
 open import Tools.Nat

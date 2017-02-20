@@ -1,11 +1,11 @@
-module Definition.LogicalRelation.Consequences.Inversion where
+module Definition.Typed.Consequences.Inversion where
 
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 
-open import Definition.LogicalRelation.Consequences.Syntactic
-open import Definition.LogicalRelation.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.SingleSubst
 
 open import Tools.Nat
 open import Tools.Context
