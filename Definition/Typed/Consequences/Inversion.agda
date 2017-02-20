@@ -8,7 +8,6 @@ open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.SingleSubst
 
 open import Tools.Nat
-open import Tools.Context
 open import Tools.Product
 
 

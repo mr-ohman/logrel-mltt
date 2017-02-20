@@ -31,16 +31,6 @@ sucCong F≡G | ⊢Γ ∙ ⊢ℕ =
                            (subst↑TypeEq F≡G
                                          (refl (suc (var (⊢Γ ∙ ⊢ℕ) here))))))
 
--- natrec-subst* : ∀ {Γ F z s n n'} → Γ ∙ ℕ ⊢ F → Γ ⊢ z ∷ F [ zero ]
---               → Γ ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
---               → Γ ⊢ n ⇒* n' ∷ ℕ
---               → Γ ⊢ natrec F z s n ⇒* natrec F z s n' ∷ F [ n ]
--- natrec-subst* F z s (id x) = id (natrec F z s x)
--- natrec-subst* F z s (x ⇨ y) =
---   (natrec-subst F z s x) ⇨
---   (conv* (natrec-subst* F z s y)
---          (sym (substTypeEq (refl F) (subsetTerm x))))
-
 lemy : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
 lemy here here = PE.refl
 lemy (there n∷R) (there n∷T) rewrite lemy n∷R n∷T = PE.refl
@@ -60,31 +50,3 @@ lemma3 x (conv t∷A x₁) t∷B = let q = lemma3 x t∷A t∷B
                              in  trans (sym x₁) q
 lemma3 x t∷A (conv t∷B x₃) = let q = lemma3 x t∷A t∷B
                              in  trans q x₃
-
--- lemma4 : ∀ {v k R T Γ}
---        → Neutral k → Γ ⊢ v ∷ R → Γ ⊢ v ∷ T → Γ ⊢ v ⇒ k ∷ R
---        → Γ ⊢ T ≡ R
--- lemma4 neK v∷R v∷T (conv d x) =
---   let q = lemma4 neK (conv v∷R (sym x)) v∷T d
---   in  trans q x
--- lemma4 (_∘_ neU) v∷R v∷T (app-subst d x) =
---   let F , G , t , a , A≡G[a] = inversion-app v∷T
---       q = lemma4 neU (redFirstTerm d) t d
---       w , r = injectivity q
---   in  trans A≡G[a] (substTypeEq r (refl a))
--- lemma4 neK v∷R v∷T (β-red x x₁ x₂) =
---   let F , G , t , a , A≡G[a] = inversion-app v∷T
---       F₁ , G₁ , t₁ , eq = inversion-lam t
---       Feq , Geq = injectivity eq
---       q = lemma3 {!{- Neutral (t [ a ]) → Neutral t -}!}
---                  (conv (stabilityTerm ((reflConEq (wf x)) ∙ {!!}) t₁) {!!}) x₁
---   in  trans A≡G[a] (substTypeEq q (refl x₂))
--- lemma4 neK v∷R v∷T (natrec-subst x x₁ x₂ d) =
---   let _ , _ , _ , _ , d = inversion-natrec v∷T
---   in  d
--- lemma4 neK v∷R v∷T (natrec-zero x x₁ x₂) =
---   let _ , _ , _ , _ , d = inversion-natrec v∷T
---   in  d
--- lemma4 neK v∷R v∷T (natrec-suc x x₁ x₂ x₃) =
---   let _ , _ , _ , _ , d = inversion-natrec v∷T
---   in  d
