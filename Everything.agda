@@ -67,7 +67,7 @@ import Definition.Conversion.Decidable
 import Definition.Conversion.EqRelInstance
 
 -- Consequences of the logical relation for algorithmic equality
-import Definition.Conversion.Consequences.Validity
+import Definition.Conversion.Consequences.Completeness
 
 -- Decidability of conversion
 import Definition.Typed.Decidable
