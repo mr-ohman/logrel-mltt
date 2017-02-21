@@ -29,7 +29,7 @@ open import Tools.Product
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩t zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] =
-  ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) (≅ₜ-zerorefl ⊢Δ) zero tt
+  ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) (≅ₜ-zerorefl ⊢Δ) zero
     , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
                     (≅ₜ-zerorefl ⊢Δ) zero)
 

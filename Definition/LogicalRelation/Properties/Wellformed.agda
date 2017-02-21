@@ -36,7 +36,7 @@ wellformedTerm : ∀ {l Γ A t} → ([A] : Γ ⊩⟨ l ⟩ A)
               → Γ ⊩⟨ l ⟩ t ∷ A / [A]
               → Γ ⊢ t ∷ A
 wellformedTerm (U (U l' l< ⊢Γ)) (Uₜ A [ ⊢t , ⊢u , d ] typeA A≡A [A]) = ⊢t
-wellformedTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t natN prop) =
+wellformedTerm (ℕ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   conv ⊢t (sym (subset* (red D)))
 wellformedTerm (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] nf) =
   conv ⊢t (sym (subset* (red D)))

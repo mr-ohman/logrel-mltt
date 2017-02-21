@@ -30,17 +30,17 @@ wkEqTermNe {ρ} [ρ] ⊢Δ (neNfₜ₌ neK neM k≡m) =
 mutual
   wkTermℕ : ∀ {ρ Γ Δ n} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)
           → Γ ⊩ℕ n ∷ℕ → Δ ⊩ℕ U.wk ρ n ∷ℕ
-  wkTermℕ {ρ} [ρ] ⊢Δ (ℕₜ n d n≡n natN prop) =
+  wkTermℕ {ρ} [ρ] ⊢Δ (ℕₜ n d n≡n prop) =
     ℕₜ (U.wk ρ n) (wkRed:*:Term [ρ] ⊢Δ d)
-       (≅ₜ-wk [ρ] ⊢Δ n≡n) (wkNatural ρ natN)
-       (wkNatural-prop [ρ] ⊢Δ natN prop)
+       (≅ₜ-wk [ρ] ⊢Δ n≡n)
+       (wkNatural-prop [ρ] ⊢Δ prop)
 
-  wkNatural-prop : ∀ {ρ Γ Δ n} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ) (natN : Natural n)
-                 → natural-prop Γ n natN
-                 → natural-prop Δ (U.wk ρ n) (wkNatural ρ natN)
-  wkNatural-prop ρ ⊢Δ suc n = wkTermℕ ρ ⊢Δ n
-  wkNatural-prop ρ ⊢Δ zero n = n
-  wkNatural-prop ρ ⊢Δ (ne x) nf = wkTermNe ρ ⊢Δ nf
+  wkNatural-prop : ∀ {ρ Γ Δ n} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)
+                 → Natural-prop Γ n
+                 → Natural-prop Δ (U.wk ρ n)
+  wkNatural-prop ρ ⊢Δ (suc n) = suc (wkTermℕ ρ ⊢Δ n)
+  wkNatural-prop ρ ⊢Δ zero = zero
+  wkNatural-prop ρ ⊢Δ (ne nf) = ne (wkTermNe ρ ⊢Δ nf)
 
 mutual
   wkEqTermℕ : ∀ {ρ Γ Δ t u} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ)

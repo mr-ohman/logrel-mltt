@@ -57,13 +57,13 @@ redSubst*Term t⇒u (U' .⁰ 0<1 ⊢Γ) (Uₜ A [ ⊢t , ⊢u , d ] typeA A≡A 
       q = redSubst* (univ* t⇒u) (univEq (U' ⁰ 0<1 ⊢Γ) (Uₜ A [d] typeA A≡A [u]))
   in Uₜ A [d'] typeA A≡A (proj₁ q)
   ,  Uₜ₌ A A [d'] [d] typeA typeA A≡A (proj₁ q) [u] (proj₂ q)
-redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] n≡n natN prop) =
+redSubst*Term t⇒u (ℕ D) (ℕₜ n [ ⊢u , ⊢n , d ] n≡n prop) =
   let A≡ℕ  = subset* (red D)
       ⊢t   = conv (redFirst*Term t⇒u) A≡ℕ
       t⇒u' = conv* t⇒u A≡ℕ
-  in  ℕₜ n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] n≡n natN prop
+  in  ℕₜ n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] n≡n prop
   ,   ℕₜ₌ n n [ ⊢t , ⊢n , t⇒u' ⇨∷* d ] [ ⊢u , ⊢n , d ]
-          n≡n (reflNatural-prop natN prop)
+          n≡n (reflNatural-prop prop)
 redSubst*Term t⇒u (ne' K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
   let A≡K  = subset* (red D)
       [d]  = [ ⊢t , ⊢u , d ]

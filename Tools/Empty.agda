@@ -2,5 +2,5 @@ module Tools.Empty where
 
 data ⊥ : Set where
 
-⊥-elim : {A : Set} → ⊥ → A
+⊥-elim : ∀ {a} {A : Set a} → ⊥ → A
 ⊥-elim ()

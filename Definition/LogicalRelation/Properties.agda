@@ -39,10 +39,12 @@ sucTerm' : ∀ {l Γ n}
            ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
          → Γ ⊩⟨ l ⟩ n ∷ ℕ / ℕ-intr [ℕ]
          → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / ℕ-intr [ℕ]
-sucTerm' (noemb D) (ℕₜ n [ ⊢t , ⊢u , d ] n≡n natN prop) =
-  ℕₜ _ [ suc ⊢t , suc ⊢t , id (suc ⊢t) ]
-     (≅-suc-cong (≅ₜ-red (red D) d d ℕ (naturalWhnf natN) (naturalWhnf natN) n≡n))
-     suc (ℕₜ n [ ⊢t , ⊢u , d ] n≡n natN prop)
+sucTerm' (noemb D) (ℕₜ n [ ⊢t , ⊢u , d ] n≡n prop) =
+  let natN = natural prop
+  in  ℕₜ _ [ suc ⊢t , suc ⊢t , id (suc ⊢t) ]
+         (≅-suc-cong (≅ₜ-red (red D) d d ℕ
+                             (naturalWhnf natN) (naturalWhnf natN) n≡n))
+         (suc (ℕₜ n [ ⊢t , ⊢u , d ] n≡n prop))
 sucTerm' (emb 0<1 x) [n] = sucTerm' x [n]
 
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)

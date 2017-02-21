@@ -19,14 +19,13 @@ import Tools.PropositionalEquality as PE
 mutual
   transEqT : ∀ {Γ A B C l l' l''}
              {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B} {[C] : Γ ⊩⟨ l'' ⟩ C}
-           → Tactic Γ l  l'  A B [A] [B]
-           → Tactic Γ l' l'' B C [B] [C]
+           → Tactic₃ Γ l l' l'' A B C [A] [B] [C]
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
-  transEqT (ℕ D D') (ℕ _ D'') A≡B B≡C = B≡C
-  transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁))
-           (ne ._ (ne K₂ D₂ neK₂ K≡K₂))
+  transEqT (ℕ D D' D'') A≡B B≡C = B≡C
+  transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)
+               (ne K₂ D₂ neK₂ K≡K₂))
            (ne₌ M D' neM K≡M) (ne₌ M₁ D'' neM₁ K≡M₁)
            rewrite whrDet*' (red D₁ , ne neK₁) (red D' , ne neM)
                  | whrDet*' (red D₂ , ne neK₂) (red D'' , ne neM₁) =
@@ -34,8 +33,8 @@ mutual
         (~-trans K≡M K≡M₁)
   transEqT {Γ} {l = l} {l' = l′} {l'' = l″}
            (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
-           (Π ._ (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
+              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)
+              (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
            (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
            (Π₌ F″ G″ D″ A≡B₁ [F≡F′]₁ [G≡G′]₁) =
     let ΠF₁G₁≡ΠF′G′    = whrDet*' (red D₁ , Π) (D′  , Π)
@@ -81,11 +80,10 @@ mutual
                   [a″] = convTerm₁ ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ) [a′]
               in  transEq ([G] ρ ⊢Δ [a]) ([G′] ρ ⊢Δ [a′]) ([G″] ρ ⊢Δ [a″])
                           ([G≡G′] ρ ⊢Δ [a]) ([G′≡G″] ρ ⊢Δ [a′]))
-  transEqT (U ⊢Γ ⊢Γ₁) (U .⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
-  transEqT (emb⁰¹ AB) BC A≡B B≡C = transEqT AB BC A≡B B≡C
-  transEqT (emb¹⁰ AB) (emb⁰¹ BC) A≡B B≡C = transEqT AB BC A≡B B≡C
-  transEqT (emb¹⁰ AB) (emb¹⁰ (emb⁰¹ BC)) A≡B B≡C = transEqT AB BC A≡B B≡C
-  transEqT AB (emb¹⁰ BC) A≡B B≡C = transEqT AB BC A≡B B≡C
+  transEqT (U ⊢Γ ⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
+  transEqT (emb⁰¹¹ AB) A≡B B≡C = transEqT AB A≡B B≡C
+  transEqT (emb¹⁰¹ AB) A≡B B≡C = transEqT AB A≡B B≡C
+  transEqT (emb¹¹⁰ AB) A≡B B≡C = transEqT AB A≡B B≡C
 
   transEq : ∀ {Γ A B C l l' l''}
             ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) ([C] : Γ ⊩⟨ l'' ⟩ C)
@@ -93,7 +91,7 @@ mutual
           → Γ ⊩⟨ l' ⟩ B ≡ C / [B]
           → Γ ⊩⟨ l ⟩  A ≡ C / [A]
   transEq [A] [B] [C] A≡B B≡C =
-    transEqT (goodCases [A] [B] A≡B) (goodCases [B] [C] B≡C) A≡B B≡C
+    transEqT (combine (goodCases [A] [B] A≡B) (goodCases [B] [C] B≡C)) A≡B B≡C
 
   transEq' : ∀ {Γ A B B' C C' l l' l''} → B PE.≡ B' → C PE.≡ C'
            → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B) ([C] : Γ ⊩⟨ l'' ⟩ C)

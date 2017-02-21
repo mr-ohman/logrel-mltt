@@ -15,20 +15,20 @@ open import Tools.Empty using (⊥; ⊥-elim)
 import Tools.PropositionalEquality as PE
 
 
-data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set where
+data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set₁ where
   noemb : ∀ {l ⊩⟨_⟩} → ⊩⟨ l ⟩ → MaybeEmb l ⊩⟨_⟩
   emb   : ∀ {l l' ⊩⟨_⟩} → l' < l → MaybeEmb l' ⊩⟨_⟩ → MaybeEmb l ⊩⟨_⟩
 
-_⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
+_⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set₁
 Γ ⊩⟨ l ⟩U = MaybeEmb l (λ l' → Γ ⊩'⟨ l' ⟩U)
 
-_⊩⟨_⟩ℕ_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
+_⊩⟨_⟩ℕ_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 Γ ⊩⟨ l ⟩ℕ A = MaybeEmb l (λ l' → Γ ⊩ℕ A)
 
-_⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
+_⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 Γ ⊩⟨ l ⟩ne A = MaybeEmb l (λ l' → Γ ⊩ne A)
 
-_⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
+_⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 Γ ⊩⟨ l ⟩Π A = MaybeEmb l (λ l' → Γ ⊩'⟨ l' ⟩Π A)
 
 U-intr : ∀ {Γ l} → Γ ⊩⟨ l ⟩U → Γ ⊩⟨ l ⟩ U
@@ -155,3 +155,60 @@ goodCases {l' = l} (emb 0<1 x) [B] A≡B =
 goodCasesRefl : ∀ {l l' Γ A} ([A] : Γ ⊩⟨ l ⟩ A) ([A'] : Γ ⊩⟨ l' ⟩ A)
               → Tactic Γ l l' A A [A] [A']
 goodCasesRefl [A] [A'] = goodCases [A] [A'] (reflEq [A])
+
+
+data Tactic₃ Γ : ∀ l l' l'' A B C
+                 (p : Γ ⊩⟨ l ⟩ A)
+                 (q : _⊩⟨_⟩_ {{eqrel}} Γ l' B)
+                 (r : _⊩⟨_⟩_ {{eqrel}} Γ l'' C) → Set where
+  U : ∀ {l l' l''} UA UB UC → Tactic₃ Γ l l' l'' U U U (U UA) (U UB) (U UC)
+  ℕ : ∀ {A B C l l' l''} ℕA ℕB ℕC
+    → Tactic₃ Γ l l' l'' A B C (ℕ ℕA) (ℕ ℕB) (ℕ ℕC)
+  ne  : ∀ {A B C l l' l''} neA neB neC
+      → Tactic₃ Γ l l' l'' A B C (ne neA) (ne neB) (ne neC)
+  Π : ∀ {A B C l l' l''} ΠA ΠB ΠC
+    → Tactic₃ Γ l l' l'' A B C (Π ΠA) (Π ΠB) (Π ΠC)
+  emb⁰¹¹ : ∀ {A B C l l' p q r}
+         → Tactic₃ Γ ⁰ l l' A B C p q r
+         → Tactic₃ Γ ¹ l l' A B C (emb 0<1 p) q r
+  emb¹⁰¹ : ∀ {A B C l l' p q r}
+         → Tactic₃ Γ l ⁰ l' A B C p q r
+         → Tactic₃ Γ l ¹ l' A B C p (emb 0<1 q) r
+  emb¹¹⁰ : ∀ {A B C l l' p q r}
+         → Tactic₃ Γ l l' ⁰ A B C p q r
+         → Tactic₃ Γ l l' ¹ A B C p q (emb 0<1 r)
+
+combine : ∀ {Γ l l' l'' l''' A B C [A] [B] [B]' [C]}
+        → Tactic Γ l l' A B [A] [B]
+        → Tactic Γ l'' l''' B C [B]' [C]
+        → Tactic₃ Γ l l' l''' A B C [A] [B] [C]
+combine (U UA₁ UB₁) (U UA UB) = U UA₁ UB₁ UB
+combine (U UA UB) (ℕ ℕA ℕB) = ⊥-elim (U≢ℕ (whnfRed*' (red ℕA) U))
+combine (U UA UB) (ne (ne K D neK K≡K) neB) =
+  ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+combine (U UA UB) (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext) ΠB) =
+  ⊥-elim (U≢Π (whnfRed*' (red D) U))
+combine (ℕ ℕA ℕB) (U UA UB) = ⊥-elim (U≢ℕ (whnfRed*' (red ℕB) U))
+combine (ℕ ℕA₁ ℕB₁) (ℕ ℕA ℕB) = ℕ ℕA₁ ℕB₁ ℕB
+combine (ℕ ℕA ℕB) (ne (ne K D neK K≡K) neB) =
+  ⊥-elim (ℕ≢ne neK (whrDet*' (red ℕB , ℕ) (red D , ne neK)))
+combine (ℕ ℕA ℕB) (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext) ΠB) =
+  ⊥-elim (ℕ≢Π (whrDet*' (red ℕB , ℕ) (red D , Π)))
+combine (ne neA (ne K D neK K≡K)) (U UA UB) =
+  ⊥-elim (U≢ne neK (whnfRed*' (red D) U))
+combine (ne neA (ne K D neK K≡K)) (ℕ ℕA ℕB) =
+  ⊥-elim (ℕ≢ne neK (whrDet*' (red ℕA , ℕ) (red D , ne neK)))
+combine (ne neA₁ neB₁) (ne neA neB) = ne neA₁ neB₁ neB
+combine (ne neA (ne K D₁ neK K≡K)) (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext) ΠB) =
+  ⊥-elim (Π≢ne neK (whrDet*' (red D , Π) (red D₁ , ne neK)))
+combine (Π ΠA (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)) (U UA UB) =
+  ⊥-elim (U≢Π (whnfRed*' (red D) U))
+combine (Π ΠA (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)) (ℕ ℕA ℕB) =
+  ⊥-elim (ℕ≢Π (whrDet*' (red ℕA , ℕ) (red D , Π)))
+combine (Π ΠA (Π F G D₁ ⊢F ⊢G A≡A [F] [G] G-ext)) (ne (ne K D neK K≡K) neB) =
+  ⊥-elim (Π≢ne neK (whrDet*' (red D₁ , Π) (red D , ne neK)))
+combine (Π ΠA₁ ΠB₁) (Π ΠA ΠB) = Π ΠA₁ ΠB₁ ΠB
+combine (emb⁰¹ [AB]) [BC] = emb⁰¹¹ (combine [AB] [BC])
+combine (emb¹⁰ [AB]) [BC] = emb¹⁰¹ (combine [AB] [BC])
+combine [AB] (emb⁰¹ [BC]) = combine [AB] [BC]
+combine [AB] (emb¹⁰ [BC]) = emb¹¹⁰ (combine [AB] [BC])

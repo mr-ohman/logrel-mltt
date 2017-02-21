@@ -58,7 +58,7 @@ mutual
     let A≡ℕ  = subset* D
         n~n' = ~-conv n~n A≡ℕ
         n≡n  = ~-to-≅ₜ n~n'
-    in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) n≡n (ne neN) (neNfₜ neN (conv n A≡ℕ) n~n')
+    in  ℕₜ _ (idRedTerm:*: (conv n A≡ℕ)) n≡n (ne (neNfₜ neN (conv n A≡ℕ) n~n'))
   neuTerm (ne' K [ ⊢A , ⊢B , D ] neK K≡K) neN n n~n =
     let A≡K = subset* D
     in  neₜ _ (idRedTerm:*: (conv n A≡K)) (neNfₜ neN (conv n A≡K)

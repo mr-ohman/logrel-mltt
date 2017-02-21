@@ -31,8 +31,9 @@ fullyReducible a with fundamental a
 fullyReducibleTerm' : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
                 → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 fullyReducibleTerm' (U x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
-fullyReducibleTerm' (ℕ x) (ℕₜ n d n≡n natN prop) =
-  n , naturalWhnf natN , convRed:*: d (sym (subset* (red x)))
+fullyReducibleTerm' (ℕ x) (ℕₜ n d n≡n prop) =
+  let natN = natural prop
+  in  n , naturalWhnf natN , convRed:*: d (sym (subset* (red x)))
 fullyReducibleTerm' (ne (ne K D neK K≡K)) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   k , ne neK₁ , convRed:*: d (sym (subset* (red D)))
 fullyReducibleTerm' (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =

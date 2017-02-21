@@ -32,16 +32,23 @@ sucᵏ : Nat → Term
 sucᵏ zero = zero
 sucᵏ (suc n) = suc (sucᵏ n)
 
+canonicity''' : ∀ {t}
+              → Natural-prop ε t
+              → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
+canonicity''' (suc (ℕₜ n₁ d n≡n prop)) =
+  let a , b = canonicity''' prop
+  in  suc a , suc-cong (trans (subset*Term (redₜ d)) b)
+canonicity''' zero = zero , refl (zero ε)
+canonicity''' (ne (neNfₜ neK ⊢k k≡k)) = ⊥-elim (noNe ⊢k neK)
+
 canonicity'' : ∀ {t l}
              → ([ℕ] : _⊩⟨_⟩ℕ_ {{eqRelInstance}} ε l ℕ)
              → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
              → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity'' {l = l} (noemb D) (ℕₜ _ d _ suc prop) =
-  let a , b = canonicity'' {l = l} (noemb D) prop
-  in  suc a , trans (subset*Term (redₜ d)) (suc-cong b)
-canonicity'' (noemb D) (ℕₜ .zero d _ zero prop) = zero , subset*Term (redₜ d)
-canonicity'' (noemb D) (ℕₜ n d _ (ne x) (neNfₜ _ prop _)) = ⊥-elim (noNe prop x)
-canonicity'' (emb 0<1 x) [t] = canonicity'' x [t]
+canonicity'' (noemb [ℕ]) (ℕₜ n d n≡n prop) =
+  let a , b = canonicity''' prop
+  in  a , trans (subset*Term (redₜ d)) b
+canonicity'' (emb 0<1 [ℕ]) [t] = canonicity'' [ℕ] [t]
 
 canonicity' : ∀ {t l}
             → ([ℕ] : ε ⊩⟨ l ⟩ ℕ)

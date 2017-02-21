@@ -79,13 +79,13 @@ _⊩ℕ_≡_ : (Γ : Con Term) (A B : Term) → Set
 mutual
   data _⊩ℕ_∷ℕ (Γ : Con Term) (t : Term) : Set where
     ℕₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ) (n≡n : Γ ⊢ n ≅ n ∷ ℕ)
-         (natN : Natural n) (prop : natural-prop Γ n natN)
+         (prop : Natural-prop Γ n)
        → Γ ⊩ℕ t ∷ℕ
 
-  natural-prop : (Γ : Con Term) (n : Term) → Natural n → Set
-  natural-prop Γ .(suc n) (suc {n}) = Γ ⊩ℕ n ∷ℕ
-  natural-prop Γ .zero zero = ⊤
-  natural-prop Γ n (ne x) = Γ ⊩neNf n ∷ ℕ
+  data Natural-prop (Γ : Con Term) : (n : Term) → Set where
+    suc  : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Natural-prop Γ (suc n)
+    zero : Natural-prop Γ zero
+    ne   : ∀ {n} → Γ ⊩neNf n ∷ ℕ → Natural-prop Γ n
 
 mutual
   data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
@@ -97,6 +97,11 @@ mutual
     suc : ∀ {n n'} → Γ ⊩ℕ n ≡ n' ∷ℕ → [Natural]-prop Γ (suc n) (suc n')
     zero : [Natural]-prop Γ zero zero
     ne : ∀ {n n'} → Γ ⊩neNf n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
+
+natural : ∀ {Γ n} → Natural-prop Γ n → Natural n
+natural (suc x) = suc
+natural zero = zero
+natural (ne (neNfₜ neK ⊢k k≡k)) = ne neK
 
 split : ∀ {Γ a b} → [Natural]-prop Γ a b → Natural a × Natural b
 split (suc x) = suc , suc
