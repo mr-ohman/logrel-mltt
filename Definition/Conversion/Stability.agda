@@ -96,8 +96,8 @@ mutual
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↑ A
               → Δ ⊢ k ~ l ↑ A
-  stability~↑ Γ≡Δ (var x) =
-    var (stabilityTerm Γ≡Δ x)
+  stability~↑ Γ≡Δ (var x x≡y) =
+    var (stabilityTerm Γ≡Δ x) x≡y
   stability~↑ Γ≡Δ (app k~l x) =
     app (stability~↓ Γ≡Δ k~l) (stabilityConv↑Term Γ≡Δ x)
   stability~↑ Γ≡Δ (natrec x₁ x₂ x₃ k~l) =

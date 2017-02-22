@@ -11,7 +11,7 @@ mutual
   ne~↑ : ∀ {t u A Γ}
        → Γ ⊢ t ~ u ↑ A
        → Neutral t × Neutral u
-  ne~↑ (var x₁) = var _ , var _
+  ne~↑ (var x₁ x≡y) = var _ , var _
   ne~↑ (app x x₁) = let _ , q , w = ne~↓ x
                     in  _∘_ q , _∘_ w
   ne~↑ (natrec x x₁ x₂ x₃) = let _ , q , w = ne~↓ x₃

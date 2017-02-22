@@ -10,10 +10,12 @@ open import Definition.Typed.Consequences.InverseUniv
 open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
+import Tools.PropositionalEquality as PE
+
 
 mutual
   soundness~↑ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
-  soundness~↑ (var x) = refl x
+  soundness~↑ (var x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
   soundness~↑ (app k~l x₁) = app-cong (soundness~↓ k~l) (soundnessConv↑Term x₁)
   soundness~↑ (natrec x₁ x₂ x₃ k~l) =
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)

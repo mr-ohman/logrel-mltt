@@ -33,7 +33,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
 ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 ~-var x =
   let ⊢A = syntacticTerm x
-  in  ↑ (refl ⊢A) (var x)
+  in  ↑ (refl ⊢A) (var x PE.refl)
 
 ~-app' : ∀ {f g a b F G Γ Δ}
       → ⊢ Γ ≡ Δ

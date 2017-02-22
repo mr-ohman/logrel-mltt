@@ -29,8 +29,11 @@ mutual
          → Δ ⊢ u ~ v ↑ B
          → Γ ⊢ t ~ v ↑ A
          × Γ ⊢ A ≡ B
-  trans~↑ Γ≡Δ (var x₁) (var x₂) =
-    var x₁ , lemma3 (var _) x₁ (stabilityTerm (symConEq Γ≡Δ) x₂)
+  trans~↑ Γ≡Δ (var x₁ x≡y) (var x₂ x≡y₁) =
+    var x₁ (PE.trans x≡y x≡y₁)
+    , lemma3 (var _) x₁
+             (PE.subst (λ x → _ ⊢ var x ∷ _) (PE.sym x≡y)
+                       (stabilityTerm (symConEq Γ≡Δ) x₂))
   trans~↑ Γ≡Δ (app t~u a<>b) (app u~v b<>c) =
     let t~v , ΠFG≡ΠF'G' = trans~↓ Γ≡Δ t~u u~v
         F≡F₁ , G≡G₁ = injectivity ΠFG≡ΠF'G'

@@ -25,7 +25,7 @@ import Tools.PropositionalEquality as PE
 
 
 lemx : ∀ {m n A Γ} → Γ ⊢ var n ~ var m ↑ A → n PE.≡ m
-lemx (var x) = PE.refl
+lemx (var x x≡y) = x≡y
 
 decNeutral : (t : Term) → Dec (Neutral t)
 decNeutral U = no (λ ())
@@ -85,12 +85,12 @@ mutual
         → ⊢ Γ ≡ Δ
         → Γ ⊢ k ~ k ↑ R → Δ ⊢ l ~ l ↑ T
         → Dec (∃ λ A → Γ ⊢ k ~ l ↑ A)
-  dec~↑ Γ≡Δ (var {n} x₂) (var {m} x₃) with n ≟ m
-  dec~↑ Γ≡Δ (var {n} x₂) (var .{n} x₃) | yes PE.refl = yes (_ , var x₂)
-  dec~↑ Γ≡Δ (var x₂) (var x₃) | no ¬p = no (λ { (A , k~l) → ¬p (lemx k~l) })
-  dec~↑ Γ≡Δ (var x₁) (app x₂ x₃) = no (λ { (_ , ()) })
-  dec~↑ Γ≡Δ (var x₁) (natrec x₂ x₃ x₄ x₅) = no (λ { (_ , ()) })
-  dec~↑ Γ≡Δ (app x₁ x₂) (var x₃) = no (λ { (_ , ()) })
+  dec~↑ Γ≡Δ (var {n} x₂ x≡y) (var {m} x₃ x≡y₁) with n ≟ m
+  dec~↑ Γ≡Δ (var {n} x₂ x≡y) (var .{n} x₃ x≡y₁) | yes PE.refl = yes (_ , var x₂ x≡y₁)
+  dec~↑ Γ≡Δ (var x₂ x≡y) (var x₃ x≡y₁) | no ¬p = no (λ { (A , k~l) → ¬p (lemx k~l) })
+  dec~↑ Γ≡Δ (var x₁ x≡y) (app x₂ x₃) = no (λ { (_ , ()) })
+  dec~↑ Γ≡Δ (var x₁ x≡y) (natrec x₂ x₃ x₄ x₅) = no (λ { (_ , ()) })
+  dec~↑ Γ≡Δ (app x₁ x₂) (var x₃ x≡y) = no (λ { (_ , ()) })
   dec~↑ Γ≡Δ (app x x₁) (app x₂ x₃)
         with dec~↓ Γ≡Δ x x₂
   dec~↑ Γ≡Δ (app x x₁) (app x₂ x₃) | yes (A , k~l) =
@@ -105,7 +105,7 @@ mutual
   dec~↑ Γ≡Δ (app x x₁) (app x₂ x₃) | no ¬p =
     no (λ { (_ , app x₄ x₅) → ¬p (_ , x₄) })
   dec~↑ Γ≡Δ (app x x₁) (natrec x₂ x₃ x₄ x₅) = no (λ { (_ , ()) })
-  dec~↑ Γ≡Δ (natrec x₁ x₂ x₃ x₄) (var x₅) = no (λ { (_ , ()) })
+  dec~↑ Γ≡Δ (natrec x₁ x₂ x₃ x₄) (var x₅ x≡y) = no (λ { (_ , ()) })
   dec~↑ Γ≡Δ (natrec x x₁ x₂ x₃) (app x₄ x₅) = no (λ { (_ , ()) })
   dec~↑ Γ≡Δ (natrec x x₁ x₂ x₃) (natrec x₄ x₅ x₆ x₇)
         with decConv↑ (Γ≡Δ ∙ refl (ℕ (wfEqTerm (soundness~↓ x₃)))) x x₄

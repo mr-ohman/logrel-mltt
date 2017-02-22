@@ -25,9 +25,11 @@ mutual
   sym~↑ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ
         → Γ ⊢ t ~ u ↑ A
         → ∃ λ B → Γ ⊢ A ≡ B × Δ ⊢ u ~ t ↑ B
-  sym~↑ Γ≡Δ (var x) =
+  sym~↑ Γ≡Δ (var x x≡y) =
     let ⊢A = syntacticTerm x
-    in  _ , refl ⊢A , var (stabilityTerm Γ≡Δ x)
+    in  _ , refl ⊢A
+     ,  var (PE.subst (λ y → _ ⊢ var y ∷ _) x≡y (stabilityTerm Γ≡Δ x))
+            (PE.sym x≡y)
   sym~↑ Γ≡Δ (app t~u x) =
     let [ ⊢Γ , ⊢Δ , _ ] = substx Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u

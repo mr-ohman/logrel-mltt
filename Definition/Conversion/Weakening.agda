@@ -17,7 +17,7 @@ mutual
   wk~↑ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
       → Γ ⊢ t ~ u ↑ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↑ U.wk ρ A
-  wk~↑ ρ ⊢Δ (var x₁) = var (wkTerm ρ ⊢Δ x₁)
+  wk~↑ {ρ} [ρ] ⊢Δ (var x₁ x≡y) = var (wkTerm [ρ] ⊢Δ x₁) (PE.cong (wkNat ρ) x≡y)
   wk~↑ ρ ⊢Δ (app {G = G} t~u x) =
     PE.subst (λ x → _ ⊢ _ ~ _ ↑ x) (PE.sym (wk-β G))
              (app (wk~↓ ρ ⊢Δ t~u) (wkConv↑Term ρ ⊢Δ x))

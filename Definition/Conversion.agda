@@ -4,6 +4,7 @@ open import Definition.Untyped
 open import Definition.Typed
 
 open import Tools.Nat
+import Tools.PropositionalEquality as PE
 
 
 infix 10 _⊢_~_↑_
@@ -16,9 +17,10 @@ mutual
     --           → Γ ⊢ A ⇒* B
     --           → Γ ⊢ k ~ l ↑ A
     --           → Γ ⊢ k ~ l ↑ B
-    var       : ∀ {x A}
+    var       : ∀ {x y A}
               → Γ ⊢ var x ∷ A
-              → Γ ⊢ var x ~ var x ↑ A
+              → x PE.≡ y
+              → Γ ⊢ var x ~ var y ↑ A
     app       : ∀ {k l t v F G}
               → Γ ⊢ k ~ l ↓ Π F ▹ G
               → Γ ⊢ t [conv↑] v ∷ F
