@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Substitution.Wellformed {{eqrel : EqRelSet}} where

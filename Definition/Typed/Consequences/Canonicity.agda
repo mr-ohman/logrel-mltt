@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.Consequences.Canonicity where
 
 open import Definition.Untyped hiding (wk)

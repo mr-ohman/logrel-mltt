@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Substitution.Conversion {{eqrel : EqRelSet}} where

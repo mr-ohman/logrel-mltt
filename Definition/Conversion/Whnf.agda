@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Conversion.Whnf where
 
 open import Definition.Untyped as U

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.Decidable where
 
 open import Definition.Untyped

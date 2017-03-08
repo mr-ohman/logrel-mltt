@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.Consequences.Reduction where
 
 open import Definition.Untyped

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.Properties where
 
 open import Tools.Empty using (⊥; ⊥-elim)

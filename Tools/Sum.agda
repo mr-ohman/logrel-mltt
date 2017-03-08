@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Tools.Sum where
 
 data _⊎_ (A B : Set) : Set where

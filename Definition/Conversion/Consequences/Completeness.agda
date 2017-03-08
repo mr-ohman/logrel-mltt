@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Conversion.Consequences.Completeness where
 
 open import Definition.Untyped

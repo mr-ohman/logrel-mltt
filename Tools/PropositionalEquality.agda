@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Tools.PropositionalEquality where
 
 

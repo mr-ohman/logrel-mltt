@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Irrelevance {{eqrel : EqRelSet}} where

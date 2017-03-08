@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Untyped where
 
 open import Tools.Nat

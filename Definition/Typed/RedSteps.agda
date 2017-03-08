@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Definition.Typed.RedSteps where
 
 open import Definition.Untyped

@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 -- A Logical Relation for Dependent Type Theory Formalized in Agda
 
 module Everything where
@@ -19,6 +21,8 @@ import Definition.Untyped.Properties
 import Definition.Typed
 import Definition.Typed.Properties
 import Definition.Typed.Weakening
+import Definition.Typed.Reduction
+import Definition.Typed.RedSteps
 import Definition.Typed.EqualityRelation
 import Definition.Typed.EqRelInstance
 
@@ -37,6 +41,8 @@ import Definition.LogicalRelation.Substitution.Reduction
 import Definition.LogicalRelation.Substitution.Reflexivity
 import Definition.LogicalRelation.Substitution.Weakening
 import Definition.LogicalRelation.Substitution.Soundness
+import Definition.LogicalRelation.Substitution.Wellformed
+import Definition.LogicalRelation.Substitution.MaybeEmbed
 import Definition.LogicalRelation.Substitution.Introductions
 
 import Definition.LogicalRelation.Fundamental
@@ -51,13 +57,16 @@ import Definition.Typed.Consequences.Inequality
 import Definition.Typed.Consequences.Substitution
 import Definition.Typed.Consequences.Equality
 import Definition.Typed.Consequences.InverseUniv
+import Definition.Typed.Consequences.Reduction
 
 -- Algorithmic equality with lemmas that depend on typing consequences
 import Definition.Conversion
 import Definition.Conversion.Conversion
 import Definition.Conversion.Lift
+import Definition.Conversion.InitLemma
 import Definition.Conversion.Reduction
 import Definition.Conversion.Soundness
+import Definition.Conversion.Stability
 import Definition.Conversion.Symmetry
 import Definition.Conversion.Transitivity
 import Definition.Conversion.Universe
