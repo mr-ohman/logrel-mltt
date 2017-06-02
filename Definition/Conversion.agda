@@ -10,15 +10,14 @@ import Tools.PropositionalEquality as PE
 
 
 infix 10 _⊢_~_↑_
---infix 10 _⊢_[conv]_
---infix 10 _⊢_[conv]_∷_
+infix 10 _⊢_~_↓_
+infix 10 _⊢_[conv↑]_
+infix 10 _⊢_[conv↓]_
+infix 10 _⊢_[conv↑]_∷_
+infix 10 _⊢_[conv↓]_∷_
 
 mutual
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
-    -- reduction : ∀ {k l A B}
-    --           → Γ ⊢ A ⇒* B
-    --           → Γ ⊢ k ~ l ↑ A
-    --           → Γ ⊢ k ~ l ↑ B
     var       : ∀ {x y A}
               → Γ ⊢ var x ∷ A
               → x PE.≡ y
@@ -55,18 +54,10 @@ mutual
       A'<>B' : Γ ⊢ A' [conv↓] B'
 
   data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
-    -- reduction : ∀ {A A' B B'}
-    --           → Γ ⊢ A ⇒* A'
-    --           → Γ ⊢ B ⇒* B'
-    --           → Γ ⊢ A' [conv] B'
-    --           → Γ ⊢ A [conv] B
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     ne        : ∀ {K L}
               → Γ ⊢ K ~ L ↓ U
-              -- → Γ ⊢ K
-              -- → Neutral K
-              -- → Neutral L
               → Γ ⊢ K [conv↓] L
     Π-cong    : ∀ {F G H E}
               → Γ ⊢ F
@@ -88,12 +79,6 @@ mutual
       t<>u    : Γ ⊢ t' [conv↓] u' ∷ B
 
   data _⊢_[conv↓]_∷_ (Γ : Con Term) : (t u A : Term) → Set where
-    -- reduction : ∀ {a a' b b' A B}
-    --           → Γ ⊢ A ⇒* B
-    --           → Γ ⊢ a ⇒* a' ∷ B
-    --           → Γ ⊢ b ⇒* b' ∷ B
-    --           → Γ ⊢ a' [conv↑] b' ∷ B
-    --           → Γ ⊢ a [conv↓] b ∷ A
     ℕ-ins     : ∀ {k l}
               → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ k [conv↓] l ∷ ℕ

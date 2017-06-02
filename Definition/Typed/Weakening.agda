@@ -10,7 +10,6 @@ open import Definition.Typed
 open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
---import Tools.HeterogeneousEquality as HE
 
 
 -- Weakening type
@@ -19,17 +18,6 @@ data _∷_⊆_ : Wk → Con Term → Con Term → Set where
   id   : ∀ {Γ}       → id ∷ Γ ⊆ Γ
   step : ∀ {Γ Δ A ρ} → ρ  ∷ Γ ⊆ Δ → step ρ ∷ Γ     ⊆ Δ ∙ A
   lift : ∀ {Γ Δ A ρ} → ρ  ∷ Γ ⊆ Δ → lift ρ ∷ Γ ∙ A ⊆ Δ ∙ U.wk ρ A
-
---   toWk : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Wk
---   toWk id = id
---   toWk (step ρ) = step (toWk ρ)
---   toWk (lift ρ) = lift (toWk ρ)
-
--- wkₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
--- wkₜ ρ = U.wk (toWk ρ)
-
--- wkLiftₜ : ∀ {Γ Δ : Con Term} (ρ : Γ ⊆ Δ) → Term → Term
--- wkLiftₜ ρ = U.wk (lift (toWk ρ))
 
 
 -- -- Weakening composition
@@ -43,46 +31,6 @@ _•ₜ_ {lift ρ} {lift ρ'} {Γ ∙ A} (lift η) (lift η′) =
   PE.subst (λ x → lift (ρ • ρ') ∷ Γ ∙ A ⊆ x)
            (PE.cong₂ _∙_ PE.refl (PE.sym (UP.wk-comp-comm ρ ρ' A)))
            (lift (η •ₜ η′))
-
---   wk-comp-comm : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
---                → wkₜ (η •ₜ η′) σ PE.≡ wkₜ η (wkₜ η′ σ)
---   wk-comp-comm {σ = σ} η η′ =
---     PE.trans (PE.cong (λ x → U.wk x σ) (comp-eq η η′))
---              (PE.sym (UP.wk-comp-comm (toWk η) (toWk η′) σ))
-
---   comp-eq : ∀ {Γ Δ E} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
---           → toWk (η •ₜ η′) PE.≡ toWk η • toWk η′
---   comp-eq id η′ = PE.refl
---   comp-eq (step η) η′ = PE.cong step (comp-eq η η′)
---   comp-eq (lift η) id = PE.refl
---   comp-eq (lift η) (step η′) = PE.cong step (comp-eq η η′)
---   comp-eq (lift {Δ} {E} {.(wkₜ η′ σ)} η) (lift {Γ} {.Δ} {σ} η′) =
---     HE.≅-to-≡
---       (HE.trans
---         (HE.cong₂ (λ X → toWk {Γ ∙ σ} {X})
---                   (HE.≡-to-≅ (PE.cong (λ x → E ∙ x)
---                                       (PE.sym (wk-comp-comm η η′))))
---                   (subst-eq η η′))
---         (HE.≡-to-≅ (PE.cong lift (comp-eq η η′))) )
-
---   subst-eq : ∀ {Γ Δ E σ} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
---            → HE._≅_ {A = Γ ∙ σ ⊆ E ∙ wkₜ η (wkₜ η′ σ)}
---                     (PE.subst (λ x → Γ ∙ σ ⊆ E ∙ x)
---                               (wk-comp-comm η η′) (lift (η •ₜ η′)))
---                     {B = Γ ∙ σ ⊆ E ∙ wkₜ (η •ₜ η′) σ}
---                     (lift (η •ₜ η′))
---   subst-eq η η′ = HE.≡-subst-removable (λ x → _ ∙ _ ⊆ _ ∙ x)
---                                        (wk-comp-comm η η′) (lift (η •ₜ η′))
-
--- wk-comp-comm-lift : ∀ {Γ Δ E G} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ)
---                   → wkLiftₜ (η •ₜ η′) G PE.≡ wkLiftₜ η (wkLiftₜ η′ G)
--- wk-comp-comm-lift {G = G} η η′ =
---   PE.sym (PE.trans (UP.wk-comp-comm (lift (toWk η)) (lift (toWk η′)) G)
---                    (PE.cong (λ x → U.wk (lift x) G) (PE.sym (comp-eq η η′))))
-
--- wk-comp-comm-subst : ∀ {Γ Δ E a} (η : Δ ⊆ E) (η′ : Γ ⊆ Δ) G
---                    → wkLiftₜ (η •ₜ η′) G [ a ] PE.≡ wkLiftₜ η (wkLiftₜ η′ G) [ a ]
--- wk-comp-comm-subst {a = a} η η′ G = PE.cong (λ x → x [ a ]) (wk-comp-comm-lift {G = G} η η′)
 
 
 -- Weakening of judgements

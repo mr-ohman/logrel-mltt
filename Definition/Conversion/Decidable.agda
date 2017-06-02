@@ -29,36 +29,6 @@ import Tools.PropositionalEquality as PE
 lemx : ∀ {m n A Γ} → Γ ⊢ var n ~ var m ↑ A → n PE.≡ m
 lemx (var x x≡y) = x≡y
 
-decNeutral : (t : Term) → Dec (Neutral t)
-decNeutral U = no (λ ())
-decNeutral (Π t ▹ t₁) = no (λ ())
-decNeutral ℕ = no (λ ())
-decNeutral (var x) = yes (var x)
-decNeutral (lam t) = no (λ ())
-decNeutral (t ∘ t₁) with decNeutral t
-decNeutral (t ∘ t₁) | yes p = yes (_∘_ p)
-decNeutral (t ∘ t₁) | no ¬p = no (λ { (_∘_ x) → ¬p x })
-decNeutral zero = no (λ ())
-decNeutral (suc t) = no (λ ())
-decNeutral (natrec t t₁ t₂ t₃) with decNeutral t₃
-decNeutral (natrec t t₁ t₂ t₃) | yes p = yes (natrec p)
-decNeutral (natrec t t₁ t₂ t₃) | no ¬p = no (λ { (natrec x) → ¬p x })
-
-decWhnf : (t : Term) → Dec (Whnf t)
-decWhnf U = yes U
-decWhnf (Π t ▹ t₁) = yes Π
-decWhnf ℕ = yes ℕ
-decWhnf (var x) = yes (ne (var x))
-decWhnf (lam t) = yes lam
-decWhnf (t ∘ t₁) with decNeutral (t ∘ t₁)
-decWhnf (t ∘ t₁) | yes p = yes (ne p)
-decWhnf (t ∘ t₁) | no ¬p = no (λ { (ne x) → ¬p x })
-decWhnf zero = yes zero
-decWhnf (suc t) = yes suc
-decWhnf (natrec t t₁ t₂ t₃) with decNeutral (natrec t t₁ t₂ t₃)
-decWhnf (natrec t t₁ t₂ t₃) | yes p = yes (ne p)
-decWhnf (natrec t t₁ t₂ t₃) | no ¬p = no (λ { (ne x) → ¬p x })
-
 mutual
   dec~↑-app : ∀ {k k₁ l l₁ F F₁ G G₁ B Γ Δ}
             → ⊢ Γ ≡ Δ

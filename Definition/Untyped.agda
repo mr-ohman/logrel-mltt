@@ -87,42 +87,6 @@ functionWhnf : ∀ {f} → Function f → Whnf f
 functionWhnf lam = lam
 functionWhnf (ne x) = ne x
 
--- A partial view on two whnfs of natural number terms.
--- Note: not inductive.
-
--- data [Natural] : Term → Term → Set where
---   suc  : ∀ {n n'}                          → [Natural] (suc n) (suc n')
---   zero :                                     [Natural] zero zero
---   ne   : ∀ {n n'} → Neutral n → Neutral n' → [Natural] n n'
-
--- -- Properties of [Natural]
-
--- reflNatural : ∀ {n} → Natural n → [Natural] n n
--- reflNatural suc = suc
--- reflNatural zero = zero
--- reflNatural (ne x) = ne x x
-
--- symNatural : ∀ {m n} → [Natural] m n → [Natural] n m
--- symNatural suc = suc
--- symNatural zero = zero
--- symNatural (ne x x₁) = ne x₁ x
-
--- transNatural : ∀ {n n' n''}
---              → [Natural] n  n'
---              → [Natural] n' n''
---              → [Natural] n  n''
--- transNatural suc suc = suc
--- transNatural suc (ne () n')
--- transNatural zero n' = n'
--- transNatural (ne neN ()) suc
--- transNatural (ne neN neN') zero = ne neN neN'
--- transNatural (ne neN neN') (ne neN'₁ neN'') = ne neN neN''
-
--- split : ∀ {t u} → [Natural] t u → Natural t × Natural u
--- split suc = suc , suc
--- split zero = zero , zero
--- split (ne x x₁) = ne x , ne x₁
-
 ------------------------------------------------------------------------
 -- Weakening
 
@@ -202,15 +166,6 @@ wkWhnf ρ lam = lam
 wkWhnf ρ zero = zero
 wkWhnf ρ suc = suc
 wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
-
--- Weakening of an instance of the [Natural] view.
-
--- wk[Natural] : ∀ {t u} ρ
---             → [Natural] t u
---             → [Natural] (wk ρ t) (wk ρ u)
--- wk[Natural] ρ (suc {t} {u}) = suc {wk ρ t} {wk ρ u}
--- wk[Natural] ρ zero = zero
--- wk[Natural] ρ (ne x x₁) = ne (wkNeutral ρ x) (wkNeutral ρ x₁)
 
 -- Non-dependent version of Π.
 _▹▹_ : Term → Term → Term

@@ -56,10 +56,8 @@ stabilityTerm Γ≡Δ t =
   let q = substitutionTerm t (substx Γ≡Δ)
   in  PE.subst₂ (λ x y → _ ⊢ x ∷ y) (idSubst-lemma₀ _) (idSubst-lemma₀ _) q
 
--- Cannot solve
+-- Cannot solve:
 -- stabilityVar : ∀ {x A Γ Δ} → ⊢ Γ ≡ Δ → x ∷ A ∈ Γ → x ∷ A ∈ Δ
--- stabilityVar (Γ≡Δ ∙ A≡B) here = {!!}
--- stabilityVar (Γ≡Δ ∙ A≡B) (there x) = there (stabilityVar Γ≡Δ x)
 
 stabilityRedTerm : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ⇒ u ∷ A → Δ ⊢ t ⇒ u ∷ A
 stabilityRedTerm Γ≡Δ (conv d x) =

@@ -17,17 +17,21 @@ inversion-ℕ : ∀ {Γ C} → Γ ⊢ ℕ ∷ C → Γ ⊢ C ≡ U
 inversion-ℕ (ℕ x) = refl (U x)
 inversion-ℕ (conv x x₁) = trans (sym x₁) (inversion-ℕ x)
 
-inversion-Π : ∀ {F G Γ C} → Γ ⊢ Π F ▹ G ∷ C → Γ ⊢ C ≡ U
-inversion-Π (Π x ▹ x₁) = refl (U (wfTerm x))
-inversion-Π (conv x x₁) = trans (sym x₁) (inversion-Π x)
+inversion-Π : ∀ {F G Γ C}
+            → Γ ⊢ Π F ▹ G ∷ C → Γ ⊢ F ∷ U × Γ ∙ F ⊢ G ∷ U × Γ ⊢ C ≡ U
+inversion-Π (Π x ▹ x₁) = x , x₁ , refl (U (wfTerm x))
+inversion-Π (conv x x₁) = let a , b , c = inversion-Π x
+                          in  a , b , trans (sym x₁) c
 
 inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
 inversion-zero (zero x) = refl (ℕ x)
 inversion-zero (conv x x₁) = trans (sym x₁) (inversion-zero x)
 
-inversion-suc : ∀ {Γ t C} → Γ ⊢ suc t ∷ C → Γ ⊢ C ≡ ℕ
-inversion-suc (suc x) = refl (ℕ (wfTerm x))
-inversion-suc (conv x x₁) = trans (sym x₁) (inversion-suc x)
+inversion-suc : ∀ {Γ t C} → Γ ⊢ suc t ∷ C → Γ ⊢ t ∷ ℕ × Γ ⊢ C ≡ ℕ
+inversion-suc (suc x) = x , refl (ℕ (wfTerm x))
+inversion-suc (conv x x₁) =
+  let a , b = inversion-suc x
+  in  a , trans (sym x₁) b
 
 inversion-natrec : ∀ {Γ c g n A C} → Γ ⊢ natrec C c g n ∷ A
   → (Γ ∙ ℕ ⊢ C)
@@ -46,7 +50,7 @@ inversion-app (conv d x) = let a , b , c , d , e = inversion-app d
                            in  a , b , c , d , trans (sym x) e
 
 inversion-lam : ∀ {t A Γ} → Γ ⊢ lam t ∷ A →
-  ∃₂ λ F G → Γ ∙ F ⊢ t ∷ G × Γ ⊢ A ≡ Π F ▹ G
-inversion-lam (lam x x₁) = _ , _ , x₁ , refl (Π x ▹ (syntacticTerm x₁))
-inversion-lam (conv x x₁) = let a , b , c , d = inversion-lam x
-                            in  a , b , c , trans (sym x₁) d
+  ∃₂ λ F G → Γ ⊢ F × (Γ ∙ F ⊢ t ∷ G × Γ ⊢ A ≡ Π F ▹ G)
+inversion-lam (lam x x₁) = _ , _ , x , x₁ , refl (Π x ▹ (syntacticTerm x₁))
+inversion-lam (conv x x₁) = let a , b , c , d , e = inversion-lam x
+                            in  a , b , c , d , trans (sym x₁) e

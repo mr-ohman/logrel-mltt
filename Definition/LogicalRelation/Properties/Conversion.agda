@@ -46,8 +46,6 @@ mutual
                              (≅-eq A≡B)
     in  Πₜ f (convRed:*: d ΠFG≡ΠF₁G₁) funcF (≅-conv f≡f ΠFG≡ΠF₁G₁)
            (λ {ρ} [ρ] ⊢Δ [a] [b] [a≡b] →
-                        -- TODO Add new irrelevance function for these cases,
-                        --      since only the second part is relevant here.
               let [F≡F₁] = irrelevanceEqR' (PE.cong (U.wk ρ) (PE.sym F₁≡F'))
                                            ([F] [ρ] ⊢Δ) ([F≡F'] [ρ] ⊢Δ)
                   [a]₁ = convTerm₂ ([F] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [F≡F₁] [a]

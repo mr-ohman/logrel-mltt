@@ -210,14 +210,6 @@ data _⊢_⇒*_ (Γ : Con Term) : Term → Term → Set where
       → Γ ⊢ A' ⇒* B
       → Γ ⊢ A  ⇒* B
 
--- Term reduction closure with at least one reduction
-_⊢_⇒⁺_∷_ : (Γ : Con Term) → Term → Term → Term → Set
-Γ ⊢ t ⇒⁺ u ∷ A = ∀ {t'} → Γ ⊢ t ⇒ t' ∷ A × Γ ⊢ t' ⇒* u ∷ A
-
--- Type reduction closure with at least one reduction
-_⊢_⇒⁺_ : (Γ : Con Term) → Term → Term → Set
-Γ ⊢ A ⇒⁺ B = ∀ {A'} → Γ ⊢ A ⇒ A' × Γ ⊢ A' ⇒* B
-
 -- Type reduction to whnf
 _⊢_↘_ : (Γ : Con Term) → Term → Term → Set
 Γ ⊢ A ↘ B = Γ ⊢ A ⇒* B × Whnf B
