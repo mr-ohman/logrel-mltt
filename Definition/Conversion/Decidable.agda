@@ -127,8 +127,8 @@ mutual
            → Dec (Γ ⊢ A [conv↑] B)
   decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
                ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'')
-           rewrite whrDet*' (D , whnfA') (D' , whnfB')
-                 | whrDet*' (D₁ , whnfA'') (D'' , whnfB'')
+           rewrite whrDet* (D , whnfA') (D' , whnfB')
+                 | whrDet* (D₁ , whnfA'') (D'' , whnfB'')
            with decConv↓ Γ≡Δ A'<>B' A'<>B''
   decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
                ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'') | yes p =
@@ -136,8 +136,8 @@ mutual
   decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
                ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'') | no ¬p =
     no (λ { ([↑] A''' B''' D₂ D''' whnfA''' whnfB''' A'<>B''') →
-        let A'''≡B'  = whrDet*' (D₂ , whnfA''') (D' , whnfB')
-            B'''≡B'' = whrDet*' (D''' , whnfB''')
+        let A'''≡B'  = whrDet* (D₂ , whnfA''') (D' , whnfB')
+            B'''≡B'' = whrDet* (D''' , whnfB''')
                                 (stabilityRed* (symConEq Γ≡Δ) D'' , whnfB'')
         in  ¬p (PE.subst₂ (λ x y → _ ⊢ x [conv↓] y) A'''≡B' B'''≡B'' A'<>B''') })
 
@@ -208,9 +208,9 @@ mutual
                → Dec (Γ ⊢ t [conv↑] u ∷ A)
   decConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u)
                    ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
-               rewrite whrDet*' (D , whnfB) (stabilityRed* (symConEq Γ≡Δ) D₁ , whnfB₁)
-                     | whrDet*  (d , whnft') (d' , whnfu')
-                     | whrDet*  (d₁ , whnft'') (d'' , whnfu'')
+               rewrite whrDet* (D , whnfB) (stabilityRed* (symConEq Γ≡Δ) D₁ , whnfB₁)
+                     | whrDet*Term  (d , whnft') (d' , whnfu')
+                     | whrDet*Term  (d₁ , whnft'') (d'' , whnfu'')
                with decConv↓Term Γ≡Δ t<>u t<>u₁
   decConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u)
                    ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
@@ -222,12 +222,12 @@ mutual
                    ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
                | no ¬p =
     no (λ { ([↑]ₜ B₂ t''' u''' D₂ d₂ d''' whnfB₂ whnft''' whnfu''' t<>u₂) →
-        let B₂≡B₁ = whrDet*' (D₂ , whnfB₂)
+        let B₂≡B₁ = whrDet* (D₂ , whnfB₂)
                              (stabilityRed* (symConEq Γ≡Δ) D₁ , whnfB₁)
-            t'''≡u' = whrDet* (d₂ , whnft''')
+            t'''≡u' = whrDet*Term (d₂ , whnft''')
                               (PE.subst (λ x → _ ⊢ _ ⇒* _ ∷ x) (PE.sym B₂≡B₁) d'
                               , whnfu')
-            u'''≡u'' = whrDet* (d''' , whnfu''')
+            u'''≡u'' = whrDet*Term (d''' , whnfu''')
                                (PE.subst (λ x → _ ⊢ _ ⇒* _ ∷ x)
                                          (PE.sym B₂≡B₁)
                                          (stabilityRed*Term (symConEq Γ≡Δ) d'')

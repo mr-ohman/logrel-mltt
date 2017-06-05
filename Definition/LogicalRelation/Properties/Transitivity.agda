@@ -29,8 +29,8 @@ mutual
   transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)
                (ne K₂ D₂ neK₂ K≡K₂))
            (ne₌ M D' neM K≡M) (ne₌ M₁ D'' neM₁ K≡M₁)
-           rewrite whrDet*' (red D₁ , ne neK₁) (red D' , ne neM)
-                 | whrDet*' (red D₂ , ne neK₂) (red D'' , ne neM₁) =
+           rewrite whrDet* (red D₁ , ne neK₁) (red D' , ne neM)
+                 | whrDet* (red D₂ , ne neK₂) (red D'' , ne neM₁) =
     ne₌ M₁ D'' neM₁
         (~-trans K≡M K≡M₁)
   transEqT {Γ} {l = l} {l' = l′} {l'' = l″}
@@ -39,9 +39,9 @@ mutual
               (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
            (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
            (Π₌ F″ G″ D″ A≡B₁ [F≡F′]₁ [G≡G′]₁) =
-    let ΠF₁G₁≡ΠF′G′    = whrDet*' (red D₁ , Π) (D′  , Π)
+    let ΠF₁G₁≡ΠF′G′    = whrDet* (red D₁ , Π) (D′  , Π)
         F₁≡F′  , G₁≡G′ = Π-PE-injectivity ΠF₁G₁≡ΠF′G′
-        F₂≡F″ , G₂≡G″  = Π-PE-injectivity (whrDet*' (red D₂ , Π) (D″ , Π))
+        F₂≡F″ , G₂≡G″  = Π-PE-injectivity (whrDet* (red D₂ , Π) (D″ , Π))
         substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ U.wk (lift ρ) x [ a ]
         [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′
         [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
@@ -119,7 +119,7 @@ mutual
                (ℕₜ₌ k₁ k'' d₁ d'' t≡u₁ prop₁) =
     let k₁Whnf = naturalWhnf (proj₁ (split prop₁))
         k'Whnf = naturalWhnf (proj₂ (split prop))
-        k₁≡k' = whrDet* (redₜ d₁ , k₁Whnf) (redₜ d' , k'Whnf)
+        k₁≡k' = whrDet*Term (redₜ d₁ , k₁Whnf) (redₜ d' , k'Whnf)
         prop' = PE.subst (λ x → [Natural]-prop _ x _) k₁≡k' prop₁
     in  ℕₜ₌ k k'' d d'' (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k' t≡u₁))
             (transNatural-prop prop prop')
@@ -144,20 +144,20 @@ transEqTerm : ∀ {l Γ A t u v}
 transEqTerm (U' .⁰ 0<1 ⊢Γ)
             (Uₜ₌ A B d d' typeA typeB t≡u [t] [u] [t≡u])
             (Uₜ₌ A₁ B₁ d₁ d₁' typeA₁ typeB₁ t≡u₁ [t]₁ [u]₁ [t≡u]₁)
-            rewrite whrDet* (redₜ d' , typeWhnf typeB) (redₜ d₁ , typeWhnf typeA₁) =
+            rewrite whrDet*Term (redₜ d' , typeWhnf typeB) (redₜ d₁ , typeWhnf typeA₁) =
   Uₜ₌ A B₁ d d₁' typeA typeB₁ (≅ₜ-trans t≡u t≡u₁) [t] [u]₁
       (transEq [t] [u] [u]₁ [t≡u] (irrelevanceEq [t]₁ [u] [t≡u]₁))
 transEqTerm (ℕ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
 transEqTerm (ne' K D neK K≡K) (neₜ₌ k m d d' (neNfₜ₌ neK₁ neM k≡m))
                               (neₜ₌ k₁ m₁ d₁ d'' (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
-  let k₁≡m = whrDet* (redₜ d₁ , ne neK₂) (redₜ d' , ne neM)
+  let k₁≡m = whrDet*Term (redₜ d₁ , ne neK₂) (redₜ d' , ne neM)
   in  neₜ₌ k m₁ d d''
            (neNfₜ₌ neK₁ neM₁
                    (~-trans k≡m (PE.subst (λ x → _ ⊢ x ~ _ ∷ _) k₁≡m k≡m₁)))
 transEqTerm (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g])
             (Πₜ₌ f₁ g₁ d₁ d₁' funcF₁ funcG₁ f≡g₁ [f]₁ [g]₁ [f≡g]₁)
-            rewrite whrDet* (redₜ d' , functionWhnf funcG)
+            rewrite whrDet*Term (redₜ d' , functionWhnf funcG)
                             (redₜ d₁ , functionWhnf funcF₁) =
   Πₜ₌ f g₁ d d₁' funcF funcG₁ (≅ₜ-trans f≡g f≡g₁) [f] [g]₁
       (λ ρ ⊢Δ [a] → transEqTerm ([G] ρ ⊢Δ [a])

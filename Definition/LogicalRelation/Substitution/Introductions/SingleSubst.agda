@@ -185,7 +185,7 @@ substSΠ₁' : ∀ {F G t Γ l l'}
            ([t] : Γ ⊩⟨ l' ⟩ t ∷ F / [F])
          → Γ ⊩⟨ l ⟩ G [ t ]
 substSΠ₁' {t = t} (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)) [F]₁ [t] =
-  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed* (red D) Π)
       Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
       ⊢Γ = wf (wellformed [F]₁)
@@ -214,8 +214,8 @@ substSΠ₂' : ∀ {F F' G G' t t' Γ l l' l''}
 substSΠ₂' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
           (Π₌ F'' G'' D' A≡B [F≡F'] [G≡G'])
           [F]₁ [F'] [t] [t'] [t≡t'] [G[t]] [G'[t']] =
-  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D) Π)
-      F'≡F'' , G'≡G'' = Π-PE-injectivity (whnfRed*' D' Π)
+  let F≡F' , G≡G' = Π-PE-injectivity (whnfRed* (red D) Π)
+      F'≡F'' , G'≡G'' = Π-PE-injectivity (whnfRed* D' Π)
       Feq = PE.trans F≡F' (PE.sym (wk-id _ 0))
       F'eq = PE.trans F'≡F'' (PE.sym (wk-id _ 0))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
@@ -283,7 +283,7 @@ substSΠEq : ∀ {F G t u Γ l}
 substSΠEq {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] [t≡u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       _ , Π F' G' D' ⊢F' ⊢G' A≡A' [F]' [G]' G-ext' = extractMaybeEmb (Π-elim [σΠFG])
-      F≡F' , G≡G' = Π-PE-injectivity (whnfRed*' (red D') Π)
+      F≡F' , G≡G' = Π-PE-injectivity (whnfRed* (red D') Π)
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σt] = proj₁ ([t] ⊢Δ [σ])
       [σu] = proj₁ ([u] ⊢Δ [σ])

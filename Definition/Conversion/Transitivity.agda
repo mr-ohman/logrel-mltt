@@ -76,7 +76,7 @@ mutual
     [↑] A' B'' D (stabilityRed* (symConEq Γ≡Δ) D'') whnfA' whnfB''
         (transConv↓ Γ≡Δ A'<>B'
                     (PE.subst (λ x → _ ⊢ x [conv↓] B'')
-                              (whrDet*' (D₁ , whnfA'')
+                              (whrDet* (D₁ , whnfA'')
                                         (stabilityRed* Γ≡Δ D' , whnfB'))
                               A'<>B''))
 
@@ -116,7 +116,7 @@ mutual
     in  [↑]ₜ B₁ t' u'' D d d₁'' whnfB whnft' whnfu''
              (transConv↓Term Γ≡Δ B₁≡B₂ t<>u
                              (PE.subst (λ x → _ ⊢ x [conv↓] u'' ∷ B₂)
-                                       (whrDet* (d₁ , whnft'')
+                                       (whrDet*Term (d₁ , whnft'')
                                                 (d₁' , whnfu'))
                                        t<>u₁))
 

@@ -40,7 +40,7 @@ U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
     → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l ℕ A (ℕ-intr [ℕ])
     → Whnf A
     → A PE.≡ ℕ
-ℕ≡A' (noemb x) [ℕ≡A] whnfA = whnfRed*' [ℕ≡A] whnfA
+ℕ≡A' (noemb x) [ℕ≡A] whnfA = whnfRed* [ℕ≡A] whnfA
 ℕ≡A' (emb 0<1 [ℕ]) [ℕ≡A] whnfA = ℕ≡A' [ℕ] [ℕ≡A] whnfA
 
 ℕ≡A : ∀ {A Γ}
@@ -59,7 +59,7 @@ ne≡A' : ∀ {A K Γ l}
      → Whnf A
      → ∃ λ M → Neutral M × A PE.≡ M
 ne≡A' (noemb [K]) (ne₌ M D' neM K≡M) whnfA =
-  M , neM , (whnfRed*' (red D') whnfA)
+  M , neM , (whnfRed* (red D') whnfA)
 ne≡A' (emb 0<1 [K]) [K≡A] whnfA = ne≡A' [K] [K≡A] whnfA
 
 ne≡A : ∀ {A K Γ}
@@ -83,7 +83,7 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
     → Whnf A
     → ∃₂ λ H E → A PE.≡ Π H ▹ E
 Π≡A' (noemb [Π]) (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) whnfA =
-  F' , G' , whnfRed*' D' whnfA
+  F' , G' , whnfRed* D' whnfA
 Π≡A' (emb 0<1 [Π]) [Π≡A] whnfA = Π≡A' [Π] [Π≡A] whnfA
 
 Π≡A : ∀ {A F G Γ}

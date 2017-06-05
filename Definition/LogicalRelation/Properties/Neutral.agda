@@ -34,7 +34,7 @@ neuEq' : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ne A)
        → Γ ⊢ A ~ B ∷ U
        → Γ ⊩⟨ l ⟩ A ≡ B / ne-intr [A]
 neuEq' (noemb (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neA neB A B A~B =
-  let A≡K = whnfRed*' D (ne neA)
+  let A≡K = whnfRed* D (ne neA)
   in  ne₌ _ (idRed:*: B) neB (PE.subst (λ x → _ ⊢ x ~ _ ∷ _) A≡K A~B)
 neuEq' (emb 0<1 x) neB A:≡:B = neuEq' x neB A:≡:B
 

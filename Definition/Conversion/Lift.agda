@@ -58,19 +58,19 @@ mutual
                 → Γ ⊢ t ~ u ↓ A
                 → Γ ⊢ t [conv↓] u ∷ A
   lift~toConv↓' (U' .⁰ 0<1 ⊢Γ) D ([~] A D₁ whnfB k~l)
-                rewrite PE.sym (whnfRed*' D U) =
+                rewrite PE.sym (whnfRed* D U) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (conv (soundness~↑ k~l) (subset* D₁))
     in  univ ⊢t ⊢u (ne ([~] A D₁ U k~l))
   lift~toConv↓' (ℕ D) D₁ ([~] A D₂ whnfB k~l)
-                rewrite PE.sym (whrDet*' (red D , ℕ) (D₁ , whnfB)) =
+                rewrite PE.sym (whrDet* (red D , ℕ) (D₁ , whnfB)) =
     ℕ-ins ([~] A D₂ ℕ k~l)
   lift~toConv↓' (ne' K D neK K≡K) D₁ ([~] A D₂ whnfB k~l)
-                rewrite PE.sym (whrDet*' (red D , ne neK) (D₁ , whnfB)) =
+                rewrite PE.sym (whrDet* (red D , ne neK) (D₁ , whnfB)) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↑ k~l)
         A≡K = subset* D₂
     in  ne-ins (conv ⊢t A≡K) (conv ⊢u A≡K) neK ([~] A D₂ (ne neK) k~l)
   lift~toConv↓' (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) D₁ ([~] A D₂ whnfB k~l)
-                rewrite PE.sym (whrDet*' (red D , Π) (D₁ , whnfB)) =
+                rewrite PE.sym (whrDet* (red D , Π) (D₁ , whnfB)) =
     let ⊢ΠFG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ ([~] A D₂ Π k~l))
         ⊢F , ⊢G = syntacticΠ ⊢ΠFG
         neT , neU = ne~↑ k~l

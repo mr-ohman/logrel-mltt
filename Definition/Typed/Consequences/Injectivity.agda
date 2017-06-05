@@ -40,8 +40,8 @@ injectivity'' : ∀ {F G H E Γ l}
              × Γ ∙ F ⊢ G ≡ E
 injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
-  let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed*' (red D) Π)
-      H≡F' , E≡G' = Π-PE-injectivity (whnfRed*' D' Π)
+  let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed* (red D) Π)
+      H≡F' , E≡G' = Π-PE-injectivity (whnfRed* D' Π)
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
       [F]' = irrelevance' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁

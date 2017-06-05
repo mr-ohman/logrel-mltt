@@ -25,13 +25,13 @@ mutual
          → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEqT (ℕ D D') A≡B = red D
   symEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D' neM K≡M)
-         rewrite whrDet*' (red D' , ne neM) (red D₁ , ne neK₁) =
+         rewrite whrDet* (red D' , ne neM) (red D₁ , ne neK₁) =
     ne₌ _ D neK
         (~-sym K≡M)
   symEqT {Γ = Γ} (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                     (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁))
          (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
-    let ΠF₁G₁≡ΠF'G'   = whrDet*' (red D₁ , Π) (D' , Π)
+    let ΠF₁G₁≡ΠF'G'   = whrDet* (red D₁ , Π) (D' , Π)
         F₁≡F' , G₁≡G' = Π-PE-injectivity ΠF₁G₁≡ΠF'G'
         [F₁≡F] : ∀ {Δ} {ρ} [ρ] ⊢Δ → _
         [F₁≡F] {Δ} {ρ} [ρ] ⊢Δ =

@@ -2,7 +2,7 @@
 
 module Definition.Typed.Consequences.Inequality where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (U≢ℕ; U≢Π; U≢ne; ℕ≢Π; ℕ≢ne; Π≢ne)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.EqRelInstance

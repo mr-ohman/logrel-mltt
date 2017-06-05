@@ -4,6 +4,7 @@ module Definition.Untyped where
 
 open import Tools.Nat
 open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 
 infixl 30 _∙_
@@ -34,6 +35,15 @@ data Term : Set where
   natrec : Term → Term → Term → Term → Term   -- first argument is a binder
 
 
+-- Constructor injectivity
+
+Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
+Π-PE-injectivity PE.refl = PE.refl , PE.refl
+
+suc-PE-injectivity : ∀ {n m} → Term.suc n PE.≡ suc m → n PE.≡ m
+suc-PE-injectivity PE.refl = PE.refl
+
+
 -- A view of terms which cannot reduce due to free variable.
 
 data Neutral : Term → Set where
@@ -52,6 +62,36 @@ data Whnf : Term → Set where
   zero : Whnf zero
   suc  : ∀{t} → Whnf (suc t)
   ne : ∀{n} → Neutral n → Whnf n
+
+
+-- Whnf inequalities
+
+U≢ℕ : Term.U PE.≢ ℕ
+U≢ℕ ()
+
+U≢Π : ∀ {F G} → Term.U PE.≢ Π F ▹ G
+U≢Π ()
+
+U≢ne : ∀ {K} → Neutral K → U PE.≢ K
+U≢ne () PE.refl
+
+ℕ≢Π : ∀ {F G} → Term.ℕ PE.≢ Π F ▹ G
+ℕ≢Π ()
+
+ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
+ℕ≢ne () PE.refl
+
+Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
+Π≢ne () PE.refl
+
+zero≢suc : ∀ {n} → Term.zero PE.≢ suc n
+zero≢suc ()
+
+zero≢ne : ∀ {k} → Neutral k → Term.zero PE.≢ k
+zero≢ne () PE.refl
+
+suc≢ne : ∀ {n k} → Neutral k → Term.suc n PE.≢ k
+suc≢ne () PE.refl
 
 
 -- A partial view on whnfs of natural number terms.
