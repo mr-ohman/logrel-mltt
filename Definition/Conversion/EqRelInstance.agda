@@ -37,30 +37,21 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   let ⊢A = syntacticTerm x
   in  ↑ (refl ⊢A) (var x PE.refl)
 
-~-app' : ∀ {f g a b F G Γ Δ}
-      → ⊢ Γ ≡ Δ
+~-app : ∀ {f g a b F G Γ}
       → Γ ⊢ f ~ g ∷ Π F ▹ G
       → Γ ⊢ a [conv↑] b ∷ F
-      → Δ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
-~-app' Γ≡Δ (↑ A≡B x) x₁ =
+      → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
+~-app (↑ A≡B x) x₁ =
   let _ , ⊢B = syntacticEq A≡B
       B' , whnfB' , D = fullyReducible ⊢B
       ΠFG≡B' = trans A≡B (subset* (red D))
       H , E , B≡ΠHE = Π≡A ΠFG≡B' whnfB'
       F≡H , G≡E = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΠHE ΠFG≡B')
       _ , ⊢f , _ = syntacticEqTerm (soundnessConv↑Term x₁)
-  in  ↑ (stabilityEq Γ≡Δ (substTypeEq G≡E (refl ⊢f)))
+  in  ↑ (substTypeEq G≡E (refl ⊢f))
         (app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
-                       B≡ΠHE (stability~↓ Γ≡Δ ([~] _ (red D) whnfB' x)))
-             (convConv↑Term Γ≡Δ F≡H x₁))
-
-~-app : ∀ {f g a b F G Γ}
-      → Γ ⊢ f ~ g ∷ Π F ▹ G
-      → Γ ⊢ a [conv↑] b ∷ F
-      → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
-~-app x x₁ =
-  let ⊢Γ = wfEqTerm (soundnessConv↑Term x₁)
-  in  ~-app' (reflConEq ⊢Γ) x x₁
+                       B≡ΠHE ([~] _ (red D) whnfB' x))
+             (convConvTerm x₁ F≡H))
 
 ~-natrec : ∀ {z z' s s' n n' F F' Γ}
          → (Γ ∙ ℕ) ⊢ F [conv↑] F' →
