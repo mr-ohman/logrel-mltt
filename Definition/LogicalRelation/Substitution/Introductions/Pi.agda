@@ -43,26 +43,26 @@ import Tools.PropositionalEquality as PE
       ⊢G≡G = wellformedEq (proj₁ ([G]σ [σ])) (reflEq (proj₁ ([G]σ [σ])))
       ⊢ΠF▹G = Π ⊢F [σ] ▹ ⊢G [σ]
       [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
-             ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst ρ σ) F
+             ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
                 / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])))
-           → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst ρ σ) a) G)
+           → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (ρ •ₛ σ) a) G)
                (λ [Aσ] →
                {σ' : Nat → Term} →
                (Σ (Δ₁ ⊩ₛ tail σ' ∷ Γ / [Γ] / ⊢Δ₁)
                (λ [tailσ] →
                   Δ₁ ⊩⟨ l ⟩ head σ' ∷ subst (tail σ') F / proj₁ ([F] ⊢Δ₁ [tailσ]))) →
-               Δ₁ ⊩ₛ consSubst (wkSubst ρ σ) a ≡ σ' ∷ Γ ∙ F /
+               Δ₁ ⊩ₛ consSubst (ρ •ₛ σ) a ≡ σ' ∷ Γ ∙ F /
                [Γ] ∙ [F] / ⊢Δ₁ /
                consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]) [F]
                [a] →
-               Δ₁ ⊩⟨ l ⟩ subst (consSubst (wkSubst ρ σ) a) G ≡
+               Δ₁ ⊩⟨ l ⟩ subst (consSubst (ρ •ₛ σ) a) G ≡
                subst σ' G / [Aσ])
-      [G]a {ρ} a [ρ] ⊢Δ₁ [a] = ([G] {σ = consSubst (wkSubst ρ σ) a} ⊢Δ₁
+      [G]a {ρ} a [ρ] ⊢Δ₁ [a] = ([G] {σ = consSubst (ρ •ₛ σ) a} ⊢Δ₁
                               (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
                                           (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])
                                           [F] [a]))
       [G]a' : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
-            → Δ₁ ⊩⟨ l ⟩ a ∷ subst (wkSubst ρ σ) F
+            → Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
                  / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))
             → Δ₁ ⊩⟨ l ⟩ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]
       [G]a' a ρ ⊢Δ₁ [a] = irrelevance' (PE.sym (G-substWkLemma a σ G))

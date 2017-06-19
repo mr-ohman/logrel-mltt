@@ -7,7 +7,6 @@ open import Tools.Product
 
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
-     using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
 open import Definition.Typed
 open import Tools.Nat
 import Tools.PropositionalEquality as PE

@@ -39,7 +39,7 @@ wellformedSubst : ∀ {Γ Δ σ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
 wellformedSubst ε ⊢Δ [σ] = ε , [σ]
 wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
   let ⊢Γ , [tailσ]' = wellformedSubst [Γ] ⊢Δ [tailσ]
-      [A]' = irrelevance' (idSubst-lemma₀ _)
+      [A]' = irrelevance' (subst-id _)
                           (proj₁ ([A] (soundContext [Γ]) (idSubstS [Γ])))
   in  ⊢Γ ∙ wellformed [A]'
   ,   ([tailσ]' , wellformedTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ])
@@ -57,7 +57,7 @@ fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
       [idA]' = proj₁ ([A] ⊢Δ [tailσ]')
       [idt]  = proj₁ ([t] (soundContext [Δ]) (idSubstS [Δ]))
   in  [Γ] ∙ [A] , ([tailσ]'
-  ,   irrelevanceTerm'' (idSubst-lemma₀ _) (idSubst-lemma₀ _) [idA] [idA]' [idt])
+  ,   irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt])
 
 irrelevanceSubst : ∀ {Γ Δ σ}
                    (⊢Γ : ⊢ Γ) (⊢Γ' : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ)
@@ -89,7 +89,7 @@ substitutionTerm t [ ⊢Γ , ⊢Δ , σ ] | [Γ] , [A] , [t] | [Γ]' , [σ] =
 wkSubst' : ∀ {ρ σ Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
            ([ρ] : ρ ∷ Δ ⊆ Δ')
            ([σ] : Δ ⊢ₛ σ ∷ Γ / ⊢Γ / ⊢Δ)
-         → Δ' ⊢ₛ wkSubst ρ σ ∷ Γ / ⊢Γ / ⊢Δ'
+         → Δ' ⊢ₛ ρ •ₛ σ ∷ Γ / ⊢Γ / ⊢Δ'
 wkSubst' ⊢Γ ⊢Δ ⊢Δ' ρ σ with fundamentalSubst ⊢Γ ⊢Δ σ
 ... | [Γ] , [σ] =
   let q , w = wellformedSubst [Γ] ⊢Δ' (wkSubstS [Γ] ⊢Δ ⊢Δ' ρ [σ])

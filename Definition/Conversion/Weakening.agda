@@ -80,7 +80,7 @@ mutual
     in  fun-ext ⊢ρF (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
                 (wkWhnf ρ y) (wkWhnf ρ y₁)
                 (PE.subst₃ (λ x y z → Δ ∙ U.wk ρ F ⊢ x [conv↑] y ∷ z)
-                           (PE.cong₂ _∘_ (PE.sym (wkIndex-lift _)) PE.refl)
-                           (PE.cong₂ _∘_ (PE.sym (wkIndex-lift _)) PE.refl)
+                           (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)
+                           (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)
                            PE.refl
                            (wkConv↑Term (lift [ρ]) (⊢Δ ∙ ⊢ρF) t<>u))

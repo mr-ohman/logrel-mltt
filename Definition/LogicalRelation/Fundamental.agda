@@ -511,9 +511,9 @@ mutual
                in PE.subst (λ x → Δ ⊢ subst σ (natrec F z s (suc n))
                                     ⇒ (subst σ t) ∷ x)
                            (PE.trans (PE.trans (substCompEq F)
-                             (substEq (λ { zero → PE.refl
+                             (substVar-to-subst (λ { zero → PE.refl
                                          ; (suc x) → PE.trans (subst-wk (σ x))
-                                                              (substIdEq (σ x))
+                                                              (subst-id (σ x))
                                          })
                                       F))
                              (PE.sym (substCompEq F)))

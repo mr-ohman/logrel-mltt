@@ -10,6 +10,7 @@ import Tools.PropositionalEquality as PE
 infixl 30 _∙_
 infix 30 Π_▹_
 infixr 22 _▹▹_
+infixr 30 _•_ _ₛ•ₛ_ _•ₛ_ _ₛ•_
 infix 25 _[_]
 infix 25 _[_]↑
 
@@ -233,19 +234,15 @@ tail σ n = σ (suc n)
 substVar : (σ : Subst) (x : Nat) → Term
 substVar σ x = σ x
 
--- Apply a weakening to a substitution such that
--- the substitution is applied first when applying to a term.
-
-wkSubst : Wk → Subst → Subst
-wkSubst pr σ x = wk pr (σ x)
-
-wk1Subst : Subst → Subst
-wk1Subst σ x = wk1 (σ x)
-
 -- Identity substitution.
 
 idSubst : Subst
 idSubst = var
+
+-- Weaken a substitution by one.
+
+wk1Subst : Subst → Subst
+wk1Subst σ x = wk1 (σ x)
 
 -- Lift a substitution.
 
@@ -257,12 +254,6 @@ liftSubst σ (suc x) = wk1Subst σ x
 
 toSubst : Wk → Subst
 toSubst pr x = var (wkNat pr x)
-
--- Apply a weakening to a substitution such that
--- the weakening is applied first when applying to a term.
-
-purge : Wk → Subst → Subst
-purge pr σ x = σ (wkNat pr x)
 
 -- Apply a substitution to a term.
 
@@ -287,8 +278,16 @@ consSubst σ t (suc n) = σ n
 
 -- Compose two substitutions.
 
-substComp : Subst → Subst → Subst
-substComp σ σ' n = subst σ' (σ n)
+_ₛ•ₛ_ : Subst → Subst → Subst
+_ₛ•ₛ_ σ σ' x = subst σ (σ' x)
+
+-- Composition of weakening and substitution.
+
+_•ₛ_ : Wk → Subst → Subst
+_•ₛ_ ρ σ x = wk ρ (σ x)
+
+_ₛ•_ : Subst → Wk → Subst
+_ₛ•_ σ ρ x = σ (wkNat ρ x)
 
 -- Substitute the first variable of a term with an other term.
 

@@ -63,5 +63,5 @@ canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ≡ sucᵏ k
 canonicity ⊢t with fundamentalTerm ⊢t
 canonicity ⊢t | ε , [ℕ] , [t] =
   let [ℕ]' = proj₁ ([ℕ] {σ = idSubst} ε tt)
-      [t]' = irrelevanceTerm'' PE.refl (substIdEq _) [ℕ]' [ℕ]' (proj₁ ([t] ε tt))
+      [t]' = irrelevanceTerm'' PE.refl (subst-id _) [ℕ]' [ℕ]' (proj₁ ([t] ε tt))
   in  canonicity' [ℕ]' [t]'

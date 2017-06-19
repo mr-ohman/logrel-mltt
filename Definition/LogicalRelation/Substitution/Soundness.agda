@@ -23,7 +23,7 @@ soundness : ∀ {A Γ l}
 soundness [Γ] [A] =
   let ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
-  in  irrelevance' (idSubst-lemma₀ _) (proj₁ ([A] ⊢Γ [id]))
+  in  irrelevance' (subst-id _) (proj₁ ([A] ⊢Γ [id]))
 
 soundnessEq : ∀ {A B Γ l}
               ([Γ] : ⊩ₛ Γ)
@@ -34,7 +34,7 @@ soundnessEq {A = A} [Γ] [A] [A≡B] =
   let [σA] = soundness {A = A} [Γ] [A]
       ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
-  in  irrelevanceEq'' (idSubst-lemma₀ _) (idSubst-lemma₀ _)
+  in  irrelevanceEq'' (subst-id _) (subst-id _)
                       (proj₁ ([A] ⊢Γ [id])) [σA] ([A≡B] ⊢Γ [id])
 
 soundnessTerm : ∀ {t A Γ l}
@@ -46,5 +46,5 @@ soundnessTerm {A = A} [Γ] [A] [t] =
   let [σA] = soundness {A = A} [Γ] [A]
       ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
-  in  irrelevanceTerm'' (idSubst-lemma₀ _) (idSubst-lemma₀ _)
+  in  irrelevanceTerm'' (subst-id _) (subst-id _)
                         (proj₁ ([A] ⊢Γ [id])) [σA] (proj₁ ([t] ⊢Γ [id]))

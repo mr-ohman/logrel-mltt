@@ -36,9 +36,9 @@ appTerm' {t = t} {Γ = Γ} [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F'] [G']
          (Πₜ f d funcF f≡f [f] [f]₁) [u] =
   let ΠFG≡ΠF'G' = whnfRed* (red D) Π
       F≡F' , G≡G' = Π-PE-injectivity ΠFG≡ΠF'G'
-      F≡idF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
-      idG'ᵤ≡Gᵤ = PE.cong (λ x → x [ _ ]) (PE.trans (wk-id _ 1) (PE.sym G≡G'))
-      idf∘u≡f∘u = (PE.cong (λ x → x ∘ _) (wk-id _ 0))
+      F≡idF' = PE.trans F≡F' (PE.sym (wk-id _))
+      idG'ᵤ≡Gᵤ = PE.cong (λ x → x [ _ ]) (PE.trans (wk-lift-id _) (PE.sym G≡G'))
+      idf∘u≡f∘u = (PE.cong (λ x → x ∘ _) (wk-id _))
       ⊢Γ = wf ⊢F
       [u]' = irrelevanceTerm' F≡idF' [F] ([F'] T.id ⊢Γ) [u]
       [f∘u] = irrelevanceTerm'' idG'ᵤ≡Gᵤ idf∘u≡f∘u
@@ -79,15 +79,15 @@ app-congTerm' {F'} {G'} {t = t} {t' = t'} {Γ = Γ}
       F≡F' , G≡G' = Π-PE-injectivity ΠFG≡ΠF'G'
       f≡f' = whrDet*Term (d , functionWhnf funcF) (d'' , functionWhnf funcF')
       g≡g' = whrDet*Term (d' , functionWhnf funcG) (d''' , functionWhnf funcG')
-      F≡wkidF' = PE.trans F≡F' (PE.sym (wk-id _ 0))
+      F≡wkidF' = PE.trans F≡F' (PE.sym (wk-id _))
       t∘x≡wkidt∘x : {a b : Term} → U.wk id a Term.∘ b PE.≡ a ∘ b
-      t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a 0)
+      t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a)
       t∘x≡wkidt∘x' : {a : Term} → U.wk id g' Term.∘ a PE.≡ g ∘ a
-      t∘x≡wkidt∘x' {a} = PE.cong (λ x → x ∘ a) (PE.trans (wk-id _ 0) (PE.sym g≡g'))
+      t∘x≡wkidt∘x' {a} = PE.cong (λ x → x ∘ a) (PE.trans (wk-id _) (PE.sym g≡g'))
       wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ])
-                               (PE.trans (wk-id _ 1) (PE.sym G≡G'))
+                               (PE.trans (wk-lift-id _) (PE.sym G≡G'))
       wkidG₁[u']≡G[u'] = PE.cong (λ x → x [ _ ])
-                                 (PE.trans (wk-id _ 1) (PE.sym G≡G'))
+                                 (PE.trans (wk-lift-id _) (PE.sym G≡G'))
       ⊢Γ = wf ⊢F
       [u]' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [a]
       [u']' = irrelevanceTerm' F≡wkidF' [F] ([F]₁ T.id ⊢Γ) [a']

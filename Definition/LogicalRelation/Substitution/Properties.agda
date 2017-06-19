@@ -42,7 +42,7 @@ consSubstSEq [Γ] ⊢Δ [σ] [σ≡σ'] [A] [t] =
 wkSubstS : ∀ {ρ σ Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
            ([ρ] : ρ ∷ Δ ⊆ Δ')
            ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-         → Δ' ⊩ₛ wkSubst ρ σ ∷ Γ / [Γ] / ⊢Δ'
+         → Δ' ⊩ₛ ρ •ₛ σ ∷ Γ / [Γ] / ⊢Δ'
 wkSubstS ε ⊢Δ ⊢Δ' ρ [σ] = tt
 wkSubstS {σ = σ} {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] =
   let [tailσ] = wkSubstS [Γ] ⊢Δ ⊢Δ' ρ (proj₁ [σ])
@@ -56,7 +56,7 @@ wkSubstSEq : ∀ {ρ σ σ' Γ Δ Δ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ) (⊢�
              ([ρ] : ρ ∷ Δ ⊆ Δ')
              ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
              ([σ≡σ'] : Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ])
-           → Δ' ⊩ₛ wkSubst ρ σ ≡ wkSubst ρ σ' ∷ Γ / [Γ]
+           → Δ' ⊩ₛ ρ •ₛ σ ≡ ρ •ₛ σ' ∷ Γ / [Γ]
                 / ⊢Δ' / wkSubstS [Γ] ⊢Δ ⊢Δ' [ρ] [σ]
 wkSubstSEq ε ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] = tt
 wkSubstSEq {Γ = Γ ∙ A} ([Γ] ∙ x) ⊢Δ ⊢Δ' ρ [σ] [σ≡σ'] =
@@ -114,7 +114,7 @@ mutual
   soundContext : ∀ {Γ} → ⊩ₛ Γ → ⊢ Γ
   soundContext ε = ε
   soundContext (x ∙ x₁) =
-    soundContext x ∙ wellformed (irrelevance' (idSubst-lemma₀ _)
+    soundContext x ∙ wellformed (irrelevance' (subst-id _)
                                              (proj₁ (x₁ (soundContext x)
                                                         (idSubstS x))))
 
@@ -128,13 +128,13 @@ mutual
                          (wellformed (proj₁ ([A] (soundContext [Γ])
                                                 (idSubstS [Γ]))))
                          (idSubstS [Γ])
-        [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (idSubst-lemma₀ A))
+        [tailσ] = S.irrelevanceSubst' (PE.cong (_∙_ Γ) (subst-id A))
                                       [Γ] [Γ] ⊢Γ∙A' ⊢Γ∙A [A]'
         var0 = var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
                                   (wk-subst A)
                                   (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A)
                                                      ∈ (Γ ∙ x))
-                                            (idSubst-lemma₀ A) here))
+                                            (subst-id A) here))
     in  [tailσ]
     ,   neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
                 (var zero)

@@ -72,9 +72,9 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
   let ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
       [ne]' = proj₁ ([ne] ⊢Γ [id])
-      [ne≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _)
+      [ne≡A]' = irrelevanceEq'' {B' = A} PE.refl (subst-id _)
                                 [ne]' [ne]' ([ne≡A] ⊢Γ [id])
-      neK' = PE.subst Neutral (PE.sym (substIdEq _)) neK
+      neK' = PE.subst Neutral (PE.sym (subst-id _)) neK
   in  ne≡A' (ne-elim neK' [ne]')
             (irrelevanceEq [ne]' (ne-intr (ne-elim neK' [ne]')) [ne≡A]') whnfA
 
@@ -95,6 +95,6 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
   let ⊢Γ = soundContext [Γ]
       [id] = idSubstS [Γ]
       [Π]' = proj₁ ([Π] ⊢Γ [id])
-      [Π≡A]' = irrelevanceEq'' {B' = A} PE.refl (substIdEq _)
+      [Π≡A]' = irrelevanceEq'' {B' = A} PE.refl (subst-id _)
                                [Π]' [Π]' ([Π≡A] ⊢Γ [id])
   in  Π≡A' (Π-elim [Π]') (irrelevanceEq [Π]' (Π-intr (Π-elim [Π]')) [Π≡A]') whnfA

@@ -3,8 +3,7 @@
 module Definition.Typed.Weakening where
 
 open import Definition.Untyped as U hiding (wk)
-open import Definition.Untyped.Properties as UP
-     using (wkIndex-step; wkIndex-lift; wk-β; wk-β-natrec)
+open import Definition.Untyped.Properties
 open import Definition.Typed
 
 open import Tools.Nat
@@ -29,7 +28,7 @@ lift η •ₜ id = lift η
 lift η •ₜ step η′ = step (η •ₜ η′)
 _•ₜ_ {lift ρ} {lift ρ'} {Γ ∙ A} (lift η) (lift η′) =
   PE.subst (λ x → lift (ρ • ρ') ∷ Γ ∙ A ⊆ x)
-           (PE.cong₂ _∙_ PE.refl (PE.sym (UP.wk-comp-comm ρ ρ' A)))
+           (PE.cong₂ _∙_ PE.refl (PE.sym (wk-comp ρ ρ' A)))
            (lift (η •ₜ η′))
 
 
@@ -39,18 +38,18 @@ wkIndex : ∀ {Γ Δ n A ρ} → ρ ∷ Γ ⊆ Δ →
         let ρA = U.wk ρ A
             ρn = wkNat ρ n
         in  ⊢ Δ → n ∷ A ∈ Γ → ρn ∷ ρA ∈ Δ
-wkIndex id ⊢Δ i = PE.subst (λ x → _ ∷ x ∈ _) (PE.sym (UP.wk-id _ 0)) i
+wkIndex id ⊢Δ i = PE.subst (λ x → _ ∷ x ∈ _) (PE.sym (wk-id _)) i
 wkIndex (step ρ) (⊢Δ ∙ A) i = PE.subst (λ x → _ ∷ x ∈ _)
-                                       (wkIndex-step _)
+                                       (wk1-wk _ _)
                                        (there (wkIndex ρ ⊢Δ i))
 wkIndex (lift ρ) (⊢Δ ∙ A) (there i) = PE.subst (λ x → _ ∷ x ∈ _)
-                                               (wkIndex-lift _)
+                                               (wk1-wk≡lift-wk1 _ _)
                                                (there (wkIndex ρ ⊢Δ i))
 wkIndex (lift ρ) ⊢Δ here =
   let G = _
       n = _
   in  PE.subst (λ x → n ∷ x ∈ G)
-               (wkIndex-lift _)
+               (wk1-wk≡lift-wk1 _ _)
                here
 
 mutual
@@ -130,9 +129,9 @@ mutual
     in  fun-ext ρF (wkTerm ρ ⊢Δ f)
                    (wkTerm ρ ⊢Δ g)
                    (PE.subst (λ t → _ ⊢ t ∘ _ ≡ _ ∷ _)
-                             (PE.sym (wkIndex-lift _))
+                             (PE.sym (wk1-wk≡lift-wk1 _ _))
                              (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
-                                       (PE.sym (wkIndex-lift _))
+                                       (PE.sym (wk1-wk≡lift-wk1 _ _))
                                        (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
   wkEqTerm ρ ⊢Δ (suc-cong m≡n) = suc-cong (wkEqTerm ρ ⊢Δ m≡n)
   wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F}

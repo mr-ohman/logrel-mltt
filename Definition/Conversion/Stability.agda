@@ -34,18 +34,18 @@ mutual
         , (wk1Subst' ⊢Γ ⊢Δ Δ⊢B [σ]
         , conv (var (⊢Δ ∙ Δ⊢B) here)
                (PE.subst (λ x → _ ⊢ _ ≡ x)
-                         (PE.trans (PE.sym (idSubst-lemma₀ (wk1 A))) (subst-wk A))
+                         (PE.trans (PE.sym (subst-id (wk1 A))) (subst-wk A))
                          (wkEq (step id) (⊢Δ ∙ Δ⊢B) (stabilityEq Γ≡Δ (sym A≡B))))) ]
 
   stability : ∀ {A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A → Δ ⊢ A
   stability Γ≡Δ A =
     let q = substitution A (substx Γ≡Δ)
-    in  PE.subst (λ x → _ ⊢ x) (idSubst-lemma₀ _) q
+    in  PE.subst (λ x → _ ⊢ x) (subst-id _) q
 
   stabilityEq : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → Δ ⊢ A ≡ B
   stabilityEq Γ≡Δ A≡B =
     let q = substitutionEq A≡B (substx Γ≡Δ)
-    in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (idSubst-lemma₀ _) (idSubst-lemma₀ _) q
+    in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (subst-id _) (subst-id _) q
 
 symConEq : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Δ ≡ Γ
 symConEq ε = ε
@@ -54,7 +54,7 @@ symConEq (Γ≡Δ ∙ A≡B) = symConEq Γ≡Δ ∙ stabilityEq Γ≡Δ (sym A�
 stabilityTerm : ∀ {t A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ∷ A → Δ ⊢ t ∷ A
 stabilityTerm Γ≡Δ t =
   let q = substitutionTerm t (substx Γ≡Δ)
-  in  PE.subst₂ (λ x y → _ ⊢ x ∷ y) (idSubst-lemma₀ _) (idSubst-lemma₀ _) q
+  in  PE.subst₂ (λ x y → _ ⊢ x ∷ y) (subst-id _) (subst-id _) q
 
 -- Cannot solve:
 -- stabilityVar : ∀ {x A Γ Δ} → ⊢ Γ ≡ Δ → x ∷ A ∈ Γ → x ∷ A ∈ Δ

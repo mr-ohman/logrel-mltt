@@ -51,96 +51,6 @@ natrec-subst* C c g (x ⇨ n⇒n') [ℕ] [n'] prop =
   in  natrec-subst C c g x ⇨ conv* (natrec-subst* C c g n⇒n' [ℕ] [n'] prop)
                    (prop q a (symEqTerm [ℕ] s))
 
-natrecSucCaseLemma : ∀ {σ} (x : Nat) →
-      (substComp (liftSubst σ)
-        (wkSubst (step id)
-        (consSubst (wk1Subst idSubst) (suc (var zero))))) x
-      PE.≡
-      (substComp (consSubst (wk1Subst idSubst) (suc (var zero)))
-        (purge (step id) (liftSubst (liftSubst σ)))) x
-natrecSucCaseLemma zero = PE.refl
-natrecSucCaseLemma {σ} (suc x) =
-  PE.trans (subst-wk (σ x))
-           (PE.sym (PE.trans (wkIndex-step (step id))
-                             (wk2subst (step (step id)) (σ x))))
-
-natrecSucCase : ∀ σ F → Term.Π ℕ ▹
-      (Π subst (liftSubst σ) F ▹
-       subst (liftSubst (liftSubst σ)) (wk1 (F [ suc (var zero) ]↑)))
-      PE.≡
-      Π ℕ ▹
-      (subst (liftSubst σ) F ▹▹
-       subst (liftSubst σ) F [ suc (var zero) ]↑)
-natrecSucCase σ F =
-  PE.cong₂ Π_▹_ PE.refl
-    (PE.cong₂ Π_▹_ PE.refl
-       (PE.trans (PE.trans (subst-wk (F [ suc (var zero) ]↑))
-                           (substCompEq F))
-                 (PE.sym (PE.trans (wk-subst (subst (liftSubst σ) F))
-                                   (PE.trans (substCompEq F)
-                                             (substEq natrecSucCaseLemma F))))))
-
-natrecIrrelevantSubstLemma : ∀ F z s m σ (x : Nat) →
-     (substComp (consSubst (λ x → var (suc x)) (suc (var 0)))
-       (purge (step id)
-        (substComp (liftSubst (liftSubst σ))
-         (substComp (liftSubst (consSubst idSubst m))
-          (consSubst idSubst
-           (natrec (subst (liftSubst σ) F) (subst σ z) (subst σ s) m)))))) x
-           PE.≡ (consSubst σ (suc m)) x
-natrecIrrelevantSubstLemma F z s m σ zero =
-  PE.cong suc (PE.trans (subst-wk m) (substIdEq m))
-natrecIrrelevantSubstLemma F z s m σ (suc x) =
-  PE.trans (subst-wk (U.wk (step id) (σ x)))
-           (PE.trans (subst-wk (σ x))
-                     (substIdEq (σ x)))
-
-natrecIrrelevantSubst : ∀ F z s m σ →
-      subst (consSubst σ (suc m)) F PE.≡
-      subst (liftSubst (consSubst idSubst m))
-      (subst (liftSubst (liftSubst σ)) (wk1 (F [ suc (var zero) ]↑)))
-      [ natrec (subst (liftSubst σ) F) (subst σ z) (subst σ s) m ]
-natrecIrrelevantSubst F z s m σ =
-  -- TODO Make nicer
-  PE.sym (PE.trans (substCompEq (subst (liftSubst (liftSubst σ))
-        (U.wk (step id)
-         (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F))))
-         (PE.trans (substCompEq (U.wk (step id)
-        (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F)))
-        (PE.trans
-           (subst-wk (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F))
-           (PE.trans (substCompEq F)
-                     (substEq (natrecIrrelevantSubstLemma F z s m σ) F)))))
-
-natrecIrrelevantSubstLemma' : ∀ F z s n (x : Nat) →
--- TODO Make nicer
-      (substComp (consSubst (λ z₁ → var (suc z₁)) (suc (var zero)))
-       (purge (step id)
-        (substComp (liftSubst (consSubst idSubst n))
-         (consSubst idSubst (natrec F z s n))))) x
-      PE.≡ (consSubst var (suc n)) x
-natrecIrrelevantSubstLemma' F z s n zero =
-  PE.cong suc (PE.trans (subst-wk n) (substIdEq n))
-natrecIrrelevantSubstLemma' F z s n (suc x) = PE.refl
-
-natrecIrrelevantSubst' : ∀ F z s n →
-      subst (liftSubst (consSubst idSubst n))
-      (wk1 (F [ suc (var zero) ]↑))
-      [ natrec F z s n ]
-      PE.≡
-      F [ suc n ]
-natrecIrrelevantSubst' F z s n =
-  PE.trans (substCompEq (U.wk (step id)
-                              (subst (consSubst (λ x → var (suc x))
-                                                (suc (var zero)))
-                                     F)))
-           (PE.trans (subst-wk (subst (consSubst (λ x → var (suc x))
-                                                 (suc (var zero)))
-                                      F))
-                     (PE.trans (substCompEq F)
-                               (substEq (natrecIrrelevantSubstLemma' F z s n)
-                                        F)))
-
 sucCase₃ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ)
            ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
          → Γ ∙ ℕ ⊩ₛ⟨ l ⟩t suc (var zero) ∷ ℕ / [Γ] ∙ [ℕ]
@@ -241,7 +151,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                                  (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σsm])
                                         (reflSubst [Γ] ⊢Δ [σ] , [σn≡σsm]))
       [σFₘ] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                             (substEq substConcatSingleton F)))
+                                             (substVar-to-subst substConcatSingleton F)))
                            (proj₁ ([F] ⊢Δ ([σ] , [m])))
       [σFₛₘ]' = irrelevance' (natrecIrrelevantSubst F z s m σ)
                              (proj₁ ([F] ⊢Δ ([σ] , [σsm])))
@@ -298,7 +208,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                                 (PE.sym (substCompEq F))
                                 [σFₙ]' [σFₙ] [Fₙ≡F₀]'
       [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                  (PE.trans (substEq substConcatSingleton' F)
+                                  (PE.trans (substVar-to-subst substConcatSingleton' F)
                                             (PE.sym (singleSubstLemma zero σ F)))
                                   [σFₙ]' [σFₙ] [Fₙ≡F₀]'
       [σz] = proj₁ ([z] ⊢Δ [σ])
@@ -458,7 +368,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                    (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σsn'])
                                           (reflSubst [Γ] ⊢Δ [σ] , [σn≡σsn']))
       [σFₙ'] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                              (substEq substConcatSingleton F)))
+                                              (substVar-to-subst substConcatSingleton F)))
                             (proj₁ ([F] ⊢Δ ([σ] , [n'])))
       [σFₛₙ']' = irrelevance' (natrecIrrelevantSubst F z s n' σ)
                               (proj₁ ([F] ⊢Δ ([σ] , [σsn'])))
@@ -479,10 +389,10 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                            ([σ'] , [σ'sm'])
                                            (reflSubst [Γ] ⊢Δ [σ'] , [σ'm≡σ'sm']))
       [σ'Fₘ'] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                               (substEq substConcatSingleton F)))
+                                               (substVar-to-subst substConcatSingleton F)))
                              (proj₁ ([F] ⊢Δ ([σ'] , [m'])))
       [σ'F'ₘ'] = irrelevance' (PE.sym (PE.trans (substCompEq F')
-                                                (substEq substConcatSingleton F')))
+                                                (substVar-to-subst substConcatSingleton F')))
                               (proj₁ ([F'] ⊢Δ ([σ'] , [m'])))
       [σ'F'ₛₘ']' = irrelevance' (natrecIrrelevantSubst F' z' s' m' σ')
                                 (proj₁ ([F'] ⊢Δ ([σ'] , [σ'sm'])))
@@ -640,11 +550,11 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                   (PE.sym (substCompEq F'))
                                   [σ'F'ₘ]' [σ'F'ₘ] [F'ₘ≡F'₀]'
       [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                  (PE.trans (substEq substConcatSingleton' F)
+                                  (PE.trans (substVar-to-subst substConcatSingleton' F)
                                             (PE.sym (singleSubstLemma zero σ F)))
                                   [σFₙ]' [σFₙ] [Fₙ≡F₀]'
       [F'ₘ≡F'₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F'))
-                                    (PE.trans (substEq substConcatSingleton' F')
+                                    (PE.trans (substVar-to-subst substConcatSingleton' F')
                                               (PE.sym (singleSubstLemma zero σ' F')))
                                     [σ'F'ₘ]' [σ'F'ₘ] [F'ₘ≡F'₀]'
       [σz] = proj₁ ([z] ⊢Δ [σ])
@@ -921,7 +831,7 @@ natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n]
       n' = subst σ n
       eqPrf = PE.trans (singleSubstLemma n' σ F)
                        (PE.sym (PE.trans (substCompEq F)
-                               (substEq substConcatSingleton' F)))
+                               (substVar-to-subst substConcatSingleton' F)))
   in  irrelevanceTerm' eqPrf (irrelevance' (PE.sym (singleSubstLemma n' σ F))
                                            (proj₁ ([F]' ⊢Δ ([σ] , [σn]'))))
                         (proj₁ ([Fₙ] ⊢Δ [σ]))

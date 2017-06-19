@@ -70,12 +70,12 @@ wk {ρ} {Γ} {Δ} {A} {l} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
       [F]' : ∀ {ρ ρ' E} ([ρ] : ρ ∷ Δ ⊆ E) ([ρ'] : ρ' ∷ Γ ⊆ Δ) (⊢E : ⊢ E)
            → E ⊩⟨ l ⟩ U.wk ρ (U.wk ρ' F)
       [F]' {ρ} {ρ'} [ρ] [ρ'] ⊢E = irrelevance'
-                              (PE.sym (wk-comp-comm ρ ρ' F))
+                              (PE.sym (wk-comp ρ ρ' F))
                               ([F] ([ρ] •ₜ [ρ']) ⊢E)
       [a]' : ∀ {ρ ρ' E a} ([ρ] : ρ ∷ Δ ⊆ E) ([ρ'] : ρ' ∷ Γ ⊆ Δ) (⊢E : ⊢ E)
              ([a] : E ⊩⟨ l ⟩ a ∷ U.wk ρ (U.wk ρ' F) / [F]' [ρ] [ρ'] ⊢E)
            → E ⊩⟨ l ⟩ a ∷ U.wk (ρ • ρ') F / [F] ([ρ] •ₜ [ρ']) ⊢E
-      [a]' {ρ} {ρ'} [ρ] [ρ'] ⊢E [a] = irrelevanceTerm' (wk-comp-comm ρ ρ' F)
+      [a]' {ρ} {ρ'} [ρ] [ρ'] ⊢E [a] = irrelevanceTerm' (wk-comp ρ ρ' F)
                                           ([F]' [ρ] [ρ'] ⊢E) ([F] ([ρ] •ₜ [ρ']) ⊢E) [a]
       [G]' : ∀ {ρ ρ' E a} ([ρ] : ρ ∷ Δ ⊆ E) ([ρ'] : ρ' ∷ Γ ⊆ Δ) (⊢E : ⊢ E)
              ([a] : E ⊩⟨ l ⟩ a ∷ U.wk ρ (U.wk ρ' F) / [F]' [ρ] [ρ'] ⊢E)
@@ -84,20 +84,20 @@ wk {ρ} {Γ} {Δ} {A} {l} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
   in  Π' (U.wk ρ F) (U.wk (lift ρ) G) (T.wkRed:*: [ρ] ⊢Δ D) ⊢ρF
            (T.wk (lift [ρ]) (⊢Δ ∙ ⊢ρF) ⊢G)
            (≅-wk [ρ] ⊢Δ A≡A)
-           (λ {ρ₁} [ρ₁] ⊢Δ₁ → irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F))
+           (λ {ρ₁} [ρ₁] ⊢Δ₁ → irrelevance' (PE.sym (wk-comp ρ₁ ρ F))
                                     ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁))
-           (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] → irrelevance' (wk-comp-comm-subst ρ₁ ρ G)
+           (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] → irrelevance' (wk-comp-subst ρ₁ ρ G)
                                         ([G]' [ρ₁] [ρ] ⊢Δ₁ [a]))
            (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] [b] [a≡b] →
-              let [a≡b]' = irrelevanceEqTerm' (wk-comp-comm ρ₁ ρ F)
+              let [a≡b]' = irrelevanceEqTerm' (wk-comp ρ₁ ρ F)
                                               ([F]' [ρ₁] [ρ] ⊢Δ₁)
                                               ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁)
                                               [a≡b]
-              in  irrelevanceEq'' (wk-comp-comm-subst ρ₁ ρ G)
-                                  (wk-comp-comm-subst ρ₁ ρ G)
+              in  irrelevanceEq'' (wk-comp-subst ρ₁ ρ G)
+                                  (wk-comp-subst ρ₁ ρ G)
                                   ([G]' [ρ₁] [ρ] ⊢Δ₁ [a])
                                   (irrelevance'
-                                            (wk-comp-comm-subst ρ₁ ρ G)
+                                            (wk-comp-subst ρ₁ ρ G)
                                             ([G]' [ρ₁] [ρ] ⊢Δ₁ [a]))
                                   (G-ext ([ρ₁] •ₜ [ρ]) ⊢Δ₁
                                          ([a]' [ρ₁] [ρ] ⊢Δ₁ [a])
@@ -118,21 +118,21 @@ wkEq {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                 (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
   -- TODO Minimize duplicates
   Π₌ (U.wk ρ F') (U.wk (lift ρ) G') (T.wkRed* [ρ] ⊢Δ D') (≅-wk [ρ] ⊢Δ A≡B)
-     (λ {ρ₁} [ρ₁] ⊢Δ₁ → irrelevanceEq'' (PE.sym (wk-comp-comm ρ₁ ρ F))
-                                 (PE.sym (wk-comp-comm ρ₁ ρ F'))
+     (λ {ρ₁} [ρ₁] ⊢Δ₁ → irrelevanceEq'' (PE.sym (wk-comp ρ₁ ρ F))
+                                 (PE.sym (wk-comp ρ₁ ρ F'))
                                  ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁)
-                                 (irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F))
+                                 (irrelevance' (PE.sym (wk-comp ρ₁ ρ F))
                                                ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁))
                                  ([F≡F'] ([ρ₁] •ₜ [ρ]) ⊢Δ₁))
      (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] →
-        let [a]' = irrelevanceTerm' (wk-comp-comm ρ₁ ρ F)
-                                    (irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F))
+        let [a]' = irrelevanceTerm' (wk-comp ρ₁ ρ F)
+                                    (irrelevance' (PE.sym (wk-comp ρ₁ ρ F))
                                                   ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁))
                                     ([F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁) [a]
-        in  irrelevanceEq'' (wk-comp-comm-subst ρ₁ ρ G)
-                            (wk-comp-comm-subst ρ₁ ρ G')
+        in  irrelevanceEq'' (wk-comp-subst ρ₁ ρ G)
+                            (wk-comp-subst ρ₁ ρ G')
                             ([G] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]')
-                            (irrelevance' (wk-comp-comm-subst ρ₁ ρ G)
+                            (irrelevance' (wk-comp-subst ρ₁ ρ G)
                                           ([G] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'))
                             ([G≡G'] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'))
 wkEq ρ ⊢Δ (emb 0<1 x) A≡B = wkEq ρ ⊢Δ x A≡B
@@ -152,28 +152,28 @@ wkTerm {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d func
      (≅ₜ-wk [ρ] ⊢Δ f≡f)
      -- TODO Minimize duplicates
      (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] [b] [a≡b] →
-        let F-compEq = wk-comp-comm ρ₁ ρ F
-            G-compEq = wk-comp-comm-subst ρ₁ ρ G
+        let F-compEq = wk-comp ρ₁ ρ F
+            G-compEq = wk-comp-subst ρ₁ ρ G
             [F]₁ = [F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁
-            [F]₂ = irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F)) [F]₁
+            [F]₂ = irrelevance' (PE.sym (wk-comp ρ₁ ρ F)) [F]₁
             [a]' = irrelevanceTerm' F-compEq [F]₂ [F]₁ [a]
             [b]' = irrelevanceTerm' F-compEq [F]₂ [F]₁ [b]
             [G]₁ = [G] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'
             [G]₂ = irrelevance' G-compEq [G]₁
             [a≡b]' = irrelevanceEqTerm' F-compEq [F]₂ [F]₁ [a≡b]
-        in  irrelevanceEqTerm'' (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp-comm ρ₁ ρ _)))
-                                (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp-comm ρ₁ ρ _)))
+        in  irrelevanceEqTerm'' (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp ρ₁ ρ _)))
+                                (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp ρ₁ ρ _)))
                                 G-compEq
                                 [G]₁ [G]₂
                                 ([f] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]' [b]' [a≡b]'))
      (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] →
         let [F]₁ = [F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁
-            [F]₂ = irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F)) [F]₁
-            [a]' = irrelevanceTerm' (wk-comp-comm ρ₁ ρ F) [F]₂ [F]₁ [a]
+            [F]₂ = irrelevance' (PE.sym (wk-comp ρ₁ ρ F)) [F]₁
+            [a]' = irrelevanceTerm' (wk-comp ρ₁ ρ F) [F]₂ [F]₁ [a]
             [G]₁ = [G] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'
-            [G]₂ = irrelevance' (wk-comp-comm-subst ρ₁ ρ G) [G]₁
-        in  irrelevanceTerm'' (wk-comp-comm-subst ρ₁ ρ G)
-                              (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp-comm ρ₁ ρ _)))
+            [G]₂ = irrelevance' (wk-comp-subst ρ₁ ρ G) [G]₁
+        in  irrelevanceTerm'' (wk-comp-subst ρ₁ ρ G)
+                              (PE.cong (λ x → x ∘ _) (PE.sym (wk-comp ρ₁ ρ _)))
                               [G]₁ [G]₂ ([f]₁ ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'))
 wkTerm ρ ⊢Δ (emb 0<1 x) t = wkTerm ρ ⊢Δ x t
 
@@ -199,13 +199,13 @@ wkEqTerm {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
           -- TODO Minimize duplicates
           (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] →
              let [F]₁ = [F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁
-                 [F]₂ = irrelevance' (PE.sym (wk-comp-comm ρ₁ ρ F)) [F]₁
-                 [a]' = irrelevanceTerm' (wk-comp-comm ρ₁ ρ F) [F]₂ [F]₁ [a]
+                 [F]₂ = irrelevance' (PE.sym (wk-comp ρ₁ ρ F)) [F]₁
+                 [a]' = irrelevanceTerm' (wk-comp ρ₁ ρ F) [F]₂ [F]₁ [a]
                  [G]₁ = [G] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'
-                 [G]₂ = irrelevance' (wk-comp-comm-subst ρ₁ ρ G) [G]₁
-             in  irrelevanceEqTerm'' (PE.cong (λ y → y ∘ _) (PE.sym (wk-comp-comm ρ₁ ρ _)))
-                                     (PE.cong (λ y → y ∘ _) (PE.sym (wk-comp-comm ρ₁ ρ _)))
-                                     (wk-comp-comm-subst ρ₁ ρ G)
+                 [G]₂ = irrelevance' (wk-comp-subst ρ₁ ρ G) [G]₁
+             in  irrelevanceEqTerm'' (PE.cong (λ y → y ∘ _) (PE.sym (wk-comp ρ₁ ρ _)))
+                                     (PE.cong (λ y → y ∘ _) (PE.sym (wk-comp ρ₁ ρ _)))
+                                     (wk-comp-subst ρ₁ ρ G)
                                      [G]₁ [G]₂
                                      ([f≡g] ([ρ₁] •ₜ [ρ]) ⊢Δ₁ [a]'))
 wkEqTerm ρ ⊢Δ (emb 0<1 x) t≡u = wkEqTerm ρ ⊢Δ x t≡u

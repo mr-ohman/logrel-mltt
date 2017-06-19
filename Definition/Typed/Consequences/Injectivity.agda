@@ -44,7 +44,7 @@ injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
       H≡F' , E≡G' = Π-PE-injectivity (whnfRed* D' Π)
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
-      [F]' = irrelevance' (PE.trans (wk-id _ zero) (PE.sym F≡F₁)) [F]₁
+      [F]' = irrelevance' (PE.trans (wk-id _) (PE.sym F≡F₁)) [F]₁
       [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
                       (refl (var (⊢Γ ∙ ⊢F) here))
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
@@ -52,8 +52,8 @@ injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                        (PE.trans (substVar0Id _) (PE.sym G≡G₁))
                        (PE.sym F≡F₁) [G]₁
       [F≡H]₁ = [F≡F'] id ⊢Γ
-      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _ zero) (PE.sym F≡F₁))
-                               (PE.trans (wk-id _ zero) (PE.sym H≡F'))
+      [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _) (PE.sym F≡F₁))
+                               (PE.trans (wk-id _) (PE.sym H≡F'))
                                [F]₁ [F]' [F≡H]₁
       [G≡E]₁ = [G≡G'] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁))

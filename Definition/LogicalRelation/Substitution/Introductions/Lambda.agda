@@ -281,12 +281,6 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                              (lamt ⊢Δ [σ']))
                   σlamt∘a≡σ'lamt∘a)
 
-lemma4 : ∀ ρ σ a x → substComp (liftSubst σ)
-      (purge (lift ρ) (consSubst idSubst a)) x
-      PE.≡ consSubst (wkSubst ρ σ) a x
-lemma4 ρ σ a zero = PE.refl
-lemma4 ρ σ a (suc x) = PE.trans (subst-wk (σ x)) (PE.sym (wk2subst ρ (σ x)))
-
 
 fun-extEqTerm : ∀ {f g F G Γ Δ σ l}
                 ([Γ] : ⊩ₛ Γ)
@@ -330,14 +324,10 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
       ⊢ΠFG = wellformed [σΠFG]
       f≡f₁' = proj₂ (redSubst*Term d [σΠFG] (Πₜ f₁ (idRedTerm:*: ⊢u) funcF f≡f [f] [f]₁))
       g≡g₁' = proj₂ (redSubst*Term d₁ [σΠFG] (Πₜ g₁ (idRedTerm:*: ⊢u₁) funcG g≡g [g] [g]₁))
-      Geq = PE.trans (subst-wk (subst (liftSubst σ) G))
-                     (PE.trans (substEq (λ { zero → PE.refl ; (suc x) → PE.refl })
-                                        (subst (liftSubst σ) G))
-                               (substIdEq (subst (liftSubst σ) G)))
-      eq'  = irrelevanceEqTerm' Geq [σG]' [σG]
+      eq'  = irrelevanceEqTerm' (Geq σ G) [σG]' [σG]
                                 (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
                                               (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] f≡f₁') var0 var0 var0≡0)
-      eq₁' = irrelevanceEqTerm' Geq [σG]' [σG]
+      eq₁' = irrelevanceEqTerm' (Geq σ G) [σG]' [σG]
                                 (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
                                               (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] g≡g₁') var0 var0 var0≡0)
       eq   = wellformedTermEq [σG] eq'
@@ -356,7 +346,7 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
                  gEq = PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl
                  GEq = PE.sym (PE.trans (subst-wk (subst (liftSubst σ) G))
                                         (PE.trans (substCompEq G)
-                                                  (substEq (lemma4 ρ σ a) G)))
+                                                  (substVar-to-subst (lemma4 ρ σ a) G)))
                  f≡g = irrelevanceEqTerm'' fEq gEq GEq
                          (proj₁ ([G] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ] , [a]')))
                          ([G]' [ρ] ⊢Δ₁ [a])
