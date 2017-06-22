@@ -33,7 +33,7 @@ mutual
      ,  var (PE.subst (λ y → _ ⊢ var y ∷ _) x≡y (stabilityTerm Γ≡Δ x))
             (PE.sym x≡y)
   sym~↑ Γ≡Δ (app t~u x) =
-    let [ ⊢Γ , ⊢Δ , _ ] = substx Γ≡Δ
+    let ⊢Γ , ⊢Δ , _ = substx Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         F' , G' , ΠF'G'≡B = Π≡A A≡B whnfB
         F≡F' , G≡G' = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ΠF'G'≡B A≡B)
@@ -41,7 +41,7 @@ mutual
     ,   app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF'G'≡B u~t)
             (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F'))
   sym~↑ Γ≡Δ (natrec x x₁ x₂ t~u) =
-    let [ ⊢Γ , ⊢Δ , _ ] = substx Γ≡Δ
+    let ⊢Γ , ⊢Δ , _ = substx Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         B≡ℕ = ℕ≡A A≡B whnfB
         F≡G = stabilityEq (Γ≡Δ ∙ refl (ℕ ⊢Γ)) (soundnessConv↑ x)
@@ -68,10 +68,10 @@ mutual
 
   symConv↓ : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A [conv↓] B → Δ ⊢ B [conv↓] A
   symConv↓ Γ≡Δ (U-refl x) =
-    let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
+    let _ , ⊢Δ , _ = substx Γ≡Δ
     in  U-refl ⊢Δ
   symConv↓ Γ≡Δ (ℕ-refl x) =
-    let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
+    let _ , ⊢Δ , _ = substx Γ≡Δ
     in  ℕ-refl ⊢Δ
   symConv↓ Γ≡Δ (ne A~B) =
     let B , whnfB , U≡B , B~A = sym~↓ Γ≡Δ A~B
@@ -99,7 +99,7 @@ mutual
   symConv↓Term Γ≡Δ (univ x x₁ x₂) =
     univ (stabilityTerm Γ≡Δ x₁) (stabilityTerm Γ≡Δ x) (symConv↓ Γ≡Δ x₂)
   symConv↓Term Γ≡Δ (zero-refl x) =
-    let [ _ , ⊢Δ , _ ] = substx Γ≡Δ
+    let _ , ⊢Δ , _ = substx Γ≡Δ
     in  zero-refl ⊢Δ
   symConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (symConv↑Term Γ≡Δ t<>u)
   symConv↓Term Γ≡Δ (fun-ext x x₁ x₂ y y₁ t<>u) =
