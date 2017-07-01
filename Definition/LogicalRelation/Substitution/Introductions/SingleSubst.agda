@@ -36,14 +36,13 @@ substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
          ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
        → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
 substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let Geq = PE.sym (PE.trans (substCompEq G) (substVar-to-subst substConcatSingleton' G))
+  let Geq = newlem1 G
       G[t] = proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ]))))
       G[t]' = irrelevance' Geq G[t]
   in  G[t]'
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          irrelevanceEq'' Geq
-                         (PE.sym (PE.trans (substCompEq G)
-                                           (substVar-to-subst substConcatSingleton' G)))
+                         (newlem1 G)
                          G[t] G[t]'
                          (proj₂ ([G] ⊢Δ
                                      ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -64,8 +63,8 @@ substSEq : ∀ {F F' G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
                    / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSEq {F} {F'} {G} {G'} {t} {t'}
          [Γ] [F] [F'] [F≡F'] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {σ = σ} ⊢Δ [σ] =
-  let Geq = PE.sym (PE.trans (substCompEq G) (substVar-to-subst substConcatSingleton' G))
-      G'eq = PE.sym (PE.trans (substCompEq G') (substVar-to-subst substConcatSingleton' G'))
+  let Geq = newlem1 G
+      G'eq = newlem1 G'
       G[t] = (proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ])))))
       G[t]' = irrelevance' Geq G[t]
       [t]' = convₛ {t} {F} {F'} [Γ] [F] [F'] [F≡F'] [t]
@@ -90,8 +89,8 @@ substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
            → Γ ⊩ₛ⟨ l ⟩t f [ t ] ∷ G [ t ] / [Γ]
                       / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
-  let prfG = PE.sym (PE.trans (substCompEq G) (substVar-to-subst substConcatSingleton' G))
-      prff = PE.sym (PE.trans (substCompEq f) (substVar-to-subst substConcatSingleton' f))
+  let prfG = newlem1 G
+      prff = newlem1 f
       G[t] = proj₁ ([G] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
       G[t]' = irrelevance' prfG G[t]
       f[t] = proj₁ ([f] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -100,7 +99,7 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          irrelevanceEqTerm''
            prff
-           (PE.sym (PE.trans (substCompEq f) (substVar-to-subst substConcatSingleton' f)))
+           (newlem1 f)
            prfG G[t] G[t]'
            (proj₂ ([f] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
                   ([σ'] , proj₁ ([t] ⊢Δ [σ']))

@@ -34,7 +34,7 @@ mutual
         , (wk1Subst' ⊢Γ ⊢Δ Δ⊢B [σ]
         , conv (var (⊢Δ ∙ Δ⊢B) here)
                (PE.subst (λ x → _ ⊢ _ ≡ x)
-                         (PE.trans (PE.sym (subst-id (wk1 A))) (subst-wk A))
+                         (wk1-tailId A)
                          (wkEq (step id) (⊢Δ ∙ Δ⊢B) (stabilityEq Γ≡Δ (sym A≡B)))))
 
   stability : ∀ {A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A → Δ ⊢ A

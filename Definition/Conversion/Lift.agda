@@ -83,7 +83,7 @@ mutual
                                      0≡0)
     in  fun-ext ⊢F ⊢t ⊢u (ne neT) (ne neU)
                 (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
-                          (substVar0Id _)
+                          (wkSingleSubstId _)
                           k∘0≡l∘0)
   lift~toConv↓' (emb 0<1 [A]) D t~u = lift~toConv↓' [A] D t~u
 

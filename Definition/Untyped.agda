@@ -10,7 +10,7 @@ import Tools.PropositionalEquality as PE
 infixl 30 _∙_
 infix 30 Π_▹_
 infixr 22 _▹▹_
-infixr 30 _•_ _ₛ•ₛ_ _•ₛ_ _ₛ•_
+infixl 30 _•_ _ₛ•ₛ_ _•ₛ_ _ₛ•_
 infix 25 _[_]
 infix 25 _[_]↑
 

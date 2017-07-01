@@ -49,15 +49,15 @@ injectivity'' (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                       (refl (var (⊢Γ ∙ ⊢F) here))
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G]' = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x)
-                       (PE.trans (substVar0Id _) (PE.sym G≡G₁))
+                       (PE.trans (wkSingleSubstId _) (PE.sym G≡G₁))
                        (PE.sym F≡F₁) [G]₁
       [F≡H]₁ = [F≡F'] id ⊢Γ
       [F≡H]' = irrelevanceEq'' (PE.trans (wk-id _) (PE.sym F≡F₁))
                                (PE.trans (wk-id _) (PE.sym H≡F'))
                                [F]₁ [F]' [F≡H]₁
       [G≡E]₁ = [G≡G'] (step id) (⊢Γ ∙ ⊢F) [x∷F]
-      [G≡E]' = irrelevanceEqLift'' (PE.trans (substVar0Id _) (PE.sym G≡G₁))
-                                   (PE.trans (substVar0Id _) (PE.sym E≡G'))
+      [G≡E]' = irrelevanceEqLift'' (PE.trans (wkSingleSubstId _) (PE.sym G≡G₁))
+                                   (PE.trans (wkSingleSubstId _) (PE.sym E≡G'))
                                    (PE.sym F≡F₁) [G]₁ [G]' [G≡E]₁
   in  wellformedEq [F]' [F≡H]' , wellformedEq [G]' [G≡E]'
 injectivity'' (emb 0<1 x) [ΠFG≡ΠHE] = injectivity'' x [ΠFG≡ΠHE]

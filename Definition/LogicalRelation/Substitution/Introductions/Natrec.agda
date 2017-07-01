@@ -122,7 +122,7 @@ natrecTerm : ∀ {F z s n Γ Δ σ l}
              ([σn] : Δ ⊩⟨ l ⟩ n ∷ ℕ / ℕ (idRed:*: (ℕ ⊢Δ)))
            → Δ ⊩⟨ l ⟩ natrec (subst (liftSubst σ) F) (subst σ z) (subst σ s) n
                ∷ subst (liftSubst σ) F [ n ]
-               / irrelevance' (PE.sym (singleSubstLemma n σ F))
+               / irrelevance' (PE.sym (singleSubstComp n σ F))
                               (proj₁ ([F] ⊢Δ ([σ] , [σn])))
 natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢Δ [σ]
            (ℕₜ (suc m) d n≡n (suc [m])) =
@@ -142,16 +142,16 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
       [σn] = ℕₜ (suc m) d n≡n (suc [m])
       [σn]' , [σn≡σsm] = redSubst*Term (redₜ d) [σℕ] [σsm]
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
-      [σFₛₘ] = irrelevance' (PE.sym (singleSubstLemma (suc m) σ F))
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
+      [σFₛₘ] = irrelevance' (PE.sym (singleSubstComp (suc m) σ F))
                             (proj₁ ([F] ⊢Δ ([σ] , [σsm])))
-      [Fₙ≡Fₛₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                 (PE.sym (singleSubstLemma (suc m) σ F))
+      [Fₙ≡Fₛₘ] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                 (PE.sym (singleSubstComp (suc m) σ F))
                                  [σFₙ]' [σFₙ]
                                  (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σsm])
                                         (reflSubst [Γ] ⊢Δ [σ] , [σn≡σsm]))
       [σFₘ] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                             (substVar-to-subst substConcatSingleton F)))
+                                             (substSingletonComp F)))
                            (proj₁ ([F] ⊢Δ ([σ] , [m])))
       [σFₛₘ]' = irrelevance' (natrecIrrelevantSubst F z s m σ)
                              (proj₁ ([F] ⊢Δ ([σ] , [σsm])))
@@ -164,13 +164,13 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                                     [Γ] [F] [F₀] [F₊] [z] [s] ⊢Δ [σ] [m])
       natrecM' = irrelevanceTerm' (PE.trans
                                     (PE.sym (natrecIrrelevantSubst F z s m σ))
-                                    (PE.sym (singleSubstLemma (suc m) σ F)))
+                                    (PE.sym (singleSubstComp (suc m) σ F)))
                                   [σFₛₘ]' [σFₛₘ] natrecM
       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) [σℕ] [σsm]
                     (λ {t} {t'} [t] [t'] [t≡t'] →
                        PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                 (PE.sym (singleSubstLemma t σ F))
-                                 (PE.sym (singleSubstLemma t' σ F))
+                                 (PE.sym (singleSubstComp t σ F))
+                                 (PE.sym (singleSubstComp t' σ F))
                                  (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                               (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                      ([σ] , [t'])
@@ -199,24 +199,24 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
       [σn]' , [σn≡σ0] = redSubst*Term (redₜ d) (proj₁ ([ℕ] ⊢Δ [σ])) [σ0]
       [σn] = ℕₜ zero d n≡n zero
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
-      [σF₀] = irrelevance' (PE.sym (singleSubstLemma zero σ F))
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
+      [σF₀] = irrelevance' (PE.sym (singleSubstComp zero σ F))
                            (proj₁ ([F] ⊢Δ ([σ] , [σ0])))
       [Fₙ≡F₀]' = proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σ0])
                        (reflSubst [Γ] ⊢Δ [σ] , [σn≡σ0])
-      [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
+      [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
                                 (PE.sym (substCompEq F))
                                 [σFₙ]' [σFₙ] [Fₙ≡F₀]'
-      [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                  (PE.trans (substVar-to-subst substConcatSingleton' F)
-                                            (PE.sym (singleSubstLemma zero σ F)))
+      [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                  (PE.trans (substConcatSingleton' F)
+                                            (PE.sym (singleSubstComp zero σ F)))
                                   [σFₙ]' [σFₙ] [Fₙ≡F₀]'
       [σz] = proj₁ ([z] ⊢Δ [σ])
       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) (proj₁ ([ℕ] ⊢Δ [σ])) [σ0]
                     (λ {t} {t'} [t] [t'] [t≡t'] →
                        PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                 (PE.sym (singleSubstLemma t σ F))
-                                 (PE.sym (singleSubstLemma t' σ F))
+                                 (PE.sym (singleSubstComp t σ F))
+                                 (PE.sym (singleSubstComp t' σ F))
                                  (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                               (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                      ([σ] , [t'])
@@ -251,11 +251,11 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
       [σm] = neuTerm [σℕ] neM ⊢m m≡m
       [σn]' , [σn≡σm] = redSubst*Term (redₜ d) [σℕ] [σm]
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
-      [σFₘ] = irrelevance' (PE.sym (singleSubstLemma m σ F))
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
+      [σFₘ] = irrelevance' (PE.sym (singleSubstComp m σ F))
                            (proj₁ ([F] ⊢Δ ([σ] , [σm])))
-      [Fₙ≡Fₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                (PE.sym (singleSubstLemma m σ F)) [σFₙ]' [σFₙ]
+      [Fₙ≡Fₘ] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                (PE.sym (singleSubstComp m σ F)) [σFₙ]' [σFₙ]
                                 ((proj₂ ([F] ⊢Δ ([σ] , [σn]))) ([σ] , [σm])
                                         (reflSubst [Γ] ⊢Δ [σ] , [σn≡σm]))
       natrecM = neuTerm [σFₘ] (natrec neM) (natrec ⊢F ⊢z ⊢s ⊢m)
@@ -263,8 +263,8 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
       reduction = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) [σℕ] [σm]
                     (λ {t} {t'} [t] [t'] [t≡t'] →
                        PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                 (PE.sym (singleSubstLemma t σ F))
-                                 (PE.sym (singleSubstLemma t' σ F))
+                                 (PE.sym (singleSubstComp t σ F))
+                                 (PE.sym (singleSubstComp t' σ F))
                                  (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                               (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                      ([σ] , [t'])
@@ -313,7 +313,7 @@ natrec-congTerm : ∀ {F F' z z' s s' n m Γ Δ σ σ' l}
                     ≡ natrec (subst (liftSubst σ') F')
                              (subst σ' z') (subst σ' s') m
                     ∷ subst (liftSubst σ) F [ n ]
-                    / irrelevance' (PE.sym (singleSubstLemma n σ F))
+                    / irrelevance' (PE.sym (singleSubstComp n σ F))
                                    (proj₁ ([F] ⊢Δ ([σ] , [σn])))
 natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                 [Γ] [F] [F'] [F≡F'] [F₀] [F'₀] [F₀≡F'₀] [F₊] [F'₊] [F₊≡F'₊]
@@ -354,21 +354,21 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                (ℕₜ (suc n') (idRedTerm:*: (suc ⊢n')) n≡n (suc [n']))
       [σn]' , [σn≡σsn'] = redSubst*Term (redₜ d) [σℕ] [σsn']
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
-      [σFₛₙ'] = irrelevance' (PE.sym (singleSubstLemma (suc n') σ F))
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
+      [σFₛₙ'] = irrelevance' (PE.sym (singleSubstComp (suc n') σ F))
                              (proj₁ ([F] ⊢Δ ([σ] , [σsn'])))
-      [Fₙ≡Fₛₙ'] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                  (PE.sym (singleSubstLemma (suc n') σ F))
+      [Fₙ≡Fₛₙ'] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                  (PE.sym (singleSubstComp (suc n') σ F))
                                   [σFₙ]' [σFₙ]
                                   (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σsn'])
                                          (reflSubst [Γ] ⊢Δ [σ] , [σn≡σsn']))
-      [Fₙ≡Fₛₙ']' = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
+      [Fₙ≡Fₛₙ']' = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
                                    (natrecIrrelevantSubst F z s n' σ)
                                    [σFₙ]' [σFₙ]
                                    (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σsn'])
                                           (reflSubst [Γ] ⊢Δ [σ] , [σn≡σsn']))
       [σFₙ'] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                              (substVar-to-subst substConcatSingleton F)))
+                                              (substSingletonComp F)))
                             (proj₁ ([F] ⊢Δ ([σ] , [n'])))
       [σFₛₙ']' = irrelevance' (natrecIrrelevantSubst F z s n' σ)
                               (proj₁ ([F] ⊢Δ ([σ] , [σsn'])))
@@ -377,43 +377,43 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                 (ℕₜ (suc m') (idRedTerm:*: (suc ⊢m')) m≡m (suc [m']))
       [σ'm]' , [σ'm≡σ'sm'] = redSubst*Term (redₜ d') [σ'ℕ] [σ'sm']
       [σ'F'ₘ]' = proj₁ ([F'] ⊢Δ ([σ'] , [σ'm]))
-      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F')) [σ'F'ₘ]'
+      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F')) [σ'F'ₘ]'
       [σ'Fₘ]' = proj₁ ([F] ⊢Δ ([σ'] , [σ'm]))
-      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F)) [σ'Fₘ]'
-      [σ'F'ₛₘ'] = irrelevance' (PE.sym (singleSubstLemma (suc m') σ' F'))
+      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F)) [σ'Fₘ]'
+      [σ'F'ₛₘ'] = irrelevance' (PE.sym (singleSubstComp (suc m') σ' F'))
                                (proj₁ ([F'] ⊢Δ ([σ'] , [σ'sm'])))
-      [F'ₘ≡F'ₛₘ'] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F'))
-                                    (PE.sym (singleSubstLemma (suc m') σ' F'))
+      [F'ₘ≡F'ₛₘ'] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F'))
+                                    (PE.sym (singleSubstComp (suc m') σ' F'))
                                     [σ'F'ₘ]' [σ'F'ₘ]
                                     (proj₂ ([F'] ⊢Δ ([σ'] , [σ'm]))
                                            ([σ'] , [σ'sm'])
                                            (reflSubst [Γ] ⊢Δ [σ'] , [σ'm≡σ'sm']))
       [σ'Fₘ'] = irrelevance' (PE.sym (PE.trans (substCompEq F)
-                                               (substVar-to-subst substConcatSingleton F)))
+                                               (substSingletonComp F)))
                              (proj₁ ([F] ⊢Δ ([σ'] , [m'])))
       [σ'F'ₘ'] = irrelevance' (PE.sym (PE.trans (substCompEq F')
-                                                (substVar-to-subst substConcatSingleton F')))
+                                                (substSingletonComp F')))
                               (proj₁ ([F'] ⊢Δ ([σ'] , [m'])))
       [σ'F'ₛₘ']' = irrelevance' (natrecIrrelevantSubst F' z' s' m' σ')
                                 (proj₁ ([F'] ⊢Δ ([σ'] , [σ'sm'])))
       [σ'F'₊ₘ'] = substSΠ₁ (proj₁ ([F'₊] ⊢Δ [σ'])) [σ'ℕ] [m']
-      [σFₙ'≡σ'Fₘ'] = irrelevanceEq'' (PE.sym (singleSubstLemma n' σ F))
-                                     (PE.sym (singleSubstLemma m' σ' F))
+      [σFₙ'≡σ'Fₘ'] = irrelevanceEq'' (PE.sym (singleSubstComp n' σ F))
+                                     (PE.sym (singleSubstComp m' σ' F))
                                      (proj₁ ([F] ⊢Δ ([σ] , [n']))) [σFₙ']
                                      (proj₂ ([F] ⊢Δ ([σ] , [n']))
                                             ([σ'] , [m']) ([σ≡σ'] , [n'≡m']))
-      [σ'Fₘ'≡σ'F'ₘ'] = irrelevanceEq'' (PE.sym (singleSubstLemma m' σ' F))
-                                       (PE.sym (singleSubstLemma m' σ' F'))
+      [σ'Fₘ'≡σ'F'ₘ'] = irrelevanceEq'' (PE.sym (singleSubstComp m' σ' F))
+                                       (PE.sym (singleSubstComp m' σ' F'))
                                        (proj₁ ([F] ⊢Δ ([σ'] , [m'])))
                                        [σ'Fₘ'] ([F≡F'] ⊢Δ ([σ'] , [m']))
       [σFₙ'≡σ'F'ₘ'] = transEq [σFₙ'] [σ'Fₘ'] [σ'F'ₘ'] [σFₙ'≡σ'Fₘ'] [σ'Fₘ'≡σ'F'ₘ']
-      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                   (PE.sym (singleSubstLemma m σ' F))
+      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                   (PE.sym (singleSubstComp m σ' F))
                                    (proj₁ ([F] ⊢Δ ([σ] , [σn]))) [σFₙ]
                                    (proj₂ ([F] ⊢Δ ([σ] , [σn]))
                                           ([σ'] , [σ'm]) ([σ≡σ'] , [σn≡σ'm]))
-      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F))
-                                     (PE.sym (singleSubstLemma m σ' F'))
+      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F))
+                                     (PE.sym (singleSubstComp m σ' F'))
                                      [σ'Fₘ]' [σ'Fₘ] ([F≡F'] ⊢Δ ([σ'] , [σ'm]))
       [σFₙ≡σ'F'ₘ] = transEq [σFₙ] [σ'Fₘ] [σ'F'ₘ] [σFₙ≡σ'Fₘ] [σ'Fₘ≡σ'F'ₘ]
       natrecN = appTerm [σFₙ'] [σFₛₙ']' [σF₊ₙ']
@@ -422,7 +422,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                         (natrecTerm {F} {z} {s} {n'} {σ = σ}
                                     [Γ] [F] [F₀] [F₊] [z] [s] ⊢Δ [σ] [n'])
       natrecN' = irrelevanceTerm' (PE.trans (PE.sym (natrecIrrelevantSubst F z s n' σ))
-                                            (PE.sym (singleSubstLemma (suc n') σ F)))
+                                            (PE.sym (singleSubstComp (suc n') σ F)))
                                   [σFₛₙ']' [σFₛₙ'] natrecN
       natrecM = appTerm [σ'F'ₘ'] [σ'F'ₛₘ']' [σ'F'₊ₘ']
                         (appTerm [σ'ℕ] [σ'F'₊ₘ'] (proj₁ ([F'₊] ⊢Δ [σ']))
@@ -430,7 +430,7 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                         (natrecTerm {F'} {z'} {s'} {m'} {σ = σ'}
                                     [Γ] [F'] [F'₀] [F'₊] [z'] [s'] ⊢Δ [σ'] [m'])
       natrecM' = irrelevanceTerm' (PE.trans (PE.sym (natrecIrrelevantSubst F' z' s' m' σ'))
-                                            (PE.sym (singleSubstLemma (suc m') σ' F')))
+                                            (PE.sym (singleSubstComp (suc m') σ' F')))
                                   [σ'F'ₛₘ']' [σ'F'ₛₘ'] natrecM
       [σs≡σ's] = proj₂ ([s] ⊢Δ [σ]) [σ'] [σ≡σ']
       [σ's≡σ's'] = convEqTerm₂ (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([F₊] ⊢Δ [σ']))
@@ -454,8 +454,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₁ = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) [σℕ] [σsn']
                      (λ {t} {t'} [t] [t'] [t≡t'] →
                         PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                  (PE.sym (singleSubstLemma t σ F))
-                                  (PE.sym (singleSubstLemma t' σ F))
+                                  (PE.sym (singleSubstComp t σ F))
+                                  (PE.sym (singleSubstComp t' σ F))
                                   (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                                (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                       ([σ] , [t'])
@@ -466,8 +466,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₂ = natrec-subst* ⊢F' ⊢z' ⊢s' (redₜ d') [σ'ℕ] [σ'sm']
                      (λ {t} {t'} [t] [t'] [t≡t'] →
                         PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                  (PE.sym (singleSubstLemma t σ' F'))
-                                  (PE.sym (singleSubstLemma t' σ' F'))
+                                  (PE.sym (singleSubstComp t σ' F'))
+                                  (PE.sym (singleSubstComp t' σ' F'))
                                   (≅-eq (wellformedEq (proj₁ ([F'] ⊢Δ ([σ'] , [t])))
                                                (proj₂ ([F'] ⊢Δ ([σ'] , [t]))
                                                       ([σ'] , [t'])
@@ -518,44 +518,44 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       [σn≡σ'm] = ℕₜ₌ zero zero d₂ d' t≡u zero
       [σn≡σ'0] = transEqTerm [σℕ] [σn≡σ'm] [σ'm≡σ'0]
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
       [σ'Fₘ]' = proj₁ ([F] ⊢Δ ([σ'] , [σ'm]))
-      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F)) [σ'Fₘ]'
+      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F)) [σ'Fₘ]'
       [σ'F'ₘ]' = proj₁ ([F'] ⊢Δ ([σ'] , [σ'm]))
-      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F')) [σ'F'ₘ]'
-      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                   (PE.sym (singleSubstLemma m σ' F))
+      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F')) [σ'F'ₘ]'
+      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                   (PE.sym (singleSubstComp m σ' F))
                                    [σFₙ]' [σFₙ]
                                    (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ'] , [σ'm])
                                           ([σ≡σ'] , [σn≡σ'm]))
-      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F))
-                                     (PE.sym (singleSubstLemma m σ' F'))
+      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F))
+                                     (PE.sym (singleSubstComp m σ' F'))
                                      [σ'Fₘ]' [σ'Fₘ] ([F≡F'] ⊢Δ ([σ'] , [σ'm]))
       [σFₙ≡σ'F'ₘ] = transEq [σFₙ] [σ'Fₘ] [σ'F'ₘ] [σFₙ≡σ'Fₘ] [σ'Fₘ≡σ'F'ₘ]
-      [σF₀] = irrelevance' (PE.sym (singleSubstLemma zero σ F))
+      [σF₀] = irrelevance' (PE.sym (singleSubstComp zero σ F))
                            (proj₁ ([F] ⊢Δ ([σ] , [σ0])))
-      [σ'F₀] = irrelevance' (PE.sym (singleSubstLemma zero σ' F))
+      [σ'F₀] = irrelevance' (PE.sym (singleSubstComp zero σ' F))
                             (proj₁ ([F] ⊢Δ ([σ'] , [σ'0])))
       [Fₙ≡F₀]' = proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σ0]) (reflSubst [Γ] ⊢Δ [σ] , [σn≡σ0])
-      [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
+      [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
                                 (PE.sym (substCompEq F))
                                 [σFₙ]' [σFₙ] [Fₙ≡F₀]'
       [σFₙ≡σ'F₀]' = proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ'] , [σ'0]) ([σ≡σ'] , [σn≡σ'0])
-      [σFₙ≡σ'F₀] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
+      [σFₙ≡σ'F₀] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
                                 (PE.sym (substCompEq F))
                                 [σFₙ]' [σFₙ] [σFₙ≡σ'F₀]'
       [F'ₘ≡F'₀]' = proj₂ ([F'] ⊢Δ ([σ'] , [σ'm])) ([σ'] , [σ'0])
                          (reflSubst [Γ] ⊢Δ [σ'] , [σ'm≡σ'0])
-      [F'ₘ≡F'₀] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F'))
+      [F'ₘ≡F'₀] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F'))
                                   (PE.sym (substCompEq F'))
                                   [σ'F'ₘ]' [σ'F'ₘ] [F'ₘ≡F'₀]'
-      [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                  (PE.trans (substVar-to-subst substConcatSingleton' F)
-                                            (PE.sym (singleSubstLemma zero σ F)))
+      [Fₙ≡F₀]'' = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                  (PE.trans (substConcatSingleton' F)
+                                            (PE.sym (singleSubstComp zero σ F)))
                                   [σFₙ]' [σFₙ] [Fₙ≡F₀]'
-      [F'ₘ≡F'₀]'' = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F'))
-                                    (PE.trans (substVar-to-subst substConcatSingleton' F')
-                                              (PE.sym (singleSubstLemma zero σ' F')))
+      [F'ₘ≡F'₀]'' = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F'))
+                                    (PE.trans (substConcatSingleton' F')
+                                              (PE.sym (singleSubstComp zero σ' F')))
                                     [σ'F'ₘ]' [σ'F'ₘ] [F'ₘ≡F'₀]'
       [σz] = proj₁ ([z] ⊢Δ [σ])
       [σ'z'] = proj₁ ([z'] ⊢Δ [σ'])
@@ -567,8 +567,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₁ = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) (proj₁ ([ℕ] ⊢Δ [σ])) [σ0]
                     (λ {t} {t'} [t] [t'] [t≡t'] →
                        PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                 (PE.sym (singleSubstLemma t σ F))
-                                 (PE.sym (singleSubstLemma t' σ F))
+                                 (PE.sym (singleSubstComp t σ F))
+                                 (PE.sym (singleSubstComp t' σ F))
                                  (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                               (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                      ([σ] , [t'])
@@ -578,8 +578,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₂ = natrec-subst* ⊢F' ⊢z' ⊢s' (redₜ d') (proj₁ ([ℕ] ⊢Δ [σ'])) [σ'0]
                     (λ {t} {t'} [t] [t'] [t≡t'] →
                        PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                 (PE.sym (singleSubstLemma t σ' F'))
-                                 (PE.sym (singleSubstLemma t' σ' F'))
+                                 (PE.sym (singleSubstComp t σ' F'))
+                                 (PE.sym (singleSubstComp t' σ' F'))
                                  (≅-eq (wellformedEq (proj₁ ([F'] ⊢Δ ([σ'] , [t])))
                                               (proj₂ ([F'] ⊢Δ ([σ'] , [t]))
                                                      ([σ'] , [t'])
@@ -675,35 +675,35 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       [σn'] = neuTerm [σℕ] neN' ⊢n' n≡n₁
       [σn]' , [σn≡σn'] = redSubst*Term (redₜ d) [σℕ] [σn']
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
-      [σFₙ] = irrelevance' (PE.sym (singleSubstLemma n σ F)) [σFₙ]'
-      [σFₙ'] = irrelevance' (PE.sym (singleSubstLemma n' σ F))
+      [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
+      [σFₙ'] = irrelevance' (PE.sym (singleSubstComp n' σ F))
                             (proj₁ ([F] ⊢Δ ([σ] , [σn'])))
-      [Fₙ≡Fₙ'] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                (PE.sym (singleSubstLemma n' σ F)) [σFₙ]' [σFₙ]
+      [Fₙ≡Fₙ'] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                (PE.sym (singleSubstComp n' σ F)) [σFₙ]' [σFₙ]
                                 ((proj₂ ([F] ⊢Δ ([σ] , [σn])))
                                         ([σ] , [σn'])
                                         (reflSubst [Γ] ⊢Δ [σ] , [σn≡σn']))
       [σ'm'] = neuTerm [σ'ℕ] neM' ⊢m' m≡m₁
       [σ'm]' , [σ'm≡σ'm'] = redSubst*Term (redₜ d') [σ'ℕ] [σ'm']
       [σ'F'ₘ]' = proj₁ ([F'] ⊢Δ ([σ'] , [σ'm]))
-      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F')) [σ'F'ₘ]'
+      [σ'F'ₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F')) [σ'F'ₘ]'
       [σ'Fₘ]' = proj₁ ([F] ⊢Δ ([σ'] , [σ'm]))
-      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstLemma m σ' F)) [σ'Fₘ]'
-      [σ'F'ₘ'] = irrelevance' (PE.sym (singleSubstLemma m' σ' F'))
+      [σ'Fₘ] = irrelevance' (PE.sym (singleSubstComp m σ' F)) [σ'Fₘ]'
+      [σ'F'ₘ'] = irrelevance' (PE.sym (singleSubstComp m' σ' F'))
                               (proj₁ ([F'] ⊢Δ ([σ'] , [σ'm'])))
-      [F'ₘ≡F'ₘ'] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F'))
-                                   (PE.sym (singleSubstLemma m' σ' F'))
+      [F'ₘ≡F'ₘ'] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F'))
+                                   (PE.sym (singleSubstComp m' σ' F'))
                                    [σ'F'ₘ]' [σ'F'ₘ]
                                    ((proj₂ ([F'] ⊢Δ ([σ'] , [σ'm])))
                                            ([σ'] , [σ'm'])
                                            (reflSubst [Γ] ⊢Δ [σ'] , [σ'm≡σ'm']))
-      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma n σ F))
-                                   (PE.sym (singleSubstLemma m σ' F))
+      [σFₙ≡σ'Fₘ] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
+                                   (PE.sym (singleSubstComp m σ' F))
                                    [σFₙ]' [σFₙ]
                                    (proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ'] , [σ'm])
                                           ([σ≡σ'] , [σn≡σ'm]))
-      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstLemma m σ' F))
-                                     (PE.sym (singleSubstLemma m σ' F'))
+      [σ'Fₘ≡σ'F'ₘ] = irrelevanceEq'' (PE.sym (singleSubstComp m σ' F))
+                                     (PE.sym (singleSubstComp m σ' F'))
                                      (proj₁ ([F] ⊢Δ ([σ'] , [σ'm])))
                                      [σ'Fₘ] ([F≡F'] ⊢Δ ([σ'] , [σ'm]))
       [σFₙ≡σ'F'ₘ] = transEq [σFₙ] [σ'Fₘ] [σ'F'ₘ] [σFₙ≡σ'Fₘ] [σ'Fₘ≡σ'F'ₘ]
@@ -725,8 +725,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₁ = natrec-subst* ⊢F ⊢z ⊢s (redₜ d) [σℕ] [σn']
                      (λ {t} {t'} [t] [t'] [t≡t'] →
                         PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                  (PE.sym (singleSubstLemma t σ F))
-                                  (PE.sym (singleSubstLemma t' σ F))
+                                  (PE.sym (singleSubstComp t σ F))
+                                  (PE.sym (singleSubstComp t' σ F))
                                   (≅-eq (wellformedEq (proj₁ ([F] ⊢Δ ([σ] , [t])))
                                                (proj₂ ([F] ⊢Δ ([σ] , [t]))
                                                       ([σ] , [t'])
@@ -734,8 +734,8 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       reduction₂ = natrec-subst* ⊢F' ⊢z' ⊢s' (redₜ d') [σ'ℕ] [σ'm']
                      (λ {t} {t'} [t] [t'] [t≡t'] →
                         PE.subst₂ (λ x y → _ ⊢ x ≡ y)
-                                  (PE.sym (singleSubstLemma t σ' F'))
-                                  (PE.sym (singleSubstLemma t' σ' F'))
+                                  (PE.sym (singleSubstComp t σ' F'))
+                                  (PE.sym (singleSubstComp t' σ' F'))
                                   (≅-eq (wellformedEq (proj₁ ([F'] ⊢Δ ([σ'] , [t])))
                                                (proj₂ ([F'] ⊢Δ ([σ'] , [t]))
                                                       ([σ'] , [t'])
@@ -829,10 +829,10 @@ natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n]
       [σn]' = irrelevanceTerm {l' = ¹} (proj₁ ([ℕ] ⊢Δ [σ]))
                               (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([n] ⊢Δ [σ]))
       n' = subst σ n
-      eqPrf = PE.trans (singleSubstLemma n' σ F)
+      eqPrf = PE.trans (singleSubstComp n' σ F)
                        (PE.sym (PE.trans (substCompEq F)
-                               (substVar-to-subst substConcatSingleton' F)))
-  in  irrelevanceTerm' eqPrf (irrelevance' (PE.sym (singleSubstLemma n' σ F))
+                               (substConcatSingleton' F)))
+  in  irrelevanceTerm' eqPrf (irrelevance' (PE.sym (singleSubstComp n' σ F))
                                            (proj₁ ([F]' ⊢Δ ([σ] , [σn]'))))
                         (proj₁ ([Fₙ] ⊢Δ [σ]))
                    (natrecTerm {F} {z} {s} {n'} {σ = σ} [Γ]
@@ -847,7 +847,7 @@ natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n]
                                          (ℕ (idRed:*: (ℕ ⊢Δ)))
                                          (proj₂ ([n] ⊢Δ [σ]) [σ'] [σ≡σ'])
         in  irrelevanceEqTerm' eqPrf
-              (irrelevance' (PE.sym (singleSubstLemma n' σ F))
+              (irrelevance' (PE.sym (singleSubstComp n' σ F))
                             (proj₁ ([F]' ⊢Δ ([σ] , [σn]'))))
               (proj₁ ([Fₙ] ⊢Δ [σ]))
               (natrec-congTerm {F} {F} {z} {z} {s} {s} {n'} {subst σ' n} {σ = σ}
@@ -904,7 +904,7 @@ natrec-congₛ {F} {F'} {z} {z'} {s} {s'} {n} {n'}
                                (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([n'] ⊢Δ [σ]))
       [σn≡σn']' = irrelevanceEqTerm {l' = ¹} (proj₁ ([ℕ] ⊢Δ [σ]))
                                     (ℕ (idRed:*: (ℕ ⊢Δ))) ([n≡n'] ⊢Δ [σ])
-      [Fₙ]' = irrelevance' (PE.sym (singleSubstLemma (subst σ n) σ F))
+      [Fₙ]' = irrelevance' (PE.sym (singleSubstComp (subst σ n) σ F))
                            (proj₁ ([F]' ⊢Δ ([σ] , [σn]')))
   in  irrelevanceEqTerm' (PE.sym (singleSubstLift F n))
                          [Fₙ]' (proj₁ ([Fₙ] ⊢Δ [σ]))
