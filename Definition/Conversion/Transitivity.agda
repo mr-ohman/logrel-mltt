@@ -16,7 +16,6 @@ open import Definition.Typed.Consequences.Injectivity
 import Definition.Typed.Consequences.Inequality as WF
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
-open import Definition.Typed.Consequences.SingleSubst
 
 open import Tools.Nat
 open import Tools.Product

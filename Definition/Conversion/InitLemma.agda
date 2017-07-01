@@ -10,7 +10,7 @@ open import Definition.Typed.RedSteps
 open import Definition.Conversion.Stability
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Injectivity
-open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Inversion
 import Definition.Typed.Consequences.Inequality as WF
 

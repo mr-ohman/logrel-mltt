@@ -13,7 +13,7 @@ open import Definition.Conversion.Symmetry
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Conversion
 open import Definition.Typed.Consequences.Syntactic
-open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Reduction
 open import Definition.Typed.Consequences.Equality

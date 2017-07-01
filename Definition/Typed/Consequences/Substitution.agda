@@ -8,6 +8,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance
 open import Definition.Typed.Weakening as T
+open import Definition.Typed.Consequences.Syntactic
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
@@ -20,22 +21,41 @@ open import Tools.Product
 open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
+data _⊢ₛ_∷_ (Δ : Con Term) (σ : Subst) : (Γ : Con Term) → Set where
+  id : Δ ⊢ₛ σ ∷ ε
+  _,_ : ∀ {Γ A}
+      → Δ ⊢ₛ tail σ ∷ Γ
+      → Δ ⊢ head σ ∷ subst (tail σ) A
+      → Δ ⊢ₛ σ ∷ Γ ∙ A
 
-_⊢ₛ_∷_ : (Δ : Con Term) (σ : Subst) (Γ : Con Term) → Set
-Δ ⊢ₛ σ ∷ ε = ⊤
-Δ ⊢ₛ σ ∷ (Γ ∙ A) = Δ ⊢ₛ tail σ ∷ Γ × Δ ⊢ head σ ∷ subst (tail σ) A
+data _⊢ₛ_≡_∷_ (Δ : Con Term) (σ σ' : Subst) : (Γ : Con Term) → Set where
+  id : Δ ⊢ₛ σ ≡ σ' ∷ ε
+  _,_ : ∀ {Γ A}
+      → Δ ⊢ₛ tail σ ≡ tail σ' ∷ Γ
+      → Δ ⊢ head σ ≡ head σ' ∷ subst (tail σ) A
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ ∙ A
 
 wellformedSubst : ∀ {Γ Δ σ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
       → Δ ⊢ₛ σ ∷ Γ
-wellformedSubst ε ⊢Δ [σ] = tt
+wellformedSubst ε ⊢Δ [σ] = id
 wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
-  wellformedSubst [Γ] ⊢Δ [tailσ] , wellformedTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ]
+  wellformedSubst [Γ] ⊢Δ [tailσ]
+  , wellformedTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ]
+
+wellformedSubstEq : ∀ {Γ Δ σ σ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
+      ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+      → Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ
+wellformedSubstEq ε ⊢Δ [σ] [σ≡σ'] = id
+wellformedSubstEq ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) ([tailσ≡σ'] , [headσ≡σ']) =
+  wellformedSubstEq [Γ] ⊢Δ [tailσ] [tailσ≡σ']
+  , wellformedTermEq (proj₁ ([A] ⊢Δ [tailσ])) [headσ≡σ']
 
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ∷ Γ
       → ∃ λ [Γ] → _⊩ₛ_∷_/_/_ {{eqRelInstance}} Δ σ Γ [Γ] ⊢Δ
-fundamentalSubst ε ⊢Δ [σ] = ε , [σ]
+fundamentalSubst ε ⊢Δ [σ] = ε , tt
 fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
   let [Γ] , [A] = fundamental ⊢A
       [Δ] , [A]' , [t] = fundamentalTerm [headσ]
@@ -47,25 +67,47 @@ fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
   in  [Γ] ∙ [A] , ([tailσ]'
   ,   irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt])
 
-irrelevanceSubst : ∀ {Γ Δ σ}
-                   (⊢Γ : ⊢ Γ) (⊢Γ' : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ)
-                 → Δ ⊢ₛ σ ∷ Γ → Δ ⊢ₛ σ ∷ Γ
-irrelevanceSubst ε ε ⊢Δ ⊢Δ' σ = σ
-irrelevanceSubst (⊢Γ ∙ x) (⊢Γ' ∙ x₁) ⊢Δ ⊢Δ' (tailσ , headσ) =
-  let tailσ' = irrelevanceSubst ⊢Γ ⊢Γ' ⊢Δ ⊢Δ' tailσ
-  in  tailσ' , headσ
+fundamentalSubstEq : ∀ {Γ Δ σ σ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ
+      → ∃₂ λ [Γ] [σ]
+      → ∃  λ ([σ'] : _⊩ₛ_∷_/_/_ {{eqRelInstance}} Δ σ' Γ [Γ] ⊢Δ)
+      → _⊩ₛ_≡_∷_/_/_/_ {{eqRelInstance}} Δ σ σ' Γ [Γ] ⊢Δ [σ]
+fundamentalSubstEq ε ⊢Δ σ = ε , tt , tt , tt
+fundamentalSubstEq (⊢Γ ∙ ⊢A) ⊢Δ (tailσ≡σ' , headσ≡σ') =
+  let [Γ] , [A] = fundamental ⊢A
+      [Γ]' , [tailσ] , [tailσ'] , [tailσ≡σ'] = fundamentalSubstEq ⊢Γ ⊢Δ tailσ≡σ'
+      [Δ] , modelsTermEq [A]' [t] [t'] [t≡t'] = fundamentalTermEq headσ≡σ'
+      [tailσ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ]
+      [tailσ']' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ']
+      [tailσ≡σ']' = S.irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ] [tailσ]' [tailσ≡σ']
+      [idA]  = proj₁ ([A]' (soundContext [Δ]) (idSubstS [Δ]))
+      [idA]' = proj₁ ([A] ⊢Δ [tailσ]')
+      [idA]'' = proj₁ ([A] ⊢Δ [tailσ']')
+      [idt]  = proj₁ ([t] (soundContext [Δ]) (idSubstS [Δ]))
+      [idt'] = proj₁ ([t'] (soundContext [Δ]) (idSubstS [Δ]))
+      [idt≡t']  = [t≡t'] (soundContext [Δ]) (idSubstS [Δ])
+  in  [Γ] ∙ [A]
+  ,   ([tailσ]' , irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt])
+  ,   ([tailσ']' , convTerm₁ [idA]' [idA]'' (proj₂ ([A] ⊢Δ [tailσ]') [tailσ']' [tailσ≡σ']')
+                             (irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt']))
+  ,   ([tailσ≡σ']' , irrelevanceEqTerm'' (subst-id _) (subst-id _) (subst-id _) [idA] [idA]' [idt≡t'])
 
 substitution : ∀ {A Γ Δ σ} → Γ ⊢ A → Δ ⊢ₛ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A
 substitution A σ ⊢Δ with fundamental A | fundamentalSubst (wf A) ⊢Δ σ
 substitution A σ ⊢Δ | [Γ] , [A] | [Γ]' , [σ] =
   wellformed (proj₁ ([A] ⊢Δ (S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ])))
 
-substitutionEq : ∀ {A B Γ Δ σ}
-               → Γ ⊢ A ≡ B → Δ ⊢ₛ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A ≡ subst σ B
-substitutionEq A≡B σ ⊢Δ with fundamentalEq A≡B | fundamentalSubst (wfEq A≡B) ⊢Δ σ
-substitutionEq A≡B σ ⊢Δ | [Γ] , [A] , [B] , [A≡B] | [Γ]' , [σ] =
+substitutionEq : ∀ {A B Γ Δ σ σ'}
+               → Γ ⊢ A ≡ B → Δ ⊢ₛ σ ≡ σ' ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A ≡ subst σ' B
+substitutionEq A≡B σ ⊢Δ with fundamentalEq A≡B | fundamentalSubstEq (wfEq A≡B) ⊢Δ σ
+substitutionEq A≡B σ ⊢Δ | [Γ] , [A] , [B] , [A≡B] | [Γ]' , [σ] , [σ'] , [σ≡σ']  =
   let [σ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
-  in  wellformedEq (proj₁ ([A] ⊢Δ [σ]')) ([A≡B] ⊢Δ [σ]')
+      [σ']' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ']
+      [σ≡σ']' = S.irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [σ] [σ]' [σ≡σ']
+  in  wellformedEq (proj₁ ([A] ⊢Δ [σ]'))
+                   (transEq (proj₁ ([A] ⊢Δ [σ]')) (proj₁ ([B] ⊢Δ [σ]'))
+                            (proj₁ ([B] ⊢Δ [σ']')) ([A≡B] ⊢Δ [σ]')
+                            (proj₂ ([B] ⊢Δ [σ]') [σ']' [σ≡σ']'))
 
 substitutionTerm : ∀ {t A Γ Δ σ}
                → Γ ⊢ t ∷ A → Δ ⊢ₛ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ t ∷ subst σ A
@@ -74,12 +116,33 @@ substitutionTerm t σ ⊢Δ | [Γ] , [A] , [t] | [Γ]' , [σ] =
   let [σ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
   in  wellformedTerm (proj₁ ([A] ⊢Δ [σ]')) (proj₁ ([t] ⊢Δ [σ]'))
 
+substitutionEqTerm : ∀ {t u A Γ Δ σ σ'}
+                   → Γ ⊢ t ≡ u ∷ A → Δ ⊢ₛ σ ≡ σ' ∷ Γ → ⊢ Δ
+                   → Δ ⊢ subst σ t ≡ subst σ' u ∷ subst σ A
+substitutionEqTerm t≡u σ≡σ' ⊢Δ with fundamentalTermEq t≡u
+                                  | fundamentalSubstEq (wfEqTerm t≡u) ⊢Δ σ≡σ'
+... | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]' , [σ] , [σ'] , [σ≡σ'] =
+  let [σ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
+      [σ']' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ']
+      [σ≡σ']' = S.irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [σ] [σ]' [σ≡σ']
+  in  wellformedTermEq (proj₁ ([A] ⊢Δ [σ]'))
+                       (transEqTerm (proj₁ ([A] ⊢Δ [σ]')) ([t≡u] ⊢Δ [σ]')
+                                    (proj₂ ([u] ⊢Δ [σ]') [σ']' [σ≡σ']'))
+
+substRefl : ∀ {σ Γ Δ}
+          → Δ ⊢ₛ σ ∷ Γ
+          → Δ ⊢ₛ σ ≡ σ ∷ Γ
+substRefl id = id
+substRefl (σ , x) = substRefl σ , refl x
+
 wkSubst' : ∀ {ρ σ Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
            ([ρ] : ρ ∷ Δ ⊆ Δ')
            ([σ] : Δ ⊢ₛ σ ∷ Γ)
          → Δ' ⊢ₛ ρ •ₛ σ ∷ Γ
-wkSubst' ⊢Γ ⊢Δ ⊢Δ' ρ σ with fundamentalSubst ⊢Γ ⊢Δ σ
-... | [Γ] , [σ] = wellformedSubst [Γ] ⊢Δ' (wkSubstS [Γ] ⊢Δ ⊢Δ' ρ [σ])
+wkSubst' ε ⊢Δ ⊢Δ' ρ id = id
+wkSubst' (_∙_ {Γ} {A} ⊢Γ ⊢A) ⊢Δ ⊢Δ' ρ (tailσ , headσ) =
+  wkSubst' ⊢Γ ⊢Δ ⊢Δ' ρ tailσ
+  , PE.subst (λ x → _ ⊢ _ ∷ x) (wk-subst A) (wkTerm ρ ⊢Δ' headσ)
 
 wk1Subst' : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
             (⊢F : Δ ⊢ F)
@@ -97,3 +160,75 @@ liftSubst' {F} {σ} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
   in  wkSubst' ⊢Γ ⊢Δ ⊢Δ∙F (T.step T.id) [σ]
   ,   var ⊢Δ∙F (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                          (wk-subst F) here)
+
+idSubst' : ∀ {Γ} (⊢Γ : ⊢ Γ)
+         → Γ ⊢ₛ idSubst ∷ Γ
+idSubst' ε = id
+idSubst' (_∙_ {Γ} {A} ⊢Γ ⊢A) =
+  wk1Subst' ⊢Γ ⊢Γ ⊢A (idSubst' ⊢Γ)
+  , PE.subst (λ x → Γ ∙ A ⊢ _ ∷ x) (wk1-tailId A) (var (⊢Γ ∙ ⊢A) here)
+
+substComp' : ∀ {σ σ' Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
+             ([σ] : Δ' ⊢ₛ σ ∷ Δ)
+             ([σ'] : Δ ⊢ₛ σ' ∷ Γ)
+           → Δ' ⊢ₛ σ ₛ•ₛ σ' ∷ Γ
+substComp' ε ⊢Δ ⊢Δ' [σ] id = id
+substComp' (_∙_ {Γ} {A} ⊢Γ ⊢A) ⊢Δ ⊢Δ' [σ] ([tailσ'] , [headσ']) =
+  substComp' ⊢Γ ⊢Δ ⊢Δ' [σ] [tailσ']
+  , PE.subst (λ x → _ ⊢ _ ∷ x) (substCompEq A)
+             (substitutionTerm [headσ'] [σ] ⊢Δ')
+
+singleSubst : ∀ {A t Γ} → Γ ⊢ t ∷ A → Γ ⊢ₛ consSubst idSubst t ∷ Γ ∙ A
+singleSubst {A} t =
+  let ⊢Γ = wfTerm t
+  in  idSubst' ⊢Γ , PE.subst (λ x → _ ⊢ _ ∷ x) (PE.sym (subst-id A)) t
+
+singleSubstEq : ∀ {A t u Γ} → Γ ⊢ t ≡ u ∷ A
+              → Γ ⊢ₛ consSubst idSubst t ≡ consSubst idSubst u ∷ Γ ∙ A
+singleSubstEq {A} t =
+  let ⊢Γ = wfEqTerm t
+  in  substRefl (idSubst' ⊢Γ) , PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (PE.sym (subst-id A)) t
+
+singleSubst↑ : ∀ {A t Γ} → Γ ∙ A ⊢ t ∷ wk1 A → Γ ∙ A ⊢ₛ consSubst (wk1Subst idSubst) t ∷ Γ ∙ A
+singleSubst↑ {A} t with wfTerm t
+... | ⊢Γ ∙ ⊢A = wk1Subst' ⊢Γ ⊢Γ ⊢A (idSubst' ⊢Γ)
+              , PE.subst (λ x → _ ∙ A ⊢ _ ∷ x) (wk1-tailId A) t
+
+singleSubst↑Eq : ∀ {A t u Γ} → Γ ∙ A ⊢ t ≡ u ∷ wk1 A
+              → Γ ∙ A ⊢ₛ consSubst (wk1Subst idSubst) t ≡ consSubst (wk1Subst idSubst) u ∷ Γ ∙ A
+singleSubst↑Eq {A} t with wfEqTerm t
+... | ⊢Γ ∙ ⊢A = substRefl (wk1Subst' ⊢Γ ⊢Γ ⊢A (idSubst' ⊢Γ))
+              , PE.subst (λ x → _ ∙ A ⊢ _ ≡ _ ∷ x) (wk1-tailId A) t
+
+-- Helper lemmas for single substitution
+
+substType : ∀ {t F G Γ} → Γ ∙ F ⊢ G → Γ ⊢ t ∷ F → Γ ⊢ G [ t ]
+substType {t} {F} {G} ⊢G ⊢t =
+  let ⊢Γ = wfTerm ⊢t
+  in  substitution ⊢G (singleSubst ⊢t) ⊢Γ
+
+substTypeEq : ∀ {t u F G E Γ} → Γ ∙ F ⊢ G ≡ E → Γ ⊢ t ≡ u ∷ F → Γ ⊢ G [ t ] ≡ E [ u ]
+substTypeEq {F = F} ⊢G ⊢t =
+  let ⊢Γ = wfEqTerm ⊢t
+  in  substitutionEq ⊢G (singleSubstEq ⊢t) ⊢Γ
+
+substTerm : ∀ {F G t f Γ} → Γ ∙ F ⊢ f ∷ G → Γ ⊢ t ∷ F → Γ ⊢ f [ t ] ∷ G [ t ]
+substTerm {F} {G} {t} {f} ⊢f ⊢t =
+  let ⊢Γ = wfTerm ⊢t
+  in  substitutionTerm ⊢f (singleSubst ⊢t) ⊢Γ
+
+substTypeΠ : ∀ {t F G Γ} → Γ ⊢ Π F ▹ G → Γ ⊢ t ∷ F → Γ ⊢ G [ t ]
+substTypeΠ ΠFG t with syntacticΠ ΠFG
+substTypeΠ ΠFG t | F , G = substType G t
+
+subst↑Type : ∀ {t F G Γ}
+           → Γ ∙ F ⊢ G
+           → Γ ∙ F ⊢ t ∷ wk1 F
+           → Γ ∙ F ⊢ G [ t ]↑
+subst↑Type ⊢G ⊢t = substitution ⊢G (singleSubst↑ ⊢t) (wfTerm ⊢t)
+
+subst↑TypeEq : ∀ {t u F G E Γ}
+             → Γ ∙ F ⊢ G ≡ E
+             → Γ ∙ F ⊢ t ≡ u ∷ wk1 F
+             → Γ ∙ F ⊢ G [ t ]↑ ≡ E [ u ]↑
+subst↑TypeEq ⊢G ⊢t = substitutionEq ⊢G (singleSubst↑Eq ⊢t) (wfEqTerm ⊢t)

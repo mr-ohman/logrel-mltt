@@ -51,7 +51,6 @@ import Definition.LogicalRelation.Fundamental
 import Definition.Typed.Consequences.Canonicity
 import Definition.Typed.Consequences.Injectivity
 import Definition.Typed.Consequences.Syntactic
-import Definition.Typed.Consequences.SingleSubst
 import Definition.Typed.Consequences.Inversion
 import Definition.Typed.Consequences.Inequality
 import Definition.Typed.Consequences.Substitution

@@ -25,7 +25,7 @@ reflConEq (⊢Γ ∙ ⊢A) = reflConEq ⊢Γ ∙ refl ⊢A
 
 mutual
   substx : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
-  substx ε = ε , ε , tt
+  substx ε = ε , ε , id
   substx (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
     let ⊢Γ , ⊢Δ , [σ] = substx Γ≡Δ
         ⊢A , ⊢B = syntacticEq A≡B
@@ -46,7 +46,7 @@ mutual
   stabilityEq : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → Δ ⊢ A ≡ B
   stabilityEq Γ≡Δ A≡B =
     let ⊢Γ , ⊢Δ , σ = substx Γ≡Δ
-        q = substitutionEq A≡B σ ⊢Δ
+        q = substitutionEq A≡B (substRefl σ) ⊢Δ
     in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (subst-id _) (subst-id _) q
 
 symConEq : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Δ ≡ Γ

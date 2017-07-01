@@ -15,7 +15,6 @@ open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
 open import Definition.Typed.Consequences.Injectivity
-open import Definition.Typed.Consequences.SingleSubst
 open import Definition.Typed.Consequences.Substitution
 
 open import Tools.Nat

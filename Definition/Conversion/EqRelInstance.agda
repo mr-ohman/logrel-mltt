@@ -19,7 +19,7 @@ open import Definition.Conversion.Transitivity
 open import Definition.Conversion.Weakening
 open import Definition.Typed.EqualityRelation
 open import Definition.Typed.Consequences.Syntactic
-open import Definition.Typed.Consequences.SingleSubst
+open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
