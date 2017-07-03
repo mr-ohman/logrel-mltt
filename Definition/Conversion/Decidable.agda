@@ -6,7 +6,6 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
-open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Whnf
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Symmetry
@@ -18,6 +17,8 @@ open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Reduction
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Inequality as IE
+open import Definition.Typed.Consequences.NeTypeEq
+open import Definition.Typed.Consequences.SucCong
 
 open import Tools.Nat
 open import Tools.Product
@@ -40,7 +41,7 @@ mutual
   dec~↑-app Γ≡Δ k k₁ k~k₁ (yes p) =
     let whnfA , neK , neL = ne~↓ k~k₁
         ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~k₁)
-        ΠFG₁≡A = lemma3 neK k ⊢k
+        ΠFG₁≡A = neTypeEq neK k ⊢k
         H , E , A≡ΠHE = Π≡A ΠFG₁≡A whnfA
         F≡H , G₁≡E = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) A≡ΠHE ΠFG₁≡A)
     in  yes (E [ _ ] , app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ΠHE k~k₁)
@@ -49,7 +50,7 @@ mutual
     no (λ { (_ , app x x₁) →
         let whnfA , neK , neL = ne~↓ x
             ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ x)
-            ΠFG≡ΠF₂G₂ = lemma3 neK k₂ ⊢k
+            ΠFG≡ΠF₂G₂ = neTypeEq neK k₂ ⊢k
             F≡F₂ , G≡G₂ = injectivity ΠFG≡ΠF₂G₂
         in  ¬p (convConvTerm x₁ (sym F≡F₂)) })
 
@@ -70,8 +71,8 @@ mutual
         ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~l)
         _ , ⊢l₁ , _ = syntacticEqTerm (soundness~↓ x)
         _ , ⊢l₂ , _ = syntacticEqTerm (soundness~↓ x₂)
-        ΠFG≡A = lemma3 neK ⊢l₁ ⊢k
-        ΠF'G'≡A = lemma3 neL (stabilityTerm (symConEq Γ≡Δ) ⊢l₂) ⊢l
+        ΠFG≡A = neTypeEq neK ⊢l₁ ⊢k
+        ΠF'G'≡A = neTypeEq neL (stabilityTerm (symConEq Γ≡Δ) ⊢l₂) ⊢l
         F≡F' , G≡G' = injectivity (trans ΠFG≡A (sym ΠF'G'≡A))
     in  dec~↑-app Γ≡Δ ⊢l₁ ⊢l₂ k~l (decConv↑TermConv Γ≡Δ F≡F' x₁ x₃)
   dec~↑ Γ≡Δ (app x x₁) (app x₂ x₃) | no ¬p =
@@ -93,7 +94,7 @@ mutual
     let whnfA , neK , neL = ne~↓ k~l
         ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~l)
         _ , ⊢l∷ℕ , _ = syntacticEqTerm (soundness~↓ x₃)
-        ⊢ℕ≡A = lemma3 neK ⊢l∷ℕ ⊢k
+        ⊢ℕ≡A = neTypeEq neK ⊢l∷ℕ ⊢k
         A≡ℕ = ℕ≡A ⊢ℕ≡A whnfA
         k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
     in  yes (_ , natrec p p₁ p₂ k~l')
@@ -168,7 +169,7 @@ mutual
     let whnfA , neK , neL = ne~↓ k~l
         ⊢A , ⊢k , _ = syntacticEqTerm (soundness~↓ k~l)
         _ , ⊢k∷U , _ = syntacticEqTerm (soundness~↓ x)
-        ⊢U≡A = lemma3 neK ⊢k∷U ⊢k
+        ⊢U≡A = neTypeEq neK ⊢k∷U ⊢k
         A≡U = U≡A ⊢U≡A
         k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡U k~l
     in  yes (ne k~l')
@@ -274,7 +275,7 @@ mutual
     let whnfA , neK , neL = ne~↓ k~l
         ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~l)
         _ , ⊢l∷ℕ , _ = syntacticEqTerm (soundness~↓ x)
-        ⊢ℕ≡A = lemma3 neK ⊢l∷ℕ ⊢k
+        ⊢ℕ≡A = neTypeEq neK ⊢l∷ℕ ⊢k
         A≡ℕ = ℕ≡A ⊢ℕ≡A whnfA
         k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
     in  yes (ℕ-ins k~l')

@@ -7,7 +7,6 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.Conversion
-open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Conversion
@@ -16,6 +15,7 @@ open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Substitution
+open import Definition.Typed.Consequences.SucCong
 
 open import Tools.Nat
 open import Tools.Product

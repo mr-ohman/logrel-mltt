@@ -57,12 +57,13 @@ import Definition.Typed.Consequences.Substitution
 import Definition.Typed.Consequences.Equality
 import Definition.Typed.Consequences.InverseUniv
 import Definition.Typed.Consequences.Reduction
+import Definition.Typed.Consequences.NeTypeEq
+import Definition.Typed.Consequences.SucCong
 
 -- Algorithmic equality with lemmas that depend on typing consequences
 import Definition.Conversion
 import Definition.Conversion.Conversion
 import Definition.Conversion.Lift
-import Definition.Conversion.InitLemma
 import Definition.Conversion.Reduction
 import Definition.Conversion.Soundness
 import Definition.Conversion.Stability

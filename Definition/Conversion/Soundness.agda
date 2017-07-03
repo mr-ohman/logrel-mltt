@@ -6,10 +6,10 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
-open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Whnf
 open import Definition.Typed.Consequences.InverseUniv
 open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.NeTypeEq
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -49,7 +49,7 @@ mutual
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)
-        M≡A = lemma3 neA t∷M t
+        M≡A = neTypeEq neA t∷M t
     in  conv (soundness~↓ x₁) M≡A
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)

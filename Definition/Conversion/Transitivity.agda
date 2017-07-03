@@ -8,7 +8,6 @@ open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.Conversion
-open import Definition.Conversion.InitLemma
 open import Definition.Conversion.Soundness
 open import Definition.Conversion.Stability
 open import Definition.Typed.Consequences.Syntactic
@@ -16,6 +15,8 @@ open import Definition.Typed.Consequences.Injectivity
 import Definition.Typed.Consequences.Inequality as WF
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
+open import Definition.Typed.Consequences.NeTypeEq
+open import Definition.Typed.Consequences.SucCong
 
 open import Tools.Nat
 open import Tools.Product
@@ -32,9 +33,9 @@ mutual
          × Γ ⊢ A ≡ B
   trans~↑ Γ≡Δ (var x₁ x≡y) (var x₂ x≡y₁) =
     var x₁ (PE.trans x≡y x≡y₁)
-    , lemma3 (var _) x₁
-             (PE.subst (λ x → _ ⊢ var x ∷ _) (PE.sym x≡y)
-                       (stabilityTerm (symConEq Γ≡Δ) x₂))
+    , neTypeEq (var _) x₁
+               (PE.subst (λ x → _ ⊢ var x ∷ _) (PE.sym x≡y)
+                         (stabilityTerm (symConEq Γ≡Δ) x₂))
   trans~↑ Γ≡Δ (app t~u a<>b) (app u~v b<>c) =
     let t~v , ΠFG≡ΠF'G' = trans~↓ Γ≡Δ t~u u~v
         F≡F₁ , G≡G₁ = injectivity ΠFG≡ΠF'G'
