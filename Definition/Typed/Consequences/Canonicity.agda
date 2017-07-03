@@ -44,7 +44,7 @@ canonicity''' zero = zero , refl (zero ε)
 canonicity''' (ne (neNfₜ neK ⊢k k≡k)) = ⊥-elim (noNe ⊢k neK)
 
 canonicity'' : ∀ {t l}
-             → ([ℕ] : _⊩⟨_⟩ℕ_ {{eqRelInstance}} ε l ℕ)
+             → ([ℕ] : ε ⊩⟨ l ⟩ℕ ℕ)
              → ε ⊩⟨ l ⟩ t ∷ ℕ / ℕ-intr [ℕ]
              → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
 canonicity'' (noemb [ℕ]) (ℕₜ n d n≡n prop) =

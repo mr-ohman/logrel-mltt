@@ -27,7 +27,7 @@ import Tools.PropositionalEquality as PE
 
 redSubst* : ∀ {A B l Γ}
           → Γ ⊢ A ⇒* B
-          → _⊩⟨_⟩_ {{eqrel}} Γ l B
+          → Γ ⊩⟨ l ⟩ B
           → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ A ≡ B / [A]
 redSubst* D (U' l' l< ⊢Γ) rewrite redU* D =

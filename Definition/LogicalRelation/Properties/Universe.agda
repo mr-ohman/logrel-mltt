@@ -24,7 +24,7 @@ univEq : ∀ {l Γ A} ([U] : Γ ⊩⟨ l ⟩ U) → Γ ⊩⟨ l ⟩ A ∷ U / [U
 univEq [U] [A] = univEq' (U-elim [U])
                          (irrelevanceTerm [U] (U-intr (U-elim [U])) [A])
 
-univEqEq' : ∀ {l l' Γ A B} ([U] : Γ ⊩⟨ l ⟩U) ([A] : _⊩⟨_⟩_ {{eqrel}} Γ l' A)
+univEqEq' : ∀ {l l' Γ A B} ([U] : Γ ⊩⟨ l ⟩U) ([A] : Γ ⊩⟨ l' ⟩ A)
          → Γ ⊩⟨ l ⟩ A ≡ B ∷ U / U-intr [U]
          → Γ ⊩⟨ l' ⟩ A ≡ B / [A]
 univEqEq' (noemb (U .⁰ 0<1 ⊢Γ)) [A]

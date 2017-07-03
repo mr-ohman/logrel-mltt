@@ -104,8 +104,7 @@ extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l' →
 extractMaybeEmb (noemb x) = _ , x
 extractMaybeEmb (emb 0<1 x) = extractMaybeEmb x
 
--- For some reason we need to apply eqrel explicitly in 2.5.1.1
-data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : _⊩⟨_⟩_ {{eqrel}} Γ l' B) → Set where
+data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) → Set where
   U : ∀ {l l'} UA UB → Tactic Γ l l' U U (U UA) (U UB)
   ℕ : ∀ {A B l l'} ℕA ℕB → Tactic Γ l l' A B (ℕ ℕA) (ℕ ℕB)
   ne  : ∀ {A B l l'} neA neB
@@ -160,9 +159,9 @@ goodCasesRefl [A] [A'] = goodCases [A] [A'] (reflEq [A])
 
 
 data Tactic₃ Γ : ∀ l l' l'' A B C
-                 (p : Γ ⊩⟨ l ⟩ A)
-                 (q : _⊩⟨_⟩_ {{eqrel}} Γ l' B)
-                 (r : _⊩⟨_⟩_ {{eqrel}} Γ l'' C) → Set where
+                 (p : Γ ⊩⟨ l   ⟩ A)
+                 (q : Γ ⊩⟨ l'  ⟩ B)
+                 (r : Γ ⊩⟨ l'' ⟩ C) → Set where
   U : ∀ {l l' l''} UA UB UC → Tactic₃ Γ l l' l'' U U U (U UA) (U UB) (U UC)
   ℕ : ∀ {A B C l l' l''} ℕA ℕB ℕC
     → Tactic₃ Γ l l' l'' A B C (ℕ ℕA) (ℕ ℕB) (ℕ ℕC)

@@ -56,12 +56,13 @@ U≢ℕ U≡ℕ =
 
 U≢Π' : ∀ {B Γ l l'}
        ([U] : Γ ⊩'⟨ l ⟩U)
-       ([Π] : _⊩'⟨_⟩Π_ {{eqRelInstance}} Γ l' B)
+       ([Π] : Γ ⊩'⟨ l' ⟩Π B)
      → Tactic Γ l l' _ _ (U [U]) (Π [Π]) → ⊥
 U≢Π' a b ()
 
 U≢Π-red : ∀ {B F G Γ} → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ U ≡ B → ⊥
-U≢Π-red D = A≢B (λ Γ l A → Γ ⊩'⟨ l ⟩U) (_⊩'⟨_⟩Π_ {{eqRelInstance}}) U Π
+U≢Π-red D = A≢B (λ Γ l A → Γ ⊩'⟨ l ⟩U)
+                (λ Γ l A → Γ ⊩'⟨ l ⟩Π A) U Π
                 (λ x → extractMaybeEmb (U-elim x))
                 (λ x → extractMaybeEmb (Π-elim' D x))
                 U≢Π'
@@ -90,12 +91,13 @@ U≢ne neK U≡K =
 
 ℕ≢Π' : ∀ {A B Γ l l'}
        ([ℕ] : Γ ⊩ℕ A)
-       ([Π] : _⊩'⟨_⟩Π_ {{eqRelInstance}} Γ l' B)
+       ([Π] : Γ ⊩'⟨ l' ⟩Π B)
      → Tactic Γ l l' _ _ (ℕ [ℕ]) (Π [Π]) → ⊥
 ℕ≢Π' a b ()
 
 ℕ≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
-ℕ≢Π-red D D' = A≢B (λ Γ l A → Γ ⊩ℕ A) (_⊩'⟨_⟩Π_ {{eqRelInstance}}) ℕ Π
+ℕ≢Π-red D D' = A≢B (λ Γ l A → Γ ⊩ℕ A)
+                   (λ Γ l A → Γ ⊩'⟨ l ⟩Π A) ℕ Π
                    (λ x → extractMaybeEmb (ℕ-elim' D x))
                    (λ x → extractMaybeEmb (Π-elim' D' x))
                    ℕ≢Π'
@@ -123,14 +125,15 @@ U≢ne neK U≡K =
   in  ℕ≢ne-red (id ⊢ℕ) (id ⊢K) neK ℕ≡K
 
 Π≢ne' : ∀ {A K Γ l l'}
-       ([Π] : _⊩'⟨_⟩Π_ {{eqRelInstance}} Γ l A)
+       ([Π] : Γ ⊩'⟨ l ⟩Π A)
        ([K] : Γ ⊩ne K)
      → Tactic Γ l l' _ _ (Π [Π]) (ne [K]) → ⊥
 Π≢ne' a b ()
 
 Π≢ne-red : ∀ {A B F G K Γ} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊢ B ⇒* K → Neutral K
      → Γ ⊢ A ≡ B → ⊥
-Π≢ne-red D D' neK = A≢B (_⊩'⟨_⟩Π_ {{eqRelInstance}}) (λ Γ l B → Γ ⊩ne B) Π ne
+Π≢ne-red D D' neK = A≢B (λ Γ l A → Γ ⊩'⟨ l ⟩Π A)
+                        (λ Γ l B → Γ ⊩ne B) Π ne
                         (λ x → extractMaybeEmb (Π-elim' D x))
                         (λ x → extractMaybeEmb (ne-elim' D' neK x))
                         Π≢ne'

@@ -5,4 +5,4 @@ The source code can be browsed in HTML [here](https://mr-ohman.github.io/logrel-
 
 ### Dependencies ###
 
-This project is written in Agda. It has been tested to be working with Agda version 2.5.1.1.
+This project is written in Agda. It has been tested to be working with Agda version 2.5.2.

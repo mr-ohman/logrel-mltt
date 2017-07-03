@@ -24,7 +24,7 @@ import Tools.PropositionalEquality as PE
 neu : ∀ {l Γ A} (neA : Neutral A)
     → Γ ⊢ A
     → Γ ⊢ A ~ A ∷ U
-    → _⊩⟨_⟩_ {{eqrel}} Γ l A
+    → Γ ⊩⟨ l ⟩ A
 neu neA A A~A = ne' _ (idRed:*: A) neA A~A
 
 neuEq' : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ne A)

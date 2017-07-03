@@ -22,7 +22,7 @@ import Tools.PropositionalEquality as PE
 
 
 U≡A' : ∀ {A Γ l} ([U] : Γ ⊩⟨ l ⟩U)
-    → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l U A (U-intr [U])
+    → Γ ⊩⟨ l ⟩ U ≡ A / (U-intr [U])
     → A PE.≡ U
 U≡A' (noemb [U]) [U≡A] = [U≡A]
 U≡A' (emb 0<1 [U]) [U≡A] = U≡A' [U] [U≡A]
@@ -37,7 +37,7 @@ U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
   in  U≡A' (U-elim [U]') (irrelevanceEq [U]' (U-intr (U-elim [U]')) [U≡A]')
 
 ℕ≡A' : ∀ {A Γ l} ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
-    → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l ℕ A (ℕ-intr [ℕ])
+    → Γ ⊩⟨ l ⟩ ℕ ≡ A / (ℕ-intr [ℕ])
     → Whnf A
     → A PE.≡ ℕ
 ℕ≡A' (noemb x) [ℕ≡A] whnfA = whnfRed* [ℕ≡A] whnfA
@@ -55,7 +55,7 @@ U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
 
 ne≡A' : ∀ {A K Γ l}
      → ([K] : Γ ⊩⟨ l ⟩ne K)
-     → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l K A (ne-intr [K])
+     → Γ ⊩⟨ l ⟩ K ≡ A / (ne-intr [K])
      → Whnf A
      → ∃ λ M → Neutral M × A PE.≡ M
 ne≡A' (noemb [K]) (ne₌ M D' neM K≡M) whnfA =
@@ -79,7 +79,7 @@ ne≡A {A} neK ne≡A whnfA | [Γ] , [ne] , [A] , [ne≡A] =
             (irrelevanceEq [ne]' (ne-intr (ne-elim neK' [ne]')) [ne≡A]') whnfA
 
 Π≡A' : ∀ {A F G Γ l} ([Π] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
-    → _⊩⟨_⟩_≡_/_ {{eqRelInstance}} Γ l (Π F ▹ G) A (Π-intr [Π])
+    → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ A / (Π-intr [Π])
     → Whnf A
     → ∃₂ λ H E → A PE.≡ Π H ▹ E
 Π≡A' (noemb [Π]) (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) whnfA =
