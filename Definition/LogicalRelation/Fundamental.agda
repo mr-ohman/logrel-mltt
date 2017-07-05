@@ -292,7 +292,8 @@ mutual
                                      [Γ] [Γ]₁ [ΠFG] [ΠFG]' [f≡g]
         [G[a]] = substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]' [a]
         [G[b]] = substSΠ {F} {G} {b} [Γ]₁ [F] [ΠFG]' [b]
-        [G[a]≡G[b]] = substSΠEq {F} {G} {a} {b} [Γ]₁ [F] [ΠFG]' [a] [b] [a≡b]
+        [G[a]≡G[b]] = substSΠEq {F} {G} {F} {G} {a} {b} [Γ]₁ [F] [F] [ΠFG]'
+                                [ΠFG]' (reflₛ {Π F ▹ G} [Γ]₁ [ΠFG]') [a] [b] [a≡b]
     in  [Γ]₁ , modelsTermEq [G[a]]
                             (appₛ {F} {G} {f} {a} [Γ]₁ [F] [ΠFG]' [f]' [a])
                             (conv₂ₛ {g ∘ b} {G [ a ]} {G [ b ]} [Γ]₁
