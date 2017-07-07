@@ -1,3 +1,5 @@
+-- Raw terms, weakening (renaming) and substitution.
+
 {-# OPTIONS --without-K #-}
 
 module Definition.Untyped where
@@ -15,37 +17,54 @@ infix 25 _[_]
 infix 25 _[_]↑
 
 
--- Context for the language (effectively the same as a list).
+-- Typing contexts (snoc-lists, isomorphic to lists)
 
 data Con (A : Set) : Set where
-  ε   : Con A
-  _∙_ : Con A → A → Con A
+  ε   : Con A               -- Empty context
+  _∙_ : Con A → A → Con A  -- Context extension
 
 
--- Grammar of language.
+-- The Grammar of our language
+
+-- We represent the expressions of our language as de Bruijn terms.
+-- Variables are natural numbers interpreted as de Bruijn indices.
+-- Π, lam, and natrec are binders.
 
 data Term : Set where
-  U      : Term
-  Π_▹_   : Term → Term → Term                 -- second argument is a binder
-  ℕ      : Term
-  var    : Nat  → Term
-  lam    : Term → Term                        -- binder
-  _∘_    : Term → Term → Term
-  zero   : Term
-  suc    : Term → Term
-  natrec : Term → Term → Term → Term → Term   -- first argument is a binder
+
+  -- Type constructors
+  U      : Term                     -- Universe
+  Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder)
+  ℕ      : Term                     -- Type of natural numbers
+
+  -- Lambda-calculus
+  var    : (x : Nat)        → Term  -- Variable (de Bruijn index)
+  lam    : (t : Term)       → Term  -- Function abstraction (binder)
+  _∘_    : (t u : Term)     → Term  -- Application
+
+  -- Introduction and elimination of natural numbers
+  zero   : Term                     -- Natural number zero
+  suc    : (t : Term)       → Term  -- Successor
+  natrec : (A t u v : Term) → Term  -- Recursor (A is a binder)
 
 
--- Constructor injectivity
+-- Injectivity of term constructors w.r.t. propositional equality
+
+-- If  Π F G = Π H E  then  F = H  and  G = E.
 
 Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
 Π-PE-injectivity PE.refl = PE.refl , PE.refl
+
+-- If  suc n = suc m  then  n = m.
 
 suc-PE-injectivity : ∀ {n m} → Term.suc n PE.≡ suc m → n PE.≡ m
 suc-PE-injectivity PE.refl = PE.refl
 
 
--- A view of terms which cannot reduce due to free variable.
+-- Neutral terms
+
+-- A term is neutral if it has a variable in head position.
+-- The variable blocks reduction of such terms.
 
 data Neutral : Term → Set where
   var    : ∀ n                     → Neutral (var n)
@@ -53,19 +72,30 @@ data Neutral : Term → Set where
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 
--- Weak head normal forms
+-- Weak head normal forms (whnfs)
+
+-- These are the (lazy) values of our language.
 
 data Whnf : Term → Set where
-  U : Whnf U
-  Π : ∀ {A B} → Whnf (Π A ▹ B)
-  ℕ : Whnf ℕ
-  lam : ∀{t} → Whnf (lam t)
+
+  -- Type constructors are whnfs.
+  U    : Whnf U
+  Π    : ∀ {A B} → Whnf (Π A ▹ B)
+  ℕ    : Whnf ℕ
+
+  -- Introductions are whnfs.
+  lam  : ∀ {t} → Whnf (lam t)
   zero : Whnf zero
-  suc  : ∀{t} → Whnf (suc t)
-  ne : ∀{n} → Neutral n → Whnf n
+  suc  : ∀ {t} → Whnf (suc t)
+
+  -- Neutrals are whnfs.
+  ne   : ∀ {n} → Neutral n → Whnf n
 
 
 -- Whnf inequalities
+
+-- Different whnfs are trivially distinguished by propositional equality.
+-- (The following statements are sometimes called "no-confusion theorems".)
 
 U≢ℕ : Term.U PE.≢ ℕ
 U≢ℕ ()
@@ -95,24 +125,31 @@ suc≢ne : ∀ {n k} → Neutral k → Term.suc n PE.≢ k
 suc≢ne () PE.refl
 
 
--- A partial view on whnfs of natural number terms.
--- Note: not inductive.
+-- Several views on whnfs (note: not recursive)
+
+-- A whnf of type ℕ is either zero, suc t, or neutral.
 
 data Natural : Term → Set where
-  suc  : ∀ {n}             → Natural (suc n)
   zero :                     Natural zero
+  suc  : ∀ {t}             → Natural (suc t)
   ne   : ∀ {n} → Neutral n → Natural n
+
+-- A (small) type in whnf is either Π A B, ℕ, or neutral.
+-- Large types could also be U.
 
 data Type : Term → Set where
   Π : ∀ {A B} → Type (Π A ▹ B)
   ℕ : Type ℕ
   ne : ∀{n} → Neutral n → Type n
 
+-- A whnf of type Π A B is either lam t or neutral.
+
 data Function : Term → Set where
   lam : ∀{t} → Function (lam t)
   ne : ∀{n} → Neutral n → Function n
 
--- Natural is a subset of Whnf
+-- These views classify only whnfs.
+-- Natural, Type, and Function are a subsets of Whnf.
 
 naturalWhnf : ∀ {n} → Natural n → Whnf n
 naturalWhnf suc = suc
@@ -131,12 +168,24 @@ functionWhnf (ne x) = ne x
 ------------------------------------------------------------------------
 -- Weakening
 
+-- In the following we define untyped weakenings η : Wk.
+-- The typed form could be written η : Γ ≤ Δ with the intention
+-- that η transport a term t living in context Δ to a context Γ
+-- that can bind additional variables (which cannot appear in t).
+-- Thus, if Δ ⊢ t : A and η : Γ ≤ Δ then Γ ⊢ wk η t : wk η A.
+--
+-- Even though Γ is "larger" than Δ we write Γ ≤ Δ to be conformant
+-- with subtyping A ≤ B.  With subtyping, relation Γ ≤ Δ could be defined as
+-- ``for all x ∈ dom(Δ) have Γ(x) ≤ Δ(x)'' (in the sense of subtyping)
+-- and this would be the natural extension of weakenings.
+
 data Wk : Set where
-  id    : Wk
-  step  : Wk  → Wk
-  lift  : Wk  → Wk
+  id    : Wk        -- η : Γ ≤ Γ
+  step  : Wk  → Wk  -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
+  lift  : Wk  → Wk  -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
 
 -- Composition of weakening.
+-- If η : Γ ≤ Δ and η′ : Δ ≤ Φ then η • η′ : Γ ≤ Φ.
 
 _•_                :  Wk → Wk → Wk
 id      • η′       =  η′
@@ -146,69 +195,75 @@ lift η  • step η′  =  step  (η • η′)
 lift η  • lift η′  =  lift  (η • η′)
 
 -- Weakening of variables.
+-- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkNat ρ x ∈ dom(Γ).
 
 wkNat : (ρ : Wk) (n : Nat) → Nat
-wkNat id n = n
-wkNat (step ρ) n = suc (wkNat ρ n)
-wkNat (lift ρ) zero = zero
+wkNat id       n       = n
+wkNat (step ρ) n       = suc (wkNat ρ n)
+wkNat (lift ρ) zero    = zero
 wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
 
 -- Weakening of terms.
+-- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
 
 wk : (ρ : Wk) (t : Term) → Term
-wk ρ U = U
-wk ρ (Π t ▹ t₁) = Π wk ρ t ▹ wk (lift ρ) t₁
-wk ρ ℕ = ℕ
-wk ρ (var x) = var (wkNat ρ x)
-wk ρ (lam t) = lam (wk (lift ρ) t)
-wk ρ (t ∘ t₁) = (wk ρ t) ∘ (wk ρ t₁)
-wk ρ zero = zero
-wk ρ (suc t) = suc (wk ρ t)
-wk ρ (natrec t t₁ t₂ t₃) = natrec (wk (lift ρ) t) (wk ρ t₁) (wk ρ t₂) (wk ρ t₃)
+wk ρ U                = U
+wk ρ (Π A ▹ B)        = Π wk ρ A ▹ wk (lift ρ) B
+wk ρ ℕ                = ℕ
+wk ρ (var x)          = var (wkNat ρ x)
+wk ρ (lam t)          = lam (wk (lift ρ) t)
+wk ρ (t ∘ u)          = wk ρ t ∘ wk ρ u
+wk ρ zero             = zero
+wk ρ (suc t)          = suc (wk ρ t)
+wk ρ (natrec A t u v) = natrec (wk (lift ρ) A) (wk ρ t) (wk ρ u) (wk ρ v)
+
+-- Adding one variable to the context requires wk1.
+-- If Γ ⊢ t : B then Γ∙A ⊢ wk1 t : wk1 B.
 
 wk1 : Term → Term
 wk1 = wk (step id)
 
--- Weakening of a context.
+-- Weakening of a context
 
 wkCon : Wk → Con Term → Con Term
 wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
 wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x
-wkCon pr Γ = Γ
+wkCon pr Γ              = Γ
 
--- Weakening of a neutral term.
+-- Weakening of a neutral term
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
-wkNeutral ρ (var n) = var (wkNat ρ n)
-wkNeutral ρ (_∘_ n) = _∘_ (wkNeutral ρ n)
+wkNeutral ρ (var n)    = var (wkNat ρ n)
+wkNeutral ρ (_∘_ n)    = _∘_ (wkNeutral ρ n)
 wkNeutral ρ (natrec n) = natrec (wkNeutral ρ n)
 
--- Weakening of an instance of the Natural view.
+-- Weakening can be applied to our whnf views.
 
 wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
-wkNatural ρ suc = suc
-wkNatural ρ zero = zero
+wkNatural ρ suc    = suc
+wkNatural ρ zero   = zero
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
-wkType ρ Π = Π
-wkType ρ ℕ = ℕ
+wkType ρ Π      = Π
+wkType ρ ℕ      = ℕ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
-wkFunction ρ lam = lam
+wkFunction ρ lam    = lam
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
 
 wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
-wkWhnf ρ U = U
-wkWhnf ρ Π = Π
-wkWhnf ρ ℕ = ℕ
-wkWhnf ρ lam = lam
-wkWhnf ρ zero = zero
-wkWhnf ρ suc = suc
+wkWhnf ρ U      = U
+wkWhnf ρ Π      = Π
+wkWhnf ρ ℕ      = ℕ
+wkWhnf ρ lam    = lam
+wkWhnf ρ zero   = zero
+wkWhnf ρ suc    = suc
 wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
 
--- Non-dependent version of Π.
+-- Non-dependent version of Π
+
 _▹▹_ : Term → Term → Term
 A ▹▹ B = Π A ▹ wk1 B
 
