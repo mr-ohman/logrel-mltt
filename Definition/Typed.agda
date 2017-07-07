@@ -245,3 +245,22 @@ record _⊢_:⇒*:_∷_ (Γ : Con Term) (t u A : Term) : Set where
     d  : Γ ⊢ t ⇒* u ∷ A
 
 open _⊢_:⇒*:_∷_ using () renaming (d to redₜ) public
+
+-- Well-formed substitutions.
+data _⊢ₛ_∷_ (Δ : Con Term) (σ : Subst) : (Γ : Con Term) → Set where
+  id : Δ ⊢ₛ σ ∷ ε
+  _,_ : ∀ {Γ A}
+      → Δ ⊢ₛ tail σ ∷ Γ
+      → Δ ⊢ head σ ∷ subst (tail σ) A
+      → Δ ⊢ₛ σ ∷ Γ ∙ A
+
+-- Conversion of well-formed substitutions.
+data _⊢ₛ_≡_∷_ (Δ : Con Term) (σ σ' : Subst) : (Γ : Con Term) → Set where
+  id : Δ ⊢ₛ σ ≡ σ' ∷ ε
+  _,_ : ∀ {Γ A}
+      → Δ ⊢ₛ tail σ ≡ tail σ' ∷ Γ
+      → Δ ⊢ head σ ≡ head σ' ∷ subst (tail σ) A
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ ∙ A
+
+-- Note that we cannot use the well-formed substitutions.
+-- For that, we need to prove the fundamental theorem for substitutions.

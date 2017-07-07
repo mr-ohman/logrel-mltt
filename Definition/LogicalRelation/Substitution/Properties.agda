@@ -22,6 +22,23 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+wellformedSubst : ∀ {Γ Δ σ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
+      → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
+      → Δ ⊢ₛ σ ∷ Γ
+wellformedSubst ε ⊢Δ [σ] = id
+wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
+  wellformedSubst [Γ] ⊢Δ [tailσ]
+  , wellformedTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ]
+
+wellformedSubstEq : ∀ {Γ Δ σ σ'} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
+      ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+      → Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ
+wellformedSubstEq ε ⊢Δ [σ] [σ≡σ'] = id
+wellformedSubstEq ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) ([tailσ≡σ'] , [headσ≡σ']) =
+  wellformedSubstEq [Γ] ⊢Δ [tailσ] [tailσ≡σ']
+  , ≅ₜ-eq (wellformedTermEq (proj₁ ([A] ⊢Δ [tailσ])) [headσ≡σ'])
+
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
            ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
            ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])

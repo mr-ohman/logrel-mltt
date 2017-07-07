@@ -43,7 +43,8 @@ import Definition.Untyped
 -- (omitted from paper)
 import Definition.Untyped.Properties
 
--- Judgements: Typing rules, conversion and reduction rules.
+-- Judgements: Typing rules, conversion, reduction rules
+-- and well-formed substitutions and respective equality.
 import Definition.Typed
 
 -- Well-formed context extraction and reduction properties.
@@ -119,6 +120,7 @@ import Definition.LogicalRelation.Substitution
 import Definition.LogicalRelation.Substitution.Irrelevance
 
 -- Properties about valid substitutions:
+-- * Substitution well-formedness.
 -- * Substitution weakening.
 -- * Substitution lifting.
 -- * Identity substitution.

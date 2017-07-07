@@ -521,3 +521,46 @@ mutual
                            r)
                         [F[sucn]] y
     in  [Γ]₃ , modelsTermEq [F[sucn]] d y r
+
+fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
+      → Δ ⊢ₛ σ ∷ Γ
+      → ∃ λ [Γ] → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
+fundamentalSubst ε ⊢Δ [σ] = ε , tt
+fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
+  let [Γ] , [A] = fundamental ⊢A
+      [Δ] , [A]' , [t] = fundamentalTerm [headσ]
+      [Γ]' , [σ] = fundamentalSubst ⊢Γ ⊢Δ [tailσ]
+      [tailσ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
+      [idA]  = proj₁ ([A]' (soundContext [Δ]) (idSubstS [Δ]))
+      [idA]' = proj₁ ([A] ⊢Δ [tailσ]')
+      [idt]  = proj₁ ([t] (soundContext [Δ]) (idSubstS [Δ]))
+  in  [Γ] ∙ [A] , ([tailσ]'
+  ,   irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt])
+
+fundamentalSubstEq : ∀ {Γ Δ σ σ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
+      → Δ ⊢ₛ σ ≡ σ' ∷ Γ
+      → ∃₂ λ [Γ] [σ]
+      → ∃  λ ([σ'] : Δ ⊩ₛ σ' ∷ Γ / [Γ] / ⊢Δ)
+      → Δ ⊩ₛ σ ≡ σ' ∷ Γ / [Γ] / ⊢Δ / [σ]
+fundamentalSubstEq ε ⊢Δ σ = ε , tt , tt , tt
+fundamentalSubstEq (⊢Γ ∙ ⊢A) ⊢Δ (tailσ≡σ' , headσ≡σ') =
+  let [Γ] , [A] = fundamental ⊢A
+      [Γ]' , [tailσ] , [tailσ'] , [tailσ≡σ'] = fundamentalSubstEq ⊢Γ ⊢Δ tailσ≡σ'
+      [Δ] , modelsTermEq [A]' [t] [t'] [t≡t'] = fundamentalTermEq headσ≡σ'
+      [tailσ]' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ]
+      [tailσ']' = S.irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ']
+      [tailσ≡σ']' = S.irrelevanceSubstEq [Γ]' [Γ] ⊢Δ ⊢Δ [tailσ] [tailσ]' [tailσ≡σ']
+      [idA]  = proj₁ ([A]' (soundContext [Δ]) (idSubstS [Δ]))
+      [idA]' = proj₁ ([A] ⊢Δ [tailσ]')
+      [idA]'' = proj₁ ([A] ⊢Δ [tailσ']')
+      [idt]  = proj₁ ([t] (soundContext [Δ]) (idSubstS [Δ]))
+      [idt'] = proj₁ ([t'] (soundContext [Δ]) (idSubstS [Δ]))
+      [idt≡t']  = [t≡t'] (soundContext [Δ]) (idSubstS [Δ])
+  in  [Γ] ∙ [A]
+  ,   ([tailσ]' , irrelevanceTerm'' (subst-id _) (subst-id _) [idA] [idA]' [idt])
+  ,   ([tailσ']' , convTerm₁ [idA]' [idA]''
+                             (proj₂ ([A] ⊢Δ [tailσ]') [tailσ']' [tailσ≡σ']')
+                             (irrelevanceTerm'' (subst-id _) (subst-id _)
+                                                [idA] [idA]' [idt']))
+  ,   ([tailσ≡σ']' , irrelevanceEqTerm'' (subst-id _) (subst-id _) (subst-id _)
+                                         [idA] [idA]' [idt≡t'])
