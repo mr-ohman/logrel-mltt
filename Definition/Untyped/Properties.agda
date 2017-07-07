@@ -299,7 +299,8 @@ substCompEq (natrec t t₁ t₂ t₃) =
 -- Pulling apart a weakening composition in specific context _[a].
 
 wk-comp-subst : ∀ {a} ρ ρ' G
-                   → wk (lift (ρ • ρ')) G [ a ] ≡ wk (lift ρ) (wk (lift ρ') G) [ a ]
+  → wk (lift (ρ • ρ')) G [ a ] ≡ wk (lift ρ) (wk (lift ρ') G) [ a ]
+
 wk-comp-subst {a} ρ ρ' G =
   cong (λ x → x [ a ]) (sym (wk-comp (lift ρ) (lift ρ') G))
 
@@ -330,18 +331,21 @@ wk-β-natrec ρ G =
          (trans (subst-wk G)
                 (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)))))))
 
+-- Composing a singleton substitution and a lifted substitution.
+-- sg u ∘ lift σ = cons id u ∘ lift σ = cons σ u
 
-
-substVarSingletonComp : ∀ {a σ} (x : Nat)
-  → (sgSubst a ₛ•ₛ liftSubst σ) x ≡ (consSubst σ a) x
+substVarSingletonComp : ∀ {u σ} (x : Nat)
+  → (sgSubst u ₛ•ₛ liftSubst σ) x ≡ (consSubst σ u) x
 substVarSingletonComp zero = refl
 substVarSingletonComp {σ = σ} (suc x) = trans (subst-wk (σ x)) (subst-id (σ x))
 
+-- The same again, as action on a term t.
+
 substSingletonComp : ∀ {a σ} t
-                     → subst (sgSubst a ₛ•ₛ liftSubst σ) t
-                     ≡ subst (consSubst σ a) t
+  → subst (sgSubst a ₛ•ₛ liftSubst σ) t ≡ subst (consSubst σ a) t
 substSingletonComp = substVar-to-subst substVarSingletonComp
 
+-- UNUSED:
 -- substConcatSingleton' : ∀ {a σ} (x : Nat)
 --                       → (σ ₛ•ₛ sgSubst a) x
 --                       ≡ (consSubst σ (subst σ a)) x
@@ -354,18 +358,26 @@ substSingletonComp = substVar-to-subst substVarSingletonComp
 -- substConcatSingleton'' zero = refl
 -- substConcatSingleton'' (suc x) = refl
 
-singleSubstComp : ∀ a σ G
-                 → (subst (liftSubst σ) G) [ a ]
-                 ≡ subst (consSubst σ a) G
-singleSubstComp a σ G = trans (substCompEq G) (substSingletonComp G)
+-- A single substitution after a lifted substitution.
+-- ((lift σ) G)[t] = (cons σ t)(G)
 
-singleSubstWkComp : ∀ {ρ} a σ G
-               → wk (lift ρ) (subst (liftSubst σ) G) [ a ]
-               ≡ subst (consSubst (ρ •ₛ σ) a) G
-singleSubstWkComp a σ G =
-  trans (cong (subst (consSubst var a))
+singleSubstComp : ∀ t σ G
+                 → (subst (liftSubst σ) G) [ t ]
+                 ≡ subst (consSubst σ t) G
+singleSubstComp t σ G = trans (substCompEq G) (substSingletonComp G)
+
+-- A single substitution after a lifted substitution (with weakening).
+-- ((lift (ρ ∘ σ)) G)[t] = (cons (ρ ∘ σ) t)(G)
+
+singleSubstWkComp : ∀ {ρ} t σ G
+               → wk (lift ρ) (subst (liftSubst σ) G) [ t ]
+               ≡ subst (consSubst (ρ •ₛ σ) t) G
+singleSubstWkComp t σ G =
+  trans (cong (subst (consSubst var t))
               (trans (wk-subst G) (subst-lift-•ₛ G)))
         (trans (substCompEq G) (substSingletonComp G))
+
+-- Pushing a substitution into a single substitution.
 
 singleSubstLift : ∀ {σ} G t
                 → subst σ (G [ t ])
@@ -375,6 +387,8 @@ singleSubstLift G t =
         (trans (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)
                       (sym (substSingletonComp G)))
                (sym (substCompEq G)))
+
+-- More specific laws.
 
 idWkLiftSubstLemma : ∀ σ G
   → wk (lift (step id)) (subst (liftSubst σ) G) [ var 0 ]
