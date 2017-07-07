@@ -32,8 +32,8 @@ lamₛ : ∀ {F G t Γ}
        ([Γ] : ⊩ₛ Γ)
        ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
        ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-       ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩t t ∷ G / [Γ] ∙ [F] / [G])
-     → Γ ⊩ₛ⟨ ¹ ⟩t lam t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
+       ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ t ∷ G / [Γ] ∙ [F] / [G])
+     → Γ ⊩ₛ⟨ ¹ ⟩ lam t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
 lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
@@ -287,7 +287,7 @@ fun-extEqTerm : ∀ {f g F G Γ Δ σ l}
                 ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
                 ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
               → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
-                Γ ∙ F ⊩ₛ⟨ l ⟩t' wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
+                Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
                              / [Γ] ∙ [F] / [G]
               → (⊢Δ   : ⊢ Δ)
                 ([σ]  : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
@@ -374,11 +374,11 @@ fun-extₛ : ∀ {f g F G Γ l}
            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
            ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
          → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
-           Γ ⊩ₛ⟨ l ⟩t f ∷ Π F ▹ G / [Γ] / [ΠFG]
-         → Γ ⊩ₛ⟨ l ⟩t g ∷ Π F ▹ G / [Γ] / [ΠFG]
-         → Γ ∙ F ⊩ₛ⟨ l ⟩t' wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
+           Γ ⊩ₛ⟨ l ⟩ f ∷ Π F ▹ G / [Γ] / [ΠFG]
+         → Γ ⊩ₛ⟨ l ⟩ g ∷ Π F ▹ G / [Γ] / [ΠFG]
+         → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
                         / [Γ] ∙ [F] / [G]
-         → Γ ⊩ₛ⟨ l ⟩t' f ≡ g ∷ Π F ▹ G / [Γ] / [ΠFG]
+         → Γ ⊩ₛ⟨ l ⟩ f ≡ g ∷ Π F ▹ G / [Γ] / [ΠFG]
 fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
   fun-extEqTerm {f} {g} {F} {G} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
                 (proj₁ ([f] ⊢Δ [σ])) (proj₁ ([g] ⊢Δ [σ]))

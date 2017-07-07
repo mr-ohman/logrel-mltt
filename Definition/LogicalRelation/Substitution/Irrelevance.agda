@@ -106,8 +106,8 @@ irrelevanceTerm : ∀ {l l' A t Γ}
                   ([Γ] [Γ]' : ⊩ₛ Γ)
                   ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
                   ([A]' : Γ ⊩ₛ⟨ l' ⟩ A / [Γ]')
-                → Γ ⊩ₛ⟨ l  ⟩t t ∷ A / [Γ]  / [A]
-                → Γ ⊩ₛ⟨ l' ⟩t t ∷ A / [Γ]' / [A]'
+                → Γ ⊩ₛ⟨ l  ⟩ t ∷ A / [Γ]  / [A]
+                → Γ ⊩ₛ⟨ l' ⟩ t ∷ A / [Γ]' / [A]'
 irrelevanceTerm [Γ] [Γ]' [A] [A]' [t] ⊢Δ [σ]' =
   let [σ]   = irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]'
       [σA]  = proj₁ ([A] ⊢Δ [σ])
@@ -122,8 +122,8 @@ irrelevanceTerm' : ∀ {l l' A A' t Γ}
                    ([Γ] [Γ]' : ⊩ₛ Γ)
                    ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
                    ([A'] : Γ ⊩ₛ⟨ l' ⟩ A' / [Γ]')
-                 → Γ ⊩ₛ⟨ l  ⟩t t ∷ A / [Γ]  / [A]
-                 → Γ ⊩ₛ⟨ l' ⟩t t ∷ A' / [Γ]' / [A']
+                 → Γ ⊩ₛ⟨ l  ⟩ t ∷ A / [Γ]  / [A]
+                 → Γ ⊩ₛ⟨ l' ⟩ t ∷ A' / [Γ]' / [A']
 irrelevanceTerm' {A = A} {t = t} PE.refl [Γ] [Γ]' [A] [A]' [t] =
   irrelevanceTerm {A = A} {t = t} [Γ] [Γ]' [A] [A]' [t]
 
@@ -134,8 +134,8 @@ irrelevanceTermLift : ∀ {l A F H t Γ}
               ([H] : Γ ⊩ₛ⟨ l ⟩ H / [Γ])
               ([F≡H] : Γ ⊩ₛ⟨ l ⟩ F ≡ H / [Γ] / [F])
               ([A] : Γ ∙ F ⊩ₛ⟨ l ⟩ A / [Γ] ∙ [F])
-            → Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] ∙ [F] / [A]
-            → Γ ∙ H ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] ∙ [H]
+            → Γ ∙ F ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] ∙ [F] / [A]
+            → Γ ∙ H ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] ∙ [H]
                            / irrelevanceLift {A = A} {F = F} {H = H}
                                              [Γ] [F] [H] [F≡H] [A]
 irrelevanceTermLift [Γ] [F] [H] [F≡H] [A] [t] ⊢Δ ([tailσ] , [headσ]) =
@@ -159,8 +159,8 @@ irrelevanceEqTerm : ∀ {l l' A t u Γ}
                   ([Γ] [Γ]' : ⊩ₛ Γ)
                   ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
                   ([A]' : Γ ⊩ₛ⟨ l' ⟩ A / [Γ]')
-                → Γ ⊩ₛ⟨ l  ⟩t' t ≡ u ∷ A / [Γ]  / [A]
-                → Γ ⊩ₛ⟨ l' ⟩t' t ≡ u ∷ A / [Γ]' / [A]'
+                → Γ ⊩ₛ⟨ l  ⟩ t ≡ u ∷ A / [Γ]  / [A]
+                → Γ ⊩ₛ⟨ l' ⟩ t ≡ u ∷ A / [Γ]' / [A]'
 irrelevanceEqTerm {A = A} {t = t} {u = u} [Γ] [Γ]' [A] [A]' [t≡u] ⊢Δ [σ] =
   let [σ]' = irrelevanceSubst [Γ]' [Γ] ⊢Δ ⊢Δ [σ]
   in  LR.irrelevanceEqTerm (proj₁ ([A] ⊢Δ [σ]'))

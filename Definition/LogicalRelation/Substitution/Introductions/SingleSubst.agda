@@ -33,7 +33,7 @@ import Tools.PropositionalEquality as PE
 substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
          ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
-         ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+         ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
        → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
 substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
   let Geq = newlem1 G
@@ -56,9 +56,9 @@ substSEq : ∀ {F F' G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
            ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
            ([G'] : Γ ∙ F' ⊩ₛ⟨ l ⟩ G' / [Γ] ∙ [F'])
            ([G≡G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G ≡ G' / [Γ] ∙ [F] / [G])
-           ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
-           ([t'] : Γ ⊩ₛ⟨ l ⟩t t' ∷ F' / [Γ] / [F'])
-           ([t≡t'] : Γ ⊩ₛ⟨ l ⟩t' t ≡ t' ∷ F / [Γ] / [F])
+           ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
+           ([t'] : Γ ⊩ₛ⟨ l ⟩ t' ∷ F' / [Γ] / [F'])
+           ([t≡t'] : Γ ⊩ₛ⟨ l ⟩ t ≡ t' ∷ F / [Γ] / [F])
          → Γ ⊩ₛ⟨ l ⟩ G [ t ] ≡ G' [ t' ] / [Γ]
                    / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSEq {F} {F'} {G} {G'} {t} {t'}
@@ -84,9 +84,9 @@ substSEq {F} {F'} {G} {G'} {t} {t'}
 substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
              ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
-             ([f] : Γ ∙ F ⊩ₛ⟨ l ⟩t f ∷ G / [Γ] ∙ [F] / [G])
-             ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
-           → Γ ⊩ₛ⟨ l ⟩t f [ t ] ∷ G [ t ] / [Γ]
+             ([f] : Γ ∙ F ⊩ₛ⟨ l ⟩ f ∷ G / [Γ] ∙ [F] / [G])
+             ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
+           → Γ ⊩ₛ⟨ l ⟩ f [ t ] ∷ G [ t ] / [Γ]
                       / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
   let prfG = newlem1 G
@@ -108,7 +108,7 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
 subst↑S : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
-          ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ wk1 F / [Γ] ∙ [F]
+          ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
                               / wk1ₛ {F} {F} [Γ] [F] [F])
         → Γ ∙ F ⊩ₛ⟨ l ⟩ G [ t ]↑ / [Γ] ∙ [F]
 subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
@@ -138,11 +138,11 @@ subst↑SEq : ∀ {F G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
             ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
             ([G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G' / [Γ] ∙ [F])
             ([G≡G'] : Γ ∙ F ⊩ₛ⟨ l ⟩ G ≡ G' / [Γ] ∙ [F] / [G])
-            ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩t t ∷ wk1 F / [Γ] ∙ [F]
+            ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
                                 / wk1ₛ {F} {F} [Γ] [F] [F])
-            ([t'] : Γ ∙ F ⊩ₛ⟨ l ⟩t t' ∷ wk1 F / [Γ] ∙ [F]
+            ([t'] : Γ ∙ F ⊩ₛ⟨ l ⟩ t' ∷ wk1 F / [Γ] ∙ [F]
                                  / wk1ₛ {F} {F} [Γ] [F] [F])
-            ([t≡t'] : Γ ∙ F ⊩ₛ⟨ l ⟩t' t ≡ t' ∷ wk1 F / [Γ] ∙ [F]
+            ([t≡t'] : Γ ∙ F ⊩ₛ⟨ l ⟩ t ≡ t' ∷ wk1 F / [Γ] ∙ [F]
                                    / wk1ₛ {F} {F} [Γ] [F] [F])
           → Γ ∙ F ⊩ₛ⟨ l ⟩ G [ t ]↑ ≡ G' [ t' ]↑ / [Γ] ∙ [F]
                         / subst↑S {F} {G} {t} [Γ] [F] [G] [t]
@@ -241,7 +241,7 @@ substSΠ : ∀ {F G t Γ l}
           ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
           ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
-          ([t] : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
+          ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
         → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
 substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
   let [σG[t]] = substSΠ₁ (proj₁ ([ΠFG] ⊢Δ [σ])) (proj₁ ([F] ⊢Δ [σ]))
@@ -269,9 +269,9 @@ substSΠEq : ∀ {F G F' G' t u Γ l}
             ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
             ([ΠF'G'] : Γ ⊩ₛ⟨ l ⟩ Π F' ▹ G' / [Γ])
             ([ΠFG≡ΠF'G'] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G ≡ Π F' ▹ G' / [Γ] / [ΠFG])
-            ([t]   : Γ ⊩ₛ⟨ l ⟩t t ∷ F / [Γ] / [F])
-            ([u]   : Γ ⊩ₛ⟨ l ⟩t u ∷ F' / [Γ] / [F'])
-            ([t≡u] : Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ F / [Γ] / [F])
+            ([t]   : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
+            ([u]   : Γ ⊩ₛ⟨ l ⟩ u ∷ F' / [Γ] / [F'])
+            ([t≡u] : Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ F / [Γ] / [F])
           → Γ ⊩ₛ⟨ l ⟩ G [ t ] ≡ G' [ u ] / [Γ]
                     / substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t]
 substSΠEq {F} {G} {F'} {G'} {t} {u} [Γ] [F] [F'] [ΠFG] [ΠF'G'] [ΠFG≡ΠF'G']

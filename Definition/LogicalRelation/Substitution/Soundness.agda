@@ -40,7 +40,7 @@ soundnessEq {A = A} [Γ] [A] [A≡B] =
 soundnessTerm : ∀ {t A Γ l}
                 ([Γ] : ⊩ₛ Γ)
                 ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-              → Γ ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] / [A]
+              → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A]
               → Γ ⊩⟨ l ⟩ t ∷ A / soundness [Γ] [A]
 soundnessTerm {A = A} [Γ] [A] [t] =
   let [σA] = soundness {A = A} [Γ] [A]

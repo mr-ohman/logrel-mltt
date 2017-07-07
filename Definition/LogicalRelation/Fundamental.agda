@@ -103,7 +103,7 @@ mutual
                  → x ∷ A ∈ Γ
                  → ([Γ] : ⊩ₛ Γ)
                  → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-                 → Γ ⊩ₛ⟨ ¹ ⟩t var x ∷ A / [Γ] / [A]
+                 → Γ ⊩ₛ⟨ ¹ ⟩ var x ∷ A / [Γ] / [A]
   fundamentalVar here (_∙_ {A = A} {l = l} [Γ] [A]) =
     (λ ⊢Δ [σ] →
        let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
@@ -144,7 +144,7 @@ mutual
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
     → ∃ λ ([Γ] : ⊩ₛ Γ)
     → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-    → Γ ⊩ₛ⟨ ¹ ⟩t t ∷ A / [Γ] / [A]
+    → Γ ⊩ₛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕₜₛ (valid x)
   fundamentalTerm (Π_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
@@ -206,7 +206,7 @@ mutual
 
   fundamentalTermEq : ∀{Γ A t t'} → Γ ⊢ t ≡ t' ∷ A
                     → ∃ λ ([Γ] : ⊩ₛ Γ)
-                    → Γ ⊩ₛ⟨ ¹ ⟩t t ≡ t' ∷ A / [Γ]
+                    → [ Γ ⊩ₛ⟨ ¹ ⟩ t ≡ t' ∷ A / [Γ] ]
   fundamentalTermEq (refl D) with fundamentalTerm D
   ... | [Γ] , [A] , [t] =
     [Γ] , modelsTermEq [A] [t] [t]

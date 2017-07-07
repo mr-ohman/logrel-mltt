@@ -36,7 +36,7 @@ wellformedEqₛ [Γ] [A] [A≡B] =
                                            [idA] [idA]' ([A≡B] ⊢Γ idSubst))
 
 wellformedTermₛ : ∀ {t A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-               → Γ ⊩ₛ⟨ l ⟩t t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
+               → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
 wellformedTermₛ [Γ] [A] [t] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
@@ -47,7 +47,7 @@ wellformedTermₛ [Γ] [A] [t] =
                                        [idA] [idA]' (proj₁ ([t] ⊢Γ idSubst)))
 
 wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-               → Γ ⊩ₛ⟨ l ⟩t' t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
+               → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
 wellformedEqTermₛ [Γ] [A] [t≡u] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
