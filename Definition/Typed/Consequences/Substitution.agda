@@ -108,13 +108,13 @@ substComp' (_∙_ {Γ} {A} ⊢Γ ⊢A) ⊢Δ ⊢Δ' [σ] ([tailσ'] , [headσ'])
   , PE.subst (λ x → _ ⊢ _ ∷ x) (substCompEq A)
              (substitutionTerm [headσ'] [σ] ⊢Δ')
 
-singleSubst : ∀ {A t Γ} → Γ ⊢ t ∷ A → Γ ⊢ₛ consSubst idSubst t ∷ Γ ∙ A
+singleSubst : ∀ {A t Γ} → Γ ⊢ t ∷ A → Γ ⊢ₛ sgSubst t ∷ Γ ∙ A
 singleSubst {A} t =
   let ⊢Γ = wfTerm t
   in  idSubst' ⊢Γ , PE.subst (λ x → _ ⊢ _ ∷ x) (PE.sym (subst-id A)) t
 
 singleSubstEq : ∀ {A t u Γ} → Γ ⊢ t ≡ u ∷ A
-              → Γ ⊢ₛ consSubst idSubst t ≡ consSubst idSubst u ∷ Γ ∙ A
+              → Γ ⊢ₛ sgSubst t ≡ sgSubst u ∷ Γ ∙ A
 singleSubstEq {A} t =
   let ⊢Γ = wfEqTerm t
   in  substRefl (idSubst' ⊢Γ) , PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (PE.sym (subst-id A)) t

@@ -360,6 +360,13 @@ consSubst : Subst → Term → Subst
 consSubst σ t zero    = t
 consSubst σ t (suc n) = σ n
 
+-- Singleton substitution.
+--
+-- If Γ ⊢ t : A then Γ ⊢ sgSubst t : Γ∙A.
+
+sgSubst : Term → Subst
+sgSubst = consSubst idSubst
+
 -- Compose two substitutions.
 --
 -- If Γ ⊢ σ : Δ and Δ ⊢ σ′ : Φ then Γ ⊢ σ ₛ•ₛ σ′ : Φ.
@@ -384,7 +391,7 @@ _ₛ•_ σ ρ x = σ (wkVar ρ x)
 -- If Γ∙A ⊢ t : B and Γ ⊢ s : A then Γ ⊢ t[s] : B[s].
 
 _[_] : (t : Term) (s : Term) → Term
-t [ s ] = subst (consSubst idSubst s) t
+t [ s ] = subst (sgSubst s) t
 
 -- Substitute the first variable of a term with an other term,
 -- but let the two terms share the same context.

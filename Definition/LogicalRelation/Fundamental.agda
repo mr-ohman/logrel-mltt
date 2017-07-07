@@ -471,7 +471,7 @@ mutual
         [natrecₙ] = natrecₛ {F} {z} {s} {n}
                             [Γ]₃ [ℕ]' [F]' [F₀]' [F₊] [Fₙ]' [z]' [s] [n]'
         t = (s ∘ n) ∘ (natrec F z s n)
-        q = subst (liftSubst (consSubst idSubst n))
+        q = subst (liftSubst (sgSubst n))
                   (wk1 (F [ suc (var zero) ]↑))
         y = S.irrelevanceTerm'
               {A = q [ natrec F z s n ]} {A' = F [ suc n ]} {t = t}
