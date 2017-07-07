@@ -19,10 +19,6 @@ data ⊢_≡_ : (Γ Δ : Con Term) → Set where
   ε : ⊢ ε ≡ ε
   _∙_ : ∀ {Γ Δ A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → ⊢ Γ ∙ A ≡ Δ ∙ B
 
-reflConEq : ∀ {Γ} → ⊢ Γ → ⊢ Γ ≡ Γ
-reflConEq ε = ε
-reflConEq (⊢Γ ∙ ⊢A) = reflConEq ⊢Γ ∙ refl ⊢A
-
 mutual
   substx : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
   substx ε = ε , ε , id
@@ -48,6 +44,10 @@ mutual
     let ⊢Γ , ⊢Δ , σ = substx Γ≡Δ
         q = substitutionEq A≡B (substRefl σ) ⊢Δ
     in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (subst-id _) (subst-id _) q
+
+reflConEq : ∀ {Γ} → ⊢ Γ → ⊢ Γ ≡ Γ
+reflConEq ε = ε
+reflConEq (⊢Γ ∙ ⊢A) = reflConEq ⊢Γ ∙ refl ⊢A
 
 symConEq : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Δ ≡ Γ
 symConEq ε = ε
