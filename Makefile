@@ -1,3 +1,12 @@
+## HTML Output ############################################################
+
+htmldir=/tmp/logrel-mltt/html
+
+.PHONY : html
+
+html :
+	agda --html --html-dir=$(htmldir) Everything.agda
+
 
 ## Lines of Code ##########################################################
 
@@ -10,3 +19,5 @@ agda-loc :
 
 agda-woc :
 	@wc -L $(agdalocfiles)
+
+# EOF
