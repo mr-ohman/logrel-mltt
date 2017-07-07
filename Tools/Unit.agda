@@ -1,5 +1,9 @@
+-- The unit type; also used as proposition ``Truth''
+
 {-# OPTIONS --without-K #-}
 
 module Tools.Unit where
 
-open import Agda.Builtin.Unit public
+-- We reexport Agda's built-in unit type.
+
+open import Agda.Builtin.Unit public using (⊤; tt)
