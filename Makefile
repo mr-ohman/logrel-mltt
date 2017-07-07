@@ -1,6 +1,7 @@
 ## HTML Output ############################################################
 
-htmldir=/tmp/logrel-mltt/html
+htmldir=$(HOME)/popl17/html
+# htmldir=/tmp/logrel-mltt/html
 
 .PHONY : html loc agda-loc agda-woc
 
