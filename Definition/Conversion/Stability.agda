@@ -20,10 +20,10 @@ data ⊢_≡_ : (Γ Δ : Con Term) → Set where
   _∙_ : ∀ {Γ Δ A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → ⊢ Γ ∙ A ≡ Δ ∙ B
 
 mutual
-  substx : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
-  substx ε = ε , ε , id
-  substx (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
-    let ⊢Γ , ⊢Δ , [σ] = substx Γ≡Δ
+  contextConvSubst : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
+  contextConvSubst ε = ε , ε , id
+  contextConvSubst (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
+    let ⊢Γ , ⊢Δ , [σ] = contextConvSubst Γ≡Δ
         ⊢A , ⊢B = syntacticEq A≡B
         Δ⊢B = stability Γ≡Δ ⊢B
     in  ⊢Γ ∙ ⊢A , ⊢Δ ∙ Δ⊢B
@@ -35,13 +35,13 @@ mutual
 
   stability : ∀ {A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A → Δ ⊢ A
   stability Γ≡Δ A =
-    let ⊢Γ , ⊢Δ , σ = substx Γ≡Δ
+    let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
         q = substitution A σ ⊢Δ
     in  PE.subst (λ x → _ ⊢ x) (subst-id _) q
 
   stabilityEq : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → Δ ⊢ A ≡ B
   stabilityEq Γ≡Δ A≡B =
-    let ⊢Γ , ⊢Δ , σ = substx Γ≡Δ
+    let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
         q = substitutionEq A≡B (substRefl σ) ⊢Δ
     in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (subst-id _) (subst-id _) q
 
@@ -55,7 +55,7 @@ symConEq (Γ≡Δ ∙ A≡B) = symConEq Γ≡Δ ∙ stabilityEq Γ≡Δ (sym A�
 
 stabilityTerm : ∀ {t A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ∷ A → Δ ⊢ t ∷ A
 stabilityTerm Γ≡Δ t =
-  let ⊢Γ , ⊢Δ , σ = substx Γ≡Δ
+  let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
       q = substitutionTerm t σ ⊢Δ
   in  PE.subst₂ (λ x y → _ ⊢ x ∷ y) (subst-id _) (subst-id _) q
 
@@ -71,15 +71,15 @@ stabilityRedTerm Γ≡Δ (β-red x x₁ x₂) =
   β-red (stability Γ≡Δ x) (stabilityTerm (Γ≡Δ ∙ refl x) x₁)
         (stabilityTerm Γ≡Δ x₂)
 stabilityRedTerm Γ≡Δ (natrec-subst x x₁ x₂ d) =
-  let ⊢Γ , _ , _ = substx Γ≡Δ
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
   in  natrec-subst (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
                    (stabilityTerm Γ≡Δ x₂) (stabilityRedTerm Γ≡Δ d)
 stabilityRedTerm Γ≡Δ (natrec-zero x x₁ x₂) =
-  let ⊢Γ , _ , _ = substx Γ≡Δ
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
   in  natrec-zero (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
                   (stabilityTerm Γ≡Δ x₂)
 stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
-  let ⊢Γ , _ , _ = substx Γ≡Δ
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
   in  natrec-suc (stabilityTerm Γ≡Δ x) (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x₁)
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
 
@@ -104,7 +104,7 @@ mutual
   stability~↑ Γ≡Δ (app k~l x) =
     app (stability~↓ Γ≡Δ k~l) (stabilityConv↑Term Γ≡Δ x)
   stability~↑ Γ≡Δ (natrec x₁ x₂ x₃ k~l) =
-    let ⊢Γ , _ , _ = substx Γ≡Δ
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
     in natrec (stabilityConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x₁)
               (stabilityConv↑Term Γ≡Δ x₂)
               (stabilityConv↑Term Γ≡Δ x₃)
@@ -130,10 +130,10 @@ mutual
                  → Γ ⊢ A [conv↓] B
                  → Δ ⊢ A [conv↓] B
   stabilityConv↓ Γ≡Δ (U-refl x) =
-    let _ , ⊢Δ , _ = substx Γ≡Δ
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  U-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ℕ-refl x) =
-    let _ , ⊢Δ , _ = substx Γ≡Δ
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  ℕ-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ne x) =
     ne (stability~↓ Γ≡Δ x)
@@ -161,7 +161,7 @@ mutual
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =
     univ (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁) (stabilityConv↓ Γ≡Δ x₂)
   stabilityConv↓Term Γ≡Δ (zero-refl x) =
-    let _ , ⊢Δ , _ = substx Γ≡Δ
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  zero-refl ⊢Δ
   stabilityConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConv↑Term Γ≡Δ t<>u)
   stabilityConv↓Term Γ≡Δ (fun-ext F x x₁ y y₁ t<>u) =

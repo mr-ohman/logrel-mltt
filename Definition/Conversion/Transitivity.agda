@@ -42,7 +42,7 @@ mutual
         a<>c = transConv↑Term Γ≡Δ F≡F₁ a<>b b<>c
     in  app t~v a<>c , substTypeEq G≡G₁ (soundnessConv↑Term a<>b)
   trans~↑ Γ≡Δ (natrec A<>B a₀<>b₀ aₛ<>bₛ t~u) (natrec B<>C b₀<>c₀ bₛ<>cₛ u~v) =
-    let ⊢Γ , _ , _ = substx Γ≡Δ
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
         A≡B = soundnessConv↑ A<>B
         F[0]≡F₁[0] = substTypeEq A≡B (refl (zero ⊢Γ))
         ΠℕFs≡ΠℕF₁s = sucCong A≡B
