@@ -359,7 +359,7 @@ natrecIrrelevantSubstLemma : ∀ F z s m σ (x : Nat)
      ₛ•ₛ liftSubst (consSubst idSubst m)
      ₛ•ₛ liftSubst (liftSubst σ)
      ₛ•  step id
-     ₛ•ₛ consSubst (λ x → var (suc x)) (suc (var 0))) x
+     ₛ•ₛ consSubst (tail idSubst) (suc (var 0))) x
   ≡ (consSubst σ (suc m)) x
 natrecIrrelevantSubstLemma F z s m σ zero =
   cong suc (trans (subst-wk m) (subst-id m))
@@ -375,66 +375,62 @@ natrecIrrelevantSubst : ∀ F z s m σ
                  (wk1 (F [ suc (var zero) ]↑)))
                    [ natrec (subst (liftSubst σ) F) (subst σ z) (subst σ s) m ]
 natrecIrrelevantSubst F z s m σ =
-  -- TODO Make nicer
   sym (trans (substCompEq (subst (liftSubst (liftSubst σ))
         (wk (step id)
-         (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F))))
+         (subst (consSubst (tail idSubst) (suc (var 0))) F))))
          (trans (substCompEq (wk (step id)
-        (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F)))
+        (subst (consSubst (tail idSubst) (suc (var 0))) F)))
         (trans
-           (subst-wk (subst (consSubst (λ x → var (suc x)) (suc (var 0))) F))
+           (subst-wk (subst (consSubst (tail idSubst) (suc (var 0))) F))
            (trans (substCompEq F)
                      (substVar-to-subst (natrecIrrelevantSubstLemma F z s m σ) F)))))
 
 natrecIrrelevantSubstLemma' : ∀ F z s n (x : Nat)
--- TODO Make nicer
   → (consSubst idSubst (natrec F z s n)
      ₛ•ₛ liftSubst (consSubst idSubst n)
      ₛ•  step id
-     ₛ•ₛ consSubst (λ z₁ → var (suc z₁)) (suc (var zero))) x
+     ₛ•ₛ consSubst (tail idSubst) (suc (var zero))) x
   ≡ (consSubst var (suc n)) x
 natrecIrrelevantSubstLemma' F z s n zero =
   cong suc (trans (subst-wk n) (subst-id n))
 natrecIrrelevantSubstLemma' F z s n (suc x) = refl
 
-natrecIrrelevantSubst' : ∀ F z s n →
-      subst (liftSubst (consSubst idSubst n))
-      (wk1 (F [ suc (var zero) ]↑))
+natrecIrrelevantSubst' : ∀ F z s n
+  → subst (liftSubst (consSubst idSubst n))
+          (wk1 (F [ suc (var zero) ]↑))
       [ natrec F z s n ]
-      ≡
-      F [ suc n ]
+  ≡ F [ suc n ]
 natrecIrrelevantSubst' F z s n =
   trans (substCompEq (wk (step id)
-                              (subst (consSubst (λ x → var (suc x))
-                                                (suc (var zero)))
-                                     F)))
-           (trans (subst-wk (subst (consSubst (λ x → var (suc x))
-                                                 (suc (var zero)))
-                                      F))
-                     (trans (substCompEq F)
-                               (substVar-to-subst (natrecIrrelevantSubstLemma' F z s n)
-                                        F)))
+                         (subst (consSubst (tail idSubst) (suc (var 0))) F)))
+        (trans (subst-wk (subst (consSubst (tail idSubst) (suc (var 0))) F))
+               (trans (substCompEq F)
+                      (substVar-to-subst (natrecIrrelevantSubstLemma' F z s n) F)))
 
-lemma3 : ∀ {G t σ} →
-         subst (consSubst (λ n → σ (suc n)) (subst σ t)) G ≡
-         subst σ (subst (consSubst (λ x → var (suc x)) t) G)
-lemma3 {G} {t} {σ} = trans (substVar-to-subst
-                                (λ { zero → refl
-                                ; (suc x) → refl }) G)
-                              (sym (substCompEq G))
-
-Geq      : ∀ σ G → subst (consSubst idSubst (var zero))
-           (wk (lift (step id)) (subst (liftSubst σ) G))
-           ≡ subst (liftSubst σ) G
-Geq σ G = trans (subst-wk (subst (liftSubst σ) G))
-               (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl })
+cons0wkLift1-id : ∀ σ G
+    → subst (consSubst idSubst (var zero))
+            (wk (lift (step id)) (subst (liftSubst σ) G))
+    ≡ subst (liftSubst σ) G
+cons0wkLift1-id σ G =
+  trans (subst-wk (subst (liftSubst σ) G))
+        (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl })
                                   (subst (liftSubst σ) G))
-                         (subst-id (subst (liftSubst σ) G)))
+               (subst-id (subst (liftSubst σ) G)))
 
-newlem1 : ∀ {σ t} G → subst
-        (λ z → consSubst (λ z₁ → σ z₁) (subst (λ z₁ → σ z₁) t) z) G
-        PE.≡ subst σ (subst (consSubst idSubst t) G)
-newlem1 G = sym (trans (substCompEq G) (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G))
+substConsId : ∀ {σ t} G
+        → subst (consSubst σ (subst σ t)) G
+        ≡ subst σ (subst (consSubst idSubst t) G)
+substConsId G =
+  sym (trans (substCompEq G)
+             (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G))
+
+substConsTailId : ∀ {G t σ}
+                → subst (consSubst (tail σ) (subst σ t)) G
+                ≡ subst σ (subst (consSubst (tail idSubst) t) G)
+substConsTailId {G} {t} {σ} =
+  trans (substVar-to-subst (λ { zero → refl
+                            ; (suc x) → refl }) G)
+        (sym (substCompEq G))
 
 substConcatSingleton' : ∀ {a σ} t
                       → subst (σ ₛ•ₛ consSubst idSubst a) t

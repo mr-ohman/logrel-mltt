@@ -36,13 +36,13 @@ substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
          ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ F / [Γ] / [F])
        → Γ ⊩ₛ⟨ l ⟩ G [ t ] / [Γ]
 substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let Geq = newlem1 G
+  let Geq = substConsId G
       G[t] = proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ]))))
       G[t]' = irrelevance' Geq G[t]
   in  G[t]'
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          irrelevanceEq'' Geq
-                         (newlem1 G)
+                         (substConsId G)
                          G[t] G[t]'
                          (proj₂ ([G] ⊢Δ
                                      ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -63,8 +63,8 @@ substSEq : ∀ {F F' G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
                    / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSEq {F} {F'} {G} {G'} {t} {t'}
          [Γ] [F] [F'] [F≡F'] [G] [G'] [G≡G'] [t] [t'] [t≡t'] {σ = σ} ⊢Δ [σ] =
-  let Geq = newlem1 G
-      G'eq = newlem1 G'
+  let Geq = substConsId G
+      G'eq = substConsId G'
       G[t] = (proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ])))))
       G[t]' = irrelevance' Geq G[t]
       [t]' = convₛ {t} {F} {F'} [Γ] [F] [F'] [F≡F'] [t]
@@ -89,8 +89,8 @@ substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
            → Γ ⊩ₛ⟨ l ⟩ f [ t ] ∷ G [ t ] / [Γ]
                       / substS {F} {G} {t} [Γ] [F] [G] [t]
 substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
-  let prfG = newlem1 G
-      prff = newlem1 f
+  let prfG = substConsId G
+      prff = substConsId f
       G[t] = proj₁ ([G] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
       G[t]' = irrelevance' prfG G[t]
       f[t] = proj₁ ([f] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -99,7 +99,7 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          irrelevanceEqTerm''
            prff
-           (newlem1 f)
+           (substConsId f)
            prfG G[t] G[t]'
            (proj₂ ([f] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
                   ([σ'] , proj₁ ([t] ⊢Δ [σ']))
@@ -118,7 +118,7 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
       [t]' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t] ⊢Δ [σ]))
       G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
                                (proj₁ [σ] , [t]'))
-      G[t]' = irrelevance' (lemma3 {G} {t} {σ}) G[t]
+      G[t]' = irrelevance' (substConsTailId {G} {t} {σ}) G[t]
   in  G[t]'
   ,   (λ {σ'} [σ'] [σ≡σ'] →
          let [σ't] = irrelevanceTerm' (subst-wk F)
@@ -130,7 +130,7 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
              [σG[t]≡σ'G[t]] = proj₂ ([G] ⊢Δ (proj₁ [σ] , [t]'))
                                     (proj₁ [σ'] , [σ't])
                                     (proj₁ [σ≡σ'] , [σt≡σ't])
-         in irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G} {t} {σ'})
+         in irrelevanceEq'' (substConsTailId {G} {t} {σ}) (substConsTailId {G} {t} {σ'})
                             G[t] G[t]' [σG[t]≡σ'G[t]])
 
 subst↑SEq : ∀ {F G G' t t' Γ l} ([Γ] : ⊩ₛ Γ)
@@ -155,15 +155,15 @@ subst↑SEq {F} {G} {G'} {t} {t'}
       [t']' = irrelevanceTerm' (subst-wk F) [σwk1F] [σwk1F]' (proj₁ ([t'] ⊢Δ [σ]))
       [t≡t']' = irrelevanceEqTerm' (subst-wk F) [σwk1F] [σwk1F]' ([t≡t'] ⊢Δ [σ])
       G[t] = proj₁ ([G] ⊢Δ (proj₁ [σ] , [t]'))
-      G[t]' = irrelevance' (lemma3 {G} {t} {σ}) G[t]
+      G[t]' = irrelevance' (substConsTailId {G} {t} {σ}) G[t]
       G'[t] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t]'))
-      G'[t]' = irrelevance' (lemma3 {G'} {t} {σ}) G'[t]
+      G'[t]' = irrelevance' (substConsTailId {G'} {t} {σ}) G'[t]
       G'[t'] = proj₁ ([G'] ⊢Δ (proj₁ [σ] , [t']'))
-      G'[t']' = irrelevance' (lemma3 {G'} {t'} {σ}) G'[t']
-      G[t]≡G'[t] = irrelevanceEq'' (lemma3 {G} {t} {σ}) (lemma3 {G'} {t} {σ})
+      G'[t']' = irrelevance' (substConsTailId {G'} {t'} {σ}) G'[t']
+      G[t]≡G'[t] = irrelevanceEq'' (substConsTailId {G} {t} {σ}) (substConsTailId {G'} {t} {σ})
                                    G[t] G[t]' ([G≡G'] ⊢Δ (proj₁ [σ] , [t]'))
-      G'[t]≡G'[t'] = irrelevanceEq'' (lemma3 {G'} {t} {σ})
-                                     (lemma3 {G'} {t'} {σ})
+      G'[t]≡G'[t'] = irrelevanceEq'' (substConsTailId {G'} {t} {σ})
+                                     (substConsTailId {G'} {t'} {σ})
                                      G'[t] G'[t]'
                                      (proj₂ ([G'] ⊢Δ (proj₁ [σ] , [t]'))
                                             (proj₁ [σ] , [t']')

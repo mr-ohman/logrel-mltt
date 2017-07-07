@@ -324,10 +324,10 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
       ⊢ΠFG = wellformed [σΠFG]
       f≡f₁' = proj₂ (redSubst*Term d [σΠFG] (Πₜ f₁ (idRedTerm:*: ⊢u) funcF f≡f [f] [f]₁))
       g≡g₁' = proj₂ (redSubst*Term d₁ [σΠFG] (Πₜ g₁ (idRedTerm:*: ⊢u₁) funcG g≡g [g] [g]₁))
-      eq'  = irrelevanceEqTerm' (Geq σ G) [σG]' [σG]
+      eq'  = irrelevanceEqTerm' (cons0wkLift1-id σ G) [σG]' [σG]
                                 (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
                                               (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] f≡f₁') var0 var0 var0≡0)
-      eq₁' = irrelevanceEqTerm' (Geq σ G) [σG]' [σG]
+      eq₁' = irrelevanceEqTerm' (cons0wkLift1-id σ G) [σG]' [σG]
                                 (app-congTerm [wk1F] [σG]' (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
                                               (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] g≡g₁') var0 var0 var0≡0)
       eq   = wellformedTermEq [σG] eq'
