@@ -223,13 +223,6 @@ wk ρ (natrec A t u v) = natrec (wk (lift ρ) A) (wk ρ t) (wk ρ u) (wk ρ v)
 wk1 : Term → Term
 wk1 = wk (step id)
 
--- Weakening of a context.
-
-wkCon : Wk → Con Term → Con Term
-wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
-wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x
-wkCon pr Γ              = Γ
-
 -- Weakening of a neutral term.
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
