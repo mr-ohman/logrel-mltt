@@ -1,3 +1,5 @@
+-- Laws for weakenings and substitutions.
+
 {-# OPTIONS --without-K #-}
 
 module Definition.Untyped.Properties where
@@ -8,18 +10,43 @@ open import Tools.PropositionalEquality as PE hiding (subst)
 
 open import Definition.Untyped
 
-
 -- Weakening properties
 
+-- Two weakenings ρ and ρ' are extensionally equal if they agree on
+-- all arguments when interpreted as functions mapping variables to
+-- variables.  Formally, they are considered equal iff
+--
+--   (∀ x → wkVar ρ x ≡ wkVar ρ' x)
+--
+-- Intensional (propositional) equality would be too fine.  For
+-- instance,
+--
+--   lift id : Γ∙A ≤ Γ∙A
+--
+-- is extensionally equal to
+--
+--   id : Γ∙A ≤ Γ∙A
+--
+-- but syntactically different.
+
+-- "lift" preserves equality of weakenings.  Or:
 -- If two weakenings are equal under wkVar, then they are equal when lifted.
-wkVar-lift : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
-           → (∀ x → wkVar (lift ρ) x ≡ wkVar (lift ρ') x)
+
+wkVar-lift : ∀ {ρ ρ'}
+  → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
+  → (∀ x → wkVar (lift ρ) x ≡ wkVar (lift ρ') x)
+
 wkVar-lift eq zero    = refl
 wkVar-lift eq (suc x) = cong suc (eq x)
 
+-- Extensionally equal weakenings, if applied to a term,
+-- yield the same weakened term.  Or:
 -- If two weakenings are equal under wkVar, then they are equal under wk.
-wkVar-to-wk : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
-     → (t : Term) → wk ρ t ≡ wk ρ' t
+
+wkVar-to-wk : ∀ {ρ ρ'}
+  → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
+  → ∀ t → wk ρ t ≡ wk ρ' t
+
 wkVar-to-wk eq U          = refl
 wkVar-to-wk eq (Π t ▹ t₁) =
   cong₂ Π_▹_ (wkVar-to-wk eq t) (wkVar-to-wk (wkVar-lift eq) t₁)
@@ -33,12 +60,14 @@ wkVar-to-wk eq (natrec t t₁ t₂ t₃) =
   cong₄ natrec (wkVar-to-wk (wkVar-lift eq) t)
                (wkVar-to-wk eq t₁) (wkVar-to-wk eq t₂) (wkVar-to-wk eq t₃)
 
--- lift id is the same as id.
+-- lift id  is extensionally equal to  id.
+
 wkVar-lift-id : (x : Nat) → wkVar (lift id) x ≡ wkVar id x
 wkVar-lift-id zero    = refl
 wkVar-lift-id (suc x) = refl
 
--- id is the identity.
+-- id is the identity renaming.
+
 wkVar-id : (x : Nat) → wkVar id x ≡ x
 wkVar-id x = refl
 
@@ -56,10 +85,15 @@ wk-id (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
                (wk-id t₁) (wk-id t₂) (wk-id t₃)
 
+-- lift id  is also the identity renaming.
+
 wk-lift-id : (t : Term) → wk (lift id) t ≡ t
 wk-lift-id t = trans (wkVar-to-wk wkVar-lift-id t) (wk-id t)
 
--- Composition of weakenings
+-- The composition of weakenings is correct...
+--
+-- ...as action on variables.
+
 wkVar-comp : ∀ ρ ρ' x → wkVar ρ (wkVar ρ' x) ≡ wkVar (ρ • ρ') x
 wkVar-comp id       ρ'        x       = refl
 wkVar-comp (step ρ) ρ'        x       = cong suc (wkVar-comp ρ ρ' x)
@@ -67,6 +101,8 @@ wkVar-comp (lift ρ) id        x       = refl
 wkVar-comp (lift ρ) (step ρ') x       = cong suc (wkVar-comp ρ ρ' x)
 wkVar-comp (lift ρ) (lift ρ') zero    = refl
 wkVar-comp (lift ρ) (lift ρ') (suc x) = cong suc (wkVar-comp ρ ρ' x)
+
+-- ... as action on terms.
 
 wk-comp : ∀ ρ ρ' t → wk ρ (wk ρ' t) ≡ wk (ρ • ρ') t
 wk-comp ρ ρ' U          = refl
@@ -84,6 +120,13 @@ wk-comp ρ ρ' (natrec t t₁ t₂ t₃) =
                (wk-comp ρ ρ' t₂)
                (wk-comp ρ ρ' t₃)
 
+
+-- The following lemmata are variations on the equality
+--
+--   wk1 ∘ ρ = lift ρ ∘ wk1.
+--
+-- Typing:  Γ∙A ≤ Γ ≤ Δ  <==>  Γ∙A ≤ Δ∙A ≤ Δ.
+
 lift-step-comp : (ρ : Wk) → step id • ρ ≡ lift ρ • step id
 lift-step-comp id       = refl
 lift-step-comp (step ρ) = cong step (lift-step-comp ρ)
@@ -99,15 +142,28 @@ lift-wk1 pr A = trans (wk-comp (lift pr) (step id) A)
 wk1-wk≡lift-wk1 : ∀ ρ t → wk1 (wk ρ t) ≡ wk (lift ρ) (wk1 t)
 wk1-wk≡lift-wk1 ρ t = trans (wk1-wk ρ t) (sym (lift-wk1 ρ t))
 
--- Substitution properties
+-- Substitution properties.
 
-substVar-lift : ∀ {σ σ'} → ((x : Nat) → σ x ≡ σ' x)
-            → (x : Nat) → liftSubst σ x ≡ liftSubst σ' x
+-- Two substitutions σ and σ' are equal if they are pointwise equal,
+-- i.e., agree on all variables.
+--
+--   ∀ x →  σ x ≡ σ' x
+
+-- If  σ = σ'  then  lift σ = lift σ'.
+
+substVar-lift : ∀ {σ σ'}
+  → (∀ x → σ x ≡ σ' x)
+  → ∀ x → liftSubst σ x ≡ liftSubst σ' x
+
 substVar-lift eq zero    = refl
 substVar-lift eq (suc x) = cong wk1 (eq x)
 
-substVar-to-subst : ∀ {σ σ'} → ((x : Nat) → σ x ≡ σ' x)
-        → (t : Term) → subst σ t ≡ subst σ' t
+-- If  σ = σ'  then  subst σ t = subst σ' t.
+
+substVar-to-subst : ∀ {σ σ'}
+  → ((x : Nat) → σ x ≡ σ' x)
+  → (t : Term) → subst σ t ≡ subst σ' t
+
 substVar-to-subst eq U          = refl
 substVar-to-subst eq (Π t ▹ t₁) =
   cong₂ Π_▹_ (substVar-to-subst eq t) (substVar-to-subst (substVar-lift eq) t₁)
@@ -124,9 +180,13 @@ substVar-to-subst eq (natrec t t₁ t₂ t₃) =
                (substVar-to-subst eq t₂)
                (substVar-to-subst eq t₃)
 
+-- lift id = id  (as substitutions)
+
 subst-lift-id : (x : Nat) → (liftSubst idSubst) x ≡ idSubst x
 subst-lift-id zero    = refl
 subst-lift-id (suc x) = refl
+
+-- Identity substitution.
 
 subst-id : (t : Term) → subst idSubst t ≡ t
 subst-id U          = refl
@@ -143,7 +203,10 @@ subst-id (natrec t t₁ t₂ t₃) =
                (subst-id t₁) (subst-id t₂) (subst-id t₃)
 
 
--- Weakening and substitution composition
+-- Correctness of composition of weakening and substitution.
+
+-- Composition of liftings is lifting of the composition.
+-- lift ρ •ₛ lift σ = lift (ρ •ₛ σ)
 
 subst-lift-•ₛ : ∀ {ρ σ} t
               → subst (lift ρ •ₛ liftSubst σ) t
@@ -151,12 +214,16 @@ subst-lift-•ₛ : ∀ {ρ σ} t
 subst-lift-•ₛ =
   substVar-to-subst (λ { zero → refl ; (suc x) → sym (wk1-wk≡lift-wk1 _ _)})
 
+-- lift σ ₛ• lift ρ = lift (σ ₛ• ρ)
+
 subst-lift-ₛ• : ∀ {ρ σ} t
               → subst (liftSubst σ ₛ• lift ρ) t
               ≡ subst (liftSubst (σ ₛ• ρ)) t
 subst-lift-ₛ• = substVar-to-subst (λ { zero → refl ; (suc x) → refl})
 
-wk-subst : ∀ {σ ρ} t → wk σ (subst ρ t) ≡ subst (σ •ₛ ρ) t
+-- wk ρ ∘ subst σ = subst (ρ •ₛ σ)
+
+wk-subst : ∀ {ρ σ} t → wk ρ (subst σ t) ≡ subst (ρ •ₛ σ) t
 wk-subst U          = refl
 wk-subst (Π t ▹ t₁) =
   cong₂ Π_▹_ (wk-subst t) (trans (wk-subst t₁) (subst-lift-•ₛ t₁))
@@ -170,7 +237,9 @@ wk-subst (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (wk-subst t) (subst-lift-•ₛ t))
                (wk-subst t₁) (wk-subst t₂) (wk-subst t₃)
 
-subst-wk : ∀ {σ ρ} t → subst ρ (wk σ t) ≡ subst (ρ ₛ• σ) t
+-- subst σ ∘ wk ρ = subst (σ •ₛ ρ)
+
+subst-wk : ∀ {ρ σ} t → subst σ (wk ρ t) ≡ subst (σ ₛ• ρ) t
 subst-wk U          = refl
 subst-wk (Π t ▹ t₁) =
   cong₂ Π_▹_ (subst-wk t) (trans (subst-wk t₁) (subst-lift-ₛ• t₁))
@@ -184,22 +253,30 @@ subst-wk (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (subst-wk t) (subst-lift-ₛ• t))
                (subst-wk t₁) (subst-wk t₂) (subst-wk t₃)
 
+-- Composition of liftings is lifting of the composition.
+
 wk-subst-lift : ∀ {ρ σ} G
               → wk (lift ρ) (subst (liftSubst σ) G)
               ≡ subst (liftSubst (ρ •ₛ σ)) G
 wk-subst-lift G = trans (wk-subst G) (subst-lift-•ₛ G)
 
+-- Renaming with ρ is the same as substituting with ρ turned into a substitution.
+
 wk≡subst : ∀ ρ t → wk ρ t ≡ subst (toSubst ρ) t
 wk≡subst ρ t = trans (cong (wk ρ) (sym (subst-id t))) (wk-subst t)
 
 
--- Composition of substitution
+-- Composition of substitutions.
+
+-- Composition of liftings is lifting of the composition.
 
 substCompLift : ∀ {σ σ'} x
               → (liftSubst σ ₛ•ₛ liftSubst σ') x
               ≡ (liftSubst (σ ₛ•ₛ σ')) x
 substCompLift          zero    = refl
 substCompLift {σ} {σ'} (suc x) = trans (subst-wk (σ' x)) (sym (wk-subst (σ' x)))
+
+-- Soundness of the composition of substitutions.
 
 substCompEq : ∀ {σ σ'} (t : Term)
             → subst σ (subst σ' t) ≡ subst (σ ₛ•ₛ σ') t
@@ -217,24 +294,30 @@ substCompEq (natrec t t₁ t₂ t₃) =
                (substCompEq t₁) (substCompEq t₂) (substCompEq t₃)
 
 
--- Specific equalities
+-- Weakening single substitutions.
+
+-- Pulling apart a weakening composition in specific context _[a].
 
 wk-comp-subst : ∀ {a} ρ ρ' G
                    → wk (lift (ρ • ρ')) G [ a ] ≡ wk (lift ρ) (wk (lift ρ') G) [ a ]
 wk-comp-subst {a} ρ ρ' G =
   cong (λ x → x [ a ]) (sym (wk-comp (lift ρ) (lift ρ') G))
 
--- Beta reduction weakening
+-- Pushing a weakening into a single substitution.
+-- ρ (t[a]) = ((lift ρ) t)[ρ a]
 
-wk-β : ∀ {pr a} t → wk pr (t [ a ]) ≡ wk (lift pr) t [ wk pr a ]
+wk-β : ∀ {ρ a} t → wk ρ (t [ a ]) ≡ wk (lift ρ) t [ wk ρ a ]
 wk-β t = trans (wk-subst t) (sym (trans (subst-wk t)
                (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) t)))
+
+-- Pushing a weakening into a single shifting substitution.
+-- If  ρ' = lift ρ  then  ρ'(t[a]↑) = ρ'(t) [ρ'(a)]↑
 
 wk-β↑ : ∀ {ρ a} t → wk (lift ρ) (t [ a ]↑) ≡ wk (lift ρ) t [ wk (lift ρ) a ]↑
 wk-β↑ t = trans (wk-subst t) (sym (trans (subst-wk t)
                 (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) t)))
 
--- Natrec beta-reduction weakening
+-- A specific equation on weakenings used for the reduction of natrec.
 
 wk-β-natrec : ∀ ρ G
   → Π ℕ ▹ (Π wk (lift ρ) G ▹ wk (lift (lift ρ)) (wk1 (G [ suc (var zero) ]↑)))
@@ -247,9 +330,10 @@ wk-β-natrec ρ G =
          (trans (subst-wk G)
                 (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)))))))
 
+
+
 substVarSingletonComp : ∀ {a σ} (x : Nat)
-                     → (consSubst idSubst a ₛ•ₛ liftSubst σ) x
-                     ≡ (consSubst σ a) x
+  → (consSubst idSubst a ₛ•ₛ liftSubst σ) x ≡ (consSubst σ a) x
 substVarSingletonComp zero = refl
 substVarSingletonComp {σ = σ} (suc x) = trans (subst-wk (σ x)) (subst-id (σ x))
 
