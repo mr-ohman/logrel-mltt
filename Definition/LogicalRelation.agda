@@ -176,11 +176,11 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
     -- Helping functions for logical relation
 
     wk-prop¹ : (Γ : Con Term) (F : Term) → Set
-    wk-prop¹ Γ F = ∀ {ρ Δ} → ρ ∷ Γ ⊆ Δ → (⊢Δ : ⊢ Δ) → Δ ⊩¹ U.wk ρ F
+    wk-prop¹ Γ F = ∀ {ρ Δ} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ) → Δ ⊩¹ U.wk ρ F
 
     wk-subst-prop¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) → Set
     wk-subst-prop¹ Γ F G [F] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                 → Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ → Δ ⊩¹ U.wk (lift ρ) G [ a ]
 
     wk-subst-prop-T¹ : (Γ : Con Term) (F G t : Term)
@@ -188,7 +188,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-subst-prop-T¹ Γ F G t [F] [G] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                 → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                 → Δ ⊩¹ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
 
@@ -197,7 +197,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-substEq-prop¹ Γ F G [F] [G] =
-      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                   → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                   → ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                   → Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ
@@ -208,7 +208,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                        ([G] : wk-subst-prop¹ Γ F G [F])
                      → Set
     wk-fun-ext-prop¹ Γ F G f [F] [G] =
-      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                     ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                     ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                     ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
@@ -219,7 +219,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                         ([G] : wk-subst-prop¹ Γ F G [F])
                       → Set
     wk-fun-ext-prop¹' Γ F G f g [F] [G] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                 → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                 → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
     -- Pi-type
@@ -248,10 +248,10 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         D'     : Γ ⊢ B ⇒* Π F' ▹ G'
         A≡B    : Γ ⊢ Π F ▹ G ≅ Π F' ▹ G'
         [F≡F'] : ∀ {ρ Δ}
-               → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+               → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                → Δ ⊩¹ U.wk ρ F ≡ U.wk ρ F' / [F] [ρ] ⊢Δ
         [G≡G'] : ∀ {ρ Δ a}
-               → ([ρ] : ρ ∷ Γ ⊆ Δ) (⊢Δ : ⊢ Δ)
+               → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G' [ a ] / [G] [ρ] ⊢Δ [a]
 

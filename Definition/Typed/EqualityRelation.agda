@@ -40,7 +40,7 @@ record EqRelSet : Set₁ where
             → Γ ⊢ A ≡ B
             → Γ ⊢ k ~ l ∷ B
     ~-wk    : ∀ {k l A ρ Γ Δ}
-            → ρ ∷ Γ ⊆ Δ
+            → ρ ∷ Δ ⊆ Γ
             → ⊢ Δ
             → Γ ⊢ k ~ l ∷ A
             → Δ ⊢ wk ρ k ~ wk ρ l ∷ wk ρ A
@@ -80,12 +80,12 @@ record EqRelSet : Set₁ where
            → Γ ⊢ a  ≅ b  ∷ A
 
     ≅-wk  : ∀ {A B ρ Γ Δ}
-          → ρ ∷ Γ ⊆ Δ
+          → ρ ∷ Δ ⊆ Γ
           → ⊢ Δ
           → Γ ⊢ A ≅ B
           → Δ ⊢ wk ρ A ≅ wk ρ B
     ≅ₜ-wk : ∀ {t u A ρ Γ Δ}
-          → ρ ∷ Γ ⊆ Δ
+          → ρ ∷ Δ ⊆ Γ
           → ⊢ Δ
           → Γ ⊢ t ≅ u ∷ A
           → Δ ⊢ wk ρ t ≅ wk ρ u ∷ wk ρ A

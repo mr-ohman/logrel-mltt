@@ -42,7 +42,7 @@ import Tools.PropositionalEquality as PE
       ⊢G {σ'} [σ'] = wellformed (proj₁ ([G]σ {σ'} [σ']))
       ⊢G≡G = wellformedEq (proj₁ ([G]σ [σ])) (reflEq (proj₁ ([G]σ [σ])))
       ⊢ΠF▹G = Π ⊢F [σ] ▹ ⊢G [σ]
-      [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
+      [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
              ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
                 / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])))
            → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (ρ •ₛ σ) a) G)
@@ -61,7 +61,7 @@ import Tools.PropositionalEquality as PE
                               (consSubstS {t = a} {A = F} [Γ] ⊢Δ₁
                                           (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])
                                           [F] [a]))
-      [G]a' : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ ⊆ Δ₁) (⊢Δ₁ : ⊢ Δ₁)
+      [G]a' : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
             → Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
                  / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]))
             → Δ₁ ⊩⟨ l ⟩ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]

@@ -15,26 +15,26 @@ import Tools.PropositionalEquality as PE
 
 data _∷_⊆_ : Wk → Con Term → Con Term → Set where
   id   : ∀ {Γ}       → id ∷ Γ ⊆ Γ
-  step : ∀ {Γ Δ A ρ} → ρ  ∷ Γ ⊆ Δ → step ρ ∷ Γ     ⊆ Δ ∙ A
-  lift : ∀ {Γ Δ A ρ} → ρ  ∷ Γ ⊆ Δ → lift ρ ∷ Γ ∙ A ⊆ Δ ∙ U.wk ρ A
+  step : ∀ {Γ Δ A ρ} → ρ  ∷ Δ ⊆ Γ → step ρ ∷ Δ ∙ A        ⊆ Γ
+  lift : ∀ {Γ Δ A ρ} → ρ  ∷ Δ ⊆ Γ → lift ρ ∷ Δ ∙ U.wk ρ A ⊆ Γ ∙ A
 
 
 -- -- Weakening composition
 
-_•ₜ_ : ∀ {ρ ρ' Γ Δ E} → ρ ∷ Δ ⊆ E → ρ' ∷ Γ ⊆ Δ → (ρ • ρ') ∷ Γ ⊆ E
+_•ₜ_ : ∀ {ρ ρ' Γ Δ Δ'} → ρ ∷ Γ ⊆ Δ → ρ' ∷ Δ ⊆ Δ' → ρ • ρ' ∷ Γ ⊆ Δ'
 id     •ₜ η′ = η′
 step η •ₜ η′ = step (η •ₜ η′)
 lift η •ₜ id = lift η
 lift η •ₜ step η′ = step (η •ₜ η′)
-_•ₜ_ {lift ρ} {lift ρ'} {Γ ∙ A} (lift η) (lift η′) =
-  PE.subst (λ x → lift (ρ • ρ') ∷ Γ ∙ A ⊆ x)
+_•ₜ_ {lift ρ} {lift ρ'} {Δ' = Δ' ∙ A} (lift η) (lift η′) =
+  PE.subst (λ x → lift (ρ • ρ') ∷ x ⊆ Δ' ∙ A)
            (PE.cong₂ _∙_ PE.refl (PE.sym (wk-comp ρ ρ' A)))
            (lift (η •ₜ η′))
 
 
 -- Weakening of judgements
 
-wkIndex : ∀ {Γ Δ n A ρ} → ρ ∷ Γ ⊆ Δ →
+wkIndex : ∀ {Γ Δ n A ρ} → ρ ∷ Δ ⊆ Γ →
         let ρA = U.wk ρ A
             ρn = wkVar ρ n
         in  ⊢ Δ → n ∷ A ∈ Γ → ρn ∷ ρA ∈ Δ
@@ -53,7 +53,7 @@ wkIndex (lift ρ) ⊢Δ here =
                here
 
 mutual
-  wk : ∀ {Γ Δ A ρ} → ρ ∷ Γ ⊆ Δ →
+  wk : ∀ {Γ Δ A ρ} → ρ ∷ Δ ⊆ Γ →
      let ρA = U.wk ρ A
      in  ⊢ Δ → Γ ⊢ A → Δ ⊢ ρA
   wk ρ ⊢Δ (ℕ ⊢Γ) = ℕ ⊢Δ
@@ -62,7 +62,7 @@ mutual
                       in  Π ρF ▹ (wk (lift ρ) (⊢Δ ∙ ρF) G)
   wk ρ ⊢Δ (univ A) = univ (wkTerm ρ ⊢Δ A)
 
-  wkTerm : ∀ {Γ Δ A t ρ} → ρ ∷ Γ ⊆ Δ →
+  wkTerm : ∀ {Γ Δ A t ρ} → ρ ∷ Δ ⊆ Γ →
          let ρA = U.wk ρ A
              ρt = U.wk ρ t
          in ⊢ Δ → Γ ⊢ t ∷ A → Δ ⊢ ρt ∷ ρA
@@ -87,7 +87,7 @@ mutual
                      (wkTerm [ρ] ⊢Δ ⊢n))
   wkTerm ρ ⊢Δ (conv t A≡B) = conv (wkTerm ρ ⊢Δ t) (wkEq ρ ⊢Δ A≡B)
 
-  wkEq : ∀ {Γ Δ A B ρ} → ρ ∷ Γ ⊆ Δ →
+  wkEq : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
        let ρA = U.wk ρ A
            ρB = U.wk ρ B
        in ⊢ Δ → Γ ⊢ A ≡ B → Δ ⊢ ρA ≡ ρB
@@ -99,7 +99,7 @@ mutual
                                  in  Π-cong ρF (wkEq ρ ⊢Δ F≡H)
                                                (wkEq (lift ρ) (⊢Δ ∙ ρF) G≡E)
 
-  wkEqTerm : ∀ {Γ Δ A t u ρ} → ρ ∷ Γ ⊆ Δ →
+  wkEqTerm : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
                ρt = U.wk ρ t
                ρu = U.wk ρ u
@@ -169,13 +169,13 @@ mutual
                                    (wkTerm [ρ] ⊢Δ ⊢s)))
 
 mutual
-  wkRed : ∀ {Γ Δ A B ρ} → ρ ∷ Γ ⊆ Δ →
+  wkRed : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
                ρB = U.wk ρ B
            in ⊢ Δ → Γ ⊢ A ⇒ B → Δ ⊢ ρA ⇒ ρB
   wkRed ρ ⊢Δ (univ A⇒B) = univ (wkRedTerm ρ ⊢Δ A⇒B)
 
-  wkRedTerm : ∀ {Γ Δ A t u ρ} → ρ ∷ Γ ⊆ Δ →
+  wkRedTerm : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
                ρt = U.wk ρ t
                ρu = U.wk ρ u
@@ -222,14 +222,14 @@ mutual
                                    (wk-β-natrec ρ F)
                                    (wkTerm [ρ] ⊢Δ ⊢s)))
 
-wkRed* : ∀ {Γ Δ A B ρ} → ρ ∷ Γ ⊆ Δ →
+wkRed* : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
                ρB = U.wk ρ B
            in ⊢ Δ → Γ ⊢ A ⇒* B → Δ ⊢ ρA ⇒* ρB
 wkRed* ρ ⊢Δ (id A) = id (wk ρ ⊢Δ A)
 wkRed* ρ ⊢Δ (A⇒A' ⇨ A'⇒*B) = wkRed ρ ⊢Δ A⇒A' ⇨ wkRed* ρ ⊢Δ A'⇒*B
 
-wkRed*Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Γ ⊆ Δ →
+wkRed*Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
                ρt = U.wk ρ t
                ρu = U.wk ρ u
@@ -237,13 +237,13 @@ wkRed*Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Γ ⊆ Δ →
 wkRed*Term ρ ⊢Δ (id t) = id (wkTerm ρ ⊢Δ t)
 wkRed*Term ρ ⊢Δ (t⇒t' ⇨ t'⇒*u) = wkRedTerm ρ ⊢Δ t⇒t' ⇨ wkRed*Term ρ ⊢Δ t'⇒*u
 
-wkRed:*: : ∀ {Γ Δ A B ρ} → ρ ∷ Γ ⊆ Δ →
+wkRed:*: : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
          let ρA = U.wk ρ A
              ρB = U.wk ρ B
          in ⊢ Δ → Γ ⊢ A :⇒*: B → Δ ⊢ ρA :⇒*: ρB
 wkRed:*: ρ ⊢Δ [ ⊢A , ⊢B , D ] = [ wk ρ ⊢Δ ⊢A , wk ρ ⊢Δ ⊢B , wkRed* ρ ⊢Δ D ]
 
-wkRed:*:Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Γ ⊆ Δ →
+wkRed:*:Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
              let ρA = U.wk ρ A
                  ρt = U.wk ρ t
                  ρu = U.wk ρ u

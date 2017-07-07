@@ -86,7 +86,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   in  ↑ x k~m
 
 ~-wk : {k l A : Term} {ρ : Wk} {Γ Δ : Con Term} →
-      ρ ∷ Γ ⊆ Δ →
+      ρ ∷ Δ ⊆ Γ →
       ⊢ Δ → Γ ⊢ k ~ l ∷ A → Δ ⊢ wk ρ k ~ wk ρ l ∷ wk ρ A
 ~-wk x x₁ (↑ x₂ x₃) = ↑ (wkEq x x₁ x₂) (wk~↑ x x₁ x₃)
 

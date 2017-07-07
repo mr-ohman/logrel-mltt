@@ -16,7 +16,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 mutual
-  wk~↑ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wk~↑ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
       → Γ ⊢ t ~ u ↑ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↑ U.wk ρ A
   wk~↑ {ρ} [ρ] ⊢Δ (var x₁ x≡y) = var (wkTerm [ρ] ⊢Δ x₁) (PE.cong (wkVar ρ) x≡y)
@@ -32,20 +32,20 @@ mutual
                                (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
                      (wk~↓ [ρ] ⊢Δ t~u))
 
-  wk~↓ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wk~↓ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
       → Γ ⊢ t ~ u ↓ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↓ U.wk ρ A
   wk~↓ {ρ} [ρ] ⊢Δ ([~] A₁ D whnfA k~l) =
     [~] (U.wk ρ A₁) (wkRed* [ρ] ⊢Δ D) (wkWhnf ρ whnfA) (wk~↑ [ρ] ⊢Δ k~l)
 
-  wkConv↑ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wkConv↑ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
           → Γ ⊢ A [conv↑] B
           → Δ ⊢ U.wk ρ A [conv↑] U.wk ρ B
   wkConv↑ {ρ} [ρ] ⊢Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
     [↑] (U.wk ρ A') (U.wk ρ B') (wkRed* [ρ] ⊢Δ D) (wkRed* [ρ] ⊢Δ D')
         (wkWhnf ρ whnfA') (wkWhnf ρ whnfB') (wkConv↓ [ρ] ⊢Δ A'<>B')
 
-  wkConv↓ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wkConv↓ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
          → Γ ⊢ A [conv↓] B
          → Δ ⊢ U.wk ρ A [conv↓] U.wk ρ B
   wkConv↓ ρ ⊢Δ (U-refl x) = U-refl ⊢Δ
@@ -55,7 +55,7 @@ mutual
     let ⊢ρF = wk ρ ⊢Δ x
     in  Π-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
 
-  wkConv↑Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wkConv↑Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
              → Γ ⊢ t [conv↑] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↑] U.wk ρ u ∷ U.wk ρ A
   wkConv↑Term {ρ} [ρ] ⊢Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
@@ -64,7 +64,7 @@ mutual
          (wkWhnf ρ whnfB) (wkWhnf ρ whnft') (wkWhnf ρ whnfu')
          (wkConv↓Term [ρ] ⊢Δ t<>u)
 
-  wkConv↓Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Γ ⊆ Δ) → ⊢ Δ
+  wkConv↓Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
              → Γ ⊢ t [conv↓] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↓] U.wk ρ u ∷ U.wk ρ A
   wkConv↓Term ρ ⊢Δ (ℕ-ins x) =

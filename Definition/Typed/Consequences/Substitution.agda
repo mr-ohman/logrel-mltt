@@ -66,7 +66,7 @@ substRefl id = id
 substRefl (σ , x) = substRefl σ , refl x
 
 wkSubst' : ∀ {ρ σ Γ Δ Δ'} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ' : ⊢ Δ')
-           ([ρ] : ρ ∷ Δ ⊆ Δ')
+           ([ρ] : ρ ∷ Δ' ⊆ Δ)
            ([σ] : Δ ⊢ₛ σ ∷ Γ)
          → Δ' ⊢ₛ ρ •ₛ σ ∷ Γ
 wkSubst' ε ⊢Δ ⊢Δ' ρ id = id
