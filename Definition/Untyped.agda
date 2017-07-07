@@ -270,8 +270,15 @@ A ▹▹ B = Π A ▹ wk1 B
 ------------------------------------------------------------------------
 -- Substitution
 
+-- The substitution operation  subst σ t  replaces the free de Bruijn indices
+-- of term t by chosen terms as specified by σ.
+
+-- The substitution σ itself is a map from natural numbers to terms.
+
 Subst : Set
 Subst = Nat → Term
+
+-- We may view σ as the infinite stream σ 0, σ 1, ...
 
 -- Extract the substitution of the first variable.
 
@@ -290,6 +297,7 @@ substVar : (σ : Subst) (x : Nat) → Term
 substVar σ x = σ x
 
 -- Identity substitution.
+-- Replaces each variable by itself.
 
 idSubst : Subst
 idSubst = var
@@ -302,7 +310,7 @@ wk1Subst σ x = wk1 (σ x)
 -- Lift a substitution.
 
 liftSubst : (σ : Subst) → Subst
-liftSubst σ zero = var zero
+liftSubst σ zero    = var zero
 liftSubst σ (suc x) = wk1Subst σ x
 
 -- Transform a weakening into a substitution.
@@ -313,22 +321,22 @@ toSubst pr x = var (wkVar pr x)
 -- Apply a substitution to a term.
 
 subst : (σ : Subst) (t : Term) → Term
-subst σ U = U
-subst σ (Π t ▹ t₁) = Π subst σ t ▹ subst (liftSubst σ) t₁
-subst σ ℕ = ℕ
-subst σ (var x) = substVar σ x
-subst σ (lam t) = lam (subst (liftSubst σ) t)
-subst σ (t ∘ t₁) = (subst σ t) ∘ (subst σ t₁)
-subst σ zero = zero
-subst σ (suc t) = suc (subst σ t)
-subst σ (natrec t t₁ t₂ t₃) =
-  natrec (subst (liftSubst σ) t) (subst σ t₁) (subst σ t₂) (subst σ t₃)
+subst σ U          = U
+subst σ (Π A ▹ B) = Π subst σ A ▹ subst (liftSubst σ) B
+subst σ ℕ          = ℕ
+subst σ (var x)    = substVar σ x
+subst σ (lam t)    = lam (subst (liftSubst σ) t)
+subst σ (t ∘ u)    = (subst σ t) ∘ (subst σ u)
+subst σ zero       = zero
+subst σ (suc t)    = suc (subst σ t)
+subst σ (natrec A t u v) =
+  natrec (subst (liftSubst σ) A) (subst σ t) (subst σ u) (subst σ v)
 
 -- Extend a substitution by adding a term as
 -- the first variable substitution and shift the rest.
 
 consSubst : Subst → Term → Subst
-consSubst σ t zero = t
+consSubst σ t zero    = t
 consSubst σ t (suc n) = σ n
 
 -- Compose two substitutions.
