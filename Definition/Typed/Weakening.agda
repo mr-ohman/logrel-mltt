@@ -36,7 +36,7 @@ _•ₜ_ {lift ρ} {lift ρ'} {Γ ∙ A} (lift η) (lift η′) =
 
 wkIndex : ∀ {Γ Δ n A ρ} → ρ ∷ Γ ⊆ Δ →
         let ρA = U.wk ρ A
-            ρn = wkNat ρ n
+            ρn = wkVar ρ n
         in  ⊢ Δ → n ∷ A ∈ Γ → ρn ∷ ρA ∈ Δ
 wkIndex id ⊢Δ i = PE.subst (λ x → _ ∷ x ∈ _) (PE.sym (wk-id _)) i
 wkIndex (step ρ) (⊢Δ ∙ A) i = PE.subst (λ x → _ ∷ x ∈ _)

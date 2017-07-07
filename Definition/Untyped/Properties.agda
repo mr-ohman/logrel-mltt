@@ -12,68 +12,68 @@ open import Definition.Untyped
 -- Weakening properties
 
 -- If two weakenings are equal under wkNat, then they are equal when lifted.
-wkNat-lift : ∀ {ρ ρ'} → (∀ x → wkNat ρ x ≡ wkNat ρ' x)
-           → (∀ x → wkNat (lift ρ) x ≡ wkNat (lift ρ') x)
-wkNat-lift eq zero = refl
-wkNat-lift eq (suc x) = cong suc (eq x)
+wkVar-lift : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
+           → (∀ x → wkVar (lift ρ) x ≡ wkVar (lift ρ') x)
+wkVar-lift eq zero = refl
+wkVar-lift eq (suc x) = cong suc (eq x)
 
 -- If two weakenings are equal under wkNat, then they are equal under wk.
-wkNat-to-wk : ∀ {ρ ρ'} → (∀ x → wkNat ρ x ≡ wkNat ρ' x)
+wkVar-to-wk : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
      → (t : Term) → wk ρ t ≡ wk ρ' t
-wkNat-to-wk eq U = refl
-wkNat-to-wk eq (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wkNat-to-wk eq t) (wkNat-to-wk (wkNat-lift eq) t₁)
-wkNat-to-wk eq ℕ = refl
-wkNat-to-wk eq (var x) = cong var (eq x)
-wkNat-to-wk eq (lam t) = cong lam (wkNat-to-wk (wkNat-lift eq) t)
-wkNat-to-wk eq (t ∘ t₁) = cong₂ _∘_ (wkNat-to-wk eq t) (wkNat-to-wk eq t₁)
-wkNat-to-wk eq zero = refl
-wkNat-to-wk eq (suc t) = cong suc (wkNat-to-wk eq t)
-wkNat-to-wk eq (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (wkNat-to-wk (wkNat-lift eq) t)
-               (wkNat-to-wk eq t₁) (wkNat-to-wk eq t₂) (wkNat-to-wk eq t₃)
+wkVar-to-wk eq U = refl
+wkVar-to-wk eq (Π t ▹ t₁) =
+  cong₂ Π_▹_ (wkVar-to-wk eq t) (wkVar-to-wk (wkVar-lift eq) t₁)
+wkVar-to-wk eq ℕ = refl
+wkVar-to-wk eq (var x) = cong var (eq x)
+wkVar-to-wk eq (lam t) = cong lam (wkVar-to-wk (wkVar-lift eq) t)
+wkVar-to-wk eq (t ∘ t₁) = cong₂ _∘_ (wkVar-to-wk eq t) (wkVar-to-wk eq t₁)
+wkVar-to-wk eq zero = refl
+wkVar-to-wk eq (suc t) = cong suc (wkVar-to-wk eq t)
+wkVar-to-wk eq (natrec t t₁ t₂ t₃) =
+  cong₄ natrec (wkVar-to-wk (wkVar-lift eq) t)
+               (wkVar-to-wk eq t₁) (wkVar-to-wk eq t₂) (wkVar-to-wk eq t₃)
 
 -- lift id is the same as id.
-wkNat-lift-id : (x : Nat) → wkNat (lift id) x ≡ wkNat id x
-wkNat-lift-id zero = refl
-wkNat-lift-id (suc x) = refl
+wkVar-lift-id : (x : Nat) → wkVar (lift id) x ≡ wkVar id x
+wkVar-lift-id zero = refl
+wkVar-lift-id (suc x) = refl
 
 -- id is the identity.
-wkNat-id : (x : Nat) → wkNat id x ≡ x
-wkNat-id x = refl
+wkVar-id : (x : Nat) → wkVar id x ≡ x
+wkVar-id x = refl
 
 wk-id : (t : Term) → wk id t ≡ t
 wk-id U = refl
 wk-id (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wk-id t) (trans (wkNat-to-wk wkNat-lift-id t₁) (wk-id t₁))
+  cong₂ Π_▹_ (wk-id t) (trans (wkVar-to-wk wkVar-lift-id t₁) (wk-id t₁))
 wk-id ℕ = refl
-wk-id (var x) = cong var (wkNat-id x)
-wk-id (lam t) = cong lam (trans (wkNat-to-wk wkNat-lift-id t) (wk-id t))
+wk-id (var x) = cong var (wkVar-id x)
+wk-id (lam t) = cong lam (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
 wk-id (t ∘ t₁) = cong₂ _∘_ (wk-id t) (wk-id t₁)
 wk-id zero = refl
 wk-id (suc t) = cong suc (wk-id t)
 wk-id (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (wkNat-to-wk wkNat-lift-id t) (wk-id t))
+  cong₄ natrec (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
                (wk-id t₁) (wk-id t₂) (wk-id t₃)
 
 wk-lift-id : (t : Term) → wk (lift id) t ≡ t
-wk-lift-id t = trans (wkNat-to-wk wkNat-lift-id t) (wk-id t)
+wk-lift-id t = trans (wkVar-to-wk wkVar-lift-id t) (wk-id t)
 
 -- Composition of weakenings
-wkNat-comp : ∀ ρ ρ' x → wkNat ρ (wkNat ρ' x) ≡ wkNat (ρ • ρ') x
-wkNat-comp id ρ' x = refl
-wkNat-comp (step ρ) ρ' x = cong suc (wkNat-comp ρ ρ' x)
-wkNat-comp (lift ρ) id x = refl
-wkNat-comp (lift ρ) (step ρ') x = cong suc (wkNat-comp ρ ρ' x)
-wkNat-comp (lift ρ) (lift ρ') zero = refl
-wkNat-comp (lift ρ) (lift ρ') (suc x) = cong suc (wkNat-comp ρ ρ' x)
+wkVar-comp : ∀ ρ ρ' x → wkVar ρ (wkVar ρ' x) ≡ wkVar (ρ • ρ') x
+wkVar-comp id ρ' x = refl
+wkVar-comp (step ρ) ρ' x = cong suc (wkVar-comp ρ ρ' x)
+wkVar-comp (lift ρ) id x = refl
+wkVar-comp (lift ρ) (step ρ') x = cong suc (wkVar-comp ρ ρ' x)
+wkVar-comp (lift ρ) (lift ρ') zero = refl
+wkVar-comp (lift ρ) (lift ρ') (suc x) = cong suc (wkVar-comp ρ ρ' x)
 
 wk-comp : ∀ ρ ρ' t → wk ρ (wk ρ' t) ≡ wk (ρ • ρ') t
 wk-comp ρ ρ' U = refl
 wk-comp ρ ρ' (Π t ▹ t₁) =
   cong₂ Π_▹_ (wk-comp ρ ρ' t) (wk-comp (lift ρ) (lift ρ') t₁)
 wk-comp ρ ρ' ℕ = refl
-wk-comp ρ ρ' (var x) = cong var (wkNat-comp ρ ρ' x)
+wk-comp ρ ρ' (var x) = cong var (wkVar-comp ρ ρ' x)
 wk-comp ρ ρ' (lam t) = cong lam (wk-comp (lift ρ) (lift ρ') t)
 wk-comp ρ ρ' (t ∘ t₁) = cong₂ _∘_ (wk-comp ρ ρ' t) (wk-comp ρ ρ' t₁)
 wk-comp ρ ρ' zero = refl

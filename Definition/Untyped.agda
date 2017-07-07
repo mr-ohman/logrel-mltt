@@ -195,13 +195,13 @@ lift η  • step η′  =  step  (η • η′)
 lift η  • lift η′  =  lift  (η • η′)
 
 -- Weakening of variables.
--- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkNat ρ x ∈ dom(Γ).
+-- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar ρ x ∈ dom(Γ).
 
-wkNat : (ρ : Wk) (n : Nat) → Nat
-wkNat id       n       = n
-wkNat (step ρ) n       = suc (wkNat ρ n)
-wkNat (lift ρ) zero    = zero
-wkNat (lift ρ) (suc n) = suc (wkNat ρ n)
+wkVar : (ρ : Wk) (n : Nat) → Nat
+wkVar id       n       = n
+wkVar (step ρ) n       = suc (wkVar ρ n)
+wkVar (lift ρ) zero    = zero
+wkVar (lift ρ) (suc n) = suc (wkVar ρ n)
 
 -- Weakening of terms.
 -- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
@@ -210,7 +210,7 @@ wk : (ρ : Wk) (t : Term) → Term
 wk ρ U                = U
 wk ρ (Π A ▹ B)        = Π wk ρ A ▹ wk (lift ρ) B
 wk ρ ℕ                = ℕ
-wk ρ (var x)          = var (wkNat ρ x)
+wk ρ (var x)          = var (wkVar ρ x)
 wk ρ (lam t)          = lam (wk (lift ρ) t)
 wk ρ (t ∘ u)          = wk ρ t ∘ wk ρ u
 wk ρ zero             = zero
@@ -233,7 +233,7 @@ wkCon pr Γ              = Γ
 -- Weakening of a neutral term
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
-wkNeutral ρ (var n)    = var (wkNat ρ n)
+wkNeutral ρ (var n)    = var (wkVar ρ n)
 wkNeutral ρ (_∘_ n)    = _∘_ (wkNeutral ρ n)
 wkNeutral ρ (natrec n) = natrec (wkNeutral ρ n)
 
@@ -308,7 +308,7 @@ liftSubst σ (suc x) = wk1Subst σ x
 -- Transform a weakening into a substitution.
 
 toSubst : Wk → Subst
-toSubst pr x = var (wkNat pr x)
+toSubst pr x = var (wkVar pr x)
 
 -- Apply a substitution to a term.
 
@@ -342,7 +342,7 @@ _•ₛ_ : Wk → Subst → Subst
 _•ₛ_ ρ σ x = wk ρ (σ x)
 
 _ₛ•_ : Subst → Wk → Subst
-_ₛ•_ σ ρ x = σ (wkNat ρ x)
+_ₛ•_ σ ρ x = σ (wkVar ρ x)
 
 -- Substitute the first variable of a term with an other term.
 
