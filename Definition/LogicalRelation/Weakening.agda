@@ -116,7 +116,6 @@ wkEq {ρ} [ρ] ⊢Δ (ne' _ _ _ _) (ne₌ M D' neM K≡M) =
       (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ K≡M)
 wkEq {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                 (Π₌ F' G' D' A≡B [F≡F'] [G≡G']) =
-  -- TODO Minimize duplicates
   Π₌ (U.wk ρ F') (U.wk (lift ρ) G') (T.wkRed* [ρ] ⊢Δ D') (≅-wk [ρ] ⊢Δ A≡B)
      (λ {ρ₁} [ρ₁] ⊢Δ₁ → irrelevanceEq'' (PE.sym (wk-comp ρ₁ ρ F))
                                  (PE.sym (wk-comp ρ₁ ρ F'))
@@ -150,7 +149,6 @@ wkTerm {ρ} [ρ] ⊢Δ (ne' K D neK K≡K) (neₜ k d nf) =
 wkTerm {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
   Πₜ (U.wk ρ f) (wkRed:*:Term [ρ] ⊢Δ d) (wkFunction ρ funcF)
      (≅ₜ-wk [ρ] ⊢Δ f≡f)
-     -- TODO Minimize duplicates
      (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] [b] [a≡b] →
         let F-compEq = wk-comp ρ₁ ρ F
             G-compEq = wk-comp-subst ρ₁ ρ G
@@ -196,7 +194,6 @@ wkEqTerm {ρ} [ρ] ⊢Δ (Π' F G D ⊢F ⊢G A≡A [F] [G] G-ext)
   in  Πₜ₌ (U.wk ρ f) (U.wk ρ g) (wkRed:*:Term [ρ] ⊢Δ d) (wkRed:*:Term [ρ] ⊢Δ d')
           (wkFunction ρ funcF) (wkFunction ρ funcG)
           (≅ₜ-wk [ρ] ⊢Δ f≡g) (wkTerm [ρ] ⊢Δ [A] [t]) (wkTerm [ρ] ⊢Δ [A] [u])
-          -- TODO Minimize duplicates
           (λ {ρ₁} [ρ₁] ⊢Δ₁ [a] →
              let [F]₁ = [F] ([ρ₁] •ₜ [ρ]) ⊢Δ₁
                  [F]₂ = irrelevance' (PE.sym (wk-comp ρ₁ ρ F)) [F]₁
