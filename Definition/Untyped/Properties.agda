@@ -345,19 +345,6 @@ substSingletonComp : ∀ {a σ} t
   → subst (sgSubst a ₛ•ₛ liftSubst σ) t ≡ subst (consSubst σ a) t
 substSingletonComp = substVar-to-subst substVarSingletonComp
 
--- UNUSED:
--- substConcatSingleton' : ∀ {a σ} (x : Nat)
---                       → (σ ₛ•ₛ sgSubst a) x
---                       ≡ (consSubst σ (subst σ a)) x
--- substConcatSingleton' zero = refl
--- substConcatSingleton' (suc x) = refl
-
--- substConcatSingleton'' : ∀ {a σ} (x : Nat)
---                        → (σ ₛ•ₛ consSubst (wk1Subst idSubst) a) x
---                        ≡ (consSubst (tail σ) (subst σ a)) x
--- substConcatSingleton'' zero = refl
--- substConcatSingleton'' (suc x) = refl
-
 -- A single substitution after a lifted substitution.
 -- ((lift σ) G)[t] = (cons σ t)(G)
 
