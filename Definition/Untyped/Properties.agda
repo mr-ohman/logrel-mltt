@@ -11,31 +11,31 @@ open import Definition.Untyped
 
 -- Weakening properties
 
--- If two weakenings are equal under wkNat, then they are equal when lifted.
+-- If two weakenings are equal under wkVar, then they are equal when lifted.
 wkVar-lift : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
            → (∀ x → wkVar (lift ρ) x ≡ wkVar (lift ρ') x)
-wkVar-lift eq zero = refl
+wkVar-lift eq zero    = refl
 wkVar-lift eq (suc x) = cong suc (eq x)
 
--- If two weakenings are equal under wkNat, then they are equal under wk.
+-- If two weakenings are equal under wkVar, then they are equal under wk.
 wkVar-to-wk : ∀ {ρ ρ'} → (∀ x → wkVar ρ x ≡ wkVar ρ' x)
      → (t : Term) → wk ρ t ≡ wk ρ' t
-wkVar-to-wk eq U = refl
+wkVar-to-wk eq U          = refl
 wkVar-to-wk eq (Π t ▹ t₁) =
   cong₂ Π_▹_ (wkVar-to-wk eq t) (wkVar-to-wk (wkVar-lift eq) t₁)
-wkVar-to-wk eq ℕ = refl
-wkVar-to-wk eq (var x) = cong var (eq x)
-wkVar-to-wk eq (lam t) = cong lam (wkVar-to-wk (wkVar-lift eq) t)
-wkVar-to-wk eq (t ∘ t₁) = cong₂ _∘_ (wkVar-to-wk eq t) (wkVar-to-wk eq t₁)
-wkVar-to-wk eq zero = refl
-wkVar-to-wk eq (suc t) = cong suc (wkVar-to-wk eq t)
+wkVar-to-wk eq ℕ          = refl
+wkVar-to-wk eq (var x)    = cong var (eq x)
+wkVar-to-wk eq (lam t)    = cong lam (wkVar-to-wk (wkVar-lift eq) t)
+wkVar-to-wk eq (t ∘ t₁)   = cong₂ _∘_ (wkVar-to-wk eq t) (wkVar-to-wk eq t₁)
+wkVar-to-wk eq zero       = refl
+wkVar-to-wk eq (suc t)    = cong suc (wkVar-to-wk eq t)
 wkVar-to-wk eq (natrec t t₁ t₂ t₃) =
   cong₄ natrec (wkVar-to-wk (wkVar-lift eq) t)
                (wkVar-to-wk eq t₁) (wkVar-to-wk eq t₂) (wkVar-to-wk eq t₃)
 
 -- lift id is the same as id.
 wkVar-lift-id : (x : Nat) → wkVar (lift id) x ≡ wkVar id x
-wkVar-lift-id zero = refl
+wkVar-lift-id zero    = refl
 wkVar-lift-id (suc x) = refl
 
 -- id is the identity.
@@ -43,15 +43,15 @@ wkVar-id : (x : Nat) → wkVar id x ≡ x
 wkVar-id x = refl
 
 wk-id : (t : Term) → wk id t ≡ t
-wk-id U = refl
+wk-id U          = refl
 wk-id (Π t ▹ t₁) =
   cong₂ Π_▹_ (wk-id t) (trans (wkVar-to-wk wkVar-lift-id t₁) (wk-id t₁))
-wk-id ℕ = refl
-wk-id (var x) = cong var (wkVar-id x)
-wk-id (lam t) = cong lam (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
-wk-id (t ∘ t₁) = cong₂ _∘_ (wk-id t) (wk-id t₁)
-wk-id zero = refl
-wk-id (suc t) = cong suc (wk-id t)
+wk-id ℕ          = refl
+wk-id (var x)    = cong var (wkVar-id x)
+wk-id (lam t)    = cong lam (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
+wk-id (t ∘ t₁)   = cong₂ _∘_ (wk-id t) (wk-id t₁)
+wk-id zero       = refl
+wk-id (suc t)    = cong suc (wk-id t)
 wk-id (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
                (wk-id t₁) (wk-id t₂) (wk-id t₃)
@@ -61,23 +61,23 @@ wk-lift-id t = trans (wkVar-to-wk wkVar-lift-id t) (wk-id t)
 
 -- Composition of weakenings
 wkVar-comp : ∀ ρ ρ' x → wkVar ρ (wkVar ρ' x) ≡ wkVar (ρ • ρ') x
-wkVar-comp id ρ' x = refl
-wkVar-comp (step ρ) ρ' x = cong suc (wkVar-comp ρ ρ' x)
-wkVar-comp (lift ρ) id x = refl
-wkVar-comp (lift ρ) (step ρ') x = cong suc (wkVar-comp ρ ρ' x)
-wkVar-comp (lift ρ) (lift ρ') zero = refl
+wkVar-comp id       ρ'        x       = refl
+wkVar-comp (step ρ) ρ'        x       = cong suc (wkVar-comp ρ ρ' x)
+wkVar-comp (lift ρ) id        x       = refl
+wkVar-comp (lift ρ) (step ρ') x       = cong suc (wkVar-comp ρ ρ' x)
+wkVar-comp (lift ρ) (lift ρ') zero    = refl
 wkVar-comp (lift ρ) (lift ρ') (suc x) = cong suc (wkVar-comp ρ ρ' x)
 
 wk-comp : ∀ ρ ρ' t → wk ρ (wk ρ' t) ≡ wk (ρ • ρ') t
-wk-comp ρ ρ' U = refl
+wk-comp ρ ρ' U          = refl
 wk-comp ρ ρ' (Π t ▹ t₁) =
   cong₂ Π_▹_ (wk-comp ρ ρ' t) (wk-comp (lift ρ) (lift ρ') t₁)
-wk-comp ρ ρ' ℕ = refl
-wk-comp ρ ρ' (var x) = cong var (wkVar-comp ρ ρ' x)
-wk-comp ρ ρ' (lam t) = cong lam (wk-comp (lift ρ) (lift ρ') t)
-wk-comp ρ ρ' (t ∘ t₁) = cong₂ _∘_ (wk-comp ρ ρ' t) (wk-comp ρ ρ' t₁)
-wk-comp ρ ρ' zero = refl
-wk-comp ρ ρ' (suc t) = cong suc (wk-comp ρ ρ' t)
+wk-comp ρ ρ' ℕ          = refl
+wk-comp ρ ρ' (var x)    = cong var (wkVar-comp ρ ρ' x)
+wk-comp ρ ρ' (lam t)    = cong lam (wk-comp (lift ρ) (lift ρ') t)
+wk-comp ρ ρ' (t ∘ t₁)   = cong₂ _∘_ (wk-comp ρ ρ' t) (wk-comp ρ ρ' t₁)
+wk-comp ρ ρ' zero       = refl
+wk-comp ρ ρ' (suc t)    = cong suc (wk-comp ρ ρ' t)
 wk-comp ρ ρ' (natrec t t₁ t₂ t₃) =
   cong₄ natrec (wk-comp (lift ρ) (lift ρ') t)
                (wk-comp ρ ρ' t₁)
@@ -85,7 +85,7 @@ wk-comp ρ ρ' (natrec t t₁ t₂ t₃) =
                (wk-comp ρ ρ' t₃)
 
 lift-step-comp : (ρ : Wk) → step id • ρ ≡ lift ρ • step id
-lift-step-comp id = refl
+lift-step-comp id       = refl
 lift-step-comp (step ρ) = cong step (lift-step-comp ρ)
 lift-step-comp (lift ρ) = refl
 
@@ -103,21 +103,21 @@ wk1-wk≡lift-wk1 ρ t = trans (wk1-wk ρ t) (sym (lift-wk1 ρ t))
 
 substVar-lift : ∀ {σ σ'} → ((x : Nat) → σ x ≡ σ' x)
             → (x : Nat) → liftSubst σ x ≡ liftSubst σ' x
-substVar-lift eq zero = refl
+substVar-lift eq zero    = refl
 substVar-lift eq (suc x) = cong wk1 (eq x)
 
 substVar-to-subst : ∀ {σ σ'} → ((x : Nat) → σ x ≡ σ' x)
         → (t : Term) → subst σ t ≡ subst σ' t
-substVar-to-subst eq U = refl
+substVar-to-subst eq U          = refl
 substVar-to-subst eq (Π t ▹ t₁) =
   cong₂ Π_▹_ (substVar-to-subst eq t) (substVar-to-subst (substVar-lift eq) t₁)
-substVar-to-subst eq ℕ = refl
-substVar-to-subst eq (var x₁) = eq x₁
-substVar-to-subst eq (lam t) = cong lam (substVar-to-subst (substVar-lift eq) t)
-substVar-to-subst eq (t ∘ t₁) =
+substVar-to-subst eq ℕ          = refl
+substVar-to-subst eq (var x₁)   = eq x₁
+substVar-to-subst eq (lam t)    = cong lam (substVar-to-subst (substVar-lift eq) t)
+substVar-to-subst eq (t ∘ t₁)   =
   cong₂ _∘_ (substVar-to-subst eq t) (substVar-to-subst eq t₁)
-substVar-to-subst eq zero = refl
-substVar-to-subst eq (suc t) = cong suc (substVar-to-subst eq t)
+substVar-to-subst eq zero       = refl
+substVar-to-subst eq (suc t)    = cong suc (substVar-to-subst eq t)
 substVar-to-subst eq (natrec t t₁ t₂ t₃) =
   cong₄ natrec (substVar-to-subst (substVar-lift eq) t)
                (substVar-to-subst eq t₁)
@@ -125,19 +125,19 @@ substVar-to-subst eq (natrec t t₁ t₂ t₃) =
                (substVar-to-subst eq t₃)
 
 subst-lift-id : (x : Nat) → (liftSubst idSubst) x ≡ idSubst x
-subst-lift-id zero = refl
+subst-lift-id zero    = refl
 subst-lift-id (suc x) = refl
 
 subst-id : (t : Term) → subst idSubst t ≡ t
-subst-id U = refl
+subst-id U          = refl
 subst-id (Π t ▹ t₁) =
   cong₂ Π_▹_ (subst-id t) (trans (substVar-to-subst subst-lift-id t₁) (subst-id t₁))
-subst-id ℕ = refl
-subst-id (var x) = refl
-subst-id (lam t) = cong lam (trans (substVar-to-subst subst-lift-id t) (subst-id t))
-subst-id (t ∘ t₁) = cong₂ _∘_ (subst-id t) (subst-id t₁)
-subst-id zero = refl
-subst-id (suc t) = cong suc (subst-id t)
+subst-id ℕ          = refl
+subst-id (var x)    = refl
+subst-id (lam t)    = cong lam (trans (substVar-to-subst subst-lift-id t) (subst-id t))
+subst-id (t ∘ t₁)   = cong₂ _∘_ (subst-id t) (subst-id t₁)
+subst-id zero       = refl
+subst-id (suc t)    = cong suc (subst-id t)
 subst-id (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (substVar-to-subst subst-lift-id t) (subst-id t))
                (subst-id t₁) (subst-id t₂) (subst-id t₃)
@@ -157,29 +157,29 @@ subst-lift-ₛ• : ∀ {ρ σ} t
 subst-lift-ₛ• = substVar-to-subst (λ { zero → refl ; (suc x) → refl})
 
 wk-subst : ∀ {σ ρ} t → wk σ (subst ρ t) ≡ subst (σ •ₛ ρ) t
-wk-subst U = refl
+wk-subst U          = refl
 wk-subst (Π t ▹ t₁) =
   cong₂ Π_▹_ (wk-subst t) (trans (wk-subst t₁) (subst-lift-•ₛ t₁))
-wk-subst ℕ = refl
-wk-subst (var x) = refl
-wk-subst (lam t) = cong lam (trans (wk-subst t) (subst-lift-•ₛ t))
-wk-subst (t ∘ t₁) = cong₂ _∘_ (wk-subst t) (wk-subst t₁)
-wk-subst zero = refl
-wk-subst (suc t) = cong suc (wk-subst t)
+wk-subst ℕ          = refl
+wk-subst (var x)    = refl
+wk-subst (lam t)    = cong lam (trans (wk-subst t) (subst-lift-•ₛ t))
+wk-subst (t ∘ t₁)   = cong₂ _∘_ (wk-subst t) (wk-subst t₁)
+wk-subst zero       = refl
+wk-subst (suc t)    = cong suc (wk-subst t)
 wk-subst (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (wk-subst t) (subst-lift-•ₛ t))
                (wk-subst t₁) (wk-subst t₂) (wk-subst t₃)
 
 subst-wk : ∀ {σ ρ} t → subst ρ (wk σ t) ≡ subst (ρ ₛ• σ) t
-subst-wk U = refl
+subst-wk U          = refl
 subst-wk (Π t ▹ t₁) =
   cong₂ Π_▹_ (subst-wk t) (trans (subst-wk t₁) (subst-lift-ₛ• t₁))
-subst-wk ℕ = refl
-subst-wk (var x) = refl
-subst-wk (lam t) = cong lam (trans (subst-wk t) (subst-lift-ₛ• t))
-subst-wk (t ∘ t₁) = cong₂ _∘_ (subst-wk t) (subst-wk t₁)
-subst-wk zero = refl
-subst-wk (suc t) = cong suc (subst-wk t)
+subst-wk ℕ          = refl
+subst-wk (var x)    = refl
+subst-wk (lam t)    = cong lam (trans (subst-wk t) (subst-lift-ₛ• t))
+subst-wk (t ∘ t₁)   = cong₂ _∘_ (subst-wk t) (subst-wk t₁)
+subst-wk zero       = refl
+subst-wk (suc t)    = cong suc (subst-wk t)
 subst-wk (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (subst-wk t) (subst-lift-ₛ• t))
                (subst-wk t₁) (subst-wk t₂) (subst-wk t₃)
@@ -198,20 +198,20 @@ wk≡subst ρ t = trans (cong (wk ρ) (sym (subst-id t))) (wk-subst t)
 substCompLift : ∀ {σ σ'} x
               → (liftSubst σ ₛ•ₛ liftSubst σ') x
               ≡ (liftSubst (σ ₛ•ₛ σ')) x
-substCompLift zero = refl
+substCompLift          zero    = refl
 substCompLift {σ} {σ'} (suc x) = trans (subst-wk (σ' x)) (sym (wk-subst (σ' x)))
 
 substCompEq : ∀ {σ σ'} (t : Term)
             → subst σ (subst σ' t) ≡ subst (σ ₛ•ₛ σ') t
-substCompEq U = refl
+substCompEq U          = refl
 substCompEq (Π t ▹ t₁) =
   cong₂ Π_▹_ (substCompEq t) (trans (substCompEq t₁) (substVar-to-subst substCompLift t₁))
-substCompEq ℕ = refl
-substCompEq (var x) = refl
-substCompEq (lam t) = cong lam (trans (substCompEq t) (substVar-to-subst substCompLift t))
-substCompEq (t ∘ t₁) = cong₂ _∘_ (substCompEq t) (substCompEq t₁)
-substCompEq zero = refl
-substCompEq (suc t) = cong suc (substCompEq t)
+substCompEq ℕ          = refl
+substCompEq (var x)    = refl
+substCompEq (lam t)    = cong lam (trans (substCompEq t) (substVar-to-subst substCompLift t))
+substCompEq (t ∘ t₁)   = cong₂ _∘_ (substCompEq t) (substCompEq t₁)
+substCompEq zero       = refl
+substCompEq (suc t)    = cong suc (substCompEq t)
 substCompEq (natrec t t₁ t₂ t₃) =
   cong₄ natrec (trans (substCompEq t) (substVar-to-subst substCompLift t))
                (substCompEq t₁) (substCompEq t₂) (substCompEq t₃)
