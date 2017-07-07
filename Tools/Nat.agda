@@ -1,4 +1,4 @@
--- The natural numbers
+-- The natural numbers.
 
 {-# OPTIONS --without-K #-}
 
@@ -13,13 +13,13 @@ open import Agda.Builtin.Nat using (Nat; zero; suc) public
 
 infix 4 _≟_
 
--- Predecessor, cutting off at 0
+-- Predecessor, cutting off at 0.
 
 pred : Nat → Nat
 pred zero = zero
 pred (suc n) = n
 
--- Decision of number equality
+-- Decision of number equality.
 
 _≟_ : (m n : Nat) → Dec (m ≡ n)
 zero  ≟ zero   = yes refl

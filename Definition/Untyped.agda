@@ -17,14 +17,14 @@ infix 25 _[_]
 infix 25 _[_]↑
 
 
--- Typing contexts (snoc-lists, isomorphic to lists)
+-- Typing contexts (snoc-lists, isomorphic to lists).
 
 data Con (A : Set) : Set where
-  ε   : Con A               -- Empty context
-  _∙_ : Con A → A → Con A  -- Context extension
+  ε   : Con A               -- Empty context.
+  _∙_ : Con A → A → Con A  -- Context extension.
 
 
--- The Grammar of our language
+-- The Grammar of our language.
 
 -- We represent the expressions of our language as de Bruijn terms.
 -- Variables are natural numbers interpreted as de Bruijn indices.
@@ -32,23 +32,23 @@ data Con (A : Set) : Set where
 
 data Term : Set where
 
-  -- Type constructors
-  U      : Term                     -- Universe
-  Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder)
-  ℕ      : Term                     -- Type of natural numbers
+  -- Type constructors.
+  U      : Term                     -- Universe.
+  Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
+  ℕ      : Term                     -- Type of natural numbers.
 
-  -- Lambda-calculus
-  var    : (x : Nat)        → Term  -- Variable (de Bruijn index)
-  lam    : (t : Term)       → Term  -- Function abstraction (binder)
-  _∘_    : (t u : Term)     → Term  -- Application
+  -- Lambda-calculus.
+  var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
+  lam    : (t : Term)       → Term  -- Function abstraction (binder).
+  _∘_    : (t u : Term)     → Term  -- Application.
 
-  -- Introduction and elimination of natural numbers
-  zero   : Term                     -- Natural number zero
-  suc    : (t : Term)       → Term  -- Successor
-  natrec : (A t u v : Term) → Term  -- Recursor (A is a binder)
+  -- Introduction and elimination of natural numbers.
+  zero   : Term                     -- Natural number zero.
+  suc    : (t : Term)       → Term  -- Successor.
+  natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
 
 
--- Injectivity of term constructors w.r.t. propositional equality
+-- Injectivity of term constructors w.r.t. propositional equality.
 
 -- If  Π F G = Π H E  then  F = H  and  G = E.
 
@@ -61,7 +61,7 @@ suc-PE-injectivity : ∀ {n m} → Term.suc n PE.≡ suc m → n PE.≡ m
 suc-PE-injectivity PE.refl = PE.refl
 
 
--- Neutral terms
+-- Neutral terms.
 
 -- A term is neutral if it has a variable in head position.
 -- The variable blocks reduction of such terms.
@@ -72,7 +72,7 @@ data Neutral : Term → Set where
   natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 
--- Weak head normal forms (whnfs)
+-- Weak head normal forms (whnfs).
 
 -- These are the (lazy) values of our language.
 
@@ -92,7 +92,7 @@ data Whnf : Term → Set where
   ne   : ∀ {n} → Neutral n → Whnf n
 
 
--- Whnf inequalities
+-- Whnf inequalities.
 
 -- Different whnfs are trivially distinguished by propositional equality.
 -- (The following statements are sometimes called "no-confusion theorems".)
@@ -125,7 +125,7 @@ suc≢ne : ∀ {n k} → Neutral k → Term.suc n PE.≢ k
 suc≢ne () PE.refl
 
 
--- Several views on whnfs (note: not recursive)
+-- Several views on whnfs (note: not recursive).
 
 -- A whnf of type ℕ is either zero, suc t, or neutral.
 
@@ -180,7 +180,7 @@ functionWhnf (ne x) = ne x
 -- and this would be the natural extension of weakenings.
 
 data Wk : Set where
-  id    : Wk        -- η : Γ ≤ Γ
+  id    : Wk        -- η : Γ ≤ Γ.
   step  : Wk  → Wk  -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
   lift  : Wk  → Wk  -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
 
@@ -223,14 +223,14 @@ wk ρ (natrec A t u v) = natrec (wk (lift ρ) A) (wk ρ t) (wk ρ u) (wk ρ v)
 wk1 : Term → Term
 wk1 = wk (step id)
 
--- Weakening of a context
+-- Weakening of a context.
 
 wkCon : Wk → Con Term → Con Term
 wkCon (step pr) (Γ ∙ x) = wkCon pr Γ ∙ x
 wkCon (lift pr) (Γ ∙ x) = wkCon pr Γ ∙ wk pr x
 wkCon pr Γ              = Γ
 
--- Weakening of a neutral term
+-- Weakening of a neutral term.
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
 wkNeutral ρ (var n)    = var (wkVar ρ n)
@@ -262,7 +262,7 @@ wkWhnf ρ zero   = zero
 wkWhnf ρ suc    = suc
 wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
 
--- Non-dependent version of Π
+-- Non-dependent version of Π.
 
 _▹▹_ : Term → Term → Term
 A ▹▹ B = Π A ▹ wk1 B

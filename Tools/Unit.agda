@@ -1,4 +1,4 @@
--- The unit type; also used as proposition ``Truth''
+-- The unit type; also used as proposition ``Truth''.
 
 {-# OPTIONS --without-K #-}
 

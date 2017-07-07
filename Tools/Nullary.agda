@@ -1,4 +1,4 @@
--- Some proposition constructors
+-- Some proposition constructors.
 
 {-# OPTIONS --without-K #-}
 
@@ -6,14 +6,14 @@ module Tools.Nullary where
 
 open import Tools.Empty
 
--- Negation
+-- Negation.
 
 infix 3 ¬_
 
 ¬_ : Set → Set
 ¬ P = P → ⊥
 
--- Decidable propositions
+-- Decidable propositions.
 
 data Dec (P : Set) : Set where
   yes : ( p :   P) → Dec P
