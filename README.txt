@@ -33,6 +33,6 @@ Agda version 2.5.2.
 FIX PAPER LINKS
 ===============
 
-To make the links from the paper work, put the PDF file of the paper in the
-same folder as this file, such that it can access both the "html" folder
-and the "code" folder.
+To make the links from the paper work, extract the zip-archive this README
+was in, in the same folder as the PDF file of the paper, such that it has
+direct access to the "html" folder.
