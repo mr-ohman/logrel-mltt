@@ -40,7 +40,7 @@ import Definition.Untyped
 
 -- Propositional equality properties: Equalities between expressions,
 -- weakenings, substitutions and their combined composition.
--- (omitted from paper)
+-- (These lemmas are not in the paper.)
 import Definition.Untyped.Properties
 
 -- Judgements: Typing rules, conversion, reduction rules
@@ -52,10 +52,6 @@ import Definition.Typed.Properties
 
 -- Well-formed weakening and its properties.
 import Definition.Typed.Weakening
-
-import Definition.Typed.Reduction -- (not in paper yet)
-
-import Definition.Typed.RedSteps -- (not in paper yet)
 
 
 ------------------------------
@@ -109,8 +105,6 @@ import Definition.LogicalRelation.Properties.Universe
 -- Successor of natural numbers in the logical relation.
 import Definition.LogicalRelation.Properties.Successor
 
-import Definition.LogicalRelation.Properties.MaybeEmb -- (not in paper yet)
-
 -- Validity judgements definitions
 import Definition.LogicalRelation.Substitution
 
@@ -141,18 +135,6 @@ import Definition.LogicalRelation.Substitution.Introductions.Lambda
 
 -- Validity of natural recursion of natural numbers.
 import Definition.LogicalRelation.Substitution.Introductions.Natrec
-
--- (These do not appear in the paper, as they are valid variants of sound lemmas
---  or minor helping lemmas)
-import Definition.LogicalRelation.Substitution.Conversion
-import Definition.LogicalRelation.Substitution.Reduction
-import Definition.LogicalRelation.Substitution.Reflexivity
-import Definition.LogicalRelation.Substitution.Weakening
-import Definition.LogicalRelation.Substitution.Soundness
-import Definition.LogicalRelation.Substitution.Wellformed
-import Definition.LogicalRelation.Substitution.MaybeEmbed
-import Definition.LogicalRelation.Substitution.Introductions.Nat
-import Definition.LogicalRelation.Substitution.Introductions.Universe
 
 -- The fundamental theorem.
 import Definition.LogicalRelation.Fundamental
@@ -186,9 +168,6 @@ import Definition.Typed.Consequences.NeTypeEq
 -- Universe membership of types.
 import Definition.Typed.Consequences.InverseUniv
 
-import Definition.Typed.Consequences.SucCong -- (not in paper yet)
-
-import Definition.Typed.Consequences.Inversion -- (not in paper yet)
 
 ------------------
 -- DECIDABILITY --
@@ -225,12 +204,6 @@ import Definition.Conversion.Weakening
 
 -- WHNF and neutral lifting of the conversion algorithm.
 import Definition.Conversion.Lift
-
-import Definition.Conversion.Reduction -- (not in paper yet)
-
-import Definition.Conversion.Universe -- (not in paper yet)
-
-import Definition.Conversion.Whnf -- (not in paper yet)
 
 -- Generic equality relation instance for the conversion algorithm.
 import Definition.Conversion.EqRelInstance
