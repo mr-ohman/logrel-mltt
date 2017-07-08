@@ -4,6 +4,9 @@
 
 module Everything where
 
+-- README
+import README
+
 -- Minimal library
 import Tools.Empty
 import Tools.Unit

@@ -6,7 +6,7 @@ htmldir=$(HOME)/popl17/html
 .PHONY : clean pack check agda-check html loc agda-loc agda-woc
 
 html :
-	agda --html --html-dir=$(htmldir) README.agda
+	agda --html --html-dir=$(htmldir) Everything.agda
 
 
 ## Type Check Code ########################################################
@@ -21,7 +21,7 @@ agda-check:
 pack: clean
 	mkdir code
 	cp -r Definition Tools Everything.agda README.agda Makefile code/
-	agda --html README.agda
+	agda --html Everything.agda
 	zip -r formalization code html README.txt
 
 clean:
