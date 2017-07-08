@@ -1,6 +1,6 @@
 
 This document will provide instructions how to browse the supplementary code,
-verify the code with Agda or how to make the links from the paper work.
+verify the code with Agda and how to make the links from the paper work.
 
 
 =============
