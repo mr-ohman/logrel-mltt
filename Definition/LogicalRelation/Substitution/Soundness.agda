@@ -48,3 +48,15 @@ soundnessTerm {A = A} [Γ] [A] [t] =
       [id] = idSubstS [Γ]
   in  irrelevanceTerm'' (subst-id _) (subst-id _)
                         (proj₁ ([A] ⊢Γ [id])) [σA] (proj₁ ([t] ⊢Γ [id]))
+
+soundnessEqTerm : ∀ {t u A Γ l}
+                ([Γ] : ⊩ₛ Γ)
+                ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
+              → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
+              → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / soundness [Γ] [A]
+soundnessEqTerm {A = A} [Γ] [A] [t≡u] =
+  let [σA] = soundness {A = A} [Γ] [A]
+      ⊢Γ = soundContext [Γ]
+      [id] = idSubstS [Γ]
+  in  irrelevanceEqTerm'' (subst-id _) (subst-id _) (subst-id _)
+                          (proj₁ ([A] ⊢Γ [id])) [σA] ([t≡u] ⊢Γ [id])
