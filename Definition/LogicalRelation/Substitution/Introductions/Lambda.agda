@@ -19,7 +19,6 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
-open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Definition.LogicalRelation.Substitution.Introductions.Application
 
 open import Tools.Nat

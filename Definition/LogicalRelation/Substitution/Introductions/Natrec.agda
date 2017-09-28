@@ -13,7 +13,6 @@ open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Tactic
-open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
@@ -134,8 +133,6 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                     (wellformedTerm (proj₁ ([F₀] ⊢Δ [σ])) (proj₁ ([z] ⊢Δ [σ])))
       ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F)
                     (wellformedTerm (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([s] ⊢Δ [σ])))
-      ⊢n = wellformedTerm {l = l} (ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ]))
-                          (ℕₜ (suc m) d n≡n (suc [m]))
       ⊢m = wellformedTerm {l = l} [σℕ] [m]
       [σsm] = irrelevanceTerm {l = l} (ℕ (idRed:*: (ℕ ⊢Δ))) [σℕ]
                               (ℕₜ (suc m) (idRedTerm:*: (suc ⊢m)) n≡n (suc [m]))
@@ -192,16 +189,12 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                     (wellformedTerm (proj₁ ([F₀] ⊢Δ [σ])) (proj₁ ([z] ⊢Δ [σ])))
       ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F)
                     (wellformedTerm (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([s] ⊢Δ [σ])))
-      ⊢n = wellformedTerm {l = l} (ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ]))
-                          (ℕₜ zero d n≡n zero)
       [σ0] = irrelevanceTerm {l = l} (ℕ (idRed:*: (ℕ ⊢Δ))) [σℕ]
                              (ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) n≡n zero)
       [σn]' , [σn≡σ0] = redSubst*Term (redₜ d) (proj₁ ([ℕ] ⊢Δ [σ])) [σ0]
       [σn] = ℕₜ zero d n≡n zero
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
       [σFₙ] = irrelevance' (PE.sym (singleSubstComp n σ F)) [σFₙ]'
-      [σF₀] = irrelevance' (PE.sym (singleSubstComp zero σ F))
-                           (proj₁ ([F] ⊢Δ ([σ] , [σ0])))
       [Fₙ≡F₀]' = proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σ0])
                        (reflSubst [Γ] ⊢Δ [σ] , [σn≡σ0])
       [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
@@ -247,7 +240,6 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                       (wellformedTermEq (proj₁ ([F₊] ⊢Δ [σ]))
                                         (reflEqTerm (proj₁ ([F₊] ⊢Δ [σ]))
                                                     (proj₁ ([s] ⊢Δ [σ]))))
-      ⊢n = wellformedTerm [σℕ] [σn]
       [σm] = neuTerm [σℕ] neM ⊢m m≡m
       [σn]' , [σn≡σm] = redSubst*Term (redₜ d) [σℕ] [σm]
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))
@@ -337,7 +329,6 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                     (wellformedTerm (proj₁ ([F₀] ⊢Δ [σ])) (proj₁ ([z] ⊢Δ [σ])))
       ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x) (natrecSucCase σ F)
                     (wellformedTerm (proj₁ ([F₊] ⊢Δ [σ])) (proj₁ ([s] ⊢Δ [σ])))
-      ⊢n = wellformedTerm {l = l} (ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ])) [σn]
       ⊢n' = wellformedTerm {l = l} [σℕ] [n']
       ⊢ℕ' = wellformed [σ'ℕ]
       ⊢F' = wellformed (proj₁ ([F'] (⊢Δ ∙ ⊢ℕ')
@@ -348,7 +339,6 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       ⊢s' = PE.subst (λ x → Δ ⊢ subst σ' s' ∷ x) (natrecSucCase σ' F')
                      (wellformedTerm (proj₁ ([F'₊] ⊢Δ [σ']))
                                     (proj₁ ([s'] ⊢Δ [σ'])))
-      ⊢m  = wellformedTerm {l = l} (ℕ ([ ⊢ℕ' , ⊢ℕ' , id ⊢ℕ' ])) [σ'm]
       ⊢m' = wellformedTerm {l = l} [σ'ℕ] [m']
       [σsn'] = irrelevanceTerm {l = l} (ℕ (idRed:*: (ℕ ⊢Δ))) [σℕ]
                                (ℕₜ (suc n') (idRedTerm:*: (suc ⊢n')) n≡n (suc [n']))
@@ -505,8 +495,6 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                      (wellformedTerm (proj₁ ([F'₀] ⊢Δ [σ'])) (proj₁ ([z'] ⊢Δ [σ'])))
       ⊢s' = PE.subst (λ x → Δ ⊢ subst σ' s' ∷ x) (natrecSucCase σ' F')
                      (wellformedTerm (proj₁ ([F'₊] ⊢Δ [σ'])) (proj₁ ([s'] ⊢Δ [σ'])))
-      ⊢n = wellformedTerm {l = l} (ℕ ([ ⊢ℕ , ⊢ℕ , id ⊢ℕ ]))
-                          (ℕₜ zero d n≡n zero)
       [σ0] = irrelevanceTerm {l = l} (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([ℕ] ⊢Δ [σ]))
                              (ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) n≡n zero)
       [σ'0] = irrelevanceTerm {l = l} (ℕ (idRed:*: (ℕ ⊢Δ))) (proj₁ ([ℕ] ⊢Δ [σ']))
@@ -532,10 +520,6 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
                                      (PE.sym (singleSubstComp m σ' F'))
                                      [σ'Fₘ]' [σ'Fₘ] ([F≡F'] ⊢Δ ([σ'] , [σ'm]))
       [σFₙ≡σ'F'ₘ] = transEq [σFₙ] [σ'Fₘ] [σ'F'ₘ] [σFₙ≡σ'Fₘ] [σ'Fₘ≡σ'F'ₘ]
-      [σF₀] = irrelevance' (PE.sym (singleSubstComp zero σ F))
-                           (proj₁ ([F] ⊢Δ ([σ] , [σ0])))
-      [σ'F₀] = irrelevance' (PE.sym (singleSubstComp zero σ' F))
-                            (proj₁ ([F] ⊢Δ ([σ'] , [σ'0])))
       [Fₙ≡F₀]' = proj₂ ([F] ⊢Δ ([σ] , [σn])) ([σ] , [σ0]) (reflSubst [Γ] ⊢Δ [σ] , [σn≡σ0])
       [Fₙ≡F₀] = irrelevanceEq'' (PE.sym (singleSubstComp n σ F))
                                 (PE.sym (substCompEq F))
@@ -671,7 +655,6 @@ natrec-congTerm {F} {F'} {z} {z'} {s} {s'} {n} {m} {Γ} {Δ} {σ} {σ'} {l}
       ⊢F≡F' = ≅-trans ⊢σF≡σ'F ⊢σ'F≡⊢σ'F'
       ⊢z≡z' = ≅ₜ-trans ⊢σz≡σ'z ⊢σ'z≡⊢σ'z'
       ⊢s≡s' = ≅ₜ-trans ⊢σs≡σ's ⊢σ's≡⊢σ's'
-      ⊢n = wellformedTerm [σℕ] [σn]
       [σn'] = neuTerm [σℕ] neN' ⊢n' n≡n₁
       [σn]' , [σn≡σn'] = redSubst*Term (redₜ d) [σℕ] [σn']
       [σFₙ]' = proj₁ ([F] ⊢Δ ([σ] , [σn]))

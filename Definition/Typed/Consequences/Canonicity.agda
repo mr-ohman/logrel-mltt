@@ -14,7 +14,6 @@ open import Definition.Typed.RedSteps
 open import Definition.Typed.EqRelInstance
 
 open import Definition.LogicalRelation
-import Definition.LogicalRelation.Weakening as LR
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Tactic
 open import Definition.LogicalRelation.Properties

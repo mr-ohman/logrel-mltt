@@ -13,7 +13,6 @@ import Definition.Typed.Weakening as T
 open import Definition.Typed.Properties
 
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
