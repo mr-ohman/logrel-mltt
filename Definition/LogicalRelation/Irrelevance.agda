@@ -11,7 +11,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -56,7 +56,7 @@ mutual
   irrelevanceEqLift'' PE.refl PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
 
   irrelevanceEqT : ∀ {Γ A B l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
-                       → Tactic Γ l l' A A p q
+                       → EqView Γ l l' A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l' ⟩ A ≡ B / q
   irrelevanceEqT (ℕ D D') A≡B = A≡B
   irrelevanceEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D' neM K≡M)
@@ -107,7 +107,7 @@ mutual
   irrelevanceTermΓ'' PE.refl PE.refl PE.refl [A] [A'] [t] = irrelevanceTerm [A] [A'] [t]
 
   irrelevanceTermT : ∀ {Γ A t l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
-                         → Tactic Γ l l' A A p q
+                         → EqView Γ l l' A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l' ⟩ t ∷ A / q
   irrelevanceTermT (ℕ D D') t = t
   irrelevanceTermT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (neₜ k d nf)
@@ -158,7 +158,7 @@ mutual
   irrelevanceEqTerm'' PE.refl PE.refl PE.refl p q t≡u = irrelevanceEqTerm p q t≡u
 
   irrelevanceEqTermT : ∀ {Γ A t u} {l l'} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l' ⟩ A}
-                           → Tactic Γ l l' A A p q
+                           → EqView Γ l l' A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l' ⟩ t ≡ u ∷ A / q
   irrelevanceEqTermT (ℕ D D') t≡u = t≡u
   irrelevanceEqTermT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (neₜ₌ k m d d' nf)

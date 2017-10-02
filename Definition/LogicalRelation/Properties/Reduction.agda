@@ -11,7 +11,7 @@ open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Properties.Symmetry
 open import Definition.LogicalRelation.Properties.Transitivity

@@ -10,7 +10,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
 
@@ -20,7 +20,7 @@ import Tools.PropositionalEquality as PE
 
 mutual
   symEqT : ∀ {Γ A B l l'} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
-         → Tactic Γ l l' A B [A] [B]
+         → EqView Γ l l' A B [A] [B]
          → Γ ⊩⟨ l  ⟩ A ≡ B / [A]
          → Γ ⊩⟨ l' ⟩ B ≡ A / [B]
   symEqT (ℕ D D') A≡B = red D

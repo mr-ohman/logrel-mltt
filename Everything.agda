@@ -32,7 +32,7 @@ import Definition.Typed.EqRelInstance
 
 -- Logical relation
 import Definition.LogicalRelation
-import Definition.LogicalRelation.Tactic
+import Definition.LogicalRelation.EqView
 import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Weakening
 import Definition.LogicalRelation.Properties

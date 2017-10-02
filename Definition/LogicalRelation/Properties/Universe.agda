@@ -9,7 +9,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties as T
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
 
 open import Tools.Product

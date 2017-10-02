@@ -11,7 +11,7 @@ open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Wellformed
 
@@ -24,7 +24,7 @@ convRed:*: [ ⊢t , ⊢u , d ] A≡B = [ conv ⊢t  A≡B , conv ⊢u  A≡B , c
 
 mutual
   convTermT₁ : ∀ {l l' Γ A B t} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
-             → Tactic Γ l l' A B [A] [B]
+             → EqView Γ l l' A B [A] [B]
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
              → Γ ⊩⟨ l ⟩  t ∷ A / [A]
              → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
@@ -71,7 +71,7 @@ mutual
   convTermT₁ (emb¹⁰ x) A≡B t = convTermT₁ x A≡B t
 
   convTermT₂ : ∀ {l l' Γ A B t} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
-           → Tactic Γ l l' A B [A] [B]
+           → EqView Γ l l' A B [A] [B]
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l' ⟩ t ∷ B / [B]
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
@@ -139,7 +139,7 @@ mutual
 
 
   convEqTermT₁ : ∀ {l l' Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
-               → Tactic Γ l l' A B [A] [B]
+               → EqView Γ l l' A B [A] [B]
                → Γ ⊩⟨ l ⟩  A ≡ B / [A]
                → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
                → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
@@ -181,7 +181,7 @@ mutual
   convEqTermT₁ (emb¹⁰ x) A≡B t≡u = convEqTermT₁ x A≡B t≡u
 
   convEqTermT₂ : ∀ {l l' Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l' ⟩ B}
-             → Tactic Γ l l' A B [A] [B]
+             → EqView Γ l l' A B [A] [B]
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
              → Γ ⊩⟨ l' ⟩ t ≡ u ∷ B / [B]
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]

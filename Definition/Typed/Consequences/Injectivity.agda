@@ -15,7 +15,7 @@ open import Definition.Typed.EqRelInstance
 
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.Tactic
+open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Soundness

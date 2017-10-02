@@ -79,7 +79,7 @@ import Definition.LogicalRelation.Properties.Reflexivity
 import Definition.LogicalRelation.Properties.Wellformed
 
 -- Equality view of two or more types.
-import Definition.LogicalRelation.Tactic
+import Definition.LogicalRelation.EqView
 
 -- Proof irrelevance for the logical relation.
 import Definition.LogicalRelation.Irrelevance
