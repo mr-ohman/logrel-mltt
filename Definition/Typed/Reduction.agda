@@ -7,6 +7,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 
 
+-- Weak head expansion of type equality
 reduction : ∀ {A A' B B' Γ}
           → Γ ⊢ A ⇒* A'
           → Γ ⊢ B ⇒* B'
@@ -27,6 +28,7 @@ reduction' : ∀ {A A' B B' Γ}
 reduction' D D' whnfA' whnfB' A≡B =
   trans (sym (subset* D)) (trans A≡B (subset* D'))
 
+-- Weak head expansion of term equality
 reductionₜ : ∀ {a a' b b' A B Γ}
            → Γ ⊢ A ⇒* B
            → Γ ⊢ a ⇒* a' ∷ B

@@ -12,15 +12,15 @@ open import Definition.Typed.EqualityRelation
 open import Tools.Product
 
 
+-- Judgmental instance of the equality relation
+
 instance eqRelInstance : EqRelSet
 eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_ _⊢_≡_∷_
-                      refl app-cong natrec-cong sym
-                      trans conv wkEqTerm (λ x → x)
-                      (λ x → refl (U x)) (λ x → refl (ℕ x)) (λ x → refl (ℕ x))
-                      (λ x → refl (zero x))
-                      sym sym trans trans
+                      (λ x → x) (λ x → x) (λ x → x) univ
+                      sym sym sym trans trans trans
+                      conv conv wkEq wkEqTerm wkEqTerm
                       reduction reductionₜ
-                      wkEq wkEqTerm
-                      (λ x → x) (λ x → x) conv univ
-                      suc-cong Π-cong Π-cong
+                      (λ x → refl (U x)) (λ x → refl (ℕ x)) (λ x → refl (ℕ x))
+                      Π-cong Π-cong (λ x → refl (zero x)) suc-cong
                       (λ x x₁ x₂ x₃ x₄ x₅ → fun-ext x x₁ x₂ x₅)
+                      refl app-cong natrec-cong

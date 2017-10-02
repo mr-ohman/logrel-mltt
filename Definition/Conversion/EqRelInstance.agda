@@ -99,20 +99,17 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
 ~-to-conv (↑ x x₁) = convConvTerm (lift~toConv↑ x₁) (sym x)
 
 instance eqRelInstance : EqRelSet
-eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
-                      _⊢_~_∷_ ~-var ~-app ~-natrec
-                      ~-sym ~-trans ~-conv ~-wk ~-to-conv
+eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
+                      ~-to-conv soundnessConv↑ soundnessConv↑Term
+                      univConv↑
+                      symConv symConvTerm ~-sym
+                      transConv transConvTerm ~-trans
+                      convConvTerm ~-conv
+                      wkConv↑ wkConv↑Term ~-wk
+                      reductionConv↑ reductionConv↑Term
                       (λ x → liftConv (U-refl x))
                       (λ x → liftConv (ℕ-refl x))
                       (λ x → liftConvTerm (univ (ℕ x) (ℕ x) (ℕ-refl x)))
-                      (λ x → liftConvTerm (zero-refl x))
-                      symConv symConvTerm
-                      transConv transConvTerm
-                      reductionConv↑ reductionConv↑Term
-                      wkConv↑ wkConv↑Term
-                      soundnessConv↑ soundnessConv↑Term
-                      convConvTerm univConv↑
-                      (λ x → liftConvTerm (suc-cong x))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →
                          let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
@@ -124,4 +121,9 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_
                              E∷U' = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
                          in  liftConvTerm (univ (Π F∷U ▹ G∷U) (Π H∷U ▹ E∷U')
                                                 (Π-cong x F<>H G<>E)))
+
+                      (λ x → liftConvTerm (zero-refl x))
+                      (λ x → liftConvTerm (suc-cong x))
                       (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (fun-ext x x₁ x₂ x₃ x₄ x₅))
+                      ~-var ~-app ~-natrec
+
