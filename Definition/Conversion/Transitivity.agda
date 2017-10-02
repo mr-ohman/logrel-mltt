@@ -37,8 +37,8 @@ mutual
                (PE.subst (λ x → _ ⊢ var x ∷ _) (PE.sym x≡y)
                          (stabilityTerm (symConEq Γ≡Δ) x₂))
   trans~↑ Γ≡Δ (app t~u a<>b) (app u~v b<>c) =
-    let t~v , ΠFG≡ΠF'G' = trans~↓ Γ≡Δ t~u u~v
-        F≡F₁ , G≡G₁ = injectivity ΠFG≡ΠF'G'
+    let t~v , ΠFG≡ΠF′G′ = trans~↓ Γ≡Δ t~u u~v
+        F≡F₁ , G≡G₁ = injectivity ΠFG≡ΠF′G′
         a<>c = transConv↑Term Γ≡Δ F≡F₁ a<>b b<>c
     in  app t~v a<>c , substTypeEq G≡G₁ (soundnessConv↑Term a<>b)
   trans~↑ Γ≡Δ (natrec A<>B a₀<>b₀ aₛ<>bₛ t~u) (natrec B<>C b₀<>c₀ bₛ<>cₛ u~v) =
@@ -71,14 +71,14 @@ mutual
             → Γ ⊢ A [conv↑] B
             → Δ ⊢ B [conv↑] C
             → Γ ⊢ A [conv↑] C
-  transConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
-             ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'') =
-    [↑] A' B'' D (stabilityRed* (symConEq Γ≡Δ) D'') whnfA' whnfB''
-        (transConv↓ Γ≡Δ A'<>B'
-                    (PE.subst (λ x → _ ⊢ x [conv↓] B'')
-                              (whrDet* (D₁ , whnfA'')
-                                        (stabilityRed* Γ≡Δ D' , whnfB'))
-                              A'<>B''))
+  transConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
+             ([↑] A″ B″ D₁ D″ whnfA″ whnfB″ A′<>B″) =
+    [↑] A′ B″ D (stabilityRed* (symConEq Γ≡Δ) D″) whnfA′ whnfB″
+        (transConv↓ Γ≡Δ A′<>B′
+                    (PE.subst (λ x → _ ⊢ x [conv↓] B″)
+                              (whrDet* (D₁ , whnfA″)
+                                        (stabilityRed* Γ≡Δ D′ , whnfB′))
+                              A′<>B″))
 
   transConv↓ : ∀ {A B C Γ Δ}
             → ⊢ Γ ≡ Δ
@@ -106,18 +106,18 @@ mutual
                 → Γ ⊢ t [conv↑] u ∷ A
                 → Δ ⊢ u [conv↑] v ∷ B
                 → Γ ⊢ t [conv↑] v ∷ A
-  transConv↑Term Γ≡Δ A≡B ([↑]ₜ B₁ t' u' D d d' whnfB whnft' whnfu' t<>u)
-                 ([↑]ₜ B₂ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁) =
+  transConv↑Term Γ≡Δ A≡B ([↑]ₜ B₁ t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
+                 ([↑]ₜ B₂ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁) =
     let B₁≡B₂ = trans (sym (subset* D))
                       (trans A≡B
                              (subset* (stabilityRed* (symConEq Γ≡Δ) D₁)))
-        d₁'' = conv* (stabilityRed*Term (symConEq Γ≡Δ) d'') (sym B₁≡B₂)
-        d₁'  = stabilityRed*Term Γ≡Δ (conv* d' B₁≡B₂)
-    in  [↑]ₜ B₁ t' u'' D d d₁'' whnfB whnft' whnfu''
+        d₁″ = conv* (stabilityRed*Term (symConEq Γ≡Δ) d″) (sym B₁≡B₂)
+        d₁′  = stabilityRed*Term Γ≡Δ (conv* d′ B₁≡B₂)
+    in  [↑]ₜ B₁ t′ u″ D d d₁″ whnfB whnft′ whnfu″
              (transConv↓Term Γ≡Δ B₁≡B₂ t<>u
-                             (PE.subst (λ x → _ ⊢ x [conv↓] u'' ∷ B₂)
-                                       (whrDet*Term (d₁ , whnft'')
-                                                (d₁' , whnfu'))
+                             (PE.subst (λ x → _ ⊢ x [conv↓] u″ ∷ B₂)
+                                       (whrDet*Term (d₁ , whnft″)
+                                                (d₁′ , whnfu′))
                                        t<>u₁))
 
   transConv↓Term : ∀ {t u v A B Γ Δ}
@@ -128,8 +128,8 @@ mutual
                 → Γ ⊢ t [conv↓] v ∷ A
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (ℕ-ins x₁) =
     ℕ-ins (proj₁ (trans~↓ Γ≡Δ x x₁))
-  transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (ne-ins t' u' x₂ x₃) =
-    ne-ins t (conv (stabilityTerm (symConEq Γ≡Δ) u') (sym A≡B)) x
+  transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (ne-ins t′ u′ x₂ x₃) =
+    ne-ins t (conv (stabilityTerm (symConEq Γ≡Δ) u′) (sym A≡B)) x
            (proj₁ (trans~↓ Γ≡Δ x₁ x₃))
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (univ x₃ x₄ x₅) =
     univ x (stabilityTerm (symConEq Γ≡Δ) x₄) (transConv↓ Γ≡Δ x₂ x₅)

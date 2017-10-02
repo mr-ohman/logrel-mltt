@@ -25,14 +25,14 @@ mutual
                 → Γ ⊢ A ≡ B
                 → Γ ⊢ t [conv↑] u ∷ A
                 → Δ ⊢ t [conv↑] u ∷ B
-  convConv↑Term Γ≡Δ A≡B ([↑]ₜ B₁ t' u' D d d' whnfB whnft' whnfu' t<>u) =
+  convConv↑Term Γ≡Δ A≡B ([↑]ₜ B₁ t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
     let _ , ⊢B = syntacticEq A≡B
-        B' , whnfB' , D' = fullyReducible ⊢B
-        B₁≡B' = trans (sym (subset* D)) (trans A≡B (subset* (red D')))
-    in  [↑]ₜ B' t' u' (stabilityRed* Γ≡Δ (red D'))
-             (stabilityRed*Term Γ≡Δ (conv* d B₁≡B'))
-             (stabilityRed*Term Γ≡Δ (conv* d' B₁≡B')) whnfB' whnft' whnfu'
-             (convConv↓Term Γ≡Δ B₁≡B' whnfB' t<>u)
+        B′ , whnfB′ , D′ = fullyReducible ⊢B
+        B₁≡B′ = trans (sym (subset* D)) (trans A≡B (subset* (red D′)))
+    in  [↑]ₜ B′ t′ u′ (stabilityRed* Γ≡Δ (red D′))
+             (stabilityRed*Term Γ≡Δ (conv* d B₁≡B′))
+             (stabilityRed*Term Γ≡Δ (conv* d′ B₁≡B′)) whnfB′ whnft′ whnfu′
+             (convConv↓Term Γ≡Δ B₁≡B′ whnfB′ t<>u)
 
   convConv↓Term : ∀ {t u A B Γ Δ}
                 → ⊢ Γ ≡ Δ
@@ -54,12 +54,12 @@ mutual
   convConv↓Term Γ≡Δ A≡B whnfB (suc-cong x) rewrite ℕ≡A A≡B whnfB =
     suc-cong (stabilityConv↑Term Γ≡Δ x)
   convConv↓Term Γ≡Δ A≡B whnfB (fun-ext x x₁ x₂ y y₁ x₃) with Π≡A A≡B whnfB
-  convConv↓Term Γ≡Δ A≡B whnfB (fun-ext x x₁ x₂ y y₁ x₃) | F' , G' , PE.refl =
-    let F≡F' , G≡G' = injectivity A≡B
-        ⊢F , ⊢F' = syntacticEq F≡F'
-    in  fun-ext (stability Γ≡Δ ⊢F') (stabilityTerm Γ≡Δ (conv x₁ A≡B))
+  convConv↓Term Γ≡Δ A≡B whnfB (fun-ext x x₁ x₂ y y₁ x₃) | F′ , G′ , PE.refl =
+    let F≡F′ , G≡G′ = injectivity A≡B
+        ⊢F , ⊢F′ = syntacticEq F≡F′
+    in  fun-ext (stability Γ≡Δ ⊢F′) (stabilityTerm Γ≡Δ (conv x₁ A≡B))
                 (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
-                (convConv↑Term (Γ≡Δ ∙ F≡F') G≡G' x₃)
+                (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
 
 convConvTerm : ∀ {t u A B Γ}
               → Γ ⊢ t [conv↑] u ∷ A

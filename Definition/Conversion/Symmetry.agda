@@ -34,11 +34,11 @@ mutual
   sym~↑ Γ≡Δ (app t~u x) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
-        F' , G' , ΠF'G'≡B = Π≡A A≡B whnfB
-        F≡F' , G≡G' = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ΠF'G'≡B A≡B)
-    in  _ , substTypeEq G≡G' (soundnessConv↑Term x)
-    ,   app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF'G'≡B u~t)
-            (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F'))
+        F′ , G′ , ΠF′G′≡B = Π≡A A≡B whnfB
+        F≡F′ , G≡G′ = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ΠF′G′≡B A≡B)
+    in  _ , substTypeEq G≡G′ (soundnessConv↑Term x)
+    ,   app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF′G′≡B u~t)
+            (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F′))
   sym~↑ Γ≡Δ (natrec x x₁ x₂ t~u) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
@@ -54,16 +54,16 @@ mutual
   sym~↓ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A
          → ∃ λ B → Whnf B × Γ ⊢ A ≡ B × Δ ⊢ u ~ t ↓ B
   sym~↓ Γ≡Δ ([~] A₁ D whnfA k~l) =
-    let B , A≡B , k~l' = sym~↑ Γ≡Δ k~l
+    let B , A≡B , k~l′ = sym~↑ Γ≡Δ k~l
         _ , ⊢B = syntacticEq A≡B
-        B' , whnfB' , D' = fullyReducible ⊢B
-        A≡B' = trans (sym (subset* D)) (trans A≡B (subset* (red D')))
-    in  B' , whnfB' , A≡B' , [~] B (stabilityRed* Γ≡Δ (red D')) whnfB' k~l'
+        B′ , whnfB′ , D′ = fullyReducible ⊢B
+        A≡B′ = trans (sym (subset* D)) (trans A≡B (subset* (red D′)))
+    in  B′ , whnfB′ , A≡B′ , [~] B (stabilityRed* Γ≡Δ (red D′)) whnfB′ k~l′
 
   symConv↑ : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A [conv↑] B → Δ ⊢ B [conv↑] A
-  symConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
-    [↑] B' A' (stabilityRed* Γ≡Δ D') (stabilityRed* Γ≡Δ D) whnfB' whnfA'
-        (symConv↓ Γ≡Δ A'<>B')
+  symConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
+    [↑] B′ A′ (stabilityRed* Γ≡Δ D′) (stabilityRed* Γ≡Δ D) whnfB′ whnfA′
+        (symConv↓ Γ≡Δ A′<>B′)
 
   symConv↓ : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A [conv↓] B → Δ ⊢ B [conv↓] A
   symConv↓ Γ≡Δ (U-refl x) =
@@ -83,9 +83,9 @@ mutual
                   (symConv↑ (Γ≡Δ ∙ F≡H) A<>B₁)
 
   symConv↑Term : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↑] u ∷ A → Δ ⊢ u [conv↑] t ∷ A
-  symConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
-    [↑]ₜ B u' t' (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d')
-         (stabilityRed*Term Γ≡Δ d) whnfB whnfu' whnft' (symConv↓Term Γ≡Δ t<>u)
+  symConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
+    [↑]ₜ B u′ t′ (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d′)
+         (stabilityRed*Term Γ≡Δ d) whnfB whnfu′ whnft′ (symConv↓Term Γ≡Δ t<>u)
 
   symConv↓Term : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↓] u ∷ A → Δ ⊢ u [conv↓] t ∷ A
   symConv↓Term Γ≡Δ (ℕ-ins t~u) =

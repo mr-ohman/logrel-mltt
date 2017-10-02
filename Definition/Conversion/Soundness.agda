@@ -27,8 +27,8 @@ mutual
   soundness~↓ ([~] A₁ D whnfA k~l) = conv (soundness~↑ k~l) (subset* D)
 
   soundnessConv↑ : ∀ {A B Γ} → Γ ⊢ A [conv↑] B → Γ ⊢ A ≡ B
-  soundnessConv↑ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
-    trans (subset* D) (trans (soundnessConv↓ A'<>B') (sym (subset* D')))
+  soundnessConv↑ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
+    trans (subset* D) (trans (soundnessConv↓ A′<>B′) (sym (subset* D′)))
 
   soundnessConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ A ≡ B
   soundnessConv↓ (U-refl ⊢Γ) = refl (U ⊢Γ)
@@ -38,10 +38,10 @@ mutual
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
 
   soundnessConv↑Term : ∀ {a b A Γ} → Γ ⊢ a [conv↑] b ∷ A → Γ ⊢ a ≡ b ∷ A
-  soundnessConv↑Term ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
+  soundnessConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
     conv (trans (subset*Term d)
                 (trans (soundnessConv↓Term t<>u)
-                       (sym (subset*Term d'))))
+                       (sym (subset*Term d′))))
          (sym (subset* D))
 
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A

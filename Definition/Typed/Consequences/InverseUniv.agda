@@ -49,23 +49,23 @@ inverseUniv q (univ x) = x
 inverseUnivNe : ∀ {A Γ} → Neutral A → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUnivNe neA ⊢A = inverseUniv (noUNe neA) ⊢A
 
-inverseUnivEq' : ∀ {A B Γ} → (¬ (UFull A)) ⊎ (¬ (UFull B)) → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
-inverseUnivEq' q (univ x) = x
-inverseUnivEq' q (refl x) = refl (inverseUniv (Sum.id q) x)
-inverseUnivEq' q (sym A≡B) = sym (inverseUnivEq' (Sum.sym q) A≡B)
-inverseUnivEq' (inj₁ x) (trans A≡B A≡B₁) =
-  let w = inverseUnivEq' (inj₁ x) A≡B
+inverseUnivEq′ : ∀ {A B Γ} → (¬ (UFull A)) ⊎ (¬ (UFull B)) → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
+inverseUnivEq′ q (univ x) = x
+inverseUnivEq′ q (refl x) = refl (inverseUniv (Sum.id q) x)
+inverseUnivEq′ q (sym A≡B) = sym (inverseUnivEq′ (Sum.sym q) A≡B)
+inverseUnivEq′ (inj₁ x) (trans A≡B A≡B₁) =
+  let w = inverseUnivEq′ (inj₁ x) A≡B
       _ , _ , t = syntacticEqTerm w
       y = noU t
-  in  trans w (inverseUnivEq' (inj₁ y) A≡B₁)
-inverseUnivEq' (inj₂ x) (trans A≡B A≡B₁) =
-  let w = inverseUnivEq' (inj₂ x) A≡B₁
+  in  trans w (inverseUnivEq′ (inj₁ y) A≡B₁)
+inverseUnivEq′ (inj₂ x) (trans A≡B A≡B₁) =
+  let w = inverseUnivEq′ (inj₂ x) A≡B₁
       _ , t , _ = syntacticEqTerm w
       y = noU t
-  in  trans (inverseUnivEq' (inj₂ y) A≡B) w
-inverseUnivEq' q (Π-cong x A≡B A≡B₁) =
+  in  trans (inverseUnivEq′ (inj₂ y) A≡B) w
+inverseUnivEq′ q (Π-cong x A≡B A≡B₁) =
   let w , e = pilem q
-  in  Π-cong x (inverseUnivEq' w A≡B) (inverseUnivEq' e A≡B₁)
+  in  Π-cong x (inverseUnivEq′ w A≡B) (inverseUnivEq′ e A≡B₁)
 
 inverseUnivEq : ∀ {A B Γ} → Γ ⊢ A ∷ U → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
-inverseUnivEq A A≡B = inverseUnivEq' (inj₁ (noU A)) A≡B
+inverseUnivEq A A≡B = inverseUnivEq′ (inj₁ (noU A)) A≡B

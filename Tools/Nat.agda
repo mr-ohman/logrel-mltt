@@ -7,7 +7,7 @@ module Tools.Nat where
 open import Tools.PropositionalEquality
 open import Tools.Nullary
 
--- We reexport Agda's built-in type of natural numbers.
+-- We reexport Agda′s built-in type of natural numbers.
 
 open import Agda.Builtin.Nat using (Nat; zero; suc) public
 

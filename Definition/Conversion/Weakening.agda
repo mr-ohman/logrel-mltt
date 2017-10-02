@@ -41,9 +41,9 @@ mutual
   wkConv↑ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
           → Γ ⊢ A [conv↑] B
           → Δ ⊢ U.wk ρ A [conv↑] U.wk ρ B
-  wkConv↑ {ρ} [ρ] ⊢Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
-    [↑] (U.wk ρ A') (U.wk ρ B') (wkRed* [ρ] ⊢Δ D) (wkRed* [ρ] ⊢Δ D')
-        (wkWhnf ρ whnfA') (wkWhnf ρ whnfB') (wkConv↓ [ρ] ⊢Δ A'<>B')
+  wkConv↑ {ρ} [ρ] ⊢Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
+    [↑] (U.wk ρ A′) (U.wk ρ B′) (wkRed* [ρ] ⊢Δ D) (wkRed* [ρ] ⊢Δ D′)
+        (wkWhnf ρ whnfA′) (wkWhnf ρ whnfB′) (wkConv↓ [ρ] ⊢Δ A′<>B′)
 
   wkConv↓ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
          → Γ ⊢ A [conv↓] B
@@ -58,10 +58,10 @@ mutual
   wkConv↑Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
              → Γ ⊢ t [conv↑] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↑] U.wk ρ u ∷ U.wk ρ A
-  wkConv↑Term {ρ} [ρ] ⊢Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
-    [↑]ₜ (U.wk ρ B) (U.wk ρ t') (U.wk ρ u')
-         (wkRed* [ρ] ⊢Δ D) (wkRed*Term [ρ] ⊢Δ d) (wkRed*Term [ρ] ⊢Δ d')
-         (wkWhnf ρ whnfB) (wkWhnf ρ whnft') (wkWhnf ρ whnfu')
+  wkConv↑Term {ρ} [ρ] ⊢Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
+    [↑]ₜ (U.wk ρ B) (U.wk ρ t′) (U.wk ρ u′)
+         (wkRed* [ρ] ⊢Δ D) (wkRed*Term [ρ] ⊢Δ d) (wkRed*Term [ρ] ⊢Δ d′)
+         (wkWhnf ρ whnfB) (wkWhnf ρ whnft′) (wkWhnf ρ whnfu′)
          (wkConv↓Term [ρ] ⊢Δ t<>u)
 
   wkConv↓Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ

@@ -21,14 +21,14 @@ data _∷_⊆_ : Wk → Con Term → Con Term → Set where
 
 -- -- Weakening composition
 
-_•ₜ_ : ∀ {ρ ρ' Γ Δ Δ'} → ρ ∷ Γ ⊆ Δ → ρ' ∷ Δ ⊆ Δ' → ρ • ρ' ∷ Γ ⊆ Δ'
+_•ₜ_ : ∀ {ρ ρ′ Γ Δ Δ′} → ρ ∷ Γ ⊆ Δ → ρ′ ∷ Δ ⊆ Δ′ → ρ • ρ′ ∷ Γ ⊆ Δ′
 id     •ₜ η′ = η′
 step η •ₜ η′ = step (η •ₜ η′)
 lift η •ₜ id = lift η
 lift η •ₜ step η′ = step (η •ₜ η′)
-_•ₜ_ {lift ρ} {lift ρ'} {Δ' = Δ' ∙ A} (lift η) (lift η′) =
-  PE.subst (λ x → lift (ρ • ρ') ∷ x ⊆ Δ' ∙ A)
-           (PE.cong₂ _∙_ PE.refl (PE.sym (wk-comp ρ ρ' A)))
+_•ₜ_ {lift ρ} {lift ρ′} {Δ′ = Δ′ ∙ A} (lift η) (lift η′) =
+  PE.subst (λ x → lift (ρ • ρ′) ∷ x ⊆ Δ′ ∙ A)
+           (PE.cong₂ _∙_ PE.refl (PE.sym (wk-comp ρ ρ′ A)))
            (lift (η •ₜ η′))
 
 
@@ -134,17 +134,17 @@ mutual
                                        (PE.sym (wk1-wk≡lift-wk1 _ _))
                                        (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
   wkEqTerm ρ ⊢Δ (suc-cong m≡n) = suc-cong (wkEqTerm ρ ⊢Δ m≡n)
-  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s' = s'} {F = F}
-                                     F≡F' z≡z' s≡s' n≡n') =
+  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s′ = s′} {F = F}
+                                     F≡F′ z≡z′ s≡s′ n≡n′) =
     PE.subst (λ x → Δ ⊢ natrec _ _ _ _ ≡ _ ∷ x) (PE.sym (wk-β F))
-             (natrec-cong (wkEq (lift [ρ]) (⊢Δ ∙ ℕ ⊢Δ) F≡F')
+             (natrec-cong (wkEq (lift [ρ]) (⊢Δ ∙ ℕ ⊢Δ) F≡F′)
                           (PE.subst (λ x → Δ ⊢ _ ≡ _ ∷ x) (wk-β F)
-                                    (wkEqTerm [ρ] ⊢Δ z≡z'))
+                                    (wkEqTerm [ρ] ⊢Δ z≡z′))
                           (PE.subst (λ x → Δ ⊢ U.wk ρ s
-                                             ≡ U.wk ρ s' ∷ x)
+                                             ≡ U.wk ρ s′ ∷ x)
                                     (wk-β-natrec _ F)
-                                    (wkEqTerm [ρ] ⊢Δ s≡s'))
-                          (wkEqTerm [ρ] ⊢Δ n≡n'))
+                                    (wkEqTerm [ρ] ⊢Δ s≡s′))
+                          (wkEqTerm [ρ] ⊢Δ n≡n′))
   wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) =
     PE.subst (λ x → Δ ⊢ natrec (U.wk (lift _) F) _ _ _ ≡ _ ∷ x)
              (PE.sym (wk-β F))
@@ -191,7 +191,7 @@ mutual
                            (PE.sym (wk-β t))
                            (β-red ⊢ρA (wkTerm (lift ρ) (⊢Δ ∙ ⊢ρA) ⊢t)
                                       (wkTerm ρ ⊢Δ ⊢a)))
-  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-subst {s = s} {F = F} ⊢F ⊢z ⊢s n⇒n') =
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-subst {s = s} {F = F} ⊢F ⊢z ⊢s n⇒n′) =
     PE.subst (λ x → _ ⊢ natrec _ _ _ _ ⇒ _ ∷ x) (PE.sym (wk-β F))
              (natrec-subst (wk (lift [ρ]) (⊢Δ ∙ ℕ ⊢Δ) ⊢F)
                            (PE.subst (λ x → _ ⊢ _ ∷ x) (wk-β F)
@@ -199,7 +199,7 @@ mutual
                            (PE.subst (λ x → Δ ⊢ U.wk ρ s ∷ x)
                                      (wk-β-natrec _ F)
                                      (wkTerm [ρ] ⊢Δ ⊢s))
-                           (wkRedTerm [ρ] ⊢Δ n⇒n'))
+                           (wkRedTerm [ρ] ⊢Δ n⇒n′))
   wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-zero {s = s} {F = F} ⊢F ⊢z ⊢s) =
     PE.subst (λ x → _ ⊢ natrec (U.wk (lift ρ) F) _ _ _ ⇒ _ ∷ x)
              (PE.sym (wk-β F))
@@ -227,7 +227,7 @@ wkRed* : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
                ρB = U.wk ρ B
            in ⊢ Δ → Γ ⊢ A ⇒* B → Δ ⊢ ρA ⇒* ρB
 wkRed* ρ ⊢Δ (id A) = id (wk ρ ⊢Δ A)
-wkRed* ρ ⊢Δ (A⇒A' ⇨ A'⇒*B) = wkRed ρ ⊢Δ A⇒A' ⇨ wkRed* ρ ⊢Δ A'⇒*B
+wkRed* ρ ⊢Δ (A⇒A′ ⇨ A′⇒*B) = wkRed ρ ⊢Δ A⇒A′ ⇨ wkRed* ρ ⊢Δ A′⇒*B
 
 wkRed*Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
@@ -235,7 +235,7 @@ wkRed*Term : ∀ {Γ Δ A t u ρ} → ρ ∷ Δ ⊆ Γ →
                ρu = U.wk ρ u
            in ⊢ Δ → Γ ⊢ t ⇒* u ∷ A → Δ ⊢ ρt ⇒* ρu ∷ ρA
 wkRed*Term ρ ⊢Δ (id t) = id (wkTerm ρ ⊢Δ t)
-wkRed*Term ρ ⊢Δ (t⇒t' ⇨ t'⇒*u) = wkRedTerm ρ ⊢Δ t⇒t' ⇨ wkRed*Term ρ ⊢Δ t'⇒*u
+wkRed*Term ρ ⊢Δ (t⇒t′ ⇨ t′⇒*u) = wkRedTerm ρ ⊢Δ t⇒t′ ⇨ wkRed*Term ρ ⊢Δ t′⇒*u
 
 wkRed:*: : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
          let ρA = U.wk ρ A

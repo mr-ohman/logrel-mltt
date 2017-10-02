@@ -24,9 +24,9 @@ convₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
       [σB]     = proj₁ ([B] ⊢Δ [σ])
       [σA≡σB]  = irrelevanceEq [σA] [σA] ([A≡B] ⊢Δ [σ])
       [σt]     = proj₁ ([t] ⊢Δ [σ])
-      [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
+      [σt≡σ′t] = proj₂ ([t] ⊢Δ [σ])
   in  convTerm₁ [σA] [σB] [σA≡σB] [σt]
-  ,   λ [σ'] [σ≡σ'] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
+  ,   λ [σ′] [σ≡σ′] → convEqTerm₁ [σA] [σB] [σA≡σB] ([σt≡σ′t] [σ′] [σ≡σ′])
 
 conv₂ₛ : ∀ {t A B Γ l}
          ([Γ] : ⊩ₛ Γ)
@@ -40,9 +40,9 @@ conv₂ₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
       [σB]     = proj₁ ([B] ⊢Δ [σ])
       [σA≡σB]  = irrelevanceEq [σA] [σA] ([A≡B] ⊢Δ [σ])
       [σt]     = proj₁ ([t] ⊢Δ [σ])
-      [σt≡σ't] = proj₂ ([t] ⊢Δ [σ])
+      [σt≡σ′t] = proj₂ ([t] ⊢Δ [σ])
   in  convTerm₂ [σA] [σB] [σA≡σB] [σt]
-  ,   λ [σ'] [σ≡σ'] → convEqTerm₂ [σA] [σB] [σA≡σB] ([σt≡σ't] [σ'] [σ≡σ'])
+  ,   λ [σ′] [σ≡σ′] → convEqTerm₂ [σA] [σB] [σA≡σB] ([σt≡σ′t] [σ′] [σ≡σ′])
 
 convEqₛ : ∀ {t u A B Γ l}
         ([Γ] : ⊩ₛ Γ)

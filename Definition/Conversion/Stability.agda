@@ -27,7 +27,7 @@ mutual
         ⊢A , ⊢B = syntacticEq A≡B
         Δ⊢B = stability Γ≡Δ ⊢B
     in  ⊢Γ ∙ ⊢A , ⊢Δ ∙ Δ⊢B
-        , (wk1Subst' ⊢Γ ⊢Δ Δ⊢B [σ]
+        , (wk1Subst′ ⊢Γ ⊢Δ Δ⊢B [σ]
         , conv (var (⊢Δ ∙ Δ⊢B) here)
                (PE.subst (λ x → _ ⊢ _ ≡ x)
                          (wk1-tailId A)
@@ -121,9 +121,9 @@ mutual
                  → ⊢ Γ ≡ Δ
                  → Γ ⊢ A [conv↑] B
                  → Δ ⊢ A [conv↑] B
-  stabilityConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B') =
-    [↑] A' B' (stabilityRed* Γ≡Δ D) (stabilityRed* Γ≡Δ D') whnfA' whnfB'
-        (stabilityConv↓ Γ≡Δ A'<>B')
+  stabilityConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
+    [↑] A′ B′ (stabilityRed* Γ≡Δ D) (stabilityRed* Γ≡Δ D′) whnfA′ whnfB′
+        (stabilityConv↓ Γ≡Δ A′<>B′)
 
   stabilityConv↓ : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
@@ -145,9 +145,9 @@ mutual
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↑] u ∷ A
                      → Δ ⊢ t [conv↑] u ∷ A
-  stabilityConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u) =
-    [↑]ₜ B t' u' (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d)
-                 (stabilityRed*Term Γ≡Δ d') whnfB whnft' whnfu'
+  stabilityConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
+    [↑]ₜ B t′ u′ (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d)
+                 (stabilityRed*Term Γ≡Δ d′) whnfB whnft′ whnfu′
                  (stabilityConv↓Term Γ≡Δ t<>u)
 
   stabilityConv↓Term : ∀ {t u A Γ Δ}

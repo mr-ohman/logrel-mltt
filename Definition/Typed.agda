@@ -131,12 +131,12 @@ mutual
     suc-cong    : ∀ {m n}
                 → Γ ⊢ m ≡ n ∷ ℕ
                 → Γ ⊢ suc m ≡ suc n ∷ ℕ
-    natrec-cong : ∀ {z z' s s' n n' F F'}
-                → Γ ∙ ℕ ⊢ F ≡ F'
-                → Γ     ⊢ z ≡ z' ∷ F [ zero ]
-                → Γ     ⊢ s ≡ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-                → Γ     ⊢ n ≡ n' ∷ ℕ
-                → Γ     ⊢ natrec F z s n ≡ natrec F' z' s' n' ∷ F [ n ]
+    natrec-cong : ∀ {z z′ s s′ n n′ F F′}
+                → Γ ∙ ℕ ⊢ F ≡ F′
+                → Γ     ⊢ z ≡ z′ ∷ F [ zero ]
+                → Γ     ⊢ s ≡ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                → Γ     ⊢ n ≡ n′ ∷ ℕ
+                → Γ     ⊢ natrec F z s n ≡ natrec F′ z′ s′ n′ ∷ F [ n ]
     natrec-zero : ∀ {z s F}
                 → Γ ∙ ℕ ⊢ F
                 → Γ     ⊢ z ∷ F [ zero ]
@@ -165,12 +165,12 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
                → Γ ∙ A ⊢ t ∷ B
                → Γ     ⊢ a ∷ A
                → Γ     ⊢ (lam t) ∘ a ⇒ t [ a ] ∷ B [ a ]
-  natrec-subst : ∀ {z s n n' F}
+  natrec-subst : ∀ {z s n n′ F}
                → Γ ∙ ℕ ⊢ F
                → Γ     ⊢ z ∷ F [ zero ]
                → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-               → Γ     ⊢ n ⇒ n' ∷ ℕ
-               → Γ     ⊢ natrec F z s n ⇒ natrec F z s n' ∷ F [ n ]
+               → Γ     ⊢ n ⇒ n′ ∷ ℕ
+               → Γ     ⊢ natrec F z s n ⇒ natrec F z s n′ ∷ F [ n ]
   natrec-zero  : ∀ {z s F}
                → Γ ∙ ℕ ⊢ F
                → Γ     ⊢ z ∷ F [ zero ]
@@ -195,9 +195,9 @@ data _⊢_⇒*_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   id  : ∀ {A t}
       → Γ ⊢ t ∷ A
       → Γ ⊢ t ⇒* t ∷ A
-  _⇨_ : ∀ {A t t' u}
-      → Γ ⊢ t  ⇒  t' ∷ A
-      → Γ ⊢ t' ⇒* u  ∷ A
+  _⇨_ : ∀ {A t t′ u}
+      → Γ ⊢ t  ⇒  t′ ∷ A
+      → Γ ⊢ t′ ⇒* u  ∷ A
       → Γ ⊢ t  ⇒* u  ∷ A
 
 -- Type reduction closure
@@ -205,9 +205,9 @@ data _⊢_⇒*_ (Γ : Con Term) : Term → Term → Set where
   id  : ∀ {A}
       → Γ ⊢ A
       → Γ ⊢ A ⇒* A
-  _⇨_ : ∀ {A A' B}
-      → Γ ⊢ A  ⇒  A'
-      → Γ ⊢ A' ⇒* B
+  _⇨_ : ∀ {A A′ B}
+      → Γ ⊢ A  ⇒  A′
+      → Γ ⊢ A′ ⇒* B
       → Γ ⊢ A  ⇒* B
 
 -- Type reduction to whnf
@@ -255,12 +255,12 @@ data _⊢ₛ_∷_ (Δ : Con Term) (σ : Subst) : (Γ : Con Term) → Set where
       → Δ ⊢ₛ σ ∷ Γ ∙ A
 
 -- Conversion of well-formed substitutions.
-data _⊢ₛ_≡_∷_ (Δ : Con Term) (σ σ' : Subst) : (Γ : Con Term) → Set where
-  id : Δ ⊢ₛ σ ≡ σ' ∷ ε
+data _⊢ₛ_≡_∷_ (Δ : Con Term) (σ σ′ : Subst) : (Γ : Con Term) → Set where
+  id : Δ ⊢ₛ σ ≡ σ′ ∷ ε
   _,_ : ∀ {Γ A}
-      → Δ ⊢ₛ tail σ ≡ tail σ' ∷ Γ
-      → Δ ⊢ head σ ≡ head σ' ∷ subst (tail σ) A
-      → Δ ⊢ₛ σ ≡ σ' ∷ Γ ∙ A
+      → Δ ⊢ₛ tail σ ≡ tail σ′ ∷ Γ
+      → Δ ⊢ head σ ≡ head σ′ ∷ subst (tail σ) A
+      → Δ ⊢ₛ σ ≡ σ′ ∷ Γ ∙ A
 
 -- Note that we cannot use the well-formed substitutions.
 -- For that, we need to prove the fundamental theorem for substitutions.

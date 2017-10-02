@@ -25,16 +25,16 @@ redSubstTermₛ [Γ] t⇒u [A] [u] =
                                        (proj₁ ([A] ⊢Δ [σ]))
                                        (proj₁ ([u] ⊢Δ [σ]))
      in  [σt]
-     ,   (λ [σ'] [σ≡σ'] →
-            let [σ'A] = proj₁ ([A] ⊢Δ [σ'])
-                [σA≡σ'A] = proj₂ ([A] ⊢Δ [σ]) [σ'] [σ≡σ']
-                [σ't] , [σ't≡σ'u] = redSubstTerm (t⇒u ⊢Δ [σ'])
-                                                 (proj₁ ([A] ⊢Δ [σ']))
-                                                 (proj₁ ([u] ⊢Δ [σ']))
+     ,   (λ [σ′] [σ≡σ′] →
+            let [σ′A] = proj₁ ([A] ⊢Δ [σ′])
+                [σA≡σ′A] = proj₂ ([A] ⊢Δ [σ]) [σ′] [σ≡σ′]
+                [σ′t] , [σ′t≡σ′u] = redSubstTerm (t⇒u ⊢Δ [σ′])
+                                                 (proj₁ ([A] ⊢Δ [σ′]))
+                                                 (proj₁ ([u] ⊢Δ [σ′]))
             in  transEqTerm [σA] [σt≡σu]
-                            (transEqTerm [σA] ((proj₂ ([u] ⊢Δ [σ])) [σ'] [σ≡σ'])
-                                         (convEqTerm₂ [σA] [σ'A] [σA≡σ'A]
-                                                      (symEqTerm [σ'A] [σ't≡σ'u])))))
+                            (transEqTerm [σA] ((proj₂ ([u] ⊢Δ [σ])) [σ′] [σ≡σ′])
+                                         (convEqTerm₂ [σA] [σ′A] [σA≡σ′A]
+                                                      (symEqTerm [σ′A] [σ′t≡σ′u])))))
   , (λ ⊢Δ [σ] → proj₂ (redSubstTerm (t⇒u ⊢Δ [σ])
                                     (proj₁ ([A] ⊢Δ [σ]))
                                     (proj₁ ([u] ⊢Δ [σ]))))

@@ -72,9 +72,9 @@ mutual
         _ , ⊢l₁ , _ = syntacticEqTerm (soundness~↓ x)
         _ , ⊢l₂ , _ = syntacticEqTerm (soundness~↓ x₂)
         ΠFG≡A = neTypeEq neK ⊢l₁ ⊢k
-        ΠF'G'≡A = neTypeEq neL (stabilityTerm (symConEq Γ≡Δ) ⊢l₂) ⊢l
-        F≡F' , G≡G' = injectivity (trans ΠFG≡A (sym ΠF'G'≡A))
-    in  dec~↑-app Γ≡Δ ⊢l₁ ⊢l₂ k~l (decConv↑TermConv Γ≡Δ F≡F' x₁ x₃)
+        ΠF′G′≡A = neTypeEq neL (stabilityTerm (symConEq Γ≡Δ) ⊢l₂) ⊢l
+        F≡F′ , G≡G′ = injectivity (trans ΠFG≡A (sym ΠF′G′≡A))
+    in  dec~↑-app Γ≡Δ ⊢l₁ ⊢l₂ k~l (decConv↑TermConv Γ≡Δ F≡F′ x₁ x₃)
   dec~↑ Γ≡Δ (app x x₁) (app x₂ x₃) | no ¬p =
     no (λ { (_ , app x₄ x₅) → ¬p (_ , x₄) })
   dec~↑ Γ≡Δ (app x x₁) (natrec x₂ x₃ x₄ x₅) = no (λ { (_ , ()) })
@@ -96,8 +96,8 @@ mutual
         _ , ⊢l∷ℕ , _ = syntacticEqTerm (soundness~↓ x₃)
         ⊢ℕ≡A = neTypeEq neK ⊢l∷ℕ ⊢k
         A≡ℕ = ℕ≡A ⊢ℕ≡A whnfA
-        k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
-    in  yes (_ , natrec p p₁ p₂ k~l')
+        k~l′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
+    in  yes (_ , natrec p p₁ p₂ k~l′)
   dec~↑ Γ≡Δ (natrec x x₁ x₂ x₃) (natrec x₄ x₅ x₆ x₇)
         | yes p | yes p₁ | yes p₂ | no ¬p =
     no (λ { (_ , natrec x₈ x₉ x₁₀ x₁₁) → ¬p (_ , x₁₁) })
@@ -117,8 +117,8 @@ mutual
   dec~↓ Γ≡Δ ([~] A D whnfB k~l) ([~] A₁ D₁ whnfB₁ k~l₁) with dec~↑ Γ≡Δ k~l k~l₁
   dec~↓ Γ≡Δ ([~] A D whnfB k~l) ([~] A₁ D₁ whnfB₁ k~l₁) | yes (B , k~l₂) =
     let ⊢B , _ , _ = syntacticEqTerm (soundness~↑ k~l₂)
-        C , whnfC , D' = fullyReducible ⊢B
-    in  yes (C , [~] B (red D') whnfC k~l₂)
+        C , whnfC , D′ = fullyReducible ⊢B
+    in  yes (C , [~] B (red D′) whnfC k~l₂)
   dec~↓ Γ≡Δ ([~] A D whnfB k~l) ([~] A₁ D₁ whnfB₁ k~l₁) | no ¬p =
     no (λ { (A₂ , [~] A₃ D₂ whnfB₂ k~l₂) → ¬p (A₃ , k~l₂) })
 
@@ -126,21 +126,21 @@ mutual
            → ⊢ Γ ≡ Δ
            → Γ ⊢ A [conv↑] A → Δ ⊢ B [conv↑] B
            → Dec (Γ ⊢ A [conv↑] B)
-  decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
-               ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'')
-           rewrite whrDet* (D , whnfA') (D' , whnfB')
-                 | whrDet* (D₁ , whnfA'') (D'' , whnfB'')
-           with decConv↓ Γ≡Δ A'<>B' A'<>B''
-  decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
-               ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'') | yes p =
-    yes ([↑] B' B'' D' (stabilityRed* (symConEq Γ≡Δ) D'') whnfB' whnfB'' p)
-  decConv↑ Γ≡Δ ([↑] A' B' D D' whnfA' whnfB' A'<>B')
-               ([↑] A'' B'' D₁ D'' whnfA'' whnfB'' A'<>B'') | no ¬p =
-    no (λ { ([↑] A''' B''' D₂ D''' whnfA''' whnfB''' A'<>B''') →
-        let A'''≡B'  = whrDet* (D₂ , whnfA''') (D' , whnfB')
-            B'''≡B'' = whrDet* (D''' , whnfB''')
-                                (stabilityRed* (symConEq Γ≡Δ) D'' , whnfB'')
-        in  ¬p (PE.subst₂ (λ x y → _ ⊢ x [conv↓] y) A'''≡B' B'''≡B'' A'<>B''') })
+  decConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
+               ([↑] A″ B″ D₁ D″ whnfA″ whnfB″ A′<>B″)
+           rewrite whrDet* (D , whnfA′) (D′ , whnfB′)
+                 | whrDet* (D₁ , whnfA″) (D″ , whnfB″)
+           with decConv↓ Γ≡Δ A′<>B′ A′<>B″
+  decConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
+               ([↑] A″ B″ D₁ D″ whnfA″ whnfB″ A′<>B″) | yes p =
+    yes ([↑] B′ B″ D′ (stabilityRed* (symConEq Γ≡Δ) D″) whnfB′ whnfB″ p)
+  decConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
+               ([↑] A″ B″ D₁ D″ whnfA″ whnfB″ A′<>B″) | no ¬p =
+    no (λ { ([↑] A‴ B‴ D₂ D‴ whnfA‴ whnfB‴ A′<>B‴) →
+        let A‴≡B′  = whrDet* (D₂ , whnfA‴) (D′ , whnfB′)
+            B‴≡B″ = whrDet* (D‴ , whnfB‴)
+                                (stabilityRed* (symConEq Γ≡Δ) D″ , whnfB″)
+        in  ¬p (PE.subst₂ (λ x y → _ ⊢ x [conv↓] y) A‴≡B′ B‴≡B″ A′<>B‴) })
 
   decConv↓ : ∀ {A B Γ Δ}
            → ⊢ Γ ≡ Δ
@@ -171,8 +171,8 @@ mutual
         _ , ⊢k∷U , _ = syntacticEqTerm (soundness~↓ x)
         ⊢U≡A = neTypeEq neK ⊢k∷U ⊢k
         A≡U = U≡A ⊢U≡A
-        k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡U k~l
-    in  yes (ne k~l')
+        k~l′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡U k~l
+    in  yes (ne k~l′)
   decConv↓ Γ≡Δ (ne x) (ne x₁) | no ¬p =
     no (λ x₂ → ¬p (U , decConv↓-ne x₂ x))
   decConv↓ Γ≡Δ (ne x) (Π-cong x₁ x₂ x₃) =
@@ -207,34 +207,34 @@ mutual
                → ⊢ Γ ≡ Δ
                → Γ ⊢ t [conv↑] t ∷ A → Δ ⊢ u [conv↑] u ∷ A
                → Dec (Γ ⊢ t [conv↑] u ∷ A)
-  decConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u)
-                   ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
+  decConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
+                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                rewrite whrDet* (D , whnfB) (stabilityRed* (symConEq Γ≡Δ) D₁ , whnfB₁)
-                     | whrDet*Term  (d , whnft') (d' , whnfu')
-                     | whrDet*Term  (d₁ , whnft'') (d'' , whnfu'')
+                     | whrDet*Term  (d , whnft′) (d′ , whnfu′)
+                     | whrDet*Term  (d₁ , whnft″) (d″ , whnfu″)
                with decConv↓Term Γ≡Δ t<>u t<>u₁
-  decConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u)
-                   ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
+  decConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
+                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                | yes p =
     let Δ≡Γ = symConEq Γ≡Δ
-    in  yes ([↑]ₜ B₁ u' u'' (stabilityRed* Δ≡Γ D₁)
-                  d' (stabilityRed*Term Δ≡Γ d'') whnfB₁ whnfu' whnfu'' p)
-  decConv↑Term Γ≡Δ ([↑]ₜ B t' u' D d d' whnfB whnft' whnfu' t<>u)
-                   ([↑]ₜ B₁ t'' u'' D₁ d₁ d'' whnfB₁ whnft'' whnfu'' t<>u₁)
+    in  yes ([↑]ₜ B₁ u′ u″ (stabilityRed* Δ≡Γ D₁)
+                  d′ (stabilityRed*Term Δ≡Γ d″) whnfB₁ whnfu′ whnfu″ p)
+  decConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
+                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                | no ¬p =
-    no (λ { ([↑]ₜ B₂ t''' u''' D₂ d₂ d''' whnfB₂ whnft''' whnfu''' t<>u₂) →
+    no (λ { ([↑]ₜ B₂ t‴ u‴ D₂ d₂ d‴ whnfB₂ whnft‴ whnfu‴ t<>u₂) →
         let B₂≡B₁ = whrDet* (D₂ , whnfB₂)
                              (stabilityRed* (symConEq Γ≡Δ) D₁ , whnfB₁)
-            t'''≡u' = whrDet*Term (d₂ , whnft''')
-                              (PE.subst (λ x → _ ⊢ _ ⇒* _ ∷ x) (PE.sym B₂≡B₁) d'
-                              , whnfu')
-            u'''≡u'' = whrDet*Term (d''' , whnfu''')
+            t‴≡u′ = whrDet*Term (d₂ , whnft‴)
+                              (PE.subst (λ x → _ ⊢ _ ⇒* _ ∷ x) (PE.sym B₂≡B₁) d′
+                              , whnfu′)
+            u‴≡u″ = whrDet*Term (d‴ , whnfu‴)
                                (PE.subst (λ x → _ ⊢ _ ⇒* _ ∷ x)
                                          (PE.sym B₂≡B₁)
-                                         (stabilityRed*Term (symConEq Γ≡Δ) d'')
-                               , whnfu'')
+                                         (stabilityRed*Term (symConEq Γ≡Δ) d″)
+                               , whnfu″)
         in  ¬p (PE.subst₃ (λ x y z → _ ⊢ x [conv↓] y ∷ z)
-                          t'''≡u' u'''≡u'' B₂≡B₁ t<>u₂) })
+                          t‴≡u′ u‴≡u″ B₂≡B₁ t<>u₂) })
 
   decConv↓Term-ℕ-ins : ∀ {t u Γ}
                      → Γ ⊢ t [conv↓] u ∷ ℕ
@@ -277,8 +277,8 @@ mutual
         _ , ⊢l∷ℕ , _ = syntacticEqTerm (soundness~↓ x)
         ⊢ℕ≡A = neTypeEq neK ⊢l∷ℕ ⊢k
         A≡ℕ = ℕ≡A ⊢ℕ≡A whnfA
-        k~l' = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
-    in  yes (ℕ-ins k~l')
+        k~l′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) A≡ℕ k~l
+    in  yes (ℕ-ins k~l′)
   decConv↓Term Γ≡Δ (ℕ-ins x) (ℕ-ins x₁) | no ¬p =
     no (λ x₂ → ¬p (ℕ , decConv↓Term-ℕ-ins x₂ x))
   decConv↓Term Γ≡Δ (ℕ-ins x) (ne-ins x₁ x₂ () x₄)

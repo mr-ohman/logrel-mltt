@@ -46,12 +46,12 @@ mutual
     inductive
     constructor [↑]
     field
-      A' B'  : Term
-      D      : Γ ⊢ A ⇒* A'
-      D'     : Γ ⊢ B ⇒* B'
-      whnfA' : Whnf A'
-      whnfB' : Whnf B'
-      A'<>B' : Γ ⊢ A' [conv↓] B'
+      A′ B′  : Term
+      D      : Γ ⊢ A ⇒* A′
+      D′     : Γ ⊢ B ⇒* B′
+      whnfA′ : Whnf A′
+      whnfB′ : Whnf B′
+      A′<>B′ : Γ ⊢ A′ [conv↓] B′
 
   data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
@@ -69,14 +69,14 @@ mutual
     inductive
     constructor [↑]ₜ
     field
-      B t' u' : Term
+      B t′ u′ : Term
       D       : Γ ⊢ A ⇒* B
-      d       : Γ ⊢ t ⇒* t' ∷ B
-      d'      : Γ ⊢ u ⇒* u' ∷ B
+      d       : Γ ⊢ t ⇒* t′ ∷ B
+      d′      : Γ ⊢ u ⇒* u′ ∷ B
       whnfB   : Whnf B
-      whnft'  : Whnf t'
-      whnfu'  : Whnf u'
-      t<>u    : Γ ⊢ t' [conv↓] u' ∷ B
+      whnft′  : Whnf t′
+      whnfu′  : Whnf u′
+      t<>u    : Γ ⊢ t′ [conv↓] u′ ∷ B
 
   data _⊢_[conv↓]_∷_ (Γ : Con Term) : (t u A : Term) → Set where
     ℕ-ins     : ∀ {k l}

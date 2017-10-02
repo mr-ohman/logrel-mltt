@@ -82,22 +82,22 @@ record EqRelSet : Set₁ where
           → Δ ⊢ wk ρ k ~ wk ρ l ∷ wk ρ A
 
     -- Weak head expansion
-    ≅-red : ∀ {A A' B B' Γ}
-          → Γ ⊢ A ⇒* A'
-          → Γ ⊢ B ⇒* B'
-          → Whnf A'
-          → Whnf B'
-          → Γ ⊢ A' ≅ B'
+    ≅-red : ∀ {A A′ B B′ Γ}
+          → Γ ⊢ A ⇒* A′
+          → Γ ⊢ B ⇒* B′
+          → Whnf A′
+          → Whnf B′
+          → Γ ⊢ A′ ≅ B′
           → Γ ⊢ A  ≅ B
 
-    ≅ₜ-red : ∀ {a a' b b' A B Γ}
+    ≅ₜ-red : ∀ {a a′ b b′ A B Γ}
            → Γ ⊢ A ⇒* B
-           → Γ ⊢ a ⇒* a' ∷ B
-           → Γ ⊢ b ⇒* b' ∷ B
+           → Γ ⊢ a ⇒* a′ ∷ B
+           → Γ ⊢ b ⇒* b′ ∷ B
            → Whnf B
-           → Whnf a'
-           → Whnf b'
-           → Γ ⊢ a' ≅ b' ∷ B
+           → Whnf a′
+           → Whnf b′
+           → Γ ⊢ a′ ≅ b′ ∷ B
            → Γ ⊢ a  ≅ b  ∷ A
 
     -- Universe type reflexivity
@@ -147,12 +147,12 @@ record EqRelSet : Set₁ where
           → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
 
     -- Natural recursion congurence
-    ~-natrec : ∀ {z z' s s' n n' F F' Γ}
-             → Γ ∙ ℕ ⊢ F ≅ F'
-             → Γ     ⊢ z ≅ z' ∷ F [ zero ]
-             → Γ     ⊢ s ≅ s' ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-             → Γ     ⊢ n ~ n' ∷ ℕ
-             → Γ     ⊢ natrec F z s n ~ natrec F' z' s' n' ∷ F [ n ]
+    ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
+             → Γ ∙ ℕ ⊢ F ≅ F′
+             → Γ     ⊢ z ≅ z′ ∷ F [ zero ]
+             → Γ     ⊢ s ≅ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+             → Γ     ⊢ n ~ n′ ∷ ℕ
+             → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
 
 
   -- Composition of universe and generic equality compatibility

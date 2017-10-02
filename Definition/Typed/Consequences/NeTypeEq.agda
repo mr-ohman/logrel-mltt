@@ -12,12 +12,12 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
-varTypeEq' : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
-varTypeEq' here here = PE.refl
-varTypeEq' (there n∷R) (there n∷T) rewrite varTypeEq' n∷R n∷T = PE.refl
+varTypeEq′ : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
+varTypeEq′ here here = PE.refl
+varTypeEq′ (there n∷R) (there n∷T) rewrite varTypeEq′ n∷R n∷T = PE.refl
 
 varTypeEq : ∀ {x A B Γ} → Γ ⊢ A → Γ ⊢ B → x ∷ A ∈ Γ → x ∷ B ∈ Γ → Γ ⊢ A ≡ B
-varTypeEq A B x∷A x∷B rewrite varTypeEq' x∷A x∷B = refl A
+varTypeEq A B x∷A x∷B rewrite varTypeEq′ x∷A x∷B = refl A
 
 neTypeEq : ∀ {t A B Γ} → Neutral t → Γ ⊢ t ∷ A → Γ ⊢ t ∷ B → Γ ⊢ A ≡ B
 neTypeEq (var x) (var x₁ x₂) (var x₃ x₄) =

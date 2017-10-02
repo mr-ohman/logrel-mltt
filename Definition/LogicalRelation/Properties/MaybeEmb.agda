@@ -16,8 +16,8 @@ maybeEmb : ∀ {l A Γ}
 maybeEmb {⁰} [A] = emb 0<1 [A]
 maybeEmb {¹} [A] = [A]
 
-maybeEmb' : ∀ {l A Γ}
+maybeEmb′ : ∀ {l A Γ}
           → Γ ⊩⟨ ⁰ ⟩ A
           → Γ ⊩⟨ l ⟩ A
-maybeEmb' {⁰} [A] = [A]
-maybeEmb' {¹} [A] = emb 0<1 [A]
+maybeEmb′ {⁰} [A] = [A]
+maybeEmb′ {¹} [A] = emb 0<1 [A]

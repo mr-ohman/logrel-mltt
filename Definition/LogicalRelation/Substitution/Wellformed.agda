@@ -23,7 +23,7 @@ wellformedₛ : ∀ {A l Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ A / [Γ] 
 wellformedₛ [Γ] [A] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
-  in  wellformed (irrelevance' (subst-id _) (proj₁ ([A] ⊢Γ idSubst)))
+  in  wellformed (irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ idSubst)))
 
 wellformedEqₛ : ∀ {A B l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
               → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≅ B
@@ -31,9 +31,9 @@ wellformedEqₛ [Γ] [A] [A≡B] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
       [idA]  = proj₁ ([A] ⊢Γ idSubst)
-      [idA]' = irrelevance' (subst-id _) [idA]
-  in  wellformedEq [idA]' (irrelevanceEq'' (subst-id _) (subst-id _)
-                                           [idA] [idA]' ([A≡B] ⊢Γ idSubst))
+      [idA]′ = irrelevance′ (subst-id _) [idA]
+  in  wellformedEq [idA]′ (irrelevanceEq″ (subst-id _) (subst-id _)
+                                           [idA] [idA]′ ([A≡B] ⊢Γ idSubst))
 
 wellformedTermₛ : ∀ {t A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
                → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
@@ -41,10 +41,10 @@ wellformedTermₛ [Γ] [A] [t] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
       [idA]  = proj₁ ([A] ⊢Γ idSubst)
-      [idA]' = irrelevance' (subst-id _) (proj₁ ([A] ⊢Γ idSubst))
-  in  wellformedTerm [idA]'
-                    (irrelevanceTerm'' (subst-id _) (subst-id _)
-                                       [idA] [idA]' (proj₁ ([t] ⊢Γ idSubst)))
+      [idA]′ = irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ idSubst))
+  in  wellformedTerm [idA]′
+                    (irrelevanceTerm″ (subst-id _) (subst-id _)
+                                       [idA] [idA]′ (proj₁ ([t] ⊢Γ idSubst)))
 
 wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
                → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
@@ -52,8 +52,8 @@ wellformedEqTermₛ [Γ] [A] [t≡u] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
       [idA]  = proj₁ ([A] ⊢Γ idSubst)
-      [idA]' = irrelevance' (subst-id _) (proj₁ ([A] ⊢Γ idSubst))
-  in  wellformedTermEq [idA]'
-                       (irrelevanceEqTerm'' (subst-id _) (subst-id _)
+      [idA]′ = irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ idSubst))
+  in  wellformedTermEq [idA]′
+                       (irrelevanceEqTerm″ (subst-id _) (subst-id _)
                                             (subst-id _)
-                                            [idA] [idA]' ([t≡u] ⊢Γ idSubst))
+                                            [idA] [idA]′ ([t≡u] ⊢Γ idSubst))

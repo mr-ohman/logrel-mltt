@@ -34,7 +34,7 @@ record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
   open _⊩ne_ [A]
   field
     M   : Term
-    D'  : Γ ⊢ B :⇒*: M
+    D′  : Γ ⊢ B :⇒*: M
     neM : Neutral M
     K≡M : Γ ⊢ K ~ M ∷ U
 
@@ -73,7 +73,7 @@ record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set
   field
     k m : Term
     d   : Γ ⊢ t :⇒*: k ∷ K
-    d'  : Γ ⊢ u :⇒*: m ∷ K
+    d′  : Γ ⊢ u :⇒*: m ∷ K
     nf  : Γ ⊩neNf k ≡ m ∷ K
 
 -- Soundness of natural numbers:
@@ -102,15 +102,15 @@ mutual
 mutual
   -- Natural number term equality
   data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
-    ℕₜ₌ : (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
-          (k≡k' : Γ ⊢ k ≅ k' ∷ ℕ)
-          (prop : [Natural]-prop Γ k k') → Γ ⊩ℕ t ≡ u ∷ℕ
+    ℕₜ₌ : (k k′ : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d′ : Γ ⊢ u :⇒*: k′ ∷ ℕ)
+          (k≡k′ : Γ ⊢ k ≅ k′ ∷ ℕ)
+          (prop : [Natural]-prop Γ k k′) → Γ ⊩ℕ t ≡ u ∷ℕ
 
   -- Natural number term equality WHNF property
-  data [Natural]-prop (Γ : Con Term) : (n n' : Term) → Set where
-    suc : ∀ {n n'} → Γ ⊩ℕ n ≡ n' ∷ℕ → [Natural]-prop Γ (suc n) (suc n')
+  data [Natural]-prop (Γ : Con Term) : (n n′ : Term) → Set where
+    suc : ∀ {n n′} → Γ ⊩ℕ n ≡ n′ ∷ℕ → [Natural]-prop Γ (suc n) (suc n′)
     zero : [Natural]-prop Γ zero zero
-    ne : ∀ {n n'} → Γ ⊩neNf n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
+    ne : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ ℕ → [Natural]-prop Γ n n′
 
 -- Natural extraction from term WHNF property
 natural : ∀ {Γ n} → Natural-prop Γ n → Natural n
@@ -147,7 +147,7 @@ record LogRelKit : Set₁ where
     _⊩_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩ A → Set
     _⊩_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩ A → Set
 
-module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
+module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) where
 
   -- Soundness of Universe:
 
@@ -155,8 +155,8 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
   record _⊩¹U (Γ : Con Term) : Set where
     constructor U
     field
-      l' : TypeLevel
-      l< : l' < l
+      l′ : TypeLevel
+      l< : l′ < l
       ⊢Γ : ⊢ Γ
 
   -- Universe type equality
@@ -164,7 +164,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
   Γ ⊩¹U≡ B = B PE.≡ U
 
   -- Universe term
-  record _⊩¹U_∷U/_ {l'} (Γ : Con Term) (t : Term) (l< : l' < l) : Set where
+  record _⊩¹U_∷U/_ {l′} (Γ : Con Term) (t : Term) (l< : l′ < l) : Set where
     constructor Uₜ
     open LogRelKit (rec l<)
     field
@@ -175,13 +175,13 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       [t]   : Γ ⊩ t
 
   -- Universe term equality
-  record _⊩¹U_≡_∷U/_ {l'} (Γ : Con Term) (t u : Term) (l< : l' < l) : Set where
+  record _⊩¹U_≡_∷U/_ {l′} (Γ : Con Term) (t u : Term) (l< : l′ < l) : Set where
     constructor Uₜ₌
     open LogRelKit (rec l<)
     field
       A B   : Term
       d     : Γ ⊢ t :⇒*: A ∷ U
-      d'    : Γ ⊢ u :⇒*: B ∷ U
+      d′    : Γ ⊢ u :⇒*: B ∷ U
       typeA : Type A
       typeB : Type B
       A≡B   : Γ ⊢ A ≅ B ∷ U
@@ -222,17 +222,17 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       constructor Π₌
       open _⊩¹Π_ [A]
       field
-        F'     : Term
-        G'     : Term
-        D'     : Γ ⊢ B ⇒* Π F' ▹ G'
-        A≡B    : Γ ⊢ Π F ▹ G ≅ Π F' ▹ G'
-        [F≡F'] : ∀ {ρ Δ}
+        F′     : Term
+        G′     : Term
+        D′     : Γ ⊢ B ⇒* Π F′ ▹ G′
+        A≡B    : Γ ⊢ Π F ▹ G ≅ Π F′ ▹ G′
+        [F≡F′] : ∀ {ρ Δ}
                → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-               → Δ ⊩¹ U.wk ρ F ≡ U.wk ρ F' / [F] [ρ] ⊢Δ
-        [G≡G'] : ∀ {ρ Δ a}
+               → Δ ⊩¹ U.wk ρ F ≡ U.wk ρ F′ / [F] [ρ] ⊢Δ
+        [G≡G′] : ∀ {ρ Δ a}
                → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-               → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G' [ a ] / [G] [ρ] ⊢Δ [a]
+               → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G′ [ a ] / [G] [ρ] ⊢Δ [a]
 
     -- Term of Π-type
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
@@ -278,7 +278,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ℕ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
       ne : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
       Π  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
-      emb : ∀ {A l'} (l< : l' < l) (let open LogRelKit (rec l<))
+      emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
             ([A] : Γ ⊩ A) → Γ ⊩¹ A
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
@@ -290,7 +290,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       where open LogRelKit (rec l<)
 
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ∷ .U / U (U l' l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
+    Γ ⊩¹ t ∷ .U / U (U l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
     Γ ⊩¹ t ∷ A / ℕ D = Γ ⊩ℕ t ∷ℕ
     Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
     Γ ⊩¹ f ∷ A / Π ΠA  = Γ ⊩¹Π f ∷ A / ΠA
@@ -298,7 +298,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       where open LogRelKit (rec l<)
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ≡ u ∷ .U / U (U l' l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
+    Γ ⊩¹ t ≡ u ∷ .U / U (U l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
     Γ ⊩¹ t ≡ u ∷ A / ℕ D = Γ ⊩ℕ t ≡ u ∷ℕ
     Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
     Γ ⊩¹ t ≡ u ∷ A / Π ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
@@ -315,11 +315,11 @@ open LogRel public using (U; ℕ; ne; Π; emb; Uₜ; Uₜ₌; Π₌)
 pattern Πₜ a b c d e f = a , b , c , d , e , f
 pattern Πₜ₌ a b c d e f g h i j = a , b , c , d , e , f , g , h , i , j
 
-pattern U'  a b c = U (U a b c)
-pattern ne' a b c d = ne (ne a b c d)
-pattern Π'  a b c d e f g h i = Π (Π a b c d e f g h i)
+pattern U′  a b c = U (U a b c)
+pattern ne′ a b c d = ne (ne a b c d)
+pattern Π′  a b c d e f g h i = Π (Π a b c d e f g h i)
 
-logRelRec : ∀ l {l'} → l' < l → LogRelKit
+logRelRec : ∀ l {l′} → l′ < l → LogRelKit
 logRelRec ⁰ = λ ()
 logRelRec ¹ 0<1 = LogRel.kit ⁰ (λ ())
 
@@ -328,11 +328,11 @@ kit l = LogRel.kit l (logRelRec l)
 -- a bit of repetition in "kit ¹" definition, would work better with Fin 2 for
 -- TypeLevel because you could recurse.
 
-_⊩'⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
-Γ ⊩'⟨ l ⟩U = Γ ⊩U where open LogRelKit (kit l)
+_⊩′⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
+Γ ⊩′⟨ l ⟩U = Γ ⊩U where open LogRelKit (kit l)
 
-_⊩'⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
-Γ ⊩'⟨ l ⟩Π A = Γ ⊩Π A where open LogRelKit (kit l)
+_⊩′⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
+Γ ⊩′⟨ l ⟩Π A = Γ ⊩Π A where open LogRelKit (kit l)
 
 _⊩⟨_⟩_ : (Γ : Con Term) (l : TypeLevel) → Term → Set
 Γ ⊩⟨ l ⟩ A = Γ ⊩ A where open LogRelKit (kit l)

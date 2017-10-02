@@ -1,4 +1,4 @@
--- The empty type; also used as absurd proposition (``Falsity'').
+-- The empty type; also used as absurd proposition (``Falsity′′).
 
 {-# OPTIONS --without-K #-}
 
