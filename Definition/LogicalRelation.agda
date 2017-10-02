@@ -17,8 +17,9 @@ import Tools.PropositionalEquality as PE
 -- The different cases of the logical relation are spread out through out
 -- this file. This is due to them having different dependencies.
 
--- Neutrals
+-- Soundness of Neutrals:
 
+-- Neutral type
 record _⊩ne_ (Γ : Con Term) (A : Term) : Set where
   constructor ne
   field
@@ -27,6 +28,7 @@ record _⊩ne_ (Γ : Con Term) (A : Term) : Set where
     neK : Neutral K
     K≡K : Γ ⊢ K ~ K ∷ U
 
+-- Neutral type equality
 record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
   constructor ne₌
   open _⊩ne_ [A]
@@ -36,6 +38,7 @@ record _⊩ne_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩ne A) : Set where
     neM : Neutral M
     K≡M : Γ ⊢ K ~ M ∷ U
 
+-- Neutral term in WHNF
 record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
   inductive
   constructor neNfₜ
@@ -44,6 +47,7 @@ record _⊩neNf_∷_ (Γ : Con Term) (k A : Term) : Set where
     ⊢k   : Γ ⊢ k ∷ A
     k≡k  : Γ ⊢ k ~ k ∷ A
 
+-- Neutral term
 record _⊩ne_∷_/_ (Γ : Con Term) (t A : Term) ([A] : Γ ⊩ne A) : Set where
   inductive
   constructor neₜ
@@ -53,6 +57,7 @@ record _⊩ne_∷_/_ (Γ : Con Term) (t A : Term) ([A] : Γ ⊩ne A) : Set where
     d   : Γ ⊢ t :⇒*: k ∷ K
     nf  : Γ ⊩neNf k ∷ K
 
+-- Neutral term equality in WHNF
 record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
   inductive
   constructor neNfₜ₌
@@ -61,6 +66,7 @@ record _⊩neNf_≡_∷_ (Γ : Con Term) (k m A : Term) : Set where
     neM  : Neutral m
     k≡m  : Γ ⊢ k ~ m ∷ A
 
+-- Neutral term equality
 record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set where
   constructor neₜ₌
   open _⊩ne_ [A]
@@ -70,41 +76,49 @@ record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set
     d'  : Γ ⊢ u :⇒*: m ∷ K
     nf  : Γ ⊩neNf k ≡ m ∷ K
 
--- Natural numbers
+-- Soundness of natural numbers:
 
+-- Natural number type
 _⊩ℕ_ : (Γ : Con Term) (A : Term) → Set
 Γ ⊩ℕ A = Γ ⊢ A :⇒*: ℕ
 
+-- Natural number type equality
 _⊩ℕ_≡_ : (Γ : Con Term) (A B : Term) → Set
 Γ ⊩ℕ A ≡ B = Γ ⊢ B ⇒* ℕ
 
 mutual
+  -- Natural number term
   data _⊩ℕ_∷ℕ (Γ : Con Term) (t : Term) : Set where
     ℕₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ) (n≡n : Γ ⊢ n ≅ n ∷ ℕ)
          (prop : Natural-prop Γ n)
        → Γ ⊩ℕ t ∷ℕ
 
+  -- Natural number term WHNF property
   data Natural-prop (Γ : Con Term) : (n : Term) → Set where
     suc  : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Natural-prop Γ (suc n)
     zero : Natural-prop Γ zero
     ne   : ∀ {n} → Γ ⊩neNf n ∷ ℕ → Natural-prop Γ n
 
 mutual
+  -- Natural number term equality
   data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
     ℕₜ₌ : (k k' : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d' : Γ ⊢ u :⇒*: k' ∷ ℕ)
           (k≡k' : Γ ⊢ k ≅ k' ∷ ℕ)
           (prop : [Natural]-prop Γ k k') → Γ ⊩ℕ t ≡ u ∷ℕ
 
+  -- Natural number term equality WHNF property
   data [Natural]-prop (Γ : Con Term) : (n n' : Term) → Set where
     suc : ∀ {n n'} → Γ ⊩ℕ n ≡ n' ∷ℕ → [Natural]-prop Γ (suc n) (suc n')
     zero : [Natural]-prop Γ zero zero
     ne : ∀ {n n'} → Γ ⊩neNf n ≡ n' ∷ ℕ → [Natural]-prop Γ n n'
 
+-- Natural extraction from term WHNF property
 natural : ∀ {Γ n} → Natural-prop Γ n → Natural n
 natural (suc x) = suc
 natural zero = zero
 natural (ne (neNfₜ neK ⊢k k≡k)) = ne neK
 
+-- Natural extraction from term equality WHNF property
 split : ∀ {Γ a b} → [Natural]-prop Γ a b → Natural a × Natural b
 split (suc x) = suc , suc
 split zero = zero , zero
@@ -117,7 +131,7 @@ data TypeLevel : Set where
   ⁰ : TypeLevel
   ¹ : TypeLevel
 
-data _<_ : (i j : TypeLevel) -> Set where
+data _<_ : (i j : TypeLevel) → Set where
   0<1 : ⁰ < ¹
 
 -- Logical relation
@@ -134,10 +148,10 @@ record LogRelKit : Set₁ where
     _⊩_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩ A → Set
 
 module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
-  -- module Lower {l'} {l< : l' < l} = LogRelKit (rec l<)
 
-  -- Universe
+  -- Soundness of Universe:
 
+  -- Universe type
   record _⊩¹U (Γ : Con Term) : Set where
     constructor U
     field
@@ -145,9 +159,11 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       l< : l' < l
       ⊢Γ : ⊢ Γ
 
+  -- Universe type equality
   _⊩¹U≡_ : (Γ : Con Term) (B : Term) → Set
   Γ ⊩¹U≡ B = B PE.≡ U
 
+  -- Universe term
   record _⊩¹U_∷U/_ {l'} (Γ : Con Term) (t : Term) (l< : l' < l) : Set where
     constructor Uₜ
     open LogRelKit (rec l<)
@@ -158,6 +174,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       A≡A   : Γ ⊢ A ≅ A ∷ U
       [t]   : Γ ⊩ t
 
+  -- Universe term equality
   record _⊩¹U_≡_∷U/_ {l'} (Γ : Con Term) (t u : Term) (l< : l' < l) : Set where
     constructor Uₜ₌
     open LogRelKit (rec l<)
@@ -173,57 +190,10 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       [t≡u] : Γ ⊩ t ≡ u / [t]
 
   mutual
-    -- Helping functions for logical relation
 
-    wk-prop¹ : (Γ : Con Term) (F : Term) → Set
-    wk-prop¹ Γ F = ∀ {ρ Δ} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ) → Δ ⊩¹ U.wk ρ F
+    -- Soundness of Π:
 
-    wk-subst-prop¹ : (Γ : Con Term) (F G : Term) ([F] : wk-prop¹ Γ F) → Set
-    wk-subst-prop¹ Γ F G [F] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                → Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ → Δ ⊩¹ U.wk (lift ρ) G [ a ]
-
-    wk-subst-prop-T¹ : (Γ : Con Term) (F G t : Term)
-                       ([F] : wk-prop¹ Γ F)
-                       ([G] : wk-subst-prop¹ Γ F G [F])
-                     → Set
-    wk-subst-prop-T¹ Γ F G t [F] [G] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                → Δ ⊩¹ U.wk ρ t ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
-
-    wk-substEq-prop¹ : (Γ : Con Term) (F G : Term)
-                       ([F] : wk-prop¹ Γ F)
-                       ([G] : wk-subst-prop¹ Γ F G [F])
-                     → Set
-    wk-substEq-prop¹ Γ F G [F] [G] =
-      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                  → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                  → ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                  → Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ
-                  → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G [ b ] / [G] [ρ] ⊢Δ [a]
-
-    wk-fun-ext-prop¹ : (Γ : Con Term) (F G f : Term)
-                       ([F] : wk-prop¹ Γ F)
-                       ([G] : wk-subst-prop¹ Γ F G [F])
-                     → Set
-    wk-fun-ext-prop¹ Γ F G f [F] [G] =
-      ∀ {ρ Δ a b} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                    ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                    ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                    ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                  → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ f ∘ b ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
-
-    wk-fun-ext-prop¹' : (Γ : Con Term) (F G f g : Term)
-                        ([F] : wk-prop¹ Γ F)
-                        ([G] : wk-subst-prop¹ Γ F G [F])
-                      → Set
-    wk-fun-ext-prop¹' Γ F G f g [F] [G] =
-      ∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a]
-    -- Pi-type
-
+    -- Π-type
     record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where
       inductive
       constructor Π
@@ -234,10 +204,19 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
         ⊢F : Γ ⊢ F
         ⊢G : Γ ∙ F ⊢ G
         A≡A : Γ ⊢ Π F ▹ G ≅ Π F ▹ G
-        [F] : wk-prop¹ Γ F
-        [G] : wk-subst-prop¹ Γ F G [F]
-        G-ext : wk-substEq-prop¹ Γ F G [F] [G]
+        [F] : ∀ {ρ Δ} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ) → Δ ⊩¹ U.wk ρ F
+        [G] : ∀ {ρ Δ a}
+            → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+            → Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ
+            → Δ ⊩¹ U.wk (lift ρ) G [ a ]
+        G-ext : ∀ {ρ Δ a b}
+              → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+              → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              → ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              → Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ
+              → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G [ b ] / [G] [ρ] ⊢Δ [a]
 
+    -- Π-type equality
     record _⊩¹Π_≡_/_ (Γ : Con Term) (A B : Term) ([A] : Γ ⊩¹Π A) : Set where
       inductive
       constructor Π₌
@@ -255,17 +234,26 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
                → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
                → Δ ⊩¹ U.wk (lift ρ) G [ a ] ≡ U.wk (lift ρ) G' [ a ] / [G] [ρ] ⊢Δ [a]
 
-    -- Issue: Agda complains about record use not being strictly positive.
-    --        Therefore we have to use ×
+    -- Term of Π-type
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
     Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
       ∃ λ f → Γ ⊢ t :⇒*: f ∷ Π F ▹ G
             × Function f
             × Γ ⊢ f ≅ f ∷ Π F ▹ G
-            × wk-fun-ext-prop¹ Γ F G f [F] [G]
-            × wk-subst-prop-T¹ Γ F G f [F] [G]
+            × (∀ {ρ Δ a b}
+              → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+                ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ f ∘ b ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
+            × (∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+              → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              → Δ ⊩¹ U.wk ρ f ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
+    -- Issue: Agda complains about record use not being strictly positive.
+    --        Therefore we have to use ×
 
-    -- Issue: Same as above.
+
+    -- Term equality of Π-type
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹Π A) → Set
     Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
       let [A] = Π F G D ⊢F ⊢G A≡A [F] [G] G-ext
@@ -277,7 +265,10 @@ module LogRel (l : TypeLevel) (rec : ∀ {l'} → l' < l → LogRelKit) where
       ×   Γ ⊢ f ≅ g ∷ Π F ▹ G
       ×   Γ ⊩¹Π t ∷ A / [A]
       ×   Γ ⊩¹Π u ∷ A / [A]
-      ×   wk-fun-ext-prop¹' Γ F G f g [F] [G]
+      ×   (∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+          → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+          → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
+    -- Issue: Same as above.
 
 
     -- Logical relation definition
