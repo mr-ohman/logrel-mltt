@@ -17,12 +17,14 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Irrelevance for propositionally equal types
 irrelevance′ : ∀ {A A′ Γ l}
              → A PE.≡ A′
              → Γ ⊩⟨ l ⟩ A
              → Γ ⊩⟨ l ⟩ A′
 irrelevance′ PE.refl [A] = [A]
 
+-- Irrelevance for propositionally equal types and contexts
 irrelevanceΓ′ : ∀ {l A A′ Γ Γ′}
               → Γ PE.≡ Γ′
               → A PE.≡ A′
@@ -31,30 +33,37 @@ irrelevanceΓ′ : ∀ {l A A′ Γ Γ′}
 irrelevanceΓ′ PE.refl PE.refl [A] = [A]
 
 mutual
+  -- Irrelevance for type equality
   irrelevanceEq : ∀ {Γ A B l l′} (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A)
                 → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l′ ⟩ A ≡ B / q
   irrelevanceEq p q A≡B = irrelevanceEqT (goodCasesRefl p q) A≡B
 
+  -- Irrelevance for type equality with propositionally equal first types
   irrelevanceEq′ : ∀ {Γ A A′ B l l′} (eq : A PE.≡ A′)
                    (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                  → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l′ ⟩ A′ ≡ B / q
   irrelevanceEq′ PE.refl p q A≡B = irrelevanceEq p q A≡B
 
+  -- Irrelevance for type equality with propositionally equal types
   irrelevanceEq″ : ∀ {Γ A A′ B B′ l l′} (eqA : A PE.≡ A′) (eqB : B PE.≡ B′)
                     (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                   → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l′ ⟩ A′ ≡ B′ / q
   irrelevanceEq″ PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
 
+  -- Irrelevance for type equality with propositionally equal second types
   irrelevanceEqR′ : ∀ {Γ A B B′ l} (eqB : B PE.≡ B′) (p : Γ ⊩⟨ l ⟩ A)
                   → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l ⟩ A ≡ B′ / p
   irrelevanceEqR′ PE.refl p A≡B = A≡B
 
+  -- Irrelevance for type equality with propositionally equal types and
+  -- a lifting of propositionally equal types
   irrelevanceEqLift″ : ∀ {Γ A A′ B B′ C C′ l l′}
                         (eqA : A PE.≡ A′) (eqB : B PE.≡ B′) (eqC : C PE.≡ C′)
                         (p : Γ ∙ C ⊩⟨ l ⟩ A) (q : Γ ∙ C′ ⊩⟨ l′ ⟩ A′)
                       → Γ ∙ C ⊩⟨ l ⟩ A ≡ B / p → Γ ∙ C′ ⊩⟨ l′ ⟩ A′ ≡ B′ / q
   irrelevanceEqLift″ PE.refl PE.refl PE.refl p q A≡B = irrelevanceEq p q A≡B
 
+  -- Helper for irrelevance of type equality using equality view
   irrelevanceEqT : ∀ {Γ A B l l′} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l′ ⟩ A}
                        → EqView Γ l l′ A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l′ ⟩ A ≡ B / q
@@ -81,21 +90,25 @@ mutual
 
 --------------------------------------------------------------------------------
 
+  -- Irrelevance for terms
   irrelevanceTerm : ∀ {Γ A t l l′} (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A)
                   → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l′ ⟩ t ∷ A / q
   irrelevanceTerm p q t = irrelevanceTermT (goodCasesRefl p q) t
 
+  -- Irrelevance for terms with propositionally equal types
   irrelevanceTerm′ : ∀ {Γ A A′ t l l′} (eq : A PE.≡ A′)
                      (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                    → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l′ ⟩ t ∷ A′ / q
   irrelevanceTerm′ PE.refl p q t = irrelevanceTerm p q t
 
+  -- Irrelevance for terms with propositionally equal types and terms
   irrelevanceTerm″ : ∀ {Γ A A′ t t′ l l′}
                       (eqA : A PE.≡ A′) (eqt : t PE.≡ t′)
                       (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                     → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l′ ⟩ t′ ∷ A′ / q
   irrelevanceTerm″ PE.refl PE.refl p q t = irrelevanceTerm p q t
 
+  -- Irrelevance for terms with propositionally equal types, terms and contexts
   irrelevanceTermΓ″ : ∀ {l l′ A A′ t t′ Γ Γ′}
                      → Γ PE.≡ Γ′
                      → A PE.≡ A′
@@ -106,6 +119,7 @@ mutual
                      → Γ′ ⊩⟨ l′ ⟩ t′ ∷ A′ / [A′]
   irrelevanceTermΓ″ PE.refl PE.refl PE.refl [A] [A′] [t] = irrelevanceTerm [A] [A′] [t]
 
+  -- Helper for irrelevance of terms using equality view
   irrelevanceTermT : ∀ {Γ A t l l′} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l′ ⟩ A}
                          → EqView Γ l l′ A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l′ ⟩ t ∷ A / q
@@ -142,21 +156,25 @@ mutual
 
 --------------------------------------------------------------------------------
 
+  -- Irrelevance for term equality
   irrelevanceEqTerm : ∀ {Γ A t u l l′} (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A)
                     → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ A / q
   irrelevanceEqTerm p q t≡u = irrelevanceEqTermT (goodCasesRefl p q) t≡u
 
+  -- Irrelevance for term equality with propositionally equal types
   irrelevanceEqTerm′ : ∀ {Γ A A′ t u l l′} (eq : A PE.≡ A′)
                        (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                      → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ A′ / q
   irrelevanceEqTerm′ PE.refl p q t≡u = irrelevanceEqTerm p q t≡u
 
+  -- Irrelevance for term equality with propositionally equal types and terms
   irrelevanceEqTerm″ : ∀ {Γ A A′ t t′ u u′ l l′}
                         (eqt : t PE.≡ t′) (equ : u PE.≡ u′) (eqA : A PE.≡ A′)
                         (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ A′)
                       → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l′ ⟩ t′ ≡ u′ ∷ A′ / q
   irrelevanceEqTerm″ PE.refl PE.refl PE.refl p q t≡u = irrelevanceEqTerm p q t≡u
 
+  -- Helper for irrelevance of term equality using equality view
   irrelevanceEqTermT : ∀ {Γ A t u} {l l′} {p : Γ ⊩⟨ l ⟩ A} {q : Γ ⊩⟨ l′ ⟩ A}
                            → EqView Γ l l′ A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ A / q

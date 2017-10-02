@@ -19,6 +19,9 @@ open import Tools.Product
 open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
+
+-- Weakening of neutrals in WHNF
+
 wkTermNe : ∀ {ρ Γ Δ k A} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
          → Γ ⊩neNf k ∷ A → Δ ⊩neNf U.wk ρ k ∷ U.wk ρ A
 wkTermNe {ρ} [ρ] ⊢Δ (neNfₜ neK ⊢k k≡k) =
@@ -28,6 +31,8 @@ wkEqTermNe : ∀ {ρ Γ Δ k k′ A} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
            → Γ ⊩neNf k ≡ k′ ∷ A → Δ ⊩neNf U.wk ρ k ≡ U.wk ρ k′ ∷ U.wk ρ A
 wkEqTermNe {ρ} [ρ] ⊢Δ (neNfₜ₌ neK neM k≡m) =
   neNfₜ₌ (wkNeutral ρ neK) (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ k≡m)
+
+-- Weakening of sound natural numbers
 
 mutual
   wkTermℕ : ∀ {ρ Γ Δ n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
@@ -59,6 +64,8 @@ mutual
   wk[Natural]-prop ρ ⊢Δ (suc [n≡n′]) = suc (wkEqTermℕ ρ ⊢Δ [n≡n′])
   wk[Natural]-prop ρ ⊢Δ zero = zero
   wk[Natural]-prop ρ ⊢Δ (ne x) = ne (wkEqTermNe ρ ⊢Δ x)
+
+-- Weakening of the logical relation
 
 wk : ∀ {ρ Γ Δ A l} → ρ ∷ Δ ⊆ Γ → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ U.wk ρ A
 wk ρ ⊢Δ (U′ l′ l< ⊢Γ) = U (U l′ l< ⊢Δ)

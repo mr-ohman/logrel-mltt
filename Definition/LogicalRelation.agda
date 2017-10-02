@@ -17,6 +17,8 @@ import Tools.PropositionalEquality as PE
 -- The different cases of the logical relation are spread out through out
 -- this file. This is due to them having different dependencies.
 
+-- We will refer to expressions that satisfies the logical relation as sound.
+
 -- Soundness of Neutrals:
 
 -- Neutral type
