@@ -21,6 +21,9 @@ import Tools.Sum
 -- Product type.
 import Tools.Product
 
+-- Identity function and composition.
+import Tools.Function
+
 -- Negation and decidability type.
 import Tools.Nullary
 

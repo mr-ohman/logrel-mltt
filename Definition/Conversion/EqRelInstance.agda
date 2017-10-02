@@ -27,6 +27,7 @@ open import Definition.Typed.Consequences.Reduction
 open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
+open import Tools.Function
 
 
 data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
@@ -107,8 +108,8 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       convConvTerm ~-conv
                       wkConv↑ wkConv↑Term ~-wk
                       reductionConv↑ reductionConv↑Term
-                      (λ x → liftConv (U-refl x))
-                      (λ x → liftConv (ℕ-refl x))
+                      (liftConv ∘ᶠ U-refl)
+                      (liftConv ∘ᶠ ℕ-refl)
                       (λ x → liftConvTerm (univ (ℕ x) (ℕ x) (ℕ-refl x)))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →
@@ -122,8 +123,8 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                          in  liftConvTerm (univ (Π F∷U ▹ G∷U) (Π H∷U ▹ E∷U')
                                                 (Π-cong x F<>H G<>E)))
 
-                      (λ x → liftConvTerm (zero-refl x))
-                      (λ x → liftConvTerm (suc-cong x))
+                      (liftConvTerm ∘ᶠ zero-refl)
+                      (liftConvTerm ∘ᶠ suc-cong)
                       (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (fun-ext x x₁ x₂ x₃ x₄ x₅))
                       ~-var ~-app ~-natrec
 

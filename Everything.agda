@@ -13,6 +13,7 @@ import Tools.Unit
 import Tools.Nat
 import Tools.Sum
 import Tools.Product
+import Tools.Function
 import Tools.Nullary
 import Tools.PropositionalEquality
 
