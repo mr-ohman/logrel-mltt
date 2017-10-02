@@ -16,10 +16,12 @@ open import Tools.Product
 open import Tools.Empty using (⊥; ⊥-elim)
 import Tools.PropositionalEquality as PE
 
-
+-- Type for maybe embeddings of sound types
 data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set₁ where
   noemb : ∀ {l ⊩⟨_⟩} → ⊩⟨ l ⟩ → MaybeEmb l ⊩⟨_⟩
   emb   : ∀ {l l' ⊩⟨_⟩} → l' < l → MaybeEmb l' ⊩⟨_⟩ → MaybeEmb l ⊩⟨_⟩
+
+-- Specific sound types with possible embedding
 
 _⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set₁
 Γ ⊩⟨ l ⟩U = MaybeEmb l (λ l' → Γ ⊩'⟨ l' ⟩U)
@@ -32,6 +34,8 @@ _⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 
 _⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 Γ ⊩⟨ l ⟩Π A = MaybeEmb l (λ l' → Γ ⊩'⟨ l' ⟩Π A)
+
+-- Construct a general sound type from a specific
 
 U-intr : ∀ {Γ l} → Γ ⊩⟨ l ⟩U → Γ ⊩⟨ l ⟩ U
 U-intr (noemb x) = U x
@@ -48,6 +52,8 @@ ne-intr (emb 0<1 x) = emb 0<1 (ne-intr x)
 Π-intr : ∀ {A Γ l} → Γ ⊩⟨ l ⟩Π A → Γ ⊩⟨ l ⟩ A
 Π-intr (noemb x) = Π x
 Π-intr (emb 0<1 x) = emb 0<1 (Π-intr x)
+
+-- Construct a specific sound type from a general with some criterion
 
 U-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ U → Γ ⊩⟨ l ⟩U
 U-elim (U' l' l< ⊢Γ) = noemb (U l' l< ⊢Γ)
@@ -72,7 +78,7 @@ U-elim (emb 0<1 x) | emb () x₁
 ℕ-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ ℕ → Γ ⊩⟨ l ⟩ℕ ℕ
 ℕ-elim [ℕ] = ℕ-elim' (id (wellformed [ℕ])) [ℕ]
 
-ne-elim' : ∀ {A Γ l K} → Γ ⊢ A ⇒* K → Neutral K  → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩ne A
+ne-elim' : ∀ {A Γ l K} → Γ ⊢ A ⇒* K → Neutral K → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩ne A
 ne-elim' D neK (U' l' l< ⊢Γ) =
   ⊥-elim (U≢ne neK (whrDet* (id (U ⊢Γ) , U) (D , ne neK)))
 ne-elim' D neK (ℕ D') = ⊥-elim (ℕ≢ne neK (whrDet* (red D' , ℕ) (D , ne neK)))
@@ -100,10 +106,12 @@ ne-elim neK [K] = ne-elim' (id (wellformed [K])) neK [K]
 Π-elim : ∀ {Γ F G l} → Γ ⊩⟨ l ⟩ Π F ▹ G → Γ ⊩⟨ l ⟩Π Π F ▹ G
 Π-elim [Π] = Π-elim' (id (wellformed [Π])) [Π]
 
+-- Extract a type and a level from a maybe embedding
 extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l' → ⊩⟨ l' ⟩
 extractMaybeEmb (noemb x) = _ , x
 extractMaybeEmb (emb 0<1 x) = extractMaybeEmb x
 
+-- A view for constructor equality of types where embeddings are ignored
 data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) → Set where
   U : ∀ {l l'} UA UB → Tactic Γ l l' U U (U UA) (U UB)
   ℕ : ∀ {A B l l'} ℕA ℕB → Tactic Γ l l' A B (ℕ ℕA) (ℕ ℕB)
@@ -118,6 +126,7 @@ data Tactic Γ : ∀ l l' A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l' ⟩ B) �
         → Tactic Γ l ⁰ A B p q
         → Tactic Γ l ¹ A B p (emb 0<1 q)
 
+-- Construct an equality view from an equality
 goodCases : ∀ {l l' Γ A B} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l' ⟩ B)
           → Γ ⊩⟨ l ⟩ A ≡ B / [A] → Tactic Γ l l' A B [A] [B]
 goodCases (U UA) (U UB) A≡B = U UA UB
@@ -153,11 +162,13 @@ goodCases {l} [A] (emb 0<1 x) A≡B =
 goodCases {l' = l} (emb 0<1 x) [B] A≡B =
   emb⁰¹ (goodCases {⁰} {l} x [B] A≡B)
 
+-- Construct an equality view between two derivations of the same type
 goodCasesRefl : ∀ {l l' Γ A} ([A] : Γ ⊩⟨ l ⟩ A) ([A'] : Γ ⊩⟨ l' ⟩ A)
               → Tactic Γ l l' A A [A] [A']
 goodCasesRefl [A] [A'] = goodCases [A] [A'] (reflEq [A])
 
 
+-- A view for constructor equality between three types
 data Tactic₃ Γ : ∀ l l' l'' A B C
                  (p : Γ ⊩⟨ l   ⟩ A)
                  (q : Γ ⊩⟨ l'  ⟩ B)
@@ -179,6 +190,7 @@ data Tactic₃ Γ : ∀ l l' l'' A B C
          → Tactic₃ Γ l l' ⁰ A B C p q r
          → Tactic₃ Γ l l' ¹ A B C p q (emb 0<1 r)
 
+-- Combines two two-way views into a three-way view
 combine : ∀ {Γ l l' l'' l''' A B C [A] [B] [B]' [C]}
         → Tactic Γ l l' A B [A] [B]
         → Tactic Γ l'' l''' B C [B]' [C]
