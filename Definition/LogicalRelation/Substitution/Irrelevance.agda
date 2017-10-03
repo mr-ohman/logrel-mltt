@@ -17,6 +17,7 @@ open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 
+-- Irrelevance of valid substitutions with different derivations of contexts
 irrelevanceSubst : ∀ {σ Γ Δ}
                    ([Γ] [Γ]′ : ⊩ₛ Γ)
                    (⊢Δ ⊢Δ′ : ⊢ Δ)
@@ -30,6 +31,8 @@ irrelevanceSubst ([Γ] ∙ [A]) ([Γ]′ ∙ [A]′) ⊢Δ ⊢Δ′ ([tailσ] , 
                             (proj₁ ([A]′ ⊢Δ′ [tailσ]′))
                             [headσ]
 
+-- Irrelevance of valid substitutions with different contexts
+-- that are propositionally equal
 irrelevanceSubst′ : ∀ {σ Γ Δ Δ′}
                     (eq : Δ PE.≡ Δ′)
                     ([Γ] [Γ]′ : ⊩ₛ Γ)
@@ -39,6 +42,8 @@ irrelevanceSubst′ : ∀ {σ Γ Δ Δ′}
                   → Δ′ ⊩ₛ σ ∷ Γ / [Γ]′ / ⊢Δ′
 irrelevanceSubst′ PE.refl [Γ] [Γ]′ ⊢Δ ⊢Δ′ [σ] = irrelevanceSubst [Γ] [Γ]′ ⊢Δ ⊢Δ′ [σ]
 
+-- Irrelevance of valid substitution equality
+-- with different derivations of contexts
 irrelevanceSubstEq : ∀ {σ σ′ Γ Δ}
                      ([Γ] [Γ]′ : ⊩ₛ Γ)
                      (⊢Δ ⊢Δ′ : ⊢ Δ)
@@ -53,6 +58,7 @@ irrelevanceSubstEq ([Γ] ∙ [A]) ([Γ]′ ∙ [A]′) ⊢Δ ⊢Δ′ [σ] [σ]�
                             (proj₁ ([A]′ ⊢Δ′ (proj₁ [σ]′)))
                             (proj₂ [σ≡σ′])
 
+-- Irrelevance of valid types with different derivations of contexts
 irrelevance : ∀ {l A Γ}
               ([Γ] [Γ]′ : ⊩ₛ Γ)
             → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
@@ -66,6 +72,8 @@ irrelevance [Γ] [Γ]′ [A] ⊢Δ [σ] =
 
 open import Definition.LogicalRelation.Properties
 
+-- Irrelevance of valid types with different derivations of contexts
+-- with lifting of eqaul types
 irrelevanceLift : ∀ {l A F H Γ}
               ([Γ] : ⊩ₛ Γ)
               ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -90,6 +98,8 @@ irrelevanceLift [Γ] [F] [H] [F≡H] [A] ⊢Δ ([tailσ] , [headσ]) =
                                           ([F≡H] ⊢Δ [tailσ])
                                           (proj₂ x)))
 
+-- Irrelevance of valid type equality with different derivations of
+-- contexts and types
 irrelevanceEq : ∀ {l l′ A B Γ}
                 ([Γ] [Γ]′ : ⊩ₛ Γ)
                 ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
@@ -102,6 +112,7 @@ irrelevanceEq [Γ] [Γ]′ [A] [A]′ [A≡B] ⊢Δ [σ] =
                        (proj₁ ([A]′ ⊢Δ [σ]))
                        ([A≡B] ⊢Δ [σ]′)
 
+-- Irrelevance of valid terms with different derivations of contexts and types
 irrelevanceTerm : ∀ {l l′ A t Γ}
                   ([Γ] [Γ]′ : ⊩ₛ Γ)
                   ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])
@@ -117,6 +128,8 @@ irrelevanceTerm [Γ] [Γ]′ [A] [A]′ [t] ⊢Δ [σ]′ =
                     (irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′])
                     (irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]′ [σ] x)))
 
+-- Irrelevance of valid terms with different derivations of
+-- contexts and types which are propositionally equal
 irrelevanceTerm′ : ∀ {l l′ A A′ t Γ}
                    (eq : A PE.≡ A′)
                    ([Γ] [Γ]′ : ⊩ₛ Γ)
@@ -127,7 +140,8 @@ irrelevanceTerm′ : ∀ {l l′ A A′ t Γ}
 irrelevanceTerm′ {A = A} {t = t} PE.refl [Γ] [Γ]′ [A] [A]′ [t] =
   irrelevanceTerm {A = A} {t = t} [Γ] [Γ]′ [A] [A]′ [t]
 
-
+-- Irrelevance of valid terms with different derivations of
+-- contexts and types with a lifting of equal types
 irrelevanceTermLift : ∀ {l A F H t Γ}
               ([Γ] : ⊩ₛ Γ)
               ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -155,6 +169,8 @@ irrelevanceTermLift [Γ] [F] [H] [F≡H] [A] [t] ⊢Δ ([tailσ] , [headσ]) =
                                         ([F≡H] ⊢Δ [tailσ])
                                         (proj₂ x)))
 
+-- Irrelevance of valid term equality with different derivations of
+-- contexts and types
 irrelevanceEqTerm : ∀ {l l′ A t u Γ}
                   ([Γ] [Γ]′ : ⊩ₛ Γ)
                   ([A]  : Γ ⊩ₛ⟨ l  ⟩ A / [Γ])

@@ -32,6 +32,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Helper function of injectivity for specific sound Π-types
 injectivity″ : ∀ {F G H E Γ l}
                ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
@@ -61,6 +62,7 @@ injectivity″ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
   in  wellformedEq [F]′ [F≡H]′ , wellformedEq [G]′ [G≡E]′
 injectivity″ (emb 0<1 x) [ΠFG≡ΠHE] = injectivity″ x [ΠFG≡ΠHE]
 
+-- Helper function of injectivity for sound Π-types
 injectivity′ : ∀ {F G H E Γ l}
                ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
@@ -69,6 +71,7 @@ injectivity′ : ∀ {F G H E Γ l}
 injectivity′ [ΠFG] [ΠFG≡ΠHE] =
   injectivity″ (Π-elim [ΠFG]) (irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠHE])
 
+-- Injectivity of Π
 injectivity : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 injectivity ⊢ΠFG≡ΠHE with fundamentalEq ⊢ΠFG≡ΠHE
 injectivity {Γ} {F} {G} {H} {E} ⊢ΠFG≡ΠHE | [Γ] , [ΠFG] , [ΠHE] , [ΠFG≡ΠHE] =
