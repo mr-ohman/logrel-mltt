@@ -19,10 +19,12 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Conversion of syntactic reduction closures.
 convRed:*: : ∀ {t u A B Γ} → Γ ⊢ t :⇒*: u ∷ A → Γ ⊢ A ≡ B → Γ ⊢ t :⇒*: u ∷ B
 convRed:*: [ ⊢t , ⊢u , d ] A≡B = [ conv ⊢t  A≡B , conv ⊢u  A≡B , conv* d  A≡B ]
 
 mutual
+  -- Helper function for conversion of terms converting from left to right.
   convTermT₁ : ∀ {l l′ Γ A B t} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
              → EqView Γ l l′ A B [A] [B]
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -70,6 +72,7 @@ mutual
   convTermT₁ (emb⁰¹ x) A≡B t = convTermT₁ x A≡B t
   convTermT₁ (emb¹⁰ x) A≡B t = convTermT₁ x A≡B t
 
+  -- Helper function for conversion of terms converting from right to left.
   convTermT₂ : ∀ {l l′ Γ A B t} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
            → EqView Γ l l′ A B [A] [B]
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -118,18 +121,22 @@ mutual
   convTermT₂ (emb⁰¹ x) A≡B t = convTermT₂ x A≡B t
   convTermT₂ (emb¹⁰ x) A≡B t = convTermT₂ x A≡B t
 
+  -- Conversion of terms converting from left to right.
   convTerm₁ : ∀ {Γ A B t l l′} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
             → Γ ⊩⟨ l ⟩  A ≡ B / [A]
             → Γ ⊩⟨ l ⟩  t ∷ A / [A]
             → Γ ⊩⟨ l′ ⟩ t ∷ B / [B]
   convTerm₁ [A] [B] A≡B t = convTermT₁ (goodCases [A] [B] A≡B) A≡B t
 
+  -- Conversion of terms converting from right to left.
   convTerm₂ : ∀ {Γ A B t l l′} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
           → Γ ⊩⟨ l ⟩  A ≡ B / [A]
           → Γ ⊩⟨ l′ ⟩ t ∷ B / [B]
           → Γ ⊩⟨ l ⟩  t ∷ A / [A]
   convTerm₂ [A] [B] A≡B t = convTermT₂ (goodCases [A] [B] A≡B) A≡B t
 
+  -- Conversion of terms converting from right to left
+  -- with some propsitionally equal types.
   convTerm₂′ : ∀ {Γ A B B′ t l l′} → B PE.≡ B′
           → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
           → Γ ⊩⟨ l ⟩  A ≡ B′ / [A]
@@ -138,6 +145,7 @@ mutual
   convTerm₂′ PE.refl [A] [B] A≡B t = convTerm₂ [A] [B] A≡B t
 
 
+  -- Helper function for conversion of term equality converting from left to right.
   convEqTermT₁ : ∀ {l l′ Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
                → EqView Γ l l′ A B [A] [B]
                → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -180,6 +188,7 @@ mutual
   convEqTermT₁ (emb⁰¹ x) A≡B t≡u = convEqTermT₁ x A≡B t≡u
   convEqTermT₁ (emb¹⁰ x) A≡B t≡u = convEqTermT₁ x A≡B t≡u
 
+  -- Helper function for conversion of term equality converting from right to left.
   convEqTermT₂ : ∀ {l l′ Γ A B t u} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
              → EqView Γ l l′ A B [A] [B]
              → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -221,12 +230,14 @@ mutual
   convEqTermT₂ (emb⁰¹ x) A≡B t≡u = convEqTermT₂ x A≡B t≡u
   convEqTermT₂ (emb¹⁰ x) A≡B t≡u = convEqTermT₂ x A≡B t≡u
 
+  -- Conversion of term equality converting from left to right.
   convEqTerm₁ : ∀ {l l′ Γ A B t u} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
               → Γ ⊩⟨ l ⟩  A ≡ B / [A]
               → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
               → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ B / [B]
   convEqTerm₁ [A] [B] A≡B t≡u = convEqTermT₁ (goodCases [A] [B] A≡B) A≡B t≡u
 
+  -- Conversion of term equality converting from right to left.
   convEqTerm₂ : ∀ {l l′ Γ A B t u} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
             → Γ ⊩⟨ l ⟩  A ≡ B / [A]
             → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ B / [B]

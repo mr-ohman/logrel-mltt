@@ -32,13 +32,13 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Fundamental theorem for contexts.
   valid : ∀ {Γ} → ⊢ Γ → ⊩ₛ Γ
   valid ε = ε
   valid (⊢Γ ∙ A) = let [Γ] , [A] = fundamental A in [Γ] ∙ [A]
 
 
--- Fundamental theorem for types
-
+  -- Fundamental theorem for types.
   fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ₛ Γ) (λ [Γ] → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
   fundamental (ℕ x) = valid x , ℕₛ (valid x)
   fundamental (U x) = valid x , Uₛ (valid x)
@@ -49,8 +49,7 @@ mutual
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
     [Γ] , univₛ {A} [Γ] [U] [A]
 
--- Fundamental theorem for type equality
-
+  -- Fundamental theorem for type equality.
   fundamentalEq : ∀{Γ A B} → Γ ⊢ A ≡ B
     → ∃  λ ([Γ] : ⊩ₛ Γ)
     → ∃₂ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
@@ -98,6 +97,7 @@ mutual
       ,   Πₛ {H} {E} [Γ] [H] [E]′
       ,   Π-congₛ {F} {G} {H} {E} [Γ] [F] [G]′ [H] [E]′ [F≡H] [G≡E]′
 
+  -- Fundamental theorem for variables.
   fundamentalVar : ∀ {Γ A x}
                  → x ∷ A ∈ Γ
                  → ([Γ] : ⊩ₛ Γ)
@@ -138,8 +138,7 @@ mutual
                 irrelevanceEqTerm′ (PE.sym (subst-wk A)) [σA] [σA′]
                                    (proj₂ [h′] (proj₁ [σ′]) (proj₁ [σ≡σ′]))))
 
--- Fundamental theorem for terms
-
+  -- Fundamental theorem for terms.
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
     → ∃ λ ([Γ] : ⊩ₛ Γ)
     → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
@@ -201,8 +200,7 @@ mutual
       in  [Γ]′ , [A]
       ,   convₛ {t} {A} {B} [Γ]′ [A′]₁ [A] [A′≡A] [t]′
 
--- Fundamental theorem for term equality
-
+  -- Fundamental theorem for term equality.
   fundamentalTermEq : ∀{Γ A t t′} → Γ ⊢ t ≡ t′ ∷ A
                     → ∃ λ ([Γ] : ⊩ₛ Γ)
                     → [ Γ ⊩ₛ⟨ ¹ ⟩ t ≡ t′ ∷ A / [Γ] ]
@@ -521,6 +519,7 @@ mutual
                         [F[sucn]] y
     in  [Γ]₃ , modelsTermEq [F[sucn]] d y r
 
+-- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ∷ Γ
       → ∃ λ [Γ] → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
@@ -536,6 +535,7 @@ fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
   in  [Γ] ∙ [A] , ([tailσ]′
   ,   irrelevanceTerm″ (subst-id _) (subst-id _) [idA] [idA]′ [idt])
 
+-- Fundamental theorem for substitution equality.
 fundamentalSubstEq : ∀ {Γ Δ σ σ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ≡ σ′ ∷ Γ
       → ∃₂ λ [Γ] [σ]

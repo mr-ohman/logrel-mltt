@@ -95,7 +95,7 @@ mutual
          (prop : Natural-prop Γ n)
        → Γ ⊩ℕ t ∷ℕ
 
-  -- Natural number term WHNF property
+  -- WHNF property of natural number terms
   data Natural-prop (Γ : Con Term) : (n : Term) → Set where
     suc  : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Natural-prop Γ (suc n)
     zero : Natural-prop Γ zero
@@ -108,7 +108,7 @@ mutual
           (k≡k′ : Γ ⊢ k ≅ k′ ∷ ℕ)
           (prop : [Natural]-prop Γ k k′) → Γ ⊩ℕ t ≡ u ∷ℕ
 
-  -- Natural number term equality WHNF property
+  -- WHNF property of Natural number term equality
   data [Natural]-prop (Γ : Con Term) : (n n′ : Term) → Set where
     suc : ∀ {n n′} → Γ ⊩ℕ n ≡ n′ ∷ℕ → [Natural]-prop Γ (suc n) (suc n′)
     zero : [Natural]-prop Γ zero zero

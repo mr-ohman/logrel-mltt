@@ -12,6 +12,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Reflexivity of sound types.
 reflEq : ∀ {l Γ A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]
 reflEq (U′ l′ l< ⊢Γ) = PE.refl
 reflEq (ℕ D) = red D
@@ -32,6 +33,7 @@ reflNatural-prop (suc (ℕₜ n d t≡t prop)) =
 reflNatural-prop zero = zero
 reflNatural-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
 
+-- Reflexivity of sound terms.
 reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
            → Γ ⊩⟨ l ⟩ t ≡ t ∷ A / [A]

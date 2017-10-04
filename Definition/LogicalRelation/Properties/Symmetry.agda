@@ -19,6 +19,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Helper function for symmetry of type equality using equality views.
   symEqT : ∀ {Γ A B l l′} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
          → EqView Γ l l′ A B [A] [B]
          → Γ ⊩⟨ l  ⟩ A ≡ B / [A]
@@ -57,6 +58,7 @@ mutual
   symEqT (emb⁰¹ x) A≡B = symEqT x A≡B
   symEqT (emb¹⁰ x) A≡B = symEqT x A≡B
 
+  -- Symmetry of type equality.
   symEq : ∀ {Γ A B l l′} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
         → Γ ⊩⟨ l ⟩ A ≡ B / [A]
         → Γ ⊩⟨ l′ ⟩ B ≡ A / [B]
@@ -75,6 +77,7 @@ symNatural-prop (suc (ℕₜ₌ k k′ d d′ t≡u prop)) =
 symNatural-prop zero = zero
 symNatural-prop (ne prop) = ne (symNeutralTerm prop)
 
+-- Symmetry of term equality.
 symEqTerm : ∀ {l Γ A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]

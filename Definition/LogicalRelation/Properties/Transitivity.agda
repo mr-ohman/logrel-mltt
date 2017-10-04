@@ -19,6 +19,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Helper function for transitivity of type equality using equality views.
   transEqT : ∀ {Γ A B C l l′ l″}
              {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B} {[C] : Γ ⊩⟨ l″ ⟩ C}
            → EqView₃ Γ l l′ l″ A B C [A] [B] [C]
@@ -87,6 +88,7 @@ mutual
   transEqT (emb¹⁰¹ AB) A≡B B≡C = transEqT AB A≡B B≡C
   transEqT (emb¹¹⁰ AB) A≡B B≡C = transEqT AB A≡B B≡C
 
+  -- Transitivty of type equality.
   transEq : ∀ {Γ A B C l l′ l″}
             ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B) ([C] : Γ ⊩⟨ l″ ⟩ C)
           → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -95,6 +97,7 @@ mutual
   transEq [A] [B] [C] A≡B B≡C =
     transEqT (combine (goodCases [A] [B] A≡B) (goodCases [B] [C] B≡C)) A≡B B≡C
 
+  -- Transitivty of type equality with some propositonally equal types.
   transEq′ : ∀ {Γ A B B′ C C′ l l′ l″} → B PE.≡ B′ → C PE.≡ C′
            → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B) ([C] : Γ ⊩⟨ l″ ⟩ C)
            → Γ ⊩⟨ l ⟩  A ≡ B′ / [A]
@@ -136,6 +139,7 @@ mutual
   transNatural-prop (ne [k≡k′]) (ne [k′≡k″]) =
     ne (transEqTermNe [k≡k′] [k′≡k″])
 
+-- Transitivty of term equality.
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
             → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
