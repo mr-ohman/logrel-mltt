@@ -5,7 +5,7 @@
 
 module Tools.PropositionalEquality where
 
--- We reexport Agda′s builtin equality type.
+-- We reexport Agda's builtin equality type.
 
 open import Agda.Builtin.Equality public using (_≡_; refl)
 open import Tools.Empty
