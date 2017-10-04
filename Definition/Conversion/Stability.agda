@@ -15,11 +15,13 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Equality of contexts.
 data ⊢_≡_ : (Γ Δ : Con Term) → Set where
   ε : ⊢ ε ≡ ε
   _∙_ : ∀ {Γ Δ A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → ⊢ Γ ∙ A ≡ Δ ∙ B
 
 mutual
+  -- Syntactic validity and conversion substitution of a context equality.
   contextConvSubst : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
   contextConvSubst ε = ε , ε , id
   contextConvSubst (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
@@ -33,35 +35,38 @@ mutual
                          (wk1-tailId A)
                          (wkEq (step id) (⊢Δ ∙ Δ⊢B) (stabilityEq Γ≡Δ (sym A≡B)))))
 
+  -- Stability of types under equal contexts.
   stability : ∀ {A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A → Δ ⊢ A
   stability Γ≡Δ A =
     let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
         q = substitution A σ ⊢Δ
     in  PE.subst (λ x → _ ⊢ x) (subst-id _) q
 
+  -- Stability of type equality.
   stabilityEq : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ≡ B → Δ ⊢ A ≡ B
   stabilityEq Γ≡Δ A≡B =
     let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
         q = substitutionEq A≡B (substRefl σ) ⊢Δ
     in  PE.subst₂ (λ x y → _ ⊢ x ≡ y) (subst-id _) (subst-id _) q
 
+-- Reflexivity of context equality.
 reflConEq : ∀ {Γ} → ⊢ Γ → ⊢ Γ ≡ Γ
 reflConEq ε = ε
 reflConEq (⊢Γ ∙ ⊢A) = reflConEq ⊢Γ ∙ refl ⊢A
 
+-- Symmetry of context equality.
 symConEq : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Δ ≡ Γ
 symConEq ε = ε
 symConEq (Γ≡Δ ∙ A≡B) = symConEq Γ≡Δ ∙ stabilityEq Γ≡Δ (sym A≡B)
 
+-- Stability of terms.
 stabilityTerm : ∀ {t A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ∷ A → Δ ⊢ t ∷ A
 stabilityTerm Γ≡Δ t =
   let ⊢Γ , ⊢Δ , σ = contextConvSubst Γ≡Δ
       q = substitutionTerm t σ ⊢Δ
   in  PE.subst₂ (λ x y → _ ⊢ x ∷ y) (subst-id _) (subst-id _) q
 
--- Cannot solve:
--- stabilityVar : ∀ {x A Γ Δ} → ⊢ Γ ≡ Δ → x ∷ A ∈ Γ → x ∷ A ∈ Δ
-
+-- Stability of term reduction.
 stabilityRedTerm : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ⇒ u ∷ A → Δ ⊢ t ⇒ u ∷ A
 stabilityRedTerm Γ≡Δ (conv d x) =
   conv (stabilityRedTerm Γ≡Δ d) (stabilityEq Γ≡Δ x)
@@ -83,18 +88,22 @@ stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
   in  natrec-suc (stabilityTerm Γ≡Δ x) (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x₁)
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
 
+-- Stability of type reductions.
 stabilityRed : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A ⇒ B
 stabilityRed Γ≡Δ (univ x) = univ (stabilityRedTerm Γ≡Δ x)
 
+-- Stability of type reduction closures.
 stabilityRed* : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒* B → Δ ⊢ A ⇒* B
 stabilityRed* Γ≡Δ (id x) = id (stability Γ≡Δ x)
 stabilityRed* Γ≡Δ (x ⇨ D) = stabilityRed Γ≡Δ x ⇨ stabilityRed* Γ≡Δ D
 
+-- Stability of term reduction closures.
 stabilityRed*Term : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ⇒* u ∷ A → Δ ⊢ t ⇒* u ∷ A
 stabilityRed*Term Γ≡Δ (id x) = id (stabilityTerm Γ≡Δ x)
 stabilityRed*Term Γ≡Δ (x ⇨ d) = stabilityRedTerm Γ≡Δ x ⇨ stabilityRed*Term Γ≡Δ d
 
 mutual
+  -- Stability of algorithmic equality of neutrals of types in WHNF.
   stability~↑ : ∀ {k l A Γ Δ}
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↑ A
@@ -110,6 +119,7 @@ mutual
               (stabilityConv↑Term Γ≡Δ x₃)
               (stability~↓ Γ≡Δ k~l)
 
+  -- Stability of algorithmic equality of neutrals.
   stability~↓ : ∀ {k l A Γ Δ}
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↓ A
@@ -117,6 +127,7 @@ mutual
   stability~↓ Γ≡Δ ([~] A D whnfA k~l) =
     [~] A (stabilityRed* Γ≡Δ D) whnfA (stability~↑ Γ≡Δ k~l)
 
+  -- Stability of algorithmic equality of types in WHNF.
   stabilityConv↑ : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
                  → Γ ⊢ A [conv↑] B
@@ -125,6 +136,7 @@ mutual
     [↑] A′ B′ (stabilityRed* Γ≡Δ D) (stabilityRed* Γ≡Δ D′) whnfA′ whnfB′
         (stabilityConv↓ Γ≡Δ A′<>B′)
 
+  -- Stability of algorithmic equality of types.
   stabilityConv↓ : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
                  → Γ ⊢ A [conv↓] B
@@ -141,6 +153,7 @@ mutual
     Π-cong (stability Γ≡Δ F) (stabilityConv↑ Γ≡Δ A<>B)
            (stabilityConv↑ (Γ≡Δ ∙ refl F) A<>B₁)
 
+  -- Stability of algorithmic equality of terms in WHNF.
   stabilityConv↑Term : ∀ {t u A Γ Δ}
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↑] u ∷ A
@@ -150,6 +163,7 @@ mutual
                  (stabilityRed*Term Γ≡Δ d′) whnfB whnft′ whnfu′
                  (stabilityConv↓Term Γ≡Δ t<>u)
 
+  -- Stability of algorithmic equality of terms.
   stabilityConv↓Term : ∀ {t u A Γ Δ}
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↓] u ∷ A

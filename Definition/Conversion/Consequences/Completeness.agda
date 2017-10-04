@@ -15,11 +15,13 @@ open import Definition.LogicalRelation.Fundamental
 open import Tools.Product
 
 
+-- Algorithmic equality is derivable from judgemental equality of types.
 completeEq : ∀ {A B Γ} → Γ ⊢ A ≡ B → Γ ⊢ A [conv↑] B
 completeEq A≡B =
   let [Γ] , [A] , [B] , [A≡B] = fundamentalEq A≡B
   in  wellformedEqₛ [Γ] [A] [A≡B]
 
+-- Algorithmic equality is derivable from judgemental equality of terms.
 completeEqTerm : ∀ {t u A Γ} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ t [conv↑] u ∷ A
 completeEqTerm t≡u =
   let [Γ] , modelsTermEq [A] [t] [u] [t≡u] = fundamentalTermEq t≡u
