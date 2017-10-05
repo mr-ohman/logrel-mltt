@@ -11,6 +11,7 @@ open import Definition.LogicalRelation.Substitution
 open import Tools.Product
 
 
+-- Reflexivity of valid types.
 reflₛ : ∀ {A Γ l}
         ([Γ] : ⊩ₛ Γ)
         ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
@@ -18,6 +19,7 @@ reflₛ : ∀ {A Γ l}
 reflₛ [Γ] [A] ⊢Δ [σ] =
   reflEq (proj₁ ([A] ⊢Δ [σ]))
 
+-- Reflexivity of valid terms.
 reflₜₛ : ∀ {A t Γ l}
          ([Γ] : ⊩ₛ Γ)
          ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])

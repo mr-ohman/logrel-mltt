@@ -22,11 +22,13 @@ open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 
+-- Well-formed substitution of types.
 substitution : ∀ {A Γ Δ σ} → Γ ⊢ A → Δ ⊢ₛ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A
 substitution A σ ⊢Δ with fundamental A | fundamentalSubst (wf A) ⊢Δ σ
 substitution A σ ⊢Δ | [Γ] , [A] | [Γ]′ , [σ] =
   wellformed (proj₁ ([A] ⊢Δ (S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ])))
 
+-- Well-formed substitution of type equality.
 substitutionEq : ∀ {A B Γ Δ σ σ′}
                → Γ ⊢ A ≡ B → Δ ⊢ₛ σ ≡ σ′ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A ≡ subst σ′ B
 substitutionEq A≡B σ ⊢Δ with fundamentalEq A≡B | fundamentalSubstEq (wfEq A≡B) ⊢Δ σ
@@ -39,6 +41,7 @@ substitutionEq A≡B σ ⊢Δ | [Γ] , [A] , [B] , [A≡B] | [Γ]′ , [σ] , [�
                             (proj₁ ([B] ⊢Δ [σ′]′)) ([A≡B] ⊢Δ [σ]′)
                             (proj₂ ([B] ⊢Δ [σ]′) [σ′]′ [σ≡σ′]′))
 
+-- Well-formed substitution of terms.
 substitutionTerm : ∀ {t A Γ Δ σ}
                → Γ ⊢ t ∷ A → Δ ⊢ₛ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ t ∷ subst σ A
 substitutionTerm t σ ⊢Δ with fundamentalTerm t | fundamentalSubst (wfTerm t) ⊢Δ σ
@@ -46,6 +49,7 @@ substitutionTerm t σ ⊢Δ | [Γ] , [A] , [t] | [Γ]′ , [σ] =
   let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
   in  wellformedTerm (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([t] ⊢Δ [σ]′))
 
+-- Well-formed substitution of term equality.
 substitutionEqTerm : ∀ {t u A Γ Δ σ σ′}
                    → Γ ⊢ t ≡ u ∷ A → Δ ⊢ₛ σ ≡ σ′ ∷ Γ → ⊢ Δ
                    → Δ ⊢ subst σ t ≡ subst σ′ u ∷ subst σ A
@@ -59,12 +63,14 @@ substitutionEqTerm t≡u σ≡σ′ ⊢Δ with fundamentalTermEq t≡u
                        (transEqTerm (proj₁ ([A] ⊢Δ [σ]′)) ([t≡u] ⊢Δ [σ]′)
                                     (proj₂ ([u] ⊢Δ [σ]′) [σ′]′ [σ≡σ′]′))
 
+-- Reflexivity of well-formed substitution.
 substRefl : ∀ {σ Γ Δ}
           → Δ ⊢ₛ σ ∷ Γ
           → Δ ⊢ₛ σ ≡ σ ∷ Γ
 substRefl id = id
 substRefl (σ , x) = substRefl σ , refl x
 
+-- Weakening of well-formed substitution.
 wkSubst′ : ∀ {ρ σ Γ Δ Δ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ′ : ⊢ Δ′)
            ([ρ] : ρ ∷ Δ′ ⊆ Δ)
            ([σ] : Δ ⊢ₛ σ ∷ Γ)
@@ -74,6 +80,7 @@ wkSubst′ (_∙_ {Γ} {A} ⊢Γ ⊢A) ⊢Δ ⊢Δ′ ρ (tailσ , headσ) =
   wkSubst′ ⊢Γ ⊢Δ ⊢Δ′ ρ tailσ
   , PE.subst (λ x → _ ⊢ _ ∷ x) (wk-subst A) (wkTerm ρ ⊢Δ′ headσ)
 
+-- Weakening of well-formed substitution by one.
 wk1Subst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
             (⊢F : Δ ⊢ F)
             ([σ] : Δ ⊢ₛ σ ∷ Γ)
@@ -81,6 +88,7 @@ wk1Subst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
 wk1Subst′ {F} {σ} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
   wkSubst′ ⊢Γ ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ]
 
+-- Lifting of well-formed substitution.
 liftSubst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
              (⊢F  : Γ ⊢ F)
              ([σ] : Δ ⊢ₛ σ ∷ Γ)
@@ -91,6 +99,7 @@ liftSubst′ {F} {σ} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
   ,   var ⊢Δ∙F (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                          (wk-subst F) here)
 
+-- Well-formed identity substitution.
 idSubst′ : ∀ {Γ} (⊢Γ : ⊢ Γ)
          → Γ ⊢ₛ idSubst ∷ Γ
 idSubst′ ε = id
@@ -98,6 +107,7 @@ idSubst′ (_∙_ {Γ} {A} ⊢Γ ⊢A) =
   wk1Subst′ ⊢Γ ⊢Γ ⊢A (idSubst′ ⊢Γ)
   , PE.subst (λ x → Γ ∙ A ⊢ _ ∷ x) (wk1-tailId A) (var (⊢Γ ∙ ⊢A) here)
 
+-- Well-formed substitution composition.
 substComp′ : ∀ {σ σ′ Γ Δ Δ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ′ : ⊢ Δ′)
              ([σ] : Δ′ ⊢ₛ σ ∷ Δ)
              ([σ′] : Δ ⊢ₛ σ′ ∷ Γ)
@@ -108,22 +118,26 @@ substComp′ (_∙_ {Γ} {A} ⊢Γ ⊢A) ⊢Δ ⊢Δ′ [σ] ([tailσ′] , [hea
   , PE.subst (λ x → _ ⊢ _ ∷ x) (substCompEq A)
              (substitutionTerm [headσ′] [σ] ⊢Δ′)
 
+-- Well-formed singleton substitution of terms.
 singleSubst : ∀ {A t Γ} → Γ ⊢ t ∷ A → Γ ⊢ₛ sgSubst t ∷ Γ ∙ A
 singleSubst {A} t =
   let ⊢Γ = wfTerm t
   in  idSubst′ ⊢Γ , PE.subst (λ x → _ ⊢ _ ∷ x) (PE.sym (subst-id A)) t
 
+-- Well-formed singleton substitution of term equality.
 singleSubstEq : ∀ {A t u Γ} → Γ ⊢ t ≡ u ∷ A
               → Γ ⊢ₛ sgSubst t ≡ sgSubst u ∷ Γ ∙ A
 singleSubstEq {A} t =
   let ⊢Γ = wfEqTerm t
   in  substRefl (idSubst′ ⊢Γ) , PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (PE.sym (subst-id A)) t
 
+-- Well-formed singleton substitution of terms with lifting.
 singleSubst↑ : ∀ {A t Γ} → Γ ∙ A ⊢ t ∷ wk1 A → Γ ∙ A ⊢ₛ consSubst (wk1Subst idSubst) t ∷ Γ ∙ A
 singleSubst↑ {A} t with wfTerm t
 ... | ⊢Γ ∙ ⊢A = wk1Subst′ ⊢Γ ⊢Γ ⊢A (idSubst′ ⊢Γ)
               , PE.subst (λ x → _ ∙ A ⊢ _ ∷ x) (wk1-tailId A) t
 
+-- Well-formed singleton substitution of term equality with lifting.
 singleSubst↑Eq : ∀ {A t u Γ} → Γ ∙ A ⊢ t ≡ u ∷ wk1 A
               → Γ ∙ A ⊢ₛ consSubst (wk1Subst idSubst) t ≡ consSubst (wk1Subst idSubst) u ∷ Γ ∙ A
 singleSubst↑Eq {A} t with wfEqTerm t

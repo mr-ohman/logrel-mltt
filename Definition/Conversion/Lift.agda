@@ -33,6 +33,7 @@ open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
 
+-- Lifting of algorithmic equality of types from WHNF to generic types.
 liftConv : ∀ {A B Γ}
           → Γ ⊢ A [conv↓] B
           → Γ ⊢ A [conv↑] B
@@ -41,6 +42,7 @@ liftConv A<>B =
       whnfA , whnfB = whnfConv↓ A<>B
   in  [↑] _ _ (id ⊢A) (id ⊢B) whnfA whnfB A<>B
 
+-- Lifting of algorithmic equality of terms from WHNF to generic terms.
 liftConvTerm : ∀ {t u A Γ}
              → Γ ⊢ t [conv↓] u ∷ A
              → Γ ⊢ t [conv↑] u ∷ A
@@ -51,6 +53,7 @@ liftConvTerm t<>u =
 
 
 mutual
+  -- Helper function for lifting from neutrals to generic terms in WHNF.
   lift~toConv↓′ : ∀ {t u A A′ Γ l}
                 → Γ ⊩⟨ l ⟩ A′
                 → Γ ⊢ A′ ⇒* A
@@ -86,6 +89,7 @@ mutual
                           k∘0≡l∘0)
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
+  -- Helper function for lifting from neutrals to generic terms.
   lift~toConv↑′ : ∀ {t u A Γ l}
                 → Γ ⊩⟨ l ⟩ A
                 → Γ ⊢ t ~ u ↑ A
@@ -98,6 +102,7 @@ mutual
     in  [↑]ₜ _ _ _ (red D) (id ⊢t) (id ⊢u) whnfB
              (ne neT) (ne neU) (lift~toConv↓′ [A] (red D) t~u↓)
 
+-- Lifting of algorithmic equality of terms from neutrals to generic terms in WHNF.
 lift~toConv↓ : ∀ {t u A Γ}
              → Γ ⊢ t ~ u ↓ A
              → Γ ⊢ t [conv↓] u ∷ A
@@ -105,6 +110,7 @@ lift~toConv↓ ([~] A₁ D whnfB k~l) with fundamental (proj₁ (syntacticRed D)
 lift~toConv↓ ([~] A₁ D whnfB k~l) | [Γ] , [A₁] =
   lift~toConv↓′ (soundness [Γ] [A₁]) D ([~] A₁ D whnfB k~l)
 
+-- Lifting of algorithmic equality of terms from neutrals to generic terms.
 lift~toConv↑ : ∀ {t u A Γ}
              → Γ ⊢ t ~ u ↑ A
              → Γ ⊢ t [conv↑] u ∷ A

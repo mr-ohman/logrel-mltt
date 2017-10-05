@@ -12,6 +12,8 @@ open import Definition.LogicalRelation.Substitution
 
 open import Tools.Product
 
+
+-- Any level can be embedded into the highest level (validity variant).
 maybeEmbₛ : ∀ {l A Γ}
             ([Γ] : ⊩ₛ Γ)
           → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
@@ -23,6 +25,7 @@ maybeEmbₛ {⁰} [Γ] [A] ⊢Δ [σ] =
   ,   (λ [σ′] [σ≡σ′] → irrelevanceEq [σA] [σA]′ (proj₂ ([A] ⊢Δ [σ]) [σ′] [σ≡σ′]))
 maybeEmbₛ {¹} [Γ] [A] = [A]
 
+-- The lowest level can be embedded in any level (validity variant).
 maybeEmbₛ′ : ∀ {l A Γ}
              ([Γ] : ⊩ₛ Γ)
            → Γ ⊩ₛ⟨ ⁰ ⟩ A / [Γ]

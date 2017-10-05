@@ -15,6 +15,7 @@ open import Definition.LogicalRelation.EqView
 open import Tools.Product
 
 
+-- Helper function for successors for specific sound derivations.
 sucTerm′ : ∀ {l Γ n}
            ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
          → Γ ⊩⟨ l ⟩ n ∷ ℕ / ℕ-intr [ℕ]
@@ -27,6 +28,7 @@ sucTerm′ (noemb D) (ℕₜ n [ ⊢t , ⊢u , d ] n≡n prop) =
          (suc (ℕₜ n [ ⊢t , ⊢u , d ] n≡n prop))
 sucTerm′ (emb 0<1 x) [n] = sucTerm′ x [n]
 
+-- Sound natural numbers can be used to construct sound successors.
 sucTerm : ∀ {l Γ n} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)
         → Γ ⊩⟨ l ⟩ n ∷ ℕ / [ℕ]
         → Γ ⊩⟨ l ⟩ suc n ∷ ℕ / [ℕ]
@@ -36,6 +38,7 @@ sucTerm [ℕ] [n] =
                       [ℕ]
                       (sucTerm′ (ℕ-elim [ℕ]) [n]′)
 
+-- Helper function for successor equality for specific sound derivations.
 sucEqTerm′ : ∀ {l Γ n n′}
              ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
            → Γ ⊩⟨ l ⟩ n ≡ n′ ∷ ℕ / ℕ-intr [ℕ]
@@ -48,6 +51,8 @@ sucEqTerm′ (noemb D) (ℕₜ₌ k k′ [ ⊢t , ⊢u , d ]
         (suc (ℕₜ₌ k k′ [ ⊢t , ⊢u , d ] [ ⊢t₁ , ⊢u₁ , d₁ ] t≡u prop))
 sucEqTerm′ (emb 0<1 x) [n≡n′] = sucEqTerm′ x [n≡n′]
 
+-- Sound natural number equality can be used to construct sound equality of
+-- the successors of the numbers.
 sucEqTerm : ∀ {l Γ n n′} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ)
           → Γ ⊩⟨ l ⟩ n ≡ n′ ∷ ℕ / [ℕ]
           → Γ ⊩⟨ l ⟩ suc n ≡ suc n′ ∷ ℕ / [ℕ]

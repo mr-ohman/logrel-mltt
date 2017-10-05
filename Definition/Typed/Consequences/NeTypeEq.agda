@@ -12,13 +12,16 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Helper function for the same variable instance of a context have equal types.
 varTypeEq′ : ∀ {n R T Γ} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
 varTypeEq′ here here = PE.refl
 varTypeEq′ (there n∷R) (there n∷T) rewrite varTypeEq′ n∷R n∷T = PE.refl
 
+-- The same variable instance of a context have equal types.
 varTypeEq : ∀ {x A B Γ} → Γ ⊢ A → Γ ⊢ B → x ∷ A ∈ Γ → x ∷ B ∈ Γ → Γ ⊢ A ≡ B
 varTypeEq A B x∷A x∷B rewrite varTypeEq′ x∷A x∷B = refl A
 
+-- The same neutral term have equal types.
 neTypeEq : ∀ {t A B Γ} → Neutral t → Γ ⊢ t ∷ A → Γ ⊢ t ∷ B → Γ ⊢ A ≡ B
 neTypeEq (var x) (var x₁ x₂) (var x₃ x₄) =
   varTypeEq (syntacticTerm (var x₃ x₂)) (syntacticTerm (var x₃ x₄)) x₂ x₄

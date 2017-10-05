@@ -15,6 +15,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Sound types are well-formed.
 wellformed : ∀ {l Γ A} → Γ ⊩⟨ l ⟩ A → Γ ⊢ A
 wellformed (U′ l′ l< ⊢Γ) = U ⊢Γ
 wellformed (ℕ [ ⊢A , ⊢B , D ]) = ⊢A
@@ -22,6 +23,7 @@ wellformed (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) = ⊢A
 wellformed (Π′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) = ⊢A
 wellformed (emb 0<1 A) = wellformed A
 
+-- Sound type equality respect the equality relation.
 wellformedEq : ∀ {l Γ A B} → ([A] : Γ ⊩⟨ l ⟩ A)
             → Γ ⊩⟨ l ⟩ A ≡ B / [A]
             → Γ ⊢ A ≅ B
@@ -34,6 +36,7 @@ wellformedEq (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
   ≅-red (red D) D′ Π Π A≡B
 wellformedEq (emb 0<1 A) A≡B = wellformedEq A A≡B
 
+-- Sound terms are well-formed.
 wellformedTerm : ∀ {l Γ A t} → ([A] : Γ ⊩⟨ l ⟩ A)
               → Γ ⊩⟨ l ⟩ t ∷ A / [A]
               → Γ ⊢ t ∷ A
@@ -47,6 +50,7 @@ wellformedTerm (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
   conv ⊢t (sym (subset* (red D)))
 wellformedTerm (emb 0<1 A) t = wellformedTerm A t
 
+-- Sound term equality respect the equality relation.
 wellformedTermEq : ∀ {l Γ A t u} → ([A] : Γ ⊩⟨ l ⟩ A)
                 → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
                 → Γ ⊢ t ≅ u ∷ A

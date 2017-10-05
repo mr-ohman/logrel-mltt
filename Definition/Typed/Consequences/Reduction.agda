@@ -18,6 +18,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Helper function where all sound types can be reduced to WHNF.
 fullyReducible′ : ∀ {A Γ l} ([A] : Γ ⊩⟨ l ⟩ A)
                 → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 fullyReducible′ (U′ .⁰ 0<1 ⊢Γ) = U , U , idRed:*: (U ⊢Γ)
@@ -26,10 +27,12 @@ fullyReducible′ (ne′ K D neK K≡K) = K , ne neK , D
 fullyReducible′ (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Π F ▹ G , Π , D
 fullyReducible′ (emb 0<1 [A]) = fullyReducible′ [A]
 
+-- Well-formed types can all be reduced to WHNF.
 fullyReducible : ∀ {A Γ} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 fullyReducible a with fundamental a
 ... | [Γ] , [A] = fullyReducible′ (soundness [Γ] [A])
 
+-- Helper function where sound all terms can be reduced to WHNF.
 fullyReducibleTerm′ : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
                 → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 fullyReducibleTerm′ (U x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
@@ -42,6 +45,7 @@ fullyReducibleTerm′ (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d fun
   f , functionWhnf funcF , convRed:*: d (sym (subset* (red D)))
 fullyReducibleTerm′ (emb 0<1 [A]) [a] = fullyReducibleTerm′ [A] [a]
 
+-- Well-formed terms can all be reduced to WHNF.
 fullyReducibleTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 fullyReducibleTerm {a} {A} ⊢a with fundamentalTerm ⊢a
 ... | [Γ] , [A] , [a] =

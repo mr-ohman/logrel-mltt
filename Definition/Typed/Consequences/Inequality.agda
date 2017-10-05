@@ -49,6 +49,7 @@ U≢ℕ-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩�
                 (λ x → extractMaybeEmb (ℕ-elim′ D x))
                 U≢ℕ′
 
+-- U and ℕ cannot be judgmentally equal.
 U≢ℕ : ∀ {Γ} → Γ ⊢ U ≡ ℕ → ⊥
 U≢ℕ U≡ℕ =
   let _ , ⊢ℕ = syntacticEq U≡ℕ
@@ -67,6 +68,7 @@ U≢Π-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U)
                 (λ x → extractMaybeEmb (Π-elim′ D x))
                 U≢Π′
 
+-- U and Π F ▹ G for any F and G cannot be judgmentally equal.
 U≢Π : ∀ {F G Γ} → Γ ⊢ U ≡ Π F ▹ G → ⊥
 U≢Π U≡Π =
   let _ , ⊢Π = syntacticEq U≡Π
@@ -84,6 +86,7 @@ U≢ne-red D neK = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ �
                      (λ x → extractMaybeEmb (ne-elim′ D neK x))
                      U≢ne′
 
+-- U and K for any neutral K cannot be judgmentally equal.
 U≢ne : ∀ {K Γ} → Neutral K → Γ ⊢ U ≡ K → ⊥
 U≢ne neK U≡K =
   let _ , ⊢K = syntacticEq U≡K
@@ -102,6 +105,7 @@ U≢ne neK U≡K =
                    (λ x → extractMaybeEmb (Π-elim′ D′ x))
                    ℕ≢Π′
 
+-- ℕ and Π F ▹ G for any F and G cannot be judgmentally equal.
 ℕ≢Π : ∀ {F G Γ} → Γ ⊢ ℕ ≡ Π F ▹ G → ⊥
 ℕ≢Π ℕ≡Π =
   let ⊢ℕ , ⊢Π = syntacticEq ℕ≡Π
@@ -119,6 +123,7 @@ U≢ne neK U≡K =
                         (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
                         ℕ≢ne′
 
+-- ℕ and K for any neutral K cannot be judgmentally equal.
 ℕ≢ne : ∀ {K Γ} → Neutral K → Γ ⊢ ℕ ≡ K → ⊥
 ℕ≢ne neK ℕ≡K =
   let ⊢ℕ , ⊢K = syntacticEq ℕ≡K
@@ -138,6 +143,7 @@ U≢ne neK U≡K =
                         (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
                         Π≢ne′
 
+-- Π F ▹ G and K for any F and G and neutral K cannot be judgmentally equal.
 Π≢ne : ∀ {F G K Γ} → Neutral K → Γ ⊢ Π F ▹ G ≡ K → ⊥
 Π≢ne neK Π≡K =
   let ⊢Π , ⊢K = syntacticEq Π≡K

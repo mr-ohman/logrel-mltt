@@ -17,9 +17,11 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Validity of the universe type.
 Uₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ ¹ ⟩ U / [Γ]
 Uₛ [Γ] ⊢Δ [σ] = U (U ⁰ 0<1 ⊢Δ) , λ _ x₂ → PE.refl
 
+-- Valid terms of type U are valid types.
 univₛ : ∀ {A Γ l l′} ([Γ] : ⊩ₛ Γ)
         ([U] : Γ ⊩ₛ⟨ l ⟩ U / [Γ])
       → Γ ⊩ₛ⟨ l ⟩ A ∷ U / [Γ] / [U]
@@ -29,6 +31,7 @@ univₛ {l′ = l′} [Γ] [U] [A] ⊢Δ [σ] =
   in  [A]₁ , (λ [σ′] [σ≡σ′] → univEqEq (proj₁ ([U] ⊢Δ [σ])) [A]₁
                                        ((proj₂ ([A] ⊢Δ [σ])) [σ′] [σ≡σ′]))
 
+-- Valid term equality of type U is valid type equality.
 univEqₛ : ∀ {A B Γ l l′} ([Γ] : ⊩ₛ Γ)
           ([U] : Γ ⊩ₛ⟨ l′ ⟩ U / [Γ])
           ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])

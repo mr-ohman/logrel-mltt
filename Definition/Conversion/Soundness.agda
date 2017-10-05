@@ -16,6 +16,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Algorithmic equality of neutrals is well-formed.
   soundness~↑ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
   soundness~↑ (var x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
   soundness~↑ (app k~l x₁) = app-cong (soundness~↓ k~l) (soundnessConv↑Term x₁)
@@ -23,13 +24,16 @@ mutual
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
 
+  -- Algorithmic equality of neutrals in WHNF is well-formed.
   soundness~↓ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↓ A → Γ ⊢ k ≡ l ∷ A
   soundness~↓ ([~] A₁ D whnfA k~l) = conv (soundness~↑ k~l) (subset* D)
 
+  -- Algorithmic equality of types is well-formed.
   soundnessConv↑ : ∀ {A B Γ} → Γ ⊢ A [conv↑] B → Γ ⊢ A ≡ B
   soundnessConv↑ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
     trans (subset* D) (trans (soundnessConv↓ A′<>B′) (sym (subset* D′)))
 
+  -- Algorithmic equality of types in WHNF is well-formed.
   soundnessConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ A ≡ B
   soundnessConv↓ (U-refl ⊢Γ) = refl (U ⊢Γ)
   soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕ ⊢Γ)
@@ -37,6 +41,7 @@ mutual
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
 
+  -- Algorithmic equality of terms is well-formed.
   soundnessConv↑Term : ∀ {a b A Γ} → Γ ⊢ a [conv↑] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
     conv (trans (subset*Term d)
@@ -44,6 +49,7 @@ mutual
                        (sym (subset*Term d′))))
          (sym (subset* D))
 
+  -- Algorithmic equality of terms in WHNF is well-formed.
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
   soundnessConv↓Term (ne-ins t u x x₁) =

@@ -33,6 +33,7 @@ zero≢one′ : ∀ {Γ l} ([ℕ] : Γ ⊩⟨ l ⟩ ℕ) → Γ ⊩⟨ l ⟩ zer
 zero≢one′ [ℕ] [0≡1] =
   zero≢one″ (ℕ-elim [ℕ]) (irrelevanceEqTerm [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [0≡1])
 
+-- Zero cannot be judgmentally equal to one.
 zero≢one : ∀ {Γ} → Γ ⊢ zero ≡ suc zero ∷ ℕ → ⊥
 zero≢one 0≡1 = let [Γ] , modelsTermEq [ℕ] _ _ [0≡1] = fundamentalTermEq 0≡1
            in  zero≢one′ (soundness [Γ] [ℕ])

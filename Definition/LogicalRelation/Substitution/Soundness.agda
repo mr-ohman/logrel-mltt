@@ -16,6 +16,7 @@ open import Definition.LogicalRelation.Substitution.Properties
 open import Tools.Product
 
 
+-- Valid types are sound.
 soundness : ∀ {A Γ l}
             ([Γ] : ⊩ₛ Γ)
           → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
@@ -25,6 +26,7 @@ soundness [Γ] [A] =
       [id] = idSubstS [Γ]
   in  irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ [id]))
 
+-- Valid type equality is sound.
 soundnessEq : ∀ {A B Γ l}
               ([Γ] : ⊩ₛ Γ)
               ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
@@ -37,6 +39,7 @@ soundnessEq {A = A} [Γ] [A] [A≡B] =
   in  irrelevanceEq″ (subst-id _) (subst-id _)
                       (proj₁ ([A] ⊢Γ [id])) [σA] ([A≡B] ⊢Γ [id])
 
+-- Valid terms are sound.
 soundnessTerm : ∀ {t A Γ l}
                 ([Γ] : ⊩ₛ Γ)
                 ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
@@ -49,6 +52,7 @@ soundnessTerm {A = A} [Γ] [A] [t] =
   in  irrelevanceTerm″ (subst-id _) (subst-id _)
                         (proj₁ ([A] ⊢Γ [id])) [σA] (proj₁ ([t] ⊢Γ [id]))
 
+-- Valid term equality is sound.
 soundnessEqTerm : ∀ {t u A Γ l}
                 ([Γ] : ⊩ₛ Γ)
                 ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])

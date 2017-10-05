@@ -13,12 +13,14 @@ open import Definition.Conversion.Lift
 import Tools.PropositionalEquality as PE
 
 
+-- Algorithmic equality of terms in WHNF of type U are equal as types.
 univConv↓ : ∀ {A B Γ}
           → Γ ⊢ A [conv↓] B ∷ U
           → Γ ⊢ A [conv↓] B
 univConv↓ (ne-ins t u () x)
 univConv↓ (univ x x₁ x₂) = x₂
 
+-- Algorithmic equality of terms of type U are equal as types.
 univConv↑ : ∀ {A B Γ}
       → Γ ⊢ A [conv↑] B ∷ U
       → Γ ⊢ A [conv↑] B

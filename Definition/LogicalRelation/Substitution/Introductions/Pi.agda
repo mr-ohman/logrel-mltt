@@ -27,6 +27,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Validity of Π.
 Πₛ : ∀ {F G Γ l}
      ([Γ] : ⊩ₛ Γ)
      ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -138,6 +139,7 @@ import Tools.PropositionalEquality as PE
                                              (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ′] , [a]″)
                                              [ρσa≡ρσ′a])))
 
+-- Validity of Π-congurence.
 Π-congₛ : ∀ {F G H E Γ l}
           ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -180,6 +182,7 @@ import Tools.PropositionalEquality as PE
                                 ([G]′ [ρ] ⊢Δ₁ [a])
                                 ([G≡E] ⊢Δ₁ [aρσ]))
 
+-- Validity of Π as a term.
 Πₜₛ : ∀ {F G Γ} ([Γ] : ⊩ₛ Γ)
       ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
       ([U] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ U / [Γ] ∙ [F])
@@ -239,6 +242,7 @@ import Tools.PropositionalEquality as PE
                  Π Π (≅ₜ-Π-cong ⊢F ⊢F≡F′ ⊢G≡G′)
                  (proj₁ [ΠFG]) (proj₁ [ΠFG]′) (proj₂ [ΠFG] [σ′] [σ≡σ′]))
 
+-- Validity of Π-congurence as a term equality.
 Π-congₜₛ : ∀ {F G H E Γ}
            ([Γ] : ⊩ₛ Γ)
            ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
@@ -292,6 +296,7 @@ import Tools.PropositionalEquality as PE
           (proj₁ (Πₛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))
           (Π-congₛ {F} {G} {H} {E} [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ])
 
+-- Validity of non-dependant function types.
 ▹▹ₛ : ∀ {F G Γ l}
       ([Γ] : ⊩ₛ Γ)
       ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -300,6 +305,7 @@ import Tools.PropositionalEquality as PE
 ▹▹ₛ {F} {G} [Γ] [F] [G] =
   Πₛ {F} {wk1 G} [Γ] [F] (wk1ₛ {G} {F} [Γ] [F] [G])
 
+-- Validity of non-dependant function type congurence.
 ▹▹-congₛ : ∀ {F F′ G G′ Γ l}
            ([Γ] : ⊩ₛ Γ)
            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])

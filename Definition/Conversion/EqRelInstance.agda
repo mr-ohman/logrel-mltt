@@ -30,8 +30,11 @@ import Tools.PropositionalEquality as PE
 open import Tools.Function
 
 
+-- Algorithmic equality of neutrals with injected conversion.
 data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   ↑ : ∀ {B} → Γ ⊢ A ≡ B → Γ ⊢ k ~ l ↑ B → Γ ⊢ k ~ l ∷ A
+
+-- Properties of algorithmic equality of neutrals with injected conversion.
 
 ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 ~-var x =
@@ -99,6 +102,8 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       Γ ⊢ k ~ l ∷ A → Γ ⊢ k [conv↑] l ∷ A
 ~-to-conv (↑ x x₁) = convConvTerm (lift~toConv↑ x₁) (sym x)
 
+
+-- Algorithmic equality instance of the generic equality relation.
 instance eqRelInstance : EqRelSet
 eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       ~-to-conv soundnessConv↑ soundnessConv↑Term

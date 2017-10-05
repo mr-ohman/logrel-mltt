@@ -13,6 +13,7 @@ open import Tools.Nat
 open import Tools.Product
 
 
+-- Congurence of the type of the successor case in natrec.
 sucCong : ∀ {F G Γ} → Γ ∙ ℕ ⊢ F ≡ G
         → Γ ⊢ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
             ≡ Π ℕ ▹ (G ▹▹ G [ suc (var zero) ]↑)

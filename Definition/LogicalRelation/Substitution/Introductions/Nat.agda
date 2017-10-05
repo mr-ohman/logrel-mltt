@@ -17,9 +17,11 @@ open import Tools.Unit
 open import Tools.Product
 
 
+-- Validity of the natural number type.
 ℕₛ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ]
 ℕₛ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ _ x₂ → id (ℕ ⊢Δ)
 
+-- Validity of the natural number type as a term.
 ℕₜₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
     → Γ ⊩ₛ⟨ ¹ ⟩ ℕ ∷ U / [Γ] / Uₛ [Γ]
 ℕₜₛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
@@ -28,6 +30,7 @@ open import Tools.Product
                  ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕ ℕ
                                    (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
+-- Validity of zero.
 zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
       → Γ ⊩ₛ⟨ ¹ ⟩ zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] =
@@ -35,6 +38,7 @@ zeroₛ [Γ] ⊢Δ [σ] =
     , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
                     (≅ₜ-zerorefl ⊢Δ) zero)
 
+-- Validity of successor of valid natural numbers.
 sucₛ : ∀ {Γ n l} ([Γ] : ⊩ₛ Γ)
          ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
      → Γ ⊩ₛ⟨ l ⟩ n ∷ ℕ / [Γ] / [ℕ]

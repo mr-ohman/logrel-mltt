@@ -23,6 +23,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Symmetry of algorithmic equality of neutrals.
   sym~↑ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ
         → Γ ⊢ t ~ u ↑ A
         → ∃ λ B → Γ ⊢ A ≡ B × Δ ⊢ u ~ t ↑ B
@@ -51,6 +52,7 @@ mutual
                (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
                (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
 
+  -- Symmetry of algorithmic equality of neutrals of types in WHNF.
   sym~↓ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A
          → ∃ λ B → Whnf B × Γ ⊢ A ≡ B × Δ ⊢ u ~ t ↓ B
   sym~↓ Γ≡Δ ([~] A₁ D whnfA k~l) =
@@ -60,11 +62,13 @@ mutual
         A≡B′ = trans (sym (subset* D)) (trans A≡B (subset* (red D′)))
     in  B′ , whnfB′ , A≡B′ , [~] B (stabilityRed* Γ≡Δ (red D′)) whnfB′ k~l′
 
+  -- Symmetry of algorithmic equality of types.
   symConv↑ : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A [conv↑] B → Δ ⊢ B [conv↑] A
   symConv↑ Γ≡Δ ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) =
     [↑] B′ A′ (stabilityRed* Γ≡Δ D′) (stabilityRed* Γ≡Δ D) whnfB′ whnfA′
         (symConv↓ Γ≡Δ A′<>B′)
 
+  -- Symmetry of algorithmic equality of types in WHNF.
   symConv↓ : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A [conv↓] B → Δ ⊢ B [conv↓] A
   symConv↓ Γ≡Δ (U-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
@@ -82,11 +86,13 @@ mutual
     in  Π-cong ⊢H (symConv↑ Γ≡Δ A<>B)
                   (symConv↑ (Γ≡Δ ∙ F≡H) A<>B₁)
 
+  -- Symmetry of algorithmic equality of terms.
   symConv↑Term : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↑] u ∷ A → Δ ⊢ u [conv↑] t ∷ A
   symConv↑Term Γ≡Δ ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
     [↑]ₜ B u′ t′ (stabilityRed* Γ≡Δ D) (stabilityRed*Term Γ≡Δ d′)
          (stabilityRed*Term Γ≡Δ d) whnfB whnfu′ whnft′ (symConv↓Term Γ≡Δ t<>u)
 
+  -- Symmetry of algorithmic equality of terms in WHNF.
   symConv↓Term : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↓] u ∷ A → Δ ⊢ u [conv↓] t ∷ A
   symConv↓Term Γ≡Δ (ℕ-ins t~u) =
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
@@ -105,11 +111,13 @@ mutual
     fun-ext (stability Γ≡Δ x) (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₁)
             y₁ y (symConv↑Term (Γ≡Δ ∙ refl x) t<>u)
 
+-- Symmetry of algorithmic equality of types with preserved context.
 symConv : ∀ {A B Γ} → Γ ⊢ A [conv↑] B → Γ ⊢ B [conv↑] A
 symConv A<>B =
   let ⊢Γ = wfEq (soundnessConv↑ A<>B)
   in  symConv↑ (reflConEq ⊢Γ) A<>B
 
+-- Symmetry of algorithmic equality of terms with preserved context.
 symConvTerm : ∀ {t u A Γ} → Γ ⊢ t [conv↑] u ∷ A → Γ ⊢ u [conv↑] t ∷ A
 symConvTerm t<>u =
   let ⊢Γ = wfEqTerm (soundnessConv↑Term t<>u)

@@ -15,30 +15,36 @@ open import Definition.Typed.Consequences.Injectivity
 open import Tools.Product
 
 
+-- Syntactic validity of type equality.
 syntacticEq : ∀ {A B Γ} → Γ ⊢ A ≡ B → Γ ⊢ A × Γ ⊢ B
 syntacticEq A≡B with fundamentalEq A≡B
 syntacticEq A≡B | [Γ] , [A] , [B] , [A≡B] =
   wellformedₛ [Γ] [A] , wellformedₛ [Γ] [B]
 
+-- Syntactic validity of terms.
 syntacticTerm : ∀ {t A Γ} → Γ ⊢ t ∷ A → Γ ⊢ A
 syntacticTerm t with fundamentalTerm t
 syntacticTerm t | [Γ] , [A] , [t] = wellformedₛ [Γ] [A]
 
+-- Syntactic validity of term equality.
 syntacticEqTerm : ∀ {t u A Γ} → Γ ⊢ t ≡ u ∷ A → Γ ⊢ A × (Γ ⊢ t ∷ A × Γ ⊢ u ∷ A)
 syntacticEqTerm t≡u with fundamentalTermEq t≡u
 syntacticEqTerm t≡u | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
   wellformedₛ [Γ] [A] , wellformedTermₛ [Γ] [A] [t] , wellformedTermₛ [Γ] [A] [u]
 
+-- Syntactic validity of type reductions.
 syntacticRed : ∀ {A B Γ} → Γ ⊢ A ⇒* B → Γ ⊢ A × Γ ⊢ B
 syntacticRed D with fundamentalEq (subset* D)
 syntacticRed D | [Γ] , [A] , [B] , [A≡B] =
   wellformedₛ [Γ] [A] , wellformedₛ [Γ] [B]
 
+-- Syntactic validity of term reductions.
 syntacticRedTerm : ∀ {t u A Γ} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ A × (Γ ⊢ t ∷ A × Γ ⊢ u ∷ A)
 syntacticRedTerm d with fundamentalTermEq (subset*Term d)
 syntacticRedTerm d | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
   wellformedₛ [Γ] [A] , wellformedTermₛ [Γ] [A] [t] , wellformedTermₛ [Γ] [A] [u]
 
+-- Syntactic validity of Π-types.
 syntacticΠ : ∀ {Γ F G} → Γ ⊢ Π F ▹ G → Γ ⊢ F × Γ ∙ F ⊢ G
 syntacticΠ ΠFG with injectivity (refl ΠFG)
 syntacticΠ ΠFG | F≡F , G≡G = proj₁ (syntacticEq F≡F) , proj₁ (syntacticEq G≡G)

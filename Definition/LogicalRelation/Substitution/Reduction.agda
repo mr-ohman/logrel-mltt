@@ -11,6 +11,7 @@ open import Definition.LogicalRelation.Substitution
 open import Tools.Product
 
 
+-- Weak head expansion of valid terms.
 redSubstTermₛ : ∀ {A t u l Γ}
               → ([Γ] : ⊩ₛ Γ)
               → Γ ⊩ₛ t ⇒ u ∷ A / [Γ]

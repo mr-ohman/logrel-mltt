@@ -8,6 +8,7 @@ open import Definition.Typed.Properties
 open import Definition.Conversion
 
 
+-- Weak head expansion of algorithmic equality of types.
 reductionConv↑ : ∀ {A A′ B B′ Γ}
                → Γ ⊢ A ⇒* A′
                → Γ ⊢ B ⇒* B′
@@ -19,6 +20,7 @@ reductionConv↑ x x₁ x₂ x₃ ([↑] A″ B″ D D′ whnfA′ whnfB′ A′
               rewrite whnfRed* D x₂ | whnfRed* D′ x₃ =
   [↑] A″ B″ x x₁ whnfA′ whnfB′ A′<>B′
 
+-- Weak head expansion of algorithmic equality of terms.
 reductionConv↑Term : ∀ {t t′ u u′ A B Γ}
                    → Γ ⊢ A ⇒* B
                    → Γ ⊢ t ⇒* t′ ∷ B

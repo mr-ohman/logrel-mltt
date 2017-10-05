@@ -19,12 +19,14 @@ open import Definition.LogicalRelation.Substitution.Properties
 open import Tools.Product
 
 
+-- Valid types are well-formed.
 wellformedₛ : ∀ {A l Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ A / [Γ] → Γ ⊢ A
 wellformedₛ [Γ] [A] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
   in  wellformed (irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ idSubst)))
 
+-- Valid type equality respects the equality relation.
 wellformedEqₛ : ∀ {A B l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
               → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≅ B
 wellformedEqₛ [Γ] [A] [A≡B] =
@@ -35,6 +37,7 @@ wellformedEqₛ [Γ] [A] [A≡B] =
   in  wellformedEq [idA]′ (irrelevanceEq″ (subst-id _) (subst-id _)
                                            [idA] [idA]′ ([A≡B] ⊢Γ idSubst))
 
+-- Valid terms are well-formed.
 wellformedTermₛ : ∀ {t A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
                → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
 wellformedTermₛ [Γ] [A] [t] =
@@ -46,6 +49,7 @@ wellformedTermₛ [Γ] [A] [t] =
                     (irrelevanceTerm″ (subst-id _) (subst-id _)
                                        [idA] [idA]′ (proj₁ ([t] ⊢Γ idSubst)))
 
+-- Valid term equality respects the equality relation.
 wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
                → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
 wellformedEqTermₛ [Γ] [A] [t≡u] =

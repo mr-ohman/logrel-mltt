@@ -10,6 +10,7 @@ open import Tools.Product
 
 
 mutual
+  -- Extraction of neutrality from algorithmic equality of neutrals.
   ne~↑ : ∀ {t u A Γ}
        → Γ ⊢ t ~ u ↑ A
        → Neutral t × Neutral u
@@ -19,11 +20,14 @@ mutual
   ne~↑ (natrec x x₁ x₂ x₃) = let _ , q , w = ne~↓ x₃
                              in  natrec q , natrec w
 
+  -- Extraction of neutrality and WHNF from algorithmic equality of neutrals
+  -- with type in WHNF.
   ne~↓ : ∀ {t u A Γ}
        → Γ ⊢ t ~ u ↓ A
        → Whnf A × Neutral t × Neutral u
   ne~↓ ([~] A₁ D whnfB k~l) = whnfB , ne~↑ k~l
 
+-- Extraction of WHNF from algorithmic equality of types in WHNF.
 whnfConv↓ : ∀ {A B Γ}
           → Γ ⊢ A [conv↓] B
           → Whnf A × Whnf B
@@ -33,6 +37,7 @@ whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
                    in  ne neA , ne neB
 whnfConv↓ (Π-cong x x₁ x₂) = Π , Π
 
+-- Extraction of WHNF from algorithmic equality of terms in WHNF.
 whnfConv↓Term : ∀ {t u A Γ}
               → Γ ⊢ t [conv↓] u ∷ A
               → Whnf A × Whnf t × Whnf u

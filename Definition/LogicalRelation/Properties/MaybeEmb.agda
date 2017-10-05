@@ -10,12 +10,14 @@ open import Definition.Typed
 open import Definition.LogicalRelation
 
 
+-- Any level can be embedded into the highest level.
 maybeEmb : ∀ {l A Γ}
          → Γ ⊩⟨ l ⟩ A
          → Γ ⊩⟨ ¹ ⟩ A
 maybeEmb {⁰} [A] = emb 0<1 [A]
 maybeEmb {¹} [A] = [A]
 
+-- The lowest level can be embedded in any level.
 maybeEmb′ : ∀ {l A Γ}
           → Γ ⊩⟨ ⁰ ⟩ A
           → Γ ⊩⟨ l ⟩ A

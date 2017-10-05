@@ -20,6 +20,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Conversion of algorithmic equality.
   convConv↑Term : ∀ {t u A B Γ Δ}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
@@ -34,6 +35,7 @@ mutual
              (stabilityRed*Term Γ≡Δ (conv* d′ B₁≡B′)) whnfB′ whnft′ whnfu′
              (convConv↓Term Γ≡Δ B₁≡B′ whnfB′ t<>u)
 
+  -- Conversion of algorithmic equality with terms and types in WHNF.
   convConv↓Term : ∀ {t u A B Γ Δ}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
@@ -61,6 +63,7 @@ mutual
                 (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
                 (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
 
+-- Conversion of algorithmic equality with the same context.
 convConvTerm : ∀ {t u A B Γ}
               → Γ ⊢ t [conv↑] u ∷ A
               → Γ ⊢ A ≡ B

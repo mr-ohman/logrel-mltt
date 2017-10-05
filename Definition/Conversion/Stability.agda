@@ -103,7 +103,7 @@ stabilityRed*Term Γ≡Δ (id x) = id (stabilityTerm Γ≡Δ x)
 stabilityRed*Term Γ≡Δ (x ⇨ d) = stabilityRedTerm Γ≡Δ x ⇨ stabilityRed*Term Γ≡Δ d
 
 mutual
-  -- Stability of algorithmic equality of neutrals of types in WHNF.
+  -- Stability of algorithmic equality of neutrals.
   stability~↑ : ∀ {k l A Γ Δ}
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↑ A
@@ -119,7 +119,7 @@ mutual
               (stabilityConv↑Term Γ≡Δ x₃)
               (stability~↓ Γ≡Δ k~l)
 
-  -- Stability of algorithmic equality of neutrals.
+  -- Stability of algorithmic equality of neutrals of types in WHNF.
   stability~↓ : ∀ {k l A Γ Δ}
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↓ A
@@ -127,7 +127,7 @@ mutual
   stability~↓ Γ≡Δ ([~] A D whnfA k~l) =
     [~] A (stabilityRed* Γ≡Δ D) whnfA (stability~↑ Γ≡Δ k~l)
 
-  -- Stability of algorithmic equality of types in WHNF.
+  -- Stability of algorithmic equality of types.
   stabilityConv↑ : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
                  → Γ ⊢ A [conv↑] B
@@ -136,7 +136,7 @@ mutual
     [↑] A′ B′ (stabilityRed* Γ≡Δ D) (stabilityRed* Γ≡Δ D′) whnfA′ whnfB′
         (stabilityConv↓ Γ≡Δ A′<>B′)
 
-  -- Stability of algorithmic equality of types.
+  -- Stability of algorithmic equality of types in WHNF.
   stabilityConv↓ : ∀ {A B Γ Δ}
                  → ⊢ Γ ≡ Δ
                  → Γ ⊢ A [conv↓] B
@@ -153,7 +153,7 @@ mutual
     Π-cong (stability Γ≡Δ F) (stabilityConv↑ Γ≡Δ A<>B)
            (stabilityConv↑ (Γ≡Δ ∙ refl F) A<>B₁)
 
-  -- Stability of algorithmic equality of terms in WHNF.
+  -- Stability of algorithmic equality of terms.
   stabilityConv↑Term : ∀ {t u A Γ Δ}
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↑] u ∷ A
@@ -163,7 +163,7 @@ mutual
                  (stabilityRed*Term Γ≡Δ d′) whnfB whnft′ whnfu′
                  (stabilityConv↓Term Γ≡Δ t<>u)
 
-  -- Stability of algorithmic equality of terms.
+  -- Stability of algorithmic equality of terms in WHNF.
   stabilityConv↓Term : ∀ {t u A Γ Δ}
                      → ⊢ Γ ≡ Δ
                      → Γ ⊢ t [conv↓] u ∷ A

@@ -19,7 +19,7 @@ infix 10 _⊢_[conv↑]_∷_
 infix 10 _⊢_[conv↓]_∷_
 
 mutual
-  -- Neutral equality with types in WHNF.
+  -- Neutral equality.
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
     var       : ∀ {x y A}
               → Γ ⊢ var x ∷ A
@@ -36,7 +36,7 @@ mutual
               → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
 
-  -- Neutral equality.
+  -- Neutral equality with types in WHNF.
   record _⊢_~_↓_ (Γ : Con Term) (k l B : Term) : Set where
     inductive
     constructor [~]
@@ -46,7 +46,7 @@ mutual
       whnfB : Whnf B
       k~l   : Γ ⊢ k ~ l ↑ A
 
-  -- Type equality with types in WHNF.
+  -- Type equality.
   record _⊢_[conv↑]_ (Γ : Con Term) (A B : Term) : Set where
     inductive
     constructor [↑]
@@ -58,7 +58,7 @@ mutual
       whnfB′ : Whnf B′
       A′<>B′ : Γ ⊢ A′ [conv↓] B′
 
-  -- Type equality.
+  -- Type equality with types in WHNF.
   data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
@@ -71,7 +71,7 @@ mutual
               → Γ ∙ F ⊢ G [conv↑] E
               → Γ ⊢ Π F ▹ G [conv↓] Π H ▹ E
 
-  -- Term equality with types and terms in WHNF.
+  -- Term equality.
   record _⊢_[conv↑]_∷_ (Γ : Con Term) (t u A : Term) : Set where
     inductive
     constructor [↑]ₜ
@@ -85,7 +85,7 @@ mutual
       whnfu′  : Whnf u′
       t<>u    : Γ ⊢ t′ [conv↓] u′ ∷ B
 
-  -- Term equality.
+  -- Term equality with types and terms in WHNF.
   data _⊢_[conv↓]_∷_ (Γ : Con Term) : (t u A : Term) → Set where
     ℕ-ins     : ∀ {k l}
               → Γ ⊢ k ~ l ↓ ℕ

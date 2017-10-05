@@ -16,6 +16,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 mutual
+  -- Weakening of algorithmic equality of neutrals.
   wk~↑ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
       → Γ ⊢ t ~ u ↑ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↑ U.wk ρ A
@@ -32,12 +33,14 @@ mutual
                                (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
                      (wk~↓ [ρ] ⊢Δ t~u))
 
+  -- Weakening of algorithmic equality of neutrals in WHNF.
   wk~↓ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
       → Γ ⊢ t ~ u ↓ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↓ U.wk ρ A
   wk~↓ {ρ} [ρ] ⊢Δ ([~] A₁ D whnfA k~l) =
     [~] (U.wk ρ A₁) (wkRed* [ρ] ⊢Δ D) (wkWhnf ρ whnfA) (wk~↑ [ρ] ⊢Δ k~l)
 
+  -- Weakening of algorithmic equality of types.
   wkConv↑ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
           → Γ ⊢ A [conv↑] B
           → Δ ⊢ U.wk ρ A [conv↑] U.wk ρ B
@@ -45,6 +48,7 @@ mutual
     [↑] (U.wk ρ A′) (U.wk ρ B′) (wkRed* [ρ] ⊢Δ D) (wkRed* [ρ] ⊢Δ D′)
         (wkWhnf ρ whnfA′) (wkWhnf ρ whnfB′) (wkConv↓ [ρ] ⊢Δ A′<>B′)
 
+  -- Weakening of algorithmic equality of types in WHNF.
   wkConv↓ : ∀ {ρ A B Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
          → Γ ⊢ A [conv↓] B
          → Δ ⊢ U.wk ρ A [conv↓] U.wk ρ B
@@ -55,6 +59,7 @@ mutual
     let ⊢ρF = wk ρ ⊢Δ x
     in  Π-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
 
+  -- Weakening of algorithmic equality of terms.
   wkConv↑Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
              → Γ ⊢ t [conv↑] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↑] U.wk ρ u ∷ U.wk ρ A
@@ -64,6 +69,7 @@ mutual
          (wkWhnf ρ whnfB) (wkWhnf ρ whnft′) (wkWhnf ρ whnfu′)
          (wkConv↓Term [ρ] ⊢Δ t<>u)
 
+  -- Weakening of algorithmic equality of terms in WHNF.
   wkConv↓Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
              → Γ ⊢ t [conv↓] u ∷ A
              → Δ ⊢ U.wk ρ t [conv↓] U.wk ρ u ∷ U.wk ρ A

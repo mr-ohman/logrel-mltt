@@ -15,6 +15,8 @@ open import Tools.Product
 
 import Tools.PropositionalEquality as PE
 
+
+-- Weakening of valid types by one.
 wk1ₛ : ∀ {A F Γ l}
       ([Γ] : ⊩ₛ Γ)
       ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -30,6 +32,7 @@ wk1ₛ {A} [Γ] [F] [A] ⊢Δ [σ] =
                          [σA] [σA]′
                          (proj₂ ([A] ⊢Δ (proj₁ [σ])) (proj₁ [σ′]) (proj₁ [σ≡σ′])))
 
+-- Weakening of valid type equality by one.
 wk1Eqₛ : ∀ {A B F Γ l}
          ([Γ] : ⊩ₛ Γ)
          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])

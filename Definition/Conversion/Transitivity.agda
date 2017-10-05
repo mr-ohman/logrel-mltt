@@ -25,6 +25,7 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
+  -- Transitivity of algorithmic equality of neutrals.
   trans~↑ : ∀ {t u v A B Γ Δ}
          → ⊢ Γ ≡ Δ
          → Γ ⊢ t ~ u ↑ A
@@ -53,6 +54,7 @@ mutual
     in  natrec A<>C a₀<>c₀ aₛ<>cₛ t~v
     ,   substTypeEq A≡B (soundness~↓ t~u)
 
+  -- Transitivity of algorithmic equality of neutrals with types in WHNF.
   trans~↓ : ∀ {t u v A B Γ Δ}
           → ⊢ Γ ≡ Δ
           → Γ ⊢ t ~ u ↓ A
@@ -66,6 +68,7 @@ mutual
               (trans A≡B
                      (subset* (stabilityRed* (symConEq Γ≡Δ) D₁)))
 
+  -- Transitivity of algorithmic equality of types.
   transConv↑ : ∀ {A B C Γ Δ}
             → ⊢ Γ ≡ Δ
             → Γ ⊢ A [conv↑] B
@@ -80,6 +83,7 @@ mutual
                                         (stabilityRed* Γ≡Δ D′ , whnfB′))
                               A′<>B″))
 
+  -- Transitivity of algorithmic equality of types in WHNF.
   transConv↓ : ∀ {A B C Γ Δ}
             → ⊢ Γ ≡ Δ
             → Γ ⊢ A [conv↓] B
@@ -100,6 +104,7 @@ mutual
   transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (ℕ-refl x₁)
   transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (Π-cong x₁ x₂ x₃)
 
+  -- Transitivity of algorithmic equality of terms.
   transConv↑Term : ∀ {t u v A B Γ Δ}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
@@ -120,6 +125,7 @@ mutual
                                                 (d₁′ , whnfu′))
                                        t<>u₁))
 
+  -- Transitivity of algorithmic equality of terms in WHNF.
   transConv↓Term : ∀ {t u v A B Γ Δ}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
@@ -171,6 +177,7 @@ mutual
   transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (zero-refl x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (fun-ext x x₁ x₂ y y₁ x₃) (suc-cong x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
 
+-- Transitivity of algorithmic equality of types of the same context.
 transConv : ∀ {A B C Γ}
           → Γ ⊢ A [conv↑] B
           → Γ ⊢ B [conv↑] C
@@ -179,6 +186,7 @@ transConv A<>B B<>C =
   let Γ≡Γ = reflConEq (wfEq (soundnessConv↑ A<>B))
   in  transConv↑ Γ≡Γ A<>B B<>C
 
+-- Transitivity of algorithmic equality of terms of the same context.
 transConvTerm : ∀ {t u v A Γ}
               → Γ ⊢ t [conv↑] u ∷ A
               → Γ ⊢ u [conv↑] v ∷ A

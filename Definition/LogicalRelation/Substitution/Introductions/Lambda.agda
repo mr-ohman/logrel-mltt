@@ -27,6 +27,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
+-- Valid lambda term construction.
 lamₛ : ∀ {F G t Γ}
        ([Γ] : ⊩ₛ Γ)
        ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
@@ -281,6 +282,7 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                   σlamt∘a≡σ′lamt∘a)
 
 
+-- Soundness of η-equality under a valid substitution.
 fun-extEqTerm : ∀ {f g F G Γ Δ σ l}
                 ([Γ] : ⊩ₛ Γ)
                 ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -368,6 +370,7 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
              in  transEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) (symEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) [tu≡fu])
                              (transEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) f≡g [gu≡t′u]))
 
+-- Validity of η-equality.
 fun-extₛ : ∀ {f g F G Γ l}
            ([Γ] : ⊩ₛ Γ)
            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])

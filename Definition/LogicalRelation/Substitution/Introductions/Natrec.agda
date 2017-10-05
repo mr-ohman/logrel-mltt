@@ -33,6 +33,7 @@ open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 
+-- Natural recursion closure reduction (requires sound terms and equality).
 natrec-subst* : ∀ {Γ C c g n n′ l} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
               → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
               → Γ ⊢ n ⇒* n′ ∷ ℕ
@@ -49,6 +50,8 @@ natrec-subst* C c g (x ⇨ n⇒n′) [ℕ] [n′] prop =
       a , s = redSubstTerm x [ℕ] q
   in  natrec-subst C c g x ⇨ conv* (natrec-subst* C c g n⇒n′ [ℕ] [n′] prop)
                    (prop q a (symEqTerm [ℕ] s))
+
+-- Helper functions for construction of valid type for the successor case of natrec.
 
 sucCase₃ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ)
            ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
@@ -75,6 +78,7 @@ sucCase₁ {F} {Γ} {l} [Γ] [ℕ] [F] =
   ▹▹ₛ {F} {F [ suc (var zero) ]↑} (_∙_ {A = ℕ} [Γ] [ℕ]) [F]
       (sucCase₂ {F} [Γ] [ℕ] [F])
 
+-- Construct a valid type for the successor case of natrec.
 sucCase : ∀ {F Γ l} ([Γ] : ⊩ₛ Γ)
           ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
           ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
@@ -83,6 +87,7 @@ sucCase {F} {Γ} {l} [Γ] [ℕ] [F] =
   Πₛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} [Γ] [ℕ]
      (sucCase₁ {F} [Γ] [ℕ] [F])
 
+-- Construct a valid type equality for the successor case of natrec.
 sucCaseCong : ∀ {F F′ Γ l} ([Γ] : ⊩ₛ Γ)
               ([ℕ] : Γ ⊩ₛ⟨ l ⟩ ℕ / [Γ])
               ([F] : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / [Γ] ∙ [ℕ])
@@ -108,6 +113,7 @@ sucCaseCong {F} {F′} {Γ} {l} [Γ] [ℕ] [F] [F′] [F≡F′] =
                                   (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
                            {Δ} {σ})))
 
+-- Soundness of natural recursion under a valid substitution.
 natrecTerm : ∀ {F z s n Γ Δ σ l}
              ([Γ]  : ⊩ₛ Γ)
              ([F]  : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕₛ [Γ]))
@@ -266,6 +272,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                            (convTerm₂ [σFₙ] [σFₘ] [Fₙ≡Fₘ] natrecM))
 
 
+-- Soundness of natural recursion congurence under a valid substitution equality.
 natrec-congTerm : ∀ {F F′ z z′ s s′ n m Γ Δ σ σ′ l}
                   ([Γ]      : ⊩ₛ Γ)
                   ([F]      : Γ ∙ ℕ ⊩ₛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕₛ [Γ]))
@@ -795,6 +802,8 @@ natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F�
                 (ℕₜ₌ n₁ n′ d₂ d′ t≡u (ne (neNfₜ₌ x₁ x₂ prop₂))) =
   ⊥-elim (zero≢ne x₂ (whrDet*Term (redₜ d₁ , zero) (redₜ d′ , ne x₂)))
 
+
+-- Validity of natural recursion.
 natrecₛ : ∀ {F z s n Γ} ([Γ] : ⊩ₛ Γ)
           ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
           ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])
@@ -845,6 +854,7 @@ natrecₛ {F} {z} {s} {n} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n]
                                        [Γ] [F₊] [s])
                                ⊢Δ [σ] [σ′] [σ≡σ′] [σn]′ [σ′n]′ [σn≡σ′n]))
 
+-- Validity of natural recursion congurence.
 natrec-congₛ : ∀ {F F′ z z′ s s′ n n′ Γ} ([Γ] : ⊩ₛ Γ)
           ([ℕ]  : Γ ⊩ₛ⟨ ¹ ⟩ ℕ / [Γ])
           ([F]  : Γ ∙ ℕ ⊩ₛ⟨ ¹ ⟩ F / [Γ] ∙ [ℕ])

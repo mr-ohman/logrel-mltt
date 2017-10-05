@@ -29,6 +29,7 @@ open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 
+-- Validity of substitution of single variable in types.
 substS : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
          ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
          ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -48,6 +49,7 @@ substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                                      ([σ′] , proj₁ ([t] ⊢Δ [σ′]))
                                      (([σ≡σ′] , (proj₂ ([t] ⊢Δ [σ]) [σ′] [σ≡σ′])))))
 
+-- Validity of substitution of single variable in type equality.
 substSEq : ∀ {F F′ G G′ t t′ Γ l} ([Γ] : ⊩ₛ Γ)
            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
            ([F′] : Γ ⊩ₛ⟨ l ⟩ F′ / [Γ])
@@ -80,6 +82,7 @@ substSEq {F} {F′} {G} {G′} {t} {t′}
       G′[t′]′ = irrelevance′ G′eq G′[t′]
   in  transEq G[t]′ G′[t] G′[t′]′ G[t]≡G′[t] G′[t]≡G′[t′]
 
+-- Validity of substitution of single variable in terms.
 substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ₛ Γ)
              ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
              ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -104,6 +107,7 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
                   ([σ′] , proj₁ ([t] ⊢Δ [σ′]))
                   ([σ≡σ′] , proj₂ ([t] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
+-- Validity of substitution of single lifted variable in types.
 subst↑S : ∀ {F G t Γ l} ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -132,6 +136,7 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
          in irrelevanceEq″ (substConsTailId {G} {t} {σ}) (substConsTailId {G} {t} {σ′})
                             G[t] G[t]′ [σG[t]≡σ′G[t]])
 
+-- Validity of substitution of single lifted variable in type equality.
 subst↑SEq : ∀ {F G G′ t t′ Γ l} ([Γ] : ⊩ₛ Γ)
             ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
             ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -169,6 +174,7 @@ subst↑SEq {F} {G} {G′} {t} {t′}
                                             (reflSubst [Γ] ⊢Δ (proj₁ [σ]) , [t≡t′]′))
   in  transEq G[t]′ G′[t]′ G′[t′]′ G[t]≡G′[t] G′[t]≡G′[t′]
 
+-- Helper function for sound substitution of Π-types with specific typing derivations.
 substSΠ₁′ : ∀ {F G t Γ l l′}
            ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -183,6 +189,7 @@ substSΠ₁′ {t = t} (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)) [F]₁ [
   in  irrelevance′ Geq ([G] T.id ⊢Γ [t]′)
 substSΠ₁′ (emb 0<1 x) [F]₁ [t] = emb 0<1 (substSΠ₁′ x [F]₁ [t])
 
+-- Sound substitution of Π-types.
 substSΠ₁ : ∀ {F G t Γ l l′}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -190,6 +197,7 @@ substSΠ₁ : ∀ {F G t Γ l l′}
          → Γ ⊩⟨ l ⟩ G [ t ]
 substSΠ₁ [ΠFG] [F] [t] = substSΠ₁′ (Π-elim [ΠFG]) [F] [t]
 
+-- Helper function for sound substitution of Π-congurence with specific typing derivations.
 substSΠ₂′ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / Π-intr [ΠFG])
@@ -221,6 +229,7 @@ substSΠ₂′ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                   [G′[t′]] [Gt≡Gt′] [Gt′≡G′t′])
 substSΠ₂′ (emb 0<1 x) = substSΠ₂′ x
 
+-- Sound substitution of Π-congurence.
 substSΠ₂ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / [ΠFG])
@@ -236,6 +245,7 @@ substSΠ₂ [ΠFG] [ΠFG≡ΠF′G′] =
   let [ΠFG≡ΠF′G′]′ = irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠF′G′]
   in  substSΠ₂′ (Π-elim [ΠFG]) [ΠFG≡ΠF′G′]′
 
+-- Valid substitution of Π-types.
 substSΠ : ∀ {F G t Γ l}
           ([Γ] : ⊩ₛ Γ)
           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
@@ -261,6 +271,7 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                              (proj₁ ([F] ⊢Δ [σ′]))
                                              (proj₁ ([t] ⊢Δ [σ′])))))
 
+-- Valid substitution of Π-congurence.
 substSΠEq : ∀ {F G F′ G′ t u Γ l}
             ([Γ] : ⊩ₛ Γ)
             ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])

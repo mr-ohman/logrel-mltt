@@ -56,7 +56,7 @@ mutual
             F≡F₂ , G≡G₂ = injectivity ΠFG≡ΠF₂G₂
         in  ¬p (convConvTerm x₁ (sym F≡F₂)) })
 
-  -- Decidability of algorithmic equality of neutrals with types in WHNF.
+  -- Decidability of algorithmic equality of neutrals.
   dec~↑ : ∀ {k l R T Γ Δ}
         → ⊢ Γ ≡ Δ
         → Γ ⊢ k ~ k ↑ R → Δ ⊢ l ~ l ↑ T
@@ -113,7 +113,7 @@ mutual
   dec~↑ Γ≡Δ (natrec x x₁ x₂ x₃) (natrec x₄ x₅ x₆ x₇) | no ¬p =
     no (λ { (_ , natrec x₈ x₉ x₁₀ x₁₁) → ¬p x₈ })
 
-  -- Decidability of algorithmic equality of neutrals.
+  -- Decidability of algorithmic equality of neutrals with types in WHNF.
   dec~↓ : ∀ {k l R T Γ Δ}
         → ⊢ Γ ≡ Δ
         → Γ ⊢ k ~ k ↓ R → Δ ⊢ l ~ l ↓ T
@@ -126,7 +126,7 @@ mutual
   dec~↓ Γ≡Δ ([~] A D whnfB k~l) ([~] A₁ D₁ whnfB₁ k~l₁) | no ¬p =
     no (λ { (A₂ , [~] A₃ D₂ whnfB₂ k~l₂) → ¬p (A₃ , k~l₂) })
 
-  -- Decidability of algorithmic equality of types in WHNF.
+  -- Decidability of algorithmic equality of types.
   decConv↑ : ∀ {A B Γ Δ}
            → ⊢ Γ ≡ Δ
            → Γ ⊢ A [conv↑] A → Δ ⊢ B [conv↑] B
@@ -147,7 +147,7 @@ mutual
                                 (stabilityRed* (symConEq Γ≡Δ) D″ , whnfB″)
         in  ¬p (PE.subst₂ (λ x y → _ ⊢ x [conv↓] y) A‴≡B′ B‴≡B″ A′<>B‴) })
 
-  -- Decidability of algorithmic equality of types.
+  -- Decidability of algorithmic equality of types in WHNF.
   decConv↓ : ∀ {A B Γ Δ}
            → ⊢ Γ ≡ Δ
            → Γ ⊢ A [conv↓] A → Δ ⊢ B [conv↓] B
@@ -210,7 +210,7 @@ mutual
   decConv↓-ne (ne x) A~A = x
   decConv↓-ne (Π-cong x x₁ x₂) ([~] A D whnfB ())
 
-  -- Decidability of algorithmic equality of terms in WHNF.
+  -- Decidability of algorithmic equality of terms.
   decConv↑Term : ∀ {t u A Γ Δ}
                → ⊢ Γ ≡ Δ
                → Γ ⊢ t [conv↑] t ∷ A → Δ ⊢ u [conv↑] u ∷ A
@@ -278,7 +278,7 @@ mutual
   decConv↓Term-ℕ (zero-refl x) ([~] A D whnfB ()) ¬u~u
   decConv↓Term-ℕ (suc-cong x) ([~] A D whnfB ()) ¬u~u
 
-  -- Decidability of algorithmic equality of terms.
+  -- Decidability of algorithmic equality of terms in WHNF.
   decConv↓Term : ∀ {t u A Γ Δ}
                → ⊢ Γ ≡ Δ
                → Γ ⊢ t [conv↓] t ∷ A → Δ ⊢ u [conv↓] u ∷ A
@@ -345,7 +345,7 @@ mutual
     no (λ { (ne-ins x₁₂ x₁₃ () x₁₅)
           ; (fun-ext x₁₂ x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
 
-  -- Decidability of algorithmic equality of terms of equal types in WHNF.
+  -- Decidability of algorithmic equality of terms of equal types.
   decConv↑TermConv : ∀ {t u A B Γ Δ}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
