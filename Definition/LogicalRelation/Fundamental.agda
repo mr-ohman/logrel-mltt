@@ -172,7 +172,7 @@ mutual
         [G[t]] = substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]′ [u]
         [t∘u] = appₛ {F} {G} {g} {a} [Γ]₁ [F] [ΠFG]′ [t]′ [u]
     in  [Γ]₁ , [G[t]] , [t∘u]
-  fundamentalTerm (zero x) = valid x , ℕₛ (valid x) , zeroₛ (valid x)
+  fundamentalTerm (zero x) = valid x , ℕₛ (valid x) , zeroₛ {l = ¹} (valid x)
   fundamentalTerm (suc {n} t) with fundamentalTerm t
   fundamentalTerm (suc {n} t) | [Γ] , [ℕ] , [n] =
     [Γ] , [ℕ] , sucₛ {n = n} [Γ] [ℕ] [n]
@@ -366,7 +366,7 @@ mutual
       let sType = Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
           s′Type = Π ℕ ▹ (F′ ▹▹ F′ [ suc (var zero) ]↑)
           [0] = S.irrelevanceTerm {l = ¹} {A = ℕ} {t = zero}
-                                  [Γ]₃ [Γ]₃ (ℕₛ [Γ]₃) [ℕ] (zeroₛ [Γ]₃)
+                                  [Γ]₃ [Γ]₃ (ℕₛ [Γ]₃) [ℕ] (zeroₛ {l = ¹} [Γ]₃)
           [F]′ = S.irrelevance {A = F} [Γ] ([Γ]₃ ∙ [ℕ]) [F]
           [F₀]′ = S.irrelevance {A = F [ zero ]} [Γ]₁ [Γ]₃ [F₀]
           [F₊]′ = S.irrelevance {A = sType} [Γ]₂ [Γ]₃ [F₊]

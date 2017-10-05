@@ -28,20 +28,20 @@ import Tools.PropositionalEquality as PE
 
 
 -- Valid lambda term construction.
-lamₛ : ∀ {F G t Γ}
+lamₛ : ∀ {F G t Γ l}
        ([Γ] : ⊩ₛ Γ)
-       ([F] : Γ ⊩ₛ⟨ ¹ ⟩ F / [Γ])
-       ([G] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ G / [Γ] ∙ [F])
-       ([t] : Γ ∙ F ⊩ₛ⟨ ¹ ⟩ t ∷ G / [Γ] ∙ [F] / [G])
-     → Γ ⊩ₛ⟨ ¹ ⟩ lam t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
-lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+       ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+       ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+       ([t] : Γ ∙ F ⊩ₛ⟨ l ⟩ t ∷ G / [Γ] ∙ [F] / [G])
+     → Γ ⊩ₛ⟨ l ⟩ lam t ∷ Π F ▹ G / [Γ] / Πₛ {F} {G} [Γ] [F] [G]
+lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       _ , Π F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
         extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-           → Δ ⊩⟨ ¹ ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
+           → Δ ⊩⟨ l ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
         let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
             [σF] = proj₁ ([F] ⊢Δ [σ])
@@ -163,8 +163,8 @@ lamₛ {F} {G} {t} {Γ} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
                               (~-var (var (⊢Δ ∙ ⊢F) here))
              σlamt∘a≡σ′lamt∘a : ∀ {ρ Δ₁ a} → ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
-                 → ([a] : Δ₁ ⊩⟨ ¹ ⟩ a ∷ U.wk ρ (subst σ F) / [F]′ [ρ] ⊢Δ₁)
-                 → Δ₁ ⊩⟨ ¹ ⟩ U.wk ρ (subst σ (lam t)) ∘ a
+                 → ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ U.wk ρ (subst σ F) / [F]′ [ρ] ⊢Δ₁)
+                 → Δ₁ ⊩⟨ l ⟩ U.wk ρ (subst σ (lam t)) ∘ a
                            ≡ U.wk ρ (subst σ′ (lam t)) ∘ a
                            ∷ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]
                            / [G]′ [ρ] ⊢Δ₁ [a]

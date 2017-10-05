@@ -31,8 +31,8 @@ open import Tools.Product
                                    (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
 -- Validity of zero.
-zeroₛ : ∀ {Γ} ([Γ] : ⊩ₛ Γ)
-      → Γ ⊩ₛ⟨ ¹ ⟩ zero ∷ ℕ / [Γ] / ℕₛ [Γ]
+zeroₛ : ∀ {Γ l} ([Γ] : ⊩ₛ Γ)
+      → Γ ⊩ₛ⟨ l ⟩ zero ∷ ℕ / [Γ] / ℕₛ [Γ]
 zeroₛ [Γ] ⊢Δ [σ] =
   ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) (≅ₜ-zerorefl ⊢Δ) zero
     , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
