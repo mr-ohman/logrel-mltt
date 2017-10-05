@@ -124,15 +124,15 @@ mutual
                            (PE.sym (wk-β t))
                            (β-red ρF (wkTerm (lift ρ) (⊢Δ ∙ ρF) ⊢t)
                                      (wkTerm ρ ⊢Δ ⊢a)))
-  wkEqTerm ρ ⊢Δ (fun-ext F f g f0≡g0) =
+  wkEqTerm ρ ⊢Δ (η-eq F f g f0≡g0) =
     let ρF = wk ρ ⊢Δ F
-    in  fun-ext ρF (wkTerm ρ ⊢Δ f)
-                   (wkTerm ρ ⊢Δ g)
-                   (PE.subst (λ t → _ ⊢ t ∘ _ ≡ _ ∷ _)
-                             (PE.sym (wk1-wk≡lift-wk1 _ _))
-                             (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
-                                       (PE.sym (wk1-wk≡lift-wk1 _ _))
-                                       (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
+    in  η-eq ρF (wkTerm ρ ⊢Δ f)
+                (wkTerm ρ ⊢Δ g)
+                (PE.subst (λ t → _ ⊢ t ∘ _ ≡ _ ∷ _)
+                          (PE.sym (wk1-wk≡lift-wk1 _ _))
+                          (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
+                                    (PE.sym (wk1-wk≡lift-wk1 _ _))
+                                    (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
   wkEqTerm ρ ⊢Δ (suc-cong m≡n) = suc-cong (wkEqTerm ρ ⊢Δ m≡n)
   wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s′ = s′} {F = F}
                                      F≡F′ z≡z′ s≡s′ n≡n′) =

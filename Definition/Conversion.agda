@@ -105,7 +105,7 @@ mutual
     suc-cong  : ∀ {m n}
               → Γ ⊢ m [conv↑] n ∷ ℕ
               → Γ ⊢ suc m [conv↓] suc n ∷ ℕ
-    fun-ext   : ∀ {f g F G}
+    η-eq      : ∀ {f g F G}
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G

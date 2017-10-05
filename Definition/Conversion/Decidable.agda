@@ -264,7 +264,7 @@ mutual
   decConv↓Term-ne-ins () (univ x x₁ x₂)
   decConv↓Term-ne-ins () (zero-refl x)
   decConv↓Term-ne-ins () (suc-cong x)
-  decConv↓Term-ne-ins () (fun-ext x x₁ x₂ x₃ x₄ x₅)
+  decConv↓Term-ne-ins () (η-eq x x₁ x₂ x₃ x₄ x₅)
 
   -- Helper function for decidability for impossibility of terms not being equal
   -- as neutrals when they are equal as terms and the first is a neutral.
@@ -309,7 +309,7 @@ mutual
   decConv↓Term Γ≡Δ (ne-ins x x₁ () x₃) (univ x₄ x₅ x₆)
   decConv↓Term Γ≡Δ (ne-ins x x₁ () x₃) (zero-refl x₄)
   decConv↓Term Γ≡Δ (ne-ins x x₁ () x₃) (suc-cong x₄)
-  decConv↓Term Γ≡Δ (ne-ins x x₁ () x₃) (fun-ext x₄ x₅ x₆ x₇ x₈ x₉)
+  decConv↓Term Γ≡Δ (ne-ins x x₁ () x₃) (η-eq x₄ x₅ x₆ x₇ x₈ x₉)
   decConv↓Term Γ≡Δ (univ x x₁ x₂) (ne-ins x₃ x₄ () x₆)
   decConv↓Term Γ≡Δ (univ x x₁ x₂) (univ x₃ x₄ x₅)
                with decConv↓ Γ≡Δ x₂ x₅
@@ -336,14 +336,14 @@ mutual
     no (λ { (ℕ-ins ([~] A D whnfB ()))
           ; (ne-ins x₂ x₃ () x₅)
           ; (suc-cong x₂) → ¬p x₂ })
-  decConv↓Term Γ≡Δ (fun-ext x x₁ x₂ x₃ x₄ x₅) (ne-ins x₆ x₇ () x₉)
-  decConv↓Term Γ≡Δ (fun-ext x x₁ x₂ x₃ x₄ x₅) (fun-ext x₆ x₇ x₈ x₉ x₁₀ x₁₁)
+  decConv↓Term Γ≡Δ (η-eq x x₁ x₂ x₃ x₄ x₅) (ne-ins x₆ x₇ () x₉)
+  decConv↓Term Γ≡Δ (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁)
                with decConv↑Term (Γ≡Δ ∙ refl x) x₅ x₁₁
-  decConv↓Term Γ≡Δ (fun-ext x x₁ x₂ x₃ x₄ x₅) (fun-ext x₆ x₇ x₈ x₉ x₁₀ x₁₁) | yes p =
-    yes (fun-ext x x₂ (stabilityTerm (symConEq Γ≡Δ) x₇) x₄ x₁₀ p)
-  decConv↓Term Γ≡Δ (fun-ext x x₁ x₂ x₃ x₄ x₅) (fun-ext x₆ x₇ x₈ x₉ x₁₀ x₁₁) | no ¬p =
+  decConv↓Term Γ≡Δ (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁) | yes p =
+    yes (η-eq x x₂ (stabilityTerm (symConEq Γ≡Δ) x₇) x₄ x₁₀ p)
+  decConv↓Term Γ≡Δ (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁) | no ¬p =
     no (λ { (ne-ins x₁₂ x₁₃ () x₁₅)
-          ; (fun-ext x₁₂ x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
+          ; (η-eq x₁₂ x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
 
   -- Decidability of algorithmic equality of terms of equal types.
   decConv↑TermConv : ∀ {t u A B Γ Δ}

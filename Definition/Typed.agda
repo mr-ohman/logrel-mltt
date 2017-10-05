@@ -122,7 +122,7 @@ mutual
                 → Γ ∙ F ⊢ t ∷ G
                 → Γ     ⊢ a ∷ F
                 → Γ     ⊢ (lam t) ∘ a ≡ t [ a ] ∷ G [ a ]
-    fun-ext     : ∀ {f g F G}
+    η-eq        : ∀ {f g F G}
                 → Γ     ⊢ F
                 → Γ     ⊢ f ∷ Π F ▹ G
                 → Γ     ⊢ g ∷ Π F ▹ G

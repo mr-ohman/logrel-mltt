@@ -322,7 +322,7 @@ mutual
                              (β-red ⊢σF ⊢σb ⊢σa))
                          [G[a]] [b[a]]
     in  [Γ]₂ , modelsTermEq [G[a]] [lam] [b[a]] [eq]
-  fundamentalTermEq (fun-ext {f} {g} {F} {G} ⊢F ⊢t ⊢t′ t≡t′) with
+  fundamentalTermEq (η-eq {f} {g} {F} {G} ⊢F ⊢t ⊢t′ t≡t′) with
     fundamental ⊢F | fundamentalTerm ⊢t |
     fundamentalTerm ⊢t′ | fundamentalTermEq t≡t′
   ... | [Γ] , [F] | [Γ]₁ , [ΠFG] , [t] | [Γ]₂ , [ΠFG]₁ , [t′]
@@ -339,7 +339,7 @@ mutual
         [t0≡t′0]′ = S.irrelevanceEqTerm {A = G} {t = wk1 f ∘ var zero}
                                         {u = wk1 g ∘ var zero}
                                         [Γ]₃ ([Γ]₁ ∙ [F]′) [G] [G]′ [t0≡t′0]
-        [t≡t′] = fun-extₛ {f} {g} {F} {G} [Γ]₁ [F]′ [G]′ [t]″ [t′]″ [t0≡t′0]′
+        [t≡t′] = η-eqₛ {f} {g} {F} {G} [Γ]₁ [F]′ [G]′ [t]″ [t′]″ [t0≡t′0]′
         [t≡t′]′ = S.irrelevanceEqTerm {A = Π F ▹ G} {t = f} {u = g}
                                       [Γ]₁ [Γ]₁ [ΠFG]″ [ΠFG] [t≡t′]
     in  [Γ]₁ , modelsTermEq [ΠFG] [t] [t′]′ [t≡t′]′

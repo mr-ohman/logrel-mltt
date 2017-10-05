@@ -128,7 +128,7 @@ record EqRelSet : Set₁ where
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
 
     -- η-equality
-    ≅-fun-ext : ∀ {f g F G Γ}
+    ≅-η-eq : ∀ {f g F G Γ}
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G

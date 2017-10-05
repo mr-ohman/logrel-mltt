@@ -107,9 +107,9 @@ mutual
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  zero-refl ⊢Δ
   symConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (symConv↑Term Γ≡Δ t<>u)
-  symConv↓Term Γ≡Δ (fun-ext x x₁ x₂ y y₁ t<>u) =
-    fun-ext (stability Γ≡Δ x) (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₁)
-            y₁ y (symConv↑Term (Γ≡Δ ∙ refl x) t<>u)
+  symConv↓Term Γ≡Δ (η-eq x x₁ x₂ y y₁ t<>u) =
+    η-eq (stability Γ≡Δ x) (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₁)
+         y₁ y (symConv↑Term (Γ≡Δ ∙ refl x) t<>u)
 
 -- Symmetry of algorithmic equality of types with preserved context.
 symConv : ∀ {A B Γ} → Γ ⊢ A [conv↑] B → Γ ⊢ B [conv↑] A

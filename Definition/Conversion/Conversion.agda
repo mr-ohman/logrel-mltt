@@ -55,13 +55,13 @@ mutual
     in  zero-refl ⊢Δ
   convConv↓Term Γ≡Δ A≡B whnfB (suc-cong x) rewrite ℕ≡A A≡B whnfB =
     suc-cong (stabilityConv↑Term Γ≡Δ x)
-  convConv↓Term Γ≡Δ A≡B whnfB (fun-ext x x₁ x₂ y y₁ x₃) with Π≡A A≡B whnfB
-  convConv↓Term Γ≡Δ A≡B whnfB (fun-ext x x₁ x₂ y y₁ x₃) | F′ , G′ , PE.refl =
+  convConv↓Term Γ≡Δ A≡B whnfB (η-eq x x₁ x₂ y y₁ x₃) with Π≡A A≡B whnfB
+  convConv↓Term Γ≡Δ A≡B whnfB (η-eq x x₁ x₂ y y₁ x₃) | F′ , G′ , PE.refl =
     let F≡F′ , G≡G′ = injectivity A≡B
         ⊢F , ⊢F′ = syntacticEq F≡F′
-    in  fun-ext (stability Γ≡Δ ⊢F′) (stabilityTerm Γ≡Δ (conv x₁ A≡B))
-                (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
-                (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
+    in  η-eq (stability Γ≡Δ ⊢F′) (stabilityTerm Γ≡Δ (conv x₁ A≡B))
+             (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
+             (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
 
 -- Conversion of algorithmic equality with the same context.
 convConvTerm : ∀ {t u A B Γ}

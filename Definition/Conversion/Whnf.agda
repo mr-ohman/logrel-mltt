@@ -49,4 +49,4 @@ whnfConv↓Term (ne-ins t u x x₁) =
 whnfConv↓Term (univ x x₁ x₂) = U , whnfConv↓ x₂
 whnfConv↓Term (zero-refl x) = ℕ , zero , zero
 whnfConv↓Term (suc-cong x) = ℕ , suc , suc
-whnfConv↓Term (fun-ext x x₁ x₂ y y₁ x₃) = Π , y , y₁
+whnfConv↓Term (η-eq x x₁ x₂ y y₁ x₃) = Π , y , y₁

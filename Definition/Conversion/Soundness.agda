@@ -60,5 +60,5 @@ mutual
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
-  soundnessConv↓Term (fun-ext F x x₁ y y₁ c) =
-    fun-ext F x x₁ (soundnessConv↑Term c)
+  soundnessConv↓Term (η-eq F x x₁ y y₁ c) =
+    η-eq F x x₁ (soundnessConv↑Term c)

@@ -63,10 +63,10 @@ lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
             _ , Π F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lam ⊢F ⊢t)) lam
-               (≅-fun-ext ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam
-                          (wellformedTermEq [σG]
-                            (reflEqTerm [σG]
-                              (proj₁ (redSubstTerm β-red′ [σG] wk1t[0])))))
+               (≅-η-eq ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam
+                       (wellformedTermEq [σG]
+                         (reflEqTerm [σG]
+                           (proj₁ (redSubstTerm β-red′ [σG] wk1t[0])))))
                (λ {_} {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]′ = irrelevanceTerm′ (wk-subst F) ([F]′ ρ ⊢Δ₁)
@@ -262,7 +262,7 @@ lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                      (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                                               [σΠFG≡σ′ΠFG])))))
                  lam lam
-                 (≅-fun-ext ⊢F (lam ⊢F ⊢t)
+                 (≅-η-eq ⊢F (lam ⊢F ⊢t)
                       (conv (lam ⊢F′ ⊢t′)
                             (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                               [σΠFG≡σ′ΠFG]))))
@@ -283,24 +283,24 @@ lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
 
 
 -- Soundness of η-equality under a valid substitution.
-fun-extEqTerm : ∀ {f g F G Γ Δ σ l}
-                ([Γ] : ⊩ₛ Γ)
-                ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-                ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
-              → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
-                Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
-                             / [Γ] ∙ [F] / [G]
-              → (⊢Δ   : ⊢ Δ)
-                ([σ]  : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
-              → Δ ⊩⟨ l ⟩ subst σ f ∷ Π subst σ F ▹ subst (liftSubst σ) G
-                  / proj₁ ([ΠFG] ⊢Δ [σ])
-              → Δ ⊩⟨ l ⟩ subst σ g ∷ Π subst σ F ▹ subst (liftSubst σ) G
-                  / proj₁ ([ΠFG] ⊢Δ [σ])
-              → Δ ⊩⟨ l ⟩ subst σ f ≡ subst σ g ∷ Π subst σ F ▹ subst (liftSubst σ) G
-                  / proj₁ ([ΠFG] ⊢Δ [σ])
-fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
-              (Πₜ f₁ [ ⊢t , ⊢u , d ] funcF f≡f [f] [f]₁)
-              (Πₜ g₁ [ ⊢t₁ , ⊢u₁ , d₁ ] funcG g≡g [g] [g]₁) =
+η-eqEqTerm : ∀ {f g F G Γ Δ σ l}
+             ([Γ] : ⊩ₛ Γ)
+             ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+             ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+           → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
+             Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
+                          / [Γ] ∙ [F] / [G]
+           → (⊢Δ   : ⊢ Δ)
+             ([σ]  : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+           → Δ ⊩⟨ l ⟩ subst σ f ∷ Π subst σ F ▹ subst (liftSubst σ) G
+               / proj₁ ([ΠFG] ⊢Δ [σ])
+           → Δ ⊩⟨ l ⟩ subst σ g ∷ Π subst σ F ▹ subst (liftSubst σ) G
+               / proj₁ ([ΠFG] ⊢Δ [σ])
+           → Δ ⊩⟨ l ⟩ subst σ f ≡ subst σ g ∷ Π subst σ F ▹ subst (liftSubst σ) G
+               / proj₁ ([ΠFG] ⊢Δ [σ])
+η-eqEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
+           (Πₜ f₁ [ ⊢t , ⊢u , d ] funcF f≡f [f] [f]₁)
+           (Πₜ g₁ [ ⊢t₁ , ⊢u₁ , d₁ ] funcG g≡g [g] [g]₁) =
   let [d]  = [ ⊢t , ⊢u , d ]
       [d′] = [ ⊢t₁ , ⊢u₁ , d₁ ]
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
@@ -334,8 +334,8 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
       eq   = wellformedTermEq [σG] eq′
       eq₁  = wellformedTermEq [σG] eq₁′
   in  Πₜ₌ f₁ g₁ [d] [d′] funcF funcG
-          (≅-fun-ext ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
-                     (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0′ eq₁)))
+          (≅-η-eq ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
+                  (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0′ eq₁)))
           (Πₜ f₁ [d] funcF f≡f [f] [f]₁)
           (Πₜ g₁ [d′] funcG g≡g [g] [g]₁)
           (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
@@ -371,16 +371,16 @@ fun-extEqTerm {f} {g} {F} {G} {Γ} {Δ} {σ} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
                              (transEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) f≡g [gu≡t′u]))
 
 -- Validity of η-equality.
-fun-extₛ : ∀ {f g F G Γ l}
-           ([Γ] : ⊩ₛ Γ)
-           ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-           ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
-         → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
-           Γ ⊩ₛ⟨ l ⟩ f ∷ Π F ▹ G / [Γ] / [ΠFG]
-         → Γ ⊩ₛ⟨ l ⟩ g ∷ Π F ▹ G / [Γ] / [ΠFG]
-         → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
-                        / [Γ] ∙ [F] / [G]
-         → Γ ⊩ₛ⟨ l ⟩ f ≡ g ∷ Π F ▹ G / [Γ] / [ΠFG]
-fun-extₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
-  fun-extEqTerm {f} {g} {F} {G} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
+η-eqₛ : ∀ {f g F G Γ l}
+        ([Γ] : ⊩ₛ Γ)
+        ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
+        ([G] : Γ ∙ F ⊩ₛ⟨ l ⟩ G / [Γ] ∙ [F])
+      → let [ΠFG] = Πₛ {F} {G} [Γ] [F] [G] in
+        Γ ⊩ₛ⟨ l ⟩ f ∷ Π F ▹ G / [Γ] / [ΠFG]
+      → Γ ⊩ₛ⟨ l ⟩ g ∷ Π F ▹ G / [Γ] / [ΠFG]
+      → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
+                     / [Γ] ∙ [F] / [G]
+      → Γ ⊩ₛ⟨ l ⟩ f ≡ g ∷ Π F ▹ G / [Γ] / [ΠFG]
+η-eqₛ {f} {g} {F} {G} [Γ] [F] [G] [f] [g] [f0≡g0] {Δ} {σ} ⊢Δ [σ] =
+  η-eqEqTerm {f} {g} {F} {G} [Γ] [F] [G] [f0≡g0] ⊢Δ [σ]
                 (proj₁ ([f] ⊢Δ [σ])) (proj₁ ([g] ⊢Δ [σ]))

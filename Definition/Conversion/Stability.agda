@@ -178,6 +178,6 @@ mutual
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  zero-refl ⊢Δ
   stabilityConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConv↑Term Γ≡Δ t<>u)
-  stabilityConv↓Term Γ≡Δ (fun-ext F x x₁ y y₁ t<>u) =
-    fun-ext (stability Γ≡Δ F) (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)
-            y y₁ (stabilityConv↑Term (Γ≡Δ ∙ refl F) t<>u)
+  stabilityConv↓Term Γ≡Δ (η-eq F x x₁ y y₁ t<>u) =
+    η-eq (stability Γ≡Δ F) (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)
+         y y₁ (stabilityConv↑Term (Γ≡Δ ∙ refl F) t<>u)
