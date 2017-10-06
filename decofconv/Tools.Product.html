@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Tools.Product</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Comment">-- Σ type (also used as existential) and</a>
+<a id="42" class="Comment">-- cartesian product (also used as conjunction).</a>
+
+<a id="92" class="Symbol">{-#</a> <a id="96" class="Keyword">OPTIONS</a> <a id="104" class="Option">--without-K</a> <a id="116" class="Symbol">#-}</a>
+
+<a id="121" class="Keyword">module</a> <a id="128" href="Tools.Product.html" class="Module">Tools.Product</a> <a id="142" class="Keyword">where</a>
+
+<a id="149" class="Keyword">infixr</a> <a id="156" class="Number">4</a> <a id="158" href="Tools.Product.html#%CE%A3._%2C_" class="InductiveConstructor Operator">_,_</a>
+<a id="162" class="Keyword">infixr</a> <a id="169" class="Number">2</a> <a id="171" href="Tools.Product.html#_%C3%97_" class="Function Operator">_×_</a>
+
+<a id="176" class="Comment">-- Dependent pair type (aka dependent sum, Σ type).</a>
+
+<a id="229" class="Keyword">record</a> <a id="Σ" href="Tools.Product.html#%CE%A3" class="Record">Σ</a> <a id="238" class="Symbol">(</a><a id="239" href="Tools.Product.html#239" class="Bound">A</a> <a id="241" class="Symbol">:</a> <a id="243" class="PrimitiveType">Set</a><a id="246" class="Symbol">)</a> <a id="248" class="Symbol">(</a><a id="249" href="Tools.Product.html#249" class="Bound">B</a> <a id="251" class="Symbol">:</a> <a id="253" href="Tools.Product.html#239" class="Bound">A</a> <a id="255" class="Symbol">→</a> <a id="257" class="PrimitiveType">Set</a><a id="260" class="Symbol">)</a> <a id="262" class="Symbol">:</a> <a id="264" class="PrimitiveType">Set</a> <a id="268" class="Keyword">where</a>
+  <a id="276" class="Keyword">constructor</a> <a id="Σ._,_" href="Tools.Product.html#%CE%A3._%2C_" class="InductiveConstructor Operator">_,_</a>
+  <a id="294" class="Keyword">field</a>
+    <a id="Σ.proj₁" href="Tools.Product.html#%CE%A3.proj%E2%82%81" class="Field">proj₁</a> <a id="310" class="Symbol">:</a> <a id="312" href="Tools.Product.html#239" class="Bound">A</a>
+    <a id="Σ.proj₂" href="Tools.Product.html#%CE%A3.proj%E2%82%82" class="Field">proj₂</a> <a id="324" class="Symbol">:</a> <a id="326" href="Tools.Product.html#249" class="Bound">B</a> <a id="328" href="Tools.Product.html#%CE%A3.proj%E2%82%81" class="Field">proj₁</a>
+
+<a id="335" class="Keyword">open</a> <a id="340" href="Tools.Product.html#%CE%A3" class="Module">Σ</a> <a id="342" class="Keyword">public</a>
+
+<a id="350" class="Comment">-- Existential quantification.</a>
+
+<a id="∃" href="Tools.Product.html#%E2%88%83" class="Function">∃</a> <a id="384" class="Symbol">:</a> <a id="386" class="Symbol">{</a><a id="387" href="Tools.Product.html#387" class="Bound">A</a> <a id="389" class="Symbol">:</a> <a id="391" class="PrimitiveType">Set</a><a id="394" class="Symbol">}</a> <a id="396" class="Symbol">→</a> <a id="398" class="Symbol">(</a><a id="399" href="Tools.Product.html#387" class="Bound">A</a> <a id="401" class="Symbol">→</a> <a id="403" class="PrimitiveType">Set</a><a id="406" class="Symbol">)</a> <a id="408" class="Symbol">→</a> <a id="410" class="PrimitiveType">Set</a>
+<a id="414" href="Tools.Product.html#%E2%88%83" class="Function">∃</a> <a id="416" class="Symbol">=</a> <a id="418" href="Tools.Product.html#%CE%A3" class="Record">Σ</a> <a id="420" class="Symbol">_</a>
+
+<a id="∃₂" href="Tools.Product.html#%E2%88%83%E2%82%82" class="Function">∃₂</a> <a id="426" class="Symbol">:</a> <a id="428" class="Symbol">{</a><a id="429" href="Tools.Product.html#429" class="Bound">A</a> <a id="431" class="Symbol">:</a> <a id="433" class="PrimitiveType">Set</a><a id="436" class="Symbol">}</a> <a id="438" class="Symbol">{</a><a id="439" href="Tools.Product.html#439" class="Bound">B</a> <a id="441" class="Symbol">:</a> <a id="443" href="Tools.Product.html#429" class="Bound">A</a> <a id="445" class="Symbol">→</a> <a id="447" class="PrimitiveType">Set</a><a id="450" class="Symbol">}</a>
+     <a id="457" class="Symbol">(</a><a id="458" href="Tools.Product.html#458" class="Bound">C</a> <a id="460" class="Symbol">:</a> <a id="462" class="Symbol">(</a><a id="463" href="Tools.Product.html#463" class="Bound">x</a> <a id="465" class="Symbol">:</a> <a id="467" href="Tools.Product.html#429" class="Bound">A</a><a id="468" class="Symbol">)</a> <a id="470" class="Symbol">→</a> <a id="472" href="Tools.Product.html#439" class="Bound">B</a> <a id="474" href="Tools.Product.html#463" class="Bound">x</a> <a id="476" class="Symbol">→</a> <a id="478" class="PrimitiveType">Set</a><a id="481" class="Symbol">)</a> <a id="483" class="Symbol">→</a> <a id="485" class="PrimitiveType">Set</a>
+<a id="489" href="Tools.Product.html#%E2%88%83%E2%82%82" class="Function">∃₂</a> <a id="492" href="Tools.Product.html#492" class="Bound">C</a> <a id="494" class="Symbol">=</a> <a id="496" href="Tools.Product.html#%E2%88%83" class="Function">∃</a> <a id="498" class="Symbol">λ</a> <a id="500" href="Tools.Product.html#500" class="Bound">a</a> <a id="502" class="Symbol">→</a> <a id="504" href="Tools.Product.html#%E2%88%83" class="Function">∃</a> <a id="506" class="Symbol">λ</a> <a id="508" href="Tools.Product.html#508" class="Bound">b</a> <a id="510" class="Symbol">→</a> <a id="512" href="Tools.Product.html#492" class="Bound">C</a> <a id="514" href="Tools.Product.html#500" class="Bound">a</a> <a id="516" href="Tools.Product.html#508" class="Bound">b</a>
+
+<a id="519" class="Comment">-- Cartesian product.</a>
+
+<a id="_×_" href="Tools.Product.html#_%C3%97_" class="Function Operator">_×_</a> <a id="546" class="Symbol">:</a> <a id="548" class="Symbol">(</a><a id="549" href="Tools.Product.html#549" class="Bound">A</a> <a id="551" href="Tools.Product.html#551" class="Bound">B</a> <a id="553" class="Symbol">:</a> <a id="555" class="PrimitiveType">Set</a><a id="558" class="Symbol">)</a> <a id="560" class="Symbol">→</a> <a id="562" class="PrimitiveType">Set</a>
+<a id="566" href="Tools.Product.html#566" class="Bound">A</a> <a id="568" href="Tools.Product.html#_%C3%97_" class="Function Operator">×</a> <a id="570" href="Tools.Product.html#570" class="Bound">B</a> <a id="572" class="Symbol">=</a> <a id="574" href="Tools.Product.html#%CE%A3" class="Record">Σ</a> <a id="576" href="Tools.Product.html#566" class="Bound">A</a> <a id="578" class="Symbol">(λ</a> <a id="581" href="Tools.Product.html#581" class="Bound">x</a> <a id="583" class="Symbol">→</a> <a id="585" href="Tools.Product.html#570" class="Bound">B</a><a id="586" class="Symbol">)</a>
+</pre></body></html>
