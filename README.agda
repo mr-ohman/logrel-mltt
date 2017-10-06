@@ -2,6 +2,9 @@
 
 module README where
 
+-- Formalization for "Decidability of Conversion for Type Theory in Type Theory"
+-- Git repository: https://github.com/mr-ohman/logrel-mltt
+
 
 ------------------
 -- INTRODUCTION --
