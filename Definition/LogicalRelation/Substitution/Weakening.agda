@@ -18,10 +18,10 @@ import Tools.PropositionalEquality as PE
 
 -- Weakening of valid types by one.
 wk1ₛ : ∀ {A F Γ l}
-      ([Γ] : ⊩ₛ Γ)
-      ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-    → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
-    → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 A / [Γ] ∙ [F]
+      ([Γ] : ⊩ᵛ Γ)
+      ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+    → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
+    → Γ ∙ F ⊩ᵛ⟨ l ⟩ wk1 A / [Γ] ∙ [F]
 wk1ₛ {A} [Γ] [F] [A] ⊢Δ [σ] =
   let [σA] = proj₁ ([A] ⊢Δ (proj₁ [σ]))
       [σA]′ = irrelevance′ (PE.sym (subst-wk A)) [σA]
@@ -34,11 +34,11 @@ wk1ₛ {A} [Γ] [F] [A] ⊢Δ [σ] =
 
 -- Weakening of valid type equality by one.
 wk1Eqₛ : ∀ {A B F Γ l}
-         ([Γ] : ⊩ₛ Γ)
-         ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-         ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-         ([A≡B] : Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A])
-       → Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 A ≡ wk1 B / [Γ] ∙ [F] / wk1ₛ {A} {F} [Γ] [F] [A]
+         ([Γ] : ⊩ᵛ Γ)
+         ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+         ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+         ([A≡B] : Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A])
+       → Γ ∙ F ⊩ᵛ⟨ l ⟩ wk1 A ≡ wk1 B / [Γ] ∙ [F] / wk1ₛ {A} {F} [Γ] [F] [A]
 wk1Eqₛ {A} {B} [Γ] [F] [A] [A≡B] ⊢Δ [σ] =
   let [σA] = proj₁ ([A] ⊢Δ (proj₁ [σ]))
       [σA]′ = irrelevance′ (PE.sym (subst-wk A)) [σA]

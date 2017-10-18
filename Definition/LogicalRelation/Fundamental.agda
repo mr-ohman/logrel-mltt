@@ -33,13 +33,13 @@ import Tools.PropositionalEquality as PE
 
 mutual
   -- Fundamental theorem for contexts.
-  valid : ∀ {Γ} → ⊢ Γ → ⊩ₛ Γ
+  valid : ∀ {Γ} → ⊢ Γ → ⊩ᵛ Γ
   valid ε = ε
   valid (⊢Γ ∙ A) = let [Γ] , [A] = fundamental A in [Γ] ∙ [A]
 
 
   -- Fundamental theorem for types.
-  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ₛ Γ) (λ [Γ] → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
+  fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ᵛ Γ) (λ [Γ] → Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
   fundamental (ℕ x) = valid x , ℕₛ (valid x)
   fundamental (U x) = valid x , Uₛ (valid x)
   fundamental (Π_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
@@ -51,9 +51,9 @@ mutual
 
   -- Fundamental theorem for type equality.
   fundamentalEq : ∀{Γ A B} → Γ ⊢ A ≡ B
-    → ∃  λ ([Γ] : ⊩ₛ Γ)
-    → ∃₂ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊩ₛ⟨ ¹ ⟩ B / [Γ])
-    → Γ ⊩ₛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
+    → ∃  λ ([Γ] : ⊩ᵛ Γ)
+    → ∃₂ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ]) ([B] : Γ ⊩ᵛ⟨ ¹ ⟩ B / [Γ])
+    → Γ ⊩ᵛ⟨ ¹ ⟩ A ≡ B / [Γ] / [A]
   fundamentalEq (univ {A} {B} x) with fundamentalTermEq x
   fundamentalEq (univ {A} {B} x) | [Γ] , modelsTermEq [U] [t] [u] [t≡u] =
     let [A] = univₛ {A} [Γ] [U] [t]
@@ -100,9 +100,9 @@ mutual
   -- Fundamental theorem for variables.
   fundamentalVar : ∀ {Γ A x}
                  → x ∷ A ∈ Γ
-                 → ([Γ] : ⊩ₛ Γ)
-                 → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-                 → Γ ⊩ₛ⟨ ¹ ⟩ var x ∷ A / [Γ] / [A]
+                 → ([Γ] : ⊩ᵛ Γ)
+                 → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
+                 → Γ ⊩ᵛ⟨ ¹ ⟩ var x ∷ A / [Γ] / [A]
   fundamentalVar here (_∙_ {A = A} {l = l} [Γ] [A]) =
     (λ ⊢Δ [σ] →
        let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
@@ -140,9 +140,9 @@ mutual
 
   -- Fundamental theorem for terms.
   fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
-    → ∃ λ ([Γ] : ⊩ₛ Γ)
-    → ∃ λ ([A] : Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ])
-    → Γ ⊩ₛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
+    → ∃ λ ([Γ] : ⊩ᵛ Γ)
+    → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
+    → Γ ⊩ᵛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕₜₛ (valid x)
   fundamentalTerm (Π_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
@@ -202,8 +202,8 @@ mutual
 
   -- Fundamental theorem for term equality.
   fundamentalTermEq : ∀{Γ A t t′} → Γ ⊢ t ≡ t′ ∷ A
-                    → ∃ λ ([Γ] : ⊩ₛ Γ)
-                    → [ Γ ⊩ₛ⟨ ¹ ⟩ t ≡ t′ ∷ A / [Γ] ]
+                    → ∃ λ ([Γ] : ⊩ᵛ Γ)
+                    → [ Γ ⊩ᵛ⟨ ¹ ⟩ t ≡ t′ ∷ A / [Γ] ]
   fundamentalTermEq (refl D) with fundamentalTerm D
   ... | [Γ] , [A] , [t] =
     [Γ] , modelsTermEq [A] [t] [t]

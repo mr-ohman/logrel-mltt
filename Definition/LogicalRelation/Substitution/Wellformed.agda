@@ -20,15 +20,15 @@ open import Tools.Product
 
 
 -- Valid types are well-formed.
-wellformedₛ : ∀ {A l Γ} ([Γ] : ⊩ₛ Γ) → Γ ⊩ₛ⟨ l ⟩ A / [Γ] → Γ ⊢ A
+wellformedₛ : ∀ {A l Γ} ([Γ] : ⊩ᵛ Γ) → Γ ⊩ᵛ⟨ l ⟩ A / [Γ] → Γ ⊢ A
 wellformedₛ [Γ] [A] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
   in  wellformed (irrelevance′ (subst-id _) (proj₁ ([A] ⊢Γ idSubst)))
 
 -- Valid type equality respects the equality relation.
-wellformedEqₛ : ∀ {A B l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-              → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≅ B
+wellformedEqₛ : ∀ {A B l Γ} ([Γ] : ⊩ᵛ Γ) ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+              → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A] → Γ ⊢ A ≅ B
 wellformedEqₛ [Γ] [A] [A≡B] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
@@ -38,8 +38,8 @@ wellformedEqₛ [Γ] [A] [A≡B] =
                                            [idA] [idA]′ ([A≡B] ⊢Γ idSubst))
 
 -- Valid terms are well-formed.
-wellformedTermₛ : ∀ {t A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-               → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
+wellformedTermₛ : ∀ {t A l Γ} ([Γ] : ⊩ᵛ Γ) ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+               → Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A] → Γ ⊢ t ∷ A
 wellformedTermₛ [Γ] [A] [t] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]
@@ -50,8 +50,8 @@ wellformedTermₛ [Γ] [A] [t] =
                                        [idA] [idA]′ (proj₁ ([t] ⊢Γ idSubst)))
 
 -- Valid term equality respects the equality relation.
-wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ₛ Γ) ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-               → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
+wellformedEqTermₛ : ∀ {t u A l Γ} ([Γ] : ⊩ᵛ Γ) ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+               → Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] → Γ ⊢ t ≅ u ∷ A
 wellformedEqTermₛ [Γ] [A] [t≡u] =
   let ⊢Γ = soundContext [Γ]
       idSubst = idSubstS [Γ]

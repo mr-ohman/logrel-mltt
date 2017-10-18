@@ -14,12 +14,12 @@ open import Tools.Product
 
 -- Conversion from left to right of valid terms.
 convₛ : ∀ {t A B Γ l}
-        ([Γ] : ⊩ₛ Γ)
-        ([A]  : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-        ([B]  : Γ ⊩ₛ⟨ l ⟩ B / [Γ])
-      → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A]
-      → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A]
-      → Γ ⊩ₛ⟨ l ⟩ t ∷ B / [Γ] / [B]
+        ([Γ] : ⊩ᵛ Γ)
+        ([A]  : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+        ([B]  : Γ ⊩ᵛ⟨ l ⟩ B / [Γ])
+      → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+      → Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A]
+      → Γ ⊩ᵛ⟨ l ⟩ t ∷ B / [Γ] / [B]
 convₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
   let [σA]     = proj₁ ([A] ⊢Δ [σ])
       [σB]     = proj₁ ([B] ⊢Δ [σ])
@@ -31,12 +31,12 @@ convₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
 
 -- Conversion from right to left of valid terms.
 conv₂ₛ : ∀ {t A B Γ l}
-         ([Γ] : ⊩ₛ Γ)
-         ([A]  : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-         ([B]  : Γ ⊩ₛ⟨ l ⟩ B / [Γ])
-       → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A]
-       → Γ ⊩ₛ⟨ l ⟩ t ∷ B / [Γ] / [B]
-       → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A]
+         ([Γ] : ⊩ᵛ Γ)
+         ([A]  : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+         ([B]  : Γ ⊩ᵛ⟨ l ⟩ B / [Γ])
+       → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+       → Γ ⊩ᵛ⟨ l ⟩ t ∷ B / [Γ] / [B]
+       → Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A]
 conv₂ₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
   let [σA]     = proj₁ ([A] ⊢Δ [σ])
       [σB]     = proj₁ ([B] ⊢Δ [σ])
@@ -48,12 +48,12 @@ conv₂ₛ [Γ] [A] [B] [A≡B] [t] ⊢Δ [σ] =
 
 -- Conversion from left to right of valid term equality.
 convEqₛ : ∀ {t u A B Γ l}
-        ([Γ] : ⊩ₛ Γ)
-        ([A]  : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-        ([B]  : Γ ⊩ₛ⟨ l ⟩ B / [Γ])
-      → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A]
-      → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
-      → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ B / [Γ] / [B]
+        ([Γ] : ⊩ᵛ Γ)
+        ([A]  : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+        ([B]  : Γ ⊩ᵛ⟨ l ⟩ B / [Γ])
+      → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+      → Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
+      → Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ B / [Γ] / [B]
 convEqₛ [Γ] [A] [B] [A≡B] [t≡u] ⊢Δ [σ] =
   let [σA]     = proj₁ ([A] ⊢Δ [σ])
       [σB]     = proj₁ ([B] ⊢Δ [σ])
