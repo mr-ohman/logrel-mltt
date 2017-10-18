@@ -33,7 +33,7 @@ mutual
                                → ([σ≡σ′] : Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
                                → Δ ⊩⟨ l ⟩ subst σ A ≡ subst σ′ A / [Aσ])
 
-  -- Validity of substitutions
+  -- Logical relation for substitutions from a valid context
   _⊩ˢ_∷_/_/_ : (Δ : Con Term) (σ : Subst) (Γ : Con Term) ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
              → Set
   Δ ⊩ˢ σ ∷ .ε        / ε  / ⊢Δ                = ⊤
@@ -41,7 +41,7 @@ mutual
     Σ (Δ ⊩ˢ tail σ ∷ Γ / [Γ] / ⊢Δ) λ [tailσ] →
     (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ ([A] ⊢Δ [tailσ]))
 
-  -- Validity of substitution equality
+  -- Logical relation for equality of substitutions from a valid context
   _⊩ˢ_≡_∷_/_/_/_ : (Δ : Con Term) (σ σ′ : Subst) (Γ : Con Term) ([Γ] : ⊩ᵛ Γ)
                     (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ) → Set
   Δ ⊩ˢ σ ≡ σ′ ∷ .ε       / ε       / ⊢Δ              / [σ] = ⊤
