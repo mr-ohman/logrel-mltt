@@ -296,7 +296,7 @@ import Tools.PropositionalEquality as PE
           (proj₁ (Πₛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))
           (Π-congₛ {F} {G} {H} {E} [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ])
 
--- Validity of non-dependant function types.
+-- Validity of non-dependent function types.
 ▹▹ₛ : ∀ {F G Γ l}
       ([Γ] : ⊩ᵛ Γ)
       ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -305,7 +305,7 @@ import Tools.PropositionalEquality as PE
 ▹▹ₛ {F} {G} [Γ] [F] [G] =
   Πₛ {F} {wk1 G} [Γ] [F] (wk1ₛ {G} {F} [Γ] [F] [G])
 
--- Validity of non-dependant function type congurence.
+-- Validity of non-dependent function type congurence.
 ▹▹-congₛ : ∀ {F F′ G G′ Γ l}
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
