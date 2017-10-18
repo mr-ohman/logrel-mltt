@@ -3,10 +3,13 @@
 htmldir=$(HOME)/popl17/html
 # htmldir=/tmp/logrel-mltt/html
 
+# Agda-2.5.3 needed to generate the links we use in the paper
+agda=agda-2.5.3
+
 .PHONY : clean pack check agda-check html loc agda-loc agda-woc
 
 html :
-	agda --html --html-dir=$(htmldir) Everything.agda
+	$(agda) --html --html-dir=$(htmldir) Everything.agda
 
 
 ## Type Check Code ########################################################
@@ -16,12 +19,12 @@ check : agda-check
 # Type check the code
 
 agda-check:
-	agda --safe Everything.agda
+	$(agda) --safe Everything.agda
 
 pack: clean
 	mkdir code
 	cp -r Definition Tools Everything.agda README.agda Makefile code/
-	agda --html Everything.agda
+	$(agda) --html Everything.agda
 	zip -r formalization code html README.txt
 
 clean:
