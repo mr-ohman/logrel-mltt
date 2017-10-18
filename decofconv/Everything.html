@@ -6,7 +6,7 @@
 <a id="98" class="Keyword">module</a> <a id="105" href="Everything.html" class="Module">Everything</a> <a id="116" class="Keyword">where</a>
 
 <a id="123" class="Comment">-- README</a>
-<a id="133" class="Keyword">import</a> <a id="140" href="index.html" class="Module">README</a>
+<a id="133" class="Keyword">import</a> <a id="140" href="README.html" class="Module">README</a>
 
 <a id="148" class="Comment">-- Minimal library</a>
 <a id="167" class="Keyword">import</a> <a id="174" href="Tools.Empty.html" class="Module">Tools.Empty</a>
@@ -64,25 +64,26 @@
 <a id="2070" class="Keyword">import</a> <a id="2077" href="Definition.Typed.Consequences.Reduction.html" class="Module">Definition.Typed.Consequences.Reduction</a>
 <a id="2117" class="Keyword">import</a> <a id="2124" href="Definition.Typed.Consequences.NeTypeEq.html" class="Module">Definition.Typed.Consequences.NeTypeEq</a>
 <a id="2163" class="Keyword">import</a> <a id="2170" href="Definition.Typed.Consequences.SucCong.html" class="Module">Definition.Typed.Consequences.SucCong</a>
+<a id="2208" class="Keyword">import</a> <a id="2215" href="Definition.Typed.Consequences.Consistency.html" class="Module">Definition.Typed.Consequences.Consistency</a>
 
-<a id="2209" class="Comment">-- Algorithmic equality with lemmas that depend on typing consequences</a>
-<a id="2280" class="Keyword">import</a> <a id="2287" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
-<a id="2309" class="Keyword">import</a> <a id="2316" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
-<a id="2349" class="Keyword">import</a> <a id="2356" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
-<a id="2383" class="Keyword">import</a> <a id="2390" href="Definition.Conversion.Reduction.html" class="Module">Definition.Conversion.Reduction</a>
-<a id="2422" class="Keyword">import</a> <a id="2429" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
-<a id="2461" class="Keyword">import</a> <a id="2468" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
-<a id="2500" class="Keyword">import</a> <a id="2507" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
-<a id="2538" class="Keyword">import</a> <a id="2545" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
-<a id="2580" class="Keyword">import</a> <a id="2587" href="Definition.Conversion.Universe.html" class="Module">Definition.Conversion.Universe</a>
-<a id="2618" class="Keyword">import</a> <a id="2625" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
-<a id="2657" class="Keyword">import</a> <a id="2664" href="Definition.Conversion.Whnf.html" class="Module">Definition.Conversion.Whnf</a>
-<a id="2691" class="Keyword">import</a> <a id="2698" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
-<a id="2730" class="Keyword">import</a> <a id="2737" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
+<a id="2258" class="Comment">-- Algorithmic equality with lemmas that depend on typing consequences</a>
+<a id="2329" class="Keyword">import</a> <a id="2336" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
+<a id="2358" class="Keyword">import</a> <a id="2365" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
+<a id="2398" class="Keyword">import</a> <a id="2405" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
+<a id="2432" class="Keyword">import</a> <a id="2439" href="Definition.Conversion.Reduction.html" class="Module">Definition.Conversion.Reduction</a>
+<a id="2471" class="Keyword">import</a> <a id="2478" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
+<a id="2510" class="Keyword">import</a> <a id="2517" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
+<a id="2549" class="Keyword">import</a> <a id="2556" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
+<a id="2587" class="Keyword">import</a> <a id="2594" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
+<a id="2629" class="Keyword">import</a> <a id="2636" href="Definition.Conversion.Universe.html" class="Module">Definition.Conversion.Universe</a>
+<a id="2667" class="Keyword">import</a> <a id="2674" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
+<a id="2706" class="Keyword">import</a> <a id="2713" href="Definition.Conversion.Whnf.html" class="Module">Definition.Conversion.Whnf</a>
+<a id="2740" class="Keyword">import</a> <a id="2747" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
+<a id="2779" class="Keyword">import</a> <a id="2786" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
 
-<a id="2774" class="Comment">-- Consequences of the logical relation for algorithmic equality</a>
-<a id="2839" class="Keyword">import</a> <a id="2846" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
+<a id="2823" class="Comment">-- Consequences of the logical relation for algorithmic equality</a>
+<a id="2888" class="Keyword">import</a> <a id="2895" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
 
-<a id="2895" class="Comment">-- Decidability of conversion</a>
-<a id="2925" class="Keyword">import</a> <a id="2932" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
+<a id="2944" class="Comment">-- Decidability of conversion</a>
+<a id="2974" class="Keyword">import</a> <a id="2981" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
 </pre></body></html>

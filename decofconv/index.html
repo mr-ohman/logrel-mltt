@@ -175,49 +175,52 @@
 <a id="4851" class="Comment">-- Universe membership of types.</a>
 <a id="4884" class="Keyword">import</a> <a id="4891" href="Definition.Typed.Consequences.InverseUniv.html" class="Module">Definition.Typed.Consequences.InverseUniv</a>
 
+<a id="4934" class="Comment">-- Consistency of the type theory.</a>
+<a id="4969" class="Keyword">import</a> <a id="4976" href="Definition.Typed.Consequences.Consistency.html" class="Module">Definition.Typed.Consequences.Consistency</a>
 
-<a id="4935" class="Comment">------------------</a>
-<a id="4954" class="Comment">-- DECIDABILITY --</a>
-<a id="4973" class="Comment">------------------</a>
 
-<a id="4993" class="Comment">-- Conversion algorithm definition.</a>
-<a id="5029" class="Keyword">import</a> <a id="5036" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
+<a id="5020" class="Comment">------------------</a>
+<a id="5039" class="Comment">-- DECIDABILITY --</a>
+<a id="5058" class="Comment">------------------</a>
 
-<a id="5059" class="Comment">-- Properties of conversion algorithm:</a>
+<a id="5078" class="Comment">-- Conversion algorithm definition.</a>
+<a id="5114" class="Keyword">import</a> <a id="5121" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
 
-<a id="5099" class="Comment">-- Context equality and its properties:</a>
-<a id="5139" class="Comment">-- * Context conversion of typing judgements.</a>
-<a id="5185" class="Comment">-- * Context conversion of reductions and algorithmic equality.</a>
-<a id="5249" class="Comment">-- * Reflexivity and symmetry of context equality.</a>
-<a id="5300" class="Keyword">import</a> <a id="5307" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
+<a id="5144" class="Comment">-- Properties of conversion algorithm:</a>
 
-<a id="5340" class="Comment">-- Soundness of the conversion algorithm.</a>
-<a id="5382" class="Keyword">import</a> <a id="5389" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
+<a id="5184" class="Comment">-- Context equality and its properties:</a>
+<a id="5224" class="Comment">-- * Context conversion of typing judgements.</a>
+<a id="5270" class="Comment">-- * Context conversion of reductions and algorithmic equality.</a>
+<a id="5334" class="Comment">-- * Reflexivity and symmetry of context equality.</a>
+<a id="5385" class="Keyword">import</a> <a id="5392" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
 
-<a id="5422" class="Comment">-- Conversion property of algorithmic equality.</a>
-<a id="5470" class="Keyword">import</a> <a id="5477" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
+<a id="5425" class="Comment">-- Soundness of the conversion algorithm.</a>
+<a id="5467" class="Keyword">import</a> <a id="5474" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
 
-<a id="5511" class="Comment">-- Decidability of the conversion algorithm.</a>
-<a id="5556" class="Keyword">import</a> <a id="5563" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
+<a id="5507" class="Comment">-- Conversion property of algorithmic equality.</a>
+<a id="5555" class="Keyword">import</a> <a id="5562" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
 
-<a id="5596" class="Comment">-- Symmetry of the conversion algorithm.</a>
-<a id="5637" class="Keyword">import</a> <a id="5644" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
+<a id="5596" class="Comment">-- Decidability of the conversion algorithm.</a>
+<a id="5641" class="Keyword">import</a> <a id="5648" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
 
-<a id="5676" class="Comment">-- Transitivity of the conversion algorithm.</a>
-<a id="5721" class="Keyword">import</a> <a id="5728" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
+<a id="5681" class="Comment">-- Symmetry of the conversion algorithm.</a>
+<a id="5722" class="Keyword">import</a> <a id="5729" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
 
-<a id="5764" class="Comment">-- Weakening of the conversion algorithm.</a>
-<a id="5806" class="Keyword">import</a> <a id="5813" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
+<a id="5761" class="Comment">-- Transitivity of the conversion algorithm.</a>
+<a id="5806" class="Keyword">import</a> <a id="5813" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
 
-<a id="5846" class="Comment">-- WHNF and neutral lifting of the conversion algorithm.</a>
-<a id="5903" class="Keyword">import</a> <a id="5910" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
+<a id="5849" class="Comment">-- Weakening of the conversion algorithm.</a>
+<a id="5891" class="Keyword">import</a> <a id="5898" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
 
-<a id="5938" class="Comment">-- Generic equality relation instance for the conversion algorithm.</a>
-<a id="6006" class="Keyword">import</a> <a id="6013" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
+<a id="5931" class="Comment">-- WHNF and neutral lifting of the conversion algorithm.</a>
+<a id="5988" class="Keyword">import</a> <a id="5995" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
 
-<a id="6050" class="Comment">-- Completeness of conversion algorithm.</a>
-<a id="6091" class="Keyword">import</a> <a id="6098" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
+<a id="6023" class="Comment">-- Generic equality relation instance for the conversion algorithm.</a>
+<a id="6091" class="Keyword">import</a> <a id="6098" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
 
-<a id="6147" class="Comment">-- Decidability of judgemental conversion.</a>
-<a id="6190" class="Keyword">import</a> <a id="6197" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
+<a id="6135" class="Comment">-- Completeness of conversion algorithm.</a>
+<a id="6176" class="Keyword">import</a> <a id="6183" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
+
+<a id="6232" class="Comment">-- Decidability of judgemental conversion.</a>
+<a id="6275" class="Keyword">import</a> <a id="6282" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
 </pre></body></html>
