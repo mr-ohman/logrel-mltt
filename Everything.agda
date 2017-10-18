@@ -63,6 +63,7 @@ import Definition.Typed.Consequences.InverseUniv
 import Definition.Typed.Consequences.Reduction
 import Definition.Typed.Consequences.NeTypeEq
 import Definition.Typed.Consequences.SucCong
+import Definition.Typed.Consequences.Consistency
 
 -- Algorithmic equality with lemmas that depend on typing consequences
 import Definition.Conversion
