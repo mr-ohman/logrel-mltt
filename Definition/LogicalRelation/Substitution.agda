@@ -27,26 +27,26 @@ mutual
 
   -- Validity of types
   _⊩ₛ⟨_⟩_/_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → ⊩ₛ Γ → Set
-  Γ ⊩ₛ⟨ l ⟩ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+  Γ ⊩ₛ⟨ l ⟩ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
                    → Σ (Δ ⊩⟨ l ⟩ subst σ A)
-                       (λ [Aσ] → ∀ {σ′} ([σ′] : Δ ⊩ₛ σ′ ∷ Γ / [Γ] / ⊢Δ)
-                               → ([σ≡σ′] : Δ ⊩ₛ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
+                       (λ [Aσ] → ∀ {σ′} ([σ′] : Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ)
+                               → ([σ≡σ′] : Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
                                → Δ ⊩⟨ l ⟩ subst σ A ≡ subst σ′ A / [Aσ])
 
   -- Validity of substitutions
-  _⊩ₛ_∷_/_/_ : (Δ : Con Term) (σ : Subst) (Γ : Con Term) ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
+  _⊩ˢ_∷_/_/_ : (Δ : Con Term) (σ : Subst) (Γ : Con Term) ([Γ] : ⊩ₛ Γ) (⊢Δ : ⊢ Δ)
              → Set
-  Δ ⊩ₛ σ ∷ .ε        / ε  / ⊢Δ                = ⊤
-  Δ ⊩ₛ σ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} {l} [Γ] [A]) / ⊢Δ =
-    Σ (Δ ⊩ₛ tail σ ∷ Γ / [Γ] / ⊢Δ) λ [tailσ] →
+  Δ ⊩ˢ σ ∷ .ε        / ε  / ⊢Δ                = ⊤
+  Δ ⊩ˢ σ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} {l} [Γ] [A]) / ⊢Δ =
+    Σ (Δ ⊩ˢ tail σ ∷ Γ / [Γ] / ⊢Δ) λ [tailσ] →
     (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ ([A] ⊢Δ [tailσ]))
 
   -- Validity of substitution equality
-  _⊩ₛ_≡_∷_/_/_/_ : (Δ : Con Term) (σ σ′ : Subst) (Γ : Con Term) ([Γ] : ⊩ₛ Γ)
-                    (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ) → Set
-  Δ ⊩ₛ σ ≡ σ′ ∷ .ε       / ε       / ⊢Δ              / [σ] = ⊤
-  Δ ⊩ₛ σ ≡ σ′ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} {l} [Γ] [A]) / ⊢Δ / [σ] =
-    (Δ ⊩ₛ tail σ ≡ tail σ′ ∷ Γ / [Γ] / ⊢Δ / proj₁ [σ]) ×
+  _⊩ˢ_≡_∷_/_/_/_ : (Δ : Con Term) (σ σ′ : Subst) (Γ : Con Term) ([Γ] : ⊩ₛ Γ)
+                    (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ) → Set
+  Δ ⊩ˢ σ ≡ σ′ ∷ .ε       / ε       / ⊢Δ              / [σ] = ⊤
+  Δ ⊩ˢ σ ≡ σ′ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} {l} [Γ] [A]) / ⊢Δ / [σ] =
+    (Δ ⊩ˢ tail σ ≡ tail σ′ ∷ Γ / [Γ] / ⊢Δ / proj₁ [σ]) ×
     (Δ ⊩⟨ l ⟩ head σ ≡ head σ′ ∷ subst (tail σ) A / proj₁ ([A] ⊢Δ (proj₁ [σ])))
 
 
@@ -54,23 +54,23 @@ mutual
 _⊩ₛ⟨_⟩_∷_/_/_ : (Γ : Con Term) (l : TypeLevel) (t A : Term) ([Γ] : ⊩ₛ Γ)
                  ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ]) → Set
 Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A] =
-  ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ) →
+  ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ) →
   Σ (Δ ⊩⟨ l ⟩ subst σ t ∷ subst σ A / proj₁ ([A] ⊢Δ [σ])) λ [tσ] →
-  ∀ {σ′} → Δ ⊩ₛ σ′ ∷ Γ / [Γ] / ⊢Δ → Δ ⊩ₛ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
+  ∀ {σ′} → Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ → Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
     → Δ ⊩⟨ l ⟩ subst σ t ≡ subst σ′ t ∷ subst σ A / proj₁ ([A] ⊢Δ [σ])
 
 -- Validity of type equality
 _⊩ₛ⟨_⟩_≡_/_/_ : (Γ : Con Term) (l : TypeLevel) (A B : Term) ([Γ] : ⊩ₛ Γ)
                 ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ]) → Set
 Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A] =
-  ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+  ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
   → Δ ⊩⟨ l ⟩ subst σ A ≡ subst σ B / proj₁ ([A] ⊢Δ [σ])
 
 -- Validity of term equality
 _⊩ₛ⟨_⟩_≡_∷_/_/_ : (Γ : Con Term) (l : TypeLevel) (t u A : Term) ([Γ] : ⊩ₛ Γ)
                     ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ]) → Set
 Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A] =
-  ∀ {Δ σ} → (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+  ∀ {Δ σ} → (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
           → Δ ⊩⟨ l ⟩ subst σ t ≡ subst σ u ∷ subst σ A / proj₁ ([A] ⊢Δ [σ])
 
 -- Valid term equality with validity of its type and terms
@@ -85,5 +85,5 @@ record [_⊩ₛ⟨_⟩_≡_∷_/_] (Γ : Con Term) (l : TypeLevel)
 
 -- Validity of reduction of terms
 _⊩ₛ_⇒_∷_/_ : (Γ : Con Term) (t u A : Term) ([Γ] : ⊩ₛ Γ) → Set
-Γ ⊩ₛ t ⇒ u ∷ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+Γ ⊩ₛ t ⇒ u ∷ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
                        → Δ ⊢ subst σ t ⇒ subst σ u ∷ subst σ A

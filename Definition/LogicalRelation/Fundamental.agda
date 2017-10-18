@@ -522,7 +522,7 @@ mutual
 -- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ∷ Γ
-      → ∃ λ [Γ] → Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ
+      → ∃ λ [Γ] → Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ
 fundamentalSubst ε ⊢Δ [σ] = ε , tt
 fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
   let [Γ] , [A] = fundamental ⊢A
@@ -539,8 +539,8 @@ fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
 fundamentalSubstEq : ∀ {Γ Δ σ σ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊢ₛ σ ≡ σ′ ∷ Γ
       → ∃₂ λ [Γ] [σ]
-      → ∃  λ ([σ′] : Δ ⊩ₛ σ′ ∷ Γ / [Γ] / ⊢Δ)
-      → Δ ⊩ₛ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
+      → ∃  λ ([σ′] : Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ)
+      → Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
 fundamentalSubstEq ε ⊢Δ σ = ε , tt , tt , tt
 fundamentalSubstEq (⊢Γ ∙ ⊢A) ⊢Δ (tailσ≡σ′ , headσ≡σ′) =
   let [Γ] , [A] = fundamental ⊢A

@@ -40,7 +40,7 @@ lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       [ΠFG] = Πₛ {F} {G} [Γ] [F] [G]
       _ , Π F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
         extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
-      lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+      lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ l ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
       lamt {Δ} {σ} ⊢Δ [σ] =
         let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
@@ -291,7 +291,7 @@ lamₛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
              Γ ∙ F ⊩ₛ⟨ l ⟩ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
                           / [Γ] ∙ [F] / [G]
            → (⊢Δ   : ⊢ Δ)
-             ([σ]  : Δ ⊩ₛ σ ∷ Γ / [Γ] / ⊢Δ)
+             ([σ]  : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ l ⟩ subst σ f ∷ Π subst σ F ▹ subst (liftSubst σ) G
                / proj₁ ([ΠFG] ⊢Δ [σ])
            → Δ ⊩⟨ l ⟩ subst σ g ∷ Π subst σ F ▹ subst (liftSubst σ) G

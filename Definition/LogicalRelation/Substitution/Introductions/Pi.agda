@@ -49,10 +49,10 @@ import Tools.PropositionalEquality as PE
            → Σ (Δ₁ ⊩⟨ l ⟩ subst (consSubst (ρ •ₛ σ) a) G)
                (λ [Aσ] →
                {σ′ : Nat → Term} →
-               (Σ (Δ₁ ⊩ₛ tail σ′ ∷ Γ / [Γ] / ⊢Δ₁)
+               (Σ (Δ₁ ⊩ˢ tail σ′ ∷ Γ / [Γ] / ⊢Δ₁)
                (λ [tailσ] →
                   Δ₁ ⊩⟨ l ⟩ head σ′ ∷ subst (tail σ′) F / proj₁ ([F] ⊢Δ₁ [tailσ]))) →
-               Δ₁ ⊩ₛ consSubst (ρ •ₛ σ) a ≡ σ′ ∷ Γ ∙ F /
+               Δ₁ ⊩ˢ consSubst (ρ •ₛ σ) a ≡ σ′ ∷ Γ ∙ F /
                [Γ] ∙ [F] / ⊢Δ₁ /
                consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]) [F]
                [a] →
