@@ -25,7 +25,7 @@ import Tools.PropositionalEquality as PE
 -- Valid substitutions are well-formed
 wellformedSubst : ∀ {Γ Δ σ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
       → Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ
-      → Δ ⊢ₛ σ ∷ Γ
+      → Δ ⊢ˢ σ ∷ Γ
 wellformedSubst ε ⊢Δ [σ] = id
 wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
   wellformedSubst [Γ] ⊢Δ [tailσ]
@@ -35,7 +35,7 @@ wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
 wellformedSubstEq : ∀ {Γ Δ σ σ′} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
       ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
       → Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
-      → Δ ⊢ₛ σ ≡ σ′ ∷ Γ
+      → Δ ⊢ˢ σ ≡ σ′ ∷ Γ
 wellformedSubstEq ε ⊢Δ [σ] [σ≡σ′] = id
 wellformedSubstEq ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) ([tailσ≡σ′] , [headσ≡σ′]) =
   wellformedSubstEq [Γ] ⊢Δ [tailσ] [tailσ≡σ′]

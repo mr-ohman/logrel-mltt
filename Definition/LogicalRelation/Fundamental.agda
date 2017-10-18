@@ -521,7 +521,7 @@ mutual
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
-      → Δ ⊢ₛ σ ∷ Γ
+      → Δ ⊢ˢ σ ∷ Γ
       → ∃ λ [Γ] → Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ
 fundamentalSubst ε ⊢Δ [σ] = ε , tt
 fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
@@ -537,7 +537,7 @@ fundamentalSubst (⊢Γ ∙ ⊢A) ⊢Δ ([tailσ] , [headσ]) =
 
 -- Fundamental theorem for substitution equality.
 fundamentalSubstEq : ∀ {Γ Δ σ σ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
-      → Δ ⊢ₛ σ ≡ σ′ ∷ Γ
+      → Δ ⊢ˢ σ ≡ σ′ ∷ Γ
       → ∃₂ λ [Γ] [σ]
       → ∃  λ ([σ′] : Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ)
       → Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ]
