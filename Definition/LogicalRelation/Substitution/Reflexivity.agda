@@ -12,18 +12,18 @@ open import Tools.Product
 
 
 -- Reflexivity of valid types.
-reflₛ : ∀ {A Γ l}
-        ([Γ] : ⊩ₛ Γ)
-        ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-      → Γ ⊩ₛ⟨ l ⟩ A ≡ A / [Γ] / [A]
-reflₛ [Γ] [A] ⊢Δ [σ] =
+reflᵛ : ∀ {A Γ l}
+        ([Γ] : ⊩ᵛ Γ)
+        ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+      → Γ ⊩ᵛ⟨ l ⟩ A ≡ A / [Γ] / [A]
+reflᵛ [Γ] [A] ⊢Δ [σ] =
   reflEq (proj₁ ([A] ⊢Δ [σ]))
 
 -- Reflexivity of valid terms.
-reflₜₛ : ∀ {A t Γ l}
-         ([Γ] : ⊩ₛ Γ)
-         ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-         ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A])
-       → Γ ⊩ₛ⟨ l ⟩ t ≡ t ∷ A / [Γ] / [A]
-reflₜₛ [Γ] [A] [t] ⊢Δ [σ] =
+reflᵗᵛ : ∀ {A t Γ l}
+         ([Γ] : ⊩ᵛ Γ)
+         ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+         ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A])
+       → Γ ⊩ᵛ⟨ l ⟩ t ≡ t ∷ A / [Γ] / [A]
+reflᵗᵛ [Γ] [A] [t] ⊢Δ [σ] =
   reflEqTerm (proj₁ ([A] ⊢Δ [σ])) (proj₁ ([t] ⊢Δ [σ]))

@@ -143,14 +143,14 @@ app-congTerm [F] [G[u]] [ΠFG] [t≡t′] =
   in  app-congTerm′ [F] [G[u]] (Π-elim [ΠFG]) [t≡t′]′
 
 -- Application of valid terms.
-appₛ : ∀ {F G t u Γ l}
-       ([Γ] : ⊩ₛ Γ)
-       ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-       ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
-       ([t] : Γ ⊩ₛ⟨ l ⟩ t ∷ Π F ▹ G / [Γ] / [ΠFG])
-       ([u] : Γ ⊩ₛ⟨ l ⟩ u ∷ F / [Γ] / [F])
-     → Γ ⊩ₛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
-appₛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
+appᵛ : ∀ {F G t u Γ l}
+       ([Γ] : ⊩ᵛ Γ)
+       ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+       ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ])
+       ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Π F ▹ G / [Γ] / [ΠFG])
+       ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
+     → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
+appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
   let [G[u]] = substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
@@ -173,17 +173,17 @@ appₛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
                                               (proj₂ ([u] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
 -- Application congurence of valid terms.
-app-congₛ : ∀ {F G t u a b Γ l}
-            ([Γ] : ⊩ₛ Γ)
-            ([F] : Γ ⊩ₛ⟨ l ⟩ F / [Γ])
-            ([ΠFG] : Γ ⊩ₛ⟨ l ⟩ Π F ▹ G / [Γ])
-            ([t≡u] : Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ Π F ▹ G / [Γ] / [ΠFG])
-            ([a] : Γ ⊩ₛ⟨ l ⟩ a ∷ F / [Γ] / [F])
-            ([b] : Γ ⊩ₛ⟨ l ⟩ b ∷ F / [Γ] / [F])
-            ([a≡b] : Γ ⊩ₛ⟨ l ⟩ a ≡ b ∷ F / [Γ] / [F])
-          → Γ ⊩ₛ⟨ l ⟩ t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ]
+app-congᵛ : ∀ {F G t u a b Γ l}
+            ([Γ] : ⊩ᵛ Γ)
+            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+            ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ])
+            ([t≡u] : Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ Π F ▹ G / [Γ] / [ΠFG])
+            ([a] : Γ ⊩ᵛ⟨ l ⟩ a ∷ F / [Γ] / [F])
+            ([b] : Γ ⊩ᵛ⟨ l ⟩ b ∷ F / [Γ] / [F])
+            ([a≡b] : Γ ⊩ᵛ⟨ l ⟩ a ≡ b ∷ F / [Γ] / [F])
+          → Γ ⊩ᵛ⟨ l ⟩ t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ]
               / substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a]
-app-congₛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
+app-congᵛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
   let [σF] = proj₁ ([F] ⊢Δ [σ])
       [G[a]]  = proj₁ (substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
       [G[a]]′ = irrelevance′ (singleSubstLift G a) [G[a]]

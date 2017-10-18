@@ -18,8 +18,8 @@ open import Tools.Product
 
 -- Valid types are sound.
 soundness : ∀ {A Γ l}
-            ([Γ] : ⊩ₛ Γ)
-          → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
+            ([Γ] : ⊩ᵛ Γ)
+          → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
           → Γ ⊩⟨ l ⟩ A
 soundness [Γ] [A] =
   let ⊢Γ = soundContext [Γ]
@@ -28,9 +28,9 @@ soundness [Γ] [A] =
 
 -- Valid type equality is sound.
 soundnessEq : ∀ {A B Γ l}
-              ([Γ] : ⊩ₛ Γ)
-              ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-            → Γ ⊩ₛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+              ([Γ] : ⊩ᵛ Γ)
+              ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+            → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A]
             → Γ ⊩⟨ l ⟩ A ≡ B / soundness [Γ] [A]
 soundnessEq {A = A} [Γ] [A] [A≡B] =
   let [σA] = soundness {A = A} [Γ] [A]
@@ -41,9 +41,9 @@ soundnessEq {A = A} [Γ] [A] [A≡B] =
 
 -- Valid terms are sound.
 soundnessTerm : ∀ {t A Γ l}
-                ([Γ] : ⊩ₛ Γ)
-                ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-              → Γ ⊩ₛ⟨ l ⟩ t ∷ A / [Γ] / [A]
+                ([Γ] : ⊩ᵛ Γ)
+                ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+              → Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A]
               → Γ ⊩⟨ l ⟩ t ∷ A / soundness [Γ] [A]
 soundnessTerm {A = A} [Γ] [A] [t] =
   let [σA] = soundness {A = A} [Γ] [A]
@@ -54,9 +54,9 @@ soundnessTerm {A = A} [Γ] [A] [t] =
 
 -- Valid term equality is sound.
 soundnessEqTerm : ∀ {t u A Γ l}
-                ([Γ] : ⊩ₛ Γ)
-                ([A] : Γ ⊩ₛ⟨ l ⟩ A / [Γ])
-              → Γ ⊩ₛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
+                ([Γ] : ⊩ᵛ Γ)
+                ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+              → Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
               → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / soundness [Γ] [A]
 soundnessEqTerm {A = A} [Γ] [A] [t≡u] =
   let [σA] = soundness {A = A} [Γ] [A]

@@ -14,22 +14,22 @@ open import Tools.Product
 
 
 -- Any level can be embedded into the highest level (validity variant).
-maybeEmbₛ : ∀ {l A Γ}
-            ([Γ] : ⊩ₛ Γ)
-          → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
-          → Γ ⊩ₛ⟨ ¹ ⟩ A / [Γ]
-maybeEmbₛ {⁰} [Γ] [A] ⊢Δ [σ] =
+maybeEmbᵛ : ∀ {l A Γ}
+            ([Γ] : ⊩ᵛ Γ)
+          → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
+          → Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ]
+maybeEmbᵛ {⁰} [Γ] [A] ⊢Δ [σ] =
   let [σA]  = proj₁ ([A] ⊢Δ [σ])
       [σA]′ = maybeEmb (proj₁ ([A] ⊢Δ [σ]))
   in  [σA]′
   ,   (λ [σ′] [σ≡σ′] → irrelevanceEq [σA] [σA]′ (proj₂ ([A] ⊢Δ [σ]) [σ′] [σ≡σ′]))
-maybeEmbₛ {¹} [Γ] [A] = [A]
+maybeEmbᵛ {¹} [Γ] [A] = [A]
 
 -- The lowest level can be embedded in any level (validity variant).
 maybeEmbₛ′ : ∀ {l A Γ}
-             ([Γ] : ⊩ₛ Γ)
-           → Γ ⊩ₛ⟨ ⁰ ⟩ A / [Γ]
-           → Γ ⊩ₛ⟨ l ⟩ A / [Γ]
+             ([Γ] : ⊩ᵛ Γ)
+           → Γ ⊩ᵛ⟨ ⁰ ⟩ A / [Γ]
+           → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
 maybeEmbₛ′ {⁰} [Γ] [A] = [A]
 maybeEmbₛ′ {¹} [Γ] [A] ⊢Δ [σ] =
   let [σA]  = proj₁ ([A] ⊢Δ [σ])

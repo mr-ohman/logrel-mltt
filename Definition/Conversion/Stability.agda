@@ -22,7 +22,7 @@ data ⊢_≡_ : (Γ Δ : Con Term) → Set where
 
 mutual
   -- Syntactic validity and conversion substitution of a context equality.
-  contextConvSubst : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ₛ idSubst ∷ Γ
+  contextConvSubst : ∀ {Γ Δ} → ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ˢ idSubst ∷ Γ
   contextConvSubst ε = ε , ε , id
   contextConvSubst (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
     let ⊢Γ , ⊢Δ , [σ] = contextConvSubst Γ≡Δ
