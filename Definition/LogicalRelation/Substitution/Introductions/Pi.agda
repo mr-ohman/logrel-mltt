@@ -183,13 +183,13 @@ import Tools.PropositionalEquality as PE
                                 ([G≡E] ⊢Δ₁ [aρσ]))
 
 -- Validity of Π as a term.
-Πₜₛ : ∀ {F G Γ} ([Γ] : ⊩ᵛ Γ)
+Πᵗᵛ : ∀ {F G Γ} ([Γ] : ⊩ᵛ Γ)
       ([F] : Γ ⊩ᵛ⟨ ¹ ⟩ F / [Γ])
       ([U] : Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ U / [Γ] ∙ [F])
     → Γ ⊩ᵛ⟨ ¹ ⟩ F ∷ U / [Γ] / Uₛ [Γ]
     → Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ G ∷ U / [Γ] ∙ [F] / (λ {Δ} {σ} → [U] {Δ} {σ})
     → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ∷ U / [Γ] / Uₛ [Γ]
-Πₜₛ {F} {G} {Γ} [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+Πᵗᵛ {F} {G} {Γ} [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       ⊢Fₜ = wellformedTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ]))
@@ -243,7 +243,7 @@ import Tools.PropositionalEquality as PE
                  (proj₁ [ΠFG]) (proj₁ [ΠFG]′) (proj₂ [ΠFG] [σ′] [σ≡σ′]))
 
 -- Validity of Π-congurence as a term equality.
-Π-congₜₛ : ∀ {F G H E Γ}
+Π-congᵗᵛ : ∀ {F G H E Γ}
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ ¹ ⟩ F / [Γ])
            ([H] : Γ ⊩ᵛ⟨ ¹ ⟩ H / [Γ])
@@ -259,7 +259,7 @@ import Tools.PropositionalEquality as PE
            ([G≡E]ₜ : Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ G ≡ E ∷ U / [Γ] ∙ [F]
                                   / (λ {Δ} {σ} → [UF] {Δ} {σ}))
          → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ≡ Π H ▹ E ∷ U / [Γ] / Uₛ [Γ]
-Π-congₜₛ {F} {G} {H} {E}
+Π-congᵗᵛ {F} {G} {H} {E}
          [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ {Δ} {σ} ⊢Δ [σ] =
   let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
       ⊢H = wellformed (proj₁ ([H] ⊢Δ [σ]))

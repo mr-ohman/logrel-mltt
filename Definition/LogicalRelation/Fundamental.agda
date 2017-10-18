@@ -143,7 +143,7 @@ mutual
     → ∃ λ ([Γ] : ⊩ᵛ Γ)
     → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ᵛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
-  fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕₜₛ (valid x)
+  fundamentalTerm (ℕ x) = valid x , Uₛ (valid x) , ℕᵗᵛ (valid x)
   fundamentalTerm (Π_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
   ... | [Γ] , [U] , [F]ₜ | [Γ]₁ , [U]₁ , [G]ₜ =
@@ -154,7 +154,7 @@ mutual
                                   (λ {Δ} {σ} → [U]′ {Δ} {σ}) [G]ₜ
     in  [Γ] , [U]
     ,   S.irrelevanceTerm {A = U} {t = Π F ▹ G} [Γ] [Γ] (Uₛ [Γ]) [U]
-                          (Πₜₛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]′ {Δ} {σ})
+                          (Πᵗᵛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]′ {Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lam {F} {G} {t} ⊢F ⊢t)
@@ -273,9 +273,9 @@ mutual
     in  [Γ]
     ,   modelsTermEq
           [U]′
-          (Πₜₛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [F]ₜ′ [G]ₜ′)
-          (Πₜₛ {H} {E} [Γ] [H] (λ {Δ} {σ} → [U]₂′ {Δ} {σ}) [H]ₜ′ [E]ₜ′)
-          (Π-congₜₛ {F} {G} {H} {E} [Γ] [F] [H]
+          (Πᵗᵛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [F]ₜ′ [G]ₜ′)
+          (Πᵗᵛ {H} {E} [Γ] [H] (λ {Δ} {σ} → [U]₂′ {Δ} {σ}) [H]ₜ′ [E]ₜ′)
+          (Π-congᵗᵛ {F} {G} {H} {E} [Γ] [F] [H]
                     (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) (λ {Δ} {σ} → [U]₂′ {Δ} {σ})
                     [F]ₜ′ [G]ₜ′ [H]ₜ′ [E]ₜ′ [F≡H]ₜ′ [G≡E]ₜ′)
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b)
@@ -377,7 +377,7 @@ mutual
           [F′₊]′ = sucCase {F′} [Γ]₃ [ℕ] [F′]′
           [F′ₙ′]′ = substS {ℕ} {F′} {n′} [Γ]₃ [ℕ] [F′]′ [n′]
           [ℕ≡ℕ] = reflₛ {ℕ} [Γ]₃ [ℕ]
-          [0≡0] = reflₜₛ {ℕ} {zero} [Γ]₃ [ℕ] [0]
+          [0≡0] = reflᵗᵛ {ℕ} {zero} [Γ]₃ [ℕ] [0]
           [F≡F′]′ = S.irrelevanceEq {A = F} {B = F′}
                                     [Γ] ([Γ]₃ ∙ [ℕ]) [F] [F]′ [F≡F′]
           [F₀≡F′₀] = substSEq {ℕ} {ℕ} {F} {F′} {zero} {zero}

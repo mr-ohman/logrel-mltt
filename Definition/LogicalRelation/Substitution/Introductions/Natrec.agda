@@ -108,7 +108,7 @@ sucCaseCong {F} {F′} {Γ} {l} [Γ] [ℕ] [F] [F′] [F≡F′] =
                         (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
                         (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
                         (λ {Δ} {σ} →
-                           reflₜₛ {ℕ} {suc (var zero)} (_∙_ {A = ℕ} [Γ] [ℕ])
+                           reflᵗᵛ {ℕ} {suc (var zero)} (_∙_ {A = ℕ} [Γ] [ℕ])
                                   (λ {Δ} {σ} → wk1ₛ {ℕ} {ℕ} [Γ] [ℕ] [ℕ] {Δ} {σ})
                                   (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
                            {Δ} {σ})))
@@ -848,9 +848,9 @@ natrecₛ {F} {z} {s} {n} {l = l} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n
                                (reflₛ {F [ zero ]} [Γ] [F₀]) [F₊] [F₊]
                                (reflₛ {Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)}
                                       [Γ] [F₊])
-                               [z] [z] (reflₜₛ {F [ zero ]} {z} [Γ] [F₀] [z])
+                               [z] [z] (reflᵗᵛ {F [ zero ]} {z} [Γ] [F₀] [z])
                                [s] [s]
-                               (reflₜₛ {Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)} {s}
+                               (reflᵗᵛ {Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)} {s}
                                        [Γ] [F₊] [s])
                                ⊢Δ [σ] [σ′] [σ≡σ′] [σn]′ [σ′n]′ [σn≡σ′n]))
 

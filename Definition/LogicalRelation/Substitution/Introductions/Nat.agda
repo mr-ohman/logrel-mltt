@@ -22,9 +22,9 @@ open import Tools.Product
 ℕₛ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ _ x₂ → id (ℕ ⊢Δ)
 
 -- Validity of the natural number type as a term.
-ℕₜₛ : ∀ {Γ} ([Γ] : ⊩ᵛ Γ)
+ℕᵗᵛ : ∀ {Γ} ([Γ] : ⊩ᵛ Γ)
     → Γ ⊩ᵛ⟨ ¹ ⟩ ℕ ∷ U / [Γ] / Uₛ [Γ]
-ℕₜₛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
+ℕᵗᵛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
                      [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
                  in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
                  ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕ ℕ
