@@ -68,7 +68,7 @@ substSEq {F} {F′} {G} {G′} {t} {t′}
       G′eq = substConsId G′
       G[t] = (proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ])))))
       G[t]′ = irrelevance′ Geq G[t]
-      [t]′ = convₛ {t} {F} {F′} [Γ] [F] [F′] [F≡F′] [t]
+      [t]′ = convᵛ {t} {F} {F′} [Γ] [F] [F′] [F≡F′] [t]
       G′[t] = (proj₁ ([G′] ⊢Δ ([σ] , proj₁ ([t]′ ⊢Δ [σ]))))
       G[t]≡G′[t] = irrelevanceEq′ Geq G[t] G[t]′
                                   ([G≡G′] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -76,7 +76,7 @@ substSEq {F} {F′} {G} {G′} {t} {t′}
                        (proj₂ ([G′] ⊢Δ ([σ] , proj₁ ([t]′ ⊢Δ [σ])))
                               ([σ] , proj₁ ([t′] ⊢Δ [σ]))
                               (reflSubst [Γ] ⊢Δ [σ] ,
-                                convEqₛ {t} {t′} {F} {F′}
+                                convEqᵛ {t} {t′} {F} {F′}
                                         [Γ] [F] [F′] [F≡F′] [t≡t′] ⊢Δ [σ]))
       G′[t′] = (proj₁ ([G′] ⊢Δ ([σ] , proj₁ ([t′] ⊢Δ [σ]))))
       G′[t′]′ = irrelevance′ G′eq G′[t′]
@@ -112,10 +112,10 @@ subst↑S : ∀ {F G t Γ l} ([Γ] : ⊩ᵛ Γ)
           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
           ([t] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
-                              / wk1ₛ {F} {F} [Γ] [F] [F])
+                              / wk1ᵛ {F} {F} [Γ] [F] [F])
         → Γ ∙ F ⊩ᵛ⟨ l ⟩ G [ t ]↑ / [Γ] ∙ [F]
 subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let [wk1F] = wk1ₛ {F} {F} [Γ] [F] [F]
+  let [wk1F] = wk1ᵛ {F} {F} [Γ] [F] [F]
       [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
       [σwk1F]′ = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
       [t]′ = irrelevanceTerm′ (subst-wk F) [σwk1F] [σwk1F]′ (proj₁ ([t] ⊢Δ [σ]))
@@ -143,16 +143,16 @@ subst↑SEq : ∀ {F G G′ t t′ Γ l} ([Γ] : ⊩ᵛ Γ)
             ([G′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G′ / [Γ] ∙ [F])
             ([G≡G′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G ≡ G′ / [Γ] ∙ [F] / [G])
             ([t] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
-                                / wk1ₛ {F} {F} [Γ] [F] [F])
+                                / wk1ᵛ {F} {F} [Γ] [F] [F])
             ([t′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t′ ∷ wk1 F / [Γ] ∙ [F]
-                                 / wk1ₛ {F} {F} [Γ] [F] [F])
+                                 / wk1ᵛ {F} {F} [Γ] [F] [F])
             ([t≡t′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ≡ t′ ∷ wk1 F / [Γ] ∙ [F]
-                                   / wk1ₛ {F} {F} [Γ] [F] [F])
+                                   / wk1ᵛ {F} {F} [Γ] [F] [F])
           → Γ ∙ F ⊩ᵛ⟨ l ⟩ G [ t ]↑ ≡ G′ [ t′ ]↑ / [Γ] ∙ [F]
                         / subst↑S {F} {G} {t} [Γ] [F] [G] [t]
 subst↑SEq {F} {G} {G′} {t} {t′}
           [Γ] [F] [G] [G′] [G≡G′] [t] [t′] [t≡t′] {σ = σ} ⊢Δ [σ] =
-  let [wk1F] = wk1ₛ {F} {F} [Γ] [F] [F]
+  let [wk1F] = wk1ᵛ {F} {F} [Γ] [F] [F]
       [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
       [σwk1F]′ = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
       [t]′ = irrelevanceTerm′ (subst-wk F) [σwk1F] [σwk1F]′ (proj₁ ([t] ⊢Δ [σ]))

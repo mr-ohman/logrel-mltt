@@ -18,12 +18,12 @@ open import Tools.Product
 
 
 -- Validity of the natural number type.
-ℕₛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ) → Γ ⊩ᵛ⟨ l ⟩ ℕ / [Γ]
-ℕₛ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ _ x₂ → id (ℕ ⊢Δ)
+ℕᵛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ) → Γ ⊩ᵛ⟨ l ⟩ ℕ / [Γ]
+ℕᵛ [Γ] ⊢Δ [σ] = ℕ (idRed:*: (ℕ ⊢Δ)) , λ _ x₂ → id (ℕ ⊢Δ)
 
 -- Validity of the natural number type as a term.
 ℕᵗᵛ : ∀ {Γ} ([Γ] : ⊩ᵛ Γ)
-    → Γ ⊩ᵛ⟨ ¹ ⟩ ℕ ∷ U / [Γ] / Uₛ [Γ]
+    → Γ ⊩ᵛ⟨ ¹ ⟩ ℕ ∷ U / [Γ] / Uᵛ [Γ]
 ℕᵗᵛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕ ⊢Δ
                      [ℕ] = ℕ (idRed:*: (ℕ ⊢Δ))
                  in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
@@ -31,18 +31,18 @@ open import Tools.Product
                                    (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕ ⊢Δ)))
 
 -- Validity of zero.
-zeroₛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ)
-      → Γ ⊩ᵛ⟨ l ⟩ zero ∷ ℕ / [Γ] / ℕₛ [Γ]
-zeroₛ [Γ] ⊢Δ [σ] =
+zeroᵛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ)
+      → Γ ⊩ᵛ⟨ l ⟩ zero ∷ ℕ / [Γ] / ℕᵛ [Γ]
+zeroᵛ [Γ] ⊢Δ [σ] =
   ℕₜ zero (idRedTerm:*: (zero ⊢Δ)) (≅ₜ-zerorefl ⊢Δ) zero
     , (λ _ x₁ → ℕₜ₌ zero zero (idRedTerm:*: (zero ⊢Δ)) (idRedTerm:*: (zero ⊢Δ))
                     (≅ₜ-zerorefl ⊢Δ) zero)
 
 -- Validity of successor of valid natural numbers.
-sucₛ : ∀ {Γ n l} ([Γ] : ⊩ᵛ Γ)
+sucᵛ : ∀ {Γ n l} ([Γ] : ⊩ᵛ Γ)
          ([ℕ] : Γ ⊩ᵛ⟨ l ⟩ ℕ / [Γ])
      → Γ ⊩ᵛ⟨ l ⟩ n ∷ ℕ / [Γ] / [ℕ]
      → Γ ⊩ᵛ⟨ l ⟩ suc n ∷ ℕ / [Γ] / [ℕ]
-sucₛ ⊢Γ [ℕ] [n] ⊢Δ [σ] =
+sucᵛ ⊢Γ [ℕ] [n] ⊢Δ [σ] =
   sucTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₁ ([n] ⊢Δ [σ]))
   , (λ x x₁ → sucEqTerm (proj₁ ([ℕ] ⊢Δ [σ])) (proj₂ ([n] ⊢Δ [σ]) x x₁))

@@ -12,14 +12,14 @@ open import Tools.Product
 
 
 -- Weak head expansion of valid terms.
-redSubstTermₛ : ∀ {A t u l Γ}
+redSubstTermᵛ : ∀ {A t u l Γ}
               → ([Γ] : ⊩ᵛ Γ)
               → Γ ⊩ᵛ t ⇒ u ∷ A / [Γ]
               → ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
               → Γ ⊩ᵛ⟨ l ⟩ u ∷ A / [Γ] / [A]
               → Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A]
               × Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ A / [Γ] / [A]
-redSubstTermₛ [Γ] t⇒u [A] [u] =
+redSubstTermᵛ [Γ] t⇒u [A] [u] =
   (λ ⊢Δ [σ] →
      let [σA] = proj₁ ([A] ⊢Δ [σ])
          [σt] , [σt≡σu] = redSubstTerm (t⇒u ⊢Δ [σ])
