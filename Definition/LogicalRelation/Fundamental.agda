@@ -310,10 +310,10 @@ mutual
           redSubstTermᵛ {G [ a ]} {(lam b) ∘ a} {b [ a ]} [Γ]₂
             (λ {Δ} {σ} ⊢Δ [σ] →
                let [liftσ] = liftSubstS {F = F} [Γ]₂ ⊢Δ [F]₁ [σ]
-                   ⊢σF = wellformed (proj₁ ([F]₁ ⊢Δ [σ]))
-                   ⊢σb = wellformedTerm (proj₁ ([G]′ (⊢Δ ∙ ⊢σF) [liftσ]))
+                   ⊢σF = escape (proj₁ ([F]₁ ⊢Δ [σ]))
+                   ⊢σb = escapeTerm (proj₁ ([G]′ (⊢Δ ∙ ⊢σF) [liftσ]))
                                        (proj₁ ([b]′ (⊢Δ ∙ ⊢σF) [liftσ]))
-                   ⊢σa = wellformedTerm (proj₁ ([F]₁ ⊢Δ [σ]))
+                   ⊢σa = escapeTerm (proj₁ ([F]₁ ⊢Δ [σ]))
                                        (proj₁ ([a] ⊢Δ [σ]))
                in  PE.subst₂ (λ x y → _ ⊢ (lam (subst (liftSubst σ) b))
                                           ∘ (subst σ a) ⇒ x ∷ y)
@@ -434,17 +434,17 @@ mutual
         d , r =
           redSubstTermᵛ {F [ zero ]} {natrec F z s zero} {z} [Γ]′
             (λ {Δ} {σ} ⊢Δ [σ] →
-               let ⊢ℕ = wellformed (proj₁ ([ℕ]′ ⊢Δ [σ]))
-                   ⊢F = wellformed (proj₁ ([F]′ (⊢Δ ∙ ⊢ℕ)
+               let ⊢ℕ = escape (proj₁ ([ℕ]′ ⊢Δ [σ]))
+                   ⊢F = escape (proj₁ ([F]′ (⊢Δ ∙ ⊢ℕ)
                                                (liftSubstS {F = ℕ}
                                                            [Γ]′ ⊢Δ [ℕ]′ [σ])))
                    ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x)
                                  (singleSubstLift F zero)
-                                 (wellformedTerm (proj₁ ([F₀] ⊢Δ [σ]))
+                                 (escapeTerm (proj₁ ([F₀] ⊢Δ [σ]))
                                                 (proj₁ ([z] ⊢Δ [σ])))
                    ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x)
                                  (natrecSucCase σ F)
-                                 (wellformedTerm (proj₁ ([F₊]′ ⊢Δ [σ]))
+                                 (escapeTerm (proj₁ ([F₊]′ ⊢Δ [σ]))
                                                 (proj₁ ([s]′ ⊢Δ [σ])))
                in PE.subst (λ x → Δ ⊢ subst σ (natrec F z s zero)
                                     ⇒ subst σ z ∷ x)
@@ -488,19 +488,19 @@ mutual
         d , r =
           redSubstTermᵛ {F [ suc n ]} {natrec F z s (suc n)} {t } {¹} {_} [Γ]₃
             (λ {Δ} {σ} ⊢Δ [σ] →
-               let ⊢n = wellformedTerm (proj₁ ([ℕ]′ ⊢Δ [σ]))
+               let ⊢n = escapeTerm (proj₁ ([ℕ]′ ⊢Δ [σ]))
                                       (proj₁ ([n]′ ⊢Δ [σ]))
-                   ⊢ℕ = wellformed (proj₁ ([ℕ]′ ⊢Δ [σ]))
-                   ⊢F = wellformed (proj₁ ([F]′ (⊢Δ ∙ ⊢ℕ)
+                   ⊢ℕ = escape (proj₁ ([ℕ]′ ⊢Δ [σ]))
+                   ⊢F = escape (proj₁ ([F]′ (⊢Δ ∙ ⊢ℕ)
                                                (liftSubstS {F = ℕ}
                                                            [Γ]₃ ⊢Δ [ℕ]′ [σ])))
                    ⊢z = PE.subst (λ x → Δ ⊢ subst σ z ∷ x)
                                  (singleSubstLift F zero)
-                                 (wellformedTerm (proj₁ ([F₀]′ ⊢Δ [σ]))
+                                 (escapeTerm (proj₁ ([F₀]′ ⊢Δ [σ]))
                                                 (proj₁ ([z]′ ⊢Δ [σ])))
                    ⊢s = PE.subst (λ x → Δ ⊢ subst σ s ∷ x)
                                  (natrecSucCase σ F)
-                                 (wellformedTerm (proj₁ ([F₊] ⊢Δ [σ]))
+                                 (escapeTerm (proj₁ ([F₊] ⊢Δ [σ]))
                                                 (proj₁ ([s] ⊢Δ [σ])))
                    r = _⊢_⇒_∷_.natrec-suc {n = subst σ n}
                                           {z = subst σ z} {s = subst σ s}

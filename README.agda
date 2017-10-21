@@ -79,7 +79,7 @@ import Definition.LogicalRelation
 import Definition.LogicalRelation.Properties.Reflexivity
 
 -- Escape lemma for the logical relation.
-import Definition.LogicalRelation.Properties.Wellformed
+import Definition.LogicalRelation.Properties.Escape
 
 -- Equality view of two or more types.
 import Definition.LogicalRelation.EqView

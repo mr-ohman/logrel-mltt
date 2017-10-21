@@ -12,7 +12,7 @@ open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 
--- Wellformed context extraction
+-- Escape context extraction
 
 wfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → ⊢ Γ
 wfTerm (ℕ ⊢Γ) = ⊢Γ

@@ -13,7 +13,7 @@ open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.Properties.Wellformed
+open import Definition.LogicalRelation.Properties.Escape
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE

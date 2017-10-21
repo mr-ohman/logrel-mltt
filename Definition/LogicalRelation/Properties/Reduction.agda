@@ -17,7 +17,7 @@ open import Definition.LogicalRelation.Properties.Symmetry
 open import Definition.LogicalRelation.Properties.Transitivity
 open import Definition.LogicalRelation.Properties.Conversion
 open import Definition.LogicalRelation.Properties.Universe
-open import Definition.LogicalRelation.Properties.Wellformed
+open import Definition.LogicalRelation.Properties.Escape
 
 open import Tools.Product
 open import Tools.Empty
@@ -92,7 +92,7 @@ redSubst : ∀ {A B l Γ}
          → Γ ⊩⟨ l ⟩ B
          → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
          → Γ ⊩⟨ l ⟩ A ≡ B / [A]
-redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (wellformed [B])) [B]
+redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (escape [B])) [B]
 
 -- Weak head expansion of reducible terms with single reduction step.
 redSubstTerm : ∀ {A t u l Γ}
@@ -101,4 +101,4 @@ redSubstTerm : ∀ {A t u l Γ}
              → Γ ⊩⟨ l ⟩ u ∷ A / [A]
              → Γ ⊩⟨ l ⟩ t ∷ A / [A]
              × Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
-redSubstTerm t⇒u [A] [u] = redSubst*Term (t⇒u ⇨ id (wellformedTerm [A] [u])) [A] [u]
+redSubstTerm t⇒u [A] [u] = redSubst*Term (t⇒u ⇨ id (escapeTerm [A] [u])) [A] [u]

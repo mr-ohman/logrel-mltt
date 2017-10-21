@@ -45,7 +45,7 @@ import Definition.LogicalRelation.Substitution.Reduction
 import Definition.LogicalRelation.Substitution.Reflexivity
 import Definition.LogicalRelation.Substitution.Weakening
 import Definition.LogicalRelation.Substitution.Reducibility
-import Definition.LogicalRelation.Substitution.Wellformed
+import Definition.LogicalRelation.Substitution.Escape
 import Definition.LogicalRelation.Substitution.MaybeEmbed
 import Definition.LogicalRelation.Substitution.Introductions
 

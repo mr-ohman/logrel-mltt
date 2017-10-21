@@ -26,7 +26,7 @@ import Tools.PropositionalEquality as PE
 substitution : ∀ {A Γ Δ σ} → Γ ⊢ A → Δ ⊢ˢ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A
 substitution A σ ⊢Δ with fundamental A | fundamentalSubst (wf A) ⊢Δ σ
 substitution A σ ⊢Δ | [Γ] , [A] | [Γ]′ , [σ] =
-  wellformed (proj₁ ([A] ⊢Δ (S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ])))
+  escape (proj₁ ([A] ⊢Δ (S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ])))
 
 -- Well-formed substitution of type equality.
 substitutionEq : ∀ {A B Γ Δ σ σ′}
@@ -36,7 +36,7 @@ substitutionEq A≡B σ ⊢Δ | [Γ] , [A] , [B] , [A≡B] | [Γ]′ , [σ] , [�
   let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
       [σ′]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
       [σ≡σ′]′ = S.irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
-  in  wellformedEq (proj₁ ([A] ⊢Δ [σ]′))
+  in  escapeEq (proj₁ ([A] ⊢Δ [σ]′))
                    (transEq (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([B] ⊢Δ [σ]′))
                             (proj₁ ([B] ⊢Δ [σ′]′)) ([A≡B] ⊢Δ [σ]′)
                             (proj₂ ([B] ⊢Δ [σ]′) [σ′]′ [σ≡σ′]′))
@@ -47,7 +47,7 @@ substitutionTerm : ∀ {t A Γ Δ σ}
 substitutionTerm t σ ⊢Δ with fundamentalTerm t | fundamentalSubst (wfTerm t) ⊢Δ σ
 substitutionTerm t σ ⊢Δ | [Γ] , [A] , [t] | [Γ]′ , [σ] =
   let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
-  in  wellformedTerm (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([t] ⊢Δ [σ]′))
+  in  escapeTerm (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([t] ⊢Δ [σ]′))
 
 -- Well-formed substitution of term equality.
 substitutionEqTerm : ∀ {t u A Γ Δ σ σ′}
@@ -59,7 +59,7 @@ substitutionEqTerm t≡u σ≡σ′ ⊢Δ with fundamentalTermEq t≡u
   let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
       [σ′]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
       [σ≡σ′]′ = S.irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
-  in  wellformedTermEq (proj₁ ([A] ⊢Δ [σ]′))
+  in  escapeTermEq (proj₁ ([A] ⊢Δ [σ]′))
                        (transEqTerm (proj₁ ([A] ⊢Δ [σ]′)) ([t≡u] ⊢Δ [σ]′)
                                     (proj₂ ([u] ⊢Δ [σ]′) [σ′]′ [σ≡σ′]′))
 

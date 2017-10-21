@@ -9,7 +9,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Properties.Wellformed
+open import Definition.LogicalRelation.Properties.Escape
 open import Definition.LogicalRelation.Properties.Reflexivity
 
 open import Tools.Product
@@ -76,7 +76,7 @@ U-elim (emb 0<1 x) | emb () x₁
 ℕ-elim′ D (emb 0<1 x) | emb () x₂
 
 ℕ-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ ℕ → Γ ⊩⟨ l ⟩ℕ ℕ
-ℕ-elim [ℕ] = ℕ-elim′ (id (wellformed [ℕ])) [ℕ]
+ℕ-elim [ℕ] = ℕ-elim′ (id (escape [ℕ])) [ℕ]
 
 ne-elim′ : ∀ {A Γ l K} → Γ ⊢ A ⇒* K → Neutral K → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩ne A
 ne-elim′ D neK (U′ l′ l< ⊢Γ) =
@@ -90,7 +90,7 @@ ne-elim′ D neK (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 ne-elim′ D neK (emb 0<1 x) | emb () x₂
 
 ne-elim : ∀ {Γ l K} → Neutral K  → Γ ⊩⟨ l ⟩ K → Γ ⊩⟨ l ⟩ne K
-ne-elim neK [K] = ne-elim′ (id (wellformed [K])) neK [K]
+ne-elim neK [K] = ne-elim′ (id (escape [K])) neK [K]
 
 Π-elim′ : ∀ {A Γ F G l} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩Π A
 Π-elim′ D (U′ l′ l< ⊢Γ) = ⊥-elim (U≢Π (whrDet* (id (U ⊢Γ) , U) (D , Π)))
@@ -104,7 +104,7 @@ ne-elim neK [K] = ne-elim′ (id (wellformed [K])) neK [K]
 Π-elim′ D (emb 0<1 x) | emb () x₂
 
 Π-elim : ∀ {Γ F G l} → Γ ⊩⟨ l ⟩ Π F ▹ G → Γ ⊩⟨ l ⟩Π Π F ▹ G
-Π-elim [Π] = Π-elim′ (id (wellformed [Π])) [Π]
+Π-elim [Π] = Π-elim′ (id (escape [Π])) [Π]
 
 -- Extract a type and a level from a maybe embedding
 extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l′ → ⊩⟨ l′ ⟩

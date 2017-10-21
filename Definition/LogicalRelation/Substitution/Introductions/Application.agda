@@ -44,7 +44,7 @@ appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F′] 
       [u]′ = irrelevanceTerm′ F≡idF′ [F] ([F′] T.id ⊢Γ) [u]
       [f∘u] = irrelevanceTerm″ idG′ᵤ≡Gᵤ idf∘u≡f∘u
                                 ([G′] T.id ⊢Γ [u]′) [G[u]] ([f]₁ T.id ⊢Γ [u]′)
-      ⊢u = wellformedTerm [F] [u]
+      ⊢u = escapeTerm [F] [u]
       d′ = PE.subst (λ x → Γ ⊢ t ⇒* f ∷ x) (PE.sym ΠFG≡ΠF′G′) (redₜ d)
   in  proj₁ (redSubst*Term (app-subst* d′ ⊢u) [G[u]] [f∘u])
 appTerm′ [F] [G[u]] (emb 0<1 x) [t] [u] = appTerm′ [F] [G[u]] x [t] [u]
@@ -117,11 +117,11 @@ app-congTerm′ {F′} {G′} {t = t} {t′ = t′} {Γ = Γ}
                                        ([g] T.id ⊢Γ [u]′ [u′]′ [u≡u′]′)
       d₁ = PE.subst (λ x → Γ ⊢ t ⇒* f ∷ x) (PE.sym ΠFG≡ΠF′G′) d
       d₂ = PE.subst (λ x → Γ ⊢ t′ ⇒* g ∷ x) (PE.sym ΠFG≡ΠF′G′) d′
-      [tu≡fu] = proj₂ (redSubst*Term (app-subst* d₁ (wellformedTerm [F] [a]))
+      [tu≡fu] = proj₂ (redSubst*Term (app-subst* d₁ (escapeTerm [F] [a]))
                                      [G[u]] [f∘u])
       [gu′≡t′u′] = convEqTerm₂ [G[u]] [G[u′]] [G[u≡u′]]
                      (symEqTerm [G[u′]]
-                       (proj₂ (redSubst*Term (app-subst* d₂ (wellformedTerm [F] [a′]))
+                       (proj₂ (redSubst*Term (app-subst* d₂ (escapeTerm [F] [a′]))
                                              [G[u′]] [g∘u′])))
   in  transEqTerm [G[u]] (transEqTerm [G[u]] [tu≡fu] [tu≡t′u])
                          (transEqTerm [G[u]] [t′u≡t′u′] [gu′≡t′u′])

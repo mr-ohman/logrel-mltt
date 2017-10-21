@@ -29,7 +29,7 @@ wellformedSubst : ∀ {Γ Δ σ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
 wellformedSubst ε ⊢Δ [σ] = id
 wellformedSubst ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) =
   wellformedSubst [Γ] ⊢Δ [tailσ]
-  , wellformedTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ]
+  , escapeTerm (proj₁ ([A] ⊢Δ [tailσ])) [headσ]
 
 -- Valid substitution equality is well-formed
 wellformedSubstEq : ∀ {Γ Δ σ σ′} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
@@ -39,7 +39,7 @@ wellformedSubstEq : ∀ {Γ Δ σ σ′} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
 wellformedSubstEq ε ⊢Δ [σ] [σ≡σ′] = id
 wellformedSubstEq ([Γ] ∙ [A]) ⊢Δ ([tailσ] , [headσ]) ([tailσ≡σ′] , [headσ≡σ′]) =
   wellformedSubstEq [Γ] ⊢Δ [tailσ] [tailσ≡σ′]
-  , ≅ₜ-eq (wellformedTermEq (proj₁ ([A] ⊢Δ [tailσ])) [headσ≡σ′])
+  , ≅ₜ-eq (escapeTermEq (proj₁ ([A] ⊢Δ [tailσ])) [headσ≡σ′])
 
 -- Extend a valid substitution with a term
 consSubstS : ∀ {l σ t A Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
@@ -112,10 +112,10 @@ liftSubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
              ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
              ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
            → (Δ ∙ subst σ F) ⊩ˢ liftSubst σ ∷ Γ ∙ F / [Γ] ∙ [F]
-                             / (⊢Δ ∙ wellformed (proj₁ ([F] ⊢Δ [σ])))
+                             / (⊢Δ ∙ escape (proj₁ ([F] ⊢Δ [σ])))
 liftSubstS {F = F} {σ = σ} {Δ = Δ} [Γ] ⊢Δ [F] [σ] =
-  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
-      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ]
+  let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
+      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ]
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                                      (wk-subst F) here)
   in  [tailσ] , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero)
@@ -127,12 +127,12 @@ liftSubstSEq : ∀ {l F σ σ′ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
              ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
              ([σ≡σ′] : Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
            → (Δ ∙ subst σ F) ⊩ˢ liftSubst σ ≡ liftSubst σ′ ∷ Γ ∙ F / [Γ] ∙ [F]
-                             / (⊢Δ ∙ wellformed (proj₁ ([F] ⊢Δ [σ])))
+                             / (⊢Δ ∙ escape (proj₁ ([F] ⊢Δ [σ])))
                              / liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
 liftSubstSEq {F = F} {σ = σ} {σ′ = σ′} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ≡σ′] =
-  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
-      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ]
-      [tailσ≡σ′] = wk1SubstSEq [Γ] ⊢Δ (wellformed (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ′]
+  let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
+      [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ]
+      [tailσ≡σ′] = wk1SubstSEq [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ′]
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
   in  [tailσ≡σ′] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var zero) (var zero)
                          var0 var0 (~-var var0)
@@ -142,7 +142,7 @@ mutual
   soundContext : ∀ {Γ} → ⊩ᵛ Γ → ⊢ Γ
   soundContext ε = ε
   soundContext (x ∙ x₁) =
-    soundContext x ∙ wellformed (irrelevance′ (subst-id _)
+    soundContext x ∙ escape (irrelevance′ (subst-id _)
                                              (proj₁ (x₁ (soundContext x)
                                                         (idSubstS x))))
 
@@ -152,9 +152,9 @@ mutual
   idSubstS {Γ = Γ ∙ A} ([Γ] ∙ [A]) =
     let ⊢Γ = soundContext [Γ]
         ⊢Γ∙A = soundContext ([Γ] ∙ [A])
-        ⊢Γ∙A′ = ⊢Γ ∙ wellformed (proj₁ ([A] ⊢Γ (idSubstS [Γ])))
+        ⊢Γ∙A′ = ⊢Γ ∙ escape (proj₁ ([A] ⊢Γ (idSubstS [Γ])))
         [A]′ = wk1SubstS {F = subst idSubst A} [Γ] ⊢Γ
-                         (wellformed (proj₁ ([A] (soundContext [Γ])
+                         (escape (proj₁ ([A] (soundContext [Γ])
                                                 (idSubstS [Γ]))))
                          (idSubstS [Γ])
         [tailσ] = S.irrelevanceSubst′ (PE.cong (_∙_ Γ) (subst-id A))

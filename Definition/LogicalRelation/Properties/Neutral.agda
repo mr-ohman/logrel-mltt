@@ -13,7 +13,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Reflexivity
-open import Definition.LogicalRelation.Properties.Wellformed
+open import Definition.LogicalRelation.Properties.Escape
 open import Definition.LogicalRelation.Properties.Symmetry
 
 open import Tools.Empty
@@ -75,12 +75,12 @@ mutual
            (λ {ρ} [ρ] ⊢Δ [a] [b] [a≡b] →
               let A≡ΠFG = subset* (red D)
                   ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
-                  G[a]≡G[b] = wellformedEq ([G] [ρ] ⊢Δ [b])
+                  G[a]≡G[b] = escapeEq ([G] [ρ] ⊢Δ [b])
                                           (symEq ([G] [ρ] ⊢Δ [a]) ([G] [ρ] ⊢Δ [b])
                                                  (G-ext [ρ] ⊢Δ [a] [b] [a≡b]))
-                  a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
-                  b = wellformedTerm ([F] [ρ] ⊢Δ) [b]
-                  a≡b = wellformedTermEq ([F] [ρ] ⊢Δ) [a≡b]
+                  a = escapeTerm ([F] [ρ] ⊢Δ) [a]
+                  b = escapeTerm ([F] [ρ] ⊢Δ) [b]
+                  a≡b = escapeTermEq ([F] [ρ] ⊢Δ) [a≡b]
                   ρn = conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG
                   neN∘a = _∘_ (wkNeutral ρ neN)
                   neN∘b = _∘_ (wkNeutral ρ neN)
@@ -90,8 +90,8 @@ mutual
                             (~-app (~-wk [ρ] ⊢Δ (~-conv n~n A≡ΠFG)) a≡b))
            (λ {ρ} [ρ] ⊢Δ [a] →
               let ρA≡ρΠFG = wkEq [ρ] ⊢Δ (subset* (red D))
-                  a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
-                  a≡a = wellformedTermEq ([F] [ρ] ⊢Δ) (reflEqTerm ([F] [ρ] ⊢Δ) [a])
+                  a = escapeTerm ([F] [ρ] ⊢Δ) [a]
+                  a≡a = escapeTermEq ([F] [ρ] ⊢Δ) (reflEqTerm ([F] [ρ] ⊢Δ) [a])
               in  neuTerm ([G] [ρ] ⊢Δ [a]) (_∘_ (wkNeutral ρ neN))
                           (conv (wkTerm [ρ] ⊢Δ n) ρA≡ρΠFG ∘ a)
                           (~-app (~-wk [ρ] ⊢Δ (~-conv n~n A≡ΠFG)) a≡a))
@@ -133,8 +133,8 @@ mutual
                let ρA≡ρΠFG = wkEq [ρ] ⊢Δ A≡ΠFG
                    ρn = wkTerm [ρ] ⊢Δ n
                    ρn′ = wkTerm [ρ] ⊢Δ n′
-                   a = wellformedTerm ([F] [ρ] ⊢Δ) [a]
-                   a≡a = wellformedTermEq ([F] [ρ] ⊢Δ)
+                   a = escapeTerm ([F] [ρ] ⊢Δ) [a]
+                   a≡a = escapeTermEq ([F] [ρ] ⊢Δ)
                                           (reflEqTerm ([F] [ρ] ⊢Δ) [a])
                    neN∙a   = _∘_ (wkNeutral ρ neN)
                    neN′∙a′ = _∘_ (wkNeutral ρ neN′)

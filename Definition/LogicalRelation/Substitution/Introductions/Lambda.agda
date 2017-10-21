@@ -35,7 +35,7 @@ lamᵛ : ∀ {F G t Γ l}
        ([t] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ∷ G / [Γ] ∙ [F] / [G])
      → Γ ⊩ᵛ⟨ l ⟩ lam t ∷ Π F ▹ G / [Γ] / Πᵛ {F} {G} [Γ] [F] [G]
 lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
-  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
+  let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πᵛ {F} {G} [Γ] [F] [G]
       _ , Π F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
@@ -45,12 +45,12 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       lamt {Δ} {σ} ⊢Δ [σ] =
         let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
             [σF] = proj₁ ([F] ⊢Δ [σ])
-            ⊢F = wellformed [σF]
+            ⊢F = escape [σF]
             ⊢wk1F = T.wk (step id) (⊢Δ ∙ ⊢F) ⊢F
             [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
-            ⊢G = wellformed [σG]
+            ⊢G = escape [σG]
             [σt] = proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ])
-            ⊢t = wellformedTerm [σG] [σt]
+            ⊢t = escapeTerm [σG] [σt]
             wk1t[0] = irrelevanceTerm″
                         PE.refl
                         (PE.sym (wkSingleSubstId (subst (liftSubst σ) t)))
@@ -64,7 +64,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lam ⊢F ⊢t)) lam
                (≅-η-eq ⊢F (lam ⊢F ⊢t) (lam ⊢F ⊢t) lam lam
-                       (wellformedTermEq [σG]
+                       (escapeTermEq [σG]
                          (reflEqTerm [σG]
                            (proj₁ (redSubstTerm β-red′ [σG] wk1t[0])))))
                (λ {_} {Δ₁} {a} {b} ρ ⊢Δ₁ [a] [b] [a≡b] →
@@ -75,8 +75,8 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                               (proj₁ ([F] ⊢Δ₁ [ρσ])) [b]
                       [a≡b]′ = irrelevanceEqTerm′ (wk-subst F) ([F]′ ρ ⊢Δ₁)
                                                   (proj₁ ([F] ⊢Δ₁ [ρσ])) [a≡b]
-                      ⊢F₁′ = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                      ⊢F₁ = wellformed ([F]′ ρ ⊢Δ₁)
+                      ⊢F₁′ = escape (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                      ⊢F₁ = escape ([F]′ ρ ⊢Δ₁)
                       [G]₁ = proj₁ ([G] (⊢Δ₁ ∙ ⊢F₁′)
                                         (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ]))
                       [G]₁′ = irrelevanceΓ′
@@ -89,9 +89,9 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                [G]₁ [G]₁′
                                (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₁′)
                                            (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ])))
-                      ⊢a = wellformedTerm ([F]′ ρ ⊢Δ₁) [a]
-                      ⊢b = wellformedTerm ([F]′ ρ ⊢Δ₁) [b]
-                      ⊢t = wellformedTerm [G]₁′ [t]′
+                      ⊢a = escapeTerm ([F]′ ρ ⊢Δ₁) [a]
+                      ⊢b = escapeTerm ([F]′ ρ ⊢Δ₁) [b]
+                      ⊢t = escapeTerm [G]₁′ [t]′
                       G[a]′ = proj₁ ([G] ⊢Δ₁ ([ρσ] , [a]′))
                       G[a] = [G]′ ρ ⊢Δ₁ [a]
                       t[a] = irrelevanceTerm″
@@ -125,8 +125,8 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                   let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                       [a]′ = irrelevanceTerm′ (wk-subst F) ([F]′ ρ ⊢Δ₁)
                                               (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
-                      ⊢F₁′ = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                      ⊢F₁ = wellformed ([F]′ ρ ⊢Δ₁)
+                      ⊢F₁′ = escape (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                      ⊢F₁ = escape ([F]′ ρ ⊢Δ₁)
                       [G]₁ = proj₁ ([G] (⊢Δ₁ ∙ ⊢F₁′)
                                         (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ]))
                       [G]₁′ = irrelevanceΓ′
@@ -139,8 +139,8 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                                [G]₁ [G]₁′
                                (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₁′)
                                            (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ])))
-                      ⊢a = wellformedTerm ([F]′ ρ ⊢Δ₁) [a]
-                      ⊢t = wellformedTerm [G]₁′ [t]′
+                      ⊢a = escapeTerm ([F]′ ρ ⊢Δ₁) [a]
+                      ⊢t = escapeTerm [G]₁′ [t]′
                       G[a]′ = proj₁ ([G] ⊢Δ₁ ([ρσ] , [a]′))
                       G[a] = [G]′ ρ ⊢Δ₁ [a]
                       t[a] = irrelevanceTerm″ (PE.sym (singleSubstWkComp a σ G))
@@ -153,12 +153,12 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
          let [liftσ′] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ′]
              _ , Π F″ G″ D″ ⊢F″ ⊢G″ A≡A″ [F]″ [G]″ G-ext′ =
                extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ′])))
-             ⊢F′ = wellformed (proj₁ ([F] ⊢Δ [σ′]))
+             ⊢F′ = escape (proj₁ ([F] ⊢Δ [σ′]))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
              [G]₁′ = proj₁ ([G] (⊢Δ ∙ ⊢F′) [liftσ′])
              [σΠFG≡σ′ΠFG] = proj₂ ([ΠFG] ⊢Δ [σ]) [σ′] [σ≡σ′]
-             ⊢t = wellformedTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
-             ⊢t′ = wellformedTerm [G]₁′ (proj₁ ([t] (⊢Δ ∙ ⊢F′) [liftσ′]))
+             ⊢t = escapeTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
+             ⊢t′ = escapeTerm [G]₁′ (proj₁ ([t] (⊢Δ ∙ ⊢F′) [liftσ′]))
              neuVar = neuTerm ([F]′ (T.step T.id) (⊢Δ ∙ ⊢F))
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
                               (~-var (var (⊢Δ ∙ ⊢F) here))
@@ -172,18 +172,18 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                 let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
                     [ρσ′] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ′]
                     [ρσ≡ρσ′] = wkSubstSEq [Γ] ⊢Δ ⊢Δ₁ ρ [σ] [σ≡σ′]
-                    ⊢F₁′ = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                    ⊢F₁ = wellformed ([F]′ ρ ⊢Δ₁)
-                    ⊢F₂′ = wellformed (proj₁ ([F] ⊢Δ₁ [ρσ′]))
-                    ⊢F₂ = wellformed ([F]″ ρ ⊢Δ₁)
+                    ⊢F₁′ = escape (proj₁ ([F] ⊢Δ₁ [ρσ]))
+                    ⊢F₁ = escape ([F]′ ρ ⊢Δ₁)
+                    ⊢F₂′ = escape (proj₁ ([F] ⊢Δ₁ [ρσ′]))
+                    ⊢F₂ = escape ([F]″ ρ ⊢Δ₁)
                     [σF≡σ′F] = proj₂ ([F] ⊢Δ₁ [ρσ]) [ρσ′] [ρσ≡ρσ′]
                     [a]′ = irrelevanceTerm′ (wk-subst F) ([F]′ ρ ⊢Δ₁)
                                             (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
                     [a]″ = convTerm₁ (proj₁ ([F] ⊢Δ₁ [ρσ]))
                                       (proj₁ ([F] ⊢Δ₁ [ρσ′]))
                                       [σF≡σ′F] [a]′
-                    ⊢a = wellformedTerm ([F]′ ρ ⊢Δ₁) [a]
-                    ⊢a′ = wellformedTerm ([F]″ ρ ⊢Δ₁)
+                    ⊢a = escapeTerm ([F]′ ρ ⊢Δ₁) [a]
+                    ⊢a′ = escapeTerm ([F]″ ρ ⊢Δ₁)
                             (irrelevanceTerm′ (PE.sym (wk-subst F))
                                               (proj₁ ([F] ⊢Δ₁ [ρσ′]))
                                               ([F]″ ρ ⊢Δ₁)
@@ -226,8 +226,8 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                               [G]₂ [G]₂′
                               (proj₁ ([t] (⊢Δ₁ ∙ ⊢F₂′)
                                           (liftSubstS {F = F} [Γ] ⊢Δ₁ [F] [ρσ′])))
-                    ⊢t = wellformedTerm [G]₁′ [t]′
-                    ⊢t′ = wellformedTerm [G]₂′ [t]″
+                    ⊢t = escapeTerm [G]₁′ [t]′
+                    ⊢t′ = escapeTerm [G]₂′ [t]″
                     t[a] = irrelevanceTerm″
                              (PE.sym (singleSubstWkComp a σ G))
                              (PE.sym (singleSubstWkComp a σ t)) G[a]′ G[a]
@@ -259,15 +259,15 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
          in  Πₜ₌ (lam (subst (liftSubst σ) t)) (lam (subst (liftSubst σ′) t))
                  (idRedTerm:*: (lam ⊢F ⊢t))
                  (idRedTerm:*: (conv (lam ⊢F′ ⊢t′)
-                                     (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
+                                     (sym (≅-eq (escapeEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                                               [σΠFG≡σ′ΠFG])))))
                  lam lam
                  (≅-η-eq ⊢F (lam ⊢F ⊢t)
                       (conv (lam ⊢F′ ⊢t′)
-                            (sym (≅-eq (wellformedEq (proj₁ ([ΠFG] ⊢Δ [σ]))
+                            (sym (≅-eq (escapeEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                               [σΠFG≡σ′ΠFG]))))
                       lam lam
-                      (wellformedTermEq
+                      (escapeTermEq
                         (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                         (irrelevanceEqTerm′
                           (idWkLiftSubstLemma σ G)
@@ -313,7 +313,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       var0≡0 = neuEqTerm [wk1F] (var zero) (var zero) var0′ var0′ (~-var var0′)
       [σG]′ = [G]′ (step id) (⊢Δ ∙ ⊢F) var0
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢F) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
-      σf0≡σg0 = wellformedTermEq [σG]
+      σf0≡σg0 = escapeTermEq [σG]
                                  ([f0≡g0] (⊢Δ ∙ ⊢F)
                                           (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
       σf0≡σg0′ =
@@ -322,7 +322,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
           (PE.cong₂ _∘_ (PE.trans (subst-wk f) (PE.sym (wk-subst f))) PE.refl)
           (PE.cong₂ _∘_ (PE.trans (subst-wk g) (PE.sym (wk-subst g))) PE.refl)
           σf0≡σg0
-      ⊢ΠFG = wellformed [σΠFG]
+      ⊢ΠFG = escape [σΠFG]
       f≡f₁′ = proj₂ (redSubst*Term d [σΠFG] (Πₜ f₁ (idRedTerm:*: ⊢u) funcF f≡f [f] [f]₁))
       g≡g₁′ = proj₂ (redSubst*Term d₁ [σΠFG] (Πₜ g₁ (idRedTerm:*: ⊢u₁) funcG g≡g [g] [g]₁))
       eq′  = irrelevanceEqTerm′ (cons0wkLift1-id σ G) [σG]′ [σG]
@@ -331,8 +331,8 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       eq₁′ = irrelevanceEqTerm′ (cons0wkLift1-id σ G) [σG]′ [σG]
                                 (app-congTerm [wk1F] [σG]′ (wk (step id) (⊢Δ ∙ ⊢F) [σΠFG])
                                               (wkEqTerm (step id) (⊢Δ ∙ ⊢F) [σΠFG] g≡g₁′) var0 var0 var0≡0)
-      eq   = wellformedTermEq [σG] eq′
-      eq₁  = wellformedTermEq [σG] eq₁′
+      eq   = escapeTermEq [σG] eq′
+      eq₁  = escapeTermEq [σG] eq₁′
   in  Πₜ₌ f₁ g₁ [d] [d′] funcF funcG
           (≅-η-eq ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
                   (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0′ eq₁)))
@@ -362,10 +362,10 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                  [f∘u] = appTerm ([F]′ [ρ] ⊢Δ₁) ([G]′ [ρ] ⊢Δ₁ [a]) [ρσΠFG] [ρf]′ [a]
                  [g∘u] = appTerm ([F]′ [ρ] ⊢Δ₁) ([G]′ [ρ] ⊢Δ₁ [a]) [ρσΠFG] [ρg]′ [a]
                  [tu≡fu] = proj₂ (redSubst*Term (app-subst* (wkRed*Term [ρ] ⊢Δ₁ d)
-                                                            (wellformedTerm ([F]′ [ρ] ⊢Δ₁) [a]))
+                                                            (escapeTerm ([F]′ [ρ] ⊢Δ₁) [a]))
                                                 ([G]′ [ρ] ⊢Δ₁ [a]) [f∘u])
                  [gu≡t′u] = proj₂ (redSubst*Term (app-subst* (wkRed*Term [ρ] ⊢Δ₁ d₁)
-                                                             (wellformedTerm ([F]′ [ρ] ⊢Δ₁) [a]))
+                                                             (escapeTerm ([F]′ [ρ] ⊢Δ₁) [a]))
                                                  ([G]′ [ρ] ⊢Δ₁ [a]) [g∘u])
              in  transEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) (symEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) [tu≡fu])
                              (transEqTerm ([G]′ [ρ] ⊢Δ₁ [a]) f≡g [gu≡t′u]))

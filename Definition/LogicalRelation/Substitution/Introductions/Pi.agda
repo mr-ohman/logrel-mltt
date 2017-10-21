@@ -36,12 +36,12 @@ import Tools.PropositionalEquality as PE
 Πᵛ {F} {G} {Γ} {l} [Γ] [F] [G] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [F]σ {σ′} [σ′] = [F] {σ = σ′} ⊢Δ [σ′]
       [σF] = proj₁ ([F]σ [σ])
-      ⊢F {σ′} [σ′] = wellformed (proj₁ ([F]σ {σ′} [σ′]))
-      ⊢F≡F = wellformedEq [σF] (reflEq [σF])
+      ⊢F {σ′} [σ′] = escape (proj₁ ([F]σ {σ′} [σ′]))
+      ⊢F≡F = escapeEq [σF] (reflEq [σF])
       [G]σ {σ′} [σ′] = [G] {σ = liftSubst σ′} (⊢Δ ∙ ⊢F [σ′])
                            (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ′])
-      ⊢G {σ′} [σ′] = wellformed (proj₁ ([G]σ {σ′} [σ′]))
-      ⊢G≡G = wellformedEq (proj₁ ([G]σ [σ])) (reflEq (proj₁ ([G]σ [σ])))
+      ⊢G {σ′} [σ′] = escape (proj₁ ([G]σ {σ′} [σ′]))
+      ⊢G≡G = escapeEq (proj₁ ([G]σ [σ])) (reflEq (proj₁ ([G]σ [σ])))
       ⊢ΠF▹G = Π ⊢F [σ] ▹ ⊢G [σ]
       [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
              ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
@@ -105,14 +105,14 @@ import Tools.PropositionalEquality as PE
             [F][wk1σ] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
             [F][wk1σ′] = proj₁ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ′])
             var0′ = conv var0
-                         (≅-eq (wellformedEq [F][wk1σ]
+                         (≅-eq (escapeEq [F][wk1σ]
                                              (proj₂ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
                                                     [wk1σ′] [wk1σ≡wk1σ′])))
         in  Π₌ _ _ (id (Π ⊢F [σ′] ▹ ⊢G [σ′]))
                (≅-Π-cong (⊢F [σ])
-                       (wellformedEq (proj₁ ([F] ⊢Δ [σ]))
+                       (escapeEq (proj₁ ([F] ⊢Δ [σ]))
                                     (proj₂ ([F] ⊢Δ [σ]) [σ′] [σ≡σ′]))
-                       (wellformedEq (proj₁ ([G]σ [σ])) (proj₂ ([G]σ [σ])
+                       (escapeEq (proj₁ ([G]σ [σ])) (proj₂ ([G]σ [σ])
                          ([wk1σ′] , neuTerm [F][wk1σ′] (var zero) var0′ (~-var var0′))
                          ([wk1σ≡wk1σ′] , neuEqTerm [F][wk1σ]
                            (var zero) (var zero) var0 var0 (~-var var0)))))
@@ -154,12 +154,12 @@ import Tools.PropositionalEquality as PE
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       _ , Π F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext′ = extractMaybeEmb (Π-elim [σΠFG])
       [σF] = proj₁ ([F] ⊢Δ [σ])
-      ⊢σF = wellformed [σF]
+      ⊢σF = escape [σF]
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
-      ⊢σH = wellformed (proj₁ ([H] ⊢Δ [σ]))
-      ⊢σE = wellformed (proj₁ ([E] (⊢Δ ∙ ⊢σH) (liftSubstS {F = H} [Γ] ⊢Δ [H] [σ])))
-      ⊢σF≡σH = wellformedEq [σF] ([F≡H] ⊢Δ [σ])
-      ⊢σG≡σE = wellformedEq [σG] ([G≡E] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+      ⊢σH = escape (proj₁ ([H] ⊢Δ [σ]))
+      ⊢σE = escape (proj₁ ([E] (⊢Δ ∙ ⊢σH) (liftSubstS {F = H} [Γ] ⊢Δ [H] [σ])))
+      ⊢σF≡σH = escapeEq [σF] ([F≡H] ⊢Δ [σ])
+      ⊢σG≡σE = escapeEq [σG] ([G≡E] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
   in  Π₌ (subst σ H)
          (subst (liftSubst σ) E)
          (id (Π ⊢σH ▹ ⊢σE))
@@ -191,13 +191,13 @@ import Tools.PropositionalEquality as PE
     → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ∷ U / [Γ] / Uᵛ [Γ]
 Πᵗᵛ {F} {G} {Γ} [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
-      ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
-      ⊢Fₜ = wellformedTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ]))
-      ⊢F≡Fₜ = wellformedTermEq (U′ ⁰ 0<1 ⊢Δ)
+      ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
+      ⊢Fₜ = escapeTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ]))
+      ⊢F≡Fₜ = escapeTermEq (U′ ⁰ 0<1 ⊢Δ)
                                (reflEqTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ])))
-      ⊢Gₜ = wellformedTerm (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
+      ⊢Gₜ = escapeTerm (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                            (proj₁ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]))
-      ⊢G≡Gₜ = wellformedTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
+      ⊢G≡Gₜ = escapeTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                                (reflEqTerm (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                                            (proj₁ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ])))
       [F]₀ = univᵛ {F} [Γ] (Uᵛ [Γ]) [Fₜ]
@@ -219,19 +219,19 @@ import Tools.PropositionalEquality as PE
              var0 = conv (var (⊢Δ ∙ ⊢F)
                          (PE.subst (λ x → zero ∷ x ∈ (Δ ∙ subst σ F))
                                    (wk-subst F) here))
-                    (≅-eq (wellformedEq (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ]))
+                    (≅-eq (escapeEq (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ]))
                                         (proj₂ ([F] (⊢Δ ∙ ⊢F) [wk1σ]) [wk1σ′]
                                                (wk1SubstSEq [Γ] ⊢Δ ⊢F [σ] [σ≡σ′]))))
              [liftσ′]′ = [wk1σ′]
                        , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ′])) (var zero)
                                  var0 (~-var var0)
-             ⊢F′ = wellformed (proj₁ ([F] ⊢Δ [σ′]))
-             ⊢Fₜ′ = wellformedTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ′]))
-             ⊢Gₜ′ = wellformedTerm (proj₁ ([U] (⊢Δ ∙ ⊢F′) [liftσ′]))
+             ⊢F′ = escape (proj₁ ([F] ⊢Δ [σ′]))
+             ⊢Fₜ′ = escapeTerm (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ′]))
+             ⊢Gₜ′ = escapeTerm (proj₁ ([U] (⊢Δ ∙ ⊢F′) [liftσ′]))
                                   (proj₁ ([Gₜ] (⊢Δ ∙ ⊢F′) [liftσ′]))
-             ⊢F≡F′ = wellformedTermEq (U′ ⁰ 0<1 ⊢Δ)
+             ⊢F≡F′ = escapeTermEq (U′ ⁰ 0<1 ⊢Δ)
                                      (proj₂ ([Fₜ] ⊢Δ [σ]) [σ′] [σ≡σ′])
-             ⊢G≡G′ = wellformedTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
+             ⊢G≡G′ = escapeTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                                      (proj₂ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]) [liftσ′]′
                                             (liftSubstSEq {F = F} [Γ] ⊢Δ [F] [σ] [σ≡σ′]))
              [ΠFG]′ = (Πᵛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ′]
@@ -261,8 +261,8 @@ import Tools.PropositionalEquality as PE
          → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ≡ Π H ▹ E ∷ U / [Γ] / Uᵛ [Γ]
 Π-congᵗᵛ {F} {G} {H} {E}
          [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ {Δ} {σ} ⊢Δ [σ] =
-  let ⊢F = wellformed (proj₁ ([F] ⊢Δ [σ]))
-      ⊢H = wellformed (proj₁ ([H] ⊢Δ [σ]))
+  let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
+      ⊢H = escape (proj₁ ([H] ⊢Δ [σ]))
       [liftFσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [liftHσ] = liftSubstS {F = H} [Γ] ⊢Δ [H] [σ]
       [F]ᵤ = univᵛ {F} [Γ] (Uᵛ [Γ]) [F]ₜ
@@ -279,18 +279,18 @@ import Tools.PropositionalEquality as PE
                                (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁ [G]ᵤ
                  (univEqᵛ {G} {E} (_∙_ {A = F} [Γ] [F])
                           (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ᵤ₁ [G≡E]ₜ)
-      ΠFGₜ = Π wellformedTerm {l = ¹} (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
-             ▹ wellformedTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
+      ΠFGₜ = Π escapeTerm {l = ¹} (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
+             ▹ escapeTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
                               (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
-      ΠHEₜ = Π wellformedTerm {l = ¹} (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
-             ▹ wellformedTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ]))
+      ΠHEₜ = Π escapeTerm {l = ¹} (U′ ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
+             ▹ escapeTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ]))
                               (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ]))
   in  Uₜ₌ (Π subst σ F ▹ subst (liftSubst σ) G)
           (Π subst σ H ▹ subst (liftSubst σ) E)
           (idRedTerm:*: ΠFGₜ) (idRedTerm:*: ΠHEₜ)
           Π Π
-          (≅ₜ-Π-cong ⊢F (wellformedTermEq (U′ ⁰ 0<1 ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
-                        (wellformedTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
+          (≅ₜ-Π-cong ⊢F (escapeTermEq (U′ ⁰ 0<1 ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
+                        (escapeTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
                                           ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ])))
           (proj₁ (Πᵛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ]))
           (proj₁ (Πᵛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))

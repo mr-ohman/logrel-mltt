@@ -19,7 +19,7 @@ open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Reducibility
-open import Definition.LogicalRelation.Substitution.Wellformed
+open import Definition.LogicalRelation.Substitution.Escape
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 open import Definition.LogicalRelation.Fundamental
@@ -59,7 +59,7 @@ injectivity″ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
       [G≡E]′ = irrelevanceEqLift″ (PE.trans (wkSingleSubstId _) (PE.sym G≡G₁))
                                    (PE.trans (wkSingleSubstId _) (PE.sym E≡G′))
                                    (PE.sym F≡F₁) [G]₁ [G]′ [G≡E]₁
-  in  wellformedEq [F]′ [F≡H]′ , wellformedEq [G]′ [G≡E]′
+  in  escapeEq [F]′ [F≡H]′ , escapeEq [G]′ [G≡E]′
 injectivity″ (emb 0<1 x) [ΠFG≡ΠHE] = injectivity″ x [ΠFG≡ΠHE]
 
 -- Helper function of injectivity for reducible Π-types
