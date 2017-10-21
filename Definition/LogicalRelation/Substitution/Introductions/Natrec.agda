@@ -33,7 +33,7 @@ open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 
--- Natural recursion closure reduction (requires sound terms and equality).
+-- Natural recursion closure reduction (requires reducible terms and equality).
 natrec-subst* : ∀ {Γ C c g n n′ l} → Γ ∙ ℕ ⊢ C → Γ ⊢ c ∷ C [ zero ]
               → Γ ⊢ g ∷ Π ℕ ▹ (C ▹▹ C [ suc (var zero) ]↑)
               → Γ ⊢ n ⇒* n′ ∷ ℕ
@@ -113,7 +113,7 @@ sucCaseCong {F} {F′} {Γ} {l} [Γ] [ℕ] [F] [F′] [F≡F′] =
                                   (λ {Δ} {σ} → sucCase₃ [Γ] [ℕ] {Δ} {σ})
                            {Δ} {σ})))
 
--- Soundness of natural recursion under a valid substitution.
+-- Reducibility of natural recursion under a valid substitution.
 natrecTerm : ∀ {F z s n Γ Δ σ l}
              ([Γ]  : ⊩ᵛ Γ)
              ([F]  : Γ ∙ ℕ ⊩ᵛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕᵛ [Γ]))
@@ -272,7 +272,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                            (convTerm₂ [σFₙ] [σFₘ] [Fₙ≡Fₘ] natrecM))
 
 
--- Soundness of natural recursion congurence under a valid substitution equality.
+-- Reducibility of natural recursion congurence under a valid substitution equality.
 natrec-congTerm : ∀ {F F′ z z′ s s′ n m Γ Δ σ σ′ l}
                   ([Γ]      : ⊩ᵛ Γ)
                   ([F]      : Γ ∙ ℕ ⊩ᵛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕᵛ [Γ]))

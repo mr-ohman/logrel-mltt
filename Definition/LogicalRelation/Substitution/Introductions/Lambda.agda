@@ -282,7 +282,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                   σlamt∘a≡σ′lamt∘a)
 
 
--- Soundness of η-equality under a valid substitution.
+-- Reducibility of η-equality under a valid substitution.
 η-eqEqTerm : ∀ {f g F G Γ Δ σ l}
              ([Γ] : ⊩ᵛ Γ)
              ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])

@@ -21,14 +21,14 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
--- Neutral reflexive types are sound.
+-- Neutral reflexive types are reducible.
 neu : ∀ {l Γ A} (neA : Neutral A)
     → Γ ⊢ A
     → Γ ⊢ A ~ A ∷ U
     → Γ ⊩⟨ l ⟩ A
 neu neA A A~A = ne′ _ (idRed:*: A) neA A~A
 
-  -- Helper function for sound neutral equality of a specific type of derivation.
+  -- Helper function for reducible neutral equality of a specific type of derivation.
 neuEq′ : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ne A)
          (neA : Neutral A)
          (neB : Neutral B)
@@ -40,7 +40,7 @@ neuEq′ (noemb (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neA neB A B A~B =
   in  ne₌ _ (idRed:*: B) neB (PE.subst (λ x → _ ⊢ x ~ _ ∷ _) A≡K A~B)
 neuEq′ (emb 0<1 x) neB A:≡:B = neuEq′ x neB A:≡:B
 
--- Neutrally equal types are of sound equality.
+-- Neutrally equal types are of reducible equality.
 neuEq : ∀ {l Γ A B} ([A] : Γ ⊩⟨ l ⟩ A)
         (neA : Neutral A)
         (neB : Neutral B)
@@ -53,7 +53,7 @@ neuEq [A] neA neB A B A~B =
                 (neuEq′ (ne-elim neA [A]) neA neB A B A~B)
 
 mutual
-  -- Neutral reflexive terms are sound.
+  -- Neutral reflexive terms are reducible.
   neuTerm : ∀ {l Γ A n} ([A] : Γ ⊩⟨ l ⟩ A) (neN : Neutral n)
           → Γ ⊢ n ∷ A
           → Γ ⊢ n ~ n ∷ A
@@ -97,7 +97,7 @@ mutual
                           (~-app (~-wk [ρ] ⊢Δ (~-conv n~n A≡ΠFG)) a≡a))
   neuTerm (emb 0<1 x) neN n = neuTerm x neN n
 
-  -- Neutrally equal terms are of sound equality.
+  -- Neutrally equal terms are of reducible equality.
   neuEqTerm : ∀ {l Γ A n n′} ([A] : Γ ⊩⟨ l ⟩ A)
               (neN : Neutral n) (neN′ : Neutral n′)
             → Γ ⊢ n  ∷ A

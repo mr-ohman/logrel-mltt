@@ -10,7 +10,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.LogicalRelation.Fundamental
 open import Definition.Typed.Consequences.Syntactic
 
@@ -29,9 +29,9 @@ A≢B : ∀ {A B Γ} (_⊩′⟨_⟩A_ _⊩′⟨_⟩B_ : Con Term → TypeLevel
     → Γ ⊢ A ≡ B → ⊥
 A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B with fundamentalEq A≡B
 A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [Γ] , [A] , [B] , [A≡B] =
-  let [idA] = soundness [Γ] [A]
-      [idB] = soundness [Γ] [B]
-      [idA≡B] = soundnessEq {A} {B} [Γ] [A] [A≡B]
+  let [idA] = reducible [Γ] [A]
+      [idB] = reducible [Γ] [B]
+      [idA≡B] = reducibleEq {A} {B} [Γ] [A] [A≡B]
       _ , [A]′ = A-elim ([idA])
       _ , [B]′ = B-elim ([idB])
       [idA≡B]′ = irrelevanceEq [idA] (A-intr [A]′) [idA≡B]

@@ -15,7 +15,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.LogicalRelation.Fundamental
 
 
@@ -36,6 +36,6 @@ zero≢one′ [ℕ] [0≡1] =
 -- Zero cannot be judgmentally equal to one.
 zero≢one : ∀ {Γ} → Γ ⊢ zero ≡ suc zero ∷ ℕ → ⊥
 zero≢one 0≡1 = let [Γ] , modelsTermEq [ℕ] _ _ [0≡1] = fundamentalTermEq 0≡1
-           in  zero≢one′ (soundness [Γ] [ℕ])
-                         (soundnessEqTerm {t = zero} {u = suc zero} {A = ℕ}
+           in  zero≢one′ (reducible [Γ] [ℕ])
+                         (reducibleEqTerm {t = zero} {u = suc zero} {A = ℕ}
                                           [Γ] [ℕ] [0≡1])

@@ -25,7 +25,7 @@ open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
 
--- Weak head expansion of sound types.
+-- Weak head expansion of reducible types.
 redSubst* : ∀ {A B l Γ}
           → Γ ⊢ A ⇒* B
           → Γ ⊩⟨ l ⟩ B
@@ -48,7 +48,7 @@ redSubst* D (Π′ F G [ ⊢B , ⊢ΠFG , D′ ] ⊢F ⊢G A≡A [F] [G] G-ext) 
 redSubst* D (emb 0<1 x) with redSubst* D x
 redSubst* D (emb 0<1 x) | y , y₁ = emb 0<1 y , y₁
 
--- Weak head expansion of sound terms.
+-- Weak head expansion of reducible terms.
 redSubst*Term : ∀ {A t u l Γ}
               → Γ ⊢ t ⇒* u ∷ A
               → ([A] : Γ ⊩⟨ l ⟩ A)
@@ -86,7 +86,7 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-
           (λ [ρ] ⊢Δ [a] → reflEqTerm ([G] [ρ] ⊢Δ [a]) ([f]₁ [ρ] ⊢Δ [a]))
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
--- Weak head expansion of sound types with single reduction step.
+-- Weak head expansion of reducible types with single reduction step.
 redSubst : ∀ {A B l Γ}
          → Γ ⊢ A ⇒ B
          → Γ ⊩⟨ l ⟩ B
@@ -94,7 +94,7 @@ redSubst : ∀ {A B l Γ}
          → Γ ⊩⟨ l ⟩ A ≡ B / [A]
 redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (wellformed [B])) [B]
 
--- Weak head expansion of sound terms with single reduction step.
+-- Weak head expansion of reducible terms with single reduction step.
 redSubstTerm : ∀ {A t u l Γ}
              → Γ ⊢ t ⇒ u ∷ A
              → ([A] : Γ ⊩⟨ l ⟩ A)

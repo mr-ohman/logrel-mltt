@@ -18,7 +18,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.LogicalRelation.Substitution.Wellformed
 import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
@@ -32,7 +32,7 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
--- Helper function of injectivity for specific sound Π-types
+-- Helper function of injectivity for specific reducible Π-types
 injectivity″ : ∀ {F G H E Γ l}
                ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
@@ -62,7 +62,7 @@ injectivity″ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
   in  wellformedEq [F]′ [F≡H]′ , wellformedEq [G]′ [G≡E]′
 injectivity″ (emb 0<1 x) [ΠFG≡ΠHE] = injectivity″ x [ΠFG≡ΠHE]
 
--- Helper function of injectivity for sound Π-types
+-- Helper function of injectivity for reducible Π-types
 injectivity′ : ∀ {F G H E Γ l}
                ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
@@ -75,6 +75,6 @@ injectivity′ [ΠFG] [ΠFG≡ΠHE] =
 injectivity : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 injectivity ⊢ΠFG≡ΠHE with fundamentalEq ⊢ΠFG≡ΠHE
 injectivity {Γ} {F} {G} {H} {E} ⊢ΠFG≡ΠHE | [Γ] , [ΠFG] , [ΠHE] , [ΠFG≡ΠHE] =
-  let [ΠFG]′ = soundness [Γ] [ΠFG]
-      [ΠFG≡ΠHE]′ = soundnessEq {Π F ▹ G} {Π H ▹ E} [Γ] [ΠFG] [ΠFG≡ΠHE]
+  let [ΠFG]′ = reducible [Γ] [ΠFG]
+      [ΠFG≡ΠHE]′ = reducibleEq {Π F ▹ G} {Π H ▹ E} [Γ] [ΠFG] [ΠFG≡ΠHE]
   in  injectivity′ [ΠFG]′ [ΠFG≡ΠHE]′

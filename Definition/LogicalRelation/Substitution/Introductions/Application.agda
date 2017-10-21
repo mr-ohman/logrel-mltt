@@ -49,7 +49,7 @@ appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F′] 
   in  proj₁ (redSubst*Term (app-subst* d′ ⊢u) [G[u]] [f∘u])
 appTerm′ [F] [G[u]] (emb 0<1 x) [t] [u] = appTerm′ [F] [G[u]] x [t] [u]
 
--- Application of sound terms.
+-- Application of reducible terms.
 appTerm : ∀ {F G t u Γ l l′ l″}
           ([F] : Γ ⊩⟨ l″ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
@@ -128,7 +128,7 @@ app-congTerm′ {F′} {G′} {t = t} {t′ = t′} {Γ = Γ}
 app-congTerm′ [F] [G[u]] (emb 0<1 x) [t≡t′] [u] [u′] [u≡u′] =
   app-congTerm′ [F] [G[u]] x [t≡t′] [u] [u′] [u≡u′]
 
--- Application congurence of sound terms.
+-- Application congurence of reducible terms.
 app-congTerm : ∀ {F G t t′ u u′ Γ l l′}
           ([F] : Γ ⊩⟨ l′ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])

@@ -16,12 +16,12 @@ open import Tools.Product
 open import Tools.Empty using (⊥; ⊥-elim)
 import Tools.PropositionalEquality as PE
 
--- Type for maybe embeddings of sound types
+-- Type for maybe embeddings of reducible types
 data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set₁ where
   noemb : ∀ {l ⊩⟨_⟩} → ⊩⟨ l ⟩ → MaybeEmb l ⊩⟨_⟩
   emb   : ∀ {l l′ ⊩⟨_⟩} → l′ < l → MaybeEmb l′ ⊩⟨_⟩ → MaybeEmb l ⊩⟨_⟩
 
--- Specific sound types with possible embedding
+-- Specific reducible types with possible embedding
 
 _⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set₁
 Γ ⊩⟨ l ⟩U = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩U)
@@ -35,7 +35,7 @@ _⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 _⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
 Γ ⊩⟨ l ⟩Π A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩Π A)
 
--- Construct a general sound type from a specific
+-- Construct a general reducible type from a specific
 
 U-intr : ∀ {Γ l} → Γ ⊩⟨ l ⟩U → Γ ⊩⟨ l ⟩ U
 U-intr (noemb x) = U x
@@ -53,7 +53,7 @@ ne-intr (emb 0<1 x) = emb 0<1 (ne-intr x)
 Π-intr (noemb x) = Π x
 Π-intr (emb 0<1 x) = emb 0<1 (Π-intr x)
 
--- Construct a specific sound type from a general with some criterion
+-- Construct a specific reducible type from a general with some criterion
 
 U-elim : ∀ {Γ l} → Γ ⊩⟨ l ⟩ U → Γ ⊩⟨ l ⟩U
 U-elim (U′ l′ l< ⊢Γ) = noemb (U l′ l< ⊢Γ)

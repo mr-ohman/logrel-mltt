@@ -32,7 +32,7 @@ wkEqTermNe : ∀ {ρ Γ Δ k k′ A} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
 wkEqTermNe {ρ} [ρ] ⊢Δ (neNfₜ₌ neK neM k≡m) =
   neNfₜ₌ (wkNeutral ρ neK) (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ k≡m)
 
--- Weakening of sound natural numbers
+-- Weakening of reducible natural numbers
 
 mutual
   wkTermℕ : ∀ {ρ Γ Δ n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)

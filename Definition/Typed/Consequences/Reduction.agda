@@ -11,14 +11,14 @@ open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
--- Helper function where all sound types can be reduced to WHNF.
+-- Helper function where all reducible types can be reduced to WHNF.
 fullyReducible′ : ∀ {A Γ l} ([A] : Γ ⊩⟨ l ⟩ A)
                 → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 fullyReducible′ (U′ .⁰ 0<1 ⊢Γ) = U , U , idRed:*: (U ⊢Γ)
@@ -30,9 +30,9 @@ fullyReducible′ (emb 0<1 [A]) = fullyReducible′ [A]
 -- Well-formed types can all be reduced to WHNF.
 fullyReducible : ∀ {A Γ} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 fullyReducible a with fundamental a
-... | [Γ] , [A] = fullyReducible′ (soundness [Γ] [A])
+... | [Γ] , [A] = fullyReducible′ (reducible [Γ] [A])
 
--- Helper function where sound all terms can be reduced to WHNF.
+-- Helper function where reducible all terms can be reduced to WHNF.
 fullyReducibleTerm′ : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
                 → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 fullyReducibleTerm′ (U x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
@@ -49,4 +49,4 @@ fullyReducibleTerm′ (emb 0<1 [A]) [a] = fullyReducibleTerm′ [A] [a]
 fullyReducibleTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 fullyReducibleTerm {a} {A} ⊢a with fundamentalTerm ⊢a
 ... | [Γ] , [A] , [a] =
-  fullyReducibleTerm′ (soundness [Γ] [A]) (soundnessTerm {a} {A} [Γ] [A] [a])
+  fullyReducibleTerm′ (reducible [Γ] [A]) (reducibleTerm {a} {A} [Γ] [A] [a])

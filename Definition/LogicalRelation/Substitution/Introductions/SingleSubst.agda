@@ -174,7 +174,7 @@ subst↑SEq {F} {G} {G′} {t} {t′}
                                             (reflSubst [Γ] ⊢Δ (proj₁ [σ]) , [t≡t′]′))
   in  transEq G[t]′ G′[t]′ G′[t′]′ G[t]≡G′[t] G′[t]≡G′[t′]
 
--- Helper function for sound substitution of Π-types with specific typing derivations.
+-- Helper function for reducible substitution of Π-types with specific typing derivations.
 substSΠ₁′ : ∀ {F G t Γ l l′}
            ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -189,7 +189,7 @@ substSΠ₁′ {t = t} (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)) [F]₁ [
   in  irrelevance′ Geq ([G] T.id ⊢Γ [t]′)
 substSΠ₁′ (emb 0<1 x) [F]₁ [t] = emb 0<1 (substSΠ₁′ x [F]₁ [t])
 
--- Sound substitution of Π-types.
+-- Reducible substitution of Π-types.
 substSΠ₁ : ∀ {F G t Γ l l′}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -197,7 +197,7 @@ substSΠ₁ : ∀ {F G t Γ l l′}
          → Γ ⊩⟨ l ⟩ G [ t ]
 substSΠ₁ [ΠFG] [F] [t] = substSΠ₁′ (Π-elim [ΠFG]) [F] [t]
 
--- Helper function for sound substitution of Π-congurence with specific typing derivations.
+-- Helper function for reducible substitution of Π-congurence with specific typing derivations.
 substSΠ₂′ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / Π-intr [ΠFG])
@@ -229,7 +229,7 @@ substSΠ₂′ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                   [G′[t′]] [Gt≡Gt′] [Gt′≡G′t′])
 substSΠ₂′ (emb 0<1 x) = substSΠ₂′ x
 
--- Sound substitution of Π-congurence.
+-- Reducible substitution of Π-congurence.
 substSΠ₂ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / [ΠFG])

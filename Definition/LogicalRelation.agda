@@ -17,9 +17,9 @@ import Tools.PropositionalEquality as PE
 -- The different cases of the logical relation are spread out through out
 -- this file. This is due to them having different dependencies.
 
--- We will refer to expressions that satisfies the logical relation as sound.
+-- We will refer to expressions that satisfies the logical relation as reducible.
 
--- Soundness of Neutrals:
+-- Reducibility of Neutrals:
 
 -- Neutral type
 record _⊩ne_ (Γ : Con Term) (A : Term) : Set where
@@ -78,7 +78,7 @@ record _⊩ne_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩ne A) : Set
     d′  : Γ ⊢ u :⇒*: m ∷ K
     nf  : Γ ⊩neNf k ≡ m ∷ K
 
--- Soundness of natural numbers:
+-- Reducibility of natural numbers:
 
 -- Natural number type
 _⊩ℕ_ : (Γ : Con Term) (A : Term) → Set
@@ -151,7 +151,7 @@ record LogRelKit : Set₁ where
 
 module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) where
 
-  -- Soundness of Universe:
+  -- Reducibility of Universe:
 
   -- Universe type
   record _⊩¹U (Γ : Con Term) : Set where
@@ -193,7 +193,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
 
   mutual
 
-    -- Soundness of Π:
+    -- Reducibility of Π:
 
     -- Π-type
     record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where

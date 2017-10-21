@@ -12,7 +12,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
-open import Definition.LogicalRelation.Substitution.Soundness
+open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
@@ -33,8 +33,8 @@ U≡A : ∀ {A Γ}
     → A PE.≡ U
 U≡A {A} U≡A with fundamentalEq U≡A
 U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
-  let [U]′ = soundness [Γ] [U]
-      [U≡A]′ = soundnessEq {U} {A} [Γ] [U] [U≡A]
+  let [U]′ = reducible [Γ] [U]
+      [U≡A]′ = reducibleEq {U} {A} [Γ] [U] [U≡A]
   in  U≡A′ (U-elim [U]′) (irrelevanceEq [U]′ (U-intr (U-elim [U]′)) [U≡A]′)
 
 ℕ≡A′ : ∀ {A Γ l} ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
@@ -51,8 +51,8 @@ U≡A {A} U≡A | [Γ] , [U] , [A] , [U≡A] =
     → A PE.≡ ℕ
 ℕ≡A {A} ℕ≡A whnfA with fundamentalEq ℕ≡A
 ℕ≡A {A} ℕ≡A whnfA | [Γ] , [ℕ] , [A] , [ℕ≡A] =
-  let [ℕ]′ = soundness [Γ] [ℕ]
-      [ℕ≡A]′ = soundnessEq {ℕ} {A} [Γ] [ℕ] [ℕ≡A]
+  let [ℕ]′ = reducible [Γ] [ℕ]
+      [ℕ≡A]′ = reducibleEq {ℕ} {A} [Γ] [ℕ] [ℕ≡A]
   in  ℕ≡A′ (ℕ-elim [ℕ]′) (irrelevanceEq [ℕ]′ (ℕ-intr (ℕ-elim [ℕ]′)) [ℕ≡A]′) whnfA
 
 ne≡A′ : ∀ {A K Γ l}
