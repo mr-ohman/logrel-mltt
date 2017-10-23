@@ -28,7 +28,7 @@ mutual
                 → Δ ⊢ t [conv↑] u ∷ B
   convConv↑Term Γ≡Δ A≡B ([↑]ₜ B₁ t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) =
     let _ , ⊢B = syntacticEq A≡B
-        B′ , whnfB′ , D′ = fullyReducible ⊢B
+        B′ , whnfB′ , D′ = whNorm ⊢B
         B₁≡B′ = trans (sym (subset* D)) (trans A≡B (subset* (red D′)))
     in  [↑]ₜ B′ t′ u′ (stabilityRed* Γ≡Δ (red D′))
              (stabilityRed*Term Γ≡Δ (conv* d B₁≡B′))

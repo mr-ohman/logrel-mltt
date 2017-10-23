@@ -47,7 +47,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
 ~-app (↑ A≡B x) x₁ =
   let _ , ⊢B = syntacticEq A≡B
-      B′ , whnfB′ , D = fullyReducible ⊢B
+      B′ , whnfB′ , D = whNorm ⊢B
       ΠFG≡B′ = trans A≡B (subset* (red D))
       H , E , B≡ΠHE = Π≡A ΠFG≡B′ whnfB′
       F≡H , G≡E = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΠHE ΠFG≡B′)
@@ -65,7 +65,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       Γ ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ (F [ n ])
 ~-natrec x x₁ x₂ (↑ A≡B x₄) =
   let _ , ⊢B = syntacticEq A≡B
-      B′ , whnfB′ , D = fullyReducible ⊢B
+      B′ , whnfB′ , D = whNorm ⊢B
       ℕ≡B′ = trans A≡B (subset* (red D))
       B≡ℕ = ℕ≡A ℕ≡B′ whnfB′
       k~l′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ
@@ -132,4 +132,3 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       (liftConvTerm ∘ᶠ suc-cong)
                       (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅))
                       ~-var ~-app ~-natrec
-

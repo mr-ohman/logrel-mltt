@@ -58,7 +58,7 @@ mutual
   sym~↓ Γ≡Δ ([~] A₁ D whnfA k~l) =
     let B , A≡B , k~l′ = sym~↑ Γ≡Δ k~l
         _ , ⊢B = syntacticEq A≡B
-        B′ , whnfB′ , D′ = fullyReducible ⊢B
+        B′ , whnfB′ , D′ = whNorm ⊢B
         A≡B′ = trans (sym (subset* D)) (trans A≡B (subset* (red D′)))
     in  B′ , whnfB′ , A≡B′ , [~] B (stabilityRed* Γ≡Δ (red D′)) whnfB′ k~l′
 

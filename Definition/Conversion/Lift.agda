@@ -95,7 +95,7 @@ mutual
                 → Γ ⊢ t ~ u ↑ A
                 → Γ ⊢ t [conv↑] u ∷ A
   lift~toConv↑′ [A] t~u =
-    let B , whnfB , D = fullyReducible′ [A]
+    let B , whnfB , D = whNorm′ [A]
         t~u↓ = [~] _ (red D) whnfB t~u
         neT , neU = ne~↑ t~u
         _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ t~u↓)
