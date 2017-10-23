@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="utf-8"><title>Tools.Empty</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Comment">-- The empty type; also used as absurd proposition (``Falsity&#39;&#39;).</a>
 
-<a id="68" class="Symbol">{-#</a> <a id="72" class="Keyword">OPTIONS</a> <a id="80" class="Option">--without-K</a> <a id="92" class="Symbol">#-}</a>
+<a id="68" class="Symbol">{-#</a> <a id="72" class="Keyword">OPTIONS</a> <a id="80" class="Option">--without-K</a> <a id="92" class="Option">--safe</a> <a id="99" class="Symbol">#-}</a>
 
-<a id="97" class="Keyword">module</a> <a id="104" href="Tools.Empty.html" class="Module">Tools.Empty</a> <a id="116" class="Keyword">where</a>
+<a id="104" class="Keyword">module</a> <a id="111" href="Tools.Empty.html" class="Module">Tools.Empty</a> <a id="123" class="Keyword">where</a>
 
-<a id="123" class="Keyword">data</a> <a id="⊥" href="Tools.Empty.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="130" class="Symbol">:</a> <a id="132" class="PrimitiveType">Set</a> <a id="136" class="Keyword">where</a>
+<a id="130" class="Keyword">data</a> <a id="⊥" href="Tools.Empty.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="137" class="Symbol">:</a> <a id="139" class="PrimitiveType">Set</a> <a id="143" class="Keyword">where</a>
 
-<a id="143" class="Comment">-- Ex falsum quod libet.</a>
+<a id="150" class="Comment">-- Ex falsum quod libet.</a>
 
-<a id="⊥-elim" href="Tools.Empty.html#%E2%8A%A5-elim" class="Function">⊥-elim</a> <a id="176" class="Symbol">:</a> <a id="178" class="Symbol">∀</a> <a id="180" class="Symbol">{</a><a id="181" href="Tools.Empty.html#181" class="Bound">a</a><a id="182" class="Symbol">}</a> <a id="184" class="Symbol">{</a><a id="185" href="Tools.Empty.html#185" class="Bound">A</a> <a id="187" class="Symbol">:</a> <a id="189" class="PrimitiveType">Set</a> <a id="193" href="Tools.Empty.html#181" class="Bound">a</a><a id="194" class="Symbol">}</a> <a id="196" class="Symbol">→</a> <a id="198" href="Tools.Empty.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="200" class="Symbol">→</a> <a id="202" href="Tools.Empty.html#185" class="Bound">A</a>
-<a id="204" href="Tools.Empty.html#%E2%8A%A5-elim" class="Function">⊥-elim</a> <a id="211" class="Symbol">()</a>
+<a id="⊥-elim" href="Tools.Empty.html#%E2%8A%A5-elim" class="Function">⊥-elim</a> <a id="183" class="Symbol">:</a> <a id="185" class="Symbol">∀</a> <a id="187" class="Symbol">{</a><a id="188" href="Tools.Empty.html#188" class="Bound">a</a><a id="189" class="Symbol">}</a> <a id="191" class="Symbol">{</a><a id="192" href="Tools.Empty.html#192" class="Bound">A</a> <a id="194" class="Symbol">:</a> <a id="196" class="PrimitiveType">Set</a> <a id="200" href="Tools.Empty.html#188" class="Bound">a</a><a id="201" class="Symbol">}</a> <a id="203" class="Symbol">→</a> <a id="205" href="Tools.Empty.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="207" class="Symbol">→</a> <a id="209" href="Tools.Empty.html#192" class="Bound">A</a>
+<a id="211" href="Tools.Empty.html#%E2%8A%A5-elim" class="Function">⊥-elim</a> <a id="218" class="Symbol">()</a>
 </pre></body></html>
