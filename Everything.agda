@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --safe #-}
 
 -- A Logical Relation for Dependent Type Theory Formalized in Agda
 

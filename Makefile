@@ -19,13 +19,13 @@ check : agda-check
 # Type check the code
 
 agda-check:
-	$(agda) --safe Everything.agda
+	$(agda) Everything.agda
 
 pack: clean
 	mkdir code
 	cp -r Definition Tools Everything.agda README.agda Makefile code/
 	$(agda) --html Everything.agda
-	zip -r formalization code html README.txt
+	zip -r formalization code html
 
 clean:
 	find . -name "*.agdai" -type f -delete

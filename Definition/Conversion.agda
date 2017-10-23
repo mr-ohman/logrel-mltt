@@ -1,6 +1,6 @@
 -- Algorithmic equality.
 
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Definition.Conversion where
 

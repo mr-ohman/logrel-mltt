@@ -1,6 +1,6 @@
 -- The natural numbers.
 
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Tools.Nat where
 
