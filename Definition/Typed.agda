@@ -10,10 +10,10 @@ infixl 30 _∙_
 infix 30 Π_▹_
 
 
--- Context member existance at location
+-- Well-typed variables
 data _∷_∈_ : (x : Nat) (A : Term) (Γ : Con Term) → Set where
   here  : ∀ {Γ A}                     →     0 ∷ wk1 A ∈ (Γ ∙ A)
-  there : ∀ {Γ A B n} (h : n ∷ A ∈ Γ) → suc n ∷ wk1 A ∈ (Γ ∙ B)
+  there : ∀ {Γ A B x} (h : x ∷ A ∈ Γ) → suc x ∷ wk1 A ∈ (Γ ∙ B)
 
 mutual
   -- Well-formed context
