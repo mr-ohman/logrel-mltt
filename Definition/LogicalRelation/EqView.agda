@@ -17,22 +17,22 @@ open import Tools.Empty using (⊥; ⊥-elim)
 import Tools.PropositionalEquality as PE
 
 -- Type for maybe embeddings of reducible types
-data MaybeEmb : TypeLevel → (TypeLevel → Set) → Set₁ where
-  noemb : ∀ {l ⊩⟨_⟩} → ⊩⟨ l ⟩ → MaybeEmb l ⊩⟨_⟩
-  emb   : ∀ {l l′ ⊩⟨_⟩} → l′ < l → MaybeEmb l′ ⊩⟨_⟩ → MaybeEmb l ⊩⟨_⟩
+data MaybeEmb (l : TypeLevel) (⊩⟨_⟩ : TypeLevel → Set) : Set where
+  noemb : ⊩⟨ l ⟩ → MaybeEmb l ⊩⟨_⟩
+  emb   : ∀ {l′} → l′ < l → MaybeEmb l′ ⊩⟨_⟩ → MaybeEmb l ⊩⟨_⟩
 
 -- Specific reducible types with possible embedding
 
-_⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set₁
+_⊩⟨_⟩U : (Γ : Con Term) (l : TypeLevel) → Set
 Γ ⊩⟨ l ⟩U = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩U)
 
-_⊩⟨_⟩ℕ_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
+_⊩⟨_⟩ℕ_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
 Γ ⊩⟨ l ⟩ℕ A = MaybeEmb l (λ l′ → Γ ⊩ℕ A)
 
-_⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
+_⊩⟨_⟩ne_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
 Γ ⊩⟨ l ⟩ne A = MaybeEmb l (λ l′ → Γ ⊩ne A)
 
-_⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set₁
+_⊩⟨_⟩Π_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → Set
 Γ ⊩⟨ l ⟩Π A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩Π A)
 
 -- Construct a general reducible type from a specific
