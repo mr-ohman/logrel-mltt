@@ -50,6 +50,7 @@ import Definition.LogicalRelation.Substitution.MaybeEmbed
 import Definition.LogicalRelation.Substitution.Introductions
 
 import Definition.LogicalRelation.Fundamental
+import Definition.LogicalRelation.Fundamental.Reducibility
 
 -- Consequences of the logical relation for typing and conversion
 import Definition.Typed.Consequences.Canonicity

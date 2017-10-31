@@ -17,9 +17,8 @@ open import Definition.Conversion.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
-open import Definition.LogicalRelation.Fundamental
+open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Reducibility
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Injectivity
 import Definition.Typed.Consequences.Inequality as WF
@@ -106,13 +105,12 @@ mutual
 lift~toConv↓ : ∀ {t u A Γ}
              → Γ ⊢ t ~ u ↓ A
              → Γ ⊢ t [conv↓] u ∷ A
-lift~toConv↓ ([~] A₁ D whnfB k~l) with fundamental (proj₁ (syntacticRed D))
-lift~toConv↓ ([~] A₁ D whnfB k~l) | [Γ] , [A₁] =
-  lift~toConv↓′ (reducible [Γ] [A₁]) D ([~] A₁ D whnfB k~l)
+lift~toConv↓ ([~] A₁ D whnfB k~l) =
+  lift~toConv↓′ (reducible (proj₁ (syntacticRed D))) D ([~] A₁ D whnfB k~l)
 
 -- Lifting of algorithmic equality of terms from neutrals to generic terms.
 lift~toConv↑ : ∀ {t u A Γ}
              → Γ ⊢ t ~ u ↑ A
              → Γ ⊢ t [conv↑] u ∷ A
-lift~toConv↑ t~u with fundamental (proj₁ (syntacticEqTerm (soundness~↑ t~u)))
-lift~toConv↑ t~u | [Γ] , [A] = lift~toConv↑′ (reducible [Γ] [A]) t~u
+lift~toConv↑ t~u =
+  lift~toConv↑′ (reducible (proj₁ (syntacticEqTerm (soundness~↑ t~u)))) t~u

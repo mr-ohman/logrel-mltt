@@ -145,6 +145,9 @@ import Definition.LogicalRelation.Substitution.Introductions.Natrec
 -- The fundamental theorem.
 import Definition.LogicalRelation.Fundamental
 
+-- Reducibility of well-formedness.
+import Definition.LogicalRelation.Fundamental.Reducibility
+
 -- Consequences of the fundamental theorem:
 
 -- Canonicity of the system.

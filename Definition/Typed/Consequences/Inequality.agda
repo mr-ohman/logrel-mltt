@@ -10,8 +10,7 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Reducibility
-open import Definition.LogicalRelation.Fundamental
+open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
@@ -27,15 +26,12 @@ A≢B : ∀ {A B Γ} (_⊩′⟨_⟩A_ _⊩′⟨_⟩B_ : Con Term → TypeLevel
       (A≢B′ : ∀ {l l′} ([A] : Γ ⊩′⟨ l ⟩A A) ([B] : Γ ⊩′⟨ l′ ⟩B B)
             → EqView Γ l l′ A B (A-intr [A]) (B-intr [B]) → ⊥)
     → Γ ⊢ A ≡ B → ⊥
-A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B with fundamentalEq A≡B
-A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [Γ] , [A] , [B] , [A≡B] =
-  let [idA] = reducible [Γ] [A]
-      [idB] = reducible [Γ] [B]
-      [idA≡B] = reducibleEq {A} {B} [Γ] [A] [A≡B]
-      _ , [A]′ = A-elim ([idA])
-      _ , [B]′ = B-elim ([idB])
-      [idA≡B]′ = irrelevanceEq [idA] (A-intr [A]′) [idA≡B]
-  in  A≢B′ [A]′ [B]′ (goodCases (A-intr [A]′) (B-intr [B]′) [idA≡B]′)
+A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B with reducibleEq A≡B
+A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [A] , [B] , [A≡B] =
+  let _ , [A]′ = A-elim ([A])
+      _ , [B]′ = B-elim ([B])
+      [A≡B]′ = irrelevanceEq [A] (A-intr [A]′) [A≡B]
+  in  A≢B′ [A]′ [B]′ (goodCases (A-intr [A]′) (B-intr [B]′) [A≡B]′)
 
 U≢ℕ′ : ∀ {Γ B l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)

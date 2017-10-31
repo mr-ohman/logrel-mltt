@@ -11,8 +11,7 @@ open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Reducibility
-open import Definition.LogicalRelation.Fundamental
+open import Definition.LogicalRelation.Fundamental.Reducibility
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -29,8 +28,7 @@ whNorm′ (emb 0<1 [A]) = whNorm′ [A]
 
 -- Well-formed types can all be reduced to WHNF.
 whNorm : ∀ {A Γ} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
-whNorm a with fundamental a
-... | [Γ] , [A] = whNorm′ (reducible [Γ] [A])
+whNorm A = whNorm′ (reducible A)
 
 -- Helper function where reducible all terms can be reduced to WHNF.
 whNormTerm′ : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
@@ -47,6 +45,6 @@ whNormTerm′ (emb 0<1 [A]) [a] = whNormTerm′ [A] [a]
 
 -- Well-formed terms can all be reduced to WHNF.
 whNormTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
-whNormTerm {a} {A} ⊢a with fundamentalTerm ⊢a
-... | [Γ] , [A] , [a] =
-  whNormTerm′ (reducible [Γ] [A]) (reducibleTerm {a} {A} [Γ] [A] [a])
+whNormTerm {a} {A} ⊢a =
+  let [A] , [a] = reducibleTerm ⊢a
+  in  whNormTerm′ [A] [a]
