@@ -106,121 +106,124 @@
 <a id="2663" class="Comment">-- Weak head expansion of the logical relation.</a>
 <a id="2711" class="Keyword">import</a> <a id="2718" href="Definition.LogicalRelation.Properties.Reduction.html" class="Module">Definition.LogicalRelation.Properties.Reduction</a>
 
-<a id="2767" class="Comment">-- Universe introduction in the logical relation.</a>
-<a id="2817" class="Keyword">import</a> <a id="2824" href="Definition.LogicalRelation.Properties.Universe.html" class="Module">Definition.LogicalRelation.Properties.Universe</a>
+<a id="2767" class="Comment">-- Application in the logical relation.</a>
+<a id="2807" class="Keyword">import</a> <a id="2814" href="Definition.LogicalRelation.Application.html" class="Module">Definition.LogicalRelation.Application</a>
 
-<a id="2872" class="Comment">-- Successor of natural numbers in the logical relation.</a>
-<a id="2929" class="Keyword">import</a> <a id="2936" href="Definition.LogicalRelation.Properties.Successor.html" class="Module">Definition.LogicalRelation.Properties.Successor</a>
+<a id="2854" class="Comment">-- Validity judgements definitions</a>
+<a id="2889" class="Keyword">import</a> <a id="2896" href="Definition.LogicalRelation.Substitution.html" class="Module">Definition.LogicalRelation.Substitution</a>
 
-<a id="2985" class="Comment">-- Validity judgements definitions</a>
-<a id="3020" class="Keyword">import</a> <a id="3027" href="Definition.LogicalRelation.Substitution.html" class="Module">Definition.LogicalRelation.Substitution</a>
+<a id="2937" class="Comment">-- Properties of validity judgements:</a>
 
-<a id="3068" class="Comment">-- Properties of validity judgements:</a>
+<a id="2976" class="Comment">-- Proof irrelevance for the validity judgements.</a>
+<a id="3026" class="Keyword">import</a> <a id="3033" href="Definition.LogicalRelation.Substitution.Irrelevance.html" class="Module">Definition.LogicalRelation.Substitution.Irrelevance</a>
 
-<a id="3107" class="Comment">-- Proof irrelevance for the validity judgements.</a>
-<a id="3157" class="Keyword">import</a> <a id="3164" href="Definition.LogicalRelation.Substitution.Irrelevance.html" class="Module">Definition.LogicalRelation.Substitution.Irrelevance</a>
+<a id="3086" class="Comment">-- Properties about valid substitutions:</a>
+<a id="3127" class="Comment">-- * Substitution well-formedness.</a>
+<a id="3162" class="Comment">-- * Substitution weakening.</a>
+<a id="3191" class="Comment">-- * Substitution lifting.</a>
+<a id="3218" class="Comment">-- * Identity substitution.</a>
+<a id="3246" class="Comment">-- * Reflexivity, symmetry and transitivity of substitution equality.</a>
+<a id="3316" class="Keyword">import</a> <a id="3323" href="Definition.LogicalRelation.Substitution.Properties.html" class="Module">Definition.LogicalRelation.Substitution.Properties</a>
 
-<a id="3217" class="Comment">-- Properties about valid substitutions:</a>
-<a id="3258" class="Comment">-- * Substitution well-formedness.</a>
-<a id="3293" class="Comment">-- * Substitution weakening.</a>
-<a id="3322" class="Comment">-- * Substitution lifting.</a>
-<a id="3349" class="Comment">-- * Identity substitution.</a>
-<a id="3377" class="Comment">-- * Reflexivity, symmetry and transitivity of substitution equality.</a>
-<a id="3447" class="Keyword">import</a> <a id="3454" href="Definition.LogicalRelation.Substitution.Properties.html" class="Module">Definition.LogicalRelation.Substitution.Properties</a>
+<a id="3375" class="Comment">-- Single term substitution of validity judgements.</a>
+<a id="3427" class="Keyword">import</a> <a id="3434" href="Definition.LogicalRelation.Substitution.Introductions.SingleSubst.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.SingleSubst</a>
 
-<a id="3506" class="Comment">-- Single term substitution of validity judgements.</a>
-<a id="3558" class="Keyword">import</a> <a id="3565" href="Definition.LogicalRelation.Substitution.Introductions.SingleSubst.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.SingleSubst</a>
+<a id="3501" class="Comment">-- The fundamental theorem.</a>
+<a id="3529" class="Keyword">import</a> <a id="3536" href="Definition.LogicalRelation.Fundamental.html" class="Module">Definition.LogicalRelation.Fundamental</a>
 
-<a id="3632" class="Comment">-- Validity of Π-types.</a>
-<a id="3656" class="Keyword">import</a> <a id="3663" href="Definition.LogicalRelation.Substitution.Introductions.Pi.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Pi</a>
+<a id="3576" class="Comment">-- Certain cases of the logical relation:</a>
 
-<a id="3721" class="Comment">-- Validity of applications.</a>
-<a id="3750" class="Keyword">import</a> <a id="3757" href="Definition.LogicalRelation.Substitution.Introductions.Application.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Application</a>
+<a id="3619" class="Comment">-- Validity of Π-types.</a>
+<a id="3643" class="Keyword">import</a> <a id="3650" href="Definition.LogicalRelation.Substitution.Introductions.Pi.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Pi</a>
 
-<a id="3824" class="Comment">-- Validity of λ-terms.</a>
-<a id="3848" class="Keyword">import</a> <a id="3855" href="Definition.LogicalRelation.Substitution.Introductions.Lambda.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Lambda</a>
+<a id="3708" class="Comment">-- Validity of applications.</a>
+<a id="3737" class="Keyword">import</a> <a id="3744" href="Definition.LogicalRelation.Substitution.Introductions.Application.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Application</a>
 
-<a id="3917" class="Comment">-- Validity of natural recursion of natural numbers.</a>
-<a id="3970" class="Keyword">import</a> <a id="3977" href="Definition.LogicalRelation.Substitution.Introductions.Natrec.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Natrec</a>
+<a id="3811" class="Comment">-- Validity of λ-terms.</a>
+<a id="3835" class="Keyword">import</a> <a id="3842" href="Definition.LogicalRelation.Substitution.Introductions.Lambda.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Lambda</a>
 
-<a id="4039" class="Comment">-- The fundamental theorem.</a>
-<a id="4067" class="Keyword">import</a> <a id="4074" href="Definition.LogicalRelation.Fundamental.html" class="Module">Definition.LogicalRelation.Fundamental</a>
-
-<a id="4114" class="Comment">-- Consequences of the fundamental theorem:</a>
-
-<a id="4159" class="Comment">-- Canonicity of the system.</a>
-<a id="4188" class="Keyword">import</a> <a id="4195" href="Definition.Typed.Consequences.Canonicity.html" class="Module">Definition.Typed.Consequences.Canonicity</a>
-
-<a id="4237" class="Comment">-- Injectivity of Π-types.</a>
-<a id="4264" class="Keyword">import</a> <a id="4271" href="Definition.Typed.Consequences.Injectivity.html" class="Module">Definition.Typed.Consequences.Injectivity</a>
-
-<a id="4314" class="Comment">-- Syntactic validitiy of the system.</a>
-<a id="4352" class="Keyword">import</a> <a id="4359" href="Definition.Typed.Consequences.Syntactic.html" class="Module">Definition.Typed.Consequences.Syntactic</a>
-
-<a id="4400" class="Comment">-- All types and terms fully reduce to WHNF.</a>
-<a id="4445" class="Keyword">import</a> <a id="4452" href="Definition.Typed.Consequences.Reduction.html" class="Module">Definition.Typed.Consequences.Reduction</a>
-
-<a id="4493" class="Comment">-- Strong equality of types.</a>
-<a id="4522" class="Keyword">import</a> <a id="4529" href="Definition.Typed.Consequences.Equality.html" class="Module">Definition.Typed.Consequences.Equality</a>
-
-<a id="4569" class="Comment">-- Syntactic inequality of types.</a>
-<a id="4603" class="Keyword">import</a> <a id="4610" href="Definition.Typed.Consequences.Inequality.html" class="Module">Definition.Typed.Consequences.Inequality</a>
-
-<a id="4652" class="Comment">-- Substiution in judgements and substitution composition.</a>
-<a id="4711" class="Keyword">import</a> <a id="4718" href="Definition.Typed.Consequences.Substitution.html" class="Module">Definition.Typed.Consequences.Substitution</a>
-
-<a id="4762" class="Comment">-- Uniqueness of the types of neutral terms.</a>
-<a id="4807" class="Keyword">import</a> <a id="4814" href="Definition.Typed.Consequences.NeTypeEq.html" class="Module">Definition.Typed.Consequences.NeTypeEq</a>
-
-<a id="4854" class="Comment">-- Universe membership of types.</a>
-<a id="4887" class="Keyword">import</a> <a id="4894" href="Definition.Typed.Consequences.InverseUniv.html" class="Module">Definition.Typed.Consequences.InverseUniv</a>
-
-<a id="4937" class="Comment">-- Consistency of the type theory.</a>
-<a id="4972" class="Keyword">import</a> <a id="4979" href="Definition.Typed.Consequences.Consistency.html" class="Module">Definition.Typed.Consequences.Consistency</a>
+<a id="3904" class="Comment">-- Validity of natural recursion of natural numbers.</a>
+<a id="3957" class="Keyword">import</a> <a id="3964" href="Definition.LogicalRelation.Substitution.Introductions.Natrec.html" class="Module">Definition.LogicalRelation.Substitution.Introductions.Natrec</a>
 
 
-<a id="5023" class="Comment">------------------</a>
-<a id="5042" class="Comment">-- DECIDABILITY --</a>
-<a id="5061" class="Comment">------------------</a>
+<a id="4027" class="Comment">-- Reducibility of well-formedness.</a>
+<a id="4063" class="Keyword">import</a> <a id="4070" href="Definition.LogicalRelation.Fundamental.Reducibility.html" class="Module">Definition.LogicalRelation.Fundamental.Reducibility</a>
 
-<a id="5081" class="Comment">-- Conversion algorithm definition.</a>
-<a id="5117" class="Keyword">import</a> <a id="5124" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
+<a id="4123" class="Comment">-- Consequences of the fundamental theorem:</a>
 
-<a id="5147" class="Comment">-- Properties of conversion algorithm:</a>
+<a id="4168" class="Comment">-- Canonicity of the system.</a>
+<a id="4197" class="Keyword">import</a> <a id="4204" href="Definition.Typed.Consequences.Canonicity.html" class="Module">Definition.Typed.Consequences.Canonicity</a>
 
-<a id="5187" class="Comment">-- Context equality and its properties:</a>
-<a id="5227" class="Comment">-- * Context conversion of typing judgements.</a>
-<a id="5273" class="Comment">-- * Context conversion of reductions and algorithmic equality.</a>
-<a id="5337" class="Comment">-- * Reflexivity and symmetry of context equality.</a>
-<a id="5388" class="Keyword">import</a> <a id="5395" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
+<a id="4246" class="Comment">-- Injectivity of Π-types.</a>
+<a id="4273" class="Keyword">import</a> <a id="4280" href="Definition.Typed.Consequences.Injectivity.html" class="Module">Definition.Typed.Consequences.Injectivity</a>
 
-<a id="5428" class="Comment">-- Soundness of the conversion algorithm.</a>
-<a id="5470" class="Keyword">import</a> <a id="5477" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
+<a id="4323" class="Comment">-- Syntactic validitiy of the system.</a>
+<a id="4361" class="Keyword">import</a> <a id="4368" href="Definition.Typed.Consequences.Syntactic.html" class="Module">Definition.Typed.Consequences.Syntactic</a>
 
-<a id="5510" class="Comment">-- Conversion property of algorithmic equality.</a>
-<a id="5558" class="Keyword">import</a> <a id="5565" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
+<a id="4409" class="Comment">-- All types and terms fully reduce to WHNF.</a>
+<a id="4454" class="Keyword">import</a> <a id="4461" href="Definition.Typed.Consequences.Reduction.html" class="Module">Definition.Typed.Consequences.Reduction</a>
 
-<a id="5599" class="Comment">-- Decidability of the conversion algorithm.</a>
-<a id="5644" class="Keyword">import</a> <a id="5651" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
+<a id="4502" class="Comment">-- Strong equality of types.</a>
+<a id="4531" class="Keyword">import</a> <a id="4538" href="Definition.Typed.Consequences.Equality.html" class="Module">Definition.Typed.Consequences.Equality</a>
 
-<a id="5684" class="Comment">-- Symmetry of the conversion algorithm.</a>
-<a id="5725" class="Keyword">import</a> <a id="5732" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
+<a id="4578" class="Comment">-- Syntactic inequality of types.</a>
+<a id="4612" class="Keyword">import</a> <a id="4619" href="Definition.Typed.Consequences.Inequality.html" class="Module">Definition.Typed.Consequences.Inequality</a>
 
-<a id="5764" class="Comment">-- Transitivity of the conversion algorithm.</a>
-<a id="5809" class="Keyword">import</a> <a id="5816" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
+<a id="4661" class="Comment">-- Substiution in judgements and substitution composition.</a>
+<a id="4720" class="Keyword">import</a> <a id="4727" href="Definition.Typed.Consequences.Substitution.html" class="Module">Definition.Typed.Consequences.Substitution</a>
 
-<a id="5852" class="Comment">-- Weakening of the conversion algorithm.</a>
-<a id="5894" class="Keyword">import</a> <a id="5901" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
+<a id="4771" class="Comment">-- Uniqueness of the types of neutral terms.</a>
+<a id="4816" class="Keyword">import</a> <a id="4823" href="Definition.Typed.Consequences.NeTypeEq.html" class="Module">Definition.Typed.Consequences.NeTypeEq</a>
 
-<a id="5934" class="Comment">-- WHNF and neutral lifting of the conversion algorithm.</a>
-<a id="5991" class="Keyword">import</a> <a id="5998" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
+<a id="4863" class="Comment">-- Universe membership of types.</a>
+<a id="4896" class="Keyword">import</a> <a id="4903" href="Definition.Typed.Consequences.InverseUniv.html" class="Module">Definition.Typed.Consequences.InverseUniv</a>
 
-<a id="6026" class="Comment">-- Generic equality relation instance for the conversion algorithm.</a>
-<a id="6094" class="Keyword">import</a> <a id="6101" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
+<a id="4946" class="Comment">-- Consistency of the type theory.</a>
+<a id="4981" class="Keyword">import</a> <a id="4988" href="Definition.Typed.Consequences.Consistency.html" class="Module">Definition.Typed.Consequences.Consistency</a>
 
-<a id="6138" class="Comment">-- Completeness of conversion algorithm.</a>
-<a id="6179" class="Keyword">import</a> <a id="6186" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
 
-<a id="6235" class="Comment">-- Decidability of judgemental conversion.</a>
-<a id="6278" class="Keyword">import</a> <a id="6285" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
+<a id="5032" class="Comment">------------------</a>
+<a id="5051" class="Comment">-- DECIDABILITY --</a>
+<a id="5070" class="Comment">------------------</a>
+
+<a id="5090" class="Comment">-- Conversion algorithm definition.</a>
+<a id="5126" class="Keyword">import</a> <a id="5133" href="Definition.Conversion.html" class="Module">Definition.Conversion</a>
+
+<a id="5156" class="Comment">-- Properties of conversion algorithm:</a>
+
+<a id="5196" class="Comment">-- Context equality and its properties:</a>
+<a id="5236" class="Comment">-- * Context conversion of typing judgements.</a>
+<a id="5282" class="Comment">-- * Context conversion of reductions and algorithmic equality.</a>
+<a id="5346" class="Comment">-- * Reflexivity and symmetry of context equality.</a>
+<a id="5397" class="Keyword">import</a> <a id="5404" href="Definition.Conversion.Stability.html" class="Module">Definition.Conversion.Stability</a>
+
+<a id="5437" class="Comment">-- Soundness of the conversion algorithm.</a>
+<a id="5479" class="Keyword">import</a> <a id="5486" href="Definition.Conversion.Soundness.html" class="Module">Definition.Conversion.Soundness</a>
+
+<a id="5519" class="Comment">-- Conversion property of algorithmic equality.</a>
+<a id="5567" class="Keyword">import</a> <a id="5574" href="Definition.Conversion.Conversion.html" class="Module">Definition.Conversion.Conversion</a>
+
+<a id="5608" class="Comment">-- Decidability of the conversion algorithm.</a>
+<a id="5653" class="Keyword">import</a> <a id="5660" href="Definition.Conversion.Decidable.html" class="Module">Definition.Conversion.Decidable</a>
+
+<a id="5693" class="Comment">-- Symmetry of the conversion algorithm.</a>
+<a id="5734" class="Keyword">import</a> <a id="5741" href="Definition.Conversion.Symmetry.html" class="Module">Definition.Conversion.Symmetry</a>
+
+<a id="5773" class="Comment">-- Transitivity of the conversion algorithm.</a>
+<a id="5818" class="Keyword">import</a> <a id="5825" href="Definition.Conversion.Transitivity.html" class="Module">Definition.Conversion.Transitivity</a>
+
+<a id="5861" class="Comment">-- Weakening of the conversion algorithm.</a>
+<a id="5903" class="Keyword">import</a> <a id="5910" href="Definition.Conversion.Weakening.html" class="Module">Definition.Conversion.Weakening</a>
+
+<a id="5943" class="Comment">-- WHNF and neutral lifting of the conversion algorithm.</a>
+<a id="6000" class="Keyword">import</a> <a id="6007" href="Definition.Conversion.Lift.html" class="Module">Definition.Conversion.Lift</a>
+
+<a id="6035" class="Comment">-- Generic equality relation instance for the conversion algorithm.</a>
+<a id="6103" class="Keyword">import</a> <a id="6110" href="Definition.Conversion.EqRelInstance.html" class="Module">Definition.Conversion.EqRelInstance</a>
+
+<a id="6147" class="Comment">-- Completeness of conversion algorithm.</a>
+<a id="6188" class="Keyword">import</a> <a id="6195" href="Definition.Conversion.Consequences.Completeness.html" class="Module">Definition.Conversion.Consequences.Completeness</a>
+
+<a id="6244" class="Comment">-- Decidability of judgemental conversion.</a>
+<a id="6287" class="Keyword">import</a> <a id="6294" href="Definition.Typed.Decidable.html" class="Module">Definition.Typed.Decidable</a>
 </pre></body></html>
