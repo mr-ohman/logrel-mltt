@@ -105,11 +105,8 @@ import Definition.LogicalRelation.Properties.Neutral
 -- Weak head expansion of the logical relation.
 import Definition.LogicalRelation.Properties.Reduction
 
--- Universe introduction in the logical relation.
-import Definition.LogicalRelation.Properties.Universe
-
--- Successor of natural numbers in the logical relation.
-import Definition.LogicalRelation.Properties.Successor
+-- Application in the logical relation.
+import Definition.LogicalRelation.Application
 
 -- Validity judgements definitions
 import Definition.LogicalRelation.Substitution
@@ -130,6 +127,11 @@ import Definition.LogicalRelation.Substitution.Properties
 -- Single term substitution of validity judgements.
 import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
+-- The fundamental theorem.
+import Definition.LogicalRelation.Fundamental
+
+-- Certain cases of the logical relation:
+
 -- Validity of Π-types.
 import Definition.LogicalRelation.Substitution.Introductions.Pi
 
@@ -142,8 +144,6 @@ import Definition.LogicalRelation.Substitution.Introductions.Lambda
 -- Validity of natural recursion of natural numbers.
 import Definition.LogicalRelation.Substitution.Introductions.Natrec
 
--- The fundamental theorem.
-import Definition.LogicalRelation.Fundamental
 
 -- Reducibility of well-formedness.
 import Definition.LogicalRelation.Fundamental.Reducibility

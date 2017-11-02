@@ -36,6 +36,7 @@ import Definition.LogicalRelation.EqView
 import Definition.LogicalRelation.Irrelevance
 import Definition.LogicalRelation.Weakening
 import Definition.LogicalRelation.Properties
+import Definition.LogicalRelation.Application
 
 import Definition.LogicalRelation.Substitution
 import Definition.LogicalRelation.Substitution.Properties

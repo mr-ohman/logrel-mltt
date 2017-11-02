@@ -16,10 +16,10 @@ open import Definition.LogicalRelation.EqView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Properties
+open import Definition.LogicalRelation.Application
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
-open import Definition.LogicalRelation.Substitution.Introductions.Application
 
 open import Tools.Nat
 open import Tools.Product
