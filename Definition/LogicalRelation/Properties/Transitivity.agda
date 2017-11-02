@@ -10,7 +10,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.EqView
+open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
 
@@ -19,10 +19,10 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
-  -- Helper function for transitivity of type equality using equality views.
+  -- Helper function for transitivity of type equality using shape views.
   transEqT : ∀ {Γ A B C l l′ l″}
              {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B} {[C] : Γ ⊩⟨ l″ ⟩ C}
-           → EqView₃ Γ l l′ l″ A B C [A] [B] [C]
+           → ShapeView₃ Γ l l′ l″ A B C [A] [B] [C]
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l′ ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]

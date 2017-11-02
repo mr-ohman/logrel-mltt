@@ -2,7 +2,7 @@
 
 open import Definition.Typed.EqualityRelation
 
-module Definition.LogicalRelation.EqView {{eqrel : EqRelSet}} where
+module Definition.LogicalRelation.ShapeView {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
 open import Definition.Untyped
@@ -112,23 +112,23 @@ extractMaybeEmb (noemb x) = _ , x
 extractMaybeEmb (emb 0<1 x) = extractMaybeEmb x
 
 -- A view for constructor equality of types where embeddings are ignored
-data EqView Γ : ∀ l l′ A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ B) → Set where
-  U : ∀ {l l′} UA UB → EqView Γ l l′ U U (U UA) (U UB)
-  ℕ : ∀ {A B l l′} ℕA ℕB → EqView Γ l l′ A B (ℕ ℕA) (ℕ ℕB)
+data ShapeView Γ : ∀ l l′ A B (p : Γ ⊩⟨ l ⟩ A) (q : Γ ⊩⟨ l′ ⟩ B) → Set where
+  U : ∀ {l l′} UA UB → ShapeView Γ l l′ U U (U UA) (U UB)
+  ℕ : ∀ {A B l l′} ℕA ℕB → ShapeView Γ l l′ A B (ℕ ℕA) (ℕ ℕB)
   ne  : ∀ {A B l l′} neA neB
-      → EqView Γ l l′ A B (ne neA) (ne neB)
+      → ShapeView Γ l l′ A B (ne neA) (ne neB)
   Π : ∀ {A B l l′} ΠA ΠB
-    → EqView Γ l l′ A B (Π ΠA) (Π ΠB)
+    → ShapeView Γ l l′ A B (Π ΠA) (Π ΠB)
   emb⁰¹ : ∀ {A B l p q}
-        → EqView Γ ⁰ l A B p q
-        → EqView Γ ¹ l A B (emb 0<1 p) q
+        → ShapeView Γ ⁰ l A B p q
+        → ShapeView Γ ¹ l A B (emb 0<1 p) q
   emb¹⁰ : ∀ {A B l p q}
-        → EqView Γ l ⁰ A B p q
-        → EqView Γ l ¹ A B p (emb 0<1 q)
+        → ShapeView Γ l ⁰ A B p q
+        → ShapeView Γ l ¹ A B p (emb 0<1 q)
 
--- Construct an equality view from an equality
+-- Construct an shape view from an equality
 goodCases : ∀ {l l′ Γ A B} ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
-          → Γ ⊩⟨ l ⟩ A ≡ B / [A] → EqView Γ l l′ A B [A] [B]
+          → Γ ⊩⟨ l ⟩ A ≡ B / [A] → ShapeView Γ l l′ A B [A] [B]
 goodCases (U UA) (U UB) A≡B = U UA UB
 goodCases (U′ _ _ ⊢Γ) (ℕ D) PE.refl = ⊥-elim (U≢ℕ (whnfRed* (red D) U))
 goodCases (U′ _ _ ⊢Γ) (ne′ K D neK K≡K) PE.refl = ⊥-elim (U≢ne neK (whnfRed* (red D) U))
@@ -162,39 +162,39 @@ goodCases {l} [A] (emb 0<1 x) A≡B =
 goodCases {l′ = l} (emb 0<1 x) [B] A≡B =
   emb⁰¹ (goodCases {⁰} {l} x [B] A≡B)
 
--- Construct an equality view between two derivations of the same type
+-- Construct an shape view between two derivations of the same type
 goodCasesRefl : ∀ {l l′ Γ A} ([A] : Γ ⊩⟨ l ⟩ A) ([A′] : Γ ⊩⟨ l′ ⟩ A)
-              → EqView Γ l l′ A A [A] [A′]
+              → ShapeView Γ l l′ A A [A] [A′]
 goodCasesRefl [A] [A′] = goodCases [A] [A′] (reflEq [A])
 
 
 -- A view for constructor equality between three types
-data EqView₃ Γ : ∀ l l′ l″ A B C
+data ShapeView₃ Γ : ∀ l l′ l″ A B C
                  (p : Γ ⊩⟨ l   ⟩ A)
                  (q : Γ ⊩⟨ l′  ⟩ B)
                  (r : Γ ⊩⟨ l″ ⟩ C) → Set where
-  U : ∀ {l l′ l″} UA UB UC → EqView₃ Γ l l′ l″ U U U (U UA) (U UB) (U UC)
+  U : ∀ {l l′ l″} UA UB UC → ShapeView₃ Γ l l′ l″ U U U (U UA) (U UB) (U UC)
   ℕ : ∀ {A B C l l′ l″} ℕA ℕB ℕC
-    → EqView₃ Γ l l′ l″ A B C (ℕ ℕA) (ℕ ℕB) (ℕ ℕC)
+    → ShapeView₃ Γ l l′ l″ A B C (ℕ ℕA) (ℕ ℕB) (ℕ ℕC)
   ne  : ∀ {A B C l l′ l″} neA neB neC
-      → EqView₃ Γ l l′ l″ A B C (ne neA) (ne neB) (ne neC)
+      → ShapeView₃ Γ l l′ l″ A B C (ne neA) (ne neB) (ne neC)
   Π : ∀ {A B C l l′ l″} ΠA ΠB ΠC
-    → EqView₃ Γ l l′ l″ A B C (Π ΠA) (Π ΠB) (Π ΠC)
+    → ShapeView₃ Γ l l′ l″ A B C (Π ΠA) (Π ΠB) (Π ΠC)
   emb⁰¹¹ : ∀ {A B C l l′ p q r}
-         → EqView₃ Γ ⁰ l l′ A B C p q r
-         → EqView₃ Γ ¹ l l′ A B C (emb 0<1 p) q r
+         → ShapeView₃ Γ ⁰ l l′ A B C p q r
+         → ShapeView₃ Γ ¹ l l′ A B C (emb 0<1 p) q r
   emb¹⁰¹ : ∀ {A B C l l′ p q r}
-         → EqView₃ Γ l ⁰ l′ A B C p q r
-         → EqView₃ Γ l ¹ l′ A B C p (emb 0<1 q) r
+         → ShapeView₃ Γ l ⁰ l′ A B C p q r
+         → ShapeView₃ Γ l ¹ l′ A B C p (emb 0<1 q) r
   emb¹¹⁰ : ∀ {A B C l l′ p q r}
-         → EqView₃ Γ l l′ ⁰ A B C p q r
-         → EqView₃ Γ l l′ ¹ A B C p q (emb 0<1 r)
+         → ShapeView₃ Γ l l′ ⁰ A B C p q r
+         → ShapeView₃ Γ l l′ ¹ A B C p q (emb 0<1 r)
 
 -- Combines two two-way views into a three-way view
 combine : ∀ {Γ l l′ l″ l‴ A B C [A] [B] [B]′ [C]}
-        → EqView Γ l l′ A B [A] [B]
-        → EqView Γ l″ l‴ B C [B]′ [C]
-        → EqView₃ Γ l l′ l‴ A B C [A] [B] [C]
+        → ShapeView Γ l l′ A B [A] [B]
+        → ShapeView Γ l″ l‴ B C [B]′ [C]
+        → ShapeView₃ Γ l l′ l‴ A B C [A] [B] [C]
 combine (U UA₁ UB₁) (U UA UB) = U UA₁ UB₁ UB
 combine (U UA UB) (ℕ ℕA ℕB) = ⊥-elim (U≢ℕ (whnfRed* (red ℕA) U))
 combine (U UA UB) (ne (ne K D neK K≡K) neB) =

@@ -12,7 +12,7 @@ open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T hiding (wk; wkTerm; wkEqTerm)
 open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.EqView
+open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Weakening
 open import Definition.LogicalRelation.Properties

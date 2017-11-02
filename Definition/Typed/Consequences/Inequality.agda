@@ -8,7 +8,7 @@ open import Definition.Typed
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.EqView
+open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.Typed.Consequences.Syntactic
@@ -24,7 +24,7 @@ A≢B : ∀ {A B Γ} (_⊩′⟨_⟩A_ _⊩′⟨_⟩B_ : Con Term → TypeLevel
       (A-elim : ∀ {l} → Γ ⊩⟨ l ⟩ A → ∃ λ l′ → Γ ⊩′⟨ l′ ⟩A A)
       (B-elim : ∀ {l} → Γ ⊩⟨ l ⟩ B → ∃ λ l′ → Γ ⊩′⟨ l′ ⟩B B)
       (A≢B′ : ∀ {l l′} ([A] : Γ ⊩′⟨ l ⟩A A) ([B] : Γ ⊩′⟨ l′ ⟩B B)
-            → EqView Γ l l′ A B (A-intr [A]) (B-intr [B]) → ⊥)
+            → ShapeView Γ l l′ A B (A-intr [A]) (B-intr [B]) → ⊥)
     → Γ ⊢ A ≡ B → ⊥
 A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B with reducibleEq A≡B
 A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [A] , [B] , [A≡B] =
@@ -36,7 +36,7 @@ A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [A] , [B] , [A≡
 U≢ℕ′ : ∀ {Γ B l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([ℕ] : Γ ⊩ℕ B)
-     → EqView Γ l l′ _ _ (U [U]) (ℕ [ℕ]) → ⊥
+     → ShapeView Γ l l′ _ _ (U [U]) (ℕ [ℕ]) → ⊥
 U≢ℕ′ a b ()
 
 U≢ℕ-red : ∀ {B Γ} → Γ ⊢ B ⇒* ℕ → Γ ⊢ U ≡ B → ⊥
@@ -54,7 +54,7 @@ U≢ℕ U≡ℕ =
 U≢Π′ : ∀ {B Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
-     → EqView Γ l l′ _ _ (U [U]) (Π [Π]) → ⊥
+     → ShapeView Γ l l′ _ _ (U [U]) (Π [Π]) → ⊥
 U≢Π′ a b ()
 
 U≢Π-red : ∀ {B F G Γ} → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ U ≡ B → ⊥
@@ -73,7 +73,7 @@ U≢Π U≡Π =
 U≢ne′ : ∀ {K Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([K] : Γ ⊩ne K)
-     → EqView Γ l l′ _ _ (U [U]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (U [U]) (ne [K]) → ⊥
 U≢ne′ a b ()
 
 U≢ne-red : ∀ {B K Γ} → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ U ≡ B → ⊥
@@ -91,7 +91,7 @@ U≢ne neK U≡K =
 ℕ≢Π′ : ∀ {A B Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
-     → EqView Γ l l′ _ _ (ℕ [ℕ]) (Π [Π]) → ⊥
+     → ShapeView Γ l l′ _ _ (ℕ [ℕ]) (Π [Π]) → ⊥
 ℕ≢Π′ a b ()
 
 ℕ≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
@@ -110,7 +110,7 @@ U≢ne neK U≡K =
 ℕ≢ne′ : ∀ {A K Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([K] : Γ ⊩ne K)
-     → EqView Γ l l′ _ _ (ℕ [ℕ]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (ℕ [ℕ]) (ne [K]) → ⊥
 ℕ≢ne′ a b ()
 
 ℕ≢ne-red : ∀ {A B K Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ A ≡ B → ⊥
@@ -128,7 +128,7 @@ U≢ne neK U≡K =
 Π≢ne′ : ∀ {A K Γ l l′}
        ([Π] : Γ ⊩′⟨ l ⟩Π A)
        ([K] : Γ ⊩ne K)
-     → EqView Γ l l′ _ _ (Π [Π]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (Π [Π]) (ne [K]) → ⊥
 Π≢ne′ a b ()
 
 Π≢ne-red : ∀ {A B F G K Γ} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊢ B ⇒* K → Neutral K

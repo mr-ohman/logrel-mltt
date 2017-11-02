@@ -81,8 +81,8 @@ import Definition.LogicalRelation.Properties.Reflexivity
 -- Escape lemma for the logical relation.
 import Definition.LogicalRelation.Properties.Escape
 
--- Equality view of two or more types.
-import Definition.LogicalRelation.EqView
+-- Shape view of two or more types.
+import Definition.LogicalRelation.ShapeView
 
 -- Proof irrelevance for the logical relation.
 import Definition.LogicalRelation.Irrelevance

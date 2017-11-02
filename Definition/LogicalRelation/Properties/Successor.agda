@@ -10,7 +10,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.EqView
+open import Definition.LogicalRelation.ShapeView
 
 open import Tools.Product
 

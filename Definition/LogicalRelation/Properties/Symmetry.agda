@@ -10,7 +10,7 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.EqView
+open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
 
@@ -19,9 +19,9 @@ import Tools.PropositionalEquality as PE
 
 
 mutual
-  -- Helper function for symmetry of type equality using equality views.
+  -- Helper function for symmetry of type equality using shape views.
   symEqT : ∀ {Γ A B l l′} {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B}
-         → EqView Γ l l′ A B [A] [B]
+         → ShapeView Γ l l′ A B [A] [B]
          → Γ ⊩⟨ l  ⟩ A ≡ B / [A]
          → Γ ⊩⟨ l′ ⟩ B ≡ A / [B]
   symEqT (ℕ D D′) A≡B = red D
