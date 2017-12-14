@@ -334,7 +334,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       eq   = escapeTermEq [σG] eq′
       eq₁  = escapeTermEq [σG] eq₁′
   in  Πₜ₌ f₁ g₁ [d] [d′] funcF funcG
-          (≅-η-eq ⊢F ⊢u ⊢u₁ (functionWhnf funcF) (functionWhnf funcG)
+          (≅-η-eq ⊢F ⊢u ⊢u₁ funcF funcG
                   (≅ₜ-trans (≅ₜ-sym eq) (≅ₜ-trans σf0≡σg0′ eq₁)))
           (Πₜ f₁ [d] funcF f≡f [f] [f]₁)
           (Πₜ g₁ [d′] funcG g≡g [g] [g]₁)

@@ -132,8 +132,8 @@ record EqRelSet : Set₁ where
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
-              → Whnf f
-              → Whnf g
+              → Function f
+              → Function g
               → Γ ∙ F ⊢ wk1 f ∘ var zero ≅ wk1 g ∘ var zero ∷ G
               → Γ ⊢ f ≅ g ∷ Π F ▹ G
 

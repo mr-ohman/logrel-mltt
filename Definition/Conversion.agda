@@ -109,7 +109,7 @@ mutual
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
-              → Whnf f
-              → Whnf g
+              → Function f
+              → Function g
               → Γ ∙ F ⊢ wk1 f ∘ var zero [conv↑] wk1 g ∘ var zero ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
