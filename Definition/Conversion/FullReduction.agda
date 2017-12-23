@@ -93,4 +93,10 @@ mutual
   fullRedTerm′ (suc-cong x) =
     let q , w , e = fullRedTerm x
     in  suc q , suc w , suc-cong e
-  fullRedTerm′ (η-eq x x₁ x₂ x₃ x₄ x₅) = {!!}
+  fullRedTerm′ (η-eq ⊢F ⊢t x₂ x₃ x₄ x₅) =
+    let q , w , e = fullRedTerm x₅
+        _ , _ , ⊢q = syntacticEqTerm e
+    in  lam q , lam w , η-eq ⊢F ⊢t (lam ⊢F ⊢q)
+              (trans e
+              (trans {! q ≡ wk1 q [ var 0 ] {- there are actually prop. equal i think -}!}
+              (sym (β-red {!wk ⊢F!} {!wk ⊢q!} (var {!ΓF⊢!} here)))))
