@@ -2,9 +2,11 @@
 
 module Definition.Conversion.FullReduction where
 
-open import Definition.Untyped as U
+open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
+open import Definition.Typed.Weakening
 open import Definition.Conversion
 open import Definition.Conversion.Conversion
 open import Definition.Conversion.Stability
@@ -96,7 +98,12 @@ mutual
   fullRedTerm′ (η-eq ⊢F ⊢t x₂ x₃ x₄ x₅) =
     let q , w , e = fullRedTerm x₅
         _ , _ , ⊢q = syntacticEqTerm e
-    in  lam q , lam w , η-eq ⊢F ⊢t (lam ⊢F ⊢q)
-              (trans e
-              (trans {! q ≡ wk1 q [ var 0 ] {- there are actually prop. equal i think -}!}
-              (sym (β-red {!wk ⊢F!} {!wk ⊢q!} (var {!ΓF⊢!} here)))))
+        ΓF⊢ = wf ⊢F ∙ ⊢F
+        wk⊢F = wk (step id) ΓF⊢ ⊢F
+        ΓFF'⊢ = ΓF⊢ ∙ wk⊢F
+        wk⊢q = wkTerm (lift (step id)) ΓFF'⊢ ⊢q
+    in  lam q , lam w ,
+        η-eq ⊢F ⊢t (lam ⊢F ⊢q)
+             (trans e (PE.subst₂ (λ x y → _ ⊢ x ≡ lam (U.wk (lift (step id)) q) ∘ var 0 ∷ y)
+                                 (wkSingleSubstId q) (wkSingleSubstId _)
+                                 (sym (β-red wk⊢F wk⊢q (var ΓF⊢ here)))))
