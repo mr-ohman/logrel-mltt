@@ -41,17 +41,18 @@ mutual
 
 mutual
   fullRedNe : ∀ {t A Γ} → Γ ⊢ t ~ t ↑ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
-  fullRedNe (var x₁ x₂) = var _ , var _ , refl x₁
-  fullRedNe (app x x₁) =
-    let t′ , nfT , t≡t′ = fullRedNe′ x
-        u′ , nfU , u≡u′ = fullRedTerm x₁
-    in  (t′ ∘ u′) , (nfT ∘ nfU) , app-cong t≡t′ u≡u′
-  fullRedNe (natrec x x₁ x₂ x₃) =
-    let q , w , e = fullRed x
-        a , s , d = fullRedTerm x₁
-        z , c , v = fullRedTerm x₂
-        r , t , y = fullRedNe′ x₃
-    in  natrec q a z r , natrec w s c t , natrec-cong e d v y
+  fullRedNe (var x _) = var _ , var _ , refl x
+  fullRedNe (app t u) =
+    let t′ , nfT′ , t≡t′ = fullRedNe′ t
+        u′ , nfU′ , u≡u′ = fullRedTerm u
+    in  (t′ ∘ u′) , (nfT′ ∘ nfU′) , app-cong t≡t′ u≡u′
+  fullRedNe (natrec C z s n) =
+    let C′ , nfC′ , C≡C′ = fullRed C
+        z′ , nfZ′ , z≡z′ = fullRedTerm z
+        s′ , nfS′ , s≡s′ = fullRedTerm s
+        n′ , nfN′ , n≡n′ = fullRedNe′ n
+    in  natrec C′ z′ s′ n′ , natrec nfC′ nfZ′ nfS′ nfN′
+     ,  natrec-cong C≡C′ z≡z′ s≡s′ n≡n′
 
   fullRedNe′ : ∀ {t A Γ} → Γ ⊢ t ~ t ↓ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
   fullRedNe′ ([~] A D whnfB k~l) =
@@ -59,51 +60,54 @@ mutual
     in  u , nf , conv t≡u (subset* D)
 
   fullRed : ∀ {A Γ} → Γ ⊢ A [conv↑] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
-  fullRed ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′) rewrite whrDet* (D , whnfA′) (D′ , whnfB′) =
-    let q , w , e = fullRed′ A′<>B′
-    in  q , w , trans (subset* D′) e
+  fullRed ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
+    rewrite whrDet* (D , whnfA′) (D′ , whnfB′) =
+    let B″ , nf , B′≡B″ = fullRed′ A′<>B′
+    in  B″ , nf , trans (subset* D′) B′≡B″
 
   fullRed′ : ∀ {A Γ} → Γ ⊢ A [conv↓] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
-  fullRed′ (U-refl x) = U , U , refl (U x)
-  fullRed′ (ℕ-refl x) = ℕ , ℕ , refl (ℕ x)
-  fullRed′ (ne x) =
-    let u , nf , t≡u = fullRedNe′ x
-    in  u , ne nf , univ t≡u
-  fullRed′ (Π-cong x x₁ x₂) =
-    let q , w , e = fullRed x₁
-        a , s , d = fullRed x₂
-    in  Π q ▹ a , Π w s , Π-cong x e d
+  fullRed′ (U-refl ⊢Γ) = U , U , refl (U ⊢Γ)
+  fullRed′ (ℕ-refl ⊢Γ) = ℕ , ℕ , refl (ℕ ⊢Γ)
+  fullRed′ (ne A) =
+    let B , nf , A≡B = fullRedNe′ A
+    in  B , ne nf , univ A≡B
+  fullRed′ (Π-cong ⊢F F G) =
+    let F′ , nfF′ , F≡F′ = fullRed F
+        G′ , nfG′ , G≡G′ = fullRed G
+    in  Π F′ ▹ G′ , Π nfF′ nfG′ , Π-cong ⊢F F≡F′ G≡G′
 
   fullRedTerm : ∀ {t A Γ} → Γ ⊢ t [conv↑] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
-  fullRedTerm ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) rewrite whrDet*Term (d , whnft′) (d′ , whnfu′) =
-    let q , w , r = fullRedTerm′ t<>u
-    in  q , w , conv (trans (subset*Term d′) r) (sym (subset* D))
+  fullRedTerm ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
+    rewrite whrDet*Term (d , whnft′) (d′ , whnfu′) =
+    let u″ , nf , u′≡u″ = fullRedTerm′ t<>u
+    in  u″ , nf , conv (trans (subset*Term d′) u′≡u″) (sym (subset* D))
 
   fullRedTerm′ : ∀ {t A Γ} → Γ ⊢ t [conv↓] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
-  fullRedTerm′ (ℕ-ins x) =
-    let q , w , e = fullRedNe′ x
-    in  q , ne w , e
-  fullRedTerm′ (ne-ins x x₁ x₂ x₃) =
-    let q , w , e = fullRedNe′ x₃
-        _ , r , _ = syntacticEqTerm e
-        _ , t , _ = ne~↓ x₃
-    in  q , ne w , conv e (neTypeEq t r x)
-  fullRedTerm′ (univ x x₁ x₂) =
-    let q , w , e = fullRed′ x₂
-    in  q , w , inverseUnivEq x e
-  fullRedTerm′ (zero-refl x) = zero , zero , refl (zero x)
-  fullRedTerm′ (suc-cong x) =
-    let q , w , e = fullRedTerm x
-    in  suc q , suc w , suc-cong e
-  fullRedTerm′ (η-eq ⊢F ⊢t x₂ x₃ x₄ x₅) =
-    let q , w , e = fullRedTerm x₅
-        _ , _ , ⊢q = syntacticEqTerm e
+  fullRedTerm′ (ℕ-ins t) =
+    let u , nf , t≡u = fullRedNe′ t
+    in  u , ne nf , t≡u
+  fullRedTerm′ (ne-ins ⊢t _ _ t) =
+    let u , nfU , t≡u = fullRedNe′ t
+        _ , ⊢t∷M , _ = syntacticEqTerm t≡u
+        _ , neT , _ = ne~↓ t
+    in  u , ne nfU , conv t≡u (neTypeEq neT ⊢t∷M ⊢t)
+  fullRedTerm′ (univ ⊢t _ t) =
+    let u , nf , t≡u = fullRed′ t
+    in  u , nf , inverseUnivEq ⊢t t≡u
+  fullRedTerm′ (zero-refl ⊢Γ) = zero , zero , refl (zero ⊢Γ)
+  fullRedTerm′ (suc-cong t) =
+    let u , nf , t≡u = fullRedTerm t
+    in  suc u , suc nf , suc-cong t≡u
+  fullRedTerm′ (η-eq ⊢F ⊢t _ _ _ t∘0) =
+    let u , nf , t∘0≡u = fullRedTerm t∘0
+        _ , _ , ⊢u = syntacticEqTerm t∘0≡u
         ΓF⊢ = wf ⊢F ∙ ⊢F
         wk⊢F = wk (step id) ΓF⊢ ⊢F
         ΓFF'⊢ = ΓF⊢ ∙ wk⊢F
-        wk⊢q = wkTerm (lift (step id)) ΓFF'⊢ ⊢q
-    in  lam q , lam w ,
-        η-eq ⊢F ⊢t (lam ⊢F ⊢q)
-             (trans e (PE.subst₂ (λ x y → _ ⊢ x ≡ lam (U.wk (lift (step id)) q) ∘ var 0 ∷ y)
-                                 (wkSingleSubstId q) (wkSingleSubstId _)
-                                 (sym (β-red wk⊢F wk⊢q (var ΓF⊢ here)))))
+        wk⊢u = wkTerm (lift (step id)) ΓFF'⊢ ⊢u
+        λu∘0 = lam (U.wk (lift (step id)) u) ∘ var 0
+    in  lam u , lam nf
+     ,  η-eq ⊢F ⊢t (lam ⊢F ⊢u)
+             (trans t∘0≡u (PE.subst₂ (λ x y → _ ⊢ x ≡ λu∘0 ∷ y)
+                                     (wkSingleSubstId u) (wkSingleSubstId _)
+                                     (sym (β-red wk⊢F wk⊢u (var ΓF⊢ here)))))
