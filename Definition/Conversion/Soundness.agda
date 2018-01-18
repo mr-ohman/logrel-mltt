@@ -18,9 +18,9 @@ import Tools.PropositionalEquality as PE
 mutual
   -- Algorithmic equality of neutrals is well-formed.
   soundness~↑ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
-  soundness~↑ (var x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
-  soundness~↑ (app k~l x₁) = app-cong (soundness~↓ k~l) (soundnessConv↑Term x₁)
-  soundness~↑ (natrec x₁ x₂ x₃ k~l) =
+  soundness~↑ (var-refl x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
+  soundness~↑ (app-cong k~l x₁) = app-cong (soundness~↓ k~l) (soundnessConv↑Term x₁)
+  soundness~↑ (natrec-cong x₁ x₂ x₃ k~l) =
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
 
@@ -35,8 +35,8 @@ mutual
 
   -- Algorithmic equality of types in WHNF is well-formed.
   soundnessConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ A ≡ B
-  soundnessConv↓ (U-refl ⊢Γ) = refl (U ⊢Γ)
-  soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕ ⊢Γ)
+  soundnessConv↓ (U-refl ⊢Γ) = refl (Uⱼ ⊢Γ)
+  soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕⱼ ⊢Γ)
   soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
@@ -58,7 +58,7 @@ mutual
         M≡A = neTypeEq neA t∷M t
     in  conv (soundness~↓ x₁) M≡A
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
-  soundnessConv↓Term (zero-refl ⊢Γ) = refl (zero ⊢Γ)
+  soundnessConv↓Term (zero-refl ⊢Γ) = refl (zeroⱼ ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
   soundnessConv↓Term (η-eq F x x₁ y y₁ c) =
     η-eq F x x₁ (soundnessConv↑Term c)

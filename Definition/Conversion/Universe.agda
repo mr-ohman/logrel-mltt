@@ -25,5 +25,5 @@ univConv↑ : ∀ {A B Γ}
       → Γ ⊢ A [conv↑] B ∷ U
       → Γ ⊢ A [conv↑] B
 univConv↑ ([↑]ₜ B₁ t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
-      rewrite PE.sym (whnfRed* D U) =
+      rewrite PE.sym (whnfRed* D Uₙ) =
   reductionConv↑ (univ* d) (univ* d′) whnft′ whnfu′ (liftConv (univConv↓ t<>u))

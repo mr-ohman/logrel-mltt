@@ -40,10 +40,10 @@ mutual
 
   -- Fundamental theorem for types.
   fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ᵛ Γ) (λ [Γ] → Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
-  fundamental (ℕ x) = valid x , ℕᵛ (valid x)
-  fundamental (U x) = valid x , Uᵛ (valid x)
-  fundamental (Π_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
-  fundamental (Π_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
+  fundamental (ℕⱼ x) = valid x , ℕᵛ (valid x)
+  fundamental (Uⱼ x) = valid x , Uᵛ (valid x)
+  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
+  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
     [Γ] , Πᵛ {F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
@@ -143,8 +143,8 @@ mutual
     → ∃ λ ([Γ] : ⊩ᵛ Γ)
     → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ᵛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
-  fundamentalTerm (ℕ x) = valid x , Uᵛ (valid x) , ℕᵗᵛ (valid x)
-  fundamentalTerm (Π_▹_ {F} {G} ⊢F ⊢G)
+  fundamentalTerm (ℕⱼ x) = valid x , Uᵛ (valid x) , ℕᵗᵛ (valid x)
+  fundamentalTerm (Πⱼ_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
   ... | [Γ] , [U] , [F]ₜ | [Γ]₁ , [U]₁ , [G]ₜ =
     let [F]   = univᵛ {F} [Γ] [U] [F]ₜ
@@ -157,14 +157,14 @@ mutual
                           (Πᵗᵛ {F} {G} [Γ] [F] (λ {Δ} {σ} → [U]′ {Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
-  fundamentalTerm (lam {F} {G} {t} ⊢F ⊢t)
+  fundamentalTerm (lamⱼ {F} {G} {t} ⊢F ⊢t)
     with fundamental ⊢F | fundamentalTerm ⊢t
   ... | [Γ] , [F] | [Γ]₁ , [G] , [t] =
     let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
         [t]′ = S.irrelevanceTerm {A = G} {t = t} [Γ]₁ ([Γ] ∙ [F]) [G] [G]′ [t]
     in  [Γ] , Πᵛ {F} {G} [Γ] [F] [G]′
     ,   lamᵛ {F} {G} {t} [Γ] [F] [G]′ [t]′
-  fundamentalTerm (_∘_ {g} {a} {F} {G} Dt Du)
+  fundamentalTerm (_∘ⱼ_ {g} {a} {F} {G} Dt Du)
     with fundamentalTerm Dt | fundamentalTerm Du
   ... | [Γ] , [ΠFG] , [t] | [Γ]₁ , [F] , [u] =
     let [ΠFG]′ = S.irrelevance {A = Π F ▹ G} [Γ] [Γ]₁ [ΠFG]
@@ -172,15 +172,15 @@ mutual
         [G[t]] = substSΠ {F} {G} {a} [Γ]₁ [F] [ΠFG]′ [u]
         [t∘u] = appᵛ {F} {G} {g} {a} [Γ]₁ [F] [ΠFG]′ [t]′ [u]
     in  [Γ]₁ , [G[t]] , [t∘u]
-  fundamentalTerm (zero x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
-  fundamentalTerm (suc {n} t) with fundamentalTerm t
-  fundamentalTerm (suc {n} t) | [Γ] , [ℕ] , [n] =
+  fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
+  fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
+  fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
     [Γ] , [ℕ] , sucᵛ {n = n} [Γ] [ℕ] [n]
-  fundamentalTerm (natrec {G} {s} {z} {n} ⊢G ⊢z ⊢s ⊢n)
+  fundamentalTerm (natrecⱼ {G} {s} {z} {n} ⊢G ⊢z ⊢s ⊢n)
     with fundamental ⊢G | fundamentalTerm ⊢z | fundamentalTerm ⊢s
        | fundamentalTerm ⊢n
   ... | [Γ] , [G] | [Γ]₁ , [G₀] , [z] | [Γ]₂ , [G₊] , [s] | [Γ]₃ , [ℕ] , [n] =
-    let sType = Π ℕ ▹ (G ▹▹ G [ suc (var zero) ]↑)
+    let sType = Π ℕ ▹ (G ▹▹ G [ suc (var 0) ]↑)
         [Γ]′ = [Γ]₃
         [G]′ = S.irrelevance {A = G} [Γ] ([Γ]′ ∙ [ℕ]) [G]
         [G₀]′ = S.irrelevance {A = G [ zero ]} [Γ]₁ [Γ]′ [G₀]
@@ -336,8 +336,8 @@ mutual
                                   [Γ]₁ [Γ]₁ [ΠFG] [ΠFG]″ [t]
         [t′]″ = S.irrelevanceTerm {A = Π F ▹ G} {t = g}
                                    [Γ]₂ [Γ]₁ [ΠFG]₁ [ΠFG]″ [t′]
-        [t0≡t′0]′ = S.irrelevanceEqTerm {A = G} {t = wk1 f ∘ var zero}
-                                        {u = wk1 g ∘ var zero}
+        [t0≡t′0]′ = S.irrelevanceEqTerm {A = G} {t = wk1 f ∘ var 0}
+                                        {u = wk1 g ∘ var 0}
                                         [Γ]₃ ([Γ]₁ ∙ [F]′) [G] [G]′ [t0≡t′0]
         [t≡t′] = η-eqᵛ {f} {g} {F} {G} [Γ]₁ [F]′ [G]′ [t]″ [t′]″ [t0≡t′0]′
         [t≡t′]′ = S.irrelevanceEqTerm {A = Π F ▹ G} {t = f} {u = g}
@@ -363,8 +363,8 @@ mutual
     [Γ]₁ , modelsTermEq [F₀] [z] [z′] [z≡z′] |
     [Γ]₂ , modelsTermEq [F₊] [s] [s′] [s≡s′] |
     [Γ]₃ , modelsTermEq [ℕ] [n] [n′] [n≡n′] =
-      let sType = Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-          s′Type = Π ℕ ▹ (F′ ▹▹ F′ [ suc (var zero) ]↑)
+      let sType = Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
+          s′Type = Π ℕ ▹ (F′ ▹▹ F′ [ suc (var 0) ]↑)
           [0] = S.irrelevanceTerm {l = ¹} {A = ℕ} {t = zero}
                                   [Γ]₃ [Γ]₃ (ℕᵛ [Γ]₃) [ℕ] (zeroᵛ {l = ¹} [Γ]₃)
           [F]′ = S.irrelevance {A = F} [Γ] ([Γ]₃ ∙ [ℕ]) [F]
@@ -425,7 +425,7 @@ mutual
     with fundamental ⊢F | fundamentalTerm ⊢z | fundamentalTerm ⊢s
   fundamentalTermEq (natrec-zero {z} {s} {F} ⊢F ⊢z ⊢s) | [Γ] , [F]
     | [Γ]₁ , [F₀] , [z] | [Γ]₂ , [F₊] , [s] =
-    let sType = Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+    let sType = Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
         [Γ]′ = [Γ]₁
         [ℕ]′ = ℕᵛ {l = ¹} [Γ]′
         [F₊]′ = S.irrelevance {A = sType} [Γ]₂ [Γ]′ [F₊]
@@ -469,20 +469,20 @@ mutual
                             [Γ]₃ [ℕ]′ [F]′ [F₀]′ [F₊] [Fₙ]′ [z]′ [s] [n]′
         t = (s ∘ n) ∘ (natrec F z s n)
         q = subst (liftSubst (sgSubst n))
-                  (wk1 (F [ suc (var zero) ]↑))
+                  (wk1 (F [ suc (var 0) ]↑))
         y = S.irrelevanceTerm′
               {A = q [ natrec F z s n ]} {A′ = F [ suc n ]} {t = t}
               (natrecIrrelevantSubst′ F z s n) [Γ]₃ [Γ]₃
               (substSΠ {F [ n ]} {q} {natrec F z s n} [Γ]₃
                 (substS {ℕ} {F} {n} [Γ]₃ [ℕ]′ [F]′ [n]′)
-                (substSΠ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {n}
+                (substSΠ {ℕ} {F ▹▹ F [ suc (var 0) ]↑} {n}
                          [Γ]₃ [ℕ]′ [F₊] [n]′)
                 [natrecₙ])
               [F[sucn]]
               (appᵛ {F [ n ]} {q} {s ∘ n} {natrec F z s n} [Γ]₃ [Fₙ]′
-                (substSΠ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {n}
+                (substSΠ {ℕ} {F ▹▹ F [ suc (var 0) ]↑} {n}
                          [Γ]₃ [ℕ]′ [F₊] [n]′)
-                (appᵛ {ℕ} {F ▹▹ F [ suc (var zero) ]↑} {s} {n}
+                (appᵛ {ℕ} {F ▹▹ F [ suc (var 0) ]↑} {s} {n}
                       [Γ]₃ [ℕ]′ [F₊] [s] [n]′)
                 [natrecₙ])
         d , r =
@@ -509,8 +509,8 @@ mutual
                in PE.subst (λ x → Δ ⊢ subst σ (natrec F z s (suc n))
                                     ⇒ (subst σ t) ∷ x)
                            (PE.trans (PE.trans (substCompEq F)
-                             (substVar-to-subst (λ { zero → PE.refl
-                                         ; (suc x) → PE.trans (subst-wk (σ x))
+                             (substVar-to-subst (λ { 0 → PE.refl
+                                         ; (1+ x) → PE.trans (subst-wk (σ x))
                                                               (subst-id (σ x))
                                          })
                                       F))

@@ -20,12 +20,12 @@ open import Definition.LogicalRelation.Fundamental.Reducibility
 
 zero≢one′ : ∀ {Γ l} ([ℕ] : Γ ⊩⟨ l ⟩ℕ ℕ)
            → Γ ⊩⟨ l ⟩ zero ≡ suc zero ∷ ℕ / ℕ-intr [ℕ] → ⊥
-zero≢one′ (noemb x) (ℕₜ₌ .(suc _) .(suc _) d d′ k≡k′ (suc x₁)) =
-  zero≢suc (whnfRed*Term (redₜ d) zero)
-zero≢one′ (noemb x) (ℕₜ₌ .zero .zero d d′ k≡k′ zero) =
-  zero≢suc (PE.sym (whnfRed*Term (redₜ d′) suc))
+zero≢one′ (noemb x) (ℕₜ₌ .(suc _) .(suc _) d d′ k≡k′ (sucᵣ x₁)) =
+  zero≢suc (whnfRed*Term (redₜ d) zeroₙ)
+zero≢one′ (noemb x) (ℕₜ₌ .zero .zero d d′ k≡k′ zeroᵣ) =
+  zero≢suc (PE.sym (whnfRed*Term (redₜ d′) sucₙ))
 zero≢one′ (noemb x) (ℕₜ₌ k k′ d d′ k≡k′ (ne (neNfₜ₌ neK neM k≡m))) =
-  zero≢ne neK (whnfRed*Term (redₜ d) zero)
+  zero≢ne neK (whnfRed*Term (redₜ d) zeroₙ)
 zero≢one′ (emb 0<1 [ℕ]) n = zero≢one′ [ℕ] n
 
 -- Zero cannot be judgmentally equal to one.

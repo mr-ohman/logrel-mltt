@@ -26,7 +26,7 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
            → Γ ⊩⟨ l′ ⟩ B ≡ C / [B]
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
-  transEqT (ℕ D D′ D″) A≡B B≡C = B≡C
+  transEqT (ℕᵥ D D′ D″) A≡B B≡C = B≡C
   transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)
                (ne K₂ D₂ neK₂ K≡K₂))
            (ne₌ M D′ neM K≡M) (ne₌ M₁ D″ neM₁ K≡M₁)
@@ -35,14 +35,14 @@ mutual
     ne₌ M₁ D″ neM₁
         (~-trans K≡M K≡M₁)
   transEqT {Γ} {l = l} {l′ = l′} {l″ = l″}
-           (Π (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-              (Π F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)
-              (Π F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
+           (Πᵥ (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+               (Πᵣ F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)
+               (Πᵣ F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
            (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
            (Π₌ F″ G″ D″ A≡B₁ [F≡F′]₁ [G≡G′]₁) =
-    let ΠF₁G₁≡ΠF′G′    = whrDet* (red D₁ , Π) (D′  , Π)
+    let ΠF₁G₁≡ΠF′G′    = whrDet* (red D₁ , Πₙ) (D′  , Πₙ)
         F₁≡F′  , G₁≡G′ = Π-PE-injectivity ΠF₁G₁≡ΠF′G′
-        F₂≡F″ , G₂≡G″  = Π-PE-injectivity (whrDet* (red D₂ , Π) (D″ , Π))
+        F₂≡F″ , G₂≡G″  = Π-PE-injectivity (whrDet* (red D₂ , Πₙ) (D″ , Πₙ))
         substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ U.wk (lift ρ) x [ a ]
         [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′
         [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
@@ -83,7 +83,7 @@ mutual
                   [a″] = convTerm₁ ([F′] ρ ⊢Δ) ([F″] ρ ⊢Δ) ([F′≡F″] ρ ⊢Δ) [a′]
               in  transEq ([G] ρ ⊢Δ [a]) ([G′] ρ ⊢Δ [a′]) ([G″] ρ ⊢Δ [a″])
                           ([G≡G′] ρ ⊢Δ [a]) ([G′≡G″] ρ ⊢Δ [a′]))
-  transEqT (U ⊢Γ ⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
+  transEqT (Uᵥ ⊢Γ ⊢Γ₁ ⊢Γ₂) A≡B B≡C = A≡B
   transEqT (emb⁰¹¹ AB) A≡B B≡C = transEqT AB A≡B B≡C
   transEqT (emb¹⁰¹ AB) A≡B B≡C = transEqT AB A≡B B≡C
   transEqT (emb¹¹⁰ AB) A≡B B≡C = transEqT AB A≡B B≡C
@@ -131,11 +131,11 @@ mutual
                     → [Natural]-prop Γ k k′
                     → [Natural]-prop Γ k′ k″
                     → [Natural]-prop Γ k k″
-  transNatural-prop (suc x) (suc x₁) = suc (transEqTermℕ x x₁)
-  transNatural-prop (suc x) (ne (neNfₜ₌ () neM k≡m))
-  transNatural-prop zero prop₁ = prop₁
-  transNatural-prop prop zero = prop
-  transNatural-prop (ne (neNfₜ₌ neK () k≡m)) (suc x₃)
+  transNatural-prop (sucᵣ x) (sucᵣ x₁) = sucᵣ (transEqTermℕ x x₁)
+  transNatural-prop (sucᵣ x) (ne (neNfₜ₌ () neM k≡m))
+  transNatural-prop zeroᵣ prop₁ = prop₁
+  transNatural-prop prop zeroᵣ = prop
+  transNatural-prop (ne (neNfₜ₌ neK () k≡m)) (sucᵣ x₃)
   transNatural-prop (ne [k≡k′]) (ne [k′≡k″]) =
     ne (transEqTermNe [k≡k′] [k′≡k″])
 
@@ -145,20 +145,20 @@ transEqTerm : ∀ {l Γ A t u v}
             → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
             → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A]
             → Γ ⊩⟨ l ⟩ t ≡ v ∷ A / [A]
-transEqTerm (U′ .⁰ 0<1 ⊢Γ)
+transEqTerm (Uᵣ′ .⁰ 0<1 ⊢Γ)
             (Uₜ₌ A B d d′ typeA typeB t≡u [t] [u] [t≡u])
             (Uₜ₌ A₁ B₁ d₁ d₁′ typeA₁ typeB₁ t≡u₁ [t]₁ [u]₁ [t≡u]₁)
             rewrite whrDet*Term (redₜ d′ , typeWhnf typeB) (redₜ d₁ , typeWhnf typeA₁) =
   Uₜ₌ A B₁ d d₁′ typeA typeB₁ (≅ₜ-trans t≡u t≡u₁) [t] [u]₁
       (transEq [t] [u] [u]₁ [t≡u] (irrelevanceEq [t]₁ [u] [t≡u]₁))
-transEqTerm (ℕ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
+transEqTerm (ℕᵣ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
 transEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m))
                               (neₜ₌ k₁ m₁ d₁ d″ (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
   let k₁≡m = whrDet*Term (redₜ d₁ , ne neK₂) (redₜ d′ , ne neM)
   in  neₜ₌ k m₁ d d″
            (neNfₜ₌ neK₁ neM₁
                    (~-trans k≡m (PE.subst (λ x → _ ⊢ x ~ _ ∷ _) k₁≡m k≡m₁)))
-transEqTerm (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+transEqTerm (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (Πₜ₌ f g d d′ funcF funcG f≡g [f] [g] [f≡g])
             (Πₜ₌ f₁ g₁ d₁ d₁′ funcF₁ funcG₁ f≡g₁ [f]₁ [g]₁ [f≡g]₁)
             rewrite whrDet*Term (redₜ d′ , functionWhnf funcG)

@@ -32,5 +32,5 @@ univ* (x ⇨ A⇒B) = univ x ⇨ univ* A⇒B
 -- Application substitution of reduction closures
 app-subst* : ∀ {Γ A B t t′ a} → Γ ⊢ t ⇒* t′ ∷ Π A ▹ B → Γ ⊢ a ∷ A
            → Γ ⊢ t ∘ a ⇒* t′ ∘ a ∷ B [ a ]
-app-subst* (id x) a₁ = id (x ∘ a₁)
+app-subst* (id x) a₁ = id (x ∘ⱼ a₁)
 app-subst* (x ⇨ t⇒t′) a₁ = app-subst x a₁ ⇨ app-subst* t⇒t′ a₁

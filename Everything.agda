@@ -15,6 +15,7 @@ import Tools.Sum
 import Tools.Product
 import Tools.Function
 import Tools.Nullary
+import Tools.List
 import Tools.PropositionalEquality
 
 -- Grammar of the language

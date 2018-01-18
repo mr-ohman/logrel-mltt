@@ -2,8 +2,7 @@
 
 module Definition.Typed.Consequences.Canonicity where
 
-open import Definition.Untyped hiding (wk)
-import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Untyped.Properties
 
 open import Definition.Typed
@@ -31,17 +30,17 @@ import Tools.PropositionalEquality as PE
 
 -- Turns a natural number into its term representation
 sucᵏ : Nat → Term
-sucᵏ zero = zero
-sucᵏ (suc n) = suc (sucᵏ n)
+sucᵏ 0 = zero
+sucᵏ (1+ n) = suc (sucᵏ n)
 
 -- Helper function for canonicity for reducible natural properties
 canonicity″ : ∀ {t}
               → Natural-prop ε t
               → ∃ λ k → ε ⊢ t ≡ sucᵏ k ∷ ℕ
-canonicity″ (suc (ℕₜ n₁ d n≡n prop)) =
+canonicity″ (sucᵣ (ℕₜ n₁ d n≡n prop)) =
   let a , b = canonicity″ prop
-  in  suc a , suc-cong (trans (subset*Term (redₜ d)) b)
-canonicity″ zero = zero , refl (zero ε)
+  in  1+ a , suc-cong (trans (subset*Term (redₜ d)) b)
+canonicity″ zeroᵣ = 0 , refl (zeroⱼ ε)
 canonicity″ (ne (neNfₜ neK ⊢k k≡k)) = ⊥-elim (noNe ⊢k neK)
 
 -- Helper function for canonicity for specific reducible natural numbers

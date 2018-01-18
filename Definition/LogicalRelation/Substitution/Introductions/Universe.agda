@@ -19,7 +19,7 @@ import Tools.PropositionalEquality as PE
 
 -- Validity of the universe type.
 Uᵛ : ∀ {Γ} ([Γ] : ⊩ᵛ Γ) → Γ ⊩ᵛ⟨ ¹ ⟩ U / [Γ]
-Uᵛ [Γ] ⊢Δ [σ] = U (U ⁰ 0<1 ⊢Δ) , λ _ x₂ → PE.refl
+Uᵛ [Γ] ⊢Δ [σ] = Uᵣ′ ⁰ 0<1 ⊢Δ , λ _ x₂ → PE.refl
 
 -- Valid terms of type U are valid types.
 univᵛ : ∀ {A Γ l l′} ([Γ] : ⊩ᵛ Γ)

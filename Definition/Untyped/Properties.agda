@@ -6,6 +6,7 @@ module Definition.Untyped.Properties where
 
 open import Tools.Nat
 open import Tools.Unit
+open import Tools.List
 open import Tools.PropositionalEquality as PE hiding (subst)
 
 open import Definition.Untyped
@@ -36,54 +37,60 @@ wkVar-lift : ∀ {ρ ρ′}
   → (∀ x → wkVar ρ x ≡ wkVar ρ′ x)
   → (∀ x → wkVar (lift ρ) x ≡ wkVar (lift ρ′) x)
 
-wkVar-lift eq zero    = refl
-wkVar-lift eq (suc x) = cong suc (eq x)
+wkVar-lift eq 0      = refl
+wkVar-lift eq (1+ x) = cong 1+ (eq x)
+
+wkVar-lifts : ∀ {ρ ρ′}
+  → (∀ x → wkVar ρ x ≡ wkVar ρ′ x)
+  → (∀ n x → wkVar (repeat lift ρ n) x ≡ wkVar (repeat lift ρ′ n) x)
+wkVar-lifts eq 0 x = eq x
+wkVar-lifts eq (1+ n) x = wkVar-lift (wkVar-lifts eq n) x
 
 -- Extensionally equal weakenings, if applied to a term,
 -- yield the same weakened term.  Or:
 -- If two weakenings are equal under wkVar, then they are equal under wk.
 
-wkVar-to-wk : ∀ {ρ ρ′}
-  → (∀ x → wkVar ρ x ≡ wkVar ρ′ x)
-  → ∀ t → wk ρ t ≡ wk ρ′ t
+mutual
+  wkVar-to-wk : ∀ {ρ ρ′}
+    → (∀ x → wkVar ρ x ≡ wkVar ρ′ x)
+    → ∀ t → wk ρ t ≡ wk ρ′ t
+  wkVar-to-wk eq (var x) = cong var (eq x)
+  wkVar-to-wk eq (gen x c) = cong (gen x) (wkVar-to-wkGen eq c)
 
-wkVar-to-wk eq U          = refl
-wkVar-to-wk eq (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wkVar-to-wk eq t) (wkVar-to-wk (wkVar-lift eq) t₁)
-wkVar-to-wk eq ℕ          = refl
-wkVar-to-wk eq (var x)    = cong var (eq x)
-wkVar-to-wk eq (lam t)    = cong lam (wkVar-to-wk (wkVar-lift eq) t)
-wkVar-to-wk eq (t ∘ t₁)   = cong₂ _∘_ (wkVar-to-wk eq t) (wkVar-to-wk eq t₁)
-wkVar-to-wk eq zero       = refl
-wkVar-to-wk eq (suc t)    = cong suc (wkVar-to-wk eq t)
-wkVar-to-wk eq (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (wkVar-to-wk (wkVar-lift eq) t)
-               (wkVar-to-wk eq t₁) (wkVar-to-wk eq t₂) (wkVar-to-wk eq t₃)
+  wkVar-to-wkGen : ∀ {ρ ρ′}
+    → (∀ x → wkVar ρ x ≡ wkVar ρ′ x)
+    → ∀ t → wkGen ρ t ≡ wkGen ρ′ t
+  wkVar-to-wkGen eq [] = refl
+  wkVar-to-wkGen eq (⟦ l , t ⟧ ∷ g) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (wkVar-to-wk (wkVar-lifts eq l) t))
+              (wkVar-to-wkGen eq g)
 
 -- lift id  is extensionally equal to  id.
 
 wkVar-lift-id : (x : Nat) → wkVar (lift id) x ≡ wkVar id x
-wkVar-lift-id zero    = refl
-wkVar-lift-id (suc x) = refl
+wkVar-lift-id 0    = refl
+wkVar-lift-id (1+ x) = refl
+
+wkVar-lifts-id : (n x : Nat) → wkVar (repeat lift id n) x ≡ wkVar id x
+wkVar-lifts-id 0 x = refl
+wkVar-lifts-id (1+ n) 0 = refl
+wkVar-lifts-id (1+ n) (1+ x) = cong 1+ (wkVar-lifts-id n x)
 
 -- id is the identity renaming.
 
 wkVar-id : (x : Nat) → wkVar id x ≡ x
 wkVar-id x = refl
 
-wk-id : (t : Term) → wk id t ≡ t
-wk-id U          = refl
-wk-id (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wk-id t) (trans (wkVar-to-wk wkVar-lift-id t₁) (wk-id t₁))
-wk-id ℕ          = refl
-wk-id (var x)    = cong var (wkVar-id x)
-wk-id (lam t)    = cong lam (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
-wk-id (t ∘ t₁)   = cong₂ _∘_ (wk-id t) (wk-id t₁)
-wk-id zero       = refl
-wk-id (suc t)    = cong suc (wk-id t)
-wk-id (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (wkVar-to-wk wkVar-lift-id t) (wk-id t))
-               (wk-id t₁) (wk-id t₂) (wk-id t₃)
+mutual
+  wk-id : (t : Term) → wk id t ≡ t
+  wk-id (var x) = refl
+  wk-id (gen x c) = cong (gen x) (wkGen-id c)
+
+  wkGen-id : ∀ x → wkGen id x ≡ x
+  wkGen-id [] = refl
+  wkGen-id (⟦ l , t ⟧ ∷ g) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l)
+              (trans (wkVar-to-wk (wkVar-lifts-id l) t) (wk-id t))) (wkGen-id g)
 
 -- lift id  is also the identity renaming.
 
@@ -96,30 +103,32 @@ wk-lift-id t = trans (wkVar-to-wk wkVar-lift-id t) (wk-id t)
 
 wkVar-comp : ∀ ρ ρ′ x → wkVar ρ (wkVar ρ′ x) ≡ wkVar (ρ • ρ′) x
 wkVar-comp id       ρ′        x       = refl
-wkVar-comp (step ρ) ρ′        x       = cong suc (wkVar-comp ρ ρ′ x)
+wkVar-comp (step ρ) ρ′        x       = cong 1+ (wkVar-comp ρ ρ′ x)
 wkVar-comp (lift ρ) id        x       = refl
-wkVar-comp (lift ρ) (step ρ′) x       = cong suc (wkVar-comp ρ ρ′ x)
-wkVar-comp (lift ρ) (lift ρ′) zero    = refl
-wkVar-comp (lift ρ) (lift ρ′) (suc x) = cong suc (wkVar-comp ρ ρ′ x)
+wkVar-comp (lift ρ) (step ρ′) x       = cong 1+ (wkVar-comp ρ ρ′ x)
+wkVar-comp (lift ρ) (lift ρ′) 0    = refl
+wkVar-comp (lift ρ) (lift ρ′) (1+ x) = cong 1+ (wkVar-comp ρ ρ′ x)
+
+wkVar-comps : ∀ n ρ ρ′ x
+            → wkVar (repeat lift ρ n • repeat lift ρ′ n) x
+            ≡ wkVar (repeat lift (ρ • ρ′) n) x
+wkVar-comps 0 ρ ρ′ x = refl
+wkVar-comps (1+ n) ρ ρ′ 0 = refl
+wkVar-comps (1+ n) ρ ρ′ (1+ x) = cong 1+ (wkVar-comps n ρ ρ′ x)
 
 -- ... as action on terms.
 
-wk-comp : ∀ ρ ρ′ t → wk ρ (wk ρ′ t) ≡ wk (ρ • ρ′) t
-wk-comp ρ ρ′ U          = refl
-wk-comp ρ ρ′ (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wk-comp ρ ρ′ t) (wk-comp (lift ρ) (lift ρ′) t₁)
-wk-comp ρ ρ′ ℕ          = refl
-wk-comp ρ ρ′ (var x)    = cong var (wkVar-comp ρ ρ′ x)
-wk-comp ρ ρ′ (lam t)    = cong lam (wk-comp (lift ρ) (lift ρ′) t)
-wk-comp ρ ρ′ (t ∘ t₁)   = cong₂ _∘_ (wk-comp ρ ρ′ t) (wk-comp ρ ρ′ t₁)
-wk-comp ρ ρ′ zero       = refl
-wk-comp ρ ρ′ (suc t)    = cong suc (wk-comp ρ ρ′ t)
-wk-comp ρ ρ′ (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (wk-comp (lift ρ) (lift ρ′) t)
-               (wk-comp ρ ρ′ t₁)
-               (wk-comp ρ ρ′ t₂)
-               (wk-comp ρ ρ′ t₃)
+mutual
+  wk-comp : ∀ ρ ρ′ t → wk ρ (wk ρ′ t) ≡ wk (ρ • ρ′) t
+  wk-comp ρ ρ′ (var x) = cong var (wkVar-comp ρ ρ′ x)
+  wk-comp ρ ρ′ (gen x c) = cong (gen x) (wkGen-comp ρ ρ′ c)
 
+  wkGen-comp : ∀ ρ ρ′ g → wkGen ρ (wkGen ρ′ g) ≡ wkGen (ρ • ρ′) g
+  wkGen-comp ρ ρ′ [] = refl
+  wkGen-comp ρ ρ′ (⟦ l , t ⟧ ∷ g) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (trans (wk-comp (repeat lift ρ l) (repeat lift ρ′ l) t)
+                                     (wkVar-to-wk (wkVar-comps l ρ ρ′) t)))
+              (wkGen-comp ρ ρ′ g)
 
 -- The following lemmata are variations on the equality
 --
@@ -155,52 +164,58 @@ substVar-lift : ∀ {σ σ′}
   → (∀ x → σ x ≡ σ′ x)
   → ∀ x → liftSubst σ x ≡ liftSubst σ′ x
 
-substVar-lift eq zero    = refl
-substVar-lift eq (suc x) = cong wk1 (eq x)
+substVar-lift eq 0    = refl
+substVar-lift eq (1+ x) = cong wk1 (eq x)
+
+substVar-lifts : ∀ {σ σ′}
+  → (∀ x → σ x ≡ σ′ x)
+  → ∀ n x → repeat liftSubst σ n x ≡ repeat liftSubst σ′ n x
+
+substVar-lifts eq 0 x = eq x
+substVar-lifts eq (1+ n) 0 = refl
+substVar-lifts eq (1+ n) (1+ x) = cong wk1 (substVar-lifts eq n x)
 
 -- If  σ = σ′  then  subst σ t = subst σ′ t.
 
-substVar-to-subst : ∀ {σ σ′}
-  → ((x : Nat) → σ x ≡ σ′ x)
-  → (t : Term) → subst σ t ≡ subst σ′ t
+mutual
+  substVar-to-subst : ∀ {σ σ′}
+    → ((x : Nat) → σ x ≡ σ′ x)
+    → (t : Term) → subst σ t ≡ subst σ′ t
+  substVar-to-subst eq (var x) = eq x
+  substVar-to-subst eq (gen x c) = cong (gen x) (substVar-to-substGen eq c)
 
-substVar-to-subst eq U          = refl
-substVar-to-subst eq (Π t ▹ t₁) =
-  cong₂ Π_▹_ (substVar-to-subst eq t) (substVar-to-subst (substVar-lift eq) t₁)
-substVar-to-subst eq ℕ          = refl
-substVar-to-subst eq (var x₁)   = eq x₁
-substVar-to-subst eq (lam t)    = cong lam (substVar-to-subst (substVar-lift eq) t)
-substVar-to-subst eq (t ∘ t₁)   =
-  cong₂ _∘_ (substVar-to-subst eq t) (substVar-to-subst eq t₁)
-substVar-to-subst eq zero       = refl
-substVar-to-subst eq (suc t)    = cong suc (substVar-to-subst eq t)
-substVar-to-subst eq (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (substVar-to-subst (substVar-lift eq) t)
-               (substVar-to-subst eq t₁)
-               (substVar-to-subst eq t₂)
-               (substVar-to-subst eq t₃)
+  substVar-to-substGen : ∀ {σ σ′}
+    → ((x : Nat) → σ x ≡ σ′ x)
+    → ∀ g → substGen σ g ≡ substGen σ′ g
+  substVar-to-substGen eq [] = refl
+  substVar-to-substGen eq (⟦ l , t ⟧ ∷ g) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (substVar-to-subst (substVar-lifts eq l) t))
+              (substVar-to-substGen eq g)
 
 -- lift id = id  (as substitutions)
 
 subst-lift-id : (x : Nat) → (liftSubst idSubst) x ≡ idSubst x
-subst-lift-id zero    = refl
-subst-lift-id (suc x) = refl
+subst-lift-id 0    = refl
+subst-lift-id (1+ x) = refl
+
+subst-lifts-id : (n x : Nat) → (repeat liftSubst idSubst n) x ≡ idSubst x
+subst-lifts-id 0 x = refl
+subst-lifts-id (1+ n) 0 = refl
+subst-lifts-id (1+ n) (1+ x) = cong wk1 (subst-lifts-id n x)
 
 -- Identity substitution.
 
-subst-id : (t : Term) → subst idSubst t ≡ t
-subst-id U          = refl
-subst-id (Π t ▹ t₁) =
-  cong₂ Π_▹_ (subst-id t) (trans (substVar-to-subst subst-lift-id t₁) (subst-id t₁))
-subst-id ℕ          = refl
-subst-id (var x)    = refl
-subst-id (lam t)    = cong lam (trans (substVar-to-subst subst-lift-id t) (subst-id t))
-subst-id (t ∘ t₁)   = cong₂ _∘_ (subst-id t) (subst-id t₁)
-subst-id zero       = refl
-subst-id (suc t)    = cong suc (subst-id t)
-subst-id (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (substVar-to-subst subst-lift-id t) (subst-id t))
-               (subst-id t₁) (subst-id t₂) (subst-id t₃)
+mutual
+  subst-id : (t : Term) → subst idSubst t ≡ t
+  subst-id (var x) = refl
+  subst-id (gen x c) = cong (gen x) (substGen-id c)
+
+  substGen-id : ∀ g → substGen idSubst g ≡ g
+  substGen-id [] = refl
+  substGen-id (⟦ l , t ⟧ ∷ g) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (trans (substVar-to-subst (subst-lifts-id l) t)
+                                     (subst-id t)))
+              (substGen-id g)
 
 
 -- Correctness of composition of weakening and substitution.
@@ -212,46 +227,68 @@ subst-lift-•ₛ : ∀ {ρ σ} t
               → subst (lift ρ •ₛ liftSubst σ) t
               ≡ subst (liftSubst (ρ •ₛ σ)) t
 subst-lift-•ₛ =
-  substVar-to-subst (λ { zero → refl ; (suc x) → sym (wk1-wk≡lift-wk1 _ _)})
+  substVar-to-subst (λ { 0 → refl ; (1+ x) → sym (wk1-wk≡lift-wk1 _ _)})
+
+helper1 : ∀ {ρ σ} (n x : Nat) →
+      (lift (repeat lift ρ n) •ₛ liftSubst (repeat liftSubst σ n)) x ≡
+      liftSubst (repeat liftSubst (ρ •ₛ σ) n) x
+helper1 0 0 = refl
+helper1 0 (1+ x) = sym (wk1-wk≡lift-wk1 _ _)
+helper1 (1+ n) 0 = refl
+helper1 (1+ n) (1+ x) = trans (sym (wk1-wk≡lift-wk1 _ _)) (cong wk1 (helper1 n x))
+
+subst-lifts-•ₛ : ∀ {ρ σ} n t
+              → subst (repeat lift ρ n •ₛ repeat liftSubst σ n) t
+              ≡ subst (repeat liftSubst (ρ •ₛ σ) n) t
+subst-lifts-•ₛ 0 t = refl
+subst-lifts-•ₛ (1+ n) t = substVar-to-subst (helper1 n) t
 
 -- lift σ ₛ• lift ρ = lift (σ ₛ• ρ)
 
 subst-lift-ₛ• : ∀ {ρ σ} t
               → subst (liftSubst σ ₛ• lift ρ) t
               ≡ subst (liftSubst (σ ₛ• ρ)) t
-subst-lift-ₛ• = substVar-to-subst (λ { zero → refl ; (suc x) → refl})
+subst-lift-ₛ• = substVar-to-subst (λ { 0 → refl ; (1+ x) → refl})
+
+helper2 : ∀ {ρ σ} (n x : Nat) →
+      liftSubst (repeat liftSubst σ n) (wkVar (lift (repeat lift ρ n)) x) ≡
+      liftSubst (repeat liftSubst (λ x₁ → σ (wkVar ρ x₁)) n) x
+helper2 0 0 = refl
+helper2 0 (1+ x) = refl
+helper2 (1+ n) 0 = refl
+helper2 (1+ n) (1+ x) = cong wk1 (helper2 n x)
+
+subst-lifts-ₛ• : ∀ {ρ σ} n t
+              → subst (repeat liftSubst σ n ₛ• repeat lift ρ n) t
+              ≡ subst (repeat liftSubst (σ ₛ• ρ) n) t
+subst-lifts-ₛ• 0 t = refl
+subst-lifts-ₛ• (1+ n) t = substVar-to-subst (helper2 n) t
 
 -- wk ρ ∘ subst σ = subst (ρ •ₛ σ)
 
-wk-subst : ∀ {ρ σ} t → wk ρ (subst σ t) ≡ subst (ρ •ₛ σ) t
-wk-subst U          = refl
-wk-subst (Π t ▹ t₁) =
-  cong₂ Π_▹_ (wk-subst t) (trans (wk-subst t₁) (subst-lift-•ₛ t₁))
-wk-subst ℕ          = refl
-wk-subst (var x)    = refl
-wk-subst (lam t)    = cong lam (trans (wk-subst t) (subst-lift-•ₛ t))
-wk-subst (t ∘ t₁)   = cong₂ _∘_ (wk-subst t) (wk-subst t₁)
-wk-subst zero       = refl
-wk-subst (suc t)    = cong suc (wk-subst t)
-wk-subst (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (wk-subst t) (subst-lift-•ₛ t))
-               (wk-subst t₁) (wk-subst t₂) (wk-subst t₃)
+mutual
+  wk-subst : ∀ {ρ σ} t → wk ρ (subst σ t) ≡ subst (ρ •ₛ σ) t
+  wk-subst (var x) = refl
+  wk-subst (gen x c) = cong (gen x) (wkGen-substGen c)
+
+  wkGen-substGen : ∀ {ρ σ} t → wkGen ρ (substGen σ t) ≡ substGen (ρ •ₛ σ) t
+  wkGen-substGen [] = refl
+  wkGen-substGen (⟦ l , t ⟧ ∷ c) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (trans (wk-subst t) (subst-lifts-•ₛ l t)))
+              (wkGen-substGen c)
 
 -- subst σ ∘ wk ρ = subst (σ •ₛ ρ)
 
-subst-wk : ∀ {ρ σ} t → subst σ (wk ρ t) ≡ subst (σ ₛ• ρ) t
-subst-wk U          = refl
-subst-wk (Π t ▹ t₁) =
-  cong₂ Π_▹_ (subst-wk t) (trans (subst-wk t₁) (subst-lift-ₛ• t₁))
-subst-wk ℕ          = refl
-subst-wk (var x)    = refl
-subst-wk (lam t)    = cong lam (trans (subst-wk t) (subst-lift-ₛ• t))
-subst-wk (t ∘ t₁)   = cong₂ _∘_ (subst-wk t) (subst-wk t₁)
-subst-wk zero       = refl
-subst-wk (suc t)    = cong suc (subst-wk t)
-subst-wk (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (subst-wk t) (subst-lift-ₛ• t))
-               (subst-wk t₁) (subst-wk t₂) (subst-wk t₃)
+mutual
+  subst-wk : ∀ {ρ σ} t → subst σ (wk ρ t) ≡ subst (σ ₛ• ρ) t
+  subst-wk (var x) = refl
+  subst-wk (gen x c) = cong (gen x) (substGen-wkGen c)
+
+  substGen-wkGen : ∀ {ρ σ} t → substGen σ (wkGen ρ t) ≡ substGen (σ ₛ• ρ) t
+  substGen-wkGen [] = refl
+  substGen-wkGen (⟦ l , t ⟧ ∷ c) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (trans (subst-wk t) (subst-lifts-ₛ• l t)))
+              (substGen-wkGen c)
 
 -- Composition of liftings is lifting of the composition.
 
@@ -273,26 +310,33 @@ wk≡subst ρ t = trans (cong (wk ρ) (sym (subst-id t))) (wk-subst t)
 substCompLift : ∀ {σ σ′} x
               → (liftSubst σ ₛ•ₛ liftSubst σ′) x
               ≡ (liftSubst (σ ₛ•ₛ σ′)) x
-substCompLift          zero    = refl
-substCompLift {σ} {σ′} (suc x) = trans (subst-wk (σ′ x)) (sym (wk-subst (σ′ x)))
+substCompLift          0    = refl
+substCompLift {σ} {σ′} (1+ x) = trans (subst-wk (σ′ x)) (sym (wk-subst (σ′ x)))
+
+substCompLifts : ∀ {σ σ′} n x
+              → (repeat liftSubst σ n ₛ•ₛ repeat liftSubst σ′ n) x
+              ≡ (repeat liftSubst (σ ₛ•ₛ σ′) n) x
+substCompLifts 0 x = refl
+substCompLifts (1+ n) 0 = refl
+substCompLifts {σ} {σ′} (1+ n) (1+ x) =
+  trans (substCompLift {repeat liftSubst σ n} {repeat liftSubst σ′ n} (1+ x))
+        (cong wk1 (substCompLifts n x))
 
 -- Soundness of the composition of substitutions.
 
-substCompEq : ∀ {σ σ′} (t : Term)
-            → subst σ (subst σ′ t) ≡ subst (σ ₛ•ₛ σ′) t
-substCompEq U          = refl
-substCompEq (Π t ▹ t₁) =
-  cong₂ Π_▹_ (substCompEq t) (trans (substCompEq t₁) (substVar-to-subst substCompLift t₁))
-substCompEq ℕ          = refl
-substCompEq (var x)    = refl
-substCompEq (lam t)    = cong lam (trans (substCompEq t) (substVar-to-subst substCompLift t))
-substCompEq (t ∘ t₁)   = cong₂ _∘_ (substCompEq t) (substCompEq t₁)
-substCompEq zero       = refl
-substCompEq (suc t)    = cong suc (substCompEq t)
-substCompEq (natrec t t₁ t₂ t₃) =
-  cong₄ natrec (trans (substCompEq t) (substVar-to-subst substCompLift t))
-               (substCompEq t₁) (substCompEq t₂) (substCompEq t₃)
+mutual
+  substCompEq : ∀ {σ σ′} (t : Term)
+              → subst σ (subst σ′ t) ≡ subst (σ ₛ•ₛ σ′) t
+  substCompEq (var x) = refl
+  substCompEq (gen x c) = cong (gen x) (substGenCompEq c)
 
+  substGenCompEq : ∀ {σ σ′} t
+              → substGen σ (substGen σ′ t) ≡ substGen (σ ₛ•ₛ σ′) t
+  substGenCompEq [] = refl
+  substGenCompEq (⟦ l , t ⟧ ∷ c) =
+    cong₂ _∷_ (cong (⟦_,_⟧ l) (trans (substCompEq t)
+                                     (substVar-to-subst (substCompLifts l) t)))
+              (substGenCompEq c)
 
 -- Weakening single substitutions.
 
@@ -309,35 +353,35 @@ wk-comp-subst {a} ρ ρ′ G =
 
 wk-β : ∀ {ρ a} t → wk ρ (t [ a ]) ≡ wk (lift ρ) t [ wk ρ a ]
 wk-β t = trans (wk-subst t) (sym (trans (subst-wk t)
-               (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) t)))
+               (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) t)))
 
 -- Pushing a weakening into a single shifting substitution.
 -- If  ρ′ = lift ρ  then  ρ′(t[a]↑) = ρ′(t) [ρ′(a)]↑
 
 wk-β↑ : ∀ {ρ a} t → wk (lift ρ) (t [ a ]↑) ≡ wk (lift ρ) t [ wk (lift ρ) a ]↑
 wk-β↑ t = trans (wk-subst t) (sym (trans (subst-wk t)
-                (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) t)))
+                (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) t)))
 
 -- A specific equation on weakenings used for the reduction of natrec.
 
 wk-β-natrec : ∀ ρ G
-  → Π ℕ ▹ (Π wk (lift ρ) G ▹ wk (lift (lift ρ)) (wk1 (G [ suc (var zero) ]↑)))
-  ≡ Π ℕ ▹ (wk (lift ρ) G ▹▹ wk (lift ρ) G [ suc (var zero) ]↑)
+  → Π ℕ ▹ (Π wk (lift ρ) G ▹ wk (lift (lift ρ)) (wk1 (G [ suc (var 0) ]↑)))
+  ≡ Π ℕ ▹ (wk (lift ρ) G ▹▹ wk (lift ρ) G [ suc (var 0) ]↑)
 wk-β-natrec ρ G =
   cong₂ Π_▹_ refl (cong₂ Π_▹_ refl
     (trans (wk-comp (lift (lift ρ)) (step id)
-                    (subst (consSubst (wk1Subst var) (suc (var zero))) G))
+                    (subst (consSubst (wk1Subst var) (suc (var 0))) G))
        (trans (wk-subst G) (sym (trans (wk-subst (wk (lift ρ) G))
          (trans (subst-wk G)
-                (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)))))))
+                (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) G)))))))
 
 -- Composing a singleton substitution and a lifted substitution.
 -- sg u ∘ lift σ = cons id u ∘ lift σ = cons σ u
 
 substVarSingletonComp : ∀ {u σ} (x : Nat)
   → (sgSubst u ₛ•ₛ liftSubst σ) x ≡ (consSubst σ u) x
-substVarSingletonComp zero = refl
-substVarSingletonComp {σ = σ} (suc x) = trans (subst-wk (σ x)) (subst-id (σ x))
+substVarSingletonComp 0 = refl
+substVarSingletonComp {σ = σ} (1+ x) = trans (subst-wk (σ x)) (subst-id (σ x))
 
 -- The same again, as action on a term t.
 
@@ -371,7 +415,7 @@ singleSubstLift : ∀ {σ} G t
                 ≡ subst (liftSubst σ) G [ subst σ t ]
 singleSubstLift G t =
   trans (substCompEq G)
-        (trans (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)
+        (trans (trans (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) G)
                       (sym (substSingletonComp G)))
                (sym (substCompEq G)))
 
@@ -381,14 +425,14 @@ idWkLiftSubstLemma : ∀ σ G
   → wk (lift (step id)) (subst (liftSubst σ) G) [ var 0 ]
   ≡ subst (liftSubst σ) G
 idWkLiftSubstLemma σ G =
-  trans (singleSubstWkComp (var zero) σ G)
-        (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G)
+  trans (singleSubstWkComp (var 0) σ G)
+        (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) G)
 
 substVarComp↑ : ∀ {t} σ x
   → (consSubst (wk1Subst idSubst) (subst (liftSubst σ) t) ₛ•ₛ liftSubst σ) x
   ≡ (liftSubst σ ₛ•ₛ consSubst (wk1Subst idSubst) t) x
-substVarComp↑ σ zero = refl
-substVarComp↑ σ (suc x) = trans (subst-wk (σ x)) (sym (wk≡subst (step id) (σ x)))
+substVarComp↑ σ 0 = refl
+substVarComp↑ σ (1+ x) = trans (subst-wk (σ x)) (sym (wk≡subst (step id) (σ x)))
 
 singleSubstLift↑ : ∀ σ G t
                  → subst (liftSubst σ) (G [ t ]↑)
@@ -398,42 +442,42 @@ singleSubstLift↑ σ G t =
         (sym (trans (substCompEq G) (substVar-to-subst (substVarComp↑ σ) G)))
 
 substConsComp : ∀ {σ t G}
-       → subst (consSubst (λ x → σ (suc x)) (subst (tail σ) t)) G
-       ≡ subst σ (subst (consSubst (λ x → var (suc x)) (wk1 t)) G)
+       → subst (consSubst (λ x → σ (1+ x)) (subst (tail σ) t)) G
+       ≡ subst σ (subst (consSubst (λ x → var (1+ x)) (wk1 t)) G)
 substConsComp {t = t} {G = G} =
-  trans (substVar-to-subst (λ { zero → sym (subst-wk t) ; (suc x) → refl }) G)
+  trans (substVar-to-subst (λ { 0 → sym (subst-wk t) ; (1+ x) → refl }) G)
         (sym (substCompEq G))
 
-wkSingleSubstId : ∀ F → (wk (lift (step id)) F) [ var zero ] ≡ F
+wkSingleSubstId : ∀ F → (wk (lift (step id)) F) [ var 0 ] ≡ F
 wkSingleSubstId F =
   trans (subst-wk F)
-        (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) F)
+        (trans (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) F)
                (subst-id F))
 
 cons-wk-subst : ∀ ρ σ a t
        → subst (sgSubst a ₛ• lift ρ ₛ•ₛ liftSubst σ) t
        ≡ subst (consSubst (ρ •ₛ σ) a) t
 cons-wk-subst ρ σ a = substVar-to-subst
-  (λ { zero → refl
-     ; (suc x) → trans (subst-wk (σ x)) (sym (wk≡subst ρ (σ x))) })
+  (λ { 0 → refl
+     ; (1+ x) → trans (subst-wk (σ x)) (sym (wk≡subst ρ (σ x))) })
 
 natrecSucCaseLemma : ∀ {σ} (x : Nat)
-  → (step id •ₛ consSubst (wk1Subst idSubst) (suc (var zero)) ₛ•ₛ liftSubst σ) x
-  ≡ (liftSubst (liftSubst σ) ₛ• step id ₛ•ₛ consSubst (wk1Subst idSubst) (suc (var zero))) x
-natrecSucCaseLemma zero = refl
-natrecSucCaseLemma {σ} (suc x) =
+  → (step id •ₛ consSubst (wk1Subst idSubst) (suc (var 0)) ₛ•ₛ liftSubst σ) x
+  ≡ (liftSubst (liftSubst σ) ₛ• step id ₛ•ₛ consSubst (wk1Subst idSubst) (suc (var 0))) x
+natrecSucCaseLemma 0 = refl
+natrecSucCaseLemma {σ} (1+ x) =
   trans (subst-wk (σ x))
            (sym (trans (wk1-wk (step id) _)
                              (wk≡subst (step (step id)) (σ x))))
 
 natrecSucCase : ∀ σ F
-  → Term.Π ℕ ▹ (Π subst (liftSubst σ) F
-                ▹ subst (liftSubst (liftSubst σ)) (wk1 (F [ suc (var zero) ]↑)))
-  ≡ Π ℕ ▹ (subst (liftSubst σ) F ▹▹ subst (liftSubst σ) F [ suc (var zero) ]↑)
+  → Π ℕ ▹ (Π subst (liftSubst σ) F
+                ▹ subst (liftSubst (liftSubst σ)) (wk1 (F [ suc (var 0) ]↑)))
+  ≡ Π ℕ ▹ (subst (liftSubst σ) F ▹▹ subst (liftSubst σ) F [ suc (var 0) ]↑)
 natrecSucCase σ F =
   cong₂ Π_▹_ refl
     (cong₂ Π_▹_ refl
-       (trans (trans (subst-wk (F [ suc (var zero) ]↑))
+       (trans (trans (subst-wk (F [ suc (var 0) ]↑))
                            (substCompEq F))
                  (sym (trans (wk-subst (subst (liftSubst σ) F))
                                    (trans (substCompEq F)
@@ -446,9 +490,9 @@ natrecIrrelevantSubstLemma : ∀ F z s m σ (x : Nat)
      ₛ•  step id
      ₛ•ₛ consSubst (tail idSubst) (suc (var 0))) x
   ≡ (consSubst σ (suc m)) x
-natrecIrrelevantSubstLemma F z s m σ zero =
+natrecIrrelevantSubstLemma F z s m σ 0 =
   cong suc (trans (subst-wk m) (subst-id m))
-natrecIrrelevantSubstLemma F z s m σ (suc x) =
+natrecIrrelevantSubstLemma F z s m σ (1+ x) =
   trans (subst-wk (wk (step id) (σ x)))
            (trans (subst-wk (σ x))
                      (subst-id (σ x)))
@@ -457,7 +501,7 @@ natrecIrrelevantSubst : ∀ F z s m σ
   → subst (consSubst σ (suc m)) F
   ≡ subst (liftSubst (sgSubst m))
           (subst (liftSubst (liftSubst σ))
-                 (wk1 (F [ suc (var zero) ]↑)))
+                 (wk1 (F [ suc (var 0) ]↑)))
                    [ natrec (subst (liftSubst σ) F) (subst σ z) (subst σ s) m ]
 natrecIrrelevantSubst F z s m σ =
   sym (trans (substCompEq (subst (liftSubst (liftSubst σ))
@@ -474,15 +518,15 @@ natrecIrrelevantSubstLemma′ : ∀ F z s n (x : Nat)
   → (sgSubst (natrec F z s n)
      ₛ•ₛ liftSubst (sgSubst n)
      ₛ•  step id
-     ₛ•ₛ consSubst (tail idSubst) (suc (var zero))) x
+     ₛ•ₛ consSubst (tail idSubst) (suc (var 0))) x
   ≡ (consSubst var (suc n)) x
-natrecIrrelevantSubstLemma′ F z s n zero =
+natrecIrrelevantSubstLemma′ F z s n 0 =
   cong suc (trans (subst-wk n) (subst-id n))
-natrecIrrelevantSubstLemma′ F z s n (suc x) = refl
+natrecIrrelevantSubstLemma′ F z s n (1+ x) = refl
 
 natrecIrrelevantSubst′ : ∀ F z s n
   → subst (liftSubst (sgSubst n))
-      (wk1 (F [ suc (var zero) ]↑))
+      (wk1 (F [ suc (var 0) ]↑))
       [ natrec F z s n ]
   ≡ F [ suc n ]
 natrecIrrelevantSubst′ F z s n =
@@ -493,12 +537,12 @@ natrecIrrelevantSubst′ F z s n =
                       (substVar-to-subst (natrecIrrelevantSubstLemma′ F z s n) F)))
 
 cons0wkLift1-id : ∀ σ G
-    → subst (sgSubst (var zero))
+    → subst (sgSubst (var 0))
             (wk (lift (step id)) (subst (liftSubst σ) G))
     ≡ subst (liftSubst σ) G
 cons0wkLift1-id σ G =
   trans (subst-wk (subst (liftSubst σ) G))
-        (trans (substVar-to-subst (λ { zero → refl ; (suc x) → refl })
+        (trans (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl })
                                   (subst (liftSubst σ) G))
                (subst-id (subst (liftSubst σ) G)))
 
@@ -507,20 +551,20 @@ substConsId : ∀ {σ t} G
         ≡ subst σ (subst (sgSubst t) G)
 substConsId G =
   sym (trans (substCompEq G)
-             (substVar-to-subst (λ { zero → refl ; (suc x) → refl}) G))
+             (substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) G))
 
 substConsTailId : ∀ {G t σ}
                 → subst (consSubst (tail σ) (subst σ t)) G
                 ≡ subst σ (subst (consSubst (tail idSubst) t) G)
 substConsTailId {G} {t} {σ} =
-  trans (substVar-to-subst (λ { zero → refl
-                            ; (suc x) → refl }) G)
+  trans (substVar-to-subst (λ { 0 → refl
+                            ; (1+ x) → refl }) G)
         (sym (substCompEq G))
 
 substConcatSingleton′ : ∀ {a σ} t
                       → subst (σ ₛ•ₛ sgSubst a) t
                       ≡ subst (consSubst σ (subst σ a)) t
-substConcatSingleton′ t = substVar-to-subst (λ { zero → refl ; (suc x) → refl}) t
+substConcatSingleton′ t = substVar-to-subst (λ { 0 → refl ; (1+ x) → refl}) t
 
 wk1-tailId : ∀ t → wk1 t ≡ subst (tail idSubst) t
 wk1-tailId t = trans (sym (subst-id (wk1 t))) (subst-wk t)

@@ -134,7 +134,7 @@ record EqRelSet : Set₁ where
               → Γ ⊢ g ∷ Π F ▹ G
               → Function f
               → Function g
-              → Γ ∙ F ⊢ wk1 f ∘ var zero ≅ wk1 g ∘ var zero ∷ G
+              → Γ ∙ F ⊢ wk1 f ∘ var 0 ≅ wk1 g ∘ var 0 ∷ G
               → Γ ⊢ f ≅ g ∷ Π F ▹ G
 
     -- Variable reflexivity
@@ -150,7 +150,7 @@ record EqRelSet : Set₁ where
     ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
              → Γ ∙ ℕ ⊢ F ≅ F′
              → Γ     ⊢ z ≅ z′ ∷ F [ zero ]
-             → Γ     ⊢ s ≅ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+             → Γ     ⊢ s ≅ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
              → Γ     ⊢ n ~ n′ ∷ ℕ
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
 

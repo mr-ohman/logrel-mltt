@@ -9,7 +9,10 @@ open import Tools.Nullary
 
 -- We reexport Agda's built-in type of natural numbers.
 
-open import Agda.Builtin.Nat using (Nat; zero; suc) public
+open import Agda.Builtin.Nat using (zero; suc)
+open import Agda.Builtin.Nat using (Nat) public
+
+pattern 1+ n = suc n
 
 infix 4 _≟_
 

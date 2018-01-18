@@ -39,7 +39,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
 ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 ~-var x =
   let ⊢A = syntacticTerm x
-  in  ↑ (refl ⊢A) (var x PE.refl)
+  in  ↑ (refl ⊢A) (var-refl x PE.refl)
 
 ~-app : ∀ {f g a b F G Γ}
       → Γ ⊢ f ~ g ∷ Π F ▹ G
@@ -53,14 +53,14 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       F≡H , G≡E = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΠHE ΠFG≡B′)
       _ , ⊢f , _ = syntacticEqTerm (soundnessConv↑Term x₁)
   in  ↑ (substTypeEq G≡E (refl ⊢f))
-        (app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+        (app-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
                        B≡ΠHE ([~] _ (red D) whnfB′ x))
              (convConvTerm x₁ F≡H))
 
 ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
          → (Γ ∙ ℕ) ⊢ F [conv↑] F′ →
       Γ ⊢ z [conv↑] z′ ∷ (F [ zero ]) →
-      Γ ⊢ s [conv↑] s′ ∷ (Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)) →
+      Γ ⊢ s [conv↑] s′ ∷ (Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)) →
       Γ ⊢ n ~ n′ ∷ ℕ →
       Γ ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ (F [ n ])
 ~-natrec x x₁ x₂ (↑ A≡B x₄) =
@@ -73,7 +73,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       ⊢F , _ = syntacticEq (soundnessConv↑ x)
       _ , ⊢n , _ = syntacticEqTerm (soundness~↓ k~l′)
   in  ↑ (refl (substType ⊢F ⊢n))
-        (natrec x x₁ x₂ k~l′)
+        (natrec-cong x x₁ x₂ k~l′)
 
 ~-sym : {k l A : Term} {Γ : Con Term} → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ k ∷ A
 ~-sym (↑ A≡B x) =
@@ -115,7 +115,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       reductionConv↑ reductionConv↑Term
                       (liftConv ∘ᶠ U-refl)
                       (liftConv ∘ᶠ ℕ-refl)
-                      (λ x → liftConvTerm (univ (ℕ x) (ℕ x) (ℕ-refl x)))
+                      (λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x)))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →
                          let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
@@ -125,7 +125,7 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                              G<>E = univConv↑ x₂
                              F≡H = soundnessConv↑ F<>H
                              E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
-                         in  liftConvTerm (univ (Π F∷U ▹ G∷U) (Π H∷U ▹ E∷U′)
+                         in  liftConvTerm (univ (Πⱼ F∷U ▹ G∷U) (Πⱼ H∷U ▹ E∷U′)
                                                 (Π-cong x F<>H G<>E)))
 
                       (liftConvTerm ∘ᶠ zero-refl)

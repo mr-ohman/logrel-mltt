@@ -37,14 +37,14 @@ injectivity′ : ∀ {F G H E Γ l}
              → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-injectivity′ (noemb (Π F G D ⊢F ⊢G A≡A [F] [G] G-ext))
+injectivity′ (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
          (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
-  let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed* (red D) Π)
-      H≡F′ , E≡G′ = Π-PE-injectivity (whnfRed* D′ Π)
+  let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed* (red D) Πₙ)
+      H≡F′ , E≡G′ = Π-PE-injectivity (whnfRed* D′ Πₙ)
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
       [F]′ = irrelevance′ (PE.trans (wk-id _) (PE.sym F≡F₁)) [F]₁
-      [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
+      [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var 0) (var (⊢Γ ∙ ⊢F) here)
                       (refl (var (⊢Γ ∙ ⊢F) here))
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G]′ = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x)

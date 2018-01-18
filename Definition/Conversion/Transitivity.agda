@@ -32,26 +32,26 @@ mutual
          → Δ ⊢ u ~ v ↑ B
          → Γ ⊢ t ~ v ↑ A
          × Γ ⊢ A ≡ B
-  trans~↑ Γ≡Δ (var x₁ x≡y) (var x₂ x≡y₁) =
-    var x₁ (PE.trans x≡y x≡y₁)
+  trans~↑ Γ≡Δ (var-refl x₁ x≡y) (var-refl x₂ x≡y₁) =
+    var-refl x₁ (PE.trans x≡y x≡y₁)
     , neTypeEq (var _) x₁
                (PE.subst (λ x → _ ⊢ var x ∷ _) (PE.sym x≡y)
                          (stabilityTerm (symConEq Γ≡Δ) x₂))
-  trans~↑ Γ≡Δ (app t~u a<>b) (app u~v b<>c) =
+  trans~↑ Γ≡Δ (app-cong t~u a<>b) (app-cong u~v b<>c) =
     let t~v , ΠFG≡ΠF′G′ = trans~↓ Γ≡Δ t~u u~v
         F≡F₁ , G≡G₁ = injectivity ΠFG≡ΠF′G′
         a<>c = transConv↑Term Γ≡Δ F≡F₁ a<>b b<>c
-    in  app t~v a<>c , substTypeEq G≡G₁ (soundnessConv↑Term a<>b)
-  trans~↑ Γ≡Δ (natrec A<>B a₀<>b₀ aₛ<>bₛ t~u) (natrec B<>C b₀<>c₀ bₛ<>cₛ u~v) =
+    in  app-cong t~v a<>c , substTypeEq G≡G₁ (soundnessConv↑Term a<>b)
+  trans~↑ Γ≡Δ (natrec-cong A<>B a₀<>b₀ aₛ<>bₛ t~u) (natrec-cong B<>C b₀<>c₀ bₛ<>cₛ u~v) =
     let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
         A≡B = soundnessConv↑ A<>B
-        F[0]≡F₁[0] = substTypeEq A≡B (refl (zero ⊢Γ))
+        F[0]≡F₁[0] = substTypeEq A≡B (refl (zeroⱼ ⊢Γ))
         ΠℕFs≡ΠℕF₁s = sucCong A≡B
-        A<>C = transConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) A<>B B<>C
+        A<>C = transConv↑ (Γ≡Δ ∙ (refl (ℕⱼ ⊢Γ))) A<>B B<>C
         a₀<>c₀ = transConv↑Term Γ≡Δ F[0]≡F₁[0] a₀<>b₀ b₀<>c₀
         aₛ<>cₛ = transConv↑Term Γ≡Δ ΠℕFs≡ΠℕF₁s aₛ<>bₛ bₛ<>cₛ
         t~v , _ = trans~↓ Γ≡Δ t~u u~v
-    in  natrec A<>C a₀<>c₀ aₛ<>cₛ t~v
+    in  natrec-cong A<>C a₀<>c₀ aₛ<>cₛ t~v
     ,   substTypeEq A≡B (soundness~↓ t~u)
 
   -- Transitivity of algorithmic equality of neutrals with types in WHNF.

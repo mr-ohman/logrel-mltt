@@ -58,30 +58,30 @@ mutual
                 → Γ ⊢ A′ ⇒* A
                 → Γ ⊢ t ~ u ↓ A
                 → Γ ⊢ t [conv↓] u ∷ A
-  lift~toConv↓′ (U′ .⁰ 0<1 ⊢Γ) D ([~] A D₁ whnfB k~l)
-                rewrite PE.sym (whnfRed* D U) =
+  lift~toConv↓′ (Uᵣ′ .⁰ 0<1 ⊢Γ) D ([~] A D₁ whnfB k~l)
+                rewrite PE.sym (whnfRed* D Uₙ) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (conv (soundness~↑ k~l) (subset* D₁))
-    in  univ ⊢t ⊢u (ne ([~] A D₁ U k~l))
-  lift~toConv↓′ (ℕ D) D₁ ([~] A D₂ whnfB k~l)
-                rewrite PE.sym (whrDet* (red D , ℕ) (D₁ , whnfB)) =
-    ℕ-ins ([~] A D₂ ℕ k~l)
+    in  univ ⊢t ⊢u (ne ([~] A D₁ Uₙ k~l))
+  lift~toConv↓′ (ℕᵣ D) D₁ ([~] A D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , ℕₙ) (D₁ , whnfB)) =
+    ℕ-ins ([~] A D₂ ℕₙ k~l)
   lift~toConv↓′ (ne′ K D neK K≡K) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , ne neK) (D₁ , whnfB)) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↑ k~l)
         A≡K = subset* D₂
     in  ne-ins (conv ⊢t A≡K) (conv ⊢u A≡K) neK ([~] A D₂ (ne neK) k~l)
-  lift~toConv↓′ (Π′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) D₁ ([~] A D₂ whnfB k~l)
-                rewrite PE.sym (whrDet* (red D , Π) (D₁ , whnfB)) =
-    let ⊢ΠFG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ ([~] A D₂ Π k~l))
+  lift~toConv↓′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) D₁ ([~] A D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , Πₙ) (D₁ , whnfB)) =
+    let ⊢ΠFG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ ([~] A D₂ Πₙ k~l))
         ⊢F , ⊢G = syntacticΠ ⊢ΠFG
         neT , neU = ne~↑ k~l
         ⊢Γ = wf ⊢F
-        var0 = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var zero) (var (⊢Γ ∙ ⊢F) here)
+        var0 = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var 0) (var (⊢Γ ∙ ⊢F) here)
                        (refl (var (⊢Γ ∙ ⊢F) here))
-        0≡0 = lift~toConv↑′ ([F] (step id) (⊢Γ ∙ ⊢F)) (var (var (⊢Γ ∙ ⊢F) here) PE.refl)
+        0≡0 = lift~toConv↑′ ([F] (step id) (⊢Γ ∙ ⊢F)) (var-refl (var (⊢Γ ∙ ⊢F) here) PE.refl)
         k∘0≡l∘0 = lift~toConv↑′ ([G] (step id) (⊢Γ ∙ ⊢F) var0)
-                                (app (wk~↓ (step id) (⊢Γ ∙ ⊢F) ([~] A D₂ Π k~l))
-                                     0≡0)
+                                (app-cong (wk~↓ (step id) (⊢Γ ∙ ⊢F) ([~] A D₂ Πₙ k~l))
+                                          0≡0)
     in  η-eq ⊢F ⊢t ⊢u (ne neT) (ne neU)
              (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
                        (wkSingleSubstId _)

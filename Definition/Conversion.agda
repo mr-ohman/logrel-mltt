@@ -21,20 +21,20 @@ infix 10 _⊢_[conv↓]_∷_
 mutual
   -- Neutral equality.
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
-    var       : ∀ {x y A}
-              → Γ ⊢ var x ∷ A
-              → x PE.≡ y
-              → Γ ⊢ var x ~ var y ↑ A
-    app       : ∀ {k l t v F G}
-              → Γ ⊢ k ~ l ↓ Π F ▹ G
-              → Γ ⊢ t [conv↑] v ∷ F
-              → Γ ⊢ k ∘ t ~ l ∘ v ↑ G [ t ]
-    natrec    : ∀ {k l h g a₀ b₀ F G}
-              → Γ ∙ ℕ ⊢ F [conv↑] G
-              → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
-              → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
-              → Γ ⊢ k ~ l ↓ ℕ
-              → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
+    var-refl    : ∀ {x y A}
+                → Γ ⊢ var x ∷ A
+                → x PE.≡ y
+                → Γ ⊢ var x ~ var y ↑ A
+    app-cong    : ∀ {k l t v F G}
+                → Γ ⊢ k ~ l ↓ Π F ▹ G
+                → Γ ⊢ t [conv↑] v ∷ F
+                → Γ ⊢ k ∘ t ~ l ∘ v ↑ G [ t ]
+    natrec-cong : ∀ {k l h g a₀ b₀ F G}
+                → Γ ∙ ℕ ⊢ F [conv↑] G
+                → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
+                → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
+                → Γ ⊢ k ~ l ↓ ℕ
+                → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
 
   -- Neutral equality with types in WHNF.
   record _⊢_~_↓_ (Γ : Con Term) (k l B : Term) : Set where
@@ -111,5 +111,5 @@ mutual
               → Γ ⊢ g ∷ Π F ▹ G
               → Function f
               → Function g
-              → Γ ∙ F ⊢ wk1 f ∘ var zero [conv↑] wk1 g ∘ var zero ∷ G
+              → Γ ∙ F ⊢ wk1 f ∘ var 0 [conv↑] wk1 g ∘ var 0 ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G

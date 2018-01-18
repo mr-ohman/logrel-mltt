@@ -31,9 +31,9 @@ appTerm′ : ∀ {F G t u Γ l l′ l″}
           ([t] : Γ ⊩⟨ l ⟩ t ∷ Π F ▹ G / Π-intr [ΠFG])
           ([u] : Γ ⊩⟨ l″ ⟩ u ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ∷ G [ u ] / [G[u]]
-appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F′] [G′] G-ext))
+appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F′] [G′] G-ext))
          (Πₜ f d funcF f≡f [f] [f]₁) [u] =
-  let ΠFG≡ΠF′G′ = whnfRed* (red D) Π
+  let ΠFG≡ΠF′G′ = whnfRed* (red D) Πₙ
       F≡F′ , G≡G′ = Π-PE-injectivity ΠFG≡ΠF′G′
       F≡idF′ = PE.trans F≡F′ (PE.sym (wk-id _))
       idG′ᵤ≡Gᵤ = PE.cong (λ x → x [ _ ]) (PE.trans (wk-lift-id _) (PE.sym G≡G′))
@@ -70,20 +70,20 @@ app-congTerm′ : ∀ {F G t t′ u u′ Γ l l′}
           ([u≡u′] : Γ ⊩⟨ l′ ⟩ u ≡ u′ ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ≡ t′ ∘ u′ ∷ G [ u ] / [G[u]]
 app-congTerm′ {F′} {G′} {t = t} {t′ = t′} {Γ = Γ}
-              [F] [G[u]] (noemb (Π F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
+              [F] [G[u]] (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
               (Πₜ₌ f g [ ⊢t , ⊢f , d ] [ ⊢t′ , ⊢g , d′ ] funcF funcG t≡u
                    (Πₜ f′ [ _ , ⊢f′ , d″ ] funcF′ f≡f [f] [f]₁)
                    (Πₜ g′ [ _ , ⊢g′ , d‴ ] funcG′ g≡g [g] [g]₁) [t≡u])
               [a] [a′] [a≡a′] =
-  let [ΠFG] = Π′ F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext
-      ΠFG≡ΠF′G′ = whnfRed* (red D) Π
+  let [ΠFG] = Πᵣ′ F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext
+      ΠFG≡ΠF′G′ = whnfRed* (red D) Πₙ
       F≡F′ , G≡G′ = Π-PE-injectivity ΠFG≡ΠF′G′
       f≡f′ = whrDet*Term (d , functionWhnf funcF) (d″ , functionWhnf funcF′)
       g≡g′ = whrDet*Term (d′ , functionWhnf funcG) (d‴ , functionWhnf funcG′)
       F≡wkidF′ = PE.trans F≡F′ (PE.sym (wk-id _))
-      t∘x≡wkidt∘x : {a b : Term} → U.wk id a Term.∘ b PE.≡ a ∘ b
+      t∘x≡wkidt∘x : {a b : Term} → U.wk id a ∘ b PE.≡ a ∘ b
       t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a)
-      t∘x≡wkidt∘x′ : {a : Term} → U.wk id g′ Term.∘ a PE.≡ g ∘ a
+      t∘x≡wkidt∘x′ : {a : Term} → U.wk id g′ ∘ a PE.≡ g ∘ a
       t∘x≡wkidt∘x′ {a} = PE.cong (λ x → x ∘ a) (PE.trans (wk-id _) (PE.sym g≡g′))
       wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ])
                                (PE.trans (wk-lift-id _) (PE.sym G≡G′))

@@ -20,18 +20,18 @@ mutual
   wk~↑ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
       → Γ ⊢ t ~ u ↑ A
       → Δ ⊢ U.wk ρ t ~ U.wk ρ u ↑ U.wk ρ A
-  wk~↑ {ρ} [ρ] ⊢Δ (var x₁ x≡y) = var (wkTerm [ρ] ⊢Δ x₁) (PE.cong (wkVar ρ) x≡y)
-  wk~↑ ρ ⊢Δ (app {G = G} t~u x) =
+  wk~↑ {ρ} [ρ] ⊢Δ (var-refl x₁ x≡y) = var-refl (wkTerm [ρ] ⊢Δ x₁) (PE.cong (wkVar ρ) x≡y)
+  wk~↑ ρ ⊢Δ (app-cong {G = G} t~u x) =
     PE.subst (λ x → _ ⊢ _ ~ _ ↑ x) (PE.sym (wk-β G))
-             (app (wk~↓ ρ ⊢Δ t~u) (wkConv↑Term ρ ⊢Δ x))
-  wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (natrec {k} {l} {h} {g} {a₀} {b₀} {F} {G} x x₁ x₂ t~u) =
+             (app-cong (wk~↓ ρ ⊢Δ t~u) (wkConv↑Term ρ ⊢Δ x))
+  wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (natrec-cong {k} {l} {h} {g} {a₀} {b₀} {F} {G} x x₁ x₂ t~u) =
     PE.subst (λ x → _ ⊢ U.wk ρ (natrec F a₀ h k) ~ _ ↑ x) (PE.sym (wk-β F))
-             (natrec (wkConv↑ (lift [ρ]) (⊢Δ ∙ ℕ ⊢Δ) x)
-                     (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x) (wk-β F)
-                               (wkConv↑Term [ρ] ⊢Δ x₁))
-                     (PE.subst (λ x → Δ ⊢ U.wk ρ h [conv↑] U.wk ρ g ∷ x)
-                               (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
-                     (wk~↓ [ρ] ⊢Δ t~u))
+             (natrec-cong (wkConv↑ (lift [ρ]) (⊢Δ ∙ ℕⱼ ⊢Δ) x)
+                          (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x) (wk-β F)
+                                    (wkConv↑Term [ρ] ⊢Δ x₁))
+                          (PE.subst (λ x → Δ ⊢ U.wk ρ h [conv↑] U.wk ρ g ∷ x)
+                                    (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
+                          (wk~↓ [ρ] ⊢Δ t~u))
 
   -- Weakening of algorithmic equality of neutrals in WHNF.
   wk~↓ : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ

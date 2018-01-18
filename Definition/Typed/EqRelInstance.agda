@@ -20,7 +20,7 @@ eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_ _⊢_≡_∷_
                       sym sym sym trans trans trans
                       conv conv wkEq wkEqTerm wkEqTerm
                       reduction reductionₜ
-                      (refl ∘ᶠ U) (refl ∘ᶠ ℕ) (refl ∘ᶠ ℕ)
-                      Π-cong Π-cong (refl ∘ᶠ zero) suc-cong
+                      (refl ∘ᶠ Uⱼ) (refl ∘ᶠ ℕⱼ) (refl ∘ᶠ ℕⱼ)
+                      Π-cong Π-cong (refl ∘ᶠ zeroⱼ) suc-cong
                       (λ x x₁ x₂ x₃ x₄ x₅ → η-eq x x₁ x₂ x₅)
                       refl app-cong natrec-cong

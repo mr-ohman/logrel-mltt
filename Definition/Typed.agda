@@ -2,18 +2,18 @@
 
 module Definition.Typed where
 
-open import Tools.Nat
+open import Tools.Nat using (Nat)
 open import Tools.Product
 open import Definition.Untyped
 
 infixl 30 _∙_
-infix 30 Π_▹_
+infix 30 Πⱼ_▹_
 
 
 -- Well-typed variables
 data _∷_∈_ : (x : Nat) (A : Term) (Γ : Con Term) → Set where
-  here  : ∀ {Γ A}                     →     0 ∷ wk1 A ∈ (Γ ∙ A)
-  there : ∀ {Γ A B x} (h : x ∷ A ∈ Γ) → suc x ∷ wk1 A ∈ (Γ ∙ B)
+  here  : ∀ {Γ A}                     →         0 ∷ wk1 A ∈ (Γ ∙ A)
+  there : ∀ {Γ A B x} (h : x ∷ A ∈ Γ) → Nat.suc x ∷ wk1 A ∈ (Γ ∙ B)
 
 mutual
   -- Well-formed context
@@ -26,9 +26,9 @@ mutual
 
   -- Well-formed type
   data _⊢_ (Γ : Con Term) : Term → Set where
-    ℕ    : ⊢ Γ → Γ ⊢ ℕ
-    U    : ⊢ Γ → Γ ⊢ U
-    Π_▹_ : ∀ {F G}
+    ℕⱼ    : ⊢ Γ → Γ ⊢ ℕ
+    Uⱼ    : ⊢ Γ → Γ ⊢ U
+    Πⱼ_▹_ : ∀ {F G}
          → Γ     ⊢ F
          → Γ ∙ F ⊢ G
          → Γ     ⊢ Π F ▹ G
@@ -38,8 +38,8 @@ mutual
 
   -- Well-formed term of a type
   data _⊢_∷_ (Γ : Con Term) : Term → Term → Set where
-    ℕ      : ⊢ Γ → Γ ⊢ ℕ ∷ U
-    Π_▹_   : ∀ {F G}
+    ℕⱼ      : ⊢ Γ → Γ ⊢ ℕ ∷ U
+    Πⱼ_▹_   : ∀ {F G}
            → Γ     ⊢ F ∷ U
            → Γ ∙ F ⊢ G ∷ U
            → Γ     ⊢ Π F ▹ G ∷ U
@@ -47,25 +47,25 @@ mutual
            → ⊢ Γ
            → x ∷ A ∈ Γ
            → Γ ⊢ var x ∷ A
-    lam    : ∀ {F G t}
+    lamⱼ    : ∀ {F G t}
            → Γ     ⊢ F
            → Γ ∙ F ⊢ t ∷ G
            → Γ     ⊢ lam t ∷ Π F ▹ G
-    _∘_    : ∀ {g a F G}
+    _∘ⱼ_    : ∀ {g a F G}
            → Γ ⊢     g ∷ Π F ▹ G
            → Γ ⊢     a ∷ F
            → Γ ⊢ g ∘ a ∷ G [ a ]
-    zero   : ⊢ Γ
+    zeroⱼ   : ⊢ Γ
            → Γ ⊢ zero ∷ ℕ
-    suc    : ∀ {n}
-           → Γ ⊢     n ∷ ℕ
+    sucⱼ    : ∀ {n}
+           → Γ ⊢       n ∷ ℕ
            → Γ ⊢ suc n ∷ ℕ
-    natrec : ∀ {G s z n}
+    natrecⱼ : ∀ {G s z n}
            → Γ ∙ ℕ ⊢ G
-           → Γ     ⊢ z ∷ G [ zero ]
-           → Γ     ⊢ s ∷ Π ℕ ▹ (G ▹▹ G [ suc (var zero) ]↑)
-           → Γ     ⊢ n ∷ ℕ
-           → Γ     ⊢ natrec G z s n ∷ G [ n ]
+           → Γ       ⊢ z ∷ G [ zero ]
+           → Γ       ⊢ s ∷ Π ℕ ▹ (G ▹▹ G [ suc (var Nat.zero) ]↑)
+           → Γ       ⊢ n ∷ ℕ
+           → Γ       ⊢ natrec G z s n ∷ G [ n ]
     conv   : ∀ {t A B}
            → Γ ⊢ t ∷ A
            → Γ ⊢ A ≡ B
@@ -126,7 +126,7 @@ mutual
                 → Γ     ⊢ F
                 → Γ     ⊢ f ∷ Π F ▹ G
                 → Γ     ⊢ g ∷ Π F ▹ G
-                → Γ ∙ F ⊢ wk1 f ∘ var zero ≡ wk1 g ∘ var zero ∷ G
+                → Γ ∙ F ⊢ wk1 f ∘ var Nat.zero ≡ wk1 g ∘ var Nat.zero ∷ G
                 → Γ     ⊢ f ≡ g ∷ Π F ▹ G
     suc-cong    : ∀ {m n}
                 → Γ ⊢ m ≡ n ∷ ℕ
@@ -134,19 +134,19 @@ mutual
     natrec-cong : ∀ {z z′ s s′ n n′ F F′}
                 → Γ ∙ ℕ ⊢ F ≡ F′
                 → Γ     ⊢ z ≡ z′ ∷ F [ zero ]
-                → Γ     ⊢ s ≡ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                → Γ     ⊢ s ≡ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                 → Γ     ⊢ n ≡ n′ ∷ ℕ
                 → Γ     ⊢ natrec F z s n ≡ natrec F′ z′ s′ n′ ∷ F [ n ]
     natrec-zero : ∀ {z s F}
                 → Γ ∙ ℕ ⊢ F
                 → Γ     ⊢ z ∷ F [ zero ]
-                → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                 → Γ     ⊢ natrec F z s zero ≡ z ∷ F [ zero ]
     natrec-suc  : ∀ {n z s F}
                 → Γ     ⊢ n ∷ ℕ
                 → Γ ∙ ℕ ⊢ F
                 → Γ     ⊢ z ∷ F [ zero ]
-                → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+                → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                 → Γ     ⊢ natrec F z s (suc n) ≡ (s ∘ n) ∘ (natrec F z s n)
                         ∷ F [ suc n ]
 
@@ -168,19 +168,19 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   natrec-subst : ∀ {z s n n′ F}
                → Γ ∙ ℕ ⊢ F
                → Γ     ⊢ z ∷ F [ zero ]
-               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                → Γ     ⊢ n ⇒ n′ ∷ ℕ
                → Γ     ⊢ natrec F z s n ⇒ natrec F z s n′ ∷ F [ n ]
   natrec-zero  : ∀ {z s F}
                → Γ ∙ ℕ ⊢ F
                → Γ     ⊢ z ∷ F [ zero ]
-               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                → Γ     ⊢ natrec F z s zero ⇒ z ∷ F [ zero ]
   natrec-suc   : ∀ {n z s F}
                → Γ     ⊢ n ∷ ℕ
                → Γ ∙ ℕ ⊢ F
                → Γ     ⊢ z ∷ F [ zero ]
-               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var zero) ]↑)
+               → Γ     ⊢ s ∷ Π ℕ ▹ (F ▹▹ F [ suc (var Nat.zero) ]↑)
                → Γ     ⊢ natrec F z s (suc n) ⇒ (s ∘ n) ∘ (natrec F z s n)
                        ∷ F [ suc n ]
 

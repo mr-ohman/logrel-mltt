@@ -6,6 +6,7 @@ module Definition.Untyped where
 
 open import Tools.Nat
 open import Tools.Product
+open import Tools.List
 import Tools.PropositionalEquality as PE
 
 
@@ -23,6 +24,16 @@ data Con (A : Set) : Set where
   ε   : Con A               -- Empty context.
   _∙_ : Con A → A → Con A  -- Context extension.
 
+record GenT (A : Set) : Set where
+  inductive
+  constructor ⟦_,_⟧
+  field
+    l : Nat
+    t : A
+
+data Term : Set where
+  var : (x : Nat) → Term
+  gen : (x : Nat) (c : List (GenT Term)) → Term
 
 -- The Grammar of our language.
 
@@ -30,34 +41,47 @@ data Con (A : Set) : Set where
 -- Variables are natural numbers interpreted as de Bruijn indices.
 -- Π, lam, and natrec are binders.
 
-data Term : Set where
+-- Type constructors.
+U      : Term                     -- Universe.
+U = gen 0 []
 
-  -- Type constructors.
-  U      : Term                     -- Universe.
-  Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
-  ℕ      : Term                     -- Type of natural numbers.
+Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
+Π A ▹ B = gen 1 (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
 
-  -- Lambda-calculus.
-  var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
-  lam    : (t : Term)       → Term  -- Function abstraction (binder).
-  _∘_    : (t u : Term)     → Term  -- Application.
+ℕ      : Term                     -- Type of natural numbers.
+ℕ = gen 2 []
 
-  -- Introduction and elimination of natural numbers.
-  zero   : Term                     -- Natural number zero.
-  suc    : (t : Term)       → Term  -- Successor.
-  natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
+-- Lambda-calculus.
+-- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
+-- var = var
+
+lam    : (t : Term)       → Term  -- Function abstraction (binder).
+lam t = gen 3 (⟦ 1 , t ⟧ ∷ [])
+
+_∘_    : (t u : Term)     → Term  -- Application.
+t ∘ u = gen 4 (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+
+-- Introduction and elimination of natural numbers.
+zero   : Term                     -- Natural number zero.
+zero = gen 5 []
+
+suc    : (t : Term)       → Term  -- Successor.
+suc t = gen 6 (⟦ 0 , t ⟧ ∷ [])
+
+natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
+natrec A t u v = gen 7 (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
 
 -- Injectivity of term constructors w.r.t. propositional equality.
 
 -- If  Π F G = Π H E  then  F = H  and  G = E.
 
-Π-PE-injectivity : ∀ {F G H E} → Term.Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
+Π-PE-injectivity : ∀ {F G H E} → Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
 Π-PE-injectivity PE.refl = PE.refl , PE.refl
 
 -- If  suc n = suc m  then  n = m.
 
-suc-PE-injectivity : ∀ {n m} → Term.suc n PE.≡ suc m → n PE.≡ m
+suc-PE-injectivity : ∀ {n m} → suc n PE.≡ suc m → n PE.≡ m
 suc-PE-injectivity PE.refl = PE.refl
 
 
@@ -67,9 +91,9 @@ suc-PE-injectivity PE.refl = PE.refl
 -- The variable blocks reduction of such terms.
 
 data Neutral : Term → Set where
-  var    : ∀ n                     → Neutral (var n)
-  _∘_    : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
-  natrec : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
+  var     : ∀ n                     → Neutral (var n)
+  ∘ₙ      : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
+  natrecₙ : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
 
 
 -- Weak head normal forms (whnfs).
@@ -79,14 +103,14 @@ data Neutral : Term → Set where
 data Whnf : Term → Set where
 
   -- Type constructors are whnfs.
-  U    : Whnf U
-  Π    : ∀ {A B} → Whnf (Π A ▹ B)
-  ℕ    : Whnf ℕ
+  Uₙ    : Whnf U
+  Πₙ    : ∀ {A B} → Whnf (Π A ▹ B)
+  ℕₙ    : Whnf ℕ
 
   -- Introductions are whnfs.
-  lam  : ∀ {t} → Whnf (lam t)
-  zero : Whnf zero
-  suc  : ∀ {t} → Whnf (suc t)
+  lamₙ  : ∀ {t} → Whnf (lam t)
+  zeroₙ : Whnf zero
+  sucₙ  : ∀ {t} → Whnf (suc t)
 
   -- Neutrals are whnfs.
   ne   : ∀ {n} → Neutral n → Whnf n
@@ -97,16 +121,16 @@ data Whnf : Term → Set where
 -- Different whnfs are trivially distinguished by propositional equality.
 -- (The following statements are sometimes called "no-confusion theorems".)
 
-U≢ℕ : Term.U PE.≢ ℕ
+U≢ℕ : U PE.≢ ℕ
 U≢ℕ ()
 
-U≢Π : ∀ {F G} → Term.U PE.≢ Π F ▹ G
+U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
 U≢Π ()
 
 U≢ne : ∀ {K} → Neutral K → U PE.≢ K
 U≢ne () PE.refl
 
-ℕ≢Π : ∀ {F G} → Term.ℕ PE.≢ Π F ▹ G
+ℕ≢Π : ∀ {F G} → ℕ PE.≢ Π F ▹ G
 ℕ≢Π ()
 
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
@@ -115,13 +139,13 @@ U≢ne () PE.refl
 Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
 Π≢ne () PE.refl
 
-zero≢suc : ∀ {n} → Term.zero PE.≢ suc n
+zero≢suc : ∀ {n} → zero PE.≢ suc n
 zero≢suc ()
 
-zero≢ne : ∀ {k} → Neutral k → Term.zero PE.≢ k
+zero≢ne : ∀ {k} → Neutral k → zero PE.≢ k
 zero≢ne () PE.refl
 
-suc≢ne : ∀ {n k} → Neutral k → Term.suc n PE.≢ k
+suc≢ne : ∀ {n k} → Neutral k → suc n PE.≢ k
 suc≢ne () PE.refl
 
 
@@ -130,39 +154,39 @@ suc≢ne () PE.refl
 -- A whnf of type ℕ is either zero, suc t, or neutral.
 
 data Natural : Term → Set where
-  zero :                     Natural zero
-  suc  : ∀ {t}             → Natural (suc t)
-  ne   : ∀ {n} → Neutral n → Natural n
+  zeroₙ :                     Natural zero
+  sucₙ  : ∀ {t}             → Natural (suc t)
+  ne    : ∀ {n} → Neutral n → Natural n
 
 -- A (small) type in whnf is either Π A B, ℕ, or neutral.
 -- Large types could also be U.
 
 data Type : Term → Set where
-  Π : ∀ {A B} → Type (Π A ▹ B)
-  ℕ : Type ℕ
+  Πₙ : ∀ {A B} → Type (Π A ▹ B)
+  ℕₙ : Type ℕ
   ne : ∀{n} → Neutral n → Type n
 
 -- A whnf of type Π A B is either lam t or neutral.
 
 data Function : Term → Set where
-  lam : ∀{t} → Function (lam t)
+  lamₙ : ∀{t} → Function (lam t)
   ne : ∀{n} → Neutral n → Function n
 
 -- These views classify only whnfs.
 -- Natural, Type, and Function are a subsets of Whnf.
 
 naturalWhnf : ∀ {n} → Natural n → Whnf n
-naturalWhnf suc = suc
-naturalWhnf zero = zero
+naturalWhnf sucₙ = sucₙ
+naturalWhnf zeroₙ = zeroₙ
 naturalWhnf (ne x) = ne x
 
 typeWhnf : ∀ {A} → Type A → Whnf A
-typeWhnf Π = Π
-typeWhnf ℕ = ℕ
+typeWhnf Πₙ = Πₙ
+typeWhnf ℕₙ = ℕₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
-functionWhnf lam = lam
+functionWhnf lamₙ = lamₙ
 functionWhnf (ne x) = ne x
 
 ------------------------------------------------------------------------
@@ -196,28 +220,30 @@ lift η  • id       =  lift  η
 lift η  • step η′  =  step  (η • η′)
 lift η  • lift η′  =  lift  (η • η′)
 
+repeat : {A : Set} → (A → A) → A → Nat → A
+repeat f a 0 = a
+repeat f a (1+ n) = f (repeat f a n)
+
 -- Weakening of variables.
 -- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar ρ x ∈ dom(Γ).
 
 wkVar : (ρ : Wk) (n : Nat) → Nat
-wkVar id       n       = n
-wkVar (step ρ) n       = suc (wkVar ρ n)
-wkVar (lift ρ) zero    = zero
-wkVar (lift ρ) (suc n) = suc (wkVar ρ n)
+wkVar id       n        = n
+wkVar (step ρ) n        = 1+ (wkVar ρ n)
+wkVar (lift ρ) 0    = 0
+wkVar (lift ρ) (1+ n) = 1+ (wkVar ρ n)
 
--- Weakening of terms.
--- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
+  -- Weakening of terms.
+  -- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
 
-wk : (ρ : Wk) (t : Term) → Term
-wk ρ U                = U
-wk ρ (Π A ▹ B)        = Π wk ρ A ▹ wk (lift ρ) B
-wk ρ ℕ                = ℕ
-wk ρ (var x)          = var (wkVar ρ x)
-wk ρ (lam t)          = lam (wk (lift ρ) t)
-wk ρ (t ∘ u)          = wk ρ t ∘ wk ρ u
-wk ρ zero             = zero
-wk ρ (suc t)          = suc (wk ρ t)
-wk ρ (natrec A t u v) = natrec (wk (lift ρ) A) (wk ρ t) (wk ρ u) (wk ρ v)
+mutual
+  wkGen : (ρ : Wk) (g : List (GenT Term)) → List (GenT Term)
+  wkGen ρ [] = []
+  wkGen ρ (⟦ l , t ⟧ ∷ g) = ⟦ l , (wk (repeat lift ρ l) t) ⟧ ∷ wkGen ρ g
+
+  wk : (ρ : Wk) (t : Term) → Term
+  wk ρ (var x) = var (wkVar ρ x)
+  wk ρ (gen x c) = gen x (wkGen ρ c)
 
 -- Adding one variable to the context requires wk1.
 -- If Γ ⊢ t : B then Γ∙A ⊢ wk1 t : wk1 B.
@@ -229,32 +255,32 @@ wk1 = wk (step id)
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
 wkNeutral ρ (var n)    = var (wkVar ρ n)
-wkNeutral ρ (_∘_ n)    = _∘_ (wkNeutral ρ n)
-wkNeutral ρ (natrec n) = natrec (wkNeutral ρ n)
+wkNeutral ρ (∘ₙ n)    = ∘ₙ (wkNeutral ρ n)
+wkNeutral ρ (natrecₙ n) = natrecₙ (wkNeutral ρ n)
 
 -- Weakening can be applied to our whnf views.
 
 wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
-wkNatural ρ suc    = suc
-wkNatural ρ zero   = zero
+wkNatural ρ sucₙ    = sucₙ
+wkNatural ρ zeroₙ   = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
-wkType ρ Π      = Π
-wkType ρ ℕ      = ℕ
+wkType ρ Πₙ      = Πₙ
+wkType ρ ℕₙ      = ℕₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
-wkFunction ρ lam    = lam
+wkFunction ρ lamₙ    = lamₙ
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
 
 wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
-wkWhnf ρ U      = U
-wkWhnf ρ Π      = Π
-wkWhnf ρ ℕ      = ℕ
-wkWhnf ρ lam    = lam
-wkWhnf ρ zero   = zero
-wkWhnf ρ suc    = suc
+wkWhnf ρ Uₙ      = Uₙ
+wkWhnf ρ Πₙ      = Πₙ
+wkWhnf ρ ℕₙ      = ℕₙ
+wkWhnf ρ lamₙ    = lamₙ
+wkWhnf ρ zeroₙ   = zeroₙ
+wkWhnf ρ sucₙ    = sucₙ
 wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
 
 -- Non-dependent version of Π.
@@ -298,7 +324,7 @@ head σ = σ 0
 -- If Γ ⊢ σ : Δ∙A then Γ ⊢ tail σ : Δ.
 
 tail : Subst → Subst
-tail σ n = σ (suc n)
+tail σ n = σ (1+ n)
 
 -- Substitution of a variable.
 --
@@ -327,8 +353,8 @@ wk1Subst σ x = wk1 (σ x)
 -- If Γ ⊢ σ : Δ then Γ∙A ⊢ liftSubst σ : Δ∙A.
 
 liftSubst : (σ : Subst) → Subst
-liftSubst σ zero    = var zero
-liftSubst σ (suc x) = wk1Subst σ x
+liftSubst σ 0    = var 0
+liftSubst σ (1+ x) = wk1Subst σ x
 
 -- Transform a weakening into a substitution.
 --
@@ -341,17 +367,14 @@ toSubst pr x = var (wkVar pr x)
 --
 -- If Γ ⊢ σ : Δ and Δ ⊢ t : A then Γ ⊢ subst σ t : subst σ A.
 
-subst : (σ : Subst) (t : Term) → Term
-subst σ U          = U
-subst σ (Π A ▹ B) = Π subst σ A ▹ subst (liftSubst σ) B
-subst σ ℕ          = ℕ
-subst σ (var x)    = substVar σ x
-subst σ (lam t)    = lam (subst (liftSubst σ) t)
-subst σ (t ∘ u)    = (subst σ t) ∘ (subst σ u)
-subst σ zero       = zero
-subst σ (suc t)    = suc (subst σ t)
-subst σ (natrec A t u v) =
-  natrec (subst (liftSubst σ) A) (subst σ t) (subst σ u) (subst σ v)
+mutual
+  substGen : (σ : Subst) (g : List (GenT Term)) → List (GenT Term)
+  substGen σ [] = []
+  substGen σ (⟦ l , t ⟧ ∷ g) = ⟦ l , (subst (repeat liftSubst σ l) t) ⟧ ∷ substGen σ g
+
+  subst : (σ : Subst) (t : Term) → Term
+  subst σ (var x) = substVar σ x
+  subst σ (gen x c) = gen x (substGen σ c)
 
 -- Extend a substitution by adding a term as
 -- the first variable substitution and shift the rest.
@@ -359,8 +382,8 @@ subst σ (natrec A t u v) =
 -- If Γ ⊢ σ : Δ and Γ ⊢ t : subst σ A then Γ ⊢ consSubst σ t : Δ∙A.
 
 consSubst : Subst → Term → Subst
-consSubst σ t zero    = t
-consSubst σ t (suc n) = σ n
+consSubst σ t 0    = t
+consSubst σ t (1+ n) = σ n
 
 -- Singleton substitution.
 --

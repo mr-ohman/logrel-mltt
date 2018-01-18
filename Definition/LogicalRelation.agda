@@ -97,9 +97,9 @@ mutual
 
   -- WHNF property of natural number terms
   data Natural-prop (Γ : Con Term) : (n : Term) → Set where
-    suc  : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Natural-prop Γ (suc n)
-    zero : Natural-prop Γ zero
-    ne   : ∀ {n} → Γ ⊩neNf n ∷ ℕ → Natural-prop Γ n
+    sucᵣ  : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Natural-prop Γ (suc n)
+    zeroᵣ : Natural-prop Γ zero
+    ne    : ∀ {n} → Γ ⊩neNf n ∷ ℕ → Natural-prop Γ n
 
 mutual
   -- Natural number term equality
@@ -110,20 +110,20 @@ mutual
 
   -- WHNF property of Natural number term equality
   data [Natural]-prop (Γ : Con Term) : (n n′ : Term) → Set where
-    suc : ∀ {n n′} → Γ ⊩ℕ n ≡ n′ ∷ℕ → [Natural]-prop Γ (suc n) (suc n′)
-    zero : [Natural]-prop Γ zero zero
-    ne : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ ℕ → [Natural]-prop Γ n n′
+    sucᵣ  : ∀ {n n′} → Γ ⊩ℕ n ≡ n′ ∷ℕ → [Natural]-prop Γ (suc n) (suc n′)
+    zeroᵣ : [Natural]-prop Γ zero zero
+    ne    : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ ℕ → [Natural]-prop Γ n n′
 
 -- Natural extraction from term WHNF property
 natural : ∀ {Γ n} → Natural-prop Γ n → Natural n
-natural (suc x) = suc
-natural zero = zero
+natural (sucᵣ x) = sucₙ
+natural zeroᵣ = zeroₙ
 natural (ne (neNfₜ neK ⊢k k≡k)) = ne neK
 
 -- Natural extraction from term equality WHNF property
 split : ∀ {Γ a b} → [Natural]-prop Γ a b → Natural a × Natural b
-split (suc x) = suc , suc
-split zero = zero , zero
+split (sucᵣ x) = sucₙ , sucₙ
+split zeroᵣ = zeroₙ , zeroₙ
 split (ne (neNfₜ₌ neK neM k≡m)) = ne neK , ne neM
 
 
@@ -155,7 +155,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
 
   -- Universe type
   record _⊩¹U (Γ : Con Term) : Set where
-    constructor U
+    constructor Uᵣ
     field
       l′ : TypeLevel
       l< : l′ < l
@@ -198,7 +198,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     -- Π-type
     record _⊩¹Π_ (Γ : Con Term) (A : Term) : Set where
       inductive
-      constructor Π
+      constructor Πᵣ
       field
         F : Term
         G : Term
@@ -238,7 +238,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
 
     -- Term of Π-type
     _⊩¹Π_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹Π A) → Set
-    Γ ⊩¹Π t ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
+    Γ ⊩¹Π t ∷ A / Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext =
       ∃ λ f → Γ ⊢ t :⇒*: f ∷ Π F ▹ G
             × Function f
             × Γ ⊢ f ≅ f ∷ Π F ▹ G
@@ -257,8 +257,8 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
 
     -- Term equality of Π-type
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹Π A) → Set
-    Γ ⊩¹Π t ≡ u ∷ A / Π F G D ⊢F ⊢G A≡A [F] [G] G-ext =
-      let [A] = Π F G D ⊢F ⊢G A≡A [F] [G] G-ext
+    Γ ⊩¹Π t ≡ u ∷ A / Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext =
+      let [A] = Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext
       in  ∃₂ λ f g →
           Γ ⊢ t :⇒*: f ∷ Π F ▹ G
       ×   Γ ⊢ u :⇒*: g ∷ Π F ▹ G
@@ -276,34 +276,34 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     -- Logical relation definition
 
     data _⊩¹_ (Γ : Con Term) : Term → Set where
-      U  : Γ ⊩¹U → Γ ⊩¹ U
-      ℕ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
-      ne : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
-      Π  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
+      Uᵣ  : Γ ⊩¹U → Γ ⊩¹ U
+      ℕᵣ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
+      ne  : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
+      Πᵣ  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
             ([A] : Γ ⊩ A) → Γ ⊩¹ A
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ .U ≡ B / U UA = Γ ⊩¹U≡ B
-    Γ ⊩¹ A ≡ B / ℕ D = Γ ⊩ℕ A ≡ B
+    Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B
+    Γ ⊩¹ A ≡ B / ℕᵣ D = Γ ⊩ℕ A ≡ B
     Γ ⊩¹ A ≡ B / ne neA = Γ ⊩ne A ≡ B / neA
-    Γ ⊩¹ A ≡ B / Π ΠA = Γ ⊩¹Π A ≡ B / ΠA
+    Γ ⊩¹ A ≡ B / Πᵣ ΠA = Γ ⊩¹Π A ≡ B / ΠA
     Γ ⊩¹ A ≡ B / emb l< [A] = Γ ⊩ A ≡ B / [A]
       where open LogRelKit (rec l<)
 
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ∷ .U / U (U l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
-    Γ ⊩¹ t ∷ A / ℕ D = Γ ⊩ℕ t ∷ℕ
+    Γ ⊩¹ t ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
+    Γ ⊩¹ t ∷ A / ℕᵣ D = Γ ⊩ℕ t ∷ℕ
     Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
-    Γ ⊩¹ f ∷ A / Π ΠA  = Γ ⊩¹Π f ∷ A / ΠA
+    Γ ⊩¹ f ∷ A / Πᵣ ΠA  = Γ ⊩¹Π f ∷ A / ΠA
     Γ ⊩¹ t ∷ A / emb l< [A] = Γ ⊩ t ∷ A / [A]
       where open LogRelKit (rec l<)
 
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
-    Γ ⊩¹ t ≡ u ∷ .U / U (U l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
-    Γ ⊩¹ t ≡ u ∷ A / ℕ D = Γ ⊩ℕ t ≡ u ∷ℕ
+    Γ ⊩¹ t ≡ u ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
+    Γ ⊩¹ t ≡ u ∷ A / ℕᵣ D = Γ ⊩ℕ t ≡ u ∷ℕ
     Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
-    Γ ⊩¹ t ≡ u ∷ A / Π ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
+    Γ ⊩¹ t ≡ u ∷ A / Πᵣ ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
     Γ ⊩¹ t ≡ u ∷ A / emb l< [A] = Γ ⊩ t ≡ u ∷ A / [A]
       where open LogRelKit (rec l<)
 
@@ -311,15 +311,15 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     kit = Kit _⊩¹U _⊩¹Π_
               _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
 
-open LogRel public using (U; ℕ; ne; Π; emb; Uₜ; Uₜ₌; Π₌)
+open LogRel public using (Uᵣ; ℕᵣ; ne; Πᵣ; emb; Uₜ; Uₜ₌; Π₌)
 
 -- Patterns for the non-records of Π
 pattern Πₜ a b c d e f = a , b , c , d , e , f
 pattern Πₜ₌ a b c d e f g h i j = a , b , c , d , e , f , g , h , i , j
 
-pattern U′  a b c = U (U a b c)
+pattern Uᵣ′  a b c = Uᵣ (Uᵣ a b c)
 pattern ne′ a b c d = ne (ne a b c d)
-pattern Π′  a b c d e f g h i = Π (Π a b c d e f g h i)
+pattern Πᵣ′  a b c d e f g h i = Πᵣ (Πᵣ a b c d e f g h i)
 
 logRelRec : ∀ l {l′} → l′ < l → LogRelKit
 logRelRec ⁰ = λ ()

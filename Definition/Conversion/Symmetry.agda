@@ -27,30 +27,30 @@ mutual
   sym~↑ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ
         → Γ ⊢ t ~ u ↑ A
         → ∃ λ B → Γ ⊢ A ≡ B × Δ ⊢ u ~ t ↑ B
-  sym~↑ Γ≡Δ (var x x≡y) =
+  sym~↑ Γ≡Δ (var-refl x x≡y) =
     let ⊢A = syntacticTerm x
     in  _ , refl ⊢A
-     ,  var (PE.subst (λ y → _ ⊢ var y ∷ _) x≡y (stabilityTerm Γ≡Δ x))
-            (PE.sym x≡y)
-  sym~↑ Γ≡Δ (app t~u x) =
+     ,  var-refl (PE.subst (λ y → _ ⊢ var y ∷ _) x≡y (stabilityTerm Γ≡Δ x))
+                 (PE.sym x≡y)
+  sym~↑ Γ≡Δ (app-cong t~u x) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         F′ , G′ , ΠF′G′≡B = Π≡A A≡B whnfB
         F≡F′ , G≡G′ = injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ΠF′G′≡B A≡B)
     in  _ , substTypeEq G≡G′ (soundnessConv↑Term x)
-    ,   app (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF′G′≡B u~t)
-            (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F′))
-  sym~↑ Γ≡Δ (natrec x x₁ x₂ t~u) =
+    ,   app-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ΠF′G′≡B u~t)
+                 (convConvTerm (symConv↑Term Γ≡Δ x) (stabilityEq Γ≡Δ F≡F′))
+  sym~↑ Γ≡Δ (natrec-cong x x₁ x₂ t~u) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         B≡ℕ = ℕ≡A A≡B whnfB
-        F≡G = stabilityEq (Γ≡Δ ∙ refl (ℕ ⊢Γ)) (soundnessConv↑ x)
-        F[0]≡G[0] = substTypeEq F≡G (refl (zero ⊢Δ))
+        F≡G = stabilityEq (Γ≡Δ ∙ refl (ℕⱼ ⊢Γ)) (soundnessConv↑ x)
+        F[0]≡G[0] = substTypeEq F≡G (refl (zeroⱼ ⊢Δ))
     in  _ , substTypeEq (soundnessConv↑ x) (soundness~↓ t~u)
-    ,   natrec (symConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x)
-               (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
-               (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
-               (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
+    ,   natrec-cong (symConv↑ (Γ≡Δ ∙ (refl (ℕⱼ ⊢Γ))) x)
+                    (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
+                    (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
+                    (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
 
   -- Symmetry of algorithmic equality of neutrals of types in WHNF.
   sym~↓ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A

@@ -36,11 +36,11 @@ A≢B {A} {B} _ _ A-intr B-intr A-elim B-elim A≢B′ A≡B | [A] , [B] , [A≡
 U≢ℕ′ : ∀ {Γ B l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([ℕ] : Γ ⊩ℕ B)
-     → ShapeView Γ l l′ _ _ (U [U]) (ℕ [ℕ]) → ⊥
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (ℕᵣ [ℕ]) → ⊥
 U≢ℕ′ a b ()
 
 U≢ℕ-red : ∀ {B Γ} → Γ ⊢ B ⇒* ℕ → Γ ⊢ U ≡ B → ⊥
-U≢ℕ-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩ℕ B) U ℕ
+U≢ℕ-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩ℕ B) Uᵣ ℕᵣ
                 (λ x → extractMaybeEmb (U-elim x))
                 (λ x → extractMaybeEmb (ℕ-elim′ D x))
                 U≢ℕ′
@@ -54,12 +54,12 @@ U≢ℕ U≡ℕ =
 U≢Π′ : ∀ {B Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
-     → ShapeView Γ l l′ _ _ (U [U]) (Π [Π]) → ⊥
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (Πᵣ [Π]) → ⊥
 U≢Π′ a b ()
 
 U≢Π-red : ∀ {B F G Γ} → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ U ≡ B → ⊥
 U≢Π-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U)
-                (λ Γ l A → Γ ⊩′⟨ l ⟩Π A) U Π
+                (λ Γ l A → Γ ⊩′⟨ l ⟩Π A) Uᵣ Πᵣ
                 (λ x → extractMaybeEmb (U-elim x))
                 (λ x → extractMaybeEmb (Π-elim′ D x))
                 U≢Π′
@@ -73,11 +73,11 @@ U≢Π U≡Π =
 U≢ne′ : ∀ {K Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([K] : Γ ⊩ne K)
-     → ShapeView Γ l l′ _ _ (U [U]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (ne [K]) → ⊥
 U≢ne′ a b ()
 
 U≢ne-red : ∀ {B K Γ} → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ U ≡ B → ⊥
-U≢ne-red D neK = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩ne B) U ne
+U≢ne-red D neK = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩ne B) Uᵣ ne
                      (λ x → extractMaybeEmb (U-elim x))
                      (λ x → extractMaybeEmb (ne-elim′ D neK x))
                      U≢ne′
@@ -91,12 +91,12 @@ U≢ne neK U≡K =
 ℕ≢Π′ : ∀ {A B Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
-     → ShapeView Γ l l′ _ _ (ℕ [ℕ]) (Π [Π]) → ⊥
+     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (Πᵣ [Π]) → ⊥
 ℕ≢Π′ a b ()
 
 ℕ≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
 ℕ≢Π-red D D′ = A≢B (λ Γ l A → Γ ⊩ℕ A)
-                   (λ Γ l A → Γ ⊩′⟨ l ⟩Π A) ℕ Π
+                   (λ Γ l A → Γ ⊩′⟨ l ⟩Π A) ℕᵣ Πᵣ
                    (λ x → extractMaybeEmb (ℕ-elim′ D x))
                    (λ x → extractMaybeEmb (Π-elim′ D′ x))
                    ℕ≢Π′
@@ -110,11 +110,11 @@ U≢ne neK U≡K =
 ℕ≢ne′ : ∀ {A K Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([K] : Γ ⊩ne K)
-     → ShapeView Γ l l′ _ _ (ℕ [ℕ]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (ne [K]) → ⊥
 ℕ≢ne′ a b ()
 
 ℕ≢ne-red : ∀ {A B K Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ A ≡ B → ⊥
-ℕ≢ne-red D D′ neK = A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩ne B) ℕ ne
+ℕ≢ne-red D D′ neK = A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩ne B) ℕᵣ ne
                         (λ x → extractMaybeEmb (ℕ-elim′ D x))
                         (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
                         ℕ≢ne′
@@ -128,13 +128,13 @@ U≢ne neK U≡K =
 Π≢ne′ : ∀ {A K Γ l l′}
        ([Π] : Γ ⊩′⟨ l ⟩Π A)
        ([K] : Γ ⊩ne K)
-     → ShapeView Γ l l′ _ _ (Π [Π]) (ne [K]) → ⊥
+     → ShapeView Γ l l′ _ _ (Πᵣ [Π]) (ne [K]) → ⊥
 Π≢ne′ a b ()
 
 Π≢ne-red : ∀ {A B F G K Γ} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊢ B ⇒* K → Neutral K
      → Γ ⊢ A ≡ B → ⊥
 Π≢ne-red D D′ neK = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩Π A)
-                        (λ Γ l B → Γ ⊩ne B) Π ne
+                        (λ Γ l B → Γ ⊩ne B) Πᵣ ne
                         (λ x → extractMaybeEmb (Π-elim′ D x))
                         (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
                         Π≢ne′

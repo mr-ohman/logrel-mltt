@@ -25,10 +25,10 @@ varTypeEq A B x∷A x∷B rewrite varTypeEq′ x∷A x∷B = refl A
 neTypeEq : ∀ {t A B Γ} → Neutral t → Γ ⊢ t ∷ A → Γ ⊢ t ∷ B → Γ ⊢ A ≡ B
 neTypeEq (var x) (var x₁ x₂) (var x₃ x₄) =
   varTypeEq (syntacticTerm (var x₃ x₂)) (syntacticTerm (var x₃ x₄)) x₂ x₄
-neTypeEq (_∘_ neT) (t∷A ∘ t∷A₁) (t∷B ∘ t∷B₁) with neTypeEq neT t∷A t∷B
+neTypeEq (∘ₙ neT) (t∷A ∘ⱼ t∷A₁) (t∷B ∘ⱼ t∷B₁) with neTypeEq neT t∷A t∷B
 ... | q = let w = proj₂ (injectivity q)
           in  substTypeEq w (refl t∷A₁)
-neTypeEq (natrec neT) (natrec x t∷A t∷A₁ t∷A₂) (natrec x₁ t∷B t∷B₁ t∷B₂) =
+neTypeEq (natrecₙ neT) (natrecⱼ x t∷A t∷A₁ t∷A₂) (natrecⱼ x₁ t∷B t∷B₁ t∷B₂) =
   refl (substType x₁ t∷B₂)
 neTypeEq x (conv t∷A x₁) t∷B = let q = neTypeEq x t∷A t∷B
                                in  trans (sym x₁) q

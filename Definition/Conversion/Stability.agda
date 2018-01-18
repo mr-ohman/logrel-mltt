@@ -77,15 +77,15 @@ stabilityRedTerm Γ≡Δ (β-red x x₁ x₂) =
         (stabilityTerm Γ≡Δ x₂)
 stabilityRedTerm Γ≡Δ (natrec-subst x x₁ x₂ d) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
-  in  natrec-subst (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
+  in  natrec-subst (stability (Γ≡Δ ∙ refl (ℕⱼ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
                    (stabilityTerm Γ≡Δ x₂) (stabilityRedTerm Γ≡Δ d)
 stabilityRedTerm Γ≡Δ (natrec-zero x x₁ x₂) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
-  in  natrec-zero (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
+  in  natrec-zero (stability (Γ≡Δ ∙ refl (ℕⱼ ⊢Γ)) x) (stabilityTerm Γ≡Δ x₁)
                   (stabilityTerm Γ≡Δ x₂)
 stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
-  in  natrec-suc (stabilityTerm Γ≡Δ x) (stability (Γ≡Δ ∙ refl (ℕ ⊢Γ)) x₁)
+  in  natrec-suc (stabilityTerm Γ≡Δ x) (stability (Γ≡Δ ∙ refl (ℕⱼ ⊢Γ)) x₁)
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
 
 -- Stability of type reductions.
@@ -108,16 +108,16 @@ mutual
               → ⊢ Γ ≡ Δ
               → Γ ⊢ k ~ l ↑ A
               → Δ ⊢ k ~ l ↑ A
-  stability~↑ Γ≡Δ (var x x≡y) =
-    var (stabilityTerm Γ≡Δ x) x≡y
-  stability~↑ Γ≡Δ (app k~l x) =
-    app (stability~↓ Γ≡Δ k~l) (stabilityConv↑Term Γ≡Δ x)
-  stability~↑ Γ≡Δ (natrec x₁ x₂ x₃ k~l) =
+  stability~↑ Γ≡Δ (var-refl x x≡y) =
+    var-refl (stabilityTerm Γ≡Δ x) x≡y
+  stability~↑ Γ≡Δ (app-cong k~l x) =
+    app-cong (stability~↓ Γ≡Δ k~l) (stabilityConv↑Term Γ≡Δ x)
+  stability~↑ Γ≡Δ (natrec-cong x₁ x₂ x₃ k~l) =
     let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
-    in natrec (stabilityConv↑ (Γ≡Δ ∙ (refl (ℕ ⊢Γ))) x₁)
-              (stabilityConv↑Term Γ≡Δ x₂)
-              (stabilityConv↑Term Γ≡Δ x₃)
-              (stability~↓ Γ≡Δ k~l)
+    in natrec-cong (stabilityConv↑ (Γ≡Δ ∙ (refl (ℕⱼ ⊢Γ))) x₁)
+                   (stabilityConv↑Term Γ≡Δ x₂)
+                   (stabilityConv↑Term Γ≡Δ x₃)
+                   (stability~↓ Γ≡Δ k~l)
 
   -- Stability of algorithmic equality of neutrals of types in WHNF.
   stability~↓ : ∀ {k l A Γ Δ}
