@@ -2,13 +2,11 @@
 
 module Definition.Typed.Properties where
 
+open import Definition.Untyped
+open import Definition.Typed
+
 open import Tools.Empty using (⊥; ⊥-elim)
 open import Tools.Product
-
-open import Definition.Untyped as U hiding (wk)
-open import Definition.Untyped.Properties
-open import Definition.Typed
-open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 

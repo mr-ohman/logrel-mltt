@@ -13,7 +13,6 @@ open import Definition.LogicalRelation.Substitution
 
 open import Tools.Product
 open import Tools.Unit
-
 import Tools.PropositionalEquality as PE
 
 

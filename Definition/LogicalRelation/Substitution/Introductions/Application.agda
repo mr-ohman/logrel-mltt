@@ -15,9 +15,7 @@ open import Definition.LogicalRelation.Application
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
-open import Tools.Empty
 open import Tools.Product
-
 import Tools.PropositionalEquality as PE
 
 

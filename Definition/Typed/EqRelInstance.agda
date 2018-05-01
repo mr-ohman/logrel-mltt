@@ -5,7 +5,6 @@ module Definition.Typed.EqRelInstance where
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening
-open import Definition.Typed.Properties
 open import Definition.Typed.Reduction
 open import Definition.Typed.EqualityRelation
 

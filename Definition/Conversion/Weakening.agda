@@ -5,14 +5,9 @@ module Definition.Conversion.Weakening where
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.Conversion
-open import Definition.Conversion.Stability
-open import Definition.Typed.Consequences.Syntactic
 
-open import Tools.Nat
-open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 mutual

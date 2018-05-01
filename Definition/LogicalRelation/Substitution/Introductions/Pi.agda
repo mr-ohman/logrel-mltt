@@ -8,7 +8,7 @@ open EqRelSet {{...}}
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
+open import Definition.Typed.Weakening using (_∷_⊆_)
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
@@ -23,7 +23,6 @@ open import Definition.LogicalRelation.Substitution.Introductions.Universe
 
 open import Tools.Nat
 open import Tools.Product
-
 import Tools.PropositionalEquality as PE
 
 

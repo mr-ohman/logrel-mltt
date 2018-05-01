@@ -5,7 +5,6 @@ module Definition.Conversion.EqRelInstance where
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
-open import Definition.Typed.RedSteps
 open import Definition.Typed.Weakening using (_∷_⊆_; wkEq)
 open import Definition.Conversion
 open import Definition.Conversion.Reduction

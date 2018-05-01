@@ -5,14 +5,11 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution {{eqrel : EqRelSet}} where
 
 open import Definition.Untyped
-open import Definition.LogicalRelation
 open import Definition.Typed
+open import Definition.LogicalRelation
 
-open import Tools.Nat
 open import Tools.Product
 open import Tools.Unit
-
-import Tools.PropositionalEquality as PE
 
 
 -- The validity judgements:

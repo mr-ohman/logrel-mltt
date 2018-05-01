@@ -5,10 +5,9 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Properties.Symmetry {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
-open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
@@ -36,8 +35,8 @@ mutual
         F₁≡F′ , G₁≡G′ = Π-PE-injectivity ΠF₁G₁≡ΠF′G′
         [F₁≡F] : ∀ {Δ} {ρ} [ρ] ⊢Δ → _
         [F₁≡F] {Δ} {ρ} [ρ] ⊢Δ =
-          let ρF′≡ρF₁ ρ = PE.cong (U.wk ρ) (PE.sym F₁≡F′)
-              [ρF′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → Δ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
+          let ρF′≡ρF₁ ρ = PE.cong (wk ρ) (PE.sym F₁≡F′)
+              [ρF′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
           in  irrelevanceEq′ {Δ} (ρF′≡ρF₁ ρ)
                              ([ρF′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ)
                              (symEq ([F] [ρ] ⊢Δ) ([ρF′] [ρ] ⊢Δ)
@@ -45,8 +44,8 @@ mutual
     in  Π₌ _ _ (red D) (≅-sym (PE.subst (λ x → Γ ⊢ Π F ▹ G ≅ x) (PE.sym ΠF₁G₁≡ΠF′G′) A≡B))
           [F₁≡F]
           (λ {ρ} [ρ] ⊢Δ [a] →
-               let ρG′a≡ρG₁′a = PE.cong (λ x → U.wk (lift ρ) x [ _ ]) (PE.sym G₁≡G′)
-                   [ρG′a] = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk (lift ρ) x [ _ ]) G₁≡G′
+               let ρG′a≡ρG₁′a = PE.cong (λ x → wk (lift ρ) x [ _ ]) (PE.sym G₁≡G′)
+                   [ρG′a] = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk (lift ρ) x [ _ ]) G₁≡G′
                                      ([G]₁ [ρ] ⊢Δ [a])
                    [a]₁ = convTerm₁ ([F]₁ [ρ] ⊢Δ) ([F] [ρ] ⊢Δ) ([F₁≡F] [ρ] ⊢Δ) [a]
                in  irrelevanceEq′ ρG′a≡ρG₁′a

@@ -5,13 +5,9 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Fundamental {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped
 open import Definition.Untyped.Properties
-
 open import Definition.Typed
-import Definition.Typed.Weakening as T
-open import Definition.Typed.Properties
-
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
@@ -25,9 +21,7 @@ import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Product
 open import Tools.Unit
-open import Tools.Empty
 open import Tools.Nat
-
 import Tools.PropositionalEquality as PE
 
 

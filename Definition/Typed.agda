@@ -2,9 +2,11 @@
 
 module Definition.Typed where
 
+open import Definition.Untyped
+
 open import Tools.Nat using (Nat)
 open import Tools.Product
-open import Definition.Untyped
+
 
 infixl 30 _∙_
 infix 30 Πⱼ_▹_

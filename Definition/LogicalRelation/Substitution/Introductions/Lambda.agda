@@ -21,9 +21,7 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 
-open import Tools.Nat
 open import Tools.Product
-
 import Tools.PropositionalEquality as PE
 
 
@@ -159,7 +157,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
              [σΠFG≡σ′ΠFG] = proj₂ ([ΠFG] ⊢Δ [σ]) [σ′] [σ≡σ′]
              ⊢t = escapeTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
              ⊢t′ = escapeTerm [G]₁′ (proj₁ ([t] (⊢Δ ∙ ⊢F′) [liftσ′]))
-             neuVar = neuTerm ([F]′ (T.step T.id) (⊢Δ ∙ ⊢F))
+             neuVar = neuTerm ([F]′ (step id) (⊢Δ ∙ ⊢F))
                               (var 0) (var (⊢Δ ∙ ⊢F) here)
                               (~-var (var (⊢Δ ∙ ⊢F) here))
              σlamt∘a≡σ′lamt∘a : ∀ {ρ Δ₁ a} → ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
@@ -271,9 +269,9 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                         (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                         (irrelevanceEqTerm′
                           (idWkLiftSubstLemma σ G)
-                          ([G]′ (T.step T.id) (⊢Δ ∙ ⊢F) neuVar)
+                          ([G]′ (step id) (⊢Δ ∙ ⊢F) neuVar)
                           (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
-                          (σlamt∘a≡σ′lamt∘a (T.step T.id) (⊢Δ ∙ ⊢F) neuVar))))
+                          (σlamt∘a≡σ′lamt∘a (step id) (⊢Δ ∙ ⊢F) neuVar))))
                   (lamt ⊢Δ [σ])
                   (convTerm₂ (proj₁ ([ΠFG] ⊢Δ [σ]))
                              (proj₁ ([ΠFG] ⊢Δ [σ′]))

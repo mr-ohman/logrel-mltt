@@ -4,7 +4,6 @@ module Definition.Conversion.Transitivity where
 
 open import Definition.Untyped
 open import Definition.Typed
-open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.Conversion

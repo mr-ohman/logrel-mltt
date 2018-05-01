@@ -8,9 +8,7 @@ open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.Conversion.Stability
-open import Definition.Conversion.Soundness
 open import Definition.Typed.Consequences.Syntactic
-open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction

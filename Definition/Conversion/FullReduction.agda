@@ -8,8 +8,6 @@ open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening
 open import Definition.Conversion
-open import Definition.Conversion.Conversion
-open import Definition.Conversion.Stability
 open import Definition.Conversion.Whnf
 open import Definition.Typed.Consequences.InverseUniv
 open import Definition.Typed.Consequences.Syntactic

@@ -10,7 +10,6 @@ open import Definition.Conversion
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
 
-open import Tools.Unit
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 

@@ -2,33 +2,23 @@
 
 module Definition.Conversion.Lift where
 
-open import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
-open import Definition.Typed.RedSteps
 open import Definition.Typed.EqRelInstance
 open import Definition.Conversion
 open import Definition.Conversion.Whnf
 open import Definition.Conversion.Soundness
-open import Definition.Conversion.Stability
 open import Definition.Conversion.Weakening
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Fundamental.Reducibility
-open import Definition.LogicalRelation.Substitution
 open import Definition.Typed.Consequences.Syntactic
-open import Definition.Typed.Consequences.Injectivity
-import Definition.Typed.Consequences.Inequality as WF
-open import Definition.Typed.Consequences.Syntactic
-open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Reduction
 
-open import Tools.Nat
 open import Tools.Product
-open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
 

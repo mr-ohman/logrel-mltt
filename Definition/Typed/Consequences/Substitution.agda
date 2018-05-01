@@ -7,18 +7,15 @@ open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance
-open import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
-import Definition.LogicalRelation.Substitution.Irrelevance as S
+open import Definition.LogicalRelation.Substitution.Irrelevance
 open import Definition.LogicalRelation.Fundamental
 
 open import Tools.Product
-open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 
@@ -26,16 +23,16 @@ import Tools.PropositionalEquality as PE
 substitution : ∀ {A Γ Δ σ} → Γ ⊢ A → Δ ⊢ˢ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A
 substitution A σ ⊢Δ with fundamental A | fundamentalSubst (wf A) ⊢Δ σ
 substitution A σ ⊢Δ | [Γ] , [A] | [Γ]′ , [σ] =
-  escape (proj₁ ([A] ⊢Δ (S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ])))
+  escape (proj₁ ([A] ⊢Δ (irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ])))
 
 -- Well-formed substitution of type equality.
 substitutionEq : ∀ {A B Γ Δ σ σ′}
                → Γ ⊢ A ≡ B → Δ ⊢ˢ σ ≡ σ′ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ A ≡ subst σ′ B
 substitutionEq A≡B σ ⊢Δ with fundamentalEq A≡B | fundamentalSubstEq (wfEq A≡B) ⊢Δ σ
 substitutionEq A≡B σ ⊢Δ | [Γ] , [A] , [B] , [A≡B] | [Γ]′ , [σ] , [σ′] , [σ≡σ′]  =
-  let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
-      [σ′]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
-      [σ≡σ′]′ = S.irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
+  let [σ]′ = irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
+      [σ′]′ = irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
+      [σ≡σ′]′ = irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
   in  escapeEq (proj₁ ([A] ⊢Δ [σ]′))
                    (transEq (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([B] ⊢Δ [σ]′))
                             (proj₁ ([B] ⊢Δ [σ′]′)) ([A≡B] ⊢Δ [σ]′)
@@ -46,7 +43,7 @@ substitutionTerm : ∀ {t A Γ Δ σ}
                → Γ ⊢ t ∷ A → Δ ⊢ˢ σ ∷ Γ → ⊢ Δ → Δ ⊢ subst σ t ∷ subst σ A
 substitutionTerm t σ ⊢Δ with fundamentalTerm t | fundamentalSubst (wfTerm t) ⊢Δ σ
 substitutionTerm t σ ⊢Δ | [Γ] , [A] , [t] | [Γ]′ , [σ] =
-  let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
+  let [σ]′ = irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
   in  escapeTerm (proj₁ ([A] ⊢Δ [σ]′)) (proj₁ ([t] ⊢Δ [σ]′))
 
 -- Well-formed substitution of term equality.
@@ -56,9 +53,9 @@ substitutionEqTerm : ∀ {t u A Γ Δ σ σ′}
 substitutionEqTerm t≡u σ≡σ′ ⊢Δ with fundamentalTermEq t≡u
                                   | fundamentalSubstEq (wfEqTerm t≡u) ⊢Δ σ≡σ′
 ... | [Γ] , modelsTermEq [A] [t] [u] [t≡u] | [Γ]′ , [σ] , [σ′] , [σ≡σ′] =
-  let [σ]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
-      [σ′]′ = S.irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
-      [σ≡σ′]′ = S.irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
+  let [σ]′ = irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]
+      [σ′]′ = irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′]
+      [σ≡σ′]′ = irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ] [σ]′ [σ≡σ′]
   in  escapeTermEq (proj₁ ([A] ⊢Δ [σ]′))
                        (transEqTerm (proj₁ ([A] ⊢Δ [σ]′)) ([t≡u] ⊢Δ [σ]′)
                                     (proj₂ ([u] ⊢Δ [σ]′) [σ′]′ [σ≡σ′]′))
@@ -86,7 +83,7 @@ wk1Subst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
             ([σ] : Δ ⊢ˢ σ ∷ Γ)
           → (Δ ∙ F) ⊢ˢ wk1Subst σ ∷ Γ
 wk1Subst′ {F} {σ} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
-  wkSubst′ ⊢Γ ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ]
+  wkSubst′ ⊢Γ ⊢Δ (⊢Δ ∙ ⊢F) (step id) [σ]
 
 -- Lifting of well-formed substitution.
 liftSubst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
@@ -95,7 +92,7 @@ liftSubst′ : ∀ {F σ Γ Δ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
            → (Δ ∙ subst σ F) ⊢ˢ liftSubst σ ∷ Γ ∙ F
 liftSubst′ {F} {σ} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
   let ⊢Δ∙F = ⊢Δ ∙ substitution ⊢F [σ] ⊢Δ
-  in  wkSubst′ ⊢Γ ⊢Δ ⊢Δ∙F (T.step T.id) [σ]
+  in  wkSubst′ ⊢Γ ⊢Δ ⊢Δ∙F (step id) [σ]
   ,   var ⊢Δ∙F (PE.subst (λ x → 0 ∷ x ∈ (Δ ∙ subst σ F))
                          (wk-subst F) here)
 

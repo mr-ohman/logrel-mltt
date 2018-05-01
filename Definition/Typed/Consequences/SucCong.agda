@@ -4,12 +4,11 @@ module Definition.Typed.Consequences.SucCong where
 
 open import Definition.Untyped
 open import Definition.Typed
-open import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
 
-open import Tools.Nat
 open import Tools.Product
 
 

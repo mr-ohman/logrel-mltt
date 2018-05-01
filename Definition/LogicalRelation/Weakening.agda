@@ -8,15 +8,11 @@ open EqRelSet {{...}}
 open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Properties
 open import Definition.Typed.Weakening as T hiding (wk; wkEq; wkTerm; wkEqTerm)
 open import Definition.LogicalRelation
-open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Irrelevance
-open import Definition.LogicalRelation.ShapeView
 
 open import Tools.Product
-open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 

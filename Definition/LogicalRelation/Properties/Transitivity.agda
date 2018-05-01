@@ -5,10 +5,9 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Properties.Transitivity {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
-open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
@@ -43,36 +42,36 @@ mutual
     let ΠF₁G₁≡ΠF′G′    = whrDet* (red D₁ , Πₙ) (D′  , Πₙ)
         F₁≡F′  , G₁≡G′ = Π-PE-injectivity ΠF₁G₁≡ΠF′G′
         F₂≡F″ , G₂≡G″  = Π-PE-injectivity (whrDet* (red D₂ , Πₙ) (D″ , Πₙ))
-        substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ U.wk (lift ρ) x [ a ]
-        [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′
-        [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
-        [F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l″ ⟩ U.wk ρ F″
-        [F″] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ U.wk ρ x) F₂≡F″ ([F]₂ [ρ] ⊢Δ)
-        [F′≡F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ U.wk ρ F′ ≡ U.wk ρ F″ / [F′] [ρ] ⊢Δ
-        [F′≡F″] {ρ} [ρ] ⊢Δ = irrelevanceEq′ (PE.cong (U.wk ρ) F₁≡F′)
+        substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ wk (lift ρ) x [ a ]
+        [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′
+        [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
+        [F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l″ ⟩ wk ρ F″
+        [F″] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₂≡F″ ([F]₂ [ρ] ⊢Δ)
+        [F′≡F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′ ≡ wk ρ F″ / [F′] [ρ] ⊢Δ
+        [F′≡F″] {ρ} [ρ] ⊢Δ = irrelevanceEq′ (PE.cong (wk ρ) F₁≡F′)
                                       ([F]₁ [ρ] ⊢Δ) ([F′] [ρ] ⊢Δ) ([F≡F′]₁ [ρ] ⊢Δ)
         [G′] : ∀ {ρ Δ a} [ρ] ⊢Δ
-             → Δ ⊩⟨ l′ ⟩ a ∷ U.wk ρ F′ / [F′] [ρ] ⊢Δ
-             → Δ ⊩⟨ l′ ⟩ U.wk (lift ρ) G′ [ a ]
+             → Δ ⊩⟨ l′ ⟩ a ∷ wk ρ F′ / [F′] [ρ] ⊢Δ
+             → Δ ⊩⟨ l′ ⟩ wk (lift ρ) G′ [ a ]
         [G′] {ρ} [ρ] ⊢Δ [a] =
-          let [a′] = irrelevanceTerm′ (PE.cong (U.wk ρ) (PE.sym F₁≡F′))
+          let [a′] = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₁≡F′))
                                       ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a]
           in  PE.subst (substLift ρ) G₁≡G′ ([G]₁ [ρ] ⊢Δ [a′])
         [G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
-             → Δ ⊩⟨ l″ ⟩ a ∷ U.wk ρ F″ / [F″] [ρ] ⊢Δ
-             → Δ ⊩⟨ l″ ⟩ U.wk (lift ρ) G″ [ a ]
+             → Δ ⊩⟨ l″ ⟩ a ∷ wk ρ F″ / [F″] [ρ] ⊢Δ
+             → Δ ⊩⟨ l″ ⟩ wk (lift ρ) G″ [ a ]
         [G″] {ρ} [ρ] ⊢Δ [a] =
-          let [a″] = irrelevanceTerm′ (PE.cong (U.wk ρ) (PE.sym F₂≡F″))
+          let [a″] = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₂≡F″))
                                       ([F″] [ρ] ⊢Δ) ([F]₂ [ρ] ⊢Δ) [a]
           in  PE.subst (substLift ρ) G₂≡G″ ([G]₂ [ρ] ⊢Δ [a″])
         [G′≡G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
-                  ([a] : Δ ⊩⟨ l′ ⟩ a ∷ U.wk ρ F′ / [F′] [ρ] ⊢Δ)
-                → Δ ⊩⟨ l′ ⟩ U.wk (lift ρ) G′  [ a ]
-                          ≡ U.wk (lift ρ) G″ [ a ] / [G′] [ρ] ⊢Δ [a]
+                  ([a] : Δ ⊩⟨ l′ ⟩ a ∷ wk ρ F′ / [F′] [ρ] ⊢Δ)
+                → Δ ⊩⟨ l′ ⟩ wk (lift ρ) G′  [ a ]
+                          ≡ wk (lift ρ) G″ [ a ] / [G′] [ρ] ⊢Δ [a]
         [G′≡G″] {ρ} [ρ] ⊢Δ [a′] =
-          let [a]₁ = irrelevanceTerm′ (PE.cong (U.wk ρ) (PE.sym F₁≡F′))
+          let [a]₁ = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₁≡F′))
                                       ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a′]
-          in  irrelevanceEq′ (PE.cong (λ x → U.wk (lift ρ) x [ _ ]) G₁≡G′)
+          in  irrelevanceEq′ (PE.cong (λ x → wk (lift ρ) x [ _ ]) G₁≡G′)
                              ([G]₁ [ρ] ⊢Δ [a]₁) ([G′] [ρ] ⊢Δ [a′])
                              ([G≡G′]₁ [ρ] ⊢Δ [a]₁)
     in  Π₌ F″ G″ D″ (≅-trans A≡B (PE.subst (λ x → Γ ⊢ x ≅ Π F″ ▹ G″) ΠF₁G₁≡ΠF′G′ A≡B₁))

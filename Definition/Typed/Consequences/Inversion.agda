@@ -9,7 +9,6 @@ open import Definition.Typed.Properties
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
 
-open import Tools.Nat
 open import Tools.Product
 
 

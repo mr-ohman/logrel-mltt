@@ -4,9 +4,6 @@ module Definition.Typed.RedSteps where
 
 open import Definition.Untyped
 open import Definition.Typed
-open import Definition.Typed.Properties
-
-open import Tools.Nat
 
 
 -- Concatenation of type reduction closures

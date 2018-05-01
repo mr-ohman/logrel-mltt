@@ -3,29 +3,19 @@
 module Definition.Typed.Consequences.Canonicity where
 
 open import Definition.Untyped
-open import Definition.Untyped.Properties
 
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
-open import Definition.Typed.RedSteps
-
 open import Definition.Typed.EqRelInstance
-
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.ShapeView
-open import Definition.LogicalRelation.Properties
-open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Fundamental.Reducibility
 
 open import Tools.Empty
-open import Tools.Unit
 open import Tools.Nat
 open import Tools.Product
-
-import Tools.PropositionalEquality as PE
 
 
 -- Turns a natural number into its term representation

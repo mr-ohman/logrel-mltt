@@ -7,13 +7,9 @@ open EqRelSet {{...}}
 
 open import Definition.Untyped
 open import Definition.Typed
-open import Definition.Typed.Properties as T
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
-
-open import Tools.Product
-open import Tools.Empty
 
 
 -- Helper function for reducible terms of type U for specific type derivations.

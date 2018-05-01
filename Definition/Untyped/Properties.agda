@@ -4,12 +4,12 @@
 
 module Definition.Untyped.Properties where
 
-open import Tools.Nat
-open import Tools.Unit
-open import Tools.List
-open import Tools.PropositionalEquality as PE hiding (subst)
-
 open import Definition.Untyped
+
+open import Tools.Nat
+open import Tools.List
+open import Tools.PropositionalEquality hiding (subst)
+
 
 -- Weakening properties
 

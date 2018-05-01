@@ -6,8 +6,6 @@ open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 
-open import Tools.Nat
-open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 

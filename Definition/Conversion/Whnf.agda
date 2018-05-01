@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Whnf where
 
-open import Definition.Untyped as U
+open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Conversion
 

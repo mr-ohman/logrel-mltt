@@ -6,9 +6,6 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Weakening using (_∷_⊆_)
 
-open import Tools.Nat
-open import Tools.Product
-
 
 -- Generic equality relation used with the logical relation
 

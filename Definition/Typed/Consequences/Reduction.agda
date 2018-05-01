@@ -3,18 +3,14 @@
 module Definition.Typed.Consequences.Reduction where
 
 open import Definition.Untyped
-open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
-open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Fundamental.Reducibility
 
 open import Tools.Product
-import Tools.PropositionalEquality as PE
 
 
 -- Helper function where all reducible types can be reduced to WHNF.

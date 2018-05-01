@@ -3,20 +3,15 @@
 module Definition.Typed.Consequences.Equality where
 
 open import Definition.Untyped
-open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.ShapeView
-open import Definition.LogicalRelation.Substitution
-open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Fundamental.Reducibility
 
 open import Tools.Product
-open import Tools.Empty
-open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 

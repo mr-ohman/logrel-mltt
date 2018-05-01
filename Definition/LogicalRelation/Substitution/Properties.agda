@@ -8,15 +8,15 @@ open EqRelSet {{...}}
 open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Substitution
-import Definition.LogicalRelation.Substitution.Irrelevance as S
+open import Definition.LogicalRelation.Substitution.Irrelevance
+     using (irrelevanceSubst′)
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 import Definition.LogicalRelation.Weakening as LR
 
-open import Tools.Nat
 open import Tools.Unit
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -95,7 +95,7 @@ wk1SubstS : ∀ {F σ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
           → (Δ ∙ F) ⊩ˢ wk1Subst σ ∷ Γ / [Γ]
                             / (⊢Δ ∙ ⊢F)
 wk1SubstS {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] =
-  wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ]
+  wkSubstS [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (step id) [σ]
 
 -- Weaken a valid substitution equality by one type
 wk1SubstSEq : ∀ {F σ σ′ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
@@ -105,7 +105,7 @@ wk1SubstSEq : ∀ {F σ σ′ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
             → (Δ ∙ F) ⊩ˢ wk1Subst σ ≡ wk1Subst σ′ ∷ Γ / [Γ]
                             / (⊢Δ ∙ ⊢F) / wk1SubstS [Γ] ⊢Δ ⊢F [σ]
 wk1SubstSEq {l} {F} {σ} {Γ} {Δ} [Γ] ⊢Δ ⊢F [σ] [σ≡σ′] =
-  wkSubstSEq [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (T.step T.id) [σ] [σ≡σ′]
+  wkSubstSEq [Γ] ⊢Δ (⊢Δ ∙ ⊢F) (step id) [σ] [σ≡σ′]
 
 -- Lift a valid substitution
 liftSubstS : ∀ {l F σ Γ Δ} ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
@@ -157,8 +157,8 @@ mutual
                          (escape (proj₁ ([A] (soundContext [Γ])
                                                 (idSubstS [Γ]))))
                          (idSubstS [Γ])
-        [tailσ] = S.irrelevanceSubst′ (PE.cong (_∙_ Γ) (subst-id A))
-                                      [Γ] [Γ] ⊢Γ∙A′ ⊢Γ∙A [A]′
+        [tailσ] = irrelevanceSubst′ (PE.cong (_∙_ Γ) (subst-id A))
+                                    [Γ] [Γ] ⊢Γ∙A′ ⊢Γ∙A [A]′
         var0 = var ⊢Γ∙A (PE.subst (λ x → 0 ∷ x ∈ (Γ ∙ A))
                                   (wk-subst A)
                                   (PE.subst (λ x → 0 ∷ wk1 (subst idSubst A)

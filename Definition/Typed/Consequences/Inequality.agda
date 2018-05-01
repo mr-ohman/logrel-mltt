@@ -3,19 +3,16 @@
 module Definition.Typed.Consequences.Inequality where
 
 open import Definition.Untyped hiding (U≢ℕ; U≢Π; U≢ne; ℕ≢Π; ℕ≢ne; Π≢ne)
-open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.ShapeView
-open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.Typed.Consequences.Syntactic
 
 open import Tools.Product
 open import Tools.Empty
-import Tools.PropositionalEquality as PE
 
 
 A≢B : ∀ {A B Γ} (_⊩′⟨_⟩A_ _⊩′⟨_⟩B_ : Con Term → TypeLevel → Term → Set)

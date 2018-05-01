@@ -10,7 +10,6 @@ open import Definition.Typed
 open import Definition.Typed.Weakening
 
 open import Tools.Product
-open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
 

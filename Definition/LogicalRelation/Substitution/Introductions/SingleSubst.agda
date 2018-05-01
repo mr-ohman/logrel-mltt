@@ -5,12 +5,11 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.SingleSubst {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped
 open import Definition.Untyped.Properties
 open import Definition.Typed
-import Definition.Typed.Weakening as T
+open import Definition.Typed.Weakening using (id)
 open import Definition.Typed.Properties
-open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
@@ -19,13 +18,8 @@ open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Conversion
 open import Definition.LogicalRelation.Substitution.Weakening
-import Definition.LogicalRelation.Substitution.Irrelevance as S
 
 open import Tools.Product
-open import Tools.Unit
-open import Tools.Empty
-open import Tools.Nat
-
 import Tools.PropositionalEquality as PE
 
 
@@ -185,8 +179,8 @@ substSΠ₁′ {t = t} (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)) [F]�
       Feq = PE.trans F≡F′ (PE.sym (wk-id _))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-lift-id _) (PE.sym G≡G′))
       ⊢Γ = wf (escape [F]₁)
-      [t]′ = irrelevanceTerm′ Feq [F]₁ ([F] T.id ⊢Γ) [t]
-  in  irrelevance′ Geq ([G] T.id ⊢Γ [t]′)
+      [t]′ = irrelevanceTerm′ Feq [F]₁ ([F] id ⊢Γ) [t]
+  in  irrelevance′ Geq ([G] id ⊢Γ [t]′)
 substSΠ₁′ (emb 0<1 x) [F]₁ [t] = emb 0<1 (substSΠ₁′ x [F]₁ [t])
 
 -- Reducible substitution of Π-types.
@@ -219,13 +213,13 @@ substSΠ₂′ (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
       Geq = PE.cong (λ x → x [ _ ]) (PE.trans (wk-lift-id _) (PE.sym G≡G′))
       Geq′ = PE.cong (λ x → x [ _ ]) (PE.trans G′≡G″ (PE.sym (wk-lift-id _)))
       ⊢Γ = wf (escape [F]₁)
-      [t]′ = irrelevanceTerm′ Feq [F]₁ ([F] T.id ⊢Γ) [t]
-      [t′]′ = convTerm₂′ F′eq ([F] T.id ⊢Γ) [F′] ([F≡F′] T.id ⊢Γ) [t′]
-      [t≡t′]′ = irrelevanceEqTerm′ Feq [F]₁ ([F] T.id ⊢Γ) [t≡t′]
-      [Gt≡Gt′] = G-ext T.id ⊢Γ [t]′ [t′]′ [t≡t′]′
-      [Gt′≡G′t′] = [G≡G′] T.id ⊢Γ [t′]′
-  in  irrelevanceEq′ Geq ([G] T.id ⊢Γ [t]′) [G[t]]
-        (transEq′ PE.refl Geq′ ([G] T.id ⊢Γ [t]′) ([G] T.id ⊢Γ [t′]′)
+      [t]′ = irrelevanceTerm′ Feq [F]₁ ([F] id ⊢Γ) [t]
+      [t′]′ = convTerm₂′ F′eq ([F] id ⊢Γ) [F′] ([F≡F′] id ⊢Γ) [t′]
+      [t≡t′]′ = irrelevanceEqTerm′ Feq [F]₁ ([F] id ⊢Γ) [t≡t′]
+      [Gt≡Gt′] = G-ext id ⊢Γ [t]′ [t′]′ [t≡t′]′
+      [Gt′≡G′t′] = [G≡G′] id ⊢Γ [t′]′
+  in  irrelevanceEq′ Geq ([G] id ⊢Γ [t]′) [G[t]]
+        (transEq′ PE.refl Geq′ ([G] id ⊢Γ [t]′) ([G] id ⊢Γ [t′]′)
                   [G′[t′]] [Gt≡Gt′] [Gt′≡G′t′])
 substSΠ₂′ (emb 0<1 x) = substSΠ₂′ x
 
@@ -297,16 +291,16 @@ substSΠEq {F} {G} {F′} {G′} {t} {u} [Γ] [F] [F′] [ΠFG] [ΠF′G′] [Π
       [σt] = proj₁ ([t] ⊢Δ [σ])
       [σu] = proj₁ ([u] ⊢Δ [σ])
       [σt]′ = irrelevanceTerm′ (PE.trans F≡F₁ (PE.sym (wk-id F₁)))
-                               [σF] ([F]₁ T.id ⊢Δ) [σt]
+                               [σF] ([F]₁ id ⊢Δ) [σt]
       [σu]′ = irrelevanceTerm′ (PE.trans F′≡F₂ (PE.sym (wk-id F₂)))
-                               [σF′] ([F]₂ T.id ⊢Δ) [σu]
+                               [σF′] ([F]₂ id ⊢Δ) [σu]
       [σt≡σu] = [t≡u] ⊢Δ [σ]
       [G[t]] = irrelevance′ (PE.cong (λ x → x [ subst σ t ])
                                      (PE.trans (wk-lift-id G₁) (PE.sym G≡G₁)))
-                            ([G]₁ T.id ⊢Δ [σt]′)
+                            ([G]₁ id ⊢Δ [σt]′)
       [G′[u]] = irrelevance′ (PE.cong (λ x → x [ subst σ u ])
                                       (PE.trans (wk-lift-id G₂) (PE.sym G′≡G₂)))
-                             ([G]₂ T.id ⊢Δ [σu]′)
+                             ([G]₂ id ⊢Δ [σu]′)
   in  irrelevanceEq″ (PE.sym (singleSubstLift G t))
                       (PE.sym (singleSubstLift G′ u))
                       [G[t]]
