@@ -31,9 +31,19 @@ record GenT (A : Set) : Set where
     l : Nat
     t : A
 
+data Kind : Set where
+  Ukind : Kind
+  Pikind : Kind
+  Natkind : Kind
+  Lamkind : Kind
+  Appkind : Kind
+  Zerokind : Kind
+  Suckind : Kind
+  Natreckind : Kind
+
 data Term : Set where
   var : (x : Nat) → Term
-  gen : (x : Nat) (c : List (GenT Term)) → Term
+  gen : (k : Kind) (c : List (GenT Term)) → Term
 
 -- The Grammar of our language.
 
@@ -43,33 +53,35 @@ data Term : Set where
 
 -- Type constructors.
 U      : Term                     -- Universe.
-U = gen 0 []
+U = gen Ukind []
+
+pattern Univ u = gen (Ukind u) []
 
 Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
-Π A ▹ B = gen 1 (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
+Π A ▹ B = gen Pikind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
 
 ℕ      : Term                     -- Type of natural numbers.
-ℕ = gen 2 []
+ℕ = gen Natkind []
 
 -- Lambda-calculus.
 -- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
 -- var = var
 
 lam    : (t : Term)       → Term  -- Function abstraction (binder).
-lam t = gen 3 (⟦ 1 , t ⟧ ∷ [])
+lam t = gen Lamkind (⟦ 1 , t ⟧ ∷ [])
 
 _∘_    : (t u : Term)     → Term  -- Application.
-t ∘ u = gen 4 (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
 -- Introduction and elimination of natural numbers.
 zero   : Term                     -- Natural number zero.
-zero = gen 5 []
+zero = gen Zerokind []
 
 suc    : (t : Term)       → Term  -- Successor.
-suc t = gen 6 (⟦ 0 , t ⟧ ∷ [])
+suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 
 natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
-natrec A t u v = gen 7 (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
+natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
 
 -- Injectivity of term constructors w.r.t. propositional equality.
