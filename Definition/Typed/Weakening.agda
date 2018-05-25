@@ -55,6 +55,7 @@ mutual
      let ρA = U.wk ρ A
      in  ⊢ Δ → Γ ⊢ A → Δ ⊢ ρA
   wk ρ ⊢Δ (ℕⱼ ⊢Γ) = ℕⱼ ⊢Δ
+  wk ρ ⊢Δ (Emptyⱼ ⊢Γ) = Emptyⱼ ⊢Δ
   wk ρ ⊢Δ (Uⱼ ⊢Γ) = Uⱼ ⊢Δ
   wk ρ ⊢Δ (Πⱼ F ▹ G) = let ρF = wk ρ ⊢Δ F
                        in  Πⱼ ρF ▹ (wk (lift ρ) (⊢Δ ∙ ρF) G)
@@ -65,6 +66,7 @@ mutual
              ρt = U.wk ρ t
          in ⊢ Δ → Γ ⊢ t ∷ A → Δ ⊢ ρt ∷ ρA
   wkTerm ρ ⊢Δ (ℕⱼ ⊢Γ) = ℕⱼ ⊢Δ
+  wkTerm ρ ⊢Δ (Emptyⱼ ⊢Γ) = Emptyⱼ ⊢Δ
   wkTerm ρ ⊢Δ (Πⱼ F ▹ G) = let ρF = wkTerm ρ ⊢Δ F
                           in  Πⱼ ρF ▹ (wkTerm (lift ρ) (⊢Δ ∙ univ ρF) G)
   wkTerm ρ ⊢Δ (var ⊢Γ x) = var ⊢Δ (wkIndex ρ ⊢Δ x)
@@ -83,6 +85,8 @@ mutual
                                 (wk-β-natrec ρ G)
                                 (wkTerm [ρ] ⊢Δ ⊢s))
                       (wkTerm [ρ] ⊢Δ ⊢n))
+  wkTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrecⱼ {A = A} {e = e} ⊢A ⊢e) =
+    (Emptyrecⱼ (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢e))
   wkTerm ρ ⊢Δ (conv t A≡B) = conv (wkTerm ρ ⊢Δ t) (wkEq ρ ⊢Δ A≡B)
 
   wkEq : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
@@ -165,6 +169,10 @@ mutual
                          (PE.subst (λ x → Δ ⊢ U.wk ρ s ∷ x)
                                    (wk-β-natrec _ F)
                                    (wkTerm [ρ] ⊢Δ ⊢s)))
+  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrec-cong {A = A} {A' = A'} {e = e} {e' = e'}
+                                  A≡A' e≡e') =
+    (Emptyrec-cong (wkEq [ρ] ⊢Δ A≡A')
+      (wkEqTerm [ρ] ⊢Δ e≡e'))
 
 mutual
   wkRed : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
@@ -219,6 +227,9 @@ mutual
                          (PE.subst (λ x → Δ ⊢ U.wk ρ s ∷ x)
                                    (wk-β-natrec ρ F)
                                    (wkTerm [ρ] ⊢Δ ⊢s)))
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrec-subst {A = A} ⊢A n⇒n′) =
+    (Emptyrec-subst (wk [ρ] ⊢Δ ⊢A)
+                    (wkRedTerm [ρ] ⊢Δ n⇒n′))
 
 wkRed* : ∀ {Γ Δ A B ρ} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A

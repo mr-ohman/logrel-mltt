@@ -104,6 +104,10 @@ record EqRelSet : Set₁ where
     ≅-ℕrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ
     ≅ₜ-ℕrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ ℕ ≅ ℕ ∷ U
 
+    -- Empty type reflexivity
+    ≅-Emptyrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty
+    ≅ₜ-Emptyrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty ∷ U
+
     -- Π-congurence
 
     ≅-Π-cong  : ∀ {F G H E Γ}
@@ -150,6 +154,12 @@ record EqRelSet : Set₁ where
              → Γ     ⊢ s ≅ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
              → Γ     ⊢ n ~ n′ ∷ ℕ
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
+
+    -- Empty recursion congurence
+    ~-Emptyrec : ∀ {n n′ F F′ Γ}
+             → Γ ⊢ F ≅ F′
+             → Γ     ⊢ n ~ n′ ∷ Empty
+             → Γ     ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
 
 
   -- Composition of universe and generic equality compatibility

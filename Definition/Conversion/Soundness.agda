@@ -23,6 +23,8 @@ mutual
   soundness~↑ (natrec-cong x₁ x₂ x₃ k~l) =
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
+  soundness~↑ (Emptyrec-cong x₁ k~l) =
+    Emptyrec-cong (soundnessConv↑ x₁) (soundness~↓ k~l)
 
   -- Algorithmic equality of neutrals in WHNF is well-formed.
   soundness~↓ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↓ A → Γ ⊢ k ≡ l ∷ A
@@ -37,6 +39,7 @@ mutual
   soundnessConv↓ : ∀ {A B Γ} → Γ ⊢ A [conv↓] B → Γ ⊢ A ≡ B
   soundnessConv↓ (U-refl ⊢Γ) = refl (Uⱼ ⊢Γ)
   soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕⱼ ⊢Γ)
+  soundnessConv↓ (Empty-refl ⊢Γ) = refl (Emptyⱼ ⊢Γ)
   soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
@@ -52,6 +55,7 @@ mutual
   -- Algorithmic equality of terms in WHNF is well-formed.
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
+  soundnessConv↓Term (Empty-ins x) = soundness~↓ x
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)

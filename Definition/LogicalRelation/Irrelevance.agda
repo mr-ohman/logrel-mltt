@@ -66,6 +66,7 @@ mutual
                        → ShapeView Γ l l′ A A p q
                        → Γ ⊩⟨ l ⟩ A ≡ B / p → Γ ⊩⟨ l′ ⟩ A ≡ B / q
   irrelevanceEqT (ℕᵥ D D′) A≡B = A≡B
+  irrelevanceEqT (Emptyᵥ D D′) A≡B = A≡B
   irrelevanceEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
                  rewrite whrDet* (red D , ne neK) (red D₁ , ne neK₁) =
     ne₌ M D′ neM K≡M
@@ -122,6 +123,7 @@ mutual
                          → ShapeView Γ l l′ A A p q
                          → Γ ⊩⟨ l ⟩ t ∷ A / p → Γ ⊩⟨ l′ ⟩ t ∷ A / q
   irrelevanceTermT (ℕᵥ D D′) t = t
+  irrelevanceTermT (Emptyᵥ D D′) t = t
   irrelevanceTermT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (neₜ k d nf)
                    with whrDet* (red D₁ , ne neK₁) (red D , ne neK)
   irrelevanceTermT (ne (ne K D neK K≡K) (ne .K D₁ neK₁ K≡K₁)) (neₜ k d nf)
@@ -177,6 +179,7 @@ mutual
                            → ShapeView Γ l l′ A A p q
                            → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / p → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ A / q
   irrelevanceEqTermT (ℕᵥ D D′) t≡u = t≡u
+  irrelevanceEqTermT (Emptyᵥ D D′) t≡u = t≡u
   irrelevanceEqTermT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (neₜ₌ k m d d′ nf)
                      with whrDet* (red D₁ , ne neK₁) (red D , ne neK)
   irrelevanceEqTermT (ne (ne K D neK K≡K) (ne .K D₁ neK₁ K≡K₁)) (neₜ₌ k m d d′ nf)

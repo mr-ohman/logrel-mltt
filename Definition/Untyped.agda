@@ -40,6 +40,8 @@ data Kind : Set where
   Zerokind : Kind
   Suckind : Kind
   Natreckind : Kind
+  Emptykind : Kind
+  Emptyreckind : Kind
 
 data Term : Set where
   var : (x : Nat) → Term
@@ -83,6 +85,11 @@ suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
 natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
+Empty : Term
+Empty = gen Emptykind []
+
+Emptyrec : (A e : Term) -> Term
+Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 
 -- Injectivity of term constructors w.r.t. propositional equality.
 
@@ -106,6 +113,7 @@ data Neutral : Term → Set where
   var     : ∀ n                     → Neutral (var n)
   ∘ₙ      : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
   natrecₙ : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
+  Emptyrecₙ : ∀ {A e} -> Neutral e -> Neutral (Emptyrec A e)
 
 
 -- Weak head normal forms (whnfs).
@@ -118,6 +126,7 @@ data Whnf : Term → Set where
   Uₙ    : Whnf U
   Πₙ    : ∀ {A B} → Whnf (Π A ▹ B)
   ℕₙ    : Whnf ℕ
+  Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
   lamₙ  : ∀ {t} → Whnf (lam t)
@@ -136,6 +145,9 @@ data Whnf : Term → Set where
 U≢ℕ : U PE.≢ ℕ
 U≢ℕ ()
 
+U≢Empty : U PE.≢ Empty
+U≢Empty ()
+
 U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
 U≢Π ()
 
@@ -145,8 +157,20 @@ U≢ne () PE.refl
 ℕ≢Π : ∀ {F G} → ℕ PE.≢ Π F ▹ G
 ℕ≢Π ()
 
+ℕ≢Empty : ℕ PE.≢ Empty
+ℕ≢Empty ()
+
+Empty≢ℕ : Empty PE.≢ ℕ
+Empty≢ℕ ()
+
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
 ℕ≢ne () PE.refl
+
+Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
+Empty≢ne () PE.refl
+
+Empty≢Π : ∀ {F G} → Empty PE.≢ Π F ▹ G
+Empty≢Π ()
 
 Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
 Π≢ne () PE.refl
@@ -176,6 +200,7 @@ data Natural : Term → Set where
 data Type : Term → Set where
   Πₙ : ∀ {A B} → Type (Π A ▹ B)
   ℕₙ : Type ℕ
+  Emptyₙ : Type Empty
   ne : ∀{n} → Neutral n → Type n
 
 -- A whnf of type Π A B is either lam t or neutral.
@@ -195,6 +220,7 @@ naturalWhnf (ne x) = ne x
 typeWhnf : ∀ {A} → Type A → Whnf A
 typeWhnf Πₙ = Πₙ
 typeWhnf ℕₙ = ℕₙ
+typeWhnf Emptyₙ = Emptyₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
@@ -269,6 +295,7 @@ wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
 wkNeutral ρ (var n)    = var (wkVar ρ n)
 wkNeutral ρ (∘ₙ n)    = ∘ₙ (wkNeutral ρ n)
 wkNeutral ρ (natrecₙ n) = natrecₙ (wkNeutral ρ n)
+wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
@@ -280,6 +307,7 @@ wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ      = Πₙ
 wkType ρ ℕₙ      = ℕₙ
+wkType ρ Emptyₙ  = Emptyₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
@@ -290,6 +318,7 @@ wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ ℕₙ      = ℕₙ
+wkWhnf ρ Emptyₙ  = Emptyₙ
 wkWhnf ρ lamₙ    = lamₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ

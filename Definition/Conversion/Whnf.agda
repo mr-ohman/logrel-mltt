@@ -19,6 +19,8 @@ mutual
                          in  ∘ₙ q , ∘ₙ w
   ne~↑ (natrec-cong x x₁ x₂ x₃) = let _ , q , w = ne~↓ x₃
                                   in  natrecₙ q , natrecₙ w
+  ne~↑ (Emptyrec-cong x x₁) = let _ , q , w = ne~↓ x₁
+                              in Emptyrecₙ q , Emptyrecₙ w
 
   -- Extraction of neutrality and WHNF from algorithmic equality of neutrals
   -- with type in WHNF.
@@ -33,6 +35,7 @@ whnfConv↓ : ∀ {A B Γ}
           → Whnf A × Whnf B
 whnfConv↓ (U-refl x) = Uₙ , Uₙ
 whnfConv↓ (ℕ-refl x) = ℕₙ , ℕₙ
+whnfConv↓ (Empty-refl x) = Emptyₙ , Emptyₙ
 whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
                    in  ne neA , ne neB
 whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
@@ -43,6 +46,8 @@ whnfConv↓Term : ∀ {t u A Γ}
               → Whnf A × Whnf t × Whnf u
 whnfConv↓Term (ℕ-ins x) = let _ , neT , neU = ne~↓ x
                           in ℕₙ , ne neT , ne neU
+whnfConv↓Term (Empty-ins x) = let _ , neT , neU = ne~↓ x
+                          in Emptyₙ , ne neT , ne neU
 whnfConv↓Term (ne-ins t u x x₁) =
   let _ , neT , neU = ne~↓ x₁
   in ne x , ne neT , ne neU

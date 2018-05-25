@@ -22,6 +22,7 @@ data UFull : Term → Set where
 -- Terms cannot contain U.
 noU : ∀ {t A Γ} → Γ ⊢ t ∷ A → ¬ (UFull t)
 noU (ℕⱼ x) ()
+noU (Emptyⱼ x) ()
 noU (Πⱼ t ▹ t₁) (∃Π₁ ufull) = noU t ufull
 noU (Πⱼ t ▹ t₁) (∃Π₂ ufull) = noU t₁ ufull
 noU (var x₁ x₂) ()
@@ -30,6 +31,7 @@ noU (t ∘ⱼ t₁) ()
 noU (zeroⱼ x) ()
 noU (sucⱼ t) ()
 noU (natrecⱼ x t t₁ t₂) ()
+noU (Emptyrecⱼ x t) ()
 noU (conv t₁ x) ufull = noU t₁ ufull
 
 -- Neutrals cannot contain U.
@@ -37,6 +39,7 @@ noUNe : ∀ {A} → Neutral A → ¬ (UFull A)
 noUNe (var n) ()
 noUNe (∘ₙ neA) ()
 noUNe (natrecₙ neA) ()
+noUNe (Emptyrecₙ neA) ()
 
 -- Helper function where if at least one Π-type does not contain U,
 -- one of F and H will not contain U and one of G and E will not contain U.
@@ -49,6 +52,7 @@ pilem (inj₂ x) = inj₂ (λ x₁ → x (∃Π₁ x₁)) , inj₂ (λ x₁ → 
 -- If type A does not contain U, then A can be a term of type U.
 inverseUniv : ∀ {A Γ} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUniv q (ℕⱼ x) = ℕⱼ x
+inverseUniv q (Emptyⱼ x) = Emptyⱼ x
 inverseUniv q (Uⱼ x) = ⊥-elim (q ∃U)
 inverseUniv q (Πⱼ A ▹ A₁) = Πⱼ inverseUniv (λ x → q (∃Π₁ x)) A ▹ inverseUniv (λ x → q (∃Π₂ x)) A₁
 inverseUniv q (univ x) = x

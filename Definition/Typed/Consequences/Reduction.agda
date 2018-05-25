@@ -18,6 +18,7 @@ whNorm′ : ∀ {A Γ l} ([A] : Γ ⊩⟨ l ⟩ A)
                 → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 whNorm′ (Uᵣ′ .⁰ 0<1 ⊢Γ) = U , Uₙ , idRed:*: (Uⱼ ⊢Γ)
 whNorm′ (ℕᵣ D) = ℕ , ℕₙ , D
+whNorm′ (Emptyᵣ D) = Empty , Emptyₙ , D
 whNorm′ (ne′ K D neK K≡K) = K , ne neK , D
 whNorm′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Π F ▹ G , Πₙ , D
 whNorm′ (emb 0<1 [A]) = whNorm′ [A]
@@ -33,6 +34,9 @@ whNormTerm′ (Uᵣ x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
 whNormTerm′ (ℕᵣ x) (ℕₜ n d n≡n prop) =
   let natN = natural prop
   in  n , naturalWhnf natN , convRed:*: d (sym (subset* (red x)))
+whNormTerm′ (Emptyᵣ x) (Emptyₜ n d n≡n prop) =
+  let emptyN = empty prop
+  in  n , ne emptyN , convRed:*: d (sym (subset* (red x)))
 whNormTerm′ (ne (ne K D neK K≡K)) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   k , ne neK₁ , convRed:*: d (sym (subset* (red D)))
 whNormTerm′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
