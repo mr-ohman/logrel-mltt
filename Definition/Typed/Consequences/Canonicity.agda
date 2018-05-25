@@ -48,3 +48,17 @@ canonicity : ∀ {t} → ε ⊢ t ∷ ℕ → ∃ λ k → ε ⊢ t ≡ sucᵏ k
 canonicity ⊢t with reducibleTerm ⊢t
 canonicity ⊢t | [ℕ] , [t] =
   canonicity′ (ℕ-elim [ℕ]) (irrelevanceTerm [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [t])
+
+-- Canonicity for Empty
+
+¬Empty′ : ∀ {n} → ε ⊩Empty n ∷Empty → ⊥
+¬Empty′ (Emptyₜ n _ n≡n (ne (neNfₜ neN ⊢n _))) =
+  noNe ⊢n neN
+
+¬Empty : ∀ {n} → ε ⊢ n ∷ Empty → ⊥
+¬Empty {n} ⊢n =
+  let [Empty] , [n] = reducibleTerm ⊢n
+      [Empty]′ = Emptyᵣ {l = ¹} ([ Emptyⱼ ε , Emptyⱼ ε , id (Emptyⱼ ε) ])
+      [n]′ = irrelevanceTerm [Empty] [Empty]′ [n]
+
+  in ¬Empty′ [n]′
