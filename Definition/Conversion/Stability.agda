@@ -86,6 +86,8 @@ stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
   in  natrec-suc (stabilityTerm Γ≡Δ x) (stability (Γ≡Δ ∙ refl (ℕⱼ ⊢Γ)) x₁)
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
+stabilityRedTerm Γ≡Δ (Emptyrec-subst x d) =
+  Emptyrec-subst (stability Γ≡Δ x) (stabilityRedTerm Γ≡Δ d)
 
 -- Stability of type reductions.
 stabilityRed : ∀ {A B Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A ⇒ B
@@ -117,6 +119,9 @@ mutual
                    (stabilityConv↑Term Γ≡Δ x₂)
                    (stabilityConv↑Term Γ≡Δ x₃)
                    (stability~↓ Γ≡Δ k~l)
+  stability~↑ Γ≡Δ (Emptyrec-cong x₁ k~l) =
+    Emptyrec-cong (stabilityConv↑ Γ≡Δ x₁)
+                (stability~↓ Γ≡Δ k~l)
 
   -- Stability of algorithmic equality of neutrals of types in WHNF.
   stability~↓ : ∀ {k l A Γ Δ}
@@ -146,6 +151,9 @@ mutual
   stabilityConv↓ Γ≡Δ (ℕ-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  ℕ-refl ⊢Δ
+  stabilityConv↓ Γ≡Δ (Empty-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Empty-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ne x) =
     ne (stability~↓ Γ≡Δ x)
   stabilityConv↓ Γ≡Δ (Π-cong F A<>B A<>B₁) =
@@ -169,6 +177,8 @@ mutual
                      → Δ ⊢ t [conv↓] u ∷ A
   stabilityConv↓Term Γ≡Δ (ℕ-ins x) =
     ℕ-ins (stability~↓ Γ≡Δ x)
+  stabilityConv↓Term Γ≡Δ (Empty-ins x) =
+    Empty-ins (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (ne-ins t u neN x) =
     ne-ins (stabilityTerm Γ≡Δ t) (stabilityTerm Γ≡Δ u) neN (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =

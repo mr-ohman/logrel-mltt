@@ -125,6 +125,39 @@ split (sucᵣ x) = sucₙ , sucₙ
 split zeroᵣ = zeroₙ , zeroₙ
 split (ne (neNfₜ₌ neK neM k≡m)) = ne neK , ne neM
 
+-- Reducibility of Empty
+
+-- Empty type
+_⊩Empty_ : (Γ : Con Term) (A : Term) → Set
+Γ ⊩Empty A = Γ ⊢ A :⇒*: Empty
+
+-- Empty type equality
+_⊩Empty_≡_ : (Γ : Con Term) (A B : Term) → Set
+Γ ⊩Empty A ≡ B = Γ ⊢ B ⇒* Empty
+
+data Empty-prop (Γ : Con Term) : (n : Term) → Set where
+  ne    : ∀ {n} → Γ ⊩neNf n ∷ Empty → Empty-prop Γ n
+
+-- Empty term
+data _⊩Empty_∷Empty (Γ : Con Term) (t : Term) : Set where
+  Emptyₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ Empty) (n≡n : Γ ⊢ n ≅ n ∷ Empty)
+         (prop : Empty-prop Γ n)
+         → Γ ⊩Empty t ∷Empty
+
+data [Empty]-prop (Γ : Con Term) : (n n′ : Term) → Set where
+  ne    : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ Empty → [Empty]-prop Γ n n′
+
+-- Empty term equality
+data _⊩Empty_≡_∷Empty (Γ : Con Term) (t u : Term) : Set where
+  Emptyₜ₌ : (k k′ : Term) (d : Γ ⊢ t :⇒*: k  ∷ Empty) (d′ : Γ ⊢ u :⇒*: k′ ∷ Empty)
+    (k≡k′ : Γ ⊢ k ≅ k′ ∷ Empty)
+      (prop : [Empty]-prop Γ k k′) → Γ ⊩Empty t ≡ u ∷Empty
+
+empty : ∀ {Γ n} → Empty-prop Γ n → Neutral n
+empty (ne (neNfₜ neK _ _)) = neK
+
+esplit : ∀ {Γ a b} → [Empty]-prop Γ a b → Neutral a × Neutral b
+esplit (ne (neNfₜ₌ neK neM k≡m)) = neK , neM
 
 -- Type levels
 
@@ -277,6 +310,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     data _⊩¹_ (Γ : Con Term) : Term → Set where
       Uᵣ  : Γ ⊩¹U → Γ ⊩¹ U
       ℕᵣ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
+      Emptyᵣ : ∀ {A} → Γ ⊩Empty A → Γ ⊩¹ A
       ne  : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
       Πᵣ  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
@@ -285,6 +319,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B
     Γ ⊩¹ A ≡ B / ℕᵣ D = Γ ⊩ℕ A ≡ B
+    Γ ⊩¹ A ≡ B / Emptyᵣ D = Γ ⊩Empty A ≡ B
     Γ ⊩¹ A ≡ B / ne neA = Γ ⊩ne A ≡ B / neA
     Γ ⊩¹ A ≡ B / Πᵣ ΠA = Γ ⊩¹Π A ≡ B / ΠA
     Γ ⊩¹ A ≡ B / emb l< [A] = Γ ⊩ A ≡ B / [A]
@@ -293,6 +328,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     _⊩¹_∷_/_ : (Γ : Con Term) (t A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
     Γ ⊩¹ t ∷ A / ℕᵣ D = Γ ⊩ℕ t ∷ℕ
+    Γ ⊩¹ t ∷ A / Emptyᵣ D = Γ ⊩Empty t ∷Empty
     Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
     Γ ⊩¹ f ∷ A / Πᵣ ΠA  = Γ ⊩¹Π f ∷ A / ΠA
     Γ ⊩¹ t ∷ A / emb l< [A] = Γ ⊩ t ∷ A / [A]
@@ -301,6 +337,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     _⊩¹_≡_∷_/_ : (Γ : Con Term) (t u A : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ≡ u ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
     Γ ⊩¹ t ≡ u ∷ A / ℕᵣ D = Γ ⊩ℕ t ≡ u ∷ℕ
+    Γ ⊩¹ t ≡ u ∷ A / Emptyᵣ D = Γ ⊩Empty t ≡ u ∷Empty
     Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
     Γ ⊩¹ t ≡ u ∷ A / Πᵣ ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
     Γ ⊩¹ t ≡ u ∷ A / emb l< [A] = Γ ⊩ t ≡ u ∷ A / [A]
@@ -310,7 +347,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     kit = Kit _⊩¹U _⊩¹Π_
               _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
 
-open LogRel public using (Uᵣ; ℕᵣ; ne; Πᵣ; emb; Uₜ; Uₜ₌; Π₌)
+open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; ne; Πᵣ; emb; Uₜ; Uₜ₌; Π₌)
 
 -- Patterns for the non-records of Π
 pattern Πₜ a b c d e f = a , b , c , d , e , f

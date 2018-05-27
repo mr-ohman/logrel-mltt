@@ -45,6 +45,22 @@ U≡A {A} U≡A | [U] , [A] , [U≡A] =
 ℕ≡A {A} ℕ≡A whnfA | [ℕ] , [A] , [ℕ≡A] =
   ℕ≡A′ (ℕ-elim [ℕ]) (irrelevanceEq [ℕ] (ℕ-intr (ℕ-elim [ℕ])) [ℕ≡A]) whnfA
 
+-- If A in WHNF is judgmentally equal to Empty, then A is propositionally equal to Empty.
+Empty≡A′ : ∀ {A Γ l} ([Empty] : Γ ⊩⟨ l ⟩Empty Empty)
+    → Γ ⊩⟨ l ⟩ Empty ≡ A / (Empty-intr [Empty])
+    → Whnf A
+    → A PE.≡ Empty
+Empty≡A′ (noemb x) [Empty≡A] whnfA = whnfRed* [Empty≡A] whnfA
+Empty≡A′ (emb 0<1 [Empty]) [Empty≡A] whnfA = Empty≡A′ [Empty] [Empty≡A] whnfA
+
+Empty≡A : ∀ {A Γ}
+    → Γ ⊢ Empty ≡ A
+    → Whnf A
+    → A PE.≡ Empty
+Empty≡A {A} Empty≡A whnfA with reducibleEq Empty≡A
+Empty≡A {A} Empty≡A whnfA | [Empty] , [A] , [Empty≡A] =
+  Empty≡A′ (Empty-elim [Empty]) (irrelevanceEq [Empty] (Empty-intr (Empty-elim [Empty])) [Empty≡A]) whnfA
+
 ne≡A′ : ∀ {A K Γ l}
      → ([K] : Γ ⊩⟨ l ⟩ne K)
      → Γ ⊩⟨ l ⟩ K ≡ A / (ne-intr [K])

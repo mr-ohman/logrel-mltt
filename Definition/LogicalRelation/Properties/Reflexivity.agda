@@ -16,6 +16,7 @@ import Tools.PropositionalEquality as PE
 reflEq : ∀ {l Γ A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]
 reflEq (Uᵣ′ l′ l< ⊢Γ) = PE.refl
 reflEq (ℕᵣ D) = red D
+reflEq (Emptyᵣ D) = red D
 reflEq (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) =
   ne₌ _ [ ⊢A , ⊢B , D ] neK K≡K
 reflEq (Πᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
@@ -33,6 +34,11 @@ reflNatural-prop (sucᵣ (ℕₜ n d t≡t prop)) =
 reflNatural-prop zeroᵣ = zeroᵣ
 reflNatural-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
 
+reflEmpty-prop : ∀ {Γ n}
+                 → Empty-prop Γ n
+                 → [Empty]-prop Γ n n
+reflEmpty-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
+
 -- Reflexivity of reducible terms.
 reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
@@ -42,6 +48,9 @@ reflEqTerm (Uᵣ′ ⁰ 0<1 ⊢Γ) (Uₜ A d typeA A≡A [A]) =
 reflEqTerm (ℕᵣ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
       (reflNatural-prop prop)
+reflEqTerm (Emptyᵣ D) (Emptyₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
+  Emptyₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
+    (reflEmpty-prop prop)
 reflEqTerm (ne′ K D neK K≡K) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   neₜ₌ k k d d (neNfₜ₌ neK₁ neK₁ k≡k)
 reflEqTerm (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =

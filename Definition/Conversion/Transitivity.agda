@@ -52,6 +52,12 @@ mutual
         t~v , _ = trans~↓ Γ≡Δ t~u u~v
     in  natrec-cong A<>C a₀<>c₀ aₛ<>cₛ t~v
     ,   substTypeEq A≡B (soundness~↓ t~u)
+  trans~↑ Γ≡Δ (Emptyrec-cong A<>B t~u) (Emptyrec-cong B<>C u~v) =
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+        A≡B = soundnessConv↑ A<>B
+        A<>C = transConv↑ Γ≡Δ A<>B B<>C
+        t~v , _ = trans~↓ Γ≡Δ t~u u~v
+    in  Emptyrec-cong A<>C t~v , A≡B
 
   -- Transitivity of algorithmic equality of neutrals with types in WHNF.
   trans~↓ : ∀ {t u v A B Γ Δ}
@@ -90,6 +96,7 @@ mutual
             → Γ ⊢ A [conv↓] C
   transConv↓ Γ≡Δ (U-refl x) (U-refl x₁) = U-refl x
   transConv↓ Γ≡Δ (ℕ-refl x) (ℕ-refl x₁) = ℕ-refl x
+  transConv↓ Γ≡Δ (Empty-refl x) (Empty-refl x₁) = Empty-refl x
   transConv↓ Γ≡Δ (ne x) (ne x₁) =
     let A~C , U≡U = trans~↓ Γ≡Δ x x₁
     in  ne A~C
@@ -98,9 +105,11 @@ mutual
   -- Refutable cases
   transConv↓ Γ≡Δ (U-refl x) (ne ([~] A D whnfB ()))
   transConv↓ Γ≡Δ (ℕ-refl x) (ne ([~] A D whnfB ()))
+  transConv↓ Γ≡Δ (Empty-refl x) (ne ([~] A D whnfB ()))
   transConv↓ Γ≡Δ (Π-cong x x₁ x₂) (ne ([~] A D whnfB ()))
   transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (U-refl x₁)
   transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (ℕ-refl x₁)
+  transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (Empty-refl x₁)
   transConv↓ Γ≡Δ (ne ([~] A₁ D whnfB ())) (Π-cong x₁ x₂ x₃)
 
   -- Transitivity of algorithmic equality of terms.
@@ -133,6 +142,8 @@ mutual
                 → Γ ⊢ t [conv↓] v ∷ A
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (ℕ-ins x₁) =
     ℕ-ins (proj₁ (trans~↓ Γ≡Δ x x₁))
+  transConv↓Term Γ≡Δ A≡B (Empty-ins x) (Empty-ins x₁) =
+    Empty-ins (proj₁ (trans~↓ Γ≡Δ x x₁))
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (ne-ins t′ u′ x₂ x₃) =
     ne-ins t (conv (stabilityTerm (symConEq Γ≡Δ) u′) (sym A≡B)) x
            (proj₁ (trans~↓ Γ≡Δ x₁ x₃))
@@ -149,28 +160,40 @@ mutual
   -- Refutable cases
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.ℕ≢ne x₂ A≡B)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (univ x₂ x₃ x₄) = ⊥-elim (WF.U≢ℕ (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (Empty-ins x₁) = ⊥-elim (WF.ℕ≢Emptyⱼ A≡B)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins ([~] A D whnfB ())) (zero-refl x₂)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins ([~] A D whnfB ())) (suc-cong x₂)
   transConv↓Term Γ≡Δ A≡B (ℕ-ins x) (η-eq x₂ x₃ x₄ y y₁ x₅) = ⊥-elim (WF.ℕ≢Π A≡B)
+  transConv↓Term Γ≡Δ A≡B (Empty-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.Empty≢neⱼ x₂ A≡B)
+  transConv↓Term Γ≡Δ A≡B (Empty-ins x) (univ x₂ x₃ x₄) = ⊥-elim (WF.U≢Emptyⱼ (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (Empty-ins x₁) (ℕ-ins x) = ⊥-elim (WF.ℕ≢Emptyⱼ (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (Empty-ins ([~] A D whnfB ())) (zero-refl x₂)
+  transConv↓Term Γ≡Δ A≡B (Empty-ins ([~] A D whnfB ())) (suc-cong x₂)
+  transConv↓Term Γ≡Δ A≡B (Empty-ins x) (η-eq x₂ x₃ x₄ y y₁ x₅) = ⊥-elim (WF.Empty≢Πⱼ A≡B)
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (ℕ-ins x₂) = ⊥-elim (WF.ℕ≢ne x (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (Empty-ins x₂) = ⊥-elim (WF.Empty≢neⱼ x (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (univ x₃ x₄ x₅) = ⊥-elim (WF.U≢ne x (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x ([~] A D whnfB ())) (zero-refl x₃)
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x ([~] A D whnfB ())) (suc-cong x₃)
   transConv↓Term Γ≡Δ A≡B (ne-ins t u x x₁) (η-eq x₃ x₄ x₅ y y₁ x₆) = ⊥-elim (WF.Π≢ne x (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (ℕ-ins x₃) = ⊥-elim (WF.U≢ℕ A≡B)
+  transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (Empty-ins x₃) = ⊥-elim (WF.U≢Emptyⱼ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (ne-ins t u x₃ x₄) = ⊥-elim (WF.U≢ne x₃ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (zero-refl x₃) = ⊥-elim (WF.U≢ℕ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (suc-cong x₃) = ⊥-elim (WF.U≢ℕ A≡B)
   transConv↓Term Γ≡Δ A≡B (univ x x₁ x₂) (η-eq x₃ x₄ x₅ y y₁ x₆) = ⊥-elim (WF.U≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (ℕ-ins ([~] A D whnfB ()))
+  transConv↓Term Γ≡Δ A≡B (zero-refl x) (Empty-ins ([~] A D whnfB ()))
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (ne-ins t u x₁ ([~] A D whnfB ()))
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (univ x₁ x₂ x₃) = ⊥-elim (WF.U≢ℕ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (zero-refl x) (η-eq x₁ x₂ x₃ y y₁ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (ℕ-ins ([~] A D whnfB ()))
+  transConv↓Term Γ≡Δ A≡B (suc-cong x) (Empty-ins ([~] A D whnfB ()))
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (ne-ins t u x₁ ([~] A D whnfB ()))
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (univ x₁ x₂ x₃) = ⊥-elim (WF.U≢ℕ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (suc-cong x) (η-eq x₁ x₂ x₃ y y₁ x₄) = ⊥-elim (WF.ℕ≢Π A≡B)
   transConv↓Term Γ≡Δ A≡B (η-eq x x₁ x₂ y y₁ x₃) (ℕ-ins x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
+  transConv↓Term Γ≡Δ A≡B (η-eq x x₁ x₂ y y₁ x₃) (Empty-ins x₄) = ⊥-elim (WF.Empty≢Πⱼ (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (η-eq x x₁ x₂ y y₁ x₃) (ne-ins t u x₄ x₅) = ⊥-elim (WF.Π≢ne x₄ A≡B)
   transConv↓Term Γ≡Δ A≡B (η-eq x x₁ x₂ y y₁ x₃) (univ x₄ x₅ x₆) = ⊥-elim (WF.U≢Π (sym A≡B))
   transConv↓Term Γ≡Δ A≡B (η-eq x x₁ x₂ y y₁ x₃) (zero-refl x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))

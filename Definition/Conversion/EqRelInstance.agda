@@ -74,6 +74,22 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   in  ↑ (refl (substType ⊢F ⊢n))
         (natrec-cong x x₁ x₂ k~l′)
 
+~-Emptyrec : ∀ {n n′ F F′ Γ}
+         → Γ ⊢ F [conv↑] F′ →
+      Γ ⊢ n ~ n′ ∷ Empty →
+      Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
+~-Emptyrec x (↑ A≡B x₄) =
+  let _ , ⊢B = syntacticEq A≡B
+      B′ , whnfB′ , D = whNorm ⊢B
+      Empty≡B′ = trans A≡B (subset* (red D))
+      B≡Empty = Empty≡A Empty≡B′ whnfB′
+      k~l′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Empty
+                      ([~] _ (red D) whnfB′ x₄)
+      ⊢F , _ = syntacticEq (soundnessConv↑ x)
+      _ , ⊢n , _ = syntacticEqTerm (soundness~↓ k~l′)
+  in  ↑ (refl ⊢F)
+        (Emptyrec-cong x k~l′)
+
 ~-sym : {k l A : Term} {Γ : Con Term} → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ k ∷ A
 ~-sym (↑ A≡B x) =
   let ⊢Γ = wfEq A≡B
@@ -115,6 +131,8 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       (liftConv ∘ᶠ U-refl)
                       (liftConv ∘ᶠ ℕ-refl)
                       (λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x)))
+                      (liftConv ∘ᶠ Empty-refl)
+                      (λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x)))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →
                          let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
@@ -130,4 +148,4 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       (liftConvTerm ∘ᶠ zero-refl)
                       (liftConvTerm ∘ᶠ suc-cong)
                       (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅))
-                      ~-var ~-app ~-natrec
+                      ~-var ~-app ~-natrec ~-Emptyrec

@@ -35,6 +35,7 @@ mutual
   -- Fundamental theorem for types.
   fundamental : ∀ {Γ A} (⊢A : Γ ⊢ A) → Σ (⊩ᵛ Γ) (λ [Γ] → Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
   fundamental (ℕⱼ x) = valid x , ℕᵛ (valid x)
+  fundamental (Emptyⱼ x) = valid x , Emptyᵛ (valid x)
   fundamental (Uⱼ x) = valid x , Uᵛ (valid x)
   fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
   fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
@@ -138,6 +139,7 @@ mutual
     → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ᵛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]
   fundamentalTerm (ℕⱼ x) = valid x , Uᵛ (valid x) , ℕᵗᵛ (valid x)
+  fundamentalTerm (Emptyⱼ x) = valid x , Uᵛ (valid x) , Emptyᵗᵛ (valid x)
   fundamentalTerm (Πⱼ_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
   ... | [Γ] , [U] , [F]ₜ | [Γ]₁ , [U]₁ , [G]ₜ =
@@ -185,6 +187,11 @@ mutual
         [s]′ = S.irrelevanceTerm {A = sType} {t = s} [Γ]₂ [Γ]′ [G₊] [G₊]′ [s]
     in  [Γ]′ , [Gₙ]′
     ,   natrecᵛ {G} {z} {s} {n} [Γ]′ [ℕ] [G]′ [G₀]′ [G₊]′ [Gₙ]′ [z]′ [s]′ [n]
+  fundamentalTerm (Emptyrecⱼ {A} {n} ⊢A ⊢n)
+    with fundamental ⊢A | fundamentalTerm ⊢n
+  ... | [Γ] , [A] | [Γ]′ , [Empty] , [n] =
+    let [A]′ = S.irrelevance {A = A} [Γ] [Γ]′ [A]
+    in [Γ]′ , [A]′ , Emptyrecᵛ {A} {n} [Γ]′ [Empty] [A]′ [n]
   fundamentalTerm (conv {t} {A} {B} ⊢t A′≡A)
     with fundamentalTerm ⊢t | fundamentalEq A′≡A
   fundamentalTerm (conv {t} {A} {B} ⊢t A′≡A) | [Γ] , [A′] , [t]
@@ -512,6 +519,24 @@ mutual
                            r)
                         [F[sucn]] y
     in  [Γ]₃ , modelsTermEq [F[sucn]] d y r
+  fundamentalTermEq (Emptyrec-cong {F} {F′} {n} {n′}
+                                 F≡F′ n≡n′)
+    with fundamentalEq F≡F′ |
+         fundamentalTermEq n≡n′
+  fundamentalTermEq (Emptyrec-cong {F} {F′} {n} {n′}
+                                 F≡F′ n≡n′) |
+    [Γ]  , [F] , [F′] , [F≡F′] |
+    [Γ]′ , modelsTermEq [Empty] [n] [n′] [n≡n′] =
+    let [F]′ = S.irrelevance {A = F} [Γ] [Γ]′ [F]
+        [F′]′ = S.irrelevance {A = F′} [Γ] [Γ]′ [F′]
+        [F≡F′]′ = S.irrelevanceEq {A = F} {B = F′} [Γ] [Γ]′ [F] [F]′ [F≡F′]
+    in [Γ]′
+      , modelsTermEq [F]′ (Emptyrecᵛ {F} {n} [Γ]′ [Empty] [F]′ [n])
+                     (conv₂ᵛ {Emptyrec F′ n′} {F} {F′} [Γ]′ [F]′ [F′]′ [F≡F′]′
+                       (Emptyrecᵛ {F′} {n′} [Γ]′ [Empty] [F′]′ [n′]))
+                     (Emptyrec-congᵛ {F} {F′} {n} {n′}
+                       [Γ]′ [Empty] [F]′ [F′]′ [F≡F′]′
+                       [n] [n′] [n≡n′])
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

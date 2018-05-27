@@ -31,9 +31,21 @@ record GenT (A : Set) : Set where
     l : Nat
     t : A
 
+data Kind : Set where
+  Ukind : Kind
+  Pikind : Kind
+  Natkind : Kind
+  Lamkind : Kind
+  Appkind : Kind
+  Zerokind : Kind
+  Suckind : Kind
+  Natreckind : Kind
+  Emptykind : Kind
+  Emptyreckind : Kind
+
 data Term : Set where
   var : (x : Nat) → Term
-  gen : (x : Nat) (c : List (GenT Term)) → Term
+  gen : (k : Kind) (c : List (GenT Term)) → Term
 
 -- The Grammar of our language.
 
@@ -43,34 +55,41 @@ data Term : Set where
 
 -- Type constructors.
 U      : Term                     -- Universe.
-U = gen 0 []
+U = gen Ukind []
+
+pattern Univ u = gen (Ukind u) []
 
 Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
-Π A ▹ B = gen 1 (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
+Π A ▹ B = gen Pikind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
 
 ℕ      : Term                     -- Type of natural numbers.
-ℕ = gen 2 []
+ℕ = gen Natkind []
 
 -- Lambda-calculus.
 -- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
 -- var = var
 
 lam    : (t : Term)       → Term  -- Function abstraction (binder).
-lam t = gen 3 (⟦ 1 , t ⟧ ∷ [])
+lam t = gen Lamkind (⟦ 1 , t ⟧ ∷ [])
 
 _∘_    : (t u : Term)     → Term  -- Application.
-t ∘ u = gen 4 (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
 -- Introduction and elimination of natural numbers.
 zero   : Term                     -- Natural number zero.
-zero = gen 5 []
+zero = gen Zerokind []
 
 suc    : (t : Term)       → Term  -- Successor.
-suc t = gen 6 (⟦ 0 , t ⟧ ∷ [])
+suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 
 natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
-natrec A t u v = gen 7 (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
+natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
+Empty : Term
+Empty = gen Emptykind []
+
+Emptyrec : (A e : Term) -> Term
+Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 
 -- Injectivity of term constructors w.r.t. propositional equality.
 
@@ -94,6 +113,7 @@ data Neutral : Term → Set where
   var     : ∀ n                     → Neutral (var n)
   ∘ₙ      : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
   natrecₙ : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
+  Emptyrecₙ : ∀ {A e} -> Neutral e -> Neutral (Emptyrec A e)
 
 
 -- Weak head normal forms (whnfs).
@@ -106,6 +126,7 @@ data Whnf : Term → Set where
   Uₙ    : Whnf U
   Πₙ    : ∀ {A B} → Whnf (Π A ▹ B)
   ℕₙ    : Whnf ℕ
+  Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
   lamₙ  : ∀ {t} → Whnf (lam t)
@@ -124,6 +145,9 @@ data Whnf : Term → Set where
 U≢ℕ : U PE.≢ ℕ
 U≢ℕ ()
 
+U≢Empty : U PE.≢ Empty
+U≢Empty ()
+
 U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
 U≢Π ()
 
@@ -133,8 +157,20 @@ U≢ne () PE.refl
 ℕ≢Π : ∀ {F G} → ℕ PE.≢ Π F ▹ G
 ℕ≢Π ()
 
+ℕ≢Empty : ℕ PE.≢ Empty
+ℕ≢Empty ()
+
+Empty≢ℕ : Empty PE.≢ ℕ
+Empty≢ℕ ()
+
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
 ℕ≢ne () PE.refl
+
+Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
+Empty≢ne () PE.refl
+
+Empty≢Π : ∀ {F G} → Empty PE.≢ Π F ▹ G
+Empty≢Π ()
 
 Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
 Π≢ne () PE.refl
@@ -164,6 +200,7 @@ data Natural : Term → Set where
 data Type : Term → Set where
   Πₙ : ∀ {A B} → Type (Π A ▹ B)
   ℕₙ : Type ℕ
+  Emptyₙ : Type Empty
   ne : ∀{n} → Neutral n → Type n
 
 -- A whnf of type Π A B is either lam t or neutral.
@@ -183,6 +220,7 @@ naturalWhnf (ne x) = ne x
 typeWhnf : ∀ {A} → Type A → Whnf A
 typeWhnf Πₙ = Πₙ
 typeWhnf ℕₙ = ℕₙ
+typeWhnf Emptyₙ = Emptyₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
@@ -257,6 +295,7 @@ wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
 wkNeutral ρ (var n)    = var (wkVar ρ n)
 wkNeutral ρ (∘ₙ n)    = ∘ₙ (wkNeutral ρ n)
 wkNeutral ρ (natrecₙ n) = natrecₙ (wkNeutral ρ n)
+wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
@@ -268,6 +307,7 @@ wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ      = Πₙ
 wkType ρ ℕₙ      = ℕₙ
+wkType ρ Emptyₙ  = Emptyₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
@@ -278,6 +318,7 @@ wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ ℕₙ      = ℕₙ
+wkWhnf ρ Emptyₙ  = Emptyₙ
 wkWhnf ρ lamₙ    = lamₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ

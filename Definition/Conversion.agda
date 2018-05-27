@@ -35,6 +35,10 @@ mutual
                 → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
                 → Γ ⊢ k ~ l ↓ ℕ
                 → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
+    Emptyrec-cong : ∀ {k l F G}
+                  → Γ ⊢ F [conv↑] G
+                  → Γ ⊢ k ~ l ↓ Empty
+                  → Γ ⊢ Emptyrec F k ~ Emptyrec G l ↑ F
 
   -- Neutral equality with types in WHNF.
   record _⊢_~_↓_ (Γ : Con Term) (k l B : Term) : Set where
@@ -62,6 +66,7 @@ mutual
   data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
+    Empty-refl : ⊢ Γ → Γ ⊢ Empty [conv↓] Empty
     ne        : ∀ {K L}
               → Γ ⊢ K ~ L ↓ U
               → Γ ⊢ K [conv↓] L
@@ -90,6 +95,9 @@ mutual
     ℕ-ins     : ∀ {k l}
               → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ k [conv↓] l ∷ ℕ
+    Empty-ins : ∀ {k l}
+              → Γ ⊢ k ~ l ↓ Empty
+              → Γ ⊢ k [conv↓] l ∷ Empty
     ne-ins    : ∀ {k l M N}
               → Γ ⊢ k ∷ N
               → Γ ⊢ l ∷ N

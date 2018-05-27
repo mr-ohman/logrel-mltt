@@ -49,6 +49,14 @@ mutual
                     (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
                     (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
                     (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
+  sym~↑ Γ≡Δ (Emptyrec-cong x t~u) =
+    let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        B≡Empty = Empty≡A A≡B whnfB
+        F≡G = stabilityEq Γ≡Δ (soundnessConv↑ x)
+    in  _ , soundnessConv↑ x
+    , Emptyrec-cong (symConv↑ Γ≡Δ x)
+                    (PE.subst (λ x₁ → _ ⊢ _ ~ _ ↓ x₁) B≡Empty u~t)
 
   -- Symmetry of algorithmic equality of neutrals of types in WHNF.
   sym~↓ : ∀ {t u A Γ Δ} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A
@@ -74,6 +82,9 @@ mutual
   symConv↓ Γ≡Δ (ℕ-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  ℕ-refl ⊢Δ
+  symConv↓ Γ≡Δ (Empty-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Empty-refl ⊢Δ
   symConv↓ Γ≡Δ (ne A~B) =
     let B , whnfB , U≡B , B~A = sym~↓ Γ≡Δ A~B
         B≡U = U≡A U≡B
@@ -96,6 +107,10 @@ mutual
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         B≡ℕ = ℕ≡A A≡B whnfB
     in  ℕ-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
+  symConv↓Term Γ≡Δ (Empty-ins t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        B≡Empty = Empty≡A A≡B whnfB
+    in  Empty-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Empty u~t)
   symConv↓Term Γ≡Δ (ne-ins t u x t~u) =
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
     in  ne-ins (stabilityTerm Γ≡Δ u) (stabilityTerm Γ≡Δ t) x u~t

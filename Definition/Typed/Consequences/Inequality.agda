@@ -48,6 +48,45 @@ U≢ℕ U≡ℕ =
   let _ , ⊢ℕ = syntacticEq U≡ℕ
   in  U≢ℕ-red (id ⊢ℕ) U≡ℕ
 
+-- U and Empty
+U≢Empty′ : ∀ {Γ B l l′}
+       ([U] : Γ ⊩′⟨ l ⟩U)
+       ([Empty] : Γ ⊩Empty B)
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (Emptyᵣ [Empty]) → ⊥
+U≢Empty′ a b ()
+
+U≢Empty-red : ∀ {B Γ} → Γ ⊢ B ⇒* Empty → Γ ⊢ U ≡ B → ⊥
+U≢Empty-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩Empty B) Uᵣ Emptyᵣ
+                (λ x → extractMaybeEmb (U-elim x))
+                (λ x → extractMaybeEmb (Empty-elim′ D x))
+                U≢Empty′
+
+U≢Emptyⱼ : ∀ {Γ} → Γ ⊢ U ≡ Empty → ⊥
+U≢Emptyⱼ U≡Empty =
+  let _ , ⊢Empty = syntacticEq U≡Empty
+  in  U≢Empty-red (id ⊢Empty) U≡Empty
+
+-- ℕ and Empty
+
+ℕ≢Empty′ : ∀ {Γ B l l'}
+           ([ℕ] : Γ ⊩ℕ ℕ)
+           ([Empty] : Γ ⊩Empty B)
+           → ShapeView Γ l l' _ _ (ℕᵣ [ℕ]) (Emptyᵣ [Empty]) → ⊥
+ℕ≢Empty′ a b ()
+
+ℕ≢Empty-red : ∀ {B Γ} → Γ ⊢ B ⇒* Empty → Γ ⊢ ℕ ≡ B → ⊥
+ℕ≢Empty-red D = A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩Empty B) ℕᵣ Emptyᵣ
+                (λ x → extractMaybeEmb (ℕ-elim x))
+                (λ x → extractMaybeEmb (Empty-elim′ D x))
+                ℕ≢Empty′
+
+ℕ≢Emptyⱼ : ∀ {Γ} → Γ ⊢ ℕ ≡ Empty → ⊥
+ℕ≢Emptyⱼ ℕ≡Empty =
+  let _ , ⊢Empty = syntacticEq ℕ≡Empty
+  in  ℕ≢Empty-red (id ⊢Empty) ℕ≡Empty
+
+
+
 U≢Π′ : ∀ {B Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
@@ -104,6 +143,26 @@ U≢ne neK U≡K =
   let ⊢ℕ , ⊢Π = syntacticEq ℕ≡Π
   in  ℕ≢Π-red (id ⊢ℕ) (id ⊢Π) ℕ≡Π
 
+-- Empty and Π
+Empty≢Π′ : ∀ {A B Γ l l′}
+       ([Empty] : Γ ⊩Empty A)
+       ([Π] : Γ ⊩′⟨ l′ ⟩Π B)
+     → ShapeView Γ l l′ _ _ (Emptyᵣ [Empty]) (Πᵣ [Π]) → ⊥
+Empty≢Π′ a b ()
+
+Empty≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* Empty → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
+Empty≢Π-red D D′ = A≢B (λ Γ l A → Γ ⊩Empty A)
+                   (λ Γ l A → Γ ⊩′⟨ l ⟩Π A) Emptyᵣ Πᵣ
+                   (λ x → extractMaybeEmb (Empty-elim′ D x))
+                   (λ x → extractMaybeEmb (Π-elim′ D′ x))
+                   Empty≢Π′
+
+Empty≢Πⱼ : ∀ {F G Γ} → Γ ⊢ Empty ≡ Π F ▹ G → ⊥
+Empty≢Πⱼ Empty≡Π =
+  let ⊢Empty , ⊢Π = syntacticEq Empty≡Π
+  in  Empty≢Π-red (id ⊢Empty) (id ⊢Π) Empty≡Π
+
+
 ℕ≢ne′ : ∀ {A K Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([K] : Γ ⊩ne K)
@@ -121,6 +180,25 @@ U≢ne neK U≡K =
 ℕ≢ne neK ℕ≡K =
   let ⊢ℕ , ⊢K = syntacticEq ℕ≡K
   in  ℕ≢ne-red (id ⊢ℕ) (id ⊢K) neK ℕ≡K
+
+-- Empty and neutral
+Empty≢ne′ : ∀ {A K Γ l l′}
+       ([Empty] : Γ ⊩Empty A)
+       ([K] : Γ ⊩ne K)
+     → ShapeView Γ l l′ _ _ (Emptyᵣ [Empty]) (ne [K]) → ⊥
+Empty≢ne′ a b ()
+
+Empty≢ne-red : ∀ {A B K Γ} → Γ ⊢ A ⇒* Empty → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ A ≡ B → ⊥
+Empty≢ne-red D D′ neK = A≢B (λ Γ l A → Γ ⊩Empty A) (λ Γ l B → Γ ⊩ne B) Emptyᵣ ne
+                        (λ x → extractMaybeEmb (Empty-elim′ D x))
+                        (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
+                        Empty≢ne′
+
+Empty≢neⱼ : ∀ {K Γ} → Neutral K → Γ ⊢ Empty ≡ K → ⊥
+Empty≢neⱼ neK Empty≡K =
+  let ⊢Empty , ⊢K = syntacticEq Empty≡K
+  in  Empty≢ne-red (id ⊢Empty) (id ⊢K) neK Empty≡K
+
 
 Π≢ne′ : ∀ {A K Γ l l′}
        ([Π] : Γ ⊩′⟨ l ⟩Π A)

@@ -23,12 +23,15 @@ mutual
     ∘ₙ      : ∀ {k u}     → NfNeutral k → Nf u → NfNeutral (k ∘ u)
     natrecₙ : ∀ {C c g k} → Nf C → Nf c → Nf g → NfNeutral k
                                                → NfNeutral (natrec C c g k)
+    Emptyrecₙ : ∀ {C k} → Nf C → NfNeutral k
+                               → NfNeutral (Emptyrec C k)
 
   data Nf : Term → Set where
 
     Uₙ    : Nf U
     Πₙ    : ∀ {A B} → Nf A → Nf B → Nf (Π A ▹ B)
     ℕₙ    : Nf ℕ
+    Emptyₙ    : Nf Empty
 
     lamₙ  : ∀ {t} → Nf t → Nf (lam t)
     zeroₙ : Nf zero
@@ -51,6 +54,11 @@ mutual
         n′ , nfN′ , n≡n′ = fullRedNe′ n
     in  natrec C′ z′ s′ n′ , natrecₙ nfC′ nfZ′ nfS′ nfN′
      ,  natrec-cong C≡C′ z≡z′ s≡s′ n≡n′
+  fullRedNe (Emptyrec-cong C n) =
+    let C′ , nfC′ , C≡C′ = fullRed C
+        n′ , nfN′ , n≡n′ = fullRedNe′ n
+    in  Emptyrec C′ n′ , Emptyrecₙ nfC′ nfN′
+     ,  Emptyrec-cong C≡C′ n≡n′
 
   fullRedNe′ : ∀ {t A Γ} → Γ ⊢ t ~ t ↓ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
   fullRedNe′ ([~] A D whnfB k~l) =
@@ -66,6 +74,7 @@ mutual
   fullRed′ : ∀ {A Γ} → Γ ⊢ A [conv↓] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
   fullRed′ (U-refl ⊢Γ) = U , Uₙ , refl (Uⱼ ⊢Γ)
   fullRed′ (ℕ-refl ⊢Γ) = ℕ , ℕₙ , refl (ℕⱼ ⊢Γ)
+  fullRed′ (Empty-refl ⊢Γ) = Empty , Emptyₙ , refl (Emptyⱼ ⊢Γ)
   fullRed′ (ne A) =
     let B , nf , A≡B = fullRedNe′ A
     in  B , ne nf , univ A≡B
@@ -82,6 +91,9 @@ mutual
 
   fullRedTerm′ : ∀ {t A Γ} → Γ ⊢ t [conv↓] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
   fullRedTerm′ (ℕ-ins t) =
+    let u , nf , t≡u = fullRedNe′ t
+    in  u , ne nf , t≡u
+  fullRedTerm′ (Empty-ins t) =
     let u , nf , t≡u = fullRedNe′ t
     in  u , ne nf , t≡u
   fullRedTerm′ (ne-ins ⊢t _ _ t) =
