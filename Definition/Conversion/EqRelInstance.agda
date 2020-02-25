@@ -22,6 +22,7 @@ open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
+open import Definition.Typed.Consequences.Inversion
 
 open import Tools.Nat
 open import Tools.Product
@@ -30,8 +31,13 @@ open import Tools.Function
 
 
 -- Algorithmic equality of neutrals with injected conversion.
-data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
-  ↑ : ∀ {B} → Γ ⊢ A ≡ B → Γ ⊢ k ~ l ↑ B → Γ ⊢ k ~ l ∷ A
+record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
+  inductive
+  constructor ↑
+  field
+    {B} : Term
+    A≡B : Γ ⊢ A ≡ B
+    k~↑l : Γ ⊢ k ~ l ↑ B
 
 -- Properties of algorithmic equality of neutrals with injected conversion.
 
@@ -133,6 +139,22 @@ eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
                       (λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x)))
                       (liftConv ∘ᶠ Empty-refl)
                       (λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x)))
+                      (liftConv ∘ᶠ Unit-refl)
+                      (λ ⊢Γ → liftConvTerm (univ (Unitⱼ ⊢Γ) (Unitⱼ ⊢Γ) (Unit-refl ⊢Γ)))
+                      (liftConvTerm ∘ᶠ star-refl)
+                      (λ [e] [e'] →
+                        let u , uWhnf , uRed = whNormTerm [e]
+                            u' , u'Whnf , u'Red = whNormTerm [e']
+                            [u] = ⊢u-redₜ uRed
+                            [u'] = ⊢u-redₜ u'Red
+                            uUnit = whnfUnitary [u] uWhnf
+                            u'Unit = whnfUnitary [u'] u'Whnf
+                        in [↑]ₜ Unit u u'
+                          (red (idRed:*: (syntacticTerm [e])))
+                          (redₜ uRed)
+                          (redₜ u'Red)
+                          Unitₙ uWhnf u'Whnf
+                          (η-unit [u] [u'] uUnit u'Unit))
                       (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
                       (λ x x₁ x₂ →
                          let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)

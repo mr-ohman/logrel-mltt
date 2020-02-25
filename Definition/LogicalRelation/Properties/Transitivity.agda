@@ -27,8 +27,9 @@ mutual
            → Γ ⊩⟨ l ⟩  A ≡ C / [A]
   transEqT (ℕᵥ D D′ D″) A≡B B≡C = B≡C
   transEqT (Emptyᵥ D D′ D″) A≡B B≡C = B≡C
-  transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)
-               (ne K₂ D₂ neK₂ K≡K₂))
+  transEqT (Unitᵥ D D′ D″) A≡B B≡C = B≡C
+  transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ _)
+               (ne K₂ D₂ neK₂ _))
            (ne₌ M D′ neM K≡M) (ne₌ M₁ D″ neM₁ K≡M₁)
            rewrite whrDet* (red D₁ , ne neK₁) (red D′ , ne neM)
                  | whrDet* (red D₂ , ne neK₂) (red D″ , ne neM₁) =
@@ -148,7 +149,7 @@ transEmpty-prop (ne [k≡k′]) (ne [k′≡k″]) =
   ne (transEqTermNe [k≡k′] [k′≡k″])
 
 transEqTermEmpty : ∀ {Γ n n′ n″}
-  → Γ ⊩Empty n  ≡ n′  ∷Empty
+  → Γ ⊩Empty n  ≡ n′ ∷Empty
   → Γ ⊩Empty n′ ≡ n″ ∷Empty
   → Γ ⊩Empty n  ≡ n″ ∷Empty
 transEqTermEmpty (Emptyₜ₌ k k′ d d′ t≡u prop)
@@ -157,9 +158,19 @@ transEqTermEmpty (Emptyₜ₌ k k′ d d′ t≡u prop)
       k′Whnf = ne (proj₂ (esplit prop))
       k₁≡k′ = whrDet*Term (redₜ d₁ , k₁Whnf) (redₜ d′ , k′Whnf)
       prop′ = PE.subst (λ x → [Empty]-prop _ x _) k₁≡k′ prop₁
-    in  Emptyₜ₌ k k″ d d″ (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ t≡u₁))
-      (transEmpty-prop prop prop′)
+  in Emptyₜ₌ k k″ d d″ (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ t≡u₁))
+     (transEmpty-prop prop prop′)
 
+transEqTermUnit : ∀ {Γ n n′ n″}
+  → Γ ⊩Unit n  ≡ n′ ∷Unit
+  → Γ ⊩Unit n′ ≡ n″ ∷Unit
+  → Γ ⊩Unit n  ≡ n″ ∷Unit
+transEqTermUnit (Unitₜ₌ k k′ d d′ t≡u)
+                (Unitₜ₌ k₁ k″ d₁ d″ t≡u₁) =
+  let [n] = ⊢t-redₜ d
+      [n″] = ⊢t-redₜ d″
+      n≡n″ = ≅ₜ-η-unit [n] [n″]
+  in  Unitₜ₌ _ _ [ [n] , [n] , id [n] ] [ [n″] , [n″] , id [n″] ] n≡n″
 
 -- Transitivty of term equality.
 transEqTerm : ∀ {l Γ A t u v}
@@ -175,6 +186,7 @@ transEqTerm (Uᵣ′ .⁰ 0<1 ⊢Γ)
       (transEq [t] [u] [u]₁ [t≡u] (irrelevanceEq [t]₁ [u] [t≡u]₁))
 transEqTerm (ℕᵣ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
 transEqTerm (Emptyᵣ D) [t≡u] [u≡v] = transEqTermEmpty [t≡u] [u≡v]
+transEqTerm (Unitᵣ D) [t≡u] [u≡v] = transEqTermUnit [t≡u] [u≡v]
 transEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m))
                               (neₜ₌ k₁ m₁ d₁ d″ (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
   let k₁≡m = whrDet*Term (redₜ d₁ , ne neK₂) (redₜ d′ , ne neM)

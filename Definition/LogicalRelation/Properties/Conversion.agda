@@ -30,6 +30,7 @@ mutual
              → Γ ⊩⟨ l′ ⟩ t ∷ B / [B]
   convTermT₁ (ℕᵥ D D′) A≡B t = t
   convTermT₁ (Emptyᵥ D D′) A≡B t = t
+  convTermT₁ (Unitᵥ D D′) A≡B t = t
   convTermT₁ (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
              (neₜ k d (neNfₜ neK₂ ⊢k k≡k)) =
     let K≡K₁ = PE.subst (λ x → _ ⊢ _ ≡ x)
@@ -79,6 +80,7 @@ mutual
            → Γ ⊩⟨ l ⟩  t ∷ A / [A]
   convTermT₂ (ℕᵥ D D′) A≡B t = t
   convTermT₂ (Emptyᵥ D D′) A≡B t = t
+  convTermT₂ (Unitᵥ D D′) A≡B t = t
   convTermT₂ (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
              (neₜ k d (neNfₜ neK₂ ⊢k k≡k)) =
     let K₁≡K = PE.subst (λ x → _ ⊢ x ≡ _)
@@ -136,7 +138,7 @@ mutual
   convTerm₂ [A] [B] A≡B t = convTermT₂ (goodCases [A] [B] A≡B) A≡B t
 
   -- Conversion of terms converting from right to left
-  -- with some propsitionally equal types.
+  -- with some propositionally equal types.
   convTerm₂′ : ∀ {Γ A B B′ t l l′} → B PE.≡ B′
           → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B)
           → Γ ⊩⟨ l ⟩  A ≡ B′ / [A]
@@ -153,6 +155,7 @@ mutual
                → Γ ⊩⟨ l′ ⟩ t ≡ u ∷ B / [B]
   convEqTermT₁ (ℕᵥ D D′) A≡B t≡u = t≡u
   convEqTermT₁ (Emptyᵥ D D′) A≡B t≡u = t≡u
+  convEqTermT₁ (Unitᵥ D D′) A≡B t≡u = t≡u
   convEqTermT₁ (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
                (neₜ₌ k m d d′ (neNfₜ₌ neK₂ neM₁ k≡m)) =
     let K≡K₁ = PE.subst (λ x → _ ⊢ _ ≡ x)
@@ -197,6 +200,7 @@ mutual
              → Γ ⊩⟨ l ⟩  t ≡ u ∷ A / [A]
   convEqTermT₂ (ℕᵥ D D′) A≡B t≡u = t≡u
   convEqTermT₂ (Emptyᵥ D D′) A≡B t≡u = t≡u
+  convEqTermT₂ (Unitᵥ D D′) A≡B t≡u = t≡u
   convEqTermT₂ (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
                (neₜ₌ k m d d′ (neNfₜ₌ neK₂ neM₁ k≡m)) =
     let K₁≡K = PE.subst (λ x → _ ⊢ x ≡ _)

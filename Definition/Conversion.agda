@@ -67,6 +67,7 @@ mutual
     U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     Empty-refl : ⊢ Γ → Γ ⊢ Empty [conv↓] Empty
+    Unit-refl : ⊢ Γ → Γ ⊢ Unit [conv↓] Unit
     ne        : ∀ {K L}
               → Γ ⊢ K ~ L ↓ U
               → Γ ⊢ K [conv↓] L
@@ -98,6 +99,16 @@ mutual
     Empty-ins : ∀ {k l}
               → Γ ⊢ k ~ l ↓ Empty
               → Γ ⊢ k [conv↓] l ∷ Empty
+    Unit-ins  : ∀ {k l}
+              → Γ ⊢ k ~ l ↓ Unit
+              → Γ ⊢ k [conv↓] l ∷ Unit
+    star-refl : ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
+    η-unit    : ∀ {k l}
+              → Γ ⊢ k ∷ Unit
+              → Γ ⊢ l ∷ Unit
+              → Unitary k
+              → Unitary l
+              → Γ ⊢ k [conv↓] l ∷ Unit
     ne-ins    : ∀ {k l M N}
               → Γ ⊢ k ∷ N
               → Γ ⊢ l ∷ N

@@ -31,6 +31,9 @@ redSubst* D (ℕᵣ [ ⊢B , ⊢ℕ , D′ ]) =
 redSubst* D (Emptyᵣ [ ⊢B , ⊢Empty , D′ ]) =
   let ⊢A = redFirst* D
   in  Emptyᵣ ([ ⊢A , ⊢Empty , D ⇨* D′ ]) , D′
+redSubst* D (Unitᵣ [ ⊢B , ⊢Unit , D′ ]) =
+  let ⊢A = redFirst* D
+  in  Unitᵣ ([ ⊢A , ⊢Unit , D ⇨* D′ ]) , D′
 redSubst* D (ne′ K [ ⊢B , ⊢K , D′ ] neK K≡K) =
   let ⊢A = redFirst* D
   in  (ne′ K [ ⊢A , ⊢K , D ⇨* D′ ] neK K≡K)
@@ -70,6 +73,13 @@ redSubst*Term t⇒u (Emptyᵣ D) (Emptyₜ n [ ⊢u , ⊢n , d ] n≡n prop) =
   in  Emptyₜ n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] n≡n prop
   ,   Emptyₜ₌ n n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] [ ⊢u , ⊢n , d ]
           n≡n (reflEmpty-prop prop)
+redSubst*Term t⇒u (Unitᵣ D) (Unitₜ n [ ⊢u , ⊢n , d ] n≡n prop) =
+  let A≡Unit  = subset* (red D)
+      ⊢t   = conv (redFirst*Term t⇒u) A≡Unit
+      t⇒u′ = conv* t⇒u A≡Unit
+  in  Unitₜ n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] n≡n prop
+  ,   Unitₜ₌ n n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] [ ⊢u , ⊢n , d ]
+          n≡n
 redSubst*Term t⇒u (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
   let A≡K  = subset* (red D)
       [d]  = [ ⊢t , ⊢u , d ]

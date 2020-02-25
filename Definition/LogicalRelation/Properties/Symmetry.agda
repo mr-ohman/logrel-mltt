@@ -25,6 +25,7 @@ mutual
          → Γ ⊩⟨ l′ ⟩ B ≡ A / [B]
   symEqT (ℕᵥ D D′) A≡B = red D
   symEqT (Emptyᵥ D D′) A≡B = red D
+  symEqT (Unitᵥ D D′) A≡B = red D
   symEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
          rewrite whrDet* (red D′ , ne neM) (red D₁ , ne neK₁) =
     ne₌ _ D neK
@@ -78,8 +79,8 @@ symNatural-prop zeroᵣ = zeroᵣ
 symNatural-prop (ne prop) = ne (symNeutralTerm prop)
 
 symEmpty-prop : ∀ {Γ k k′}
-                → [Empty]-prop Γ k k′
-                → [Empty]-prop Γ k′ k
+              → [Empty]-prop Γ k k′
+              → [Empty]-prop Γ k′ k
 symEmpty-prop (ne prop) = ne (symNeutralTerm prop)
 
 -- Symmetry of term equality.
@@ -92,6 +93,8 @@ symEqTerm (ℕᵣ D) (ℕₜ₌ k k′ d d′ t≡u prop) =
   ℕₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symNatural-prop prop)
 symEqTerm (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ t≡u prop) =
   Emptyₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symEmpty-prop prop)
+symEqTerm (Unitᵣ D) (Unitₜ₌ k k′ d d′ t≡u) =
+  Unitₜ₌ k′ k d′ d (≅ₜ-sym t≡u)
 symEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ nf) =
   neₜ₌ m k d′ d (symNeutralTerm nf)
 symEqTerm (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)

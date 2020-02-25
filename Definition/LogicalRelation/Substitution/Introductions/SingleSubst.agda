@@ -191,7 +191,7 @@ substSΠ₁ : ∀ {F G t Γ l l′}
          → Γ ⊩⟨ l ⟩ G [ t ]
 substSΠ₁ [ΠFG] [F] [t] = substSΠ₁′ (Π-elim [ΠFG]) [F] [t]
 
--- Helper function for reducible substitution of Π-congurence with specific typing derivations.
+-- Helper function for reducible substitution of Π-congruence with specific typing derivations.
 substSΠ₂′ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / Π-intr [ΠFG])
@@ -223,7 +223,7 @@ substSΠ₂′ (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                   [G′[t′]] [Gt≡Gt′] [Gt′≡G′t′])
 substSΠ₂′ (emb 0<1 x) = substSΠ₂′ x
 
--- Reducible substitution of Π-congurence.
+-- Reducible substitution of Π-congruence.
 substSΠ₂ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴}
            ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π F′ ▹ G′ / [ΠFG])
@@ -265,7 +265,7 @@ substSΠ {F} {G} {t} [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                              (proj₁ ([F] ⊢Δ [σ′]))
                                              (proj₁ ([t] ⊢Δ [σ′])))))
 
--- Valid substitution of Π-congurence.
+-- Valid substitution of Π-congruence.
 substSΠEq : ∀ {F G F′ G′ t u Γ l}
             ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])

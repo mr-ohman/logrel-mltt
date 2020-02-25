@@ -58,6 +58,9 @@ mutual
   lift~toConv↓′ (Emptyᵣ D) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , Emptyₙ) (D₁ , whnfB)) =
     Empty-ins ([~] A D₂ Emptyₙ k~l)
+  lift~toConv↓′ (Unitᵣ D) D₁ ([~] A D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , Unitₙ) (D₁ , whnfB)) =
+    Unit-ins ([~] A D₂ Unitₙ k~l)
   lift~toConv↓′ (ne′ K D neK K≡K) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , ne neK) (D₁ , whnfB)) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↑ k~l)

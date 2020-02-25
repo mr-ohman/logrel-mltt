@@ -29,7 +29,8 @@ mutual
   -- Well-formed type
   data _⊢_ (Γ : Con Term) : Term → Set where
     ℕⱼ    : ⊢ Γ → Γ ⊢ ℕ
-    Emptyⱼ : ⊢ Γ -> Γ ⊢ Empty
+    Emptyⱼ : ⊢ Γ → Γ ⊢ Empty
+    Unitⱼ : ⊢ Γ → Γ ⊢ Unit
     Uⱼ    : ⊢ Γ → Γ ⊢ U
     Πⱼ_▹_ : ∀ {F G}
          → Γ     ⊢ F
@@ -42,7 +43,8 @@ mutual
   -- Well-formed term of a type
   data _⊢_∷_ (Γ : Con Term) : Term → Term → Set where
     ℕⱼ      : ⊢ Γ → Γ ⊢ ℕ ∷ U
-    Emptyⱼ :  ⊢ Γ → Γ ⊢ Empty ∷ U
+    Emptyⱼ  : ⊢ Γ → Γ ⊢ Empty ∷ U
+    Unitⱼ   : ⊢ Γ → Γ ⊢ Unit ∷ U
     Πⱼ_▹_   : ∀ {F G}
            → Γ     ⊢ F ∷ U
            → Γ ∙ F ⊢ G ∷ U
@@ -71,7 +73,8 @@ mutual
            → Γ       ⊢ n ∷ ℕ
            → Γ       ⊢ natrec G z s n ∷ G [ n ]
     Emptyrecⱼ : ∀ {A e}
-           -> Γ ⊢ A -> Γ ⊢ e ∷ Empty -> Γ ⊢ Emptyrec A e ∷ A
+           → Γ ⊢ A → Γ ⊢ e ∷ Empty → Γ ⊢ Emptyrec A e ∷ A
+    starⱼ  : ⊢ Γ → Γ ⊢ star ∷ Unit
     conv   : ∀ {t A B}
            → Γ ⊢ t ∷ A
            → Γ ⊢ A ≡ B
@@ -156,9 +159,13 @@ mutual
                 → Γ     ⊢ natrec F z s (suc n) ≡ (s ∘ n) ∘ (natrec F z s n)
                         ∷ F [ suc n ]
     Emptyrec-cong : ∀ {A A' e e'}
-                → Γ ⊢ A ≡ A'
-                → Γ ⊢ e ≡ e' ∷ Empty
-                → Γ ⊢ Emptyrec A e ≡ Emptyrec A' e' ∷ A
+                  → Γ ⊢ A ≡ A'
+                  → Γ ⊢ e ≡ e' ∷ Empty
+                  → Γ ⊢ Emptyrec A e ≡ Emptyrec A' e' ∷ A
+    η-unit        : ∀ {e e'}
+                  → Γ ⊢ e ∷ Unit
+                  → Γ ⊢ e' ∷ Unit
+                  → Γ ⊢ e ≡ e' ∷ Unit
 
 -- Term reduction
 data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
@@ -248,7 +255,7 @@ record _⊢_:⇒*:_ (Γ : Con Term) (A B : Term) : Set where
     ⊢B : Γ ⊢ B
     D  : Γ ⊢ A ⇒* B
 
-open _⊢_:⇒*:_ using () renaming (D to red) public
+open _⊢_:⇒*:_ using () renaming (D to red; ⊢A to ⊢A-red; ⊢B to ⊢B-red) public
 
 -- Term reduction closure with well-formed terms
 record _⊢_:⇒*:_∷_ (Γ : Con Term) (t u A : Term) : Set where
@@ -258,7 +265,7 @@ record _⊢_:⇒*:_∷_ (Γ : Con Term) (t u A : Term) : Set where
     ⊢u : Γ ⊢ u ∷ A
     d  : Γ ⊢ t ⇒* u ∷ A
 
-open _⊢_:⇒*:_∷_ using () renaming (d to redₜ) public
+open _⊢_:⇒*:_∷_ using () renaming (d to redₜ; ⊢t to ⊢t-redₜ; ⊢u to ⊢u-redₜ) public
 
 -- Well-formed substitutions.
 data _⊢ˢ_∷_ (Δ : Con Term) (σ : Subst) : (Γ : Con Term) → Set where

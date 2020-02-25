@@ -8,14 +8,30 @@ open import Definition.Typed.Properties
 
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
+open import Definition.Typed.Consequences.Inequality
 
 open import Tools.Product
+open import Tools.Empty using (⊥; ⊥-elim)
 
+
+-- Inversion of U (it has no type).
+inversion-U : ∀ {Γ C} → Γ ⊢ U ∷ C → ⊥
+inversion-U (conv x x₁) = inversion-U x
 
 -- Inversion of natural number type.
 inversion-ℕ : ∀ {Γ C} → Γ ⊢ ℕ ∷ C → Γ ⊢ C ≡ U
 inversion-ℕ (ℕⱼ x) = refl (Uⱼ x)
 inversion-ℕ (conv x x₁) = trans (sym x₁) (inversion-ℕ x)
+
+-- Inversion of Empty.
+inversion-Empty : ∀ {Γ C} → Γ ⊢ Empty ∷ C → Γ ⊢ C ≡ U
+inversion-Empty (Emptyⱼ x) = refl (Uⱼ x)
+inversion-Empty (conv x x₁) = trans (sym x₁) (inversion-Empty x)
+
+-- Inversion of Unit.
+inversion-Unit : ∀ {Γ C} → Γ ⊢ Unit ∷ C → Γ ⊢ C ≡ U
+inversion-Unit (Unitⱼ x) = refl (Uⱼ x)
+inversion-Unit (conv x x₁) = trans (sym x₁) (inversion-Unit x)
 
 -- Inversion of Π-types.
 inversion-Π : ∀ {F G Γ C}
@@ -60,3 +76,34 @@ inversion-lam : ∀ {t A Γ} → Γ ⊢ lam t ∷ A →
 inversion-lam (lamⱼ x x₁) = _ , _ , x , x₁ , refl (Πⱼ x ▹ (syntacticTerm x₁))
 inversion-lam (conv x x₁) = let a , b , c , d , e = inversion-lam x
                             in  a , b , c , d , trans (sym x₁) e
+
+-- Inversion of star.
+inversion-star : ∀ {Γ C} → Γ ⊢ star ∷ C → Γ ⊢ C ≡ Unit
+inversion-star (starⱼ x) = refl (Unitⱼ x)
+inversion-star (conv x x₁) = trans (sym x₁) (inversion-star x)
+
+-- Inversion of WHNF elements of Unit.
+whnfUnitary : ∀ {Γ e} → Γ ⊢ e ∷ Unit → Whnf e → Unitary e
+whnfUnitary (conv [e] x) starₙ = starₙ
+whnfUnitary (starⱼ x) starₙ = starₙ
+whnfUnitary [e] (ne eNe) = ne eNe
+
+-- Refutable cases
+whnfUnitary (conv [e] A≡Unit) Uₙ = ⊥-elim (inversion-U [e])
+whnfUnitary {Γ} (conv [e] A≡Unit) Πₙ =
+  let _ , _ , A≡U = inversion-Π [e]
+  in  ⊥-elim (U≢Unitⱼ (trans (sym A≡U) A≡Unit))
+whnfUnitary (conv [e] A≡Unit) ℕₙ =
+  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-ℕ [e])) A≡Unit))
+whnfUnitary (conv [e] A≡Unit) Emptyₙ =
+  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-Empty [e])) A≡Unit))
+whnfUnitary (conv [e] A≡Unit) Unitₙ =
+  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-Unit [e])) A≡Unit))
+whnfUnitary (conv [e] A≡Unit) lamₙ =
+  let _ , _ , _ , _ , A≡Π = inversion-lam [e]
+  in  ⊥-elim (Unit≢Πⱼ (trans (sym A≡Unit) A≡Π))
+whnfUnitary (conv [e] A≡Unit) zeroₙ =
+  ⊥-elim (ℕ≢Unitⱼ (trans (sym (inversion-zero [e])) A≡Unit))
+whnfUnitary (conv [e] A≡Unit) sucₙ =
+  let _ , A≡ℕ = inversion-suc [e]
+  in  ⊥-elim (ℕ≢Unitⱼ (trans (sym A≡ℕ) A≡Unit))

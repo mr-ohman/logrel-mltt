@@ -15,6 +15,7 @@ import Tools.PropositionalEquality as PE
 wfTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A → ⊢ Γ
 wfTerm (ℕⱼ ⊢Γ) = ⊢Γ
 wfTerm (Emptyⱼ ⊢Γ) = ⊢Γ
+wfTerm (Unitⱼ ⊢Γ) = ⊢Γ
 wfTerm (Πⱼ F ▹ G) = wfTerm F
 wfTerm (var ⊢Γ x₁) = ⊢Γ
 wfTerm (lamⱼ F t) with wfTerm t
@@ -24,11 +25,13 @@ wfTerm (zeroⱼ ⊢Γ) = ⊢Γ
 wfTerm (sucⱼ n) = wfTerm n
 wfTerm (natrecⱼ F z s n) = wfTerm z
 wfTerm (Emptyrecⱼ A e) = wfTerm e
+wfTerm (starⱼ ⊢Γ) = ⊢Γ
 wfTerm (conv t A≡B) = wfTerm t
 
 wf : ∀ {Γ A} → Γ ⊢ A → ⊢ Γ
 wf (ℕⱼ ⊢Γ) = ⊢Γ
 wf (Emptyⱼ ⊢Γ) = ⊢Γ
+wf (Unitⱼ ⊢Γ) = ⊢Γ
 wf (Uⱼ ⊢Γ) = ⊢Γ
 wf (Πⱼ F ▹ G) = wf F
 wf (univ A) = wfTerm A
@@ -47,6 +50,7 @@ wfEqTerm (natrec-cong F≡F′ z≡z′ s≡s′ n≡n′) = wfEqTerm z≡z′
 wfEqTerm (natrec-zero F z s) = wfTerm z
 wfEqTerm (natrec-suc n F z s) = wfTerm n
 wfEqTerm (Emptyrec-cong A≡A' e≡e') = wfEqTerm e≡e'
+wfEqTerm (η-unit e e') = wfTerm e
 
 wfEq : ∀ {Γ A B} → Γ ⊢ A ≡ B → ⊢ Γ
 wfEq (univ A≡B) = wfEqTerm A≡B
@@ -149,9 +153,11 @@ whnfRed*Term (id x) Uₙ = PE.refl
 whnfRed*Term (id x) Πₙ = PE.refl
 whnfRed*Term (id x) ℕₙ = PE.refl
 whnfRed*Term (id x) Emptyₙ = PE.refl
+whnfRed*Term (id x) Unitₙ = PE.refl
 whnfRed*Term (id x) lamₙ = PE.refl
 whnfRed*Term (id x) zeroₙ = PE.refl
 whnfRed*Term (id x) sucₙ = PE.refl
+whnfRed*Term (id x) starₙ = PE.refl
 whnfRed*Term (id x) (ne x₁) = PE.refl
 whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)
 whnfRed*Term (x ⇨ d) (ne x₁) = ⊥-elim (neRedTerm x x₁)

@@ -85,6 +85,9 @@ mutual
   symConv↓ Γ≡Δ (Empty-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  Empty-refl ⊢Δ
+  symConv↓ Γ≡Δ (Unit-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Unit-refl ⊢Δ
   symConv↓ Γ≡Δ (ne A~B) =
     let B , whnfB , U≡B , B~A = sym~↓ Γ≡Δ A~B
         B≡U = U≡A U≡B
@@ -111,6 +114,17 @@ mutual
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         B≡Empty = Empty≡A A≡B whnfB
     in  Empty-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Empty u~t)
+  symConv↓Term Γ≡Δ (Unit-ins t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        B≡Unit = Unit≡A A≡B whnfB
+    in  Unit-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Unit u~t)
+  symConv↓Term Γ≡Δ (star-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  star-refl ⊢Δ
+  symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
+    let [t] = stabilityTerm Γ≡Δ [t]
+        [u] = stabilityTerm Γ≡Δ [u]
+    in  (η-unit [u] [t] uUnit tUnit)
   symConv↓Term Γ≡Δ (ne-ins t u x t~u) =
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
     in  ne-ins (stabilityTerm Γ≡Δ u) (stabilityTerm Γ≡Δ t) x u~t

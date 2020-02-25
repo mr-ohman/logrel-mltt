@@ -3,6 +3,7 @@
 module Definition.Conversion.Conversion where
 
 open import Definition.Untyped
+open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
@@ -44,6 +45,15 @@ mutual
     ℕ-ins (stability~↓ Γ≡Δ x)
   convConv↓Term Γ≡Δ A≡B whnfB (Empty-ins x) rewrite Empty≡A A≡B whnfB =
     Empty-ins (stability~↓ Γ≡Δ x)
+  convConv↓Term Γ≡Δ A≡B whnfB (Unit-ins x) rewrite Unit≡A A≡B whnfB =
+    Unit-ins (stability~↓ Γ≡Δ x)
+  convConv↓Term Γ≡Δ A≡B whnfB (star-refl x) rewrite Unit≡A A≡B whnfB =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  star-refl ⊢Δ
+  convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
+    let [t] = stabilityTerm Γ≡Δ [t]
+        [u] = stabilityTerm Γ≡Δ [u]
+    in  η-unit [t] [u] tUnit uUnit
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) with ne≡A x A≡B whnfB
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) | B , neB , PE.refl =
     ne-ins (stabilityTerm Γ≡Δ (conv t A≡B)) (stabilityTerm Γ≡Δ (conv u A≡B))

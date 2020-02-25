@@ -40,6 +40,8 @@ data Kind : Set where
   Zerokind : Kind
   Suckind : Kind
   Natreckind : Kind
+  Unitkind : Kind
+  Starkind : Kind
   Emptykind : Kind
   Emptyreckind : Kind
 
@@ -65,6 +67,12 @@ pattern Univ u = gen (Ukind u) []
 ℕ      : Term                     -- Type of natural numbers.
 ℕ = gen Natkind []
 
+Empty : Term
+Empty = gen Emptykind []
+
+Unit  : Term
+Unit = gen Unitkind []
+
 -- Lambda-calculus.
 -- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
 -- var = var
@@ -85,10 +93,12 @@ suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
 natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
-Empty : Term
-Empty = gen Emptykind []
+-- Unit type
+star : Term
+star = gen Starkind []
 
-Emptyrec : (A e : Term) -> Term
+-- Empty type
+Emptyrec : (A e : Term) → Term
 Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 
 -- Injectivity of term constructors w.r.t. propositional equality.
@@ -110,10 +120,10 @@ suc-PE-injectivity PE.refl = PE.refl
 -- The variable blocks reduction of such terms.
 
 data Neutral : Term → Set where
-  var     : ∀ n                     → Neutral (var n)
-  ∘ₙ      : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
-  natrecₙ : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
-  Emptyrecₙ : ∀ {A e} -> Neutral e -> Neutral (Emptyrec A e)
+  var       : ∀ n                     → Neutral (var n)
+  ∘ₙ        : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
+  natrecₙ   : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
+  Emptyrecₙ : ∀ {A e}     → Neutral e → Neutral (Emptyrec A e)
 
 
 -- Weak head normal forms (whnfs).
@@ -123,18 +133,20 @@ data Neutral : Term → Set where
 data Whnf : Term → Set where
 
   -- Type constructors are whnfs.
-  Uₙ    : Whnf U
-  Πₙ    : ∀ {A B} → Whnf (Π A ▹ B)
-  ℕₙ    : Whnf ℕ
+  Uₙ     : Whnf U
+  Πₙ     : ∀ {A B} → Whnf (Π A ▹ B)
+  ℕₙ     : Whnf ℕ
+  Unitₙ  : Whnf Unit
   Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
   lamₙ  : ∀ {t} → Whnf (lam t)
   zeroₙ : Whnf zero
   sucₙ  : ∀ {t} → Whnf (suc t)
+  starₙ : Whnf star
 
   -- Neutrals are whnfs.
-  ne   : ∀ {n} → Neutral n → Whnf n
+  ne    : ∀ {n} → Neutral n → Whnf n
 
 
 -- Whnf inequalities.
@@ -148,6 +160,9 @@ U≢ℕ ()
 U≢Empty : U PE.≢ Empty
 U≢Empty ()
 
+U≢Unit : U PE.≢ Unit
+U≢Unit ()
+
 U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
 U≢Π ()
 
@@ -160,17 +175,29 @@ U≢ne () PE.refl
 ℕ≢Empty : ℕ PE.≢ Empty
 ℕ≢Empty ()
 
+ℕ≢Unit : ℕ PE.≢ Unit
+ℕ≢Unit ()
+
 Empty≢ℕ : Empty PE.≢ ℕ
 Empty≢ℕ ()
 
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
 ℕ≢ne () PE.refl
 
+Empty≢Unit : Empty PE.≢ Unit
+Empty≢Unit ()
+
 Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
 Empty≢ne () PE.refl
 
+Unit≢ne : ∀ {K} → Neutral K → Unit PE.≢ K
+Unit≢ne () PE.refl
+
 Empty≢Π : ∀ {F G} → Empty PE.≢ Π F ▹ G
 Empty≢Π ()
+
+Unit≢Π : ∀ {F G} → Unit PE.≢ Π F ▹ G
+Unit≢Π ()
 
 Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
 Π≢ne () PE.refl
@@ -184,7 +211,6 @@ zero≢ne () PE.refl
 suc≢ne : ∀ {n k} → Neutral k → suc n PE.≢ k
 suc≢ne () PE.refl
 
-
 -- Several views on whnfs (note: not recursive).
 
 -- A whnf of type ℕ is either zero, suc t, or neutral.
@@ -194,6 +220,12 @@ data Natural : Term → Set where
   sucₙ  : ∀ {t}             → Natural (suc t)
   ne    : ∀ {n} → Neutral n → Natural n
 
+-- A whnf of type Unit is either star or neutral.
+
+data Unitary : Term → Set where
+  starₙ : Unitary star
+  ne    : ∀ {s} → Neutral s → Unitary s
+
 -- A (small) type in whnf is either Π A B, ℕ, or neutral.
 -- Large types could also be U.
 
@@ -201,6 +233,7 @@ data Type : Term → Set where
   Πₙ : ∀ {A B} → Type (Π A ▹ B)
   ℕₙ : Type ℕ
   Emptyₙ : Type Empty
+  Unitₙ : Type Unit
   ne : ∀{n} → Neutral n → Type n
 
 -- A whnf of type Π A B is either lam t or neutral.
@@ -217,10 +250,15 @@ naturalWhnf sucₙ = sucₙ
 naturalWhnf zeroₙ = zeroₙ
 naturalWhnf (ne x) = ne x
 
+unitaryWhnf : ∀ {s} → Unitary s → Whnf s
+unitaryWhnf starₙ = starₙ
+unitaryWhnf (ne x) = ne x
+
 typeWhnf : ∀ {A} → Type A → Whnf A
 typeWhnf Πₙ = Πₙ
 typeWhnf ℕₙ = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
+typeWhnf Unitₙ = Unitₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
@@ -304,10 +342,15 @@ wkNatural ρ sucₙ    = sucₙ
 wkNatural ρ zeroₙ   = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
+wkUnitary : ∀ {t} ρ → Unitary t → Unitary (wk ρ t)
+wkUnitary ρ starₙ    = starₙ
+wkUnitary ρ (ne x) = ne (wkNeutral ρ x)
+
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ      = Πₙ
 wkType ρ ℕₙ      = ℕₙ
 wkType ρ Emptyₙ  = Emptyₙ
+wkType ρ Unitₙ = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
@@ -319,10 +362,12 @@ wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ ℕₙ      = ℕₙ
 wkWhnf ρ Emptyₙ  = Emptyₙ
+wkWhnf ρ Unitₙ   = Unitₙ
 wkWhnf ρ lamₙ    = lamₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ
-wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
+wkWhnf ρ starₙ   = starₙ
+wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
 -- Non-dependent version of Π.
 

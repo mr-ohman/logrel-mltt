@@ -108,7 +108,20 @@ record EqRelSet : Set₁ where
     ≅-Emptyrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty
     ≅ₜ-Emptyrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty ∷ U
 
-    -- Π-congurence
+    -- Unit type reflexivity
+    ≅-Unitrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit
+    ≅ₜ-Unitrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit ∷ U
+
+    -- Star reflexivity
+    ≅ₜ-starrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star ≅ star ∷ Unit
+
+    -- Unit η-equality
+    ≅ₜ-η-unit : ∀ {Γ e e'}
+             → Γ ⊢ e ∷ Unit
+             → Γ ⊢ e' ∷ Unit
+             → Γ ⊢ e ≅ e' ∷ Unit
+
+    -- Π-congruence
 
     ≅-Π-cong  : ∀ {F G H E Γ}
               → Γ ⊢ F
@@ -125,7 +138,7 @@ record EqRelSet : Set₁ where
     -- Zero reflexivity
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
-    -- Successor congurence
+    -- Successor congruence
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
 
     -- η-equality
@@ -141,13 +154,13 @@ record EqRelSet : Set₁ where
     -- Variable reflexivity
     ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 
-    -- Application congurence
+    -- Application congruence
     ~-app : ∀ {a b f g F G Γ}
           → Γ ⊢ f ~ g ∷ Π F ▹ G
           → Γ ⊢ a ≅ b ∷ F
           → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
 
-    -- Natural recursion congurence
+    -- Natural recursion congruence
     ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
              → Γ ∙ ℕ ⊢ F ≅ F′
              → Γ     ⊢ z ≅ z′ ∷ F [ zero ]
@@ -155,12 +168,11 @@ record EqRelSet : Set₁ where
              → Γ     ⊢ n ~ n′ ∷ ℕ
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
 
-    -- Empty recursion congurence
+    -- Empty recursion congruence
     ~-Emptyrec : ∀ {n n′ F F′ Γ}
-             → Γ ⊢ F ≅ F′
-             → Γ     ⊢ n ~ n′ ∷ Empty
-             → Γ     ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
-
+               → Γ ⊢ F ≅ F′
+               → Γ ⊢ n ~ n′ ∷ Empty
+               → Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
 
   -- Composition of universe and generic equality compatibility
   ~-to-≅ : ∀ {k l Γ} → Γ ⊢ k ~ l ∷ U → Γ ⊢ k ≅ l

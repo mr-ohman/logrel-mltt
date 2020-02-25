@@ -10,6 +10,7 @@ open import Definition.LogicalRelation.Substitution.Introductions.Nat public
 open import Definition.LogicalRelation.Substitution.Introductions.Natrec public
 open import Definition.LogicalRelation.Substitution.Introductions.Empty public
 open import Definition.LogicalRelation.Substitution.Introductions.Emptyrec public
+open import Definition.LogicalRelation.Substitution.Introductions.Unit public
 open import Definition.LogicalRelation.Substitution.Introductions.Pi public
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst public
 open import Definition.LogicalRelation.Substitution.Introductions.Universe public

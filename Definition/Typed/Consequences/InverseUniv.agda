@@ -53,6 +53,7 @@ pilem (inj₂ x) = inj₂ (λ x₁ → x (∃Π₁ x₁)) , inj₂ (λ x₁ → 
 inverseUniv : ∀ {A Γ} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUniv q (ℕⱼ x) = ℕⱼ x
 inverseUniv q (Emptyⱼ x) = Emptyⱼ x
+inverseUniv q (Unitⱼ x) = Unitⱼ x
 inverseUniv q (Uⱼ x) = ⊥-elim (q ∃U)
 inverseUniv q (Πⱼ A ▹ A₁) = Πⱼ inverseUniv (λ x → q (∃Π₁ x)) A ▹ inverseUniv (λ x → q (∃Π₂ x)) A₁
 inverseUniv q (univ x) = x

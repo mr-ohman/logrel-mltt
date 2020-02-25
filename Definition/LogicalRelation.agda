@@ -89,10 +89,14 @@ _⊩ℕ_≡_ : (Γ : Con Term) (A B : Term) → Set
 
 mutual
   -- Natural number term
-  data _⊩ℕ_∷ℕ (Γ : Con Term) (t : Term) : Set where
-    ℕₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ ℕ) (n≡n : Γ ⊢ n ≅ n ∷ ℕ)
-         (prop : Natural-prop Γ n)
-       → Γ ⊩ℕ t ∷ℕ
+  record _⊩ℕ_∷ℕ (Γ : Con Term) (t : Term) : Set where
+    inductive
+    constructor ℕₜ
+    field
+      n : Term
+      d : Γ ⊢ t :⇒*: n ∷ ℕ
+      n≡n : Γ ⊢ n ≅ n ∷ ℕ
+      prop : Natural-prop Γ n
 
   -- WHNF property of natural number terms
   data Natural-prop (Γ : Con Term) : (n : Term) → Set where
@@ -102,10 +106,15 @@ mutual
 
 mutual
   -- Natural number term equality
-  data _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
-    ℕₜ₌ : (k k′ : Term) (d : Γ ⊢ t :⇒*: k  ∷ ℕ) (d′ : Γ ⊢ u :⇒*: k′ ∷ ℕ)
-          (k≡k′ : Γ ⊢ k ≅ k′ ∷ ℕ)
-          (prop : [Natural]-prop Γ k k′) → Γ ⊩ℕ t ≡ u ∷ℕ
+  record _⊩ℕ_≡_∷ℕ (Γ : Con Term) (t u : Term) : Set where
+    inductive
+    constructor ℕₜ₌
+    field
+      k k′ : Term
+      d : Γ ⊢ t :⇒*: k  ∷ ℕ
+      d′ : Γ ⊢ u :⇒*: k′ ∷ ℕ
+      k≡k′ : Γ ⊢ k ≅ k′ ∷ ℕ
+      prop : [Natural]-prop Γ k k′
 
   -- WHNF property of Natural number term equality
   data [Natural]-prop (Γ : Con Term) : (n n′ : Term) → Set where
@@ -135,29 +144,76 @@ _⊩Empty_ : (Γ : Con Term) (A : Term) → Set
 _⊩Empty_≡_ : (Γ : Con Term) (A B : Term) → Set
 Γ ⊩Empty A ≡ B = Γ ⊢ B ⇒* Empty
 
+-- WHNF property of absurd terms
 data Empty-prop (Γ : Con Term) : (n : Term) → Set where
   ne    : ∀ {n} → Γ ⊩neNf n ∷ Empty → Empty-prop Γ n
 
 -- Empty term
-data _⊩Empty_∷Empty (Γ : Con Term) (t : Term) : Set where
-  Emptyₜ : (n : Term) (d : Γ ⊢ t :⇒*: n ∷ Empty) (n≡n : Γ ⊢ n ≅ n ∷ Empty)
-         (prop : Empty-prop Γ n)
-         → Γ ⊩Empty t ∷Empty
+record _⊩Empty_∷Empty (Γ : Con Term) (t : Term) : Set where
+  inductive
+  constructor Emptyₜ
+  field
+    n : Term
+    d : Γ ⊢ t :⇒*: n ∷ Empty
+    n≡n : Γ ⊢ n ≅ n ∷ Empty
+    prop : Empty-prop Γ n
 
 data [Empty]-prop (Γ : Con Term) : (n n′ : Term) → Set where
   ne    : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ Empty → [Empty]-prop Γ n n′
 
 -- Empty term equality
-data _⊩Empty_≡_∷Empty (Γ : Con Term) (t u : Term) : Set where
-  Emptyₜ₌ : (k k′ : Term) (d : Γ ⊢ t :⇒*: k  ∷ Empty) (d′ : Γ ⊢ u :⇒*: k′ ∷ Empty)
-    (k≡k′ : Γ ⊢ k ≅ k′ ∷ Empty)
-      (prop : [Empty]-prop Γ k k′) → Γ ⊩Empty t ≡ u ∷Empty
+record _⊩Empty_≡_∷Empty (Γ : Con Term) (t u : Term) : Set where
+  inductive
+  constructor Emptyₜ₌
+  field
+    k k′ : Term
+    d : Γ ⊢ t :⇒*: k  ∷ Empty
+    d′ : Γ ⊢ u :⇒*: k′ ∷ Empty
+    k≡k′ : Γ ⊢ k ≅ k′ ∷ Empty
+    prop : [Empty]-prop Γ k k′
 
 empty : ∀ {Γ n} → Empty-prop Γ n → Neutral n
 empty (ne (neNfₜ neK _ _)) = neK
 
 esplit : ∀ {Γ a b} → [Empty]-prop Γ a b → Neutral a × Neutral b
 esplit (ne (neNfₜ₌ neK neM k≡m)) = neK , neM
+
+-- Reducibility of Unit
+
+-- Unit type
+_⊩Unit_ : (Γ : Con Term) (A : Term) → Set
+Γ ⊩Unit A = Γ ⊢ A :⇒*: Unit
+
+-- Unit type equality
+_⊩Unit_≡_ : (Γ : Con Term) (A B : Term) → Set
+Γ ⊩Unit A ≡ B = Γ ⊢ B ⇒* Unit
+
+data Unit-prop (Γ : Con Term) : (n : Term) → Set where
+  starᵣ : Unit-prop Γ star
+  ne    : ∀ {n} → Γ ⊩neNf n ∷ Unit → Unit-prop Γ n
+
+record _⊩Unit_∷Unit (Γ : Con Term) (t : Term) : Set where
+  inductive
+  constructor Unitₜ
+  field
+    n : Term
+    d : Γ ⊢ t :⇒*: n ∷ Unit
+    n≡n : Γ ⊢ n ≅ n ∷ Unit
+    prop : Unit-prop Γ n
+
+-- Unit term equality
+record _⊩Unit_≡_∷Unit (Γ : Con Term) (t u : Term) : Set where
+  inductive
+  constructor Unitₜ₌
+  field
+    k k′ : Term
+    d : Γ ⊢ t :⇒*: k  ∷ Unit
+    d′ : Γ ⊢ u :⇒*: k′ ∷ Unit
+    k≡k′ : Γ ⊢ k ≅ k′ ∷ Unit
+
+unitary : ∀ {Γ n} → Unit-prop Γ n → Unitary n
+unitary starᵣ = starₙ
+unitary (ne (neNfₜ neK ⊢k k≡k)) = ne neK
 
 -- Type levels
 
@@ -169,7 +225,7 @@ data _<_ : (i j : TypeLevel) → Set where
   0<1 : ⁰ < ¹
 
 -- Logical relation
-
+-- Exported interface
 record LogRelKit : Set₁ where
   constructor Kit
   field
@@ -195,7 +251,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
 
   -- Universe type equality
   _⊩¹U≡_ : (Γ : Con Term) (B : Term) → Set
-  Γ ⊩¹U≡ B = B PE.≡ U
+  Γ ⊩¹U≡ B = B PE.≡ U -- Note lack of reduction
 
   -- Universe term
   record _⊩¹U_∷U/_ {l′} (Γ : Con Term) (t : Term) (l< : l′ < l) : Set where
@@ -311,6 +367,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
       Uᵣ  : Γ ⊩¹U → Γ ⊩¹ U
       ℕᵣ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
       Emptyᵣ : ∀ {A} → Γ ⊩Empty A → Γ ⊩¹ A
+      Unitᵣ : ∀ {A} → Γ ⊩Unit A → Γ ⊩¹ A
       ne  : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
       Πᵣ  : ∀ {A} → Γ ⊩¹Π A → Γ ⊩¹ A
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
@@ -320,6 +377,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B
     Γ ⊩¹ A ≡ B / ℕᵣ D = Γ ⊩ℕ A ≡ B
     Γ ⊩¹ A ≡ B / Emptyᵣ D = Γ ⊩Empty A ≡ B
+    Γ ⊩¹ A ≡ B / Unitᵣ D = Γ ⊩Unit A ≡ B
     Γ ⊩¹ A ≡ B / ne neA = Γ ⊩ne A ≡ B / neA
     Γ ⊩¹ A ≡ B / Πᵣ ΠA = Γ ⊩¹Π A ≡ B / ΠA
     Γ ⊩¹ A ≡ B / emb l< [A] = Γ ⊩ A ≡ B / [A]
@@ -329,6 +387,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     Γ ⊩¹ t ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
     Γ ⊩¹ t ∷ A / ℕᵣ D = Γ ⊩ℕ t ∷ℕ
     Γ ⊩¹ t ∷ A / Emptyᵣ D = Γ ⊩Empty t ∷Empty
+    Γ ⊩¹ t ∷ A / Unitᵣ D = Γ ⊩Unit t ∷Unit
     Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
     Γ ⊩¹ f ∷ A / Πᵣ ΠA  = Γ ⊩¹Π f ∷ A / ΠA
     Γ ⊩¹ t ∷ A / emb l< [A] = Γ ⊩ t ∷ A / [A]
@@ -338,6 +397,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     Γ ⊩¹ t ≡ u ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
     Γ ⊩¹ t ≡ u ∷ A / ℕᵣ D = Γ ⊩ℕ t ≡ u ∷ℕ
     Γ ⊩¹ t ≡ u ∷ A / Emptyᵣ D = Γ ⊩Empty t ≡ u ∷Empty
+    Γ ⊩¹ t ≡ u ∷ A / Unitᵣ D = Γ ⊩Unit t ≡ u ∷Unit
     Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
     Γ ⊩¹ t ≡ u ∷ A / Πᵣ ΠA = Γ ⊩¹Π t ≡ u ∷ A / ΠA
     Γ ⊩¹ t ≡ u ∷ A / emb l< [A] = Γ ⊩ t ≡ u ∷ A / [A]
@@ -347,7 +407,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     kit = Kit _⊩¹U _⊩¹Π_
               _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
 
-open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; ne; Πᵣ; emb; Uₜ; Uₜ₌; Π₌)
+open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; Unitᵣ; ne; Πᵣ; emb; Uₜ; Uₜ₌; Π₌)
 
 -- Patterns for the non-records of Π
 pattern Πₜ a b c d e f = a , b , c , d , e , f

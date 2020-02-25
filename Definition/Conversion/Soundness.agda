@@ -40,6 +40,7 @@ mutual
   soundnessConv↓ (U-refl ⊢Γ) = refl (Uⱼ ⊢Γ)
   soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕⱼ ⊢Γ)
   soundnessConv↓ (Empty-refl ⊢Γ) = refl (Emptyⱼ ⊢Γ)
+  soundnessConv↓ (Unit-refl ⊢Γ) = refl (Unitⱼ ⊢Γ)
   soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
@@ -56,6 +57,9 @@ mutual
   soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
   soundnessConv↓Term (Empty-ins x) = soundness~↓ x
+  soundnessConv↓Term (Unit-ins x) = soundness~↓ x
+  soundnessConv↓Term (star-refl ⊢Γ) = refl (starⱼ ⊢Γ)
+  soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)

@@ -36,6 +36,7 @@ whnfConv↓ : ∀ {A B Γ}
 whnfConv↓ (U-refl x) = Uₙ , Uₙ
 whnfConv↓ (ℕ-refl x) = ℕₙ , ℕₙ
 whnfConv↓ (Empty-refl x) = Emptyₙ , Emptyₙ
+whnfConv↓ (Unit-refl x) = Unitₙ , Unitₙ
 whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
                    in  ne neA , ne neB
 whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
@@ -45,9 +46,13 @@ whnfConv↓Term : ∀ {t u A Γ}
               → Γ ⊢ t [conv↓] u ∷ A
               → Whnf A × Whnf t × Whnf u
 whnfConv↓Term (ℕ-ins x) = let _ , neT , neU = ne~↓ x
-                          in ℕₙ , ne neT , ne neU
+                           in ℕₙ , ne neT , ne neU
 whnfConv↓Term (Empty-ins x) = let _ , neT , neU = ne~↓ x
-                          in Emptyₙ , ne neT , ne neU
+                              in Emptyₙ , ne neT , ne neU
+whnfConv↓Term (Unit-ins x) = let _ , neT , neU = ne~↓ x
+                             in Unitₙ , ne neT , ne neU
+whnfConv↓Term (star-refl x) = Unitₙ , starₙ , starₙ
+whnfConv↓Term (η-unit _ _ tUnit uUnit) = Unitₙ , (unitaryWhnf tUnit) , (unitaryWhnf uUnit)
 whnfConv↓Term (ne-ins t u x x₁) =
   let _ , neT , neU = ne~↓ x₁
   in ne x , ne neT , ne neU

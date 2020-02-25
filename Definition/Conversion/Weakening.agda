@@ -52,6 +52,7 @@ mutual
   wkConv↓ ρ ⊢Δ (U-refl x) = U-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ℕ-refl x) = ℕ-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (Empty-refl x) = Empty-refl ⊢Δ
+  wkConv↓ ρ ⊢Δ (Unit-refl x) = Unit-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ne x) = ne (wk~↓ ρ ⊢Δ x)
   wkConv↓ ρ ⊢Δ (Π-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
@@ -75,6 +76,11 @@ mutual
     ℕ-ins (wk~↓ ρ ⊢Δ x)
   wkConv↓Term ρ ⊢Δ (Empty-ins x) =
     Empty-ins (wk~↓ ρ ⊢Δ x)
+  wkConv↓Term ρ ⊢Δ (Unit-ins x) =
+    Unit-ins (wk~↓ ρ ⊢Δ x)
+  wkConv↓Term ρ ⊢Δ (star-refl x) = star-refl ⊢Δ
+  wkConv↓Term {ρ} [ρ] ⊢Δ (η-unit [t] [u] tUnit uUnit) =
+    η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u]) (wkUnitary ρ tUnit) (wkUnitary ρ uUnit)
   wkConv↓Term {ρ} [ρ] ⊢Δ (ne-ins t u x x₁) =
     ne-ins (wkTerm [ρ] ⊢Δ t) (wkTerm [ρ] ⊢Δ u) (wkNeutral ρ x) (wk~↓ [ρ] ⊢Δ x₁)
   wkConv↓Term ρ ⊢Δ (univ x x₁ x₂) =

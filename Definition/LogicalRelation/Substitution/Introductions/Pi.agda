@@ -138,7 +138,7 @@ import Tools.PropositionalEquality as PE
                                              (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ′] , [a]″)
                                              [ρσa≡ρσ′a])))
 
--- Validity of Π-congurence.
+-- Validity of Π-congruence.
 Π-congᵛ : ∀ {F G H E Γ l}
           ([Γ] : ⊩ᵛ Γ)
           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -241,7 +241,7 @@ import Tools.PropositionalEquality as PE
                  Πₙ Πₙ (≅ₜ-Π-cong ⊢F ⊢F≡F′ ⊢G≡G′)
                  (proj₁ [ΠFG]) (proj₁ [ΠFG]′) (proj₂ [ΠFG] [σ′] [σ≡σ′]))
 
--- Validity of Π-congurence as a term equality.
+-- Validity of Π-congruence as a term equality.
 Π-congᵗᵛ : ∀ {F G H E Γ}
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ ¹ ⟩ F / [Γ])
@@ -304,7 +304,7 @@ import Tools.PropositionalEquality as PE
 ▹▹ᵛ {F} {G} [Γ] [F] [G] =
   Πᵛ {F} {wk1 G} [Γ] [F] (wk1ᵛ {G} {F} [Γ] [F] [G])
 
--- Validity of non-dependent function type congurence.
+-- Validity of non-dependent function type congruence.
 ▹▹-congᵛ : ∀ {F F′ G G′ Γ l}
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])

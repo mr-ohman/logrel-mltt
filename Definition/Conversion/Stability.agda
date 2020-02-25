@@ -154,6 +154,9 @@ mutual
   stabilityConv↓ Γ≡Δ (Empty-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  Empty-refl ⊢Δ
+  stabilityConv↓ Γ≡Δ (Unit-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Unit-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ne x) =
     ne (stability~↓ Γ≡Δ x)
   stabilityConv↓ Γ≡Δ (Π-cong F A<>B A<>B₁) =
@@ -179,6 +182,15 @@ mutual
     ℕ-ins (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (Empty-ins x) =
     Empty-ins (stability~↓ Γ≡Δ x)
+  stabilityConv↓Term Γ≡Δ (Unit-ins x) =
+    Unit-ins (stability~↓ Γ≡Δ x)
+  stabilityConv↓Term Γ≡Δ (star-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  star-refl ⊢Δ
+  stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
+    let [t] = stabilityTerm Γ≡Δ [t]
+        [u] = stabilityTerm Γ≡Δ [u]
+    in  η-unit [t] [u] tUnit uUnit
   stabilityConv↓Term Γ≡Δ (ne-ins t u neN x) =
     ne-ins (stabilityTerm Γ≡Δ t) (stabilityTerm Γ≡Δ u) neN (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =

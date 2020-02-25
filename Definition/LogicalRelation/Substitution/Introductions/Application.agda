@@ -49,7 +49,7 @@ appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
                                               [σu] [σu′]
                                               (proj₂ ([u] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
--- Application congurence of valid terms.
+-- Application congruence of valid terms.
 app-congᵛ : ∀ {F G t u a b Γ l}
             ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])

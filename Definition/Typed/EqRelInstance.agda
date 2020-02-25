@@ -21,6 +21,8 @@ eqRelInstance = eqRel _⊢_≡_ _⊢_≡_∷_ _⊢_≡_∷_
                       reduction reductionₜ
                       (refl ∘ᶠ Uⱼ) (refl ∘ᶠ ℕⱼ) (refl ∘ᶠ ℕⱼ)
                       (refl ∘ᶠ Emptyⱼ) (refl ∘ᶠ Emptyⱼ)
+                      (refl ∘ᶠ Unitⱼ) (refl ∘ᶠ Unitⱼ)
+                      (refl ∘ᶠ starⱼ) η-unit
                       Π-cong Π-cong (refl ∘ᶠ zeroⱼ) suc-cong
                       (λ x x₁ x₂ x₃ x₄ x₅ → η-eq x x₁ x₂ x₅)
                       refl app-cong natrec-cong Emptyrec-cong
