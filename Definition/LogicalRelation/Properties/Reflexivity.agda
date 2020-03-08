@@ -21,7 +21,11 @@ reflEq (Unitᵣ D) = red D
 reflEq (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) =
   ne₌ _ [ ⊢A , ⊢B , D ] neK K≡K
 reflEq (Πᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
-  Π₌ _ _ D A≡A
+  B₌ _ _ D A≡A
+     (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
+     (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
+reflEq (Σᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
+  B₌ _ _ D A≡A
      (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
      (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
 reflEq (emb 0<1 [A]) = reflEq [A]
@@ -61,4 +65,8 @@ reflEqTerm (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f
       (Πₜ f d funcF f≡f [f] [f]₁)
       (Πₜ f d funcF f≡f [f] [f]₁)
       (λ ρ ⊢Δ [a] → [f] ρ ⊢Δ [a] [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))
+reflEqTerm (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Σₜ p d pProd p≅p) =
+  Σₜ₌ p p d d pProd pProd p≅p
+      (Σₜ p d pProd p≅p)
+      (Σₜ p d pProd p≅p)
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t

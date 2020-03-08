@@ -126,48 +126,64 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
 
 -- Algorithmic equality instance of the generic equality relation.
 instance eqRelInstance : EqRelSet
-eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
-                      ~-to-conv soundnessConv↑ soundnessConv↑Term
-                      univConv↑
-                      symConv symConvTerm ~-sym
-                      transConv transConvTerm ~-trans
-                      convConvTerm ~-conv
-                      wkConv↑ wkConv↑Term ~-wk
-                      reductionConv↑ reductionConv↑Term
-                      (liftConv ∘ᶠ U-refl)
-                      (liftConv ∘ᶠ ℕ-refl)
-                      (λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x)))
-                      (liftConv ∘ᶠ Empty-refl)
-                      (λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x)))
-                      (liftConv ∘ᶠ Unit-refl)
-                      (λ ⊢Γ → liftConvTerm (univ (Unitⱼ ⊢Γ) (Unitⱼ ⊢Γ) (Unit-refl ⊢Γ)))
-                      (liftConvTerm ∘ᶠ star-refl)
-                      (λ [e] [e'] →
-                        let u , uWhnf , uRed = whNormTerm [e]
-                            u' , u'Whnf , u'Red = whNormTerm [e']
-                            [u] = ⊢u-redₜ uRed
-                            [u'] = ⊢u-redₜ u'Red
-                            uUnit = whnfUnitary [u] uWhnf
-                            u'Unit = whnfUnitary [u'] u'Whnf
-                        in [↑]ₜ Unit u u'
-                          (red (idRed:*: (syntacticTerm [e])))
-                          (redₜ uRed)
-                          (redₜ u'Red)
-                          Unitₙ uWhnf u'Whnf
-                          (η-unit [u] [u'] uUnit u'Unit))
-                      (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
-                      (λ x x₁ x₂ →
-                         let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
-                             _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
-                             ⊢Γ = wfTerm F∷U
-                             F<>H = univConv↑ x₁
-                             G<>E = univConv↑ x₂
-                             F≡H = soundnessConv↑ F<>H
-                             E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
-                         in  liftConvTerm (univ (Πⱼ F∷U ▹ G∷U) (Πⱼ H∷U ▹ E∷U′)
-                                                (Π-cong x F<>H G<>E)))
-
-                      (liftConvTerm ∘ᶠ zero-refl)
-                      (liftConvTerm ∘ᶠ suc-cong)
-                      (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅))
-                      ~-var ~-app ~-natrec ~-Emptyrec
+eqRelInstance = record {
+  _⊢_≅_ = _⊢_[conv↑]_;
+  _⊢_≅_∷_ = _⊢_[conv↑]_∷_;
+  _⊢_~_∷_ = _⊢_~_∷_;
+  ~-to-≅ₜ = ~-to-conv;
+  ≅-eq = soundnessConv↑;
+  ≅ₜ-eq = soundnessConv↑Term;
+  ≅-univ = univConv↑;
+  ≅-sym = symConv;
+  ≅ₜ-sym = symConvTerm;
+  ~-sym = ~-sym;
+  ≅-trans = transConv;
+  ≅ₜ-trans = transConvTerm;
+  ∼-trans = ~-trans;
+  ≅-conv = convConvTerm;
+  ~-conv = ~-conv
+  ≅-wk = wkConv↑;
+  ≅ₜ-wk = wkConv↑Term;
+  ~-wk = ~-wk;
+  ≅-red = reductionConv↑;
+  ≅ₜ-red = reductionConv↑Term;
+  ≅-Urefl = liftConv ∘ᶠ U-refl;
+  ≅-ℕrefl = liftConv ∘ᶠ ℕ-refl;
+  ≅ₜ-ℕrefl = λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x));
+  ≅-Emptyrefl = liftConv ∘ᶠ Empty-refl;
+  ≅ₜ-Emptyrefl = λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x));
+  ≅-Unitrefl = liftConv ∘ᶠ Unit-refl;
+  ≅ₜ-Unitrefl = λ ⊢Γ → liftConvTerm (univ (Unitⱼ ⊢Γ) (Unitⱼ ⊢Γ) (Unit-refl ⊢Γ));
+  ≅ₜ-starrefl = liftConvTerm ∘ᶠ star-refl;
+  ≅ₜ-η-unit = λ [e] [e'] → let u , uWhnf , uRed = whNormTerm [e]
+                               u' , u'Whnf , u'Red = whNormTerm [e']
+                               [u] = ⊢u-redₜ uRed
+                               [u'] = ⊢u-redₜ u'Red
+                               uUnit = whnfUnitary [u] uWhnf
+                               u'Unit = whnfUnitary [u'] u'Whnf
+                           in  [↑]ₜ Unit u u'
+                               (red (idRed:*: (syntacticTerm [e])))
+                               (redₜ uRed)
+                               (redₜ u'Red)
+                               Unitₙ uWhnf u'Whnf
+                               (η-unit [u] [u'] uUnit u'Unit);
+  ≅-Π-cong = λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂);
+  ≅ₜ-Π-cong = λ x x₁ x₂ → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
+                              _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
+                              ⊢Γ = wfTerm F∷U
+                              F<>H = univConv↑ x₁
+                              G<>E = univConv↑ x₂
+                              F≡H = soundnessConv↑ F<>H
+                              E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
+                          in  liftConvTerm (univ (Πⱼ F∷U ▹ G∷U) (Πⱼ H∷U ▹ E∷U′)
+                                                (Π-cong x F<>H G<>E));
+  ≅-Σ-cong = ?;
+  ≅ₜ-Σ-cong = ?;
+  ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
+  ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
+  ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅);
+  ≅-Σ-η = ?;
+  ~-var = ~-var;
+  ~-app = ~-app;
+  ~-natrec = ~-natrec;
+  ~-Emptyrec = ~-Emptyrec }

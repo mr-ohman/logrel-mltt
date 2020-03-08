@@ -135,6 +135,20 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Π F ▹ G ≅ Π H ▹ E ∷ U
 
+    -- Σ-congruence
+
+    ≅-Σ-cong  : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H
+              → Γ ∙ F ⊢ G ≅ E
+              → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E
+
+    ≅ₜ-Σ-cong : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ∙ F ⊢ G ≅ E ∷ U
+              → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E ∷ U
+
     -- Zero reflexivity
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
@@ -143,13 +157,19 @@ record EqRelSet : Set₁ where
 
     -- η-equality
     ≅-η-eq : ∀ {f g F G Γ}
-              → Γ ⊢ F
-              → Γ ⊢ f ∷ Π F ▹ G
-              → Γ ⊢ g ∷ Π F ▹ G
-              → Function f
-              → Function g
-              → Γ ∙ F ⊢ wk1 f ∘ var 0 ≅ wk1 g ∘ var 0 ∷ G
-              → Γ ⊢ f ≅ g ∷ Π F ▹ G
+           → Γ ⊢ F
+           → Γ ⊢ f ∷ Π F ▹ G
+           → Γ ⊢ g ∷ Π F ▹ G
+           → Function f
+           → Function g
+           → Γ ∙ F ⊢ wk1 f ∘ var 0 ≅ wk1 g ∘ var 0 ∷ G
+           → Γ ⊢ f ≅ g ∷ Π F ▹ G
+
+    -- η for product types
+    ≅-Σ-η : ∀ {p F G Γ}
+          → Γ ⊢ p ∷ Σ F ▹ G
+          → Product p
+          → Γ ⊢ p ≅ prod (fst p) (snd p) ∷ Σ F ▹ G
 
     -- Variable reflexivity
     ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
@@ -159,6 +179,15 @@ record EqRelSet : Set₁ where
           → Γ ⊢ f ~ g ∷ Π F ▹ G
           → Γ ⊢ a ≅ b ∷ F
           → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
+
+    -- Product projections congruence
+    ~-fst : ∀ {p r F G Γ}
+          → Γ ⊢ p ~ r ∷ Σ F ▹ G
+          → Γ ⊢ fst p ~ fst r ∷ F
+
+    ~-snd : ∀ {p r F G Γ}
+          → Γ ⊢ p ~ r ∷ Σ F ▹ G
+          → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
 
     -- Natural recursion congruence
     ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
