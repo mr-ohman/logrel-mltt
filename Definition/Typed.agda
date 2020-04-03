@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed where
 
@@ -10,6 +10,8 @@ open import Tools.Product
 
 infixl 30 _∙_
 infix 30 Πⱼ_▹_
+infix 30 Σⱼ_▹_
+infix 30 ⟦_⟧ⱼ_▹_
 
 
 -- Well-typed variables
@@ -178,9 +180,6 @@ mutual
     snd-cong    : ∀ {t t' F G}
                 → Γ ⊢ t ≡ t' ∷ Σ F ▹ G
                 → Γ ⊢ snd t ≡ snd t' ∷ G [ fst t ]
-    Σ-η         : ∀ {t F G}
-                → Γ ⊢ t ∷ Σ F ▹ G
-                → Γ ⊢ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G
     Σ-β₁        : ∀ {t u F} G
                 → Γ ⊢ t ∷ F
                 → Γ ⊢ u ∷ G [ t ]
@@ -188,7 +187,14 @@ mutual
     Σ-β₂        : ∀ {t u F} G
                 → Γ ⊢ t ∷ F
                 → Γ ⊢ u ∷ G [ t ]
-                → Γ ⊢ snd (prod t u) ≡ u ∷ G [ t ]
+                → Γ ⊢ snd (prod t u) ≡ u ∷ G [ fst (prod t u) ]
+    Σ-η         : ∀ {t F G}
+                → Γ ⊢ t ∷ Σ F ▹ G
+                → Γ ⊢ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G
+    prod-cong   : ∀ {t t′ u u′ F} G
+                → Γ ⊢ t ≡ t′ ∷ F
+                → Γ ⊢ u ≡ u′ ∷ G [ t ]
+                → Γ ⊢ prod t u ≡ prod t′ u′ ∷ Σ F ▹ G
     suc-cong    : ∀ {m n}
                 → Γ ⊢ m ≡ n ∷ ℕ
                 → Γ ⊢ suc m ≡ suc n ∷ ℕ
@@ -247,7 +253,7 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
   Σ-β₂           : ∀ {t u F} G
                  → Γ ⊢ t ∷ F
                  → Γ ⊢ u ∷ G [ t ]
-                 → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ t ]
+                 → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ] -- TODO prove 𝔍 ∷ G [ t ]
   natrec-subst   : ∀ {z s n n′ F}
                  → Γ ∙ ℕ ⊢ F
                  → Γ     ⊢ z ∷ F [ zero ]
@@ -350,3 +356,17 @@ data _⊢ˢ_≡_∷_ (Δ : Con Term) (σ σ′ : Subst) : (Γ : Con Term) → Se
 
 -- Note that we cannot use the well-formed substitutions.
 -- For that, we need to prove the fundamental theorem for substitutions.
+
+⟦_⟧ⱼ_▹_ : (W : BindingType) → ∀ {Γ F G}
+     → Γ     ⊢ F
+     → Γ ∙ F ⊢ G
+     → Γ     ⊢ ⟦ W ⟧ F ▹ G
+⟦ BΠ ⟧ⱼ ⊢F ▹ ⊢G = Πⱼ ⊢F ▹ ⊢G
+⟦ BΣ ⟧ⱼ ⊢F ▹ ⊢G = Σⱼ ⊢F ▹ ⊢G
+
+⟦_⟧ⱼᵤ_▹_ : (W : BindingType) → ∀ {Γ F G}
+     → Γ     ⊢ F ∷ U
+     → Γ ∙ F ⊢ G ∷ U
+     → Γ     ⊢ ⟦ W ⟧ F ▹ G ∷ U
+⟦ BΠ ⟧ⱼᵤ ⊢F ▹ ⊢G = Πⱼ ⊢F ▹ ⊢G
+⟦ BΣ ⟧ⱼᵤ ⊢F ▹ ⊢G = Σⱼ ⊢F ▹ ⊢G

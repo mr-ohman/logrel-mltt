@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed.EqRelInstance where
 
@@ -42,7 +42,6 @@ eqRelInstance = record {
   ≅ₜ-Emptyrefl = refl ∘ᶠ Emptyⱼ;
   ≅-Unitrefl = refl ∘ᶠ Unitⱼ;
   ≅ₜ-Unitrefl = refl ∘ᶠ Unitⱼ;
-  ≅ₜ-starrefl = refl ∘ᶠ starⱼ;
   ≅ₜ-η-unit = η-unit;
   ≅-Π-cong = Π-cong;
   ≅ₜ-Π-cong = Π-cong;
@@ -50,6 +49,7 @@ eqRelInstance = record {
   ≅ₜ-Σ-cong = Σ-cong;
   ≅ₜ-zerorefl = refl ∘ᶠ zeroⱼ;
   ≅-suc-cong = suc-cong;
+  ≅-prod-cong = prod-cong;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → η-eq x x₁ x₂ x₅;
   ≅-Σ-η = λ x x₁ → Σ-η x;
   ~-var = refl;

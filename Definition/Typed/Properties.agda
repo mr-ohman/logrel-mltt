@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed.Properties where
 
@@ -50,6 +50,7 @@ wfEqTerm (Π-cong F F≡H G≡E) = wfEqTerm F≡H
 wfEqTerm (app-cong f≡g a≡b) = wfEqTerm f≡g
 wfEqTerm (β-red F t a) = wfTerm a
 wfEqTerm (η-eq F f g f0≡g0) = wfTerm f
+wfEqTerm (prod-cong _ x _) = wfEqTerm x
 wfEqTerm (suc-cong n) = wfEqTerm n
 wfEqTerm (natrec-cong F≡F′ z≡z′ s≡s′ n≡n′) = wfEqTerm z≡z′
 wfEqTerm (natrec-zero F z s) = wfTerm z
@@ -102,33 +103,29 @@ subset* (A⇒A′ ⇨ A′⇒*B) = trans (subset A⇒A′) (subset* A′⇒*B)
 
 -- Can extract left-part of a reduction
 
---redFirstTerm : ∀ {Γ t u A} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ∷ A
---redFirstTerm (conv t⇒u A≡B) = conv (redFirstTerm t⇒u) A≡B
---redFirstTerm (app-subst t⇒u a) = (redFirstTerm t⇒u) ∘ⱼ a
---redFirstTerm (β-red A t a) = (lamⱼ A t) ∘ⱼ a
---redFirstTerm (natrec-subst F z s n⇒n′) = natrecⱼ F z s (redFirstTerm n⇒n′)
---redFirstTerm (natrec-zero F z s) = natrecⱼ F z s (zeroⱼ (wfTerm z))
---redFirstTerm (natrec-suc n F z s) = natrecⱼ F z s (sucⱼ n)
---redFirstTerm (Emptyrec-subst A n⇒n′) = Emptyrecⱼ A (redFirstTerm n⇒n′)
---redFirstTerm (fst-subst x) = fstⱼ (redFirstTerm x)
---redFirstTerm (snd-subst x) = sndⱼ (redFirstTerm x)
---redFirstTerm (Σ-β₁ G x x₁) = fstⱼ (prodⱼ G x x₁)
---redFirstTerm (Σ-β₂ G x x₁) =
---  -- needs logical relation consequence of substitution to prove!
---  let aa : _ ⊢ fst (prod _ _) ≡ _ ∷ _
---      aa = Σ-β₁ G x x₁
---  in  conv (sndⱼ (prodⱼ G x x₁)) {!!}
---
---redFirst : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A
---redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
---
---redFirst*Term : ∀ {Γ t u A} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ t ∷ A
---redFirst*Term (id t) = t
---redFirst*Term (t⇒t′ ⇨ t′⇒*u) = redFirstTerm t⇒t′
---
---redFirst* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A
---redFirst* (id A) = A
---redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
+redFirstTerm : ∀ {Γ t u A} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ∷ A
+redFirstTerm (conv t⇒u A≡B) = conv (redFirstTerm t⇒u) A≡B
+redFirstTerm (app-subst t⇒u a) = (redFirstTerm t⇒u) ∘ⱼ a
+redFirstTerm (β-red A t a) = (lamⱼ A t) ∘ⱼ a
+redFirstTerm (natrec-subst F z s n⇒n′) = natrecⱼ F z s (redFirstTerm n⇒n′)
+redFirstTerm (natrec-zero F z s) = natrecⱼ F z s (zeroⱼ (wfTerm z))
+redFirstTerm (natrec-suc n F z s) = natrecⱼ F z s (sucⱼ n)
+redFirstTerm (Emptyrec-subst A n⇒n′) = Emptyrecⱼ A (redFirstTerm n⇒n′)
+redFirstTerm (fst-subst x) = fstⱼ (redFirstTerm x)
+redFirstTerm (snd-subst x) = sndⱼ (redFirstTerm x)
+redFirstTerm (Σ-β₁ G x x₁) = fstⱼ (prodⱼ G x x₁)
+redFirstTerm (Σ-β₂ G x x₁) = sndⱼ (prodⱼ G x x₁)
+
+redFirst : ∀ {Γ A B} → Γ ⊢ A ⇒ B → Γ ⊢ A
+redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
+
+redFirst*Term : ∀ {Γ t u A} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ t ∷ A
+redFirst*Term (id t) = t
+redFirst*Term (t⇒t′ ⇨ t′⇒*u) = redFirstTerm t⇒t′
+
+redFirst* : ∀ {Γ A B} → Γ ⊢ A ⇒* B → Γ ⊢ A
+redFirst* (id A) = A
+redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
 
 
 -- No neutral terms are well-formed in an empty context

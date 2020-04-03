@@ -1,6 +1,6 @@
 -- Raw terms, weakening (renaming) and substitution.
 
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Untyped where
 
@@ -15,6 +15,7 @@ infix 30 Π_▹_
 infixr 22 _▹▹_
 infix 30 Σ_▹_
 infixr 22 _××_
+infix 30 ⟦_⟧_▹_
 infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
 infix 25 _[_]
 infix 25 _[_]↑
@@ -125,15 +126,24 @@ star = gen Starkind []
 Emptyrec : (A e : Term) → Term
 Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 
+-- Binding types
+
+data BindingType : Set where
+  -- TODO these are horrible names, get mixed up with ΠB
+  BΠ : BindingType
+  BΣ : BindingType
+
+⟦_⟧_▹_ : BindingType → Term → Term → Term
+⟦ BΠ ⟧ F ▹ G = Π F ▹ G
+⟦ BΣ ⟧ F ▹ G = Σ F ▹ G
+
 -- Injectivity of term constructors w.r.t. propositional equality.
 
 -- If  W F G = W H E  then  F = H  and  G = E.
 
-Π-PE-injectivity : ∀ {F G H E} → Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
-Π-PE-injectivity PE.refl = PE.refl , PE.refl
-
-Σ-PE-injectivity : ∀ {F G H E} → Σ F ▹ G PE.≡ Σ H ▹ E → F PE.≡ H × G PE.≡ E
-Σ-PE-injectivity PE.refl = PE.refl , PE.refl
+B-PE-injectivity : ∀ {F G H E} W → ⟦ W ⟧ F ▹ G PE.≡ ⟦ W ⟧ H ▹ E → F PE.≡ H × G PE.≡ E
+B-PE-injectivity BΠ PE.refl = PE.refl , PE.refl
+B-PE-injectivity BΣ PE.refl = PE.refl , PE.refl
 
 -- If  suc n = suc m  then  n = m.
 
@@ -183,38 +193,11 @@ data Whnf : Term → Set where
 -- Different whnfs are trivially distinguished by propositional equality.
 -- (The following statements are sometimes called "no-confusion theorems".)
 
-U≢ℕ : U PE.≢ ℕ
-U≢ℕ ()
-
-U≢Empty : U PE.≢ Empty
-U≢Empty ()
-
-U≢Unit : U PE.≢ Unit
-U≢Unit ()
-
-U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
-U≢Π ()
-
 U≢ne : ∀ {K} → Neutral K → U PE.≢ K
 U≢ne () PE.refl
 
-ℕ≢Π : ∀ {F G} → ℕ PE.≢ Π F ▹ G
-ℕ≢Π ()
-
-ℕ≢Empty : ℕ PE.≢ Empty
-ℕ≢Empty ()
-
-ℕ≢Unit : ℕ PE.≢ Unit
-ℕ≢Unit ()
-
-Empty≢ℕ : Empty PE.≢ ℕ
-Empty≢ℕ ()
-
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
 ℕ≢ne () PE.refl
-
-Empty≢Unit : Empty PE.≢ Unit
-Empty≢Unit ()
 
 Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
 Empty≢ne () PE.refl
@@ -222,20 +205,25 @@ Empty≢ne () PE.refl
 Unit≢ne : ∀ {K} → Neutral K → Unit PE.≢ K
 Unit≢ne () PE.refl
 
-Empty≢Π : ∀ {F G} → Empty PE.≢ Π F ▹ G
-Empty≢Π ()
+B≢ne : ∀ {F G K} W → Neutral K → ⟦ W ⟧ F ▹ G PE.≢ K
+B≢ne BΠ () PE.refl
+B≢ne BΣ () PE.refl
 
-Unit≢Π : ∀ {F G} → Unit PE.≢ Π F ▹ G
-Unit≢Π ()
+U≢B : ∀ {F G} W → U PE.≢ ⟦ W ⟧ F ▹ G
+U≢B BΠ ()
+U≢B BΣ ()
 
-Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
-Π≢ne () PE.refl
+ℕ≢B : ∀ {F G} W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
+ℕ≢B BΠ ()
+ℕ≢B BΣ ()
 
-Σ≢ne : ∀ {F G K} → Neutral K → Σ F ▹ G PE.≢ K
-Σ≢ne () PE.refl
+Empty≢B : ∀ {F G} W → Empty PE.≢ ⟦ W ⟧ F ▹ G
+Empty≢B BΠ ()
+Empty≢B BΣ ()
 
-zero≢suc : ∀ {n} → zero PE.≢ suc n
-zero≢suc ()
+Unit≢B : ∀ {F G} W → Unit PE.≢ ⟦ W ⟧ F ▹ G
+Unit≢B BΠ ()
+Unit≢B BΣ ()
 
 zero≢ne : ∀ {k} → Neutral k → zero PE.≢ k
 zero≢ne () PE.refl
@@ -268,6 +256,10 @@ data Type : Term → Set where
   Emptyₙ : Type Empty
   Unitₙ : Type Unit
   ne : ∀{n} → Neutral n → Type n
+
+⟦_⟧-type : ∀ (W : BindingType) {F} {G} → Type (⟦ W ⟧ F ▹ G)
+⟦ BΠ ⟧-type = Πₙ
+⟦ BΣ ⟧-type = Σₙ
 
 -- A whnf of type Π A ▹ B is either lam t or neutral.
 
@@ -308,6 +300,11 @@ functionWhnf (ne x) = ne x
 productWhnf : ∀ {p} → Product p → Whnf p
 productWhnf prodₙ = prodₙ
 productWhnf (ne x) = ne x
+
+⟦_⟧ₙ : (W : BindingType) → ∀ {F G} → Whnf (⟦ W ⟧ F ▹ G)
+⟦_⟧ₙ BΠ = Πₙ
+⟦_⟧ₙ BΣ = Σₙ
+
 
 ------------------------------------------------------------------------
 -- Weakening
@@ -399,8 +396,12 @@ wkType ρ Unitₙ = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
-wkFunction ρ lamₙ    = lamₙ
+wkFunction ρ lamₙ   = lamₙ
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
+
+wkProduct : ∀ {t} ρ → Product t → Product (wk ρ t)
+wkProduct ρ prodₙ  = prodₙ
+wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
 wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
@@ -563,3 +564,10 @@ t [ s ] = subst (sgSubst s) t
 
 _[_]↑ : (t : Term) (s : Term) → Term
 t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
+
+
+-- TODO where should this go? Do i make it a rewrite rule globally?
+B-subst : (σ : Subst) (W : BindingType) (F G : Term)
+        → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
+B-subst σ BΠ F G = PE.refl
+B-subst σ BΣ F G = PE.refl

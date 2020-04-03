@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -26,13 +26,13 @@ open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
--- Validity of Π.
-Πᵛ : ∀ {F G Γ l}
+-- Validity of W.
+⟦_⟧ᵛ : ∀ W {F G Γ l}
      ([Γ] : ⊩ᵛ Γ)
      ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
    → Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F]
-   → Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ]
-Πᵛ {F} {G} {Γ} {l} [Γ] [F] [G] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+   → Γ ⊩ᵛ⟨ l ⟩ ⟦ W ⟧ F ▹ G / [Γ]
+⟦ W ⟧ᵛ {F} {G} {Γ} {l} [Γ] [F] [G] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [F]σ {σ′} [σ′] = [F] {σ = σ′} ⊢Δ [σ′]
       [σF] = proj₁ ([F]σ [σ])
       ⊢F {σ′} [σ′] = escape (proj₁ ([F]σ {σ′} [σ′]))
@@ -41,7 +41,7 @@ import Tools.PropositionalEquality as PE
                            (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ′])
       ⊢G {σ′} [σ′] = escape (proj₁ ([G]σ {σ′} [σ′]))
       ⊢G≡G = escapeEq (proj₁ ([G]σ [σ])) (reflEq (proj₁ ([G]σ [σ])))
-      ⊢ΠF▹G = Πⱼ ⊢F [σ] ▹ ⊢G [σ]
+      ⊢ΠF▹G = ⟦ W ⟧ⱼ ⊢F [σ] ▹ ⊢G [σ]
       [G]a : ∀ {ρ Δ₁} a ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
              ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ subst (ρ •ₛ σ) F
                 / proj₁ ([F] ⊢Δ₁ (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ])))
@@ -67,8 +67,13 @@ import Tools.PropositionalEquality as PE
             → Δ₁ ⊩⟨ l ⟩ U.wk (lift ρ) (subst (liftSubst σ) G) [ a ]
       [G]a′ a ρ ⊢Δ₁ [a] = irrelevance′ (PE.sym (singleSubstWkComp a σ G))
                                    (proj₁ ([G]a a ρ ⊢Δ₁ [a]))
-  in Πᵣ′ (subst σ F) (subst (liftSubst σ) G)
-         (idRed:*: ⊢ΠF▹G) (⊢F [σ]) (⊢G [σ]) (≅-Π-cong (⊢F [σ]) ⊢F≡F ⊢G≡G)
+  in Bᵣ′ W (subst σ F) (subst (liftSubst σ) G)
+         (PE.subst
+           (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G)
+           (PE.sym (B-subst _ W F G))
+           (idRed:*: ⊢ΠF▹G))
+         (⊢F [σ]) (⊢G [σ])
+         (≅-W-cong W (⊢F [σ]) ⊢F≡F ⊢G≡G)
          (λ ρ ⊢Δ₁ → wk ρ ⊢Δ₁ [σF])
          (λ {ρ} {Δ₁} {a} [ρ] ⊢Δ₁ [a] →
             let [a]′ = irrelevanceTerm′
@@ -107,8 +112,12 @@ import Tools.PropositionalEquality as PE
                          (≅-eq (escapeEq [F][wk1σ]
                                              (proj₂ ([F] (⊢Δ ∙ ⊢F [σ]) [wk1σ])
                                                     [wk1σ′] [wk1σ≡wk1σ′])))
-        in  Π₌ _ _ (id (Πⱼ ⊢F [σ′] ▹ ⊢G [σ′]))
-               (≅-Π-cong (⊢F [σ])
+        in  B₌ (subst σ′ F) (subst (liftSubst σ′) G)
+               (PE.subst
+                 (λ x → Δ ⊢ x ⇒* ⟦ W ⟧ subst σ′ F ▹ subst (liftSubst σ′) G)
+                 (PE.sym (B-subst _ W F G))
+                 (id (⟦ W ⟧ⱼ ⊢F [σ′] ▹ ⊢G [σ′])))
+               (≅-W-cong W (⊢F [σ])
                        (escapeEq (proj₁ ([F] ⊢Δ [σ]))
                                     (proj₂ ([F] ⊢Δ [σ]) [σ′] [σ≡σ′]))
                        (escapeEq (proj₁ ([G]σ [σ])) (proj₂ ([G]σ [σ])
@@ -138,8 +147,8 @@ import Tools.PropositionalEquality as PE
                                              (wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ′] , [a]″)
                                              [ρσa≡ρσ′a])))
 
--- Validity of Π-congruence.
-Π-congᵛ : ∀ {F G H E Γ l}
+-- Validity of W-congruence.
+W-congᵛ : ∀ {F G H E Γ l} W
           ([Γ] : ⊩ᵛ Γ)
           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
@@ -147,11 +156,11 @@ import Tools.PropositionalEquality as PE
           ([E] : Γ ∙ H ⊩ᵛ⟨ l ⟩ E / [Γ] ∙ [H])
           ([F≡H] : Γ ⊩ᵛ⟨ l ⟩ F ≡ H / [Γ] / [F])
           ([G≡E] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G ≡ E / [Γ] ∙ [F] / [G])
-        → Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [Γ] / Πᵛ {F} {G} [Γ] [F] [G]
-Π-congᵛ {F} {G} {H} {E} [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
-  let [ΠFG] = Πᵛ {F} {G} [Γ] [F] [G]
+        → Γ ⊩ᵛ⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ H ▹ E / [Γ] / ⟦ W ⟧ᵛ {F} {G} [Γ] [F] [G]
+W-congᵛ {F} {G} {H} {E} {Γ} {l} BΠ [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
+  let [ΠFG] = ⟦ BΠ ⟧ᵛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , Πᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext′ = extractMaybeEmb (Π-elim [σΠFG])
+      l′ , Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext′ = extractMaybeEmb (Π-elim [σΠFG])
       [σF] = proj₁ ([F] ⊢Δ [σ])
       ⊢σF = escape [σF]
       [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
@@ -159,16 +168,18 @@ import Tools.PropositionalEquality as PE
       ⊢σE = escape (proj₁ ([E] (⊢Δ ∙ ⊢σH) (liftSubstS {F = H} [Γ] ⊢Δ [H] [σ])))
       ⊢σF≡σH = escapeEq [σF] ([F≡H] ⊢Δ [σ])
       ⊢σG≡σE = escapeEq [σG] ([G≡E] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
-  in  Π₌ (subst σ H)
+  in  B₌ (subst σ H)
          (subst (liftSubst σ) E)
          (id (Πⱼ ⊢σH ▹ ⊢σE))
          (≅-Π-cong ⊢σF ⊢σF≡σH ⊢σG≡σE)
          (λ ρ ⊢Δ₁ → let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
-                    in  irrelevanceEq″ (PE.sym (wk-subst F))
-                                        (PE.sym (wk-subst H))
-                                        (proj₁ ([F] ⊢Δ₁ [ρσ]))
-                                        ([F]′ ρ ⊢Δ₁)
-                                        ([F≡H] ⊢Δ₁ [ρσ]))
+                        eqA = PE.sym (wk-subst F)
+                        eqB = PE.sym (wk-subst H)
+                        p = proj₁ ([F] ⊢Δ₁ [ρσ])
+                        wut : _ ⊩⟨ _ ⟩ U.wk _ (subst σ F)
+                        wut = [F]′ ρ ⊢Δ₁
+                        A≡B = [F≡H] ⊢Δ₁ [ρσ]
+                    in  irrelevanceEq″ eqA eqB p wut A≡B)
          (λ {ρ} {Δ} {a} [ρ] ⊢Δ₁ [a] →
             let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
                 [a]′ = irrelevanceTerm′ (wk-subst F)
@@ -181,14 +192,49 @@ import Tools.PropositionalEquality as PE
                                 ([G]′ [ρ] ⊢Δ₁ [a])
                                 ([G≡E] ⊢Δ₁ [aρσ]))
 
--- Validity of Π as a term.
-Πᵗᵛ : ∀ {F G Γ} ([Γ] : ⊩ᵛ Γ)
+W-congᵛ {F} {G} {H} {E} {Γ} {l} BΣ [Γ] [F] [G] [H] [E] [F≡H] [G≡E] {σ = σ} ⊢Δ [σ] =
+  let [ΠFG] = ⟦ BΣ ⟧ᵛ {F} {G} [Γ] [F] [G]
+      [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
+      l′ , Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext′ = extractMaybeEmb (Σ-elim [σΠFG])
+      [σF] = proj₁ ([F] ⊢Δ [σ])
+      ⊢σF = escape [σF]
+      [σG] = proj₁ ([G] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+      ⊢σH = escape (proj₁ ([H] ⊢Δ [σ]))
+      ⊢σE = escape (proj₁ ([E] (⊢Δ ∙ ⊢σH) (liftSubstS {F = H} [Γ] ⊢Δ [H] [σ])))
+      ⊢σF≡σH = escapeEq [σF] ([F≡H] ⊢Δ [σ])
+      ⊢σG≡σE = escapeEq [σG] ([G≡E] (⊢Δ ∙ ⊢σF) (liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]))
+  in  B₌ (subst σ H)
+         (subst (liftSubst σ) E)
+         (id (Σⱼ ⊢σH ▹ ⊢σE))
+         (≅-Σ-cong ⊢σF ⊢σF≡σH ⊢σG≡σE)
+         (λ ρ ⊢Δ₁ → let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ ρ [σ]
+                        eqA = PE.sym (wk-subst F)
+                        eqB = PE.sym (wk-subst H)
+                        p = proj₁ ([F] ⊢Δ₁ [ρσ])
+                        wut : _ ⊩⟨ _ ⟩ U.wk _ (subst σ F)
+                        wut = [F]′ ρ ⊢Δ₁
+                        A≡B = [F≡H] ⊢Δ₁ [ρσ]
+                    in  irrelevanceEq″ eqA eqB p wut A≡B)
+         (λ {ρ} {Δ} {a} [ρ] ⊢Δ₁ [a] →
+            let [ρσ] = wkSubstS [Γ] ⊢Δ ⊢Δ₁ [ρ] [σ]
+                [a]′ = irrelevanceTerm′ (wk-subst F)
+                                        ([F]′ [ρ] ⊢Δ₁)
+                                        (proj₁ ([F] ⊢Δ₁ [ρσ])) [a]
+                [aρσ] = consSubstS {t = a} {A = F} [Γ] ⊢Δ₁ [ρσ] [F] [a]′
+            in  irrelevanceEq″ (PE.sym (singleSubstWkComp a σ G))
+                                (PE.sym (singleSubstWkComp a σ E))
+                                (proj₁ ([G] ⊢Δ₁ [aρσ]))
+                                ([G]′ [ρ] ⊢Δ₁ [a])
+                                ([G≡E] ⊢Δ₁ [aρσ]))
+
+-- Validity of ⟦ W ⟧ as a term.
+Wᵗᵛ : ∀ {F G Γ} W ([Γ] : ⊩ᵛ Γ)
       ([F] : Γ ⊩ᵛ⟨ ¹ ⟩ F / [Γ])
       ([U] : Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ U / [Γ] ∙ [F])
     → Γ ⊩ᵛ⟨ ¹ ⟩ F ∷ U / [Γ] / Uᵛ [Γ]
     → Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ G ∷ U / [Γ] ∙ [F] / (λ {Δ} {σ} → [U] {Δ} {σ})
-    → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ∷ U / [Γ] / Uᵛ [Γ]
-Πᵗᵛ {F} {G} {Γ} [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+    → Γ ⊩ᵛ⟨ ¹ ⟩ ⟦ W ⟧ F ▹ G ∷ U / [Γ] / Uᵛ [Γ]
+Wᵗᵛ {F} {G} {Γ} W [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       ⊢Fₜ = escapeTerm (Uᵣ′ ⁰ 0<1 ⊢Δ) (proj₁ ([Fₜ] ⊢Δ [σ]))
@@ -208,9 +254,10 @@ import Tools.PropositionalEquality as PE
       [G]₀ = univᵛ {G} (_∙_ {A = F} [Γ] [F]₀)
                    (λ {Δ} {σ} → Uᵛ (_∙_ {A = F} [Γ] [F]₀) {Δ} {σ})
                    (λ {Δ} {σ} → [Gₜ]′ {Δ} {σ})
-      [ΠFG] = (Πᵛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ]
-  in  Uₜ (Π subst σ F ▹ subst (liftSubst σ) G) (idRedTerm:*: (Πⱼ ⊢Fₜ ▹ ⊢Gₜ))
-         Πₙ (≅ₜ-Π-cong ⊢F ⊢F≡Fₜ ⊢G≡Gₜ) (proj₁ [ΠFG])
+      [ΠFG] = (⟦ W ⟧ᵛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ]
+  in  Uₜ (⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G)
+         (PE.subst (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G ∷ U) (PE.sym (B-subst σ W F G)) (idRedTerm:*: (⟦ W ⟧ⱼᵤ ⊢Fₜ ▹ ⊢Gₜ)))
+         ⟦ W ⟧-type (≅ₜ-W-cong W ⊢F ⊢F≡Fₜ ⊢G≡Gₜ) (proj₁ [ΠFG])
   ,   (λ {σ′} [σ′] [σ≡σ′] →
          let [liftσ′] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ′]
              [wk1σ] = wk1SubstS [Γ] ⊢Δ ⊢F [σ]
@@ -233,16 +280,22 @@ import Tools.PropositionalEquality as PE
              ⊢G≡G′ = escapeTermEq (proj₁ ([U] (⊢Δ ∙ ⊢F) [liftσ]))
                                      (proj₂ ([Gₜ] (⊢Δ ∙ ⊢F) [liftσ]) [liftσ′]′
                                             (liftSubstSEq {F = F} [Γ] ⊢Δ [F] [σ] [σ≡σ′]))
-             [ΠFG]′ = (Πᵛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ′]
-         in  Uₜ₌ (Π subst σ F ▹ subst (liftSubst σ) G)
-                 (Π subst σ′ F ▹ subst (liftSubst σ′) G)
-                 (idRedTerm:*: (Πⱼ ⊢Fₜ ▹ ⊢Gₜ))
-                 (idRedTerm:*: (Πⱼ ⊢Fₜ′ ▹ ⊢Gₜ′))
-                 Πₙ Πₙ (≅ₜ-Π-cong ⊢F ⊢F≡F′ ⊢G≡G′)
+             [ΠFG]′ = (⟦ W ⟧ᵛ {F} {G} [Γ] [F]₀ [G]₀) ⊢Δ [σ′]
+         in  Uₜ₌ (⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G)
+                 (⟦ W ⟧ subst σ′ F ▹ subst (liftSubst σ′) G)
+                 (PE.subst
+                   (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G ∷ U)
+                   (PE.sym (B-subst σ W F G))
+                   (idRedTerm:*: (⟦ W ⟧ⱼᵤ ⊢Fₜ ▹ ⊢Gₜ)))
+                 (PE.subst
+                   (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ′ F ▹ subst (liftSubst σ′) G ∷ U)
+                   (PE.sym (B-subst σ′ W F G))
+                   (idRedTerm:*: (⟦ W ⟧ⱼᵤ ⊢Fₜ′ ▹ ⊢Gₜ′)))
+                 ⟦ W ⟧-type ⟦ W ⟧-type (≅ₜ-W-cong W ⊢F ⊢F≡F′ ⊢G≡G′)
                  (proj₁ [ΠFG]) (proj₁ [ΠFG]′) (proj₂ [ΠFG] [σ′] [σ≡σ′]))
 
--- Validity of Π-congruence as a term equality.
-Π-congᵗᵛ : ∀ {F G H E Γ}
+-- Validity of W-congruence as a term equality.
+W-congᵗᵛ : ∀ {F G H E Γ} W
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ ¹ ⟩ F / [Γ])
            ([H] : Γ ⊩ᵛ⟨ ¹ ⟩ H / [Γ])
@@ -257,8 +310,8 @@ import Tools.PropositionalEquality as PE
            ([F≡H]ₜ : Γ ⊩ᵛ⟨ ¹ ⟩ F ≡ H ∷ U / [Γ] / Uᵛ [Γ])
            ([G≡E]ₜ : Γ ∙ F ⊩ᵛ⟨ ¹ ⟩ G ≡ E ∷ U / [Γ] ∙ [F]
                                   / (λ {Δ} {σ} → [UF] {Δ} {σ}))
-         → Γ ⊩ᵛ⟨ ¹ ⟩ Π F ▹ G ≡ Π H ▹ E ∷ U / [Γ] / Uᵛ [Γ]
-Π-congᵗᵛ {F} {G} {H} {E}
+         → Γ ⊩ᵛ⟨ ¹ ⟩ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ H ▹ E ∷ U / [Γ] / Uᵛ [Γ]
+W-congᵗᵛ {F} {G} {H} {E} W
          [Γ] [F] [H] [UF] [UH] [F]ₜ [G]ₜ [H]ₜ [E]ₜ [F≡H]ₜ [G≡E]ₜ {Δ} {σ} ⊢Δ [σ] =
   let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       ⊢H = escape (proj₁ ([H] ⊢Δ [σ]))
@@ -278,34 +331,41 @@ import Tools.PropositionalEquality as PE
                                (_∙_ {A = F} [Γ] [F]ᵤ) [G]ᵤ₁ [G]ᵤ
                  (univEqᵛ {G} {E} (_∙_ {A = F} [Γ] [F])
                           (λ {Δ} {σ} → [UF] {Δ} {σ}) [G]ᵤ₁ [G≡E]ₜ)
-      ΠFGₜ = Πⱼ escapeTerm {l = ¹} (Uᵣ′ ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
+      ΠFGₜ = ⟦ W ⟧ⱼᵤ escapeTerm {l = ¹} (Uᵣ′ ⁰ 0<1 ⊢Δ) (proj₁ ([F]ₜ ⊢Δ [σ]))
              ▹  escapeTerm (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
                            (proj₁ ([G]ₜ (⊢Δ ∙ ⊢F) [liftFσ]))
-      ΠHEₜ = Πⱼ escapeTerm {l = ¹} (Uᵣ′ ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
+      ΠHEₜ = ⟦ W ⟧ⱼᵤ escapeTerm {l = ¹} (Uᵣ′ ⁰ 0<1 ⊢Δ) (proj₁ ([H]ₜ ⊢Δ [σ]))
              ▹  escapeTerm (proj₁ ([UH] (⊢Δ ∙ ⊢H) [liftHσ]))
                            (proj₁ ([E]ₜ (⊢Δ ∙ ⊢H) [liftHσ]))
-  in  Uₜ₌ (Π subst σ F ▹ subst (liftSubst σ) G)
-          (Π subst σ H ▹ subst (liftSubst σ) E)
-          (idRedTerm:*: ΠFGₜ) (idRedTerm:*: ΠHEₜ)
-          Πₙ Πₙ
-          (≅ₜ-Π-cong ⊢F (escapeTermEq (Uᵣ′ ⁰ 0<1 ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
+  in  Uₜ₌ (⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G)
+          (⟦ W ⟧ subst σ H ▹ subst (liftSubst σ) E)
+          (PE.subst
+            (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ F ▹ subst (liftSubst σ) G ∷ U)
+            (PE.sym (B-subst σ W F G))
+            (idRedTerm:*: ΠFGₜ))
+          (PE.subst
+            (λ x → Δ ⊢ x :⇒*: ⟦ W ⟧ subst σ H ▹ subst (liftSubst σ) E ∷ U)
+            (PE.sym (B-subst σ W H E))
+            (idRedTerm:*: ΠHEₜ))
+          ⟦ W ⟧-type ⟦ W ⟧-type
+          (≅ₜ-W-cong W ⊢F (escapeTermEq (Uᵣ′ ⁰ 0<1 ⊢Δ) ([F≡H]ₜ ⊢Δ [σ]))
                         (escapeTermEq (proj₁ ([UF] (⊢Δ ∙ ⊢F) [liftFσ]))
                                           ([G≡E]ₜ (⊢Δ ∙ ⊢F) [liftFσ])))
-          (proj₁ (Πᵛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ]))
-          (proj₁ (Πᵛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))
-          (Π-congᵛ {F} {G} {H} {E} [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ])
+          (proj₁ (⟦ W ⟧ᵛ {F} {G} [Γ] [F]ᵤ [G]ᵤ ⊢Δ [σ]))
+          (proj₁ (⟦ W ⟧ᵛ {H} {E} [Γ] [H]ᵤ [E]ᵤ ⊢Δ [σ]))
+          (W-congᵛ {F} {G} {H} {E} W [Γ] [F]ᵤ [G]ᵤ [H]ᵤ [E]ᵤ [F≡H]ᵤ [G≡E]ᵤ ⊢Δ [σ])
 
--- Validity of non-dependent function types.
-▹▹ᵛ : ∀ {F G Γ l}
+-- Validity of non-dependent binding types.
+ndᵛ : ∀ {F G Γ l} W
       ([Γ] : ⊩ᵛ Γ)
       ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
     → Γ ⊩ᵛ⟨ l ⟩ G / [Γ]
-    → Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ]
-▹▹ᵛ {F} {G} [Γ] [F] [G] =
-  Πᵛ {F} {wk1 G} [Γ] [F] (wk1ᵛ {G} {F} [Γ] [F] [G])
+    → Γ ⊩ᵛ⟨ l ⟩ ⟦ W ⟧ F ▹ wk1 G / [Γ]
+ndᵛ {F} {G} W [Γ] [F] [G] =
+  ⟦ W ⟧ᵛ {F} {wk1 G} [Γ] [F] (wk1ᵛ {G} {F} [Γ] [F] [G])
 
--- Validity of non-dependent function type congruence.
-▹▹-congᵛ : ∀ {F F′ G G′ Γ l}
+-- Validity of non-dependent binding type congruence.
+nd-congᵛ : ∀ {F F′ G G′ Γ l} W
            ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
            ([F′] : Γ ⊩ᵛ⟨ l ⟩ F′ / [Γ])
@@ -313,9 +373,46 @@ import Tools.PropositionalEquality as PE
            ([G] : Γ ⊩ᵛ⟨ l ⟩ G / [Γ])
            ([G′] : Γ ⊩ᵛ⟨ l ⟩ G′ / [Γ])
            ([G≡G′] : Γ ⊩ᵛ⟨ l ⟩ G ≡ G′ / [Γ] / [G])
-         → Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G ≡ F′ ▹▹ G′ / [Γ] / ▹▹ᵛ {F} {G} [Γ] [F] [G]
-▹▹-congᵛ {F} {F′} {G} {G′} [Γ] [F] [F′] [F≡F′] [G] [G′] [G≡G′] =
-  Π-congᵛ {F} {wk1 G} {F′} {wk1 G′} [Γ]
-          [F] (wk1ᵛ {G} {F} [Γ] [F] [G])
+         → Γ ⊩ᵛ⟨ l ⟩ ⟦ W ⟧ F ▹ wk1 G ≡ ⟦ W ⟧ F′ ▹ wk1 G′ / [Γ] / ndᵛ {F} {G} W [Γ] [F] [G]
+nd-congᵛ {F} {F′} {G} {G′} W [Γ] [F] [F′] [F≡F′] [G] [G′] [G≡G′] =
+  W-congᵛ {F} {wk1 G} {F′} {wk1 G′} W
+          [Γ] [F] (wk1ᵛ {G} {F} [Γ] [F] [G])
           [F′] (wk1ᵛ {G′} {F′} [Γ] [F′] [G′])
           [F≡F′] (wk1Eqᵛ {G} {G′} {F} [Γ] [F] [G] [G≡G′])
+
+-- Respecialized declarations at Π and Σ
+Πᵛ : ∀ {F G Γ l} → _
+Πᵛ {F} {G} {Γ} {l} = ⟦ BΠ ⟧ᵛ {F} {G} {Γ} {l}
+
+Π-congᵛ : ∀ {F G H E Γ l} → _
+Π-congᵛ {F} {G} {H} {E} {Γ} {l} = W-congᵛ {F} {G} {H} {E} {Γ} {l} BΠ
+
+Πᵗᵛ : ∀ {F G Γ} → _
+Πᵗᵛ {F} {G} {Γ} = Wᵗᵛ {F} {G} {Γ} BΠ
+
+Π-congᵗᵛ : ∀ {F G H E Γ} → _
+Π-congᵗᵛ {F} {G} {H} {E} {Γ} = W-congᵗᵛ {F} {G} {H} {E} {Γ} BΠ
+
+▹▹ᵛ : ∀ {F G Γ l} → _
+▹▹ᵛ {F} {G} {Γ} {l} = ndᵛ {F} {G} {Γ} {l} BΠ
+
+▹▹-congᵛ : ∀ {F F′ G G′ Γ l} → _
+▹▹-congᵛ {F} {F′} {G} {G′} {Γ} {l} = nd-congᵛ {F} {F′} {G} {G′} {Γ} {l} BΠ
+
+Σᵛ : ∀ {F G Γ l} → _
+Σᵛ {F} {G} {Γ} {l} = ⟦ BΣ ⟧ᵛ {F} {G} {Γ} {l}
+
+Σ-congᵛ : ∀ {F G H E Γ l} → _
+Σ-congᵛ {F} {G} {H} {E} {Γ} {l} = W-congᵛ {F} {G} {H} {E} {Γ} {l} BΣ
+
+Σᵗᵛ : ∀ {F G Γ} → _
+Σᵗᵛ {F} {G} {Γ} = Wᵗᵛ {F} {G} {Γ} BΣ
+
+Σ-congᵗᵛ : ∀ {F G H E Γ} → _
+Σ-congᵗᵛ {F} {G} {H} {E} {Γ} = W-congᵗᵛ {F} {G} {H} {E} {Γ} BΣ
+
+××ᵛ : ∀ {F G Γ l} → _
+××ᵛ {F} {G} {Γ} {l} = ndᵛ {F} {G} {Γ} {l} BΣ
+
+××-congᵛ : ∀ {F F′ G G′ Γ l} → _
+××-congᵛ {F} {F′} {G} {G′} {Γ} {l} = nd-congᵛ {F} {F′} {G} {G′} {Γ} {l} BΣ

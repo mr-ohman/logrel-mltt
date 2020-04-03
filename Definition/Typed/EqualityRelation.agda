@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed.EqualityRelation where
 
@@ -112,9 +112,6 @@ record EqRelSet : Set₁ where
     ≅-Unitrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit
     ≅ₜ-Unitrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit ∷ U
 
-    -- Star reflexivity
-    ≅ₜ-starrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star ≅ star ∷ Unit
-
     -- Unit η-equality
     ≅ₜ-η-unit : ∀ {Γ e e'}
              → Γ ⊢ e ∷ Unit
@@ -154,6 +151,13 @@ record EqRelSet : Set₁ where
 
     -- Successor congruence
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
+
+    -- Product congruence
+    -- TODO would prod-refl be enough?
+    ≅-prod-cong : ∀ {Γ t t′ u u′ F} G
+                → Γ ⊢ t ≅ t′ ∷ F -- ~ or ≅ ?
+                → Γ ⊢ u ≅ u′ ∷ G [ t ]
+                → Γ ⊢ prod t u ≅ prod t′ u′ ∷ Σ F ▹ G
 
     -- η-equality
     ≅-η-eq : ∀ {f g F G Γ}
@@ -203,6 +207,26 @@ record EqRelSet : Set₁ where
                → Γ ⊢ n ~ n′ ∷ Empty
                → Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
 
+  -- Star reflexivity
+  ≅ₜ-starrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star ≅ star ∷ Unit
+  ≅ₜ-starrefl [Γ] = ≅ₜ-η-unit (starⱼ [Γ]) (starⱼ [Γ])
+
   -- Composition of universe and generic equality compatibility
   ~-to-≅ : ∀ {k l Γ} → Γ ⊢ k ~ l ∷ U → Γ ⊢ k ≅ l
   ~-to-≅ k~l = ≅-univ (~-to-≅ₜ k~l)
+
+  ≅-W-cong : ∀ {F G H E Γ} W
+          → Γ ⊢ F
+          → Γ ⊢ F ≅ H
+          → Γ ∙ F ⊢ G ≅ E
+          → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ ⟦ W ⟧ H ▹ E
+  ≅-W-cong BΠ = ≅-Π-cong
+  ≅-W-cong BΣ = ≅-Σ-cong
+
+  ≅ₜ-W-cong : ∀ {F G H E Γ} W
+            → Γ ⊢ F
+            → Γ ⊢ F ≅ H ∷ U
+            → Γ ∙ F ⊢ G ≅ E ∷ U
+            → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ ⟦ W ⟧ H ▹ E ∷ U
+  ≅ₜ-W-cong BΠ = ≅ₜ-Π-cong
+  ≅ₜ-W-cong BΣ = ≅ₜ-Σ-cong

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed.Weakening where
 
@@ -158,6 +158,10 @@ mutual
                           (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
                                     (PE.sym (wk1-wk≡lift-wk1 _ _))
                                     (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
+  wkEqTerm ρ ⊢Δ (prod-cong G t u) =
+    let ρt = wkEqTerm ρ ⊢Δ t
+        ρu = wkEqTerm ρ ⊢Δ u
+    in  prod-cong _ ρt (PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (wk-β G) ρu)
   wkEqTerm ρ ⊢Δ (fst-cong t≡t') = fst-cong (wkEqTerm ρ ⊢Δ t≡t')
   wkEqTerm ρ ⊢Δ (snd-cong {G = G} t≡t') =
     let ρt≡t' = wkEqTerm ρ ⊢Δ t≡t'

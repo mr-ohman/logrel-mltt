@@ -1,9 +1,16 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Tools.List where
 
-infixr 30 _∷_
+open import Data.List public using (List; []; _∷_)
 
-data List (A : Set) : Set where
-  [] : List A
-  _∷_ : A → List A → List A
+module L where
+  open import Data.List public
+
+--infixr 30 _∷_
+--_∷_ : ∀ {A : Set} → A → List A → List A
+--_∷_ = DL._∷_
+
+--data List (A : Set) : Set where
+--  [] : List A
+--  _∷_ : A → List A → List A
