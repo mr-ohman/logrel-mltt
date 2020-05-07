@@ -8,6 +8,7 @@ open EqRelSet {{...}}
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
+import Definition.Typed.Weakening as Wk
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
@@ -102,6 +103,13 @@ symEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
   Πₜ₌ g f d′ d funcG funcF (≅ₜ-sym f≡g) [g] [f]
       (λ ρ ⊢Δ [a] → symEqTerm ([G] ρ ⊢Δ [a]) ([f≡g] ρ ⊢Δ [a]))
 symEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-          (Σₜ₌ p r d d′ pProd rProd p≅r [p] [r]) =
-  Σₜ₌ r p d′ d rProd pProd (≅ₜ-sym p≅r) [r] [p]
+          (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) =
+  let ⊢Γ = wf ⊢F
+      [Gfstp≡Gfstr] = G-ext Wk.id ⊢Γ [fstp] [fstr] [fst≡]
+  in  Σₜ₌ r p d′ d rProd pProd (≅ₜ-sym p≅r) [u] [t] [fstr] [fstp]
+          (symEqTerm ([F] Wk.id ⊢Γ) [fst≡])
+          (convEqTerm₁
+            ([G] Wk.id ⊢Γ [fstp]) ([G] Wk.id ⊢Γ [fstr])
+            [Gfstp≡Gfstr]
+            (symEqTerm ([G] Wk.id ⊢Γ [fstp]) [snd≡]))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

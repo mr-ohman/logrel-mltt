@@ -152,7 +152,7 @@ mutual
                                    (proj₂ [h′] (proj₁ [σ′]) (proj₁ [σ≡σ′]))))
 
   -- Fundamental theorem for terms.
-  fundamentalTerm : ∀{Γ A t} → Γ ⊢ t ∷ A
+  fundamentalTerm : ∀ {Γ A t} → Γ ⊢ t ∷ A
     → ∃ λ ([Γ] : ⊩ᵛ Γ)
     → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
     → Γ ⊩ᵛ⟨ ¹ ⟩ t ∷ A / [Γ] / [A]

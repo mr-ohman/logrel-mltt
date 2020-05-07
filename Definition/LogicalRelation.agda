@@ -6,6 +6,8 @@ module Definition.LogicalRelation {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
 open import Definition.Untyped as U
+open import Definition.Untyped.Properties
+open import Definition.Typed.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
 
@@ -331,64 +333,61 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
             × Function f
             × Γ ⊢ f ≅ f ∷ Π F ▹ G
             × (∀ {ρ Δ a b}
-              → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-                ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-                ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+              ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              ([b] : Δ ⊩¹ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+              ([a≡b] : Δ ⊩¹ a ≡ b ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
               → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ f ∘ b ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
             × (∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
               → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
               → Δ ⊩¹ U.wk ρ f ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
+              -- TODO(WN): last 2 fields could be refactored to a single forall
     -- Issue: Agda complains about record use not being strictly positive.
     --        Therefore we have to use ×
 
     -- Term equality of Π-type
     _⊩¹Π_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹B⟨ BΠ ⟩ A) → Set
-    Γ ⊩¹Π t ≡ u ∷ A / Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext =
-      let [A] = Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext
-      in  ∃₂ λ f g →
-          Γ ⊢ t :⇒*: f ∷ Π F ▹ G
-      ×   Γ ⊢ u :⇒*: g ∷ Π F ▹ G
-      ×   Function f
-      ×   Function g
-      ×   Γ ⊢ f ≅ g ∷ Π F ▹ G
-      ×   Γ ⊩¹Π t ∷ A / [A]
-      ×   Γ ⊩¹Π u ∷ A / [A]
-      ×   (∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-          → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
-          → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
+    Γ ⊩¹Π t ≡ u ∷ A / [A]@(Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
+      ∃₂ λ f g → Γ ⊢ t :⇒*: f ∷ Π F ▹ G
+               × Γ ⊢ u :⇒*: g ∷ Π F ▹ G
+               × Function f
+               × Function g
+               × Γ ⊢ f ≅ g ∷ Π F ▹ G
+               × Γ ⊩¹Π t ∷ A / [A]
+               × Γ ⊩¹Π u ∷ A / [A]
+               × (∀ {ρ Δ a} ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+                 ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
+                 → Δ ⊩¹ U.wk ρ f ∘ a ≡ U.wk ρ g ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
     -- Issue: Same as above.
 
+
     -- Term reducibility of Σ-type
-    record _⊩¹Σ_∷_/_ (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹B⟨ BΣ ⟩ A) : Set where
-      inductive
-      constructor Σₜ
-      open _⊩¹B⟨_⟩_ [A]
-      field
-        p : Term
-        t⇒p : Γ ⊢ t :⇒*: p ∷ Σ F ▹ G
-        pProd : Product p
-        pRefl : Γ ⊢ p ≅ p ∷ Σ F ▹ G
-        -- TODO extra stuff re projections?
+    _⊩¹Σ_∷_/_ : (Γ : Con Term) (t A : Term) ([A] : Γ ⊩¹B⟨ BΣ ⟩ A) → Set
+    Γ ⊩¹Σ t ∷ A / [A]@(Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
+      ∃ λ p → Γ ⊢ t :⇒*: p ∷ Σ F ▹ G
+            × Product p
+            × Γ ⊢ p ≅ p ∷ Σ F ▹ G
+            × (Σ (Γ ⊩¹ fst p ∷ U.wk id F / [F] id (wf ⊢F)) λ [fst]
+                 → Γ ⊩¹ snd p ∷ U.wk (lift id) G [ fst p ] / [G] id (wf ⊢F) [fst])
+            --× (∀ {ρ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+            --  → Product-prop Δ (U.wk ρ F) (U.wk (lift ρ) G [ fst (U.wk ρ p) ]) ([F] [ρ] ⊢Δ) (U.wk ρ p))
 
     -- Term equality of Σ-type
-    record _⊩¹Σ_≡_∷_/_ (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹B⟨ BΣ ⟩ A) : Set where
-      inductive
-      constructor Σₜ₌
-      open _⊩¹B⟨_⟩_ [A]
-      field
-        p r : Term
-        t⇒p : Γ ⊢ t :⇒*: p ∷ Σ F ▹ G
-        u⇒r : Γ ⊢ u :⇒*: r ∷ Σ F ▹ G
-        pProd : Product p
-        rProd : Product r
-        p≅r : Γ ⊢ p ≅ r ∷ Σ F ▹ G
-        ⊩t : Γ ⊩¹Σ t ∷ A / [A]
-        ⊩u : Γ ⊩¹Σ u ∷ A / [A]
-        -- TODO extra stuff re projections?
+    _⊩¹Σ_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹B⟨ BΣ ⟩ A) → Set
+    Γ ⊩¹Σ t ≡ u ∷ A / [A]@(Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
+      ∃₂ λ p r → Γ ⊢ t :⇒*: p ∷ Σ F ▹ G
+               × Γ ⊢ u :⇒*: r ∷ Σ F ▹ G
+               × Product p
+               × Product r
+               × Γ ⊢ p ≅ r ∷ Σ F ▹ G
+               × Γ ⊩¹Σ t ∷ A / [A]
+               × Γ ⊩¹Σ u ∷ A / [A]
+               × (Σ (Γ ⊩¹ fst p ∷ U.wk id F / [F] id (wf ⊢F)) λ [fstp]
+                    → Γ ⊩¹ fst r ∷ U.wk id F / [F] id (wf ⊢F)
+                    × Γ ⊩¹ fst p ≡ fst r ∷ U.wk id F / [F] id (wf ⊢F)
+                    × Γ ⊩¹ snd p ≡ snd r ∷ U.wk (lift id) G [ fst p ] / [G] id (wf ⊢F) [fstp])
 
     -- Logical relation definition
-
     data _⊩¹_ (Γ : Con Term) : Term → Set where
       Uᵣ  : Γ ⊩¹U → Γ ⊩¹ U
       ℕᵣ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
@@ -398,6 +397,14 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
       Bᵣ  : ∀ {A} W → Γ ⊩¹B⟨ W ⟩ A → Γ ⊩¹ A
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
             ([A] : Γ ⊩ A) → Γ ⊩¹ A
+
+    data Product-prop (Γ : Con Term) (F G : Term) ([F] : Γ ⊩¹ F) : (p : Term) → Set where
+      prodᵣ : ∀ {t u}
+              → Γ ⊩¹ t ∷ F / [F]
+              → Product-prop Γ F G [F] (prod t u)
+      ne    : ∀ {p} → Γ ⊩neNf p ∷ Σ F ▹ G
+              → Product-prop Γ F G [F] p
+
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B
@@ -435,11 +442,13 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     kit = Kit _⊩¹U _⊩¹B⟨_⟩_
               _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
 
-open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; Unitᵣ; ne; Bᵣ; B₌; Σₜ; Σₜ₌; emb; Uₜ; Uₜ₌)
+open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; Unitᵣ; ne; Bᵣ; B₌; emb; Uₜ; Uₜ₌)
 
 -- Patterns for the non-records of Π
 pattern Πₜ f d funcF f≡f [f] [f]₁ = f , d , funcF , f≡f , [f] , [f]₁
 pattern Πₜ₌ f g d d′ funcF funcG f≡g [f] [g] [f≡g] = f , g , d , d′ , funcF , funcG , f≡g , [f] , [g] , [f≡g]
+pattern Σₜ p d pProd p≅p [fst] [snd] = p , d , pProd , p≅p , ([fst] , [snd])
+pattern Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡] = p , r , d , d′ , pProd , rProd , p≅r , [t] , [u] , ([fstp] , [fstr] , [fst≡] , [snd≡])
 
 pattern Uᵣ′ a b c = Uᵣ (Uᵣ a b c)
 pattern ne′ a b c d = ne (ne a b c d)

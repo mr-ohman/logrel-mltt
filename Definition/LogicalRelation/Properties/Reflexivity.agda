@@ -6,6 +6,8 @@ module Definition.LogicalRelation.Properties.Reflexivity {{eqrel : EqRelSet}} wh
 
 open import Definition.Untyped
 open import Definition.Typed
+open import Definition.Typed.Weakening
+open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 
 open import Tools.Product
@@ -56,13 +58,11 @@ reflEqTerm (Unitᵣ D) (Unitₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   Unitₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
 reflEqTerm (ne′ K D neK K≡K) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   neₜ₌ k k d d (neNfₜ₌ neK₁ neK₁ k≡k)
-reflEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
-  Πₜ₌ f f d d funcF funcF f≡f
-      (Πₜ f d funcF f≡f [f] [f]₁)
-      (Πₜ f d funcF f≡f [f] [f]₁)
+reflEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Πₜ f d funcF f≡f [f] [f]₁) =
+  Πₜ₌ f f d d funcF funcF f≡f [t] [t]
       (λ ρ ⊢Δ [a] → [f] ρ ⊢Δ [a] [a] (reflEqTerm ([F] ρ ⊢Δ) [a]))
-reflEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Σₜ p d pProd p≅p) =
-  Σₜ₌ p p d d pProd pProd p≅p
-      (Σₜ p d pProd p≅p)
-      (Σₜ p d pProd p≅p)
+reflEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Σₜ p d pProd p≅p [fst] [snd]) =
+  Σₜ₌ p p d d pProd pProd p≅p [t] [t] [fst] [fst]
+    (reflEqTerm ([F] id (wf ⊢F)) [fst])
+    (reflEqTerm ([G] id (wf ⊢F) [fst]) [snd])
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t

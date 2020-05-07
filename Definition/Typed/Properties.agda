@@ -131,14 +131,13 @@ redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
 -- No neutral terms are well-formed in an empty context
 
 noNe : ∀ {t A} → ε ⊢ t ∷ A → Neutral t → ⊥
+noNe (conv ⊢t x) n = noNe ⊢t n
 noNe (var x₁ ()) (var x)
-noNe (conv ⊢t x) (var n) = noNe ⊢t (var n)
 noNe (⊢t ∘ⱼ ⊢t₁) (∘ₙ neT) = noNe ⊢t neT
-noNe (conv ⊢t x) (∘ₙ neT) = noNe ⊢t (∘ₙ neT)
+noNe (fstⱼ ⊢t) (fstₙ neT) = noNe ⊢t neT
+noNe (sndⱼ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
-noNe (conv ⊢t x) (natrecₙ neT) = noNe ⊢t (natrecₙ neT)
-noNe (conv ⊢t x) (Emptyrecₙ neT) = noNe ⊢t (Emptyrecₙ neT)
 
 -- Neutrals do not weak head reduce
 
@@ -150,6 +149,10 @@ neRedTerm (natrec-subst x x₁ x₂ d) (natrecₙ n₁) = neRedTerm d n₁
 neRedTerm (natrec-zero x x₁ x₂) (natrecₙ ())
 neRedTerm (natrec-suc x x₁ x₂ x₃) (natrecₙ ())
 neRedTerm (Emptyrec-subst x d) (Emptyrecₙ n₁) = neRedTerm d n₁
+neRedTerm (fst-subst d) (fstₙ n) = neRedTerm d n
+neRedTerm (snd-subst d) (sndₙ n) = neRedTerm d n
+neRedTerm (Σ-β₁ G x x₁) (fstₙ ())
+neRedTerm (Σ-β₂ G x x₁) (sndₙ ())
 
 neRed : ∀ {Γ A B} (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
@@ -164,10 +167,10 @@ whnfRedTerm (natrec-subst x x₁ x₂ d) (ne (natrecₙ x₃)) = neRedTerm d x�
 whnfRedTerm (natrec-zero x x₁ x₂) (ne (natrecₙ ()))
 whnfRedTerm (natrec-suc x x₁ x₂ x₃) (ne (natrecₙ ()))
 whnfRedTerm (Emptyrec-subst x d) (ne (Emptyrecₙ x₂)) = neRedTerm d x₂
-whnfRedTerm (fst-subst x) (ne ())
-whnfRedTerm (snd-subst x) (ne ())
-whnfRedTerm (Σ-β₁ G x x₁) (ne ())
-whnfRedTerm (Σ-β₂ G x x₁) (ne ())
+whnfRedTerm (fst-subst d) (ne (fstₙ n)) = neRedTerm d n
+whnfRedTerm (snd-subst d) (ne (sndₙ n)) = neRedTerm d n
+whnfRedTerm (Σ-β₁ G x x₁) (ne (fstₙ ()))
+whnfRedTerm (Σ-β₂ G x x₁) (ne (sndₙ ()))
 
 whnfRed : ∀ {Γ A B} (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w

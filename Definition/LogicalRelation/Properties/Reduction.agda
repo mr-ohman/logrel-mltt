@@ -86,26 +86,22 @@ redSubst*Term t⇒u (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ 
       [d′] = [ conv (redFirst*Term t⇒u) A≡K , ⊢u , conv* t⇒u A≡K ⇨∷* d ]
   in  neₜ k [d′] (neNfₜ neK₁ ⊢k k≡k) , neₜ₌ k k [d′] [d] (neNfₜ₌ neK₁ neK₁ k≡k)
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-                  (Πₜ f [ ⊢t , ⊢u , d ] funcF f≡f [f] [f]₁) =
+                  [u]@(Πₜ f [d]@([ ⊢t , ⊢u , d ]) funcF f≡f [f] [f]₁) =
   let A≡ΠFG = subset* (red D)
       t⇒u′  = conv* t⇒u A≡ΠFG
-      [d]  = [ ⊢t , ⊢u , d ]
       [d′] = [ conv (redFirst*Term t⇒u) A≡ΠFG , ⊢u , conv* t⇒u A≡ΠFG ⇨∷* d ]
-  in  Πₜ f [d′] funcF f≡f [f] [f]₁
-  ,   Πₜ₌ f f [d′] [d] funcF funcF f≡f
-          (Πₜ f [d′] funcF f≡f [f] [f]₁)
-          (Πₜ f [d] funcF f≡f [f] [f]₁)
+      [u′] = Πₜ f [d′] funcF f≡f [f] [f]₁
+  in  [u′]
+  ,   Πₜ₌ f f [d′] [d] funcF funcF f≡f [u′] [u]
           (λ [ρ] ⊢Δ [a] → reflEqTerm ([G] [ρ] ⊢Δ [a]) ([f]₁ [ρ] ⊢Δ [a]))
 redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-                  (Σₜ p [ ⊢t , ⊢u , d ] pProd p≅p) =
+                  [u]@(Σₜ p [d]@([ ⊢t , ⊢u , d ]) pProd p≅p [fst] [snd]) =
   let A≡ΣFG = subset* (red D)
       t⇒u′  = conv* t⇒u A≡ΣFG
-      [d]  = [ ⊢t , ⊢u , d ]
       [d′] = [ conv (redFirst*Term t⇒u) A≡ΣFG , ⊢u , conv* t⇒u A≡ΣFG ⇨∷* d ]
-  in  Σₜ p [d′] pProd p≅p
-  ,   Σₜ₌ p p [d′] [d] pProd pProd p≅p
-          (Σₜ p [d′] pProd p≅p)
-          (Σₜ p [d] pProd p≅p)
+      [u′] = Σₜ p [d′] pProd p≅p [fst] [snd]
+  in  [u′]
+  ,   Σₜ₌ p p [d′] [d] pProd pProd p≅p [u′] [u] ? ? ? ?
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 -- Weak head expansion of reducible types with single reduction step.

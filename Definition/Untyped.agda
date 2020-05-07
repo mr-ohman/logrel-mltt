@@ -159,6 +159,8 @@ suc-PE-injectivity PE.refl = PE.refl
 data Neutral : Term → Set where
   var       : ∀ n                     → Neutral (var n)
   ∘ₙ        : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
+  fstₙ      : ∀ {p}       → Neutral p → Neutral (fst p)
+  sndₙ      : ∀ {p}       → Neutral p → Neutral (snd p)
   natrecₙ   : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
   Emptyrecₙ : ∀ {A e}     → Neutral e → Neutral (Emptyrec A e)
 
@@ -371,9 +373,11 @@ wk1 = wk (step id)
 -- Weakening of a neutral term.
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
-wkNeutral ρ (var n)    = var (wkVar ρ n)
-wkNeutral ρ (∘ₙ n)    = ∘ₙ (wkNeutral ρ n)
-wkNeutral ρ (natrecₙ n) = natrecₙ (wkNeutral ρ n)
+wkNeutral ρ (var n)       = var (wkVar ρ n)
+wkNeutral ρ (∘ₙ n)        = ∘ₙ (wkNeutral ρ n)
+wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
+wkNeutral ρ (sndₙ n)      = sndₙ (wkNeutral ρ n)
+wkNeutral ρ (natrecₙ n)   = natrecₙ (wkNeutral ρ n)
 wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.

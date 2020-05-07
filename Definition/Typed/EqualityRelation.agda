@@ -153,7 +153,7 @@ record EqRelSet : Set₁ where
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
 
     -- Product congruence
-    -- TODO would prod-refl be enough?
+    -- TODO it's dissatisfying to postulate congruence
     ≅-prod-cong : ∀ {Γ t t′ u u′ F} G
                 → Γ ⊢ t ≅ t′ ∷ F -- ~ or ≅ ?
                 → Γ ⊢ u ≅ u′ ∷ G [ t ]

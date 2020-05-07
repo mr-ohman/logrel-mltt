@@ -31,3 +31,7 @@ app-subst* : ∀ {Γ A B t t′ a} → Γ ⊢ t ⇒* t′ ∷ Π A ▹ B → Γ 
            → Γ ⊢ t ∘ a ⇒* t′ ∘ a ∷ B [ a ]
 app-subst* (id x) a₁ = id (x ∘ⱼ a₁)
 app-subst* (x ⇨ t⇒t′) a₁ = app-subst x a₁ ⇨ app-subst* t⇒t′ a₁
+
+fst-subst* : ∀ {Γ F G t t′} → Γ ⊢ t ⇒* t′ ∷ Σ F ▹ G → Γ ⊢ fst t ⇒* fst t′ ∷ F
+fst-subst* (id x) = id (fstⱼ x)
+fst-subst* (x ⇨ t⇒t′) = fst-subst x ⇨ fst-subst* t⇒t′

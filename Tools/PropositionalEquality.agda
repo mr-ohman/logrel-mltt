@@ -7,8 +7,10 @@ module Tools.PropositionalEquality where
 
 -- We reexport Agda's builtin equality type.
 
-open import Agda.Builtin.Equality public using (_≡_; refl)
-open import Tools.Empty
+open import Tools.Empty public
+import Relation.Binary.PropositionalEquality as Eq
+open Eq using (_≡_; refl) public
+open Eq.≡-Reasoning public
 
 -- Inequality.
 
@@ -20,12 +22,12 @@ a ≢ b = a ≡ b → ⊥
 -- Symmetry.
 
 sym : {A : Set} {a b : A} → a ≡ b → b ≡ a
-sym refl = refl
+sym = Eq.sym
 
 -- Transitivity.
 
 trans : {A : Set} {a b c : A} → a ≡ b → b ≡ c → a ≡ c
-trans refl refl = refl
+trans = Eq.trans
 
 -- Non-dependent congruence rules.
 
