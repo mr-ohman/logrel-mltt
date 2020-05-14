@@ -116,21 +116,21 @@ mutual
                         (PE.subst
                           (λ x → _ ⊢ fst _ ∷ x)
                           (PE.sym (wk-id F))
-                          (fstⱼ ⊢n))
+                          (fstⱼ ⊢F ⊢G ⊢n))
                         (PE.subst
                           (λ x → _ ⊢ _ ~ _ ∷ x)
                           (PE.sym (wk-id F))
-                          (~-fst n~n))
+                          (~-fst ⊢F ⊢G n~n))
         [Gfst] = [G] Wk.id ⊢Γ [fst]
         [snd] = neuTerm [Gfst] (sndₙ neN)
                         (PE.subst
                           (λ x → _ ⊢ snd _ ∷ x)
                           (PE.cong (λ x → x [ fst _ ]) (PE.sym (wk-lift-id G)))
-                          (sndⱼ ⊢n))
+                          (sndⱼ ⊢F ⊢G ⊢n))
                         (PE.subst
                           (λ x → _ ⊢ _ ~ _ ∷ x)
                           (PE.cong (λ x → x [ fst _ ]) (PE.sym (wk-lift-id G)))
-                          (~-snd n~n))
+                          (~-snd ⊢F ⊢G n~n))
     in  Σₜ _ (idRedTerm:*: ⊢n) (ne neN) (~-to-≅ₜ n~n)
            [fst]
            [snd]
@@ -205,15 +205,58 @@ mutual
         n~n′Σ = ~-conv n~n′ A≡ΣFG
         n~nΣ = ~-conv n~n A≡ΣFG
         n′~n′Σ = ~-conv n′~n′ A≡ΣFG
-        [F] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (wk-id F) ([F] Wk.id ⊢Γ)
-        [fstn] = neuTerm [F] (fstₙ neN) (fstⱼ ⊢nΣ) (~-fst n~nΣ)
-        [fstn′] = neuTerm [F] (fstₙ neN′) (fstⱼ ⊢n′Σ) (~-fst n′~n′Σ)
-
-        --[Gfstn] = [G] Wk.id ⊢Γ [fstn]
-        --[fstn≡fstn′] = neuEqTerm [ΣFG]
-
+        [F] = [F] Wk.id ⊢Γ
+        ⊢fstnΣ = (PE.subst
+                (λ x → _ ⊢ fst _ ∷ x)
+                (PE.sym (wk-id F))
+                (fstⱼ ⊢F ⊢G ⊢nΣ))
+        ⊢fstn′Σ = (PE.subst
+                    (λ x → _ ⊢ fst _ ∷ x)
+                    (PE.sym (wk-id F))
+                    (fstⱼ ⊢F ⊢G ⊢n′Σ))
+        [fstn] = neuTerm [F] (fstₙ neN)
+                         ⊢fstnΣ
+                         (PE.subst
+                           (λ x → _ ⊢ _ ~ _ ∷ x)
+                           (PE.sym (wk-id F))
+                           (~-fst ⊢F ⊢G n~nΣ))
+        [fstn′] = neuTerm [F] (fstₙ neN′)
+                          ⊢fstn′Σ
+                          (PE.subst
+                            (λ x → _ ⊢ _ ~ _ ∷ x)
+                            (PE.sym (wk-id F))
+                            (~-fst ⊢F ⊢G n′~n′Σ))
+        [fstn≡fstn′] = neuEqTerm [F] (fstₙ neN) (fstₙ neN′)
+                         ⊢fstnΣ
+                         ⊢fstn′Σ
+                         (PE.subst
+                           (λ x → _ ⊢ _ ~ _ ∷ x)
+                           (PE.sym (wk-id F))
+                           (~-fst ⊢F ⊢G n~n′Σ))
+        [Gfstn] = [G] Wk.id ⊢Γ [fstn]
+        [Gfstn′] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x [ fst _ ]) (wk-lift-id G) ([G] Wk.id ⊢Γ [fstn′])
+        [fstn′≡fstn] = symEqTerm [F] [fstn≡fstn′]
+        [Gfstn′≡Gfstn] = irrelevanceEq″
+                           (PE.cong (λ x → x [ fst _ ]) (wk-lift-id G))
+                           (PE.cong (λ x → x [ fst _ ]) (wk-lift-id G))
+                           ([G] Wk.id ⊢Γ [fstn′]) [Gfstn′]
+                           (G-ext Wk.id ⊢Γ [fstn′] [fstn] [fstn′≡fstn])
+        Gfstn′≡Gfstn = ≅-eq (escapeEq [Gfstn′] [Gfstn′≡Gfstn])
+        [sndn≡sndn′] = neuEqTerm [Gfstn] (sndₙ neN) (sndₙ neN′)
+                          (PE.subst
+                            (λ x → _ ⊢ snd _ ∷ x)
+                            (PE.cong (λ x → x [ fst _ ]) (PE.sym (wk-lift-id G)))
+                            (sndⱼ ⊢F ⊢G ⊢nΣ))
+                          (PE.subst
+                            (λ x → _ ⊢ snd _ ∷ x)
+                            (PE.cong (λ x → x [ fst _ ]) (PE.sym (wk-lift-id G)))
+                            (conv (sndⱼ ⊢F ⊢G ⊢n′Σ) Gfstn′≡Gfstn))
+                          (PE.subst
+                            (λ x → _ ⊢ _ ~ _ ∷ x)
+                            (PE.cong (λ x → x [ fst _ ]) (PE.sym (wk-lift-id G)))
+                            (~-snd ⊢F ⊢G n~n′Σ))
     in  Σₜ₌ _ _ (idRedTerm:*: ⊢nΣ) (idRedTerm:*: ⊢n′Σ)
             (ne neN) (ne neN′) (~-to-≅ₜ n~n′Σ)
             (neuTerm [ΣFG] neN ⊢n n~n) (neuTerm [ΣFG] neN′ ⊢n′ n′~n′)
-            {!!} {!!} {!!} {!!}
+            [fstn] [fstn′] [fstn≡fstn′] [sndn≡sndn′]
   neuEqTerm (emb 0<1 x) neN neN′ n:≡:n′ = neuEqTerm x neN neN′ n:≡:n′

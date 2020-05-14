@@ -199,12 +199,25 @@ mutual
         [G[t]] = substSΠ {F} {G} {a} BΠ [Γ]₁ [F] [ΠFG]′ [u]
         [t∘u] = appᵛ {F} {G} {g} {a} [Γ]₁ [F] [ΠFG]′ [t]′ [u]
     in  [Γ]₁ , [G[t]] , [t∘u]
-  fundamentalTerm (prodⱼ G t u) with fundamentalTerm t | fundamentalTerm u
-  ... | [Γ] , [F] , [t] | [Γ]₁ , [G] , [u] = {!!}
-  fundamentalTerm (fstⱼ t) with fundamentalTerm t
-  ... | [Γ] , [ΣFG] , [t] = {!!}
-  fundamentalTerm (sndⱼ t) with fundamentalTerm t
-  ... | [Γ] , [ΣFG] , [u] = {!!}
+  fundamentalTerm (prodⱼ {F} {G} {t} {u} ⊢F ⊢G ⊢t ⊢u) with
+    fundamentalTerm ⊢t | fundamental ⊢G | fundamentalTerm ⊢u
+  ... | [Γ] , [F] , [t] | [Γ]₁ , [G] | [Γ]₂ , [Gt] , [u] =
+    let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
+        [u]′ = S.irrelevanceTerm {A = G [ t ]} {t = u} [Γ]₂ [Γ] [Gt] (substS {F} {G} [Γ] [F] [G]′ [t]) [u]
+    in  [Γ] , Σᵛ {F} {G} [Γ] [F] [G]′ , prodᵛ {F} {G} {t} {u} [Γ] [F] [G]′ [t] [u]′
+  fundamentalTerm (fstⱼ {F} {G} {t} ⊢F ⊢G ⊢t) with
+    fundamental ⊢F | fundamental ⊢G | fundamentalTerm ⊢t
+  ... | [Γ] , [F] | [Γ]₁ , [G] | [Γ]₂ , [ΣFG] , [t] =
+    let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
+        [t]′ = S.irrelevanceTerm {A = Σ F ▹ G} [Γ]₂ [Γ] [ΣFG] (Σᵛ {F} {G} [Γ] [F] [G]′) [t]
+    in  [Γ] , [F] , fstᵛ [Γ] [F] [G]′ [t]′
+  fundamentalTerm (sndⱼ {F} {G} {t} ⊢F ⊢G ⊢t) with
+    fundamental ⊢F | fundamental ⊢G | fundamentalTerm ⊢t
+  ... | [Γ] , [F] | [Γ]₁ , [G] | [Γ]₂ , [ΣFG] , [t] =
+    let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
+        [t]′ = S.irrelevanceTerm {A = Σ F ▹ G} [Γ]₂ [Γ] [ΣFG] (Σᵛ {F} {G} [Γ] [F] [G]′) [t]
+    in  [Γ] , substS {F} {G} [Γ] [F] [G]′ (fstᵛ {F} {G} [Γ] [F] [G]′ [t]′)
+      , sndᵛ [Γ] [F] [G]′ [t]′
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
   fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
@@ -613,6 +626,51 @@ mutual
   ... | [Γ] , [Unit] , [e] | [Γ]' , [Unit]' , [e'] =
     let [e'] = S.irrelevanceTerm {A = Unit} {t = e'} [Γ]' [Γ] [Unit]' [Unit] [e']
     in  [Γ] , modelsTermEq [Unit] [e] [e'] (η-unitᵛ {e = e} {e' = e'} [Γ] [Unit] [e] [e'])
+  fundamentalTermEq {Γ = Γ} (prod-cong {t} {t′} {u} {u′} {F} {G} ⊢F ⊢G t≡t′ u≡u′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢G | fundamentalTermEq u≡u′
+  ... | [Γ] , modelsTermEq [F] [t] [t′] [t≡t′] | [Γ]₁ , [G] | [Γ]₂ , modelsTermEq [Gt] [u] [u′] [u≡u′] =
+    let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
+
+        [u]′ = S.irrelevanceTerm {A = G [ t ]} {t = u} [Γ]₂ [Γ]
+                                 [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
+                                 [u]
+        [u′]″ = S.irrelevanceTerm {A = G [ t ]} {t = u′} [Γ]₂ [Γ]
+                                  [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
+                                  [u′]
+        [u≡u′]′ = S.irrelevanceEqTerm {A = G [ t ]} {t = u} {u = u′} [Γ]₂ [Γ]
+                                      [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
+                                      [u≡u′]
+
+        [Gt≡Gt′] = substSEq {F = F} {F′ = F} {G = G} {G′ = G} {t = t} {t′ = t′} [Γ]
+                            [F] [F] (reflᵛ {A = F} [Γ] [F])
+                            [G]′ [G]′ (reflᵛ {A = G} {Γ = Γ ∙ F} ([Γ] ∙ [F]) [G]′)
+                            [t] [t′] [t≡t′]
+
+        [u′]′ = convᵛ {t = u′} {A = G [ t ]} {B = G [ t′ ]} [Γ]
+                      (substS {F} {G} [Γ] [F] [G]′ [t])
+                      (substS {F} {G} [Γ] [F] [G]′ [t′])
+                      [Gt≡Gt′]
+                      [u′]″
+
+        [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]′
+
+        [prod] = prodᵛ {F} {G} {t} {u} [Γ] [F] [G]′ [t] [u]′
+        [prod′] = prodᵛ {F} {G} {t′} {u′} [Γ] [F] [G]′ [t′] [u′]′
+        [prod≡] = prod-congᵛ {F} {G} {t} {t′} {u} {u′} [Γ] [F] [G]′ [t] [t′] [t≡t′] [u]′ [u′]′ [u≡u′]′
+    in [Γ] , modelsTermEq [ΣFG] [prod] [prod′] [prod≡]
+  fundamentalTermEq (fst-cong ⊢F ⊢G t≡t′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢G
+  ... | [Γ] , modelsTermEq [F] [t] [t′] [t≡t′] | [Γ]₁ , [G] =
+    let x = 4
+    in  {!!}
+  fundamentalTermEq (snd-cong ⊢F ⊢G t≡t′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢G
+  ... | [Γ] , modelsTermEq [F] [t] [t′] [t≡t′] | [Γ]₁ , [G] =
+    let x = 5
+    in  {!!}
+  fundamentalTermEq (Σ-β₁ ⊢F ⊢G ⊢t ⊢u) = {!!}
+  fundamentalTermEq (Σ-β₂ ⊢F ⊢G ⊢t ⊢u) = {!!}
+  fundamentalTermEq (Σ-η ⊢F ⊢G ⊢t) = {!!}
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

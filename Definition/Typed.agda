@@ -74,14 +74,20 @@ mutual
               → Γ ⊢     a ∷ F
               → Γ ⊢ g ∘ a ∷ G [ a ]
 
-    prodⱼ     : ∀ {F t u} G
+    prodⱼ     : ∀ {F G t u}
+              → Γ ⊢ F
+              → Γ ∙ F ⊢ G
               → Γ ⊢ t ∷ F
               → Γ ⊢ u ∷ G [ t ]
               → Γ ⊢ prod t u ∷ Σ F ▹ G
     fstⱼ      : ∀ {F G t}
+              → Γ ⊢ F
+              → Γ ∙ F ⊢ G
               → Γ ⊢ t ∷ Σ F ▹ G
               → Γ ⊢ fst t ∷ F
     sndⱼ      : ∀ {F G t}
+              → Γ ⊢ F
+              → Γ ∙ F ⊢ G
               → Γ ⊢ t ∷ Σ F ▹ G
               → Γ ⊢ snd t ∷ G [ fst t ]
 
@@ -174,27 +180,39 @@ mutual
                 → Γ     ⊢ g ∷ Π F ▹ G
                 → Γ ∙ F ⊢ wk1 f ∘ var Nat.zero ≡ wk1 g ∘ var Nat.zero ∷ G
                 → Γ     ⊢ f ≡ g ∷ Π F ▹ G
+    prod-cong   : ∀ {t t′ u u′ F G}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
+                → Γ ⊢ t ≡ t′ ∷ F
+                → Γ ⊢ u ≡ u′ ∷ G [ t ]
+                → Γ ⊢ prod t u ≡ prod t′ u′ ∷ Σ F ▹ G
     fst-cong    : ∀ {t t' F G}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ≡ t' ∷ Σ F ▹ G
                 → Γ ⊢ fst t ≡ fst t' ∷ F
     snd-cong    : ∀ {t t' F G}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ≡ t' ∷ Σ F ▹ G
                 → Γ ⊢ snd t ≡ snd t' ∷ G [ fst t ]
-    Σ-β₁        : ∀ {t u F} G
+    Σ-β₁        : ∀ {F G t u}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ∷ F
                 → Γ ⊢ u ∷ G [ t ]
                 → Γ ⊢ fst (prod t u) ≡ t ∷ F
-    Σ-β₂        : ∀ {t u F} G
+    Σ-β₂        : ∀ {F G t u}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ∷ F
                 → Γ ⊢ u ∷ G [ t ]
                 → Γ ⊢ snd (prod t u) ≡ u ∷ G [ fst (prod t u) ]
     Σ-η         : ∀ {t F G}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ∷ Σ F ▹ G
                 → Γ ⊢ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G
-    prod-cong   : ∀ {t t′ u u′ F} G
-                → Γ ⊢ t ≡ t′ ∷ F
-                → Γ ⊢ u ≡ u′ ∷ G [ t ]
-                → Γ ⊢ prod t u ≡ prod t′ u′ ∷ Σ F ▹ G
     suc-cong    : ∀ {m n}
                 → Γ ⊢ m ≡ n ∷ ℕ
                 → Γ ⊢ suc m ≡ suc n ∷ ℕ
@@ -241,16 +259,24 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
                  → Γ     ⊢ a ∷ A
                  → Γ     ⊢ (lam t) ∘ a ⇒ t [ a ] ∷ B [ a ]
   fst-subst      : ∀ {t t' F G}
+                 → Γ ⊢ F
+                 → Γ ∙ F ⊢ G
                  → Γ ⊢ t ⇒ t' ∷ Σ F ▹ G
                  → Γ ⊢ fst t ⇒ fst t' ∷ F
   snd-subst      : ∀ {t t' F G}
+                 → Γ ⊢ F
+                 → Γ ∙ F ⊢ G
                  → Γ ⊢ t ⇒ t' ∷ Σ F ▹ G
                  → Γ ⊢ snd t ⇒ snd t' ∷ G [ fst t ]
-  Σ-β₁           : ∀ {t u F} G -- G not easily synthesizable, so pass explicitly
+  Σ-β₁           : ∀ {F G t u}
+                 → Γ ⊢ F
+                 → Γ ∙ F ⊢ G
                  → Γ ⊢ t ∷ F
                  → Γ ⊢ u ∷ G [ t ]
                  → Γ ⊢ fst (prod t u) ⇒ t ∷ F
-  Σ-β₂           : ∀ {t u F} G
+  Σ-β₂           : ∀ {F G t u}
+                 → Γ ⊢ F
+                 → Γ ∙ F ⊢ G
                  → Γ ⊢ t ∷ F
                  → Γ ⊢ u ∷ G [ t ]
                  → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ] -- TODO prove 𝔍 ∷ G [ t ]

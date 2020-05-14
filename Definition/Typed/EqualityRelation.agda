@@ -154,7 +154,9 @@ record EqRelSet : Set₁ where
 
     -- Product congruence
     -- TODO it's dissatisfying to postulate congruence
-    ≅-prod-cong : ∀ {Γ t t′ u u′ F} G
+    ≅-prod-cong : ∀ {Γ t t′ u u′ F G}
+                → Γ ⊢ F
+                → Γ ∙ F ⊢ G
                 → Γ ⊢ t ≅ t′ ∷ F -- ~ or ≅ ?
                 → Γ ⊢ u ≅ u′ ∷ G [ t ]
                 → Γ ⊢ prod t u ≅ prod t′ u′ ∷ Σ F ▹ G
@@ -171,6 +173,8 @@ record EqRelSet : Set₁ where
 
     -- η for product types
     ≅-Σ-η : ∀ {p F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
           → Γ ⊢ p ∷ Σ F ▹ G
           → Product p
           → Γ ⊢ p ≅ prod (fst p) (snd p) ∷ Σ F ▹ G
@@ -186,10 +190,14 @@ record EqRelSet : Set₁ where
 
     -- Product projections congruence
     ~-fst : ∀ {p r F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
           → Γ ⊢ p ~ r ∷ Σ F ▹ G
           → Γ ⊢ fst p ~ fst r ∷ F
 
     ~-snd : ∀ {p r F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
           → Γ ⊢ p ~ r ∷ Σ F ▹ G
           → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
 

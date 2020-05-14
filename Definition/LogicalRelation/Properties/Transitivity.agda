@@ -8,10 +8,12 @@ open EqRelSet {{...}}
 open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
+import Definition.Typed.Weakening as Wk
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
+open import Definition.LogicalRelation.Properties.Symmetry
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -203,9 +205,19 @@ transEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                                 ([f≡g] ρ ⊢Δ [a])
                                 ([f≡g]₁ ρ ⊢Δ [a]))
 transEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-            (Σₜ₌ p r d d′ pProd rProd p≅r [p] [r])
-            (Σₜ₌ p₁ r₁ d₁ d₁′ pProd₁ rProd₁ p≅r₁ [p]₁ [r]₁)
+            (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡])
+            (Σₜ₌ p₁ r₁ d₁ d₁′ pProd₁ rProd₁ p≅r₁ [t]₁ [u]₁ [fstp]₁ [fstr]₁ [fst≡]₁ [snd≡]₁)
             rewrite whrDet*Term (redₜ d′ , productWhnf rProd)
-                            (redₜ d₁ , productWhnf pProd₁) =
-  Σₜ₌ p r₁ d d₁′ pProd rProd₁ (≅ₜ-trans p≅r p≅r₁) [p] [r]₁
+                                (redₜ d₁ , productWhnf pProd₁) =
+  let ⊢Γ = wf ⊢F
+      [Gfstp≡Gfstp₁] = G-ext Wk.id ⊢Γ [fstp] [fstr] [fst≡]
+      [snd≡]′ = transEqTerm ([G] Wk.id ⊢Γ [fstp])
+                            [snd≡]
+                            (convEqTerm₂ ([G] Wk.id ⊢Γ [fstp])
+                                         ([G] Wk.id ⊢Γ [fstp]₁)
+                                         [Gfstp≡Gfstp₁]
+                                         [snd≡]₁)
+  in  Σₜ₌ p r₁ d d₁′ pProd rProd₁ (≅ₜ-trans p≅r p≅r₁) [t] [u]₁ [fstp] [fstr]₁
+          (transEqTerm ([F] Wk.id ⊢Γ) [fst≡] [fst≡]₁)
+          [snd≡]′
 transEqTerm (emb 0<1 x) t≡u u≡v = transEqTerm x t≡u u≡v

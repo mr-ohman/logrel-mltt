@@ -7,6 +7,7 @@ open EqRelSet {{...}}
 
 open import Definition.Typed
 open import Definition.Typed.Properties
+import Definition.Typed.Weakening as Wk
 open import Definition.Typed.RedSteps
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties.Reflexivity
@@ -101,7 +102,9 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G]
       [d′] = [ conv (redFirst*Term t⇒u) A≡ΣFG , ⊢u , conv* t⇒u A≡ΣFG ⇨∷* d ]
       [u′] = Σₜ p [d′] pProd p≅p [fst] [snd]
   in  [u′]
-  ,   Σₜ₌ p p [d′] [d] pProd pProd p≅p [u′] [u] ? ? ? ?
+  ,   Σₜ₌ p p [d′] [d] pProd pProd p≅p [u′] [u] [fst] [fst]
+          (reflEqTerm ([F] Wk.id (wf ⊢F)) [fst])
+          (reflEqTerm ([G] Wk.id (wf ⊢F) [fst]) [snd])
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 -- Weak head expansion of reducible types with single reduction step.
