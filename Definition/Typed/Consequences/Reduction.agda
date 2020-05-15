@@ -22,6 +22,7 @@ whNorm′ (Emptyᵣ D) = Empty , Emptyₙ , D
 whNorm′ (Unitᵣ D) = Unit , Unitₙ , D
 whNorm′ (ne′ K D neK K≡K) = K , ne neK , D
 whNorm′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Π F ▹ G , Πₙ , D
+whNorm′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Σ F ▹ G , Σₙ , D
 whNorm′ (emb 0<1 [A]) = whNorm′ [A]
 
 -- Well-formed types can all be reduced to WHNF.
@@ -45,6 +46,8 @@ whNormTerm′ (ne (ne K D neK K≡K)) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   k , ne neK₁ , convRed:*: d (sym (subset* (red D)))
 whNormTerm′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
   f , functionWhnf funcF , convRed:*: d (sym (subset* (red D)))
+whNormTerm′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Σₜ p d pProd p≡p [fst] [snd]) =
+  p , productWhnf pProd , convRed:*: d (sym (subset* (red D)))
 whNormTerm′ (emb 0<1 [A]) [a] = whNormTerm′ [A] [a]
 
 -- Well-formed terms can all be reduced to WHNF.

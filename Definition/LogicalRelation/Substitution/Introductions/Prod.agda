@@ -22,10 +22,10 @@ open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Reflexivity
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
-open import Definition.LogicalRelation.Substitution.Introductions.Fst
 
 open import Tools.Product
 import Tools.PropositionalEquality as PE
+
 
 prod′ : ∀ {F G t u Γ l l′ l″}
        ([F] : Γ ⊩⟨ l ⟩ F)
@@ -111,37 +111,97 @@ prod-cong′ {F} {G} {t} {t′} {u} {u′} {Γ} {l} {l′}
   let [prod] = prod′ [F] [t] [Gt] [u] [ΣFG]
 
       ⊢Γ = wf ⊢F
-      [wkF] = [F]₁ id ⊢Γ
-      [wkt] = irrelevanceTerm′ (PE.sym (wk-id F)) [F] [wkF] [t]
-      [wkt′] = irrelevanceTerm′ (PE.sym (wk-id F)) [F] [wkF] [t′]
-      [wkt≡t′] = irrelevanceEqTerm′ (PE.sym (wk-id F)) [F] [wkF] [t≡t′]
-      [wkGt] = [G]₁ id ⊢Γ [wkt]
-      [wkGt′] = [G]₁ id ⊢Γ [wkt′]
-      [wkGt≡Gt′] = G-ext id ⊢Γ [wkt] [wkt′] [wkt≡t′]
+      wk[F] = [F]₁ id ⊢Γ
+      wk[t] = irrelevanceTerm′ (PE.sym (wk-id F)) [F] wk[F] [t]
+      wk[t′] = irrelevanceTerm′ (PE.sym (wk-id F)) [F] wk[F] [t′]
+      wk[t≡t′] = irrelevanceEqTerm′ (PE.sym (wk-id F)) [F] wk[F] [t≡t′]
+      wk[Gt] = [G]₁ id ⊢Γ wk[t]
+      wk[Gt′] = [G]₁ id ⊢Γ wk[t′]
+      wk[Gt≡Gt′] = G-ext id ⊢Γ wk[t] wk[t′] wk[t≡t′]
 
-
-      [Gt′] = irrelevance′ (PE.cong (λ x → x [ t′ ]) (wk-lift-id G)) [wkGt′]
+      [Gt′] = irrelevance′ (PE.cong (λ x → x [ t′ ]) (wk-lift-id G)) wk[Gt′]
       [Gt≡Gt′] = irrelevanceEq″ (PE.cong (λ x → x [ t ]) (wk-lift-id G))
                                 (PE.cong (λ x → x [ t′ ]) (wk-lift-id G))
-                                [wkGt] [Gt]
-                                [wkGt≡Gt′]
+                                wk[Gt] [Gt]
+                                wk[Gt≡Gt′]
 
-      [u′]′ = convTerm₁ [Gt] [Gt′] [Gt≡Gt′] [u′]
+      [u′]Gt′ = convTerm₁ [Gt] [Gt′] [Gt≡Gt′] [u′]
 
-      [prod′] = prod′ [F] [t′] [Gt′] [u′]′ [ΣFG]
+      [prod′] = prod′ [F] [t′] [Gt′] [u′]Gt′ [ΣFG]
 
-      [fst] = fst′ [F] [ΣFG] [prod]
-      [fst′] = fst′ [F] [ΣFG] [prod′]
+      ⊢t = escapeTerm [F] [t]
+      ⊢t′ = escapeTerm [F] [t′]
+      ⊢u = escapeTerm [Gt] [u]
+      ⊢u′ = escapeTerm [Gt′] [u′]Gt′
 
-      [fst]′ = irrelevanceTerm′ (PE.sym (wk-id F))
-                                [F] [wkF]
-                                [fst]
-      [fst′]′ = irrelevanceTerm′ (PE.sym (wk-id F))
-                                 [F] [wkF]
+      fst⇒t = Σ-β₁ ⊢F ⊢G ⊢t ⊢u
+      [fst] , [fst≡t] = redSubstTerm fst⇒t [F] [t]
+      fst⇒t′ = Σ-β₁ ⊢F ⊢G ⊢t′ ⊢u′
+      [fst′] , [fst≡t′] = redSubstTerm fst⇒t′ [F] [t′]
+
+      wk[fst≡t] = irrelevanceEqTerm′ (PE.sym (wk-id F))
+                                      [F] wk[F]
+                                      [fst≡t]
+      wk[fst≡t′] = irrelevanceEqTerm′ (PE.sym (wk-id F))
+                                      [F] wk[F]
+                                      [fst≡t′]
+
+      wk[fst] = irrelevanceTerm′ (PE.sym (wk-id F))
+                                 [F] wk[F]
+                                 [fst]
+      wk[fst′] = irrelevanceTerm′ (PE.sym (wk-id F))
+                                 [F] wk[F]
                                  [fst′]
 
-      [fst≡fst′] = {!!}
-      [snd≡snd′] = {!!}
+      -- fst t ≡ fst t′ ∷ F
+      [fst≡fst′] = transEqTerm [F] [fst≡t] (transEqTerm [F] [t≡t′] (symEqTerm [F] [fst≡t′]))
+      wk[fst≡fst′] = irrelevanceEqTerm′ (PE.sym (wk-id F))
+                                        [F] wk[F]
+                                        [fst≡fst′]
+
+      -- snd (prod t u) ≡ u ∷ G [ fst (prod t u) ]
+      wkLiftIdEq = PE.cong (λ x → x [ fst (prod t u ) ]) (wk-lift-id G)
+      wk[Gfst] = [G]₁ id ⊢Γ wk[fst]
+      [Gfst] = irrelevance′ wkLiftIdEq wk[Gfst]
+      [Gfst≡Gt] = irrelevanceEq″ wkLiftIdEq (PE.cong (λ x → x [ t ])
+                                                     (wk-lift-id G))
+                                 wk[Gfst] [Gfst]
+                                 (G-ext id ⊢Γ wk[fst] wk[t] wk[fst≡t])
+
+      [u]fst = convTerm₂ [Gfst] [Gt] [Gfst≡Gt] [u]
+      snd⇒u = Σ-β₂ ⊢F ⊢G ⊢t ⊢u
+      [snd] , [snd≡u] = redSubstTerm snd⇒u [Gfst] [u]fst
+
+      -- u ≡ u′ ∷ G [ fst (prod t u) ]
+      [u≡u′]Gfst = convEqTerm₂ [Gfst] [Gt] [Gfst≡Gt] [u≡u′]
+
+      -- u′ ≡ snd (prod t′ u′) ∷ G [ fst (prod t u) ]
+      wkLiftIdEq′ = PE.cong (λ x → x [ fst (prod t′ u′) ]) (wk-lift-id G)
+      wk[Gfst′] = [G]₁ id ⊢Γ wk[fst′]
+      [Gfst′] = irrelevance′ wkLiftIdEq′ wk[Gfst′]
+      [Gfst′≡Gt′] = irrelevanceEq″ wkLiftIdEq′ (PE.cong (λ x → x [ t′ ])
+                                                        (wk-lift-id G))
+                                   wk[Gfst′] [Gfst′]
+                                   (G-ext id ⊢Γ wk[fst′] wk[t′] wk[fst≡t′])
+
+      snd⇒u′ = Σ-β₂ ⊢F ⊢G ⊢t′ ⊢u′
+
+      [u′]Gfst′ = convTerm₂ [Gfst′] [Gt′] [Gfst′≡Gt′] [u′]Gt′
+      [snd≡u′]Gfst′ = proj₂ (redSubstTerm snd⇒u′ [Gfst′] [u′]Gfst′)
+
+      [Gfst≡Gfst′] = irrelevanceEq″ wkLiftIdEq wkLiftIdEq′
+                                    wk[Gfst] [Gfst]
+                                    (G-ext id ⊢Γ wk[fst] wk[fst′] wk[fst≡fst′])
+
+      [snd≡u′]Gfst = convEqTerm₂ [Gfst] [Gfst′] [Gfst≡Gfst′] [snd≡u′]Gfst′
+
+      [snd≡snd′] = transEqTerm [Gfst] [snd≡u]
+                               (transEqTerm [Gfst] [u≡u′]Gfst
+                                            (symEqTerm [Gfst] [snd≡u′]Gfst))
+      wk[snd≡snd′] = irrelevanceEqTerm′ (PE.cong (λ x → x [ fst (prod t u) ])
+                                                 (PE.sym (wk-lift-id G)))
+                                        [Gfst] wk[Gfst]
+                                        [snd≡snd′]
   in Σₜ₌ (prod t u)
          (prod t′ u′)
          (idRedTerm:*: (escapeTerm (B-intr BΣ [ΣFG]) [prod]))
@@ -151,9 +211,9 @@ prod-cong′ {F} {G} {t} {t′} {u} {u′} {Γ} {l} {l′}
                       (escapeTermEq [F] [t≡t′])
                       (escapeTermEq [Gt] [u≡u′]))
          [prod] [prod′]
-         [fst]′ [fst′]′
-         [fst≡fst′]
-         [snd≡snd′]
+         wk[fst] wk[fst′]
+         wk[fst≡fst′]
+         wk[snd≡snd′]
 prod-cong′ [F] [t] [t′] [t≡t′] [Gt] [u] [u′] [u≡u′] (emb 0<1 x) =
   prod-cong′ [F] [t] [t′] [t≡t′] [Gt] [u] [u′] [u≡u′] x
 

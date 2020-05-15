@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K  #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -202,6 +202,31 @@ snd-cong″ {F} {G} [ΣFG] [t] [t′] [t≡t′] [Gfst] =
       [t′] = irrelevanceTerm [ΣFG] (B-intr BΣ (Σ-elim [ΣFG])) [t′]
       [t≡t′] = irrelevanceEqTerm [ΣFG] (B-intr BΣ (Σ-elim [ΣFG])) [t≡t′]
   in  snd-cong′ (B-elim BΣ [ΣFG]) [t] [t′] [t≡t′] [Gfst]
+
+snd-congᵛ : ∀ {F G t t′ Γ l}
+            ([Γ] : ⊩ᵛ Γ)
+            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+            ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
+            ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+            ([t′] : Γ ⊩ᵛ⟨ l ⟩ t′ ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+            ([t≡t′] : Γ ⊩ᵛ⟨ l ⟩ t ≡ t′ ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+          → Γ ⊩ᵛ⟨ l ⟩ snd t ≡ snd t′ ∷ G [ fst t ] / [Γ] / substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {t} [Γ] [F] [G] [t])
+snd-congᵛ {F} {G} {t} {t′} {Γ} {l} [Γ] [F] [G] [t] [t′] [t≡t′] {Δ} {σ} ⊢Δ [σ] =
+  let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]
+      [fst] = fstᵛ {F} {G} {t} [Γ] [F] [G] [t]
+      [Gfst] = substS {F} {G} [Γ] [F] [G] [fst]
+
+      ⊩σΣFG = proj₁ ([ΣFG] ⊢Δ [σ])
+      ⊩σt = proj₁ ([t] ⊢Δ [σ])
+      ⊩σt′ = proj₁ ([t′] ⊢Δ [σ])
+      σt≡σt′ = [t≡t′] ⊢Δ [σ]
+
+      ⊩σGfst₁ = proj₁ ([Gfst] ⊢Δ [σ])
+      ⊩σGfst = irrelevance′ (singleSubstLift G (fst t)) ⊩σGfst₁
+
+      σsnd≡₁ = snd-cong″ ⊩σΣFG ⊩σt ⊩σt′ σt≡σt′ ⊩σGfst
+      σsnd≡ = irrelevanceEqTerm′ (PE.sym (singleSubstLift G (fst t))) ⊩σGfst ⊩σGfst₁ σsnd≡₁
+  in  σsnd≡
 
 -- Validity of second projection
 sndᵛ : ∀ {F G t Γ l}

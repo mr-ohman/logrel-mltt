@@ -28,6 +28,12 @@ neTypeEq (var x) (var x₁ x₂) (var x₃ x₄) =
 neTypeEq (∘ₙ neT) (t∷A ∘ⱼ t∷A₁) (t∷B ∘ⱼ t∷B₁) with neTypeEq neT t∷A t∷B
 ... | q = let w = proj₂ (injectivity q)
           in  substTypeEq w (refl t∷A₁)
+neTypeEq (fstₙ neP) (fstⱼ ⊢F ⊢G ⊢t) (fstⱼ ⊢F′ ⊢G′ ⊢t′) with neTypeEq neP ⊢t ⊢t′
+... | q = proj₁ (Σ-injectivity q)
+neTypeEq (sndₙ neP) (sndⱼ ⊢F ⊢G ⊢t) (sndⱼ ⊢F′ ⊢G′ ⊢t′) with neTypeEq neP ⊢t ⊢t′
+... | q = let G≡G₁ = proj₂ (Σ-injectivity q)
+              ⊢fst = fstⱼ ⊢F ⊢G ⊢t
+          in  substTypeEq G≡G₁ (refl ⊢fst)
 neTypeEq (natrecₙ neT) (natrecⱼ x t∷A t∷A₁ t∷A₂) (natrecⱼ x₁ t∷B t∷B₁ t∷B₂) =
   refl (substType x₁ t∷B₂)
 neTypeEq (Emptyrecₙ neT) (Emptyrecⱼ x t∷A) (Emptyrecⱼ x₁ t∷B) =

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K  #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -85,6 +85,21 @@ fst-cong″ : ∀ {F G t t′ Γ l l′}
 fst-cong″ {F} {G} [F] [ΣFG] [t≡t′] =
   let [t≡t′] = irrelevanceEqTerm [ΣFG] (B-intr BΣ (Σ-elim [ΣFG])) [t≡t′]
   in  fst-cong′ [F] (Σ-elim [ΣFG]) [t≡t′]
+
+fst-congᵛ : ∀ {F G t t′ Γ l}
+            ([Γ] : ⊩ᵛ Γ)
+            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+            ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
+            ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+            ([t′] : Γ ⊩ᵛ⟨ l ⟩ t′ ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+            ([t≡t′] : Γ ⊩ᵛ⟨ l ⟩ t ≡ t′ ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
+          → Γ ⊩ᵛ⟨ l ⟩ fst t ≡ fst t′ ∷ F / [Γ] / [F]
+fst-congᵛ {F} {G} [Γ] [F] [G] [t] [t′] [t≡t′] ⊢Δ [σ] =
+  let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]
+      ⊩σF = proj₁ ([F] ⊢Δ [σ])
+      ⊩σΣFG = proj₁ ([ΣFG] ⊢Δ [σ])
+      ⊩σt≡t′ = [t≡t′] ⊢Δ [σ]
+  in  fst-cong″ ⊩σF ⊩σΣFG ⊩σt≡t′
 
 -- Validity of first projection
 fstᵛ : ∀ {F G t Γ l}

@@ -21,15 +21,15 @@ import Tools.PropositionalEquality as PE
 
 
 -- Helper function of injectivity for specific reducible Π-types
-injectivity′ : ∀ {F G H E Γ l}
-               ([ΠFG] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
-             → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / Π-intr [ΠFG]
+injectivity′ : ∀ {F G H E Γ l} W
+               ([WFG] : Γ ⊩⟨ l ⟩B⟨ W ⟩ ⟦ W ⟧ F ▹ G)
+             → Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ H ▹ E / B-intr W [WFG]
              → Γ ⊢ F ≡ H
              × Γ ∙ F ⊢ G ≡ E
-injectivity′ (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
-         (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
-  let F≡F₁ , G≡G₁ = Π-PE-injectivity (whnfRed* (red D) Πₙ)
-      H≡F′ , E≡G′ = Π-PE-injectivity (whnfRed* D′ Πₙ)
+injectivity′ W (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
+         (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
+  let F≡F₁ , G≡G₁ = B-PE-injectivity W (whnfRed* (red D) ⟦ W ⟧ₙ)
+      H≡F′ , E≡G′ = B-PE-injectivity W (whnfRed* D′ ⟦ W ⟧ₙ)
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
       [F]′ = irrelevance′ (PE.trans (wk-id _) (PE.sym F≡F₁)) [F]₁
@@ -48,11 +48,17 @@ injectivity′ (noemb (Πᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
                                    (PE.trans (wkSingleSubstId _) (PE.sym E≡G′))
                                    (PE.sym F≡F₁) [G]₁ [G]′ [G≡E]₁
   in  escapeEq [F]′ [F≡H]′ , escapeEq [G]′ [G≡E]′
-injectivity′ (emb 0<1 x) [ΠFG≡ΠHE] = injectivity′ x [ΠFG≡ΠHE]
+injectivity′ W (emb 0<1 x) [WFG≡WHE] = injectivity′ W x [WFG≡WHE]
 
--- Injectivity of Π
+-- Injectivity of W
+B-injectivity : ∀ {Γ F G H E} W → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
+B-injectivity W ⊢WFG≡WHE =
+  let [WFG] , _ , [WFG≡WHE] = reducibleEq ⊢WFG≡WHE
+  in  injectivity′ W (B-elim W [WFG])
+                   (irrelevanceEq [WFG] (B-intr W (B-elim W [WFG])) [WFG≡WHE])
+
 injectivity : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Π H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
-injectivity ⊢ΠFG≡ΠHE =
-  let [ΠFG] , _ , [ΠFG≡ΠHE] = reducibleEq ⊢ΠFG≡ΠHE
-  in  injectivity′ (Π-elim [ΠFG])
-                   (irrelevanceEq [ΠFG] (Π-intr (Π-elim [ΠFG])) [ΠFG≡ΠHE])
+injectivity = B-injectivity BΠ
+
+Σ-injectivity : ∀ {Γ F G H E} → Γ ⊢ Σ F ▹ G ≡ Σ H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
+Σ-injectivity = B-injectivity BΣ

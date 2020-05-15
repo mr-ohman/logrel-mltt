@@ -11,6 +11,7 @@ open import Definition.LogicalRelation.Substitution.Introductions.Application pu
 open import Definition.LogicalRelation.Substitution.Introductions.Prod public
 open import Definition.LogicalRelation.Substitution.Introductions.Fst public
 open import Definition.LogicalRelation.Substitution.Introductions.Snd public
+open import Definition.LogicalRelation.Substitution.Introductions.ProdBetaEta public
 open import Definition.LogicalRelation.Substitution.Introductions.Nat public
 open import Definition.LogicalRelation.Substitution.Introductions.Natrec public
 open import Definition.LogicalRelation.Substitution.Introductions.Empty public

@@ -48,3 +48,7 @@ syntacticRedTerm d | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
 syntacticΠ : ∀ {Γ F G} → Γ ⊢ Π F ▹ G → Γ ⊢ F × Γ ∙ F ⊢ G
 syntacticΠ ΠFG with injectivity (refl ΠFG)
 syntacticΠ ΠFG | F≡F , G≡G = proj₁ (syntacticEq F≡F) , proj₁ (syntacticEq G≡G)
+
+syntacticΣ : ∀ {Γ F G} → Γ ⊢ Σ F ▹ G → Γ ⊢ F × Γ ∙ F ⊢ G
+syntacticΣ ΣFG with Σ-injectivity (refl ΣFG)
+syntacticΣ ΣFG | F≡F , G≡G = proj₁ (syntacticEq F≡F) , proj₁ (syntacticEq G≡G)
