@@ -62,6 +62,7 @@ snd-subst*′ {Γ = Γ} {F = F} {G = G} {t = t} {t′ = t″} [F]
                                                (≅-eq (escapeEq [Gfstt′] [Gfstt′≡Gfstt]))
 snd-subst*′ [F] (emb 0<1 x) = snd-subst*′ [F] x
 
+-- NOTE this has a horrible interface (and implementation)
 snd-subst* : ∀ {Γ l l′ F G t t′}
              ([F] : Γ ⊩⟨ l ⟩ F)
              ([ΣFG] : Γ ⊩⟨ l′ ⟩ Σ F ▹ G)
