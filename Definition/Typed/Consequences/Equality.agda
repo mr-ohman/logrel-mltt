@@ -97,20 +97,30 @@ ne≡A {A} neK ne≡A whnfA | [ne] , [A] , [ne≡A] =
   ne≡A′ (ne-elim neK [ne])
         (irrelevanceEq [ne] (ne-intr (ne-elim neK [ne])) [ne≡A]) whnfA
 
-Π≡A′ : ∀ {A F G Γ l} ([Π] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
-    → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ A / (Π-intr [Π])
+B≡A′ : ∀ {A F G Γ l} W ([W] : Γ ⊩⟨ l ⟩B⟨ W ⟩ ⟦ W ⟧ F ▹ G)
+    → Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ A / (B-intr W [W])
     → Whnf A
-    → ∃₂ λ H E → A PE.≡ Π H ▹ E
-Π≡A′ (noemb [Π]) (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) whnfA =
+    → ∃₂ λ H E → A PE.≡ ⟦ W ⟧ H ▹ E
+B≡A′ W (noemb [W]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) whnfA =
   F′ , G′ , whnfRed* D′ whnfA
-Π≡A′ (emb 0<1 [Π]) [Π≡A] whnfA = Π≡A′ [Π] [Π≡A] whnfA
+B≡A′ W (emb 0<1 [W]) [W≡A] whnfA = B≡A′ W [W] [W≡A] whnfA
+
+Π≡A′ : ∀ {A F G Γ l} → _
+Π≡A′ {A} {F} {G} {Γ} {l} = B≡A′ {A} {F} {G} {Γ} {l} BΠ
+Σ≡A′ : ∀ {A F G Γ l} → _
+Σ≡A′ {A} {F} {G} {Γ} {l} = B≡A′ {A} {F} {G} {Γ} {l} BΣ
 
 -- If A is judgmentally equal to Π F ▹ G, then there exists H and E such that
 -- A is propositionally equal to  Π H ▹ E.
-Π≡A : ∀ {A F G Γ}
-    → Γ ⊢ Π F ▹ G ≡ A
+B≡A : ∀ {A F G Γ} W
+    → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ A
     → Whnf A
-    → ∃₂ λ H E → A PE.≡ Π H ▹ E
-Π≡A {A} Π≡A whnfA with reducibleEq Π≡A
-Π≡A {A} Π≡A whnfA | [Π] , [A] , [Π≡A] =
-  Π≡A′ (Π-elim [Π]) (irrelevanceEq [Π] (Π-intr (Π-elim [Π])) [Π≡A]) whnfA
+    → ∃₂ λ H E → A PE.≡ ⟦ W ⟧ H ▹ E
+B≡A {A} W W≡A whnfA with reducibleEq W≡A
+B≡A {A} W W≡A whnfA | [W] , [A] , [W≡A] =
+  B≡A′ W (B-elim W [W]) (irrelevanceEq [W] (B-intr W (B-elim W [W])) [W≡A]) whnfA
+
+Π≡A : ∀ {A F G Γ} → _
+Π≡A {A} {F} {G} {Γ} = B≡A {A} {F} {G} {Γ} BΠ
+Σ≡A : ∀ {A F G Γ} → _
+Σ≡A {A} {F} {G} {Γ} = B≡A {A} {F} {G} {Γ} BΣ

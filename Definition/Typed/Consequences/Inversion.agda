@@ -40,6 +40,12 @@ inversion-Π (Πⱼ x ▹ x₁) = x , x₁ , refl (Uⱼ (wfTerm x))
 inversion-Π (conv x x₁) = let a , b , c = inversion-Π x
                           in  a , b , trans (sym x₁) c
 
+inversion-Σ : ∀ {F G Γ C}
+            → Γ ⊢ Σ F ▹ G ∷ C → Γ ⊢ F ∷ U × Γ ∙ F ⊢ G ∷ U × Γ ⊢ C ≡ U
+inversion-Σ (Σⱼ x ▹ x₁) = x , x₁ , refl (Uⱼ (wfTerm x))
+inversion-Σ (conv x x₁) = let a , b , c = inversion-Σ x
+                          in  a , b , trans (sym x₁) c
+
 -- Inversion of zero.
 inversion-zero : ∀ {Γ C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
 inversion-zero (zeroⱼ x) = refl (ℕⱼ x)
@@ -77,6 +83,16 @@ inversion-lam (lamⱼ x x₁) = _ , _ , x , x₁ , refl (Πⱼ x ▹ (syntacticT
 inversion-lam (conv x x₁) = let a , b , c , d , e = inversion-lam x
                             in  a , b , c , d , trans (sym x₁) e
 
+-- Inversion of products.
+inversion-prod : ∀ {t u A Γ} → Γ ⊢ prod t u ∷ A →
+  ∃₂ λ F G → Γ ⊢ F × (Γ ∙ F ⊢ G × (Γ ⊢ t ∷ F × Γ ⊢ u ∷ G [ t ] × Γ ⊢ A ≡ Σ F ▹ G))
+inversion-prod (prodⱼ ⊢F ⊢G ⊢t ⊢u) =
+  -- NOTE fundamental theorem not required since prodⱼ has inversion built-in.
+  _ , _ , ⊢F , ⊢G , ⊢t , ⊢u , refl (Σⱼ ⊢F ▹ ⊢G )
+inversion-prod (conv x x₁) =
+  let F , G , a , b , c , d , e = inversion-prod x
+  in F , G , a , b , c , d , trans (sym x₁) e
+
 -- Inversion of star.
 inversion-star : ∀ {Γ C} → Γ ⊢ star ∷ C → Γ ⊢ C ≡ Unit
 inversion-star (starⱼ x) = refl (Unitⱼ x)
@@ -93,6 +109,9 @@ whnfUnitary (conv [e] A≡Unit) Uₙ = ⊥-elim (inversion-U [e])
 whnfUnitary {Γ} (conv [e] A≡Unit) Πₙ =
   let _ , _ , A≡U = inversion-Π [e]
   in  ⊥-elim (U≢Unitⱼ (trans (sym A≡U) A≡Unit))
+whnfUnitary {Γ} (conv [e] A≡Unit) Σₙ =
+  let _ , _ , A≡U = inversion-Σ [e]
+  in  ⊥-elim (U≢Unitⱼ (trans (sym A≡U) A≡Unit))
 whnfUnitary (conv [e] A≡Unit) ℕₙ =
   ⊥-elim (U≢Unitⱼ (trans (sym (inversion-ℕ [e])) A≡Unit))
 whnfUnitary (conv [e] A≡Unit) Emptyₙ =
@@ -101,7 +120,10 @@ whnfUnitary (conv [e] A≡Unit) Unitₙ =
   ⊥-elim (U≢Unitⱼ (trans (sym (inversion-Unit [e])) A≡Unit))
 whnfUnitary (conv [e] A≡Unit) lamₙ =
   let _ , _ , _ , _ , A≡Π = inversion-lam [e]
-  in  ⊥-elim (Unit≢Πⱼ (trans (sym A≡Unit) A≡Π))
+  in  ⊥-elim (Unit≢Bⱼ BΠ (trans (sym A≡Unit) A≡Π))
+whnfUnitary {Γ} (conv [e] A≡Unit) prodₙ =
+  let _ , _ , _ , _ , _ , _ , A≡Σ = inversion-prod [e]
+  in  ⊥-elim (Unit≢Bⱼ BΣ (trans (sym A≡Unit) A≡Σ))
 whnfUnitary (conv [e] A≡Unit) zeroₙ =
   ⊥-elim (ℕ≢Unitⱼ (trans (sym (inversion-zero [e])) A≡Unit))
 whnfUnitary (conv [e] A≡Unit) sucₙ =

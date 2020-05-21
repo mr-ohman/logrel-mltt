@@ -8,6 +8,7 @@ open import Definition.Untyped
 open import Definition.Typed
 
 open import Tools.Nat
+open import Tools.Product
 import Tools.PropositionalEquality as PE
 
 
@@ -29,6 +30,12 @@ mutual
                 → Γ ⊢ k ~ l ↓ Π F ▹ G
                 → Γ ⊢ t [conv↑] v ∷ F
                 → Γ ⊢ k ∘ t ~ l ∘ v ↑ G [ t ]
+    fst-cong    : ∀ {p r F G}
+                → Γ ⊢ p ~ r ↓ Σ F ▹ G
+                → Γ ⊢ fst p ~ fst r ↑ F
+    snd-cong    : ∀ {p r F G}
+                → Γ ⊢ p ~ r ↓ Σ F ▹ G
+                → Γ ⊢ snd p ~ snd r ↑ G [ fst p ]
     natrec-cong : ∀ {k l h g a₀ b₀ F G}
                 → Γ ∙ ℕ ⊢ F [conv↑] G
                 → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
@@ -76,6 +83,11 @@ mutual
               → Γ ⊢ F [conv↑] H
               → Γ ∙ F ⊢ G [conv↑] E
               → Γ ⊢ Π F ▹ G [conv↓] Π H ▹ E
+    Σ-cong    : ∀ {F G H E}
+              → Γ ⊢ F
+              → Γ ⊢ F [conv↑] H
+              → Γ ∙ F ⊢ G [conv↑] E
+              → Γ ⊢ Σ F ▹ G [conv↓] Σ H ▹ E
 
   -- Term equality.
   record _⊢_[conv↑]_∷_ (Γ : Con Term) (t u A : Term) : Set where
@@ -102,13 +114,6 @@ mutual
     Unit-ins  : ∀ {k l}
               → Γ ⊢ k ~ l ↓ Unit
               → Γ ⊢ k [conv↓] l ∷ Unit
-    star-refl : ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
-    η-unit    : ∀ {k l}
-              → Γ ⊢ k ∷ Unit
-              → Γ ⊢ l ∷ Unit
-              → Unitary k
-              → Unitary l
-              → Γ ⊢ k [conv↓] l ∷ Unit
     ne-ins    : ∀ {k l M N}
               → Γ ⊢ k ∷ N
               → Γ ⊢ l ∷ N
@@ -132,3 +137,30 @@ mutual
               → Function g
               → Γ ∙ F ⊢ wk1 f ∘ var 0 [conv↑] wk1 g ∘ var 0 ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
+    prod-cong : ∀ {t u t′ u′ F G}
+              → Γ ∙ F ⊢ G
+              → Γ ⊢ t [conv↑] t′ ∷ F
+              → Γ ⊢ u [conv↑] u′ ∷ G [ t ]
+              → Γ ⊢ prod t u [conv↓] prod t′ u′ ∷ Σ F ▹ G
+    Σ-η       : ∀ {p F G} -- TODO which rule to use. this or Σ-η₂ (below)?
+              → Γ ⊢ p ∷ Σ F ▹ G
+              → Product p
+              → Γ ⊢ p [conv↓] prod (fst p) (snd p) ∷ Σ F ▹ G
+    η-unit    : ∀ {k l}
+              → Γ ⊢ k ∷ Unit
+              → Γ ⊢ l ∷ Unit
+              → Unitary k
+              → Unitary l
+              → Γ ⊢ k [conv↓] l ∷ Unit
+
+star-refl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
+star-refl ⊢Γ = η-unit (starⱼ ⊢Γ) (starⱼ ⊢Γ) starₙ starₙ
+
+    {-Σ-η₂    : ∀ {p r F G}
+              → Γ ⊢ p ∷ Σ F ▹ G
+              → Γ ⊢ r ∷ Σ F ▹ G
+              → Product p
+              → Product r
+              → Γ ⊢ fst p [conv↑] fst r ∷ F
+              → Γ ⊢ snd r [conv↑] snd r ∷ G [ fst p ]
+              → Γ ⊢ p [conv↓] r ∷ Σ F ▹ G-}

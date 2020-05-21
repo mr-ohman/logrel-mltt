@@ -9,7 +9,9 @@ open import Definition.Typed.RedSteps
 open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.Conversion.Stability
+open import Definition.Conversion.Soundness
 open import Definition.Typed.Consequences.Syntactic
+open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
@@ -47,13 +49,6 @@ mutual
     Empty-ins (stability~↓ Γ≡Δ x)
   convConv↓Term Γ≡Δ A≡B whnfB (Unit-ins x) rewrite Unit≡A A≡B whnfB =
     Unit-ins (stability~↓ Γ≡Δ x)
-  convConv↓Term Γ≡Δ A≡B whnfB (star-refl x) rewrite Unit≡A A≡B whnfB =
-    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
-    in  star-refl ⊢Δ
-  convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
-    let [t] = stabilityTerm Γ≡Δ [t]
-        [u] = stabilityTerm Γ≡Δ [u]
-    in  η-unit [t] [u] tUnit uUnit
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) with ne≡A x A≡B whnfB
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) | B , neB , PE.refl =
     ne-ins (stabilityTerm Γ≡Δ (conv t A≡B)) (stabilityTerm Γ≡Δ (conv u A≡B))
@@ -72,6 +67,21 @@ mutual
     in  η-eq (stability Γ≡Δ ⊢F′) (stabilityTerm Γ≡Δ (conv x₁ A≡B))
              (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
              (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
+  convConv↓Term Γ≡Δ A≡B whnfB (prod-cong ⊢G tConv uConv) with Σ≡A A≡B whnfB
+  ... | F , G , PE.refl =
+    let F≡ , G≡ = Σ-injectivity A≡B
+        G≡′ = stabilityEq (Γ≡Δ ∙ F≡) G≡
+        _ , ⊢G′ = syntacticEq G≡′
+        _ , ⊢t , _ = syntacticEqTerm (soundnessConv↑Term tConv)
+        tConv′ = convConv↑Term Γ≡Δ F≡ tConv
+        uConv′ = convConv↑Term Γ≡Δ (substTypeEq G≡ (refl ⊢t)) uConv
+    in  prod-cong ⊢G′ tConv′ uConv′
+  convConv↓Term Γ≡Δ A≡B whnfB (Σ-η ⊢p pProd) with Σ≡A A≡B whnfB
+  ... | F , G , PE.refl = Σ-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B)) pProd
+  convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
+    let [t] = stabilityTerm Γ≡Δ [t]
+        [u] = stabilityTerm Γ≡Δ [u]
+    in  η-unit [t] [u] tUnit uUnit
 
 -- Conversion of algorithmic equality with the same context.
 convConvTerm : ∀ {t u A B Γ}

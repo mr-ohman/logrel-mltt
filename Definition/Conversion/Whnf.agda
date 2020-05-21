@@ -17,6 +17,12 @@ mutual
   ne~↑ (var-refl x₁ x≡y) = var _ , var _
   ne~↑ (app-cong x x₁) = let _ , q , w = ne~↓ x
                          in  ∘ₙ q , ∘ₙ w
+  ne~↑ (fst-cong x) =
+    let _ , pNe , rNe = ne~↓ x
+    in  fstₙ pNe , fstₙ rNe
+  ne~↑ (snd-cong x) =
+    let _ , pNe , rNe = ne~↓ x
+    in  sndₙ pNe , sndₙ rNe
   ne~↑ (natrec-cong x x₁ x₂ x₃) = let _ , q , w = ne~↓ x₃
                                   in  natrecₙ q , natrecₙ w
   ne~↑ (Emptyrec-cong x x₁) = let _ , q , w = ne~↓ x₁
@@ -40,6 +46,7 @@ whnfConv↓ (Unit-refl x) = Unitₙ , Unitₙ
 whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
                    in  ne neA , ne neB
 whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
+whnfConv↓ (Σ-cong x x₁ x₂) = Σₙ , Σₙ
 
 -- Extraction of WHNF from algorithmic equality of terms in WHNF.
 whnfConv↓Term : ∀ {t u A Γ}
@@ -51,8 +58,6 @@ whnfConv↓Term (Empty-ins x) = let _ , neT , neU = ne~↓ x
                               in Emptyₙ , ne neT , ne neU
 whnfConv↓Term (Unit-ins x) = let _ , neT , neU = ne~↓ x
                              in Unitₙ , ne neT , ne neU
-whnfConv↓Term (star-refl x) = Unitₙ , starₙ , starₙ
-whnfConv↓Term (η-unit _ _ tUnit uUnit) = Unitₙ , (unitaryWhnf tUnit) , (unitaryWhnf uUnit)
 whnfConv↓Term (ne-ins t u x x₁) =
   let _ , neT , neU = ne~↓ x₁
   in ne x , ne neT , ne neU
@@ -60,3 +65,6 @@ whnfConv↓Term (univ x x₁ x₂) = Uₙ , whnfConv↓ x₂
 whnfConv↓Term (zero-refl x) = ℕₙ , zeroₙ , zeroₙ
 whnfConv↓Term (suc-cong x) = ℕₙ , sucₙ , sucₙ
 whnfConv↓Term (η-eq x x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functionWhnf y₁
+whnfConv↓Term (prod-cong ⊢G tConv uConv) = Σₙ , prodₙ , prodₙ
+whnfConv↓Term (Σ-η ⊢p pProd) = Σₙ , productWhnf pProd , prodₙ
+whnfConv↓Term (η-unit _ _ tUnit uUnit) = Unitₙ , (unitaryWhnf tUnit) , (unitaryWhnf uUnit)

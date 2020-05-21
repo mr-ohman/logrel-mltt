@@ -20,6 +20,16 @@ mutual
   soundness~↑ : ∀ {k l A Γ} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
   soundness~↑ (var-refl x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
   soundness~↑ (app-cong k~l x₁) = app-cong (soundness~↓ k~l) (soundnessConv↑Term x₁)
+  soundness~↑ (fst-cong x) =
+    let p≡ = soundness~↓ x
+        ⊢ΣFG = proj₁ (syntacticEqTerm p≡)
+        ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+    in  fst-cong ⊢F ⊢G p≡
+  soundness~↑ (snd-cong x) =
+    let p≡ = soundness~↓ x
+        ⊢ΣFG = proj₁ (syntacticEqTerm p≡)
+        ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+    in  snd-cong ⊢F ⊢G p≡
   soundness~↑ (natrec-cong x₁ x₂ x₃ k~l) =
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
@@ -44,6 +54,8 @@ mutual
   soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
+  soundnessConv↓ (Σ-cong F c c₁) =
+    Σ-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
 
   -- Algorithmic equality of terms is well-formed.
   soundnessConv↑Term : ∀ {a b A Γ} → Γ ⊢ a [conv↑] b ∷ A → Γ ⊢ a ≡ b ∷ A
@@ -58,8 +70,6 @@ mutual
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
   soundnessConv↓Term (Empty-ins x) = soundness~↓ x
   soundnessConv↓Term (Unit-ins x) = soundness~↓ x
-  soundnessConv↓Term (star-refl ⊢Γ) = refl (starⱼ ⊢Γ)
-  soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)
@@ -70,3 +80,12 @@ mutual
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
   soundnessConv↓Term (η-eq F x x₁ y y₁ c) =
     η-eq F x x₁ (soundnessConv↑Term c)
+  soundnessConv↓Term (prod-cong G tConv uConv) =
+    let t≡ = soundnessConv↑Term tConv
+        ⊢F = proj₁ (syntacticEqTerm t≡)
+    in  prod-cong ⊢F G t≡ (soundnessConv↑Term uConv)
+  soundnessConv↓Term (Σ-η ⊢p pProd) =
+    let ⊢ΣFG = syntacticTerm ⊢p
+        ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+    in  Σ-η ⊢F ⊢G ⊢p
+  soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]
