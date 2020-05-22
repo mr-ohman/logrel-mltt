@@ -753,23 +753,36 @@ mutual
         [u]fst = conv₂ᵛ {t = u} {A = G [ fst (prod t u) ]} {B = G [ t ]}
                         [Γ] [Gfst] [Gt] [Gfst≡Gt] [u]
     in  [Γ] , modelsTermEq [Gfst] [snd] [u]fst [snd≡u]
-  fundamentalTermEq (Σ-η {t} {F} {G} ⊢F ⊢G ⊢t)
-    with fundamentalTerm ⊢t | fundamental ⊢F | fundamental ⊢G
-  ... | [Γ] , [ΣFG]₀ , [t]₀ | [Γ]₁ , [F]₁ | [Γ]₂ , [G]₂ =
-    let [F] = S.irrelevance {A = F} [Γ]₁ [Γ] [F]₁
-        [G] = S.irrelevance {A = G} [Γ]₂ ([Γ] ∙ [F]) [G]₂
-
+  fundamentalTermEq (Σ-η {p} {r} {F} {G} ⊢F ⊢G ⊢p ⊢r fst≡ snd≡)
+    with fundamentalTerm ⊢p | fundamentalTerm ⊢r |
+         fundamental ⊢F | fundamental ⊢G |
+         fundamentalTermEq fst≡ | fundamentalTermEq snd≡
+  ... | [Γ] , [ΣFG]₀ , [p]₀ | [Γ]₁ , [ΣFG]₁ , [r]₁
+      | [Γ]₂ , [F]₂ | [Γ]₃ , [G]₃
+      | [Γ]₄ , modelsTermEq [F]₄ [fstp]₄ [fstr]₄ [fst≡]₄
+      | [Γ]₅ , modelsTermEq [Gfstp]₅ [sndp]₅ [sndr]₅ [snd≡]₅ =
+    let [F] = S.irrelevance {A = F} [Γ]₂ [Γ] [F]₂
+        [G] = S.irrelevance {A = G} [Γ]₃ ([Γ] ∙ [F]) [G]₃
         [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]
-        [t] = S.irrelevanceTerm {A = Σ F ▹ G} {t = t} [Γ] [Γ]
-                                 [ΣFG]₀ [ΣFG]
-                                 [t]₀
+        [p] = S.irrelevanceTerm {A = Σ F ▹ G} {t = p} [Γ] [Γ]
+                                [ΣFG]₀ [ΣFG]
+                                [p]₀
+        [r] = S.irrelevanceTerm {A = Σ F ▹ G} {t = r} [Γ]₁ [Γ]
+                                [ΣFG]₁ [ΣFG]
+                                [r]₁
 
-        [fst] = fstᵛ {F} {G} {t} [Γ] [F] [G] [t]
-        [snd] = sndᵛ {F} {G} {t} [Γ] [F] [G] [t]
-        [prod] = prodᵛ {F} {G} {fst t} {snd t} [Γ] [F] [G] [fst] [snd]
+        [fst≡] = S.irrelevanceEqTerm {A = F} {t = fst p} {u = fst r} [Γ]₄ [Γ]
+                                     [F]₄ [F]
+                                     [fst≡]₄
 
-        [t≡prod] = Σ-ηᵛ {F} {G} {t} [Γ] [F] [G] [t]
-    in  [Γ] , modelsTermEq [ΣFG] [t] [prod] [t≡prod]
+        [Gfstp] = substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {p} [Γ] [F] [G] [p])
+        [snd≡] = S.irrelevanceEqTerm {A = G [ fst p ]} {t = snd p} {u = snd r} [Γ]₅ [Γ]
+                                     [Gfstp]₅ [Gfstp]
+                                     [snd≡]₅
+
+        [p≡r] = Σ-ηᵛ {F} {G} {p} {r}
+                     [Γ] [F] [G] [p] [r] [fst≡] [snd≡]
+    in  [Γ] , modelsTermEq [ΣFG] [p] [r] [p≡r]
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : ∀ {Γ Δ σ} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

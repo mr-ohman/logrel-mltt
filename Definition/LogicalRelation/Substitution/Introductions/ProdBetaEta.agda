@@ -115,133 +115,151 @@ import Tools.PropositionalEquality as PE
               in  conv snd⇒t σGfst≡σGfst)
   in  proj₂ (redSubstTermᵛ {G [ fst (prod t u) ]} {snd (prod t u)} {u} [Γ] snd⇒t [Gfst] [u]Gfst)
 
-Σ-η′ : ∀ {F G t Γ l}
-        ([ΣFG]₁ : Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G )
-        ([t] : Γ ⊩⟨ l ⟩ t ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁)
-        ([prod] : Γ ⊩⟨ l ⟩ prod (fst t) (snd t) ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁)
-      → Γ ⊩⟨ l ⟩ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁
-Σ-η′ {F} {G} {t} {Γ} {l}
+Σ-η′ : ∀ {F G p r Γ l l′}
+         ([F] : Γ ⊩⟨ l′ ⟩ F)
+         ([Gfstp] : Γ ⊩⟨ l′ ⟩ G [ fst p ])
+         ([ΣFG]₁ : Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G )
+         ([p] : Γ ⊩⟨ l ⟩ p ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁)
+         ([r] : Γ ⊩⟨ l ⟩ r ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁)
+         ([fst≡] : Γ ⊩⟨ l′ ⟩ fst p ≡ fst r ∷ F / [F])
+         ([snd≡] : Γ ⊩⟨ l′ ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Gfstp])
+       → Γ ⊩⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁
+Σ-η′ {F} {G} {p} {r} {Γ} {l} {l′}
+     [F] [Gfstp]
      [ΣFG]₁@(noemb (Bᵣ F₁ G₁ D ⊢F ⊢G A≡A [F]₁ [G]₁ G-ext))
-     [t]@(Σₜ p d pProd p≅p wk[fstp] wk[sndp])
-     [prod]@(Σₜ _ d′ _ _ wk[fstprod] wk[sndprod])
-       with B-PE-injectivity BΣ (whnfRed* (red D) Σₙ) | whnfRed*Term (redₜ d′) prodₙ
-... | PE.refl , PE.refl | PE.refl =
-      -- some types
+     [p]@(Σₜ p′ dₚ p′Prod p′≅p′ wk[fstp′] wk[sndp′])
+     [r]@(Σₜ r′ dᵣ r′Prod r′≅r′ wk[fstr′] wk[sndr′])
+     [fst≡]
+     [snd≡]
+       with B-PE-injectivity BΣ (whnfRed* (red D) Σₙ)
+... | PE.refl , PE.refl =
   let [ΣFG] = B-intr BΣ [ΣFG]₁
       ⊢Γ = wf ⊢F
       wk[F] = [F]₁ id ⊢Γ
-      [F] = irrelevance′ (wk-id F) wk[F]
+      wk[Gfstp′] = [G]₁ id ⊢Γ wk[fstp′]
 
-      -- eta congruence of WHNFs
-      [fstp] = irrelevanceTerm′ (wk-id F) wk[F] [F] wk[fstp]
-      fstt⇒*fstp : Γ ⊢ fst t ⇒* fst p ∷ F
-      fstt⇒*fstp = fst-subst* ⊢F ⊢G (redₜ d)
-      [fstt] , [fstt≡fstp] = redSubst*Term fstt⇒*fstp [F] [fstp]
-      fstt≅fstp : Γ ⊢ fst t ≅ fst p ∷ F
-      fstt≅fstp = escapeTermEq [F] [fstt≡fstp]
+      fstp⇒* : Γ ⊢ fst p ⇒* fst p′ ∷ U.wk id F
+      fstp⇒* = PE.subst (λ x → Γ ⊢ _ ⇒* _ ∷ x)
+                        (PE.sym (wk-id F))
+                        (fst-subst* ⊢F ⊢G (redₜ dₚ))
+      fstr⇒* = PE.subst (λ x → Γ ⊢ _ ⇒* _ ∷ x)
+                        (PE.sym (wk-id F))
+                        (fst-subst* ⊢F ⊢G (redₜ dᵣ))
 
-      wk[fstt] = irrelevanceTerm′ (PE.sym (wk-id F)) [F] wk[F] [fstt]
-      wk[fstt≡fstp] = irrelevanceEqTerm′ (PE.sym (wk-id F)) [F] wk[F] [fstt≡fstp]
-      wk[Gfstt] = [G]₁ id ⊢Γ wk[fstt]
-      wkLiftIdFstt = PE.cong (λ x → x [ fst t ]) (wk-lift-id G)
-      wkLiftIdFstp = PE.cong (λ x → x [ fst p ]) (wk-lift-id G)
-      [Gfstt] = irrelevance′ wkLiftIdFstt wk[Gfstt]
+      --wk[fstp≡] : Γ ⊩⟨ l ⟩ fst p ≡ fst p′ ∷ U.wk id F / wk[F]
+      wk[fstp] , wk[fstp≡] = redSubst*Term fstp⇒* wk[F] wk[fstp′]
+      wk[fstr] , wk[fstr≡] = redSubst*Term fstr⇒* wk[F] wk[fstr′]
+
+      wk[fst≡] = irrelevanceEqTerm′ (PE.sym (wk-id F))
+                                    [F] wk[F]
+                                    [fst≡]
+      wk[fst′≡] : Γ ⊩⟨ l ⟩ fst p′ ≡ fst r′ ∷ U.wk id F / wk[F]
+      wk[fst′≡] = transEqTerm wk[F]
+                             (symEqTerm wk[F] wk[fstp≡])
+                             (transEqTerm wk[F] wk[fst≡] wk[fstr≡])
+
+      [p′] : Γ ⊩⟨ l ⟩ p′ ∷ Σ F ▹ G / [ΣFG]
+      [p′] = Σₜ p′ (idRedTerm:*: (⊢u-redₜ dₚ)) p′Prod p′≅p′ wk[fstp′] wk[sndp′]
+      [r′] = Σₜ r′ (idRedTerm:*: (⊢u-redₜ dᵣ)) r′Prod r′≅r′ wk[fstr′] wk[sndr′]
+
+      sndp⇒*₁ : Γ ⊢ snd p ⇒* snd p′ ∷ G [ fst p ]
+      sndp⇒*₁ = snd-subst* [F] [ΣFG] [p′] (redₜ dₚ)
+      sndr⇒*₁ = snd-subst* [F] [ΣFG] [r′] (redₜ dᵣ)
+
       wk[Gfstp] = [G]₁ id ⊢Γ wk[fstp]
-      [Gfstp] = irrelevance′ wkLiftIdFstp wk[Gfstp]
-      wk[Gfstt≡Gfstp] = G-ext id ⊢Γ wk[fstt] wk[fstp] wk[fstt≡fstp]
-      [Gfstt≡Gfstp] = irrelevanceEq″ wkLiftIdFstt wkLiftIdFstp wk[Gfstt] [Gfstt] wk[Gfstt≡Gfstp]
+      wk[Gfstr] = [G]₁ id ⊢Γ wk[fstr]
+      [Gfstr] = irrelevance′ (PE.cong (λ x → x [ fst r ]) (wk-lift-id G)) wk[Gfstr]
+      wk[Gfstr′] = [G]₁ id ⊢Γ wk[fstr′]
 
-      [sndp]₁ = irrelevanceTerm′ wkLiftIdFstp wk[Gfstp] [Gfstp] wk[sndp]
-      [sndp] : Γ ⊩⟨ l ⟩ snd p ∷ G [ fst t ] / [Gfstt]
-      [sndp] = convTerm₂ [Gfstt] [Gfstp] [Gfstt≡Gfstp] [sndp]₁
+      [Gfstp≡wkGfstp′] : Γ ⊩⟨ l′ ⟩ G [ fst p ] ≡ U.wk (lift id) G [ fst p′ ] / [Gfstp]
+      [Gfstp≡wkGfstp′] = irrelevanceEq′ (PE.cong (λ x → x [ fst p ]) (wk-lift-id G))
+                                        ([G]₁ id ⊢Γ wk[fstp]) [Gfstp]
+                                        (G-ext id ⊢Γ wk[fstp] wk[fstp′] wk[fstp≡])
+      [Gfstr≡Gfstp] : Γ ⊩⟨ _ ⟩ G [ fst r ] ≡ G [ fst p ] / [Gfstr]
+      [Gfstr≡Gfstp] = irrelevanceEq″ (PE.cong (λ x → x [ fst r ]) (wk-lift-id G))
+                                     (PE.cong (λ x → x [ fst p ]) (wk-lift-id G))
+                                     wk[Gfstr] [Gfstr]
+                                     (symEq wk[Gfstp] wk[Gfstr]
+                                            (G-ext id ⊢Γ wk[fstp] wk[fstr] wk[fst≡]))
+      [Gfstr≡wkGfstp′] : Γ ⊩⟨ l ⟩ G [ fst r ] ≡ U.wk (lift id) G [ fst p′ ] / [Gfstr]
+      [Gfstr≡wkGfstp′] = transEq [Gfstr] [Gfstp] wk[Gfstp′]
+                                 [Gfstr≡Gfstp] [Gfstp≡wkGfstp′]
+      [wkGfstr′≡wkGfstp′] : Γ ⊩⟨ l ⟩ U.wk (lift id) G [ fst r′ ] ≡ U.wk (lift id) G [ fst p′ ] / wk[Gfstr′]
+      [wkGfstr′≡wkGfstp′] = G-ext id ⊢Γ wk[fstr′] wk[fstp′] (symEqTerm wk[F] wk[fst′≡])
 
-      sndt⇒*sndp : Γ ⊢ snd t ⇒* snd p ∷ G [ fst t ]
-      sndt⇒*sndp = snd-subst* [F] [ΣFG]
-                              (Σₜ p (idRedTerm:*: (⊢u-redₜ d)) pProd
-                                  p≅p wk[fstp] wk[sndp])
-                              (redₜ d)
-      [sndt] , [sndt≡sndp] = redSubst*Term sndt⇒*sndp [Gfstt] [sndp]
-      sndt≅sndp : Γ ⊢ snd t ≅ snd p ∷ G [ fst t ]
-      sndt≅sndp = escapeTermEq [Gfstt] [sndt≡sndp]
+      sndp⇒* : Γ ⊢ snd p ⇒* snd p′ ∷ U.wk (lift id) G [ fst p′ ]
+      sndp⇒* = conv* sndp⇒*₁ (≅-eq (escapeEq [Gfstp] [Gfstp≡wkGfstp′]))
+      sndr⇒* = conv* sndr⇒*₁ (≅-eq (escapeEq [Gfstr] [Gfstr≡wkGfstp′]))
 
-      prodt≅prodp : Γ ⊢ prod (fst t) (snd t) ≅ prod (fst p) (snd p) ∷ Σ F ▹ G
-      prodt≅prodp = ≅-prod-cong ⊢F ⊢G fstt≅fstp sndt≅sndp
+      wk[sndp≡] : Γ ⊩⟨ l ⟩ snd p ≡ snd p′ ∷ U.wk (lift id) G [ fst p′ ] / wk[Gfstp′]
+      wk[sndp≡] = proj₂ (redSubst*Term sndp⇒* wk[Gfstp′] wk[sndp′])
+      wk[sndr≡] = proj₂ (redSubst*Term sndr⇒* wk[Gfstp′]
+                                       (convTerm₁ wk[Gfstr′] wk[Gfstp′]
+                                                  [wkGfstr′≡wkGfstp′]
+                                                  wk[sndr′]))
 
-      p≅prodp : Γ ⊢ p ≅ prod (fst p) (snd p) ∷ Σ F ▹ G
-      p≅prodp = ≅-Σ-η ⊢F ⊢G (⊢u-redₜ d) pProd
-      p≅prodt : Γ ⊢ p ≅ prod (fst t) (snd t) ∷ Σ F ▹ G
-      p≅prodt = ≅ₜ-trans p≅prodp (≅ₜ-sym prodt≅prodp)
+      wk[snd≡] : Γ ⊩⟨ l ⟩ snd p ≡ snd r ∷ U.wk (lift id) G [ fst p′ ] / wk[Gfstp′]
+      wk[snd≡] = convEqTerm₁ [Gfstp] wk[Gfstp′] [Gfstp≡wkGfstp′] [snd≡]
 
-      -- fst congruence
-      fstprod⇒fstt : Γ ⊢ fst (prod (fst t) (snd t)) ⇒ fst t ∷ F
-      fstprod⇒fstt = Σ-β₁ ⊢F ⊢G (escapeTerm [F] [fstt]) (escapeTerm [Gfstt] [sndt])
-      fstprod⇒*fstp : Γ ⊢ fst (prod (fst t) (snd t)) ⇒* fst p ∷ F
-      fstprod⇒*fstp = fstprod⇒fstt ⇨ fstt⇒*fstp
+      wk[snd′≡] : Γ ⊩⟨ l ⟩ snd p′ ≡ snd r′ ∷ U.wk (lift id) G [ fst p′ ] / wk[Gfstp′]
+      wk[snd′≡] = transEqTerm wk[Gfstp′]
+                              (symEqTerm wk[Gfstp′] wk[sndp≡])
+                              (transEqTerm wk[Gfstp′] wk[snd≡] wk[sndr≡])
 
-      [fstprod] , [fstprod≡fstp] = redSubst*Term fstprod⇒*fstp [F] [fstp]
-      wk[fstprod≡fstp] = irrelevanceEqTerm′ (PE.sym (wk-id F)) [F] wk[F] [fstprod≡fstp]
+      p′≅r′ : Γ ⊢ p′ ≅ r′ ∷ Σ F ▹ G
+      p′≅r′ = ≅-Σ-η ⊢F ⊢G (⊢u-redₜ dₚ) (⊢u-redₜ dᵣ)
+                    p′Prod r′Prod
+                    (PE.subst (λ x → Γ ⊢ _ ≅ _ ∷ x)
+                              (wk-id F)
+                              (escapeTermEq wk[F] wk[fst′≡]))
+                    (PE.subst (λ x → Γ ⊢ _ ≅ _ ∷ x [ fst p′ ])
+                              (wk-lift-id G)
+                              (escapeTermEq wk[Gfstp′] wk[snd′≡]))
+  in  Σₜ₌ p′ r′ dₚ dᵣ p′Prod r′Prod
+          p′≅r′ [p] [r]
+          wk[fstp′]
+          wk[fstr′]
+          wk[fst′≡]
+          wk[snd′≡]
+Σ-η′ [F] [Gfst] (emb 0<1 x) = Σ-η′ [F] [Gfst] x
 
-      wk[fst≡] : Γ ⊩⟨ l ⟩ fst p ≡ fst (prod (fst t) (snd t)) ∷ U.wk id F / wk[F]
-      wk[fst≡] = symEqTerm wk[F] wk[fstprod≡fstp]
-
-      -- snd congruence
-      sndprod⇒sndt₁ : Γ ⊢ _ ⇒ _ ∷ _
-      sndprod⇒sndt₁ = Σ-β₂ ⊢F ⊢G (escapeTerm [F] [fstt]) (escapeTerm [Gfstt] [sndt])
-
-      wkLiftIdFstProd = PE.cong (λ x → x [ fst (prod (fst t) (snd t)) ]) (wk-lift-id G)
-      wk[Gfstprod] = [G]₁ id ⊢Γ wk[fstprod]
-      [Gfstprod] = irrelevance′ wkLiftIdFstProd wk[Gfstprod]
-
-      wk[Gfstprod≡Gfstp] = G-ext id ⊢Γ wk[fstprod] wk[fstp] wk[fstprod≡fstp]
-      [Gfstprod≡Gfstp] = irrelevanceEq″ wkLiftIdFstProd wkLiftIdFstp
-                                        wk[Gfstprod] [Gfstprod]
-                                        wk[Gfstprod≡Gfstp]
-
-      sndprod⇒sndt : Γ ⊢ snd (prod (fst t) (snd t)) ⇒ snd t ∷ G [ fst p ]
-      sndprod⇒sndt = conv sndprod⇒sndt₁ (≅-eq (escapeEq [Gfstprod] [Gfstprod≡Gfstp]))
-
-      sndprod⇒*sndp : Γ ⊢ snd (prod (fst t) (snd t)) ⇒* snd p ∷ G [ fst p ]
-      sndprod⇒*sndp = sndprod⇒sndt ⇨ conv* sndt⇒*sndp (≅-eq (escapeEq [Gfstt] [Gfstt≡Gfstp]))
-      [sndprod≡sndp] : Γ ⊩⟨ l ⟩ snd (prod (fst t) (snd t)) ≡ snd p ∷ G [ fst p ] / [Gfstp]
-      [sndprod≡sndp] = proj₂ (redSubst*Term sndprod⇒*sndp [Gfstp] [sndp]₁)
-      wk[sndprod≡sndp] = irrelevanceEqTerm′ (PE.sym wkLiftIdFstp) [Gfstp] wk[Gfstp] [sndprod≡sndp]
-
-      wk[snd≡] : Γ ⊩⟨ l ⟩ snd p ≡ snd (prod (fst t) (snd t)) ∷ U.wk (lift id) G [ fst p ] / wk[Gfstp]
-      wk[snd≡] = symEqTerm wk[Gfstp] wk[sndprod≡sndp]
-  in  Σₜ₌ p (prod (fst t) (snd t))
-          d (idRedTerm:*: (escapeTerm [ΣFG] [prod]))
-          pProd prodₙ
-          p≅prodt
-          [t] [prod]
-          wk[fstp] wk[fstprod]
-          wk[fst≡]
-          wk[snd≡]
-Σ-η′ (emb 0<1 x) = Σ-η′ x
-
-Σ-η″ : ∀ {F G t Γ l}
-        ([ΣFG] : Γ ⊩⟨ l ⟩ Σ F ▹ G )
-        ([t] : Γ ⊩⟨ l ⟩ t ∷ Σ F ▹ G / [ΣFG])
-        ([prod] : Γ ⊩⟨ l ⟩ prod (fst t) (snd t) ∷ Σ F ▹ G / [ΣFG])
-      → Γ ⊩⟨ l ⟩ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G / [ΣFG]
-Σ-η″ {F} {G} {t} {Γ} {l} [ΣFG] [t] [prod] =
+Σ-η″ : ∀ {F G p r Γ l}
+        ([F] : Γ ⊩⟨ l ⟩ F)
+        ([Gfst] : Γ ⊩⟨ l ⟩ G [ fst p ])
+        ([ΣFG] : Γ ⊩⟨ l ⟩ Σ F ▹ G)
+        ([p] : Γ ⊩⟨ l ⟩ p ∷ Σ F ▹ G / [ΣFG])
+        ([r] : Γ ⊩⟨ l ⟩ r ∷ Σ F ▹ G / [ΣFG])
+        ([fst≡] : Γ ⊩⟨ l ⟩ fst p ≡ fst r ∷ F / [F])
+        ([snd≡] : Γ ⊩⟨ l ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Gfst])
+      → Γ ⊩⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / [ΣFG]
+Σ-η″ {F} {G} {t} {Γ} {l} [F] [Gfst] [ΣFG] [p] [r] [fst≡] [snd≡] =
   let [ΣFG]′ = B-intr BΣ (B-elim BΣ [ΣFG])
-      [t]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [t]
-      [prod]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [prod]
-      [η] = Σ-η′ (B-elim BΣ [ΣFG]) [t]′ [prod]′
-  in  irrelevanceEqTerm [ΣFG]′ [ΣFG] [η]
+      [p]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [p]
+      [r]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [r]
+      [p≡]′ = Σ-η′ [F] [Gfst] (B-elim BΣ [ΣFG]) [p]′ [r]′ [fst≡] [snd≡]
+  in  irrelevanceEqTerm [ΣFG]′ [ΣFG] [p≡]′
 
-Σ-ηᵛ : ∀ {F G t Γ l}
-        ([Γ] : ⊩ᵛ Γ)
-        ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
-        ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
-        ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G])
-      → Γ ⊩ᵛ⟨ l ⟩ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G / [Γ] / Σᵛ {F} {G} [Γ] [F] [G]
-Σ-ηᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ} {σ} ⊢Δ [σ] =
+Σ-ηᵛ : ∀ {F G p r Γ l}
+         ([Γ] : ⊩ᵛ Γ)
+         ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+         ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
+       → let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G] in
+         ([p] : Γ ⊩ᵛ⟨ l ⟩ p ∷ Σ F ▹ G / [Γ] / [ΣFG])
+         ([r] : Γ ⊩ᵛ⟨ l ⟩ r ∷ Σ F ▹ G / [Γ] / [ΣFG])
+         ([fst≡] : Γ ⊩ᵛ⟨ l ⟩ fst p ≡ fst r ∷ F / [Γ] / [F])
+       → let [Gfst] = substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {p} [Γ] [F] [G] [p]) in
+         ([snd≡] : Γ ⊩ᵛ⟨ l ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Γ] / [Gfst])
+       → Γ ⊩ᵛ⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / [Γ] / [ΣFG]
+Σ-ηᵛ {F} {G} {p} {r} {Γ} {l} [Γ] [F] [G] [p] [r] [fst≡] [snd≡] {Δ} {σ} ⊢Δ [σ] =
   let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]
-      [fst] = fstᵛ {F} {G} {t} [Γ] [F] [G] [t]
-      [snd] = sndᵛ {F} {G} {t} [Γ] [F] [G] [t]
-      [prod] = prodᵛ {F} {G} {fst t} {snd t} [Γ] [F] [G] [fst] [snd]
+      [Gfst] = substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {p} [Γ] [F] [G] [p])
+      ⊩σF = proj₁ ([F] ⊢Δ [σ])
+      ⊩σGfst₁ = proj₁ ([Gfst] ⊢Δ [σ])
+      ⊩σGfst = irrelevance′ (singleSubstLift G (fst p)) ⊩σGfst₁
       ⊩σΣFG = proj₁ ([ΣFG] ⊢Δ [σ])
-      ⊩σt = proj₁ ([t] ⊢Δ [σ])
-      ⊩σprod = proj₁ ([prod] ⊢Δ [σ])
-  in  Σ-η″ ⊩σΣFG ⊩σt ⊩σprod
+      ⊩σp = proj₁ ([p] ⊢Δ [σ])
+      ⊩σr = proj₁ ([r] ⊢Δ [σ])
+      σfst≡ = [fst≡] ⊢Δ [σ]
+      σsnd≡₁ = [snd≡] ⊢Δ [σ]
+      σsnd≡ = irrelevanceEqTerm′ (singleSubstLift G (fst p)) ⊩σGfst₁ ⊩σGfst σsnd≡₁
+  in  Σ-η″ ⊩σF ⊩σGfst ⊩σΣFG ⊩σp ⊩σr σfst≡ σsnd≡

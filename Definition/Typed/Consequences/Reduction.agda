@@ -6,6 +6,7 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance
+open import Definition.Typed.Consequences.Syntactic
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Fundamental.Reducibility
@@ -55,3 +56,8 @@ whNormTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a
 whNormTerm {a} {A} ⊢a =
   let [A] , [a] = reducibleTerm ⊢a
   in  whNormTerm′ [A] [a]
+
+redMany : ∀ {t u A Γ} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ⇒* u ∷ A
+redMany d =
+  let _ , _ , ⊢u = syntacticEqTerm (subsetTerm d)
+  in  d ⇨ id ⊢u

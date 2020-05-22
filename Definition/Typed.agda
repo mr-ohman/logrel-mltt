@@ -208,11 +208,14 @@ mutual
                 → Γ ⊢ t ∷ F
                 → Γ ⊢ u ∷ G [ t ]
                 → Γ ⊢ snd (prod t u) ≡ u ∷ G [ fst (prod t u) ]
-    Σ-η         : ∀ {t F G}
+    Σ-η         : ∀ {p r F G}
                 → Γ ⊢ F
                 → Γ ∙ F ⊢ G
-                → Γ ⊢ t ∷ Σ F ▹ G
-                → Γ ⊢ t ≡ prod (fst t) (snd t) ∷ Σ F ▹ G
+                → Γ ⊢ p ∷ Σ F ▹ G
+                → Γ ⊢ r ∷ Σ F ▹ G
+                → Γ ⊢ fst p ≡ fst r ∷ F
+                → Γ ⊢ snd p ≡ snd r ∷ G [ fst p ]
+                → Γ ⊢ p ≡ r ∷ Σ F ▹ G
     suc-cong    : ∀ {m n}
                 → Γ ⊢ m ≡ n ∷ ℕ
                 → Γ ⊢ suc m ≡ suc n ∷ ℕ

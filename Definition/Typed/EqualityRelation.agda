@@ -172,12 +172,16 @@ record EqRelSet : Set₁ where
            → Γ ⊢ f ≅ g ∷ Π F ▹ G
 
     -- η for product types
-    ≅-Σ-η : ∀ {p F G Γ}
+    ≅-Σ-η : ∀ {p r F G Γ}
           → Γ ⊢ F
           → Γ ∙ F ⊢ G
           → Γ ⊢ p ∷ Σ F ▹ G
+          → Γ ⊢ r ∷ Σ F ▹ G
           → Product p
-          → Γ ⊢ p ≅ prod (fst p) (snd p) ∷ Σ F ▹ G
+          → Product r
+          → Γ ⊢ fst p ≅ fst r ∷ F
+          → Γ ⊢ snd p ≅ snd r ∷ G [ fst p ]
+          → Γ ⊢ p ≅ r ∷ Σ F ▹ G
 
     -- Variable reflexivity
     ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A

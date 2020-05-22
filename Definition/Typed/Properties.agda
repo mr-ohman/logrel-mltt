@@ -60,7 +60,7 @@ wfEqTerm (η-unit e e') = wfTerm e
 wfEqTerm (Σ-cong F _ _) = wf F
 wfEqTerm (fst-cong _ _ a) = wfEqTerm a
 wfEqTerm (snd-cong _ _ a) = wfEqTerm a
-wfEqTerm (Σ-η _ _ x) = wfTerm x
+wfEqTerm (Σ-η _ _ x _ _ _) = wfTerm x
 wfEqTerm (Σ-β₁ F G x x₁) = wfTerm x
 wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
 

@@ -100,32 +100,51 @@ inversion-star (conv x x₁) = trans (sym x₁) (inversion-star x)
 
 -- Inversion of WHNF elements of Unit.
 whnfUnitary : ∀ {Γ e} → Γ ⊢ e ∷ Unit → Whnf e → Unitary e
-whnfUnitary (conv [e] x) starₙ = starₙ
-whnfUnitary (starⱼ x) starₙ = starₙ
-whnfUnitary [e] (ne eNe) = ne eNe
+whnfUnitary x starₙ = starₙ
+whnfUnitary x (ne eNe) = ne eNe
 
 -- Refutable cases
-whnfUnitary (conv [e] A≡Unit) Uₙ = ⊥-elim (inversion-U [e])
-whnfUnitary {Γ} (conv [e] A≡Unit) Πₙ =
-  let _ , _ , A≡U = inversion-Π [e]
-  in  ⊥-elim (U≢Unitⱼ (trans (sym A≡U) A≡Unit))
-whnfUnitary {Γ} (conv [e] A≡Unit) Σₙ =
-  let _ , _ , A≡U = inversion-Σ [e]
-  in  ⊥-elim (U≢Unitⱼ (trans (sym A≡U) A≡Unit))
-whnfUnitary (conv [e] A≡Unit) ℕₙ =
-  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-ℕ [e])) A≡Unit))
-whnfUnitary (conv [e] A≡Unit) Emptyₙ =
-  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-Empty [e])) A≡Unit))
-whnfUnitary (conv [e] A≡Unit) Unitₙ =
-  ⊥-elim (U≢Unitⱼ (trans (sym (inversion-Unit [e])) A≡Unit))
-whnfUnitary (conv [e] A≡Unit) lamₙ =
-  let _ , _ , _ , _ , A≡Π = inversion-lam [e]
-  in  ⊥-elim (Unit≢Bⱼ BΠ (trans (sym A≡Unit) A≡Π))
-whnfUnitary {Γ} (conv [e] A≡Unit) prodₙ =
-  let _ , _ , _ , _ , _ , _ , A≡Σ = inversion-prod [e]
-  in  ⊥-elim (Unit≢Bⱼ BΣ (trans (sym A≡Unit) A≡Σ))
-whnfUnitary (conv [e] A≡Unit) zeroₙ =
-  ⊥-elim (ℕ≢Unitⱼ (trans (sym (inversion-zero [e])) A≡Unit))
-whnfUnitary (conv [e] A≡Unit) sucₙ =
-  let _ , A≡ℕ = inversion-suc [e]
-  in  ⊥-elim (ℕ≢Unitⱼ (trans (sym A≡ℕ) A≡Unit))
+whnfUnitary x Uₙ = ⊥-elim (inversion-U x)
+whnfUnitary x Πₙ =
+  let _ , _ , A≡U = inversion-Π x
+  in  ⊥-elim (U≢Unitⱼ (sym A≡U))
+whnfUnitary x Σₙ =
+  let _ , _ , A≡U = inversion-Σ x
+  in  ⊥-elim (U≢Unitⱼ (sym A≡U))
+whnfUnitary x ℕₙ = ⊥-elim (U≢Unitⱼ (sym (inversion-ℕ x)))
+whnfUnitary x Emptyₙ = ⊥-elim (U≢Unitⱼ (sym (inversion-Empty x)))
+whnfUnitary x Unitₙ = ⊥-elim (U≢Unitⱼ (sym (inversion-Unit x)))
+whnfUnitary x lamₙ =
+  let _ , _ , _ , _ , A≡Π = inversion-lam x
+  in  ⊥-elim (Unit≢Πⱼ A≡Π)
+whnfUnitary x prodₙ =
+  let _ , _ , _ , _ , _ , _ , A≡Σ = inversion-prod x
+  in  ⊥-elim (Unit≢Σⱼ  A≡Σ)
+whnfUnitary x zeroₙ = ⊥-elim (ℕ≢Unitⱼ (sym (inversion-zero x)))
+whnfUnitary x sucₙ =
+  let _ , A≡ℕ = inversion-suc x
+  in  ⊥-elim (ℕ≢Unitⱼ (sym A≡ℕ))
+
+-- Inversion of products in WHNF.
+whnfProduct : ∀ {Γ p F G} → Γ ⊢ p ∷ Σ F ▹ G → Whnf p → Product p
+whnfProduct x prodₙ = prodₙ
+whnfProduct x (ne pNe) = ne pNe
+
+whnfProduct x Uₙ = ⊥-elim (inversion-U x)
+whnfProduct x Πₙ =
+  let _ , _ , Σ≡U = inversion-Π x
+  in  ⊥-elim (U≢Σ (sym Σ≡U))
+whnfProduct x Σₙ =
+  let _ , _ , Σ≡U = inversion-Σ x
+  in  ⊥-elim (U≢Σ (sym Σ≡U))
+whnfProduct x ℕₙ = ⊥-elim (U≢Σ (sym (inversion-ℕ x)))
+whnfProduct x Unitₙ = ⊥-elim (U≢Σ (sym (inversion-Unit x)))
+whnfProduct x Emptyₙ = ⊥-elim (U≢Σ (sym (inversion-Empty x)))
+whnfProduct x lamₙ =
+  let _ , _ , _ , _ , Σ≡Π = inversion-lam x
+  in  ⊥-elim (Π≢Σ (sym Σ≡Π))
+whnfProduct x zeroₙ = ⊥-elim (ℕ≢Σ (sym (inversion-zero x)))
+whnfProduct x sucₙ =
+  let _ , A≡ℕ = inversion-suc x
+  in  ⊥-elim (ℕ≢Σ (sym A≡ℕ))
+whnfProduct x starₙ = ⊥-elim (Unit≢Σⱼ (sym (inversion-star x)))

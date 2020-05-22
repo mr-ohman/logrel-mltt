@@ -2,7 +2,7 @@
 
 module Definition.Typed.Consequences.Inequality where
 
-open import Definition.Untyped hiding (U≢ne; ℕ≢ne; B≢ne)
+open import Definition.Untyped hiding (U≢ne; ℕ≢ne; B≢ne; U≢B; ℕ≢B)
 open import Definition.Typed
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
@@ -141,26 +141,31 @@ Empty≢Unitⱼ Empty≡Unit =
   let _ , ⊢Unit = syntacticEq Empty≡Unit
   in  Empty≢Unit-red (id ⊢Unit) Empty≡Unit
 
--- Universe and Π
+-- Universe and binding types
 
-U≢Π′ : ∀ {B Γ l l′}
+U≢B′ : ∀ {B Γ l l′} W
        ([U] : Γ ⊩′⟨ l ⟩U)
-       ([Π] : Γ ⊩′⟨ l′ ⟩B⟨ BΠ ⟩ B)
-     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (Bᵣ BΠ [Π]) → ⊥
-U≢Π′ a b ()
+       ([W] : Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ B)
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (Bᵣ W [W]) → ⊥
+U≢B′ W a b ()
 
-U≢Π-red : ∀ {B F G Γ} → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ U ≡ B → ⊥
-U≢Π-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U)
-                (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ BΠ ⟩ A) Uᵣ (Bᵣ BΠ)
-                (λ x → extractMaybeEmb (U-elim x))
-                (λ x → extractMaybeEmb (B-elim′ BΠ D x))
-                U≢Π′
+U≢B-red : ∀ {B F G Γ} W → Γ ⊢ B ⇒* ⟦ W ⟧ F ▹ G → Γ ⊢ U ≡ B → ⊥
+U≢B-red W D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U)
+                  (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) Uᵣ (Bᵣ W)
+                  (λ x → extractMaybeEmb (U-elim x))
+                  (λ x → extractMaybeEmb (B-elim′ W D x))
+                  (U≢B′ W)
 
 -- U and Π F ▹ G for any F and G cannot be judgmentally equal.
-U≢Π : ∀ {F G Γ} → Γ ⊢ U ≡ Π F ▹ G → ⊥
-U≢Π U≡Π =
-  let _ , ⊢Π = syntacticEq U≡Π
-  in  U≢Π-red (id ⊢Π) U≡Π
+U≢B : ∀ {F G Γ} W → Γ ⊢ U ≡ ⟦ W ⟧ F ▹ G → ⊥
+U≢B W U≡W =
+  let _ , ⊢W = syntacticEq U≡W
+  in  U≢B-red W (id ⊢W) U≡W
+
+U≢Π : ∀ {F G Γ} → _
+U≢Π {F} {G} {Γ} = U≢B {F} {G} {Γ} BΠ
+U≢Σ : ∀ {F G Γ} → _
+U≢Σ {F} {G} {Γ} = U≢B {F} {G} {Γ} BΣ
 
 U≢ne′ : ∀ {K Γ l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
@@ -180,43 +185,53 @@ U≢ne neK U≡K =
   let _ , ⊢K = syntacticEq U≡K
   in  U≢ne-red (id ⊢K) neK U≡K
 
-ℕ≢Π′ : ∀ {A B Γ l l′}
+ℕ≢B′ : ∀ {A B Γ l l′} W
        ([ℕ] : Γ ⊩ℕ A)
-       ([Π] : Γ ⊩′⟨ l′ ⟩B⟨ BΠ ⟩ B)
-     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (Bᵣ BΠ [Π]) → ⊥
-ℕ≢Π′ a b ()
+       ([W] : Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ B)
+     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (Bᵣ W [W]) → ⊥
+ℕ≢B′ W a b ()
 
-ℕ≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
-ℕ≢Π-red D D′ = A≢B (λ Γ l A → Γ ⊩ℕ A)
-                   (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ BΠ ⟩ A) ℕᵣ (Bᵣ BΠ)
-                   (λ x → extractMaybeEmb (ℕ-elim′ D x))
-                   (λ x → extractMaybeEmb (B-elim′ BΠ D′ x))
-                   ℕ≢Π′
+ℕ≢B-red : ∀ {A B F G Γ} W → Γ ⊢ A ⇒* ℕ → Γ ⊢ B ⇒* ⟦ W ⟧ F ▹ G → Γ ⊢ A ≡ B → ⊥
+ℕ≢B-red W D D′ = A≢B (λ Γ l A → Γ ⊩ℕ A)
+                     (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) ℕᵣ (Bᵣ W)
+                     (λ x → extractMaybeEmb (ℕ-elim′ D x))
+                     (λ x → extractMaybeEmb (B-elim′ W D′ x))
+                     (ℕ≢B′ W)
 
--- ℕ and Π F ▹ G for any F and G cannot be judgmentally equal.
-ℕ≢Π : ∀ {F G Γ} → Γ ⊢ ℕ ≡ Π F ▹ G → ⊥
-ℕ≢Π ℕ≡Π =
-  let ⊢ℕ , ⊢Π = syntacticEq ℕ≡Π
-  in  ℕ≢Π-red (id ⊢ℕ) (id ⊢Π) ℕ≡Π
+-- ℕ and B F ▹ G for any F and G cannot be judgmentally equal.
+ℕ≢B : ∀ {F G Γ} W → Γ ⊢ ℕ ≡ ⟦ W ⟧ F ▹ G → ⊥
+ℕ≢B W ℕ≡W =
+  let ⊢ℕ , ⊢W = syntacticEq ℕ≡W
+  in  ℕ≢B-red W (id ⊢ℕ) (id ⊢W) ℕ≡W
+
+ℕ≢Π : ∀ {F G Γ} → _
+ℕ≢Π {F} {G} {Γ} = ℕ≢B {F} {G} {Γ} BΠ
+ℕ≢Σ : ∀ {F G Γ} → _
+ℕ≢Σ {F} {G} {Γ} = ℕ≢B {F} {G} {Γ} BΣ
 
 -- Empty and Π
-Empty≢Π′ : ∀ {A B Γ l l′}
+Empty≢B′ : ∀ {A B Γ l l′} W
        ([Empty] : Γ ⊩Empty A)
-       ([Π] : Γ ⊩′⟨ l′ ⟩B⟨ BΠ ⟩ B)
-     → ShapeView Γ l l′ _ _ (Emptyᵣ [Empty]) (Bᵣ BΠ [Π]) → ⊥
-Empty≢Π′ a b ()
+       ([W] : Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ B)
+     → ShapeView Γ l l′ _ _ (Emptyᵣ [Empty]) (Bᵣ W [W]) → ⊥
+Empty≢B′ W a b ()
 
-Empty≢Π-red : ∀ {A B F G Γ} → Γ ⊢ A ⇒* Empty → Γ ⊢ B ⇒* Π F ▹ G → Γ ⊢ A ≡ B → ⊥
-Empty≢Π-red D D′ = A≢B (λ Γ l A → Γ ⊩Empty A)
-                   (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ BΠ ⟩ A) Emptyᵣ (Bᵣ BΠ)
-                   (λ x → extractMaybeEmb (Empty-elim′ D x))
-                   (λ x → extractMaybeEmb (B-elim′ BΠ D′ x))
-                   Empty≢Π′
+Empty≢B-red : ∀ {A B F G Γ} W → Γ ⊢ A ⇒* Empty → Γ ⊢ B ⇒* ⟦ W ⟧ F ▹ G → Γ ⊢ A ≡ B → ⊥
+Empty≢B-red W D D′ = A≢B (λ Γ l A → Γ ⊩Empty A)
+                         (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) Emptyᵣ (Bᵣ W)
+                         (λ x → extractMaybeEmb (Empty-elim′ D x))
+                         (λ x → extractMaybeEmb (B-elim′ W D′ x))
+                         (Empty≢B′ W)
 
-Empty≢Πⱼ : ∀ {F G Γ} → Γ ⊢ Empty ≡ Π F ▹ G → ⊥
-Empty≢Πⱼ Empty≡Π =
-  let ⊢Empty , ⊢Π = syntacticEq Empty≡Π
-  in  Empty≢Π-red (id ⊢Empty) (id ⊢Π) Empty≡Π
+Empty≢Bⱼ : ∀ {F G Γ} W → Γ ⊢ Empty ≡ ⟦ W ⟧ F ▹ G → ⊥
+Empty≢Bⱼ W Empty≡W =
+  let ⊢Empty , ⊢W = syntacticEq Empty≡W
+  in  Empty≢B-red W (id ⊢Empty) (id ⊢W) Empty≡W
+
+Empty≢Πⱼ : ∀ {F G Γ} → _
+Empty≢Πⱼ {F} {G} {Γ} = Empty≢Bⱼ {F} {G} {Γ} BΠ
+Empty≢Σⱼ : ∀ {F G Γ} → _
+Empty≢Σⱼ {F} {G} {Γ} = Empty≢Bⱼ {F} {G} {Γ} BΣ
 
 -- Unit and Π
 Unit≢B′ : ∀ {A B Γ l l′} W
@@ -236,6 +251,11 @@ Unit≢Bⱼ : ∀ {F G Γ} W → Γ ⊢ Unit ≡ ⟦ W ⟧ F ▹ G → ⊥
 Unit≢Bⱼ W Unit≡W =
   let ⊢Unit , ⊢W = syntacticEq Unit≡W
   in  Unit≢B-red W (id ⊢Unit) (id ⊢W) Unit≡W
+
+Unit≢Πⱼ : ∀ {F G Γ} → _
+Unit≢Πⱼ {F} {G} {Γ} = Unit≢Bⱼ {F} {G} {Γ} BΠ
+Unit≢Σⱼ : ∀ {F G Γ} → _
+Unit≢Σⱼ {F} {G} {Γ} = Unit≢Bⱼ {F} {G} {Γ} BΣ
 
 ℕ≢ne′ : ∀ {A K Γ l l′}
        ([ℕ] : Γ ⊩ℕ A)
@@ -305,7 +325,7 @@ B≢ne-red W D D′ neK = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A)
                           (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
                           (B≢ne′ W)
 
--- ⟦ W ⟧ F ▹ G and K for any F and G and neutral K cannot be judgmentally equal.
+-- ⟦ W ⟧ F ▹ G and K for any W, F, G and neutral K cannot be judgmentally equal.
 B≢ne : ∀ {F G K Γ} W → Neutral K → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ K → ⊥
 B≢ne W neK W≡K =
   let ⊢W , ⊢K = syntacticEq W≡K
@@ -315,3 +335,22 @@ B≢ne W neK W≡K =
 Π≢ne {F} {G} {K} {Γ} = B≢ne {F} {G} {K} {Γ} BΠ
 Σ≢ne : ∀ {F G K Γ} → _
 Σ≢ne {F} {G} {K} {Γ} = B≢ne {F} {G} {K} {Γ} BΣ
+
+-- Π and Σ
+Π≢Σ′ : ∀ {A B Γ l l′}
+       ([A] : Γ ⊩′⟨ l ⟩B⟨ BΠ ⟩ A)
+       ([B] : Γ ⊩′⟨ l′ ⟩B⟨ BΣ ⟩ B)
+     → ShapeView Γ l l′ _ _ (Bᵣ BΠ [A]) (Bᵣ BΣ [B]) → ⊥
+Π≢Σ′ a b ()
+
+Π≢Σ-red : ∀ {A B F G H E Γ} → Γ ⊢ A ⇒* Π F ▹ G → Γ ⊢ B ⇒* Σ H ▹ E → Γ ⊢ A ≡ B → ⊥
+Π≢Σ-red D D′ = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ BΠ ⟩ A)
+                   (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ BΣ ⟩ A) (Bᵣ BΠ) (Bᵣ BΣ)
+                   (λ x → extractMaybeEmb (B-elim′ BΠ D x))
+                   (λ x → extractMaybeEmb (B-elim′ BΣ D′ x))
+                   Π≢Σ′
+
+Π≢Σ : ∀ {Γ F G H E} → Γ ⊢ Π F ▹ G ≡ Σ H ▹ E → ⊥
+Π≢Σ Π≡Σ =
+  let ⊢Π , ⊢Σ = syntacticEq Π≡Σ
+  in  Π≢Σ-red (id ⊢Π) (id ⊢Σ) Π≡Σ

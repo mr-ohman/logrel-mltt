@@ -182,10 +182,17 @@ mutual
         ρt≡t' = wkEqTerm ρ ⊢Δ t≡t'
     in  PE.subst (λ x → _ ⊢ snd _ ≡ snd _ ∷ x) (PE.sym (wk-β G))
       (snd-cong ρF ρG ρt≡t')
-  wkEqTerm ρ ⊢Δ (Σ-η ⊢F ⊢G t) =
+  wkEqTerm ρ ⊢Δ (Σ-η {G = G} ⊢F ⊢G ⊢p ⊢r fst≡ snd≡) =
     let ρF = wk ρ ⊢Δ ⊢F
         ρG = wk (lift ρ) (⊢Δ ∙ ρF) ⊢G
-    in  Σ-η ρF ρG (wkTerm ρ ⊢Δ t)
+        ρp = wkTerm ρ ⊢Δ ⊢p
+        ρr = wkTerm ρ ⊢Δ ⊢r
+        ρfst≡ = wkEqTerm ρ ⊢Δ fst≡
+        ρsnd≡ = wkEqTerm ρ ⊢Δ snd≡
+        ρsnd≡ = PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x)
+                         (wk-β G)
+                         ρsnd≡
+    in  Σ-η ρF ρG ρp ρr ρfst≡ ρsnd≡
   wkEqTerm {ρ = ρ} [ρ] ⊢Δ (Σ-β₁ {G = G} ⊢F ⊢G t u) =
     let ρF = wk [ρ] ⊢Δ ⊢F
         ρG = wk (lift [ρ]) (⊢Δ ∙ ρF) ⊢G
