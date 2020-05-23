@@ -180,12 +180,6 @@ mutual
                 → Γ     ⊢ g ∷ Π F ▹ G
                 → Γ ∙ F ⊢ wk1 f ∘ var Nat.zero ≡ wk1 g ∘ var Nat.zero ∷ G
                 → Γ     ⊢ f ≡ g ∷ Π F ▹ G
-    prod-cong   : ∀ {t t′ u u′ F G}
-                → Γ ⊢ F
-                → Γ ∙ F ⊢ G
-                → Γ ⊢ t ≡ t′ ∷ F
-                → Γ ⊢ u ≡ u′ ∷ G [ t ]
-                → Γ ⊢ prod t u ≡ prod t′ u′ ∷ Σ F ▹ G
     fst-cong    : ∀ {t t' F G}
                 → Γ ⊢ F
                 → Γ ∙ F ⊢ G

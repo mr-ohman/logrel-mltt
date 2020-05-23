@@ -49,7 +49,6 @@ eqRelInstance = record {
   ≅ₜ-Σ-cong = Σ-cong;
   ≅ₜ-zerorefl = refl ∘ᶠ zeroⱼ;
   ≅-suc-cong = suc-cong;
-  ≅-prod-cong = prod-cong;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → η-eq x x₁ x₂ x₅;
   ≅-Σ-η = λ ⊢F ⊢G ⊢p ⊢r pProd rProd fst≡ snd≡ → Σ-η ⊢F ⊢G ⊢p ⊢r fst≡ snd≡;
   ~-var = refl;

@@ -50,7 +50,6 @@ wfEqTerm (Π-cong F F≡H G≡E) = wfEqTerm F≡H
 wfEqTerm (app-cong f≡g a≡b) = wfEqTerm f≡g
 wfEqTerm (β-red F t a) = wfTerm a
 wfEqTerm (η-eq F f g f0≡g0) = wfTerm f
-wfEqTerm (prod-cong _ _ x _) = wfEqTerm x
 wfEqTerm (suc-cong n) = wfEqTerm n
 wfEqTerm (natrec-cong F≡F′ z≡z′ s≡s′ n≡n′) = wfEqTerm z≡z′
 wfEqTerm (natrec-zero F z s) = wfTerm z

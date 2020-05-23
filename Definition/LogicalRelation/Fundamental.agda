@@ -633,38 +633,6 @@ mutual
   ... | [Γ] , [Unit] , [e] | [Γ]' , [Unit]' , [e'] =
     let [e'] = S.irrelevanceTerm {A = Unit} {t = e'} [Γ]' [Γ] [Unit]' [Unit] [e']
     in  [Γ] , modelsTermEq [Unit] [e] [e'] (η-unitᵛ {e = e} {e' = e'} [Γ] [Unit] [e] [e'])
-  fundamentalTermEq {Γ = Γ} (prod-cong {t} {t′} {u} {u′} {F} {G} ⊢F ⊢G t≡t′ u≡u′)
-    with fundamentalTermEq t≡t′ | fundamental ⊢G | fundamentalTermEq u≡u′
-  ... | [Γ] , modelsTermEq [F] [t] [t′] [t≡t′] | [Γ]₁ , [G] | [Γ]₂ , modelsTermEq [Gt] [u] [u′] [u≡u′] =
-    let [G]′ = S.irrelevance {A = G} [Γ]₁ ([Γ] ∙ [F]) [G]
-
-        [u]′ = S.irrelevanceTerm {A = G [ t ]} {t = u} [Γ]₂ [Γ]
-                                 [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
-                                 [u]
-        [u′]″ = S.irrelevanceTerm {A = G [ t ]} {t = u′} [Γ]₂ [Γ]
-                                  [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
-                                  [u′]
-        [u≡u′]′ = S.irrelevanceEqTerm {A = G [ t ]} {t = u} {u = u′} [Γ]₂ [Γ]
-                                      [Gt] (substS {F} {G} [Γ] [F] [G]′ [t])
-                                      [u≡u′]
-
-        [Gt≡Gt′] = substSEq {F = F} {F′ = F} {G = G} {G′ = G} {t = t} {t′ = t′} [Γ]
-                            [F] [F] (reflᵛ {A = F} [Γ] [F])
-                            [G]′ [G]′ (reflᵛ {A = G} {Γ = Γ ∙ F} ([Γ] ∙ [F]) [G]′)
-                            [t] [t′] [t≡t′]
-
-        [u′]′ = convᵛ {t = u′} {A = G [ t ]} {B = G [ t′ ]} [Γ]
-                      (substS {F} {G} [Γ] [F] [G]′ [t])
-                      (substS {F} {G} [Γ] [F] [G]′ [t′])
-                      [Gt≡Gt′]
-                      [u′]″
-
-        [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]′
-
-        [prod] = prodᵛ {F} {G} {t} {u} [Γ] [F] [G]′ [t] [u]′
-        [prod′] = prodᵛ {F} {G} {t′} {u′} [Γ] [F] [G]′ [t′] [u′]′
-        [prod≡] = prod-congᵛ {F} {G} {t} {t′} {u} {u′} [Γ] [F] [G]′ [t] [t′] [t≡t′] [u]′ [u′]′ [u≡u′]′
-    in [Γ] , modelsTermEq [ΣFG] [prod] [prod′] [prod≡]
   fundamentalTermEq (fst-cong {t} {t′} {F} {G} ⊢F ⊢G t≡t′)
     with fundamentalTermEq t≡t′ | fundamental ⊢F | fundamental ⊢G
   ... | [Γ] , modelsTermEq [ΣFG] [t] [t′] [t≡t′] | [Γ]₁ , [F]₁ | [Γ]₂ , [G]₂ =

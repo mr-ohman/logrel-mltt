@@ -67,13 +67,18 @@ prod′ {F} {G} {t} {u} {Γ} {l} {l′} {l″} [F] [t] [Gt] [u]
 
       snd⇒u : Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ]
       snd⇒u = Σ-β₂ ⊢F ⊢G ⊢t ⊢u
-      [sndprod] = proj₁ (redSubstTerm snd⇒u [Gfst]′ [u]′)
+      [sndprod] , [sndprod≡u] = redSubstTerm snd⇒u [Gfst]′ [u]′
+
+      ⊢prod = prodⱼ ⊢F ⊢G ⊢t ⊢u
+
+      [fstRefl] = transEqTerm [F] [fstprod≡t] (symEqTerm [F] [fstprod≡t])
+      [sndRefl] = transEqTerm [Gfst]′ [sndprod≡u] (symEqTerm [Gfst]′ [sndprod≡u])
   in  Σₜ (prod t u)
-         (idRedTerm:*: (prodⱼ ⊢F ⊢G ⊢t ⊢u))
+         (idRedTerm:*: ⊢prod)
          prodₙ
-         (≅-prod-cong ⊢F ⊢G
-                      (escapeTermEq [F] (reflEqTerm [F] [t]))
-                      (escapeTermEq [Gt] (reflEqTerm [Gt] [u])))
+         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod prodₙ prodₙ
+                (escapeTermEq [F] [fstRefl])
+                (escapeTermEq [Gfst]′ [sndRefl]))
          [fstprod]′
          (irrelevanceTerm′ (PE.sym wkLiftIdEq)
                        [Gfst]′ [Gfst]
@@ -202,14 +207,17 @@ prod-cong′ {F} {G} {t} {t′} {u} {u′} {Γ} {l} {l′}
                                                  (PE.sym (wk-lift-id G)))
                                         [Gfst] wk[Gfst]
                                         [snd≡snd′]
+
+      ⊢prod = escapeTerm (B-intr BΣ [ΣFG]) [prod]
+      ⊢prod′ = escapeTerm (B-intr BΣ [ΣFG]) [prod′]
   in Σₜ₌ (prod t u)
          (prod t′ u′)
-         (idRedTerm:*: (escapeTerm (B-intr BΣ [ΣFG]) [prod]))
-         (idRedTerm:*: (escapeTerm (B-intr BΣ [ΣFG]) [prod′]))
+         (idRedTerm:*: ⊢prod)
+         (idRedTerm:*: ⊢prod′)
          prodₙ prodₙ
-         (≅-prod-cong ⊢F ⊢G
-                      (escapeTermEq [F] [t≡t′])
-                      (escapeTermEq [Gt] [u≡u′]))
+         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod′ prodₙ prodₙ
+                (escapeTermEq [F] [fst≡fst′])
+                (escapeTermEq [Gfst] [snd≡snd′]))
          [prod] [prod′]
          wk[fst] wk[fst′]
          wk[fst≡fst′]

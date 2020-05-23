@@ -166,12 +166,6 @@ mutual
                           (PE.subst (λ t → _ ⊢ _ ≡ t ∘ _ ∷ _)
                                     (PE.sym (wk1-wk≡lift-wk1 _ _))
                                     (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) f0≡g0)))
-  wkEqTerm ρ ⊢Δ (prod-cong {G = G} ⊢F ⊢G t u) =
-    let ρF = wk ρ ⊢Δ ⊢F
-        ρG = wk (lift ρ) (⊢Δ ∙ ρF) ⊢G
-        ρt = wkEqTerm ρ ⊢Δ t
-        ρu = wkEqTerm ρ ⊢Δ u
-    in  prod-cong ρF ρG ρt (PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (wk-β G) ρu)
   wkEqTerm ρ ⊢Δ (fst-cong ⊢F ⊢G t≡t') =
     let ρF = wk ρ ⊢Δ ⊢F
         ρG = wk (lift ρ) (⊢Δ ∙ ρF) ⊢G

@@ -152,15 +152,6 @@ record EqRelSet : Set₁ where
     -- Successor congruence
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
 
-    -- Product congruence
-    -- TODO it's dissatisfying to postulate congruence
-    ≅-prod-cong : ∀ {Γ t t′ u u′ F G}
-                → Γ ⊢ F
-                → Γ ∙ F ⊢ G
-                → Γ ⊢ t ≅ t′ ∷ F -- ~ or ≅ ?
-                → Γ ⊢ u ≅ u′ ∷ G [ t ]
-                → Γ ⊢ prod t u ≅ prod t′ u′ ∷ Σ F ▹ G
-
     -- η-equality
     ≅-η-eq : ∀ {f g F G Γ}
            → Γ ⊢ F
