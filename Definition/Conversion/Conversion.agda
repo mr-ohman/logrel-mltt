@@ -67,17 +67,19 @@ mutual
     in  η-eq (stability Γ≡Δ ⊢F′) (stabilityTerm Γ≡Δ (conv x₁ A≡B))
              (stabilityTerm Γ≡Δ (conv x₂ A≡B)) y y₁
              (convConv↑Term (Γ≡Δ ∙ F≡F′) G≡G′ x₃)
-  convConv↓Term Γ≡Δ A≡B whnfB (prod-cong ⊢G tConv uConv) with Σ≡A A≡B whnfB
+  convConv↓Term Γ≡Δ A≡B whnfB (Σ-η ⊢p ⊢r pProd rProd fstConv sndConv)
+    with Σ≡A A≡B whnfB
   ... | F , G , PE.refl =
     let F≡ , G≡ = Σ-injectivity A≡B
-        G≡′ = stabilityEq (Γ≡Δ ∙ F≡) G≡
-        _ , ⊢G′ = syntacticEq G≡′
-        _ , ⊢t , _ = syntacticEqTerm (soundnessConv↑Term tConv)
-        tConv′ = convConv↑Term Γ≡Δ F≡ tConv
-        uConv′ = convConv↑Term Γ≡Δ (substTypeEq G≡ (refl ⊢t)) uConv
-    in  prod-cong ⊢G′ tConv′ uConv′
-  convConv↓Term Γ≡Δ A≡B whnfB (Σ-η ⊢p pProd) with Σ≡A A≡B whnfB
-  ... | F , G , PE.refl = Σ-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B)) pProd
+        ⊢F = proj₁ (syntacticEq F≡)
+        ⊢G = proj₁ (syntacticEq G≡)
+        ⊢fst = fstⱼ ⊢F ⊢G ⊢p
+    in  Σ-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+            (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+            pProd
+            rProd
+            (convConv↑Term Γ≡Δ F≡ fstConv)
+            (convConv↑Term Γ≡Δ (substTypeEq G≡ (refl ⊢fst)) sndConv)
   convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

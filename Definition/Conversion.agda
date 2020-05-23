@@ -22,26 +22,26 @@ infix 10 _⊢_[conv↓]_∷_
 mutual
   -- Neutral equality.
   data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
-    var-refl    : ∀ {x y A}
-                → Γ ⊢ var x ∷ A
-                → x PE.≡ y
-                → Γ ⊢ var x ~ var y ↑ A
-    app-cong    : ∀ {k l t v F G}
-                → Γ ⊢ k ~ l ↓ Π F ▹ G
-                → Γ ⊢ t [conv↑] v ∷ F
-                → Γ ⊢ k ∘ t ~ l ∘ v ↑ G [ t ]
-    fst-cong    : ∀ {p r F G}
-                → Γ ⊢ p ~ r ↓ Σ F ▹ G
-                → Γ ⊢ fst p ~ fst r ↑ F
-    snd-cong    : ∀ {p r F G}
-                → Γ ⊢ p ~ r ↓ Σ F ▹ G
-                → Γ ⊢ snd p ~ snd r ↑ G [ fst p ]
-    natrec-cong : ∀ {k l h g a₀ b₀ F G}
-                → Γ ∙ ℕ ⊢ F [conv↑] G
-                → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
-                → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
-                → Γ ⊢ k ~ l ↓ ℕ
-                → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
+    var-refl      : ∀ {x y A}
+                  → Γ ⊢ var x ∷ A
+                  → x PE.≡ y
+                  → Γ ⊢ var x ~ var y ↑ A
+    app-cong      : ∀ {k l t v F G}
+                  → Γ ⊢ k ~ l ↓ Π F ▹ G
+                  → Γ ⊢ t [conv↑] v ∷ F
+                  → Γ ⊢ k ∘ t ~ l ∘ v ↑ G [ t ]
+    fst-cong      : ∀ {p r F G}
+                  → Γ ⊢ p ~ r ↓ Σ F ▹ G
+                  → Γ ⊢ fst p ~ fst r ↑ F
+    snd-cong      : ∀ {p r F G}
+                  → Γ ⊢ p ~ r ↓ Σ F ▹ G
+                  → Γ ⊢ snd p ~ snd r ↑ G [ fst p ]
+    natrec-cong   : ∀ {k l h g a₀ b₀ F G}
+                  → Γ ∙ ℕ ⊢ F [conv↑] G
+                  → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
+                  → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
+                  → Γ ⊢ k ~ l ↓ ℕ
+                  → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
     Emptyrec-cong : ∀ {k l F G}
                   → Γ ⊢ F [conv↑] G
                   → Γ ⊢ k ~ l ↓ Empty
@@ -71,23 +71,23 @@ mutual
 
   -- Type equality with types in WHNF.
   data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
-    U-refl    : ⊢ Γ → Γ ⊢ U [conv↓] U
-    ℕ-refl    : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
+    U-refl     : ⊢ Γ → Γ ⊢ U [conv↓] U
+    ℕ-refl     : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     Empty-refl : ⊢ Γ → Γ ⊢ Empty [conv↓] Empty
-    Unit-refl : ⊢ Γ → Γ ⊢ Unit [conv↓] Unit
-    ne        : ∀ {K L}
-              → Γ ⊢ K ~ L ↓ U
-              → Γ ⊢ K [conv↓] L
-    Π-cong    : ∀ {F G H E}
-              → Γ ⊢ F
-              → Γ ⊢ F [conv↑] H
-              → Γ ∙ F ⊢ G [conv↑] E
-              → Γ ⊢ Π F ▹ G [conv↓] Π H ▹ E
-    Σ-cong    : ∀ {F G H E}
-              → Γ ⊢ F
-              → Γ ⊢ F [conv↑] H
-              → Γ ∙ F ⊢ G [conv↑] E
-              → Γ ⊢ Σ F ▹ G [conv↓] Σ H ▹ E
+    Unit-refl  : ⊢ Γ → Γ ⊢ Unit [conv↓] Unit
+    ne         : ∀ {K L}
+               → Γ ⊢ K ~ L ↓ U
+               → Γ ⊢ K [conv↓] L
+    Π-cong     : ∀ {F G H E}
+               → Γ ⊢ F
+               → Γ ⊢ F [conv↑] H
+               → Γ ∙ F ⊢ G [conv↑] E
+               → Γ ⊢ Π F ▹ G [conv↓] Π H ▹ E
+    Σ-cong     : ∀ {F G H E}
+               → Γ ⊢ F
+               → Γ ⊢ F [conv↑] H
+               → Γ ∙ F ⊢ G [conv↑] E
+               → Γ ⊢ Σ F ▹ G [conv↓] Σ H ▹ E
 
   -- Term equality.
   record _⊢_[conv↑]_∷_ (Γ : Con Term) (t u A : Term) : Set where
@@ -129,6 +129,9 @@ mutual
     suc-cong  : ∀ {m n}
               → Γ ⊢ m [conv↑] n ∷ ℕ
               → Γ ⊢ suc m [conv↓] suc n ∷ ℕ
+  {-η-eq-decl : ∀ {f F G}
+              → Γ ⊢ f ∷ Π F ▹ G
+              → Γ ⊢ f ≡ lam (f ∘ var 0) ∷ Σ F ▹ G-}
     η-eq      : ∀ {f g F G}
               → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
@@ -137,15 +140,18 @@ mutual
               → Function g
               → Γ ∙ F ⊢ wk1 f ∘ var 0 [conv↑] wk1 g ∘ var 0 ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
-    prod-cong : ∀ {t u t′ u′ F G}
-              → Γ ∙ F ⊢ G
-              → Γ ⊢ t [conv↑] t′ ∷ F
-              → Γ ⊢ u [conv↑] u′ ∷ G [ t ]
-              → Γ ⊢ prod t u [conv↓] prod t′ u′ ∷ Σ F ▹ G
-    Σ-η       : ∀ {p F G} -- TODO which rule to use. this or Σ-η₂ (below)?
+  {-Σ-η-decl  : ∀ {p F G}
               → Γ ⊢ p ∷ Σ F ▹ G
               → Product p
-              → Γ ⊢ p [conv↓] prod (fst p) (snd p) ∷ Σ F ▹ G
+              → Γ ⊢ p [conv↓] prod (fst p) (snd p) ∷ Σ F ▹ G-}
+    Σ-η       : ∀ {p r F G}
+              → Γ ⊢ p ∷ Σ F ▹ G
+              → Γ ⊢ r ∷ Σ F ▹ G
+              → Product p
+              → Product r
+              → Γ ⊢ fst p [conv↑] fst r ∷ F
+              → Γ ⊢ snd p [conv↑] snd r ∷ G [ fst p ]
+              → Γ ⊢ p [conv↓] r ∷ Σ F ▹ G
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit
@@ -155,12 +161,3 @@ mutual
 
 star-refl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
 star-refl ⊢Γ = η-unit (starⱼ ⊢Γ) (starⱼ ⊢Γ) starₙ starₙ
-
-    {-Σ-η₂    : ∀ {p r F G}
-              → Γ ⊢ p ∷ Σ F ▹ G
-              → Γ ⊢ r ∷ Σ F ▹ G
-              → Product p
-              → Product r
-              → Γ ⊢ fst p [conv↑] fst r ∷ F
-              → Γ ⊢ snd r [conv↑] snd r ∷ G [ fst p ]
-              → Γ ⊢ p [conv↓] r ∷ Σ F ▹ G-}

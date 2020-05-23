@@ -59,18 +59,40 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       _ , ⊢f , _ = syntacticEqTerm (soundnessConv↑Term x₁)
   in  ↑ (substTypeEq G≡E (refl ⊢f))
         (app-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
-                       B≡ΠHE ([~] _ (red D) whnfB′ x))
+                            B≡ΠHE
+                            ([~] _ (red D) whnfB′ x))
              (convConvTerm x₁ F≡H))
 
 ~-fst : ∀ {Γ p r F G}
       → Γ ⊢ p ~ r ∷ Σ F ▹ G
       → Γ ⊢ fst p ~ fst r ∷ F
-~-fst (↑ A≡B x) = {!!}
+~-fst (↑ A≡B p~r) =
+  let _ , ⊢B = syntacticEq A≡B
+      B′ , whnfB′ , D = whNorm ⊢B
+      ΣFG≡B′ = trans A≡B (subset* (red D))
+      H , E , B≡ΣHE = Σ≡A ΣFG≡B′ whnfB′
+      F≡H , G≡E = Σ-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΣHE ΣFG≡B′)
+      p~r↓ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                      B≡ΣHE
+                      ([~] _ (red D) whnfB′ p~r)
+  in  ↑ F≡H (fst-cong p~r↓)
 
 ~-snd : ∀ {Γ p r F G}
       → Γ ⊢ p ~ r ∷ Σ F ▹ G
       → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
-~-snd (↑ A≡B x) = {!!}
+~-snd (↑ A≡B p~r) =
+  let ⊢ΣFG , ⊢B = syntacticEq A≡B
+      B′ , whnfB′ , D = whNorm ⊢B
+      ΣFG≡B′ = trans A≡B (subset* (red D))
+      H , E , B≡ΣHE = Σ≡A ΣFG≡B′ whnfB′
+      F≡H , G≡E = Σ-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΣHE ΣFG≡B′)
+      p~r↓ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                      B≡ΣHE
+                      ([~] _ (red D) whnfB′ p~r)
+      ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+      _ , ⊢p , _ = syntacticEqTerm (soundness~↑ p~r)
+      ⊢fst = fstⱼ ⊢F ⊢G (conv ⊢p (sym A≡B))
+  in  ↑ (substTypeEq G≡E (refl ⊢fst)) (snd-cong p~r↓)
 
 ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
          → (Γ ∙ ℕ) ⊢ F [conv↑] F′ →
@@ -155,8 +177,8 @@ eqRelInstance = record {
   ≅-wk = wkConv↑;
   ≅ₜ-wk = wkConv↑Term;
   ~-wk = ~-wk;
-  ≅-red = reductionConv↑;
-  ≅ₜ-red = reductionConv↑Term;
+  ≅-red = λ x x₁ x₂ x₃ x₄ → reductionConv↑ x x₁ x₄;
+  ≅ₜ-red = λ x x₁ x₂ x₃ x₄ x₅ x₆ → reductionConv↑Term x x₁ x₂ x₆;
   ≅-Urefl = liftConv ∘ᶠ U-refl;
   ≅-ℕrefl = liftConv ∘ᶠ ℕ-refl;
   ≅ₜ-ℕrefl = λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x));
@@ -198,9 +220,8 @@ eqRelInstance = record {
                                                 (Σ-cong x F<>H G<>E));
   ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
   ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
-  ≅-prod-cong = λ x x₁ x₂ x₃ → liftConvTerm (prod-cong x₁ x₂ x₃);
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅);
-  ≅-Σ-η = λ x x₁ x₂ x₃ → liftConvTerm (Σ-η x₂ x₃);
+  ≅-Σ-η = λ x x₁ x₂ x₃ x₄ x₅ x₆ x₇ → (liftConvTerm (Σ-η x₂ x₃ x₄ x₅ x₆ x₇));
   ~-var = ~-var;
   ~-app = ~-app;
   ~-fst = λ x x₁ x₂ → ~-fst x₂;

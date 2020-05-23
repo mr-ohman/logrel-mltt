@@ -82,10 +82,30 @@ mutual
              (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
                        (wkSingleSubstId _)
                        k∘0≡l∘0)
-  lift~toConv↓′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) D₁ ([~] A D₂ whnfB t~u)
-                rewrite PE.sym (whrDet* (red D , Σₙ) (D₁ , whnfB)) =
+  lift~toConv↓′ (Σᵣ′ F G D ⊢F ⊢G Σ≡Σ [F] [G] G-ext) D₁ ([~] A″ D₂ whnfA t~u)
+                rewrite PE.sym (whrDet* (red D , Σₙ) (D₁ , whnfA)) {- Σ F ▹ G ≡ A -} =
     let neT , neU = ne~↑ t~u
-    in  {!!}
+        t~u↓ = [~] A″ D₂ Σₙ t~u
+        ⊢ΣFG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ t~u↓)
+        ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+        ⊢Γ = wf ⊢F
+
+        wkId = wk-id F
+        wkLiftId = PE.cong (λ x → x [ fst _ ]) (wk-lift-id G)
+
+        wk[F] = [F] id ⊢Γ
+        wk⊢fst = PE.subst (λ x → _ ⊢ _ ∷ x) (PE.sym wkId) (fstⱼ ⊢F ⊢G ⊢t)
+        wkfst≡ = PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x) (PE.sym wkId) (fst-cong ⊢F ⊢G (refl ⊢t))
+        wk[fst] = neuTerm wk[F] (fstₙ neT) wk⊢fst wkfst≡
+        wk[Gfst] = [G] id ⊢Γ wk[fst]
+
+        wkfst~ = PE.subst (λ x → _ ⊢ _ ~ _ ↑ x) (PE.sym wkId) (fst-cong t~u↓)
+        wksnd~ = PE.subst (λ x → _ ⊢ _ ~ _ ↑ x) (PE.sym wkLiftId) (snd-cong t~u↓)
+    in  Σ-η ⊢t ⊢u (ne neT) (ne neU)
+            (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x) wkId
+                      (lift~toConv↑′ wk[F] wkfst~))
+            (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x) wkLiftId
+                      (lift~toConv↑′ wk[Gfst] wksnd~))
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.

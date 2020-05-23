@@ -221,13 +221,10 @@ mutual
   stabilityConv↓Term Γ≡Δ (η-eq F x x₁ y y₁ t<>u) =
     η-eq (stability Γ≡Δ F) (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)
          y y₁ (stabilityConv↑Term (Γ≡Δ ∙ refl F) t<>u)
-  stabilityConv↓Term Γ≡Δ (prod-cong ⊢G tConv uConv) =
-    let ⊢F = proj₁ (syntacticEqTerm (soundnessConv↑Term tConv))
-    in  prod-cong (stability (Γ≡Δ ∙ refl ⊢F) ⊢G)
-                  (stabilityConv↑Term Γ≡Δ tConv)
-                  (stabilityConv↑Term Γ≡Δ uConv)
-  stabilityConv↓Term Γ≡Δ (Σ-η ⊢p pProd) =
-    Σ-η (stabilityTerm Γ≡Δ ⊢p) pProd
+  stabilityConv↓Term Γ≡Δ (Σ-η ⊢p ⊢r pProd rProd fstConv sndConv) =
+    Σ-η (stabilityTerm Γ≡Δ ⊢p) (stabilityTerm Γ≡Δ ⊢r)
+        pProd rProd
+        (stabilityConv↑Term Γ≡Δ fstConv) (stabilityConv↑Term Γ≡Δ sndConv)
   stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

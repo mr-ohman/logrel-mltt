@@ -147,15 +147,16 @@ mutual
   symConv↓Term Γ≡Δ (η-eq x x₁ x₂ y y₁ t<>u) =
     η-eq (stability Γ≡Δ x) (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₁)
          y₁ y (symConv↑Term (Γ≡Δ ∙ refl x) t<>u)
-  symConv↓Term Γ≡Δ (prod-cong ⊢G tConv uConv) =
-    let ⊢F , ⊢t , ⊢t′ = syntacticEqTerm (soundnessConv↑Term tConv)
-        ⊢G₁ = stability (Γ≡Δ ∙ (refl ⊢F)) ⊢G
-        tConv₁ = symConv↑Term Γ≡Δ tConv
-        Gt′≡Gt = substTypeEq (refl ⊢G₁) (soundnessConv↑Term tConv₁)
-        uConv₁ = symConv↑Term Γ≡Δ uConv
-        uConv₂ = convConvTerm uConv₁ (sym Gt′≡Gt)
-    in  prod-cong ⊢G₁ tConv₁ uConv₂
-  symConv↓Term Γ≡Δ (Σ-η ⊢p pProd) = {!!}
+  symConv↓Term Γ≡Δ (Σ-η ⊢p ⊢r pProd rProd fstConv sndConv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        ⊢G = proj₂ (syntacticΣ (syntacticTerm ⊢p))
+        Δfst≡ = symConv↑Term Γ≡Δ fstConv
+        Δsnd≡₁ = symConv↑Term Γ≡Δ sndConv
+        ΔGfstt≡Gfstu = stabilityEq Γ≡Δ (substTypeEq (refl ⊢G)
+                                                    (soundnessConv↑Term fstConv))
+        Δsnd≡ = convConvTerm Δsnd≡₁ ΔGfstt≡Gfstu
+    in  Σ-η Δ⊢r Δ⊢p rProd pProd Δfst≡ Δsnd≡
   symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

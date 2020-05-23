@@ -150,11 +150,11 @@ mutual
     let whnfA , neK , neL = ne~↓ k~l
         ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~l)
         _ , ⊢k₁ , _ = syntacticEqTerm (soundness~↓ k~k)
-        _ , ⊢l₁ , _ = syntacticEqTerm (soundness~↓ l~l)
-        --ΣFG≡A = neTypeEq neK ⊢l ⊢k
-       --ΣF′G′≡A = neTypeEq neL (stabilityTerm (symConEq ) ⊢l₂) ⊢l
-       -- F≡F′ , G≡G′ = injectivity (trans ΠFG≡A (sym ΠF′G′≡A))
-    in  {!!} --{!yes (_ , fst-cong k~l)!}
+        ΣFG≡A = neTypeEq neK ⊢k₁ ⊢k
+        F , G , A≡ΣFG = Σ≡A ΣFG≡A whnfA
+    in  yes (F , fst-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                          A≡ΣFG
+                          k~l))
   ... | no ¬p = no (λ { (_ , fst-cong x₂) → ¬p (_ , x₂) })
   dec~↑ (fst-cong x) (var-refl x₁ x₂) = no (λ { (_ , ()) })
   dec~↑ (fst-cong x) (app-cong x₁ x₂) = no (λ { (_ , ()) })
@@ -162,8 +162,16 @@ mutual
   dec~↑ (fst-cong x) (natrec-cong x₁ x₂ x₃ x₄) = no (λ { (_ , ()) })
   dec~↑ (fst-cong x) (Emptyrec-cong x₁ x₂) = no (λ { (_ , ()) })
 
-  dec~↑ (snd-cong x) (snd-cong x₁) with dec~↓ x x₁
-  ... | yes (A , k~l) = {!!}
+  dec~↑ (snd-cong {k} k~k) (snd-cong {l} l~l) with dec~↓ k~k l~l
+  ... | yes (A , k~l) =
+    let whnfA , neK , neL = ne~↓ k~l
+        ⊢A , ⊢k , ⊢l = syntacticEqTerm (soundness~↓ k~l)
+        _ , ⊢k₁ , _ = syntacticEqTerm (soundness~↓ k~k)
+        ΣFG≡A = neTypeEq neK ⊢k₁ ⊢k
+        F , G , A≡ΣFG = Σ≡A ΣFG≡A whnfA
+    in  yes (G [ fst k ] , snd-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                                    A≡ΣFG
+                                    k~l))
   ... | no ¬p = no (λ { (_ , snd-cong x₂) → ¬p (_ , x₂) })
   dec~↑ (snd-cong x) (var-refl x₁ x₂) = no (λ { (_ , ()) })
   dec~↑ (snd-cong x) (app-cong x₁ x₂) = no (λ { (_ , ()) })
@@ -172,7 +180,6 @@ mutual
   dec~↑ (snd-cong x) (Emptyrec-cong x₁ x₂) = no (λ { (_ , ()) })
 
   dec~↑ (natrec-cong x x₁ x₂ x₃) (natrec-cong x₄ x₅ x₆ x₇)
-        --with decConv↑′ (? ∙ refl (ℕⱼ (wfEqTerm (soundness~↓ x₃)))) x x₄
         with decConv↑ x x₄
   ... | yes p
         with decConv↑TermConv
@@ -430,7 +437,6 @@ mutual
   decConv↓Term (Unit-ins t~t) uConv = decConv↓Term-Unit (Unit-ins t~t) uConv
   decConv↓Term (η-unit [t] _ tUnit _) uConv =
     decConv↓Term-Unit (η-unit [t] [t] tUnit tUnit) uConv
-  decConv↓Term (prod-cong ⊢G t≡ u≡) uConv = {!!}
 
   -- Inspective cases
   decConv↓Term (ℕ-ins x) (ℕ-ins x₁) with dec~↓ x x₁
@@ -461,20 +467,31 @@ mutual
     yes (ne-ins x₁ x₄ x₆ k~l)
   decConv↓Term (ne-ins x x₁ x₂ x₃) (ne-ins x₄ x₅ x₆ x₇) | no ¬p =
     no (λ x₈ → ¬p (decConv↓Term-ne-ins x₆ x₈))
-  decConv↓Term  (univ x x₁ x₂) (univ x₃ x₄ x₅)
+  decConv↓Term (univ x x₁ x₂) (univ x₃ x₄ x₅)
                with decConv↓  x₂ x₅
-  decConv↓Term  (univ x x₁ x₂) (univ x₃ x₄ x₅) | yes p =
+  decConv↓Term (univ x x₁ x₂) (univ x₃ x₄ x₅) | yes p =
     yes (univ x₁ x₃ p)
-  decConv↓Term  (univ x x₁ x₂) (univ x₃ x₄ x₅) | no ¬p =
+  decConv↓Term (univ x x₁ x₂) (univ x₃ x₄ x₅) | no ¬p =
     no (λ { (ne-ins x₆ x₇ () x₉)
           ; (univ x₆ x₇ x₈) → ¬p x₈ })
-  decConv↓Term  (suc-cong x) (suc-cong x₁) with decConv↑Term  x x₁
-  decConv↓Term  (suc-cong x) (suc-cong x₁) | yes p =
+  decConv↓Term (suc-cong x) (suc-cong x₁) with decConv↑Term  x x₁
+  decConv↓Term (suc-cong x) (suc-cong x₁) | yes p =
     yes (suc-cong p)
-  decConv↓Term  (suc-cong x) (suc-cong x₁) | no ¬p =
+  decConv↓Term (suc-cong x) (suc-cong x₁) | no ¬p =
     no (λ { (ℕ-ins ([~] A D whnfB ()))
           ; (ne-ins x₂ x₃ () x₅)
           ; (suc-cong x₂) → ¬p x₂ })
+  decConv↓Term (Σ-η ⊢t _ tProd _ fstConvT sndConvT)
+               (Σ-η ⊢u _ uProd _ fstConvU sndConvU)
+    with decConv↑Term fstConvT fstConvU
+  ... | yes P with let ⊢F , ⊢G = syntacticΣ (syntacticTerm ⊢t)
+                       fstt≡fstu = soundnessConv↑Term P
+                       Gfstt≡Gfstu = substTypeEq (refl ⊢G) fstt≡fstu
+                   in  decConv↑TermConv Gfstt≡Gfstu sndConvT sndConvU
+  ... | yes Q = yes (Σ-η ⊢t ⊢u tProd uProd P Q)
+  ... | no ¬Q = no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q } )
+  decConv↓Term (Σ-η _ _ _ _ _ _) (Σ-η _ _ _ _ _ _)
+    | no ¬P = no (λ { (Σ-η _ _ _ _ P _) → ¬P P } )
   decConv↓Term  (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁)
                with decConv↑Term x₅ x₁₁
   decConv↓Term  (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁) | yes p =

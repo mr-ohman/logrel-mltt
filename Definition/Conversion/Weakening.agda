@@ -105,13 +105,15 @@ mutual
                         (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)
                         PE.refl
                         (wkConv↑Term (lift [ρ]) (⊢Δ ∙ ⊢ρF) t<>u))
-  wkConv↓Term {ρ} [ρ] ⊢Δ (prod-cong {G = G} ⊢G tConv uConv) =
-    let ⊢F = proj₁ (syntacticEqTerm (soundnessConv↑Term tConv))
-    in  prod-cong (wk (lift [ρ]) (⊢Δ ∙ wk [ρ] ⊢Δ ⊢F) ⊢G)
-                  (wkConv↑Term [ρ] ⊢Δ tConv)
-                  (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
-                            (wk-β G)
-                            (wkConv↑Term [ρ] ⊢Δ uConv))
-  wkConv↓Term {ρ} [ρ] ⊢Δ (Σ-η ⊢p pProd) = Σ-η (wkTerm [ρ] ⊢Δ ⊢p) (wkProduct ρ pProd)
+  wkConv↓Term {ρ} [ρ] ⊢Δ (Σ-η {G = G} ⊢p ⊢r pProd rProd fstConv sndConv) =
+    Σ-η (wkTerm [ρ] ⊢Δ ⊢p)
+        (wkTerm [ρ] ⊢Δ ⊢r)
+        (wkProduct ρ pProd)
+        (wkProduct ρ rProd)
+        (wkConv↑Term [ρ] ⊢Δ fstConv)
+        (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
+                  (wk-β G)
+                  (wkConv↑Term [ρ] ⊢Δ sndConv))
   wkConv↓Term {ρ} [ρ] ⊢Δ (η-unit [t] [u] tUnit uUnit) =
-    η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u]) (wkUnitary ρ tUnit) (wkUnitary ρ uUnit)
+    η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
+           (wkUnitary ρ tUnit) (wkUnitary ρ uUnit)

@@ -65,6 +65,5 @@ whnfConv↓Term (univ x x₁ x₂) = Uₙ , whnfConv↓ x₂
 whnfConv↓Term (zero-refl x) = ℕₙ , zeroₙ , zeroₙ
 whnfConv↓Term (suc-cong x) = ℕₙ , sucₙ , sucₙ
 whnfConv↓Term (η-eq x x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functionWhnf y₁
-whnfConv↓Term (prod-cong ⊢G tConv uConv) = Σₙ , prodₙ , prodₙ
-whnfConv↓Term (Σ-η ⊢p pProd) = Σₙ , productWhnf pProd , prodₙ
+whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , productWhnf rProd
 whnfConv↓Term (η-unit _ _ tUnit uUnit) = Unitₙ , (unitaryWhnf tUnit) , (unitaryWhnf uUnit)

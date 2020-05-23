@@ -80,12 +80,10 @@ mutual
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
   soundnessConv↓Term (η-eq F x x₁ y y₁ c) =
     η-eq F x x₁ (soundnessConv↑Term c)
-  soundnessConv↓Term (prod-cong G tConv uConv) =
-    let t≡ = soundnessConv↑Term tConv
-        ⊢F = proj₁ (syntacticEqTerm t≡)
-    in  prod-cong ⊢F G t≡ (soundnessConv↑Term uConv)
-  soundnessConv↓Term (Σ-η ⊢p pProd) =
+  soundnessConv↓Term (Σ-η ⊢p ⊢r pProd rProd fstConv sndConv) =
     let ⊢ΣFG = syntacticTerm ⊢p
         ⊢F , ⊢G = syntacticΣ ⊢ΣFG
-    in  Σ-η ⊢F ⊢G ⊢p
+        fst≡ = soundnessConv↑Term fstConv
+        snd≡ = soundnessConv↑Term sndConv
+    in  Σ-η ⊢F ⊢G ⊢p ⊢r fst≡ snd≡
   soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]
