@@ -1,6 +1,6 @@
 -- Laws for weakenings and substitutions.
 
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Definition.Untyped.Properties where
 

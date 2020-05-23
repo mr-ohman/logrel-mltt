@@ -1,7 +1,7 @@
 -- Σ type (also used as existential) and
 -- cartesian product (also used as conjunction).
 
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Tools.Product where
 

@@ -1,6 +1,6 @@
 -- Algorithmic equality.
 
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Definition.Conversion where
 

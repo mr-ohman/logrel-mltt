@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Tools.List where
 

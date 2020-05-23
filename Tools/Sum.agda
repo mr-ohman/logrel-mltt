@@ -1,6 +1,6 @@
 -- Disjoint sum type; also used as logical disjunction.
 
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Tools.Sum where
 

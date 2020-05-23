@@ -1,6 +1,6 @@
 -- The empty type; also used as absurd proposition (``Falsity'').
 
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Tools.Empty where
 
