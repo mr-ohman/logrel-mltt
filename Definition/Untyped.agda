@@ -100,7 +100,7 @@ t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
 -- Dependent products
 prod : (t u : Term) → Term
-prod t u = gen Prodkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ []) -- TODO (0, 0) since u doesn't have extra vars right?
+prod t u = gen Prodkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
 fst : (t : Term) → Term
 fst t = gen Fstkind (⟦ 0 , t ⟧ ∷ [])
@@ -129,7 +129,6 @@ Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 -- Binding types
 
 data BindingType : Set where
-  -- TODO these are horrible names, get mixed up with ΠB
   BΠ : BindingType
   BΣ : BindingType
 
@@ -570,7 +569,6 @@ _[_]↑ : (t : Term) (s : Term) → Term
 t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
 
 
--- TODO where should this go? Do i make it a rewrite rule globally?
 B-subst : (σ : Subst) (W : BindingType) (F G : Term)
         → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
 B-subst σ BΠ F G = PE.refl

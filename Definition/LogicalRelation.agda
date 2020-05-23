@@ -341,7 +341,9 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
             × (∀ {ρ Δ a} → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
               → ([a] : Δ ⊩¹ a ∷ U.wk ρ F / [F] [ρ] ⊢Δ)
               → Δ ⊩¹ U.wk ρ f ∘ a ∷ U.wk (lift ρ) G [ a ] / [G] [ρ] ⊢Δ [a])
-              -- TODO(WN): last 2 fields could be refactored to a single forall
+              {- NOTE(WN): Last 2 fields could be refactored to a single forall.
+                           But touching this definition is painful, so only do it
+                           if you have to change it anyway. -}
     -- Issue: Agda complains about record use not being strictly positive.
     --        Therefore we have to use ×
 

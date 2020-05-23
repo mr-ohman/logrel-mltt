@@ -276,7 +276,8 @@ data _⊢_⇒_∷_ (Γ : Con Term) : Term → Term → Term → Set where
                  → Γ ∙ F ⊢ G
                  → Γ ⊢ t ∷ F
                  → Γ ⊢ u ∷ G [ t ]
-                 → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ] -- TODO prove 𝔍 ∷ G [ t ]
+                 -- TODO(WN): Prove that 𝔍 ∷ G [ t ] is admissible
+                 → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ]
   natrec-subst   : ∀ {z s n n′ F}
                  → Γ ∙ ℕ ⊢ F
                  → Γ     ⊢ z ∷ F [ zero ]
