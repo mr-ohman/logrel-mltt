@@ -82,7 +82,7 @@ import Definition.Conversion.Weakening
 import Definition.Conversion.Whnf
 import Definition.Conversion.Decidable
 import Definition.Conversion.EqRelInstance
---import Definition.Conversion.FullReduction
+import Definition.Conversion.FullReduction
 
 -- Consequences of the logical relation for algorithmic equality
 import Definition.Conversion.Consequences.Completeness
