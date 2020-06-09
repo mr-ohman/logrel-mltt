@@ -96,9 +96,10 @@ mutual
     univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↓ ρ ⊢Δ x₂)
   wkConv↓Term ρ ⊢Δ (zero-refl x) = zero-refl ⊢Δ
   wkConv↓Term ρ ⊢Δ (suc-cong t<>u) = suc-cong (wkConv↑Term ρ ⊢Δ t<>u)
-  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (η-eq {F = F} {G = G} x x₁ x₂ y y₁ t<>u) =
-    let ⊢ρF = wk [ρ] ⊢Δ x
-    in  η-eq ⊢ρF (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
+  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (η-eq {F = F} {G = G} x₁ x₂ y y₁ t<>u) =
+    let ⊢F , _ = syntacticΠ (syntacticTerm x₁)
+        ⊢ρF = wk [ρ] ⊢Δ ⊢F
+    in  η-eq (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
              (wkFunction ρ y) (wkFunction ρ y₁)
              (PE.subst₃ (λ x y z → Δ ∙ U.wk ρ F ⊢ x [conv↑] y ∷ z)
                         (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)

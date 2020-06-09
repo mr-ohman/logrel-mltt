@@ -84,7 +84,7 @@ decConv↓Term-ne-ins neA (ne-ins x x₁ x₂ x₃) = _ , x₃
 decConv↓Term-ne-ins () (univ x x₁ x₂)
 decConv↓Term-ne-ins () (zero-refl x)
 decConv↓Term-ne-ins () (suc-cong x)
-decConv↓Term-ne-ins () (η-eq x x₁ x₂ x₃ x₄ x₅)
+decConv↓Term-ne-ins () (η-eq x₁ x₂ x₃ x₄ x₅)
 
 -- Helper function for decidability for impossibility of terms not being equal
 -- as neutrals when they are equal as terms and the first is a neutral.
@@ -395,18 +395,18 @@ mutual
                → Γ ⊢ t [conv↑] t ∷ A → Γ ⊢ u [conv↑] u ∷ A
                → Dec (Γ ⊢ t [conv↑] u ∷ A)
   decConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
-                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
+               ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                rewrite whrDet* (D , whnfB) (D₁ , whnfB₁)
                      | whrDet*Term  (d , whnft′) (d′ , whnfu′)
                      | whrDet*Term  (d₁ , whnft″) (d″ , whnfu″)
                with decConv↓Term t<>u t<>u₁
   decConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
-                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
+               ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                | yes p =
     yes ([↑]ₜ B₁ u′ u″ D₁
                   d′ d″ whnfB₁ whnfu′ whnfu″ p)
   decConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
-                   ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
+               ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
                | no ¬p =
     no (λ { ([↑]ₜ B₂ t‴ u‴ D₂ d₂ d‴ whnfB₂ whnft‴ whnfu‴ t<>u₂) →
         let B₂≡B₁ = whrDet* (D₂ , whnfB₂)
@@ -492,13 +492,13 @@ mutual
   ... | no ¬Q = no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q } )
   decConv↓Term (Σ-η _ _ _ _ _ _) (Σ-η _ _ _ _ _ _)
     | no ¬P = no (λ { (Σ-η _ _ _ _ P _) → ¬P P } )
-  decConv↓Term  (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁)
+  decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁)
                with decConv↑Term x₅ x₁₁
-  decConv↓Term  (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁) | yes p =
-    yes (η-eq x x₂ x₇ x₄ x₁₀ p)
-  decConv↓Term  (η-eq x x₁ x₂ x₃ x₄ x₅) (η-eq x₆ x₇ x₈ x₉ x₁₀ x₁₁) | no ¬p =
+  decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁) | yes p =
+    yes (η-eq x₂ x₇ x₄ x₁₀ p)
+  decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁) | no ¬p =
     no (λ { (ne-ins x₁₂ x₁₃ () x₁₅)
-          ; (η-eq x₁₂ x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
+          ; (η-eq x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
 
   -- False cases
   decConv↓Term  (ℕ-ins x) (zero-refl x₁) =

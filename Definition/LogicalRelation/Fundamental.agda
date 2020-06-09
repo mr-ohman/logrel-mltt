@@ -129,8 +129,8 @@ mutual
          let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
              [σA′] = maybeEmb (irrelevance′ (PE.sym (subst-wk A)) [σA])
          in  irrelevanceTerm′ (PE.sym (subst-wk A)) [σA] [σA′] (proj₂ [σ])
-    , (λ [σ′] [σ≡σ′] → irrelevanceEqTerm′ (PE.sym (subst-wk A))
-                                          [σA] [σA′] (proj₂ [σ≡σ′])))
+         ,   (λ [σ′] [σ≡σ′] → irrelevanceEqTerm′ (PE.sym (subst-wk A))
+                                                 [σA] [σA′] (proj₂ [σ≡σ′])))
   fundamentalVar (there {A = A} h) ([Γ] ∙ [B]) =
     (λ ⊢Δ [σ] →
        let [h]   = proj₁ (fundamentalVar h [Γ]) ⊢Δ (proj₁ [σ])

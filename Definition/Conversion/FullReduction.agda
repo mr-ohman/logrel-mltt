@@ -131,9 +131,10 @@ mutual
   fullRedTermConv↓ (suc-cong t) =
     let u , nf , t≡u = fullRedTerm t
     in  suc u , sucₙ nf , suc-cong t≡u
-  fullRedTermConv↓ (η-eq ⊢F ⊢t _ _ _ t∘0) =
+  fullRedTermConv↓ (η-eq ⊢t _ _ _ t∘0) =
     let u , nf , t∘0≡u = fullRedTerm t∘0
         _ , _ , ⊢u = syntacticEqTerm t∘0≡u
+        ⊢F , _ = syntacticΠ (syntacticTerm ⊢t)
         ΓF⊢ = wf ⊢F ∙ ⊢F
         wk⊢F = wk (step id) ΓF⊢ ⊢F
         ΓFF'⊢ = ΓF⊢ ∙ wk⊢F
@@ -141,9 +142,9 @@ mutual
         λu∘0 = lam (U.wk (lift (step id)) u) ∘ var 0
     in  lam u , lamₙ nf
      ,  η-eq ⊢F ⊢t (lamⱼ ⊢F ⊢u)
-             (trans t∘0≡u (PE.subst₂ (λ x y → _ ⊢ x ≡ λu∘0 ∷ y)
-                                     (wkSingleSubstId u) (wkSingleSubstId _)
-                                     (sym (β-red wk⊢F wk⊢u (var ΓF⊢ here)))))
+                (trans t∘0≡u (PE.subst₂ (λ x y → _ ⊢ x ≡ λu∘0 ∷ y)
+                                        (wkSingleSubstId u) (wkSingleSubstId _)
+                                        (sym (β-red wk⊢F wk⊢u (var ΓF⊢ here)))))
   fullRedTermConv↓ (Σ-η ⊢t _ tProd _ fstConv sndConv) =
     let fst′ , nfFst′ , fst≡fst′ = fullRedTerm fstConv
         snd′ , nfSnd′ , snd≡snd′ = fullRedTerm sndConv

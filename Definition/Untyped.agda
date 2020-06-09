@@ -343,7 +343,7 @@ repeat f a 0 = a
 repeat f a (1+ n) = f (repeat f a n)
 
 -- Weakening of variables.
--- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar ρ x ∈ dom(Γ).
+-- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar η x ∈ dom(Γ).
 
 wkVar : (ρ : Wk) (n : Nat) → Nat
 wkVar id       n        = n

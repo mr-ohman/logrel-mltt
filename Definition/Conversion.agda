@@ -133,7 +133,6 @@ mutual
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ f ≡ lam (f ∘ var 0) ∷ Σ F ▹ G-}
     η-eq      : ∀ {f g F G}
-              → Γ ⊢ F
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
               → Function f
