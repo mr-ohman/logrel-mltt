@@ -34,15 +34,11 @@ syntacticEqTerm t≡u | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
 
 -- Syntactic validity of type reductions.
 syntacticRed : ∀ {A B Γ} → Γ ⊢ A ⇒* B → Γ ⊢ A × Γ ⊢ B
-syntacticRed D with fundamentalEq (subset* D)
-syntacticRed D | [Γ] , [A] , [B] , [A≡B] =
-  escapeᵛ [Γ] [A] , escapeᵛ [Γ] [B]
+syntacticRed D = syntacticEq (subset* D)
 
 -- Syntactic validity of term reductions.
 syntacticRedTerm : ∀ {t u A Γ} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ A × (Γ ⊢ t ∷ A × Γ ⊢ u ∷ A)
-syntacticRedTerm d with fundamentalTermEq (subset*Term d)
-syntacticRedTerm d | [Γ] , modelsTermEq [A] [t] [u] [t≡u] =
-  escapeᵛ [Γ] [A] , escapeTermᵛ [Γ] [A] [t] , escapeTermᵛ [Γ] [A] [u]
+syntacticRedTerm d = syntacticEqTerm (subset*Term d)
 
 -- Syntactic validity of Π-types.
 syntacticΠ : ∀ {Γ F G} → Γ ⊢ Π F ▹ G → Γ ⊢ F × Γ ∙ F ⊢ G
