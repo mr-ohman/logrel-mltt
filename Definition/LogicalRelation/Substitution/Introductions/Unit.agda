@@ -27,17 +27,17 @@ Unitᵗᵛ : ∀ {Γ} ([Γ] : ⊩ᵛ Γ)
     → Γ ⊩ᵛ⟨ ¹ ⟩ Unit ∷ U / [Γ] / Uᵛ [Γ]
 Unitᵗᵛ [Γ] ⊢Δ [σ] = let ⊢Unit  = Unitⱼ ⊢Δ
                         [Unit] = Unitᵣ (idRed:*: (Unitⱼ ⊢Δ))
-                 in  Uₜ Unit (idRedTerm:*: ⊢Unit) Unitₙ (≅ₜ-Unitrefl ⊢Δ) [Unit]
-                 ,   (λ x x₁ → Uₜ₌ Unit Unit (idRedTerm:*: ⊢Unit) (idRedTerm:*: ⊢Unit) Unitₙ Unitₙ
-                                   (≅ₜ-Unitrefl ⊢Δ) [Unit] [Unit] (id (Unitⱼ ⊢Δ)))
+                    in  Uₜ Unit (idRedTerm:*: ⊢Unit) Unitₙ (≅ₜ-Unitrefl ⊢Δ) [Unit]
+                    ,   (λ x x₁ → Uₜ₌ Unit Unit (idRedTerm:*: ⊢Unit) (idRedTerm:*: ⊢Unit) Unitₙ Unitₙ
+                                      (≅ₜ-Unitrefl ⊢Δ) [Unit] [Unit] (id (Unitⱼ ⊢Δ)))
 
 -- Validity of star.
 starᵛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ)
       → Γ ⊩ᵛ⟨ l ⟩ star ∷ Unit / [Γ] / Unitᵛ [Γ]
 starᵛ [Γ] ⊢Δ [σ] =
-  Unitₜ star (idRedTerm:*: (starⱼ ⊢Δ)) (≅ₜ-starrefl ⊢Δ) starᵣ
+  Unitₜ star (idRedTerm:*: (starⱼ ⊢Δ)) starᵣ
     , (λ _ x₁ → Unitₜ₌ star star (idRedTerm:*: (starⱼ ⊢Δ)) (idRedTerm:*: (starⱼ ⊢Δ))
-                    (≅ₜ-starrefl ⊢Δ)) --starᵣ)
+                       (≅ₜ-starrefl ⊢Δ))
 
 -- Validity of η-unit.
 η-unitᵛ : ∀ {Γ l e e'} ([Γ] : ⊩ᵛ Γ)

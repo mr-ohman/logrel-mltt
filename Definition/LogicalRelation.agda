@@ -200,7 +200,6 @@ record _⊩Unit_∷Unit (Γ : Con Term) (t : Term) : Set where
   field
     n : Term
     d : Γ ⊢ t :⇒*: n ∷ Unit
-    n≡n : Γ ⊢ n ≅ n ∷ Unit
     prop : Unit-prop Γ n
 
 -- Unit term equality

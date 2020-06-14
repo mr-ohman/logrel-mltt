@@ -40,7 +40,7 @@ whNormTerm′ (ℕᵣ x) (ℕₜ n d n≡n prop) =
 whNormTerm′ (Emptyᵣ x) (Emptyₜ n d n≡n prop) =
   let emptyN = empty prop
   in  n , ne emptyN , convRed:*: d (sym (subset* (red x)))
-whNormTerm′ (Unitᵣ x) (Unitₜ n d n≡n prop) =
+whNormTerm′ (Unitᵣ x) (Unitₜ n d prop) =
   let unitN = unitary prop
   in  n , unitaryWhnf unitN , convRed:*: d (sym (subset* (red x)))
 whNormTerm′ (ne (ne K D neK K≡K)) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =

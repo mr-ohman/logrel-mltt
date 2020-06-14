@@ -92,10 +92,9 @@ wkUnit-prop ρ ⊢Δ (ne nf) = ne (wkTermNe ρ ⊢Δ nf)
 
 wkTermUnit : ∀ {ρ Γ Δ n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
            → Γ ⊩Unit n ∷Unit → Δ ⊩Unit U.wk ρ n ∷Unit
-wkTermUnit {ρ} [ρ] ⊢Δ (Unitₜ n d n≡n prop) =
+wkTermUnit {ρ} [ρ] ⊢Δ (Unitₜ n d prop) =
   Unitₜ (U.wk ρ n) (wkRed:*:Term [ρ] ⊢Δ d)
-      (≅ₜ-wk [ρ] ⊢Δ n≡n)
-      (wkUnit-prop [ρ] ⊢Δ prop)
+        (wkUnit-prop [ρ] ⊢Δ prop)
 
 wkEqTermUnit : ∀ {ρ Γ Δ t u} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
           → Γ ⊩Unit t ≡ u ∷Unit

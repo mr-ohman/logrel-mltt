@@ -73,8 +73,7 @@ mutual
   neuTerm (Unitᵣ [ ⊢A , ⊢B , D ]) neN n n~n =
     let A≡Unit  = subset* D
         n~n′ = ~-conv n~n A≡Unit
-        n≡n  = ~-to-≅ₜ n~n′
-    in  Unitₜ _ (idRedTerm:*: (conv n A≡Unit)) n≡n (ne (neNfₜ neN (conv n A≡Unit) n~n′))
+    in  Unitₜ _ (idRedTerm:*: (conv n A≡Unit)) (ne (neNfₜ neN (conv n A≡Unit) n~n′))
   neuTerm (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) neN n n~n =
     let A≡K = subset* D
     in  neₜ _ (idRedTerm:*: (conv n A≡K)) (neNfₜ neN (conv n A≡K)
