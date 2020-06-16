@@ -79,7 +79,7 @@ redSubst*Term t⇒u (Unitᵣ D) (Unitₜ n [ ⊢u , ⊢n , d ] prop) =
       ⊢t   = conv (redFirst*Term t⇒u) A≡Unit
       t⇒u′ = conv* t⇒u A≡Unit
   in  Unitₜ n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] prop
-  ,   Unitₜ₌ n n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] [ ⊢u , ⊢n , d ] (≅ₜ-η-unit ⊢n ⊢n)
+  ,   Unitₜ₌ ⊢t ⊢u
 redSubst*Term t⇒u (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
   let A≡K  = subset* (red D)
       [d]  = [ ⊢t , ⊢u , d ]

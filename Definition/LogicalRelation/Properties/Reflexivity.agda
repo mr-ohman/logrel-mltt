@@ -55,7 +55,7 @@ reflEqTerm (Emptyᵣ D) (Emptyₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   Emptyₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
     (reflEmpty-prop prop)
 reflEqTerm (Unitᵣ D) (Unitₜ n [ ⊢t , ⊢u , d ] prop) =
-  Unitₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] (EqRelSet.≅ₜ-η-unit eqrel ⊢u ⊢u)
+  Unitₜ₌ ⊢t ⊢t
 reflEqTerm (ne′ K D neK K≡K) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   neₜ₌ k k d d (neNfₜ₌ neK₁ neK₁ k≡k)
 reflEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Πₜ f d funcF f≡f [f] [f]₁) =

@@ -109,9 +109,7 @@ decConv↓Term-Unit tConv uConv =
       _ , [u] , _ = syntacticEqTerm u≡u
       _ , tWhnf , _ = whnfConv↓Term tConv
       _ , uWhnf , _ = whnfConv↓Term uConv
-      tUnit = whnfUnitary [t] tWhnf
-      uUnit = whnfUnitary [u] uWhnf
-  in  yes (η-unit [t] [u] tUnit uUnit)
+  in  yes (η-unit [t] [u] tWhnf uWhnf)
 
 mutual
   -- Decidability of algorithmic equality of neutrals.

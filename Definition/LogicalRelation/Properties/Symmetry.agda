@@ -94,8 +94,8 @@ symEqTerm (ℕᵣ D) (ℕₜ₌ k k′ d d′ t≡u prop) =
   ℕₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symNatural-prop prop)
 symEqTerm (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ t≡u prop) =
   Emptyₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symEmpty-prop prop)
-symEqTerm (Unitᵣ D) (Unitₜ₌ k k′ d d′ t≡u) =
-  Unitₜ₌ k′ k d′ d (≅ₜ-sym t≡u)
+symEqTerm (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
+  Unitₜ₌ ⊢u ⊢t
 symEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ nf) =
   neₜ₌ m k d′ d (symNeutralTerm nf)
 symEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)

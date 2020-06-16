@@ -178,7 +178,7 @@ mutual
         _ , _ , [v] = syntacticEqTerm (soundnessConv↓Term uConvV)
         [v] = conv [v] (sym A≡B)
         _ , _ , vWhnf = whnfConv↓Term uConvV
-    in  η-unit [t] [v] (ne tNe) (whnfUnitary [v] vWhnf)
+    in  η-unit [t] [v] (ne tNe) vWhnf
   transConv↓Term A≡B (ne-ins t u x x₁) (ne-ins t′ u′ x₂ x₃) =
     ne-ins t (conv u′ (sym A≡B)) x
            (proj₁ (trans~↓ x₁ x₃))
@@ -204,7 +204,7 @@ mutual
     let _ , _ , [v] = syntacticEqTerm (soundnessConv↓Term uConvV)
         [v] = conv [v] (sym A≡B)
         _ , _ , vWhnf = whnfConv↓Term uConvV
-    in  η-unit [t] [v] tUnit (whnfUnitary [v] vWhnf)
+    in  η-unit [t] [v] tUnit vWhnf
 
   -- Refutable cases
   transConv↓Term A≡B (ℕ-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.ℕ≢ne x₂ A≡B)

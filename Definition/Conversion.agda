@@ -154,8 +154,8 @@ mutual
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit
-              → Unitary k
-              → Unitary l
+              → Whnf k
+              → Whnf l
               → Γ ⊢ k [conv↓] l ∷ Unit
 
 star-refl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit

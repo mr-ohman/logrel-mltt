@@ -75,10 +75,8 @@ escapeTermEq (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ k≡k′ prop) =
   let natK , natK′ = esplit prop
   in  ≅ₜ-red (red D) (redₜ d) (redₜ d′) Emptyₙ
              (ne natK) (ne natK′) k≡k′
-escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ k k′ d d′ k≡k′) =
-  let [t] = ⊢t-redₜ d
-      [u] = ⊢t-redₜ d′
-      t≅u = ≅ₜ-η-unit [t] [u]
+escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
+  let t≅u = ≅ₜ-η-unit ⊢t ⊢u
       A≡Unit = subset* (red D)
   in  ≅-conv t≅u (sym A≡Unit)
 escapeTermEq (ne′ K D neK K≡K)

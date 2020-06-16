@@ -115,6 +115,6 @@ mutual
         (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
                   (wk-β G)
                   (wkConv↑Term [ρ] ⊢Δ sndConv))
-  wkConv↓Term {ρ} [ρ] ⊢Δ (η-unit [t] [u] tUnit uUnit) =
+  wkConv↓Term {ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
     η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
-           (wkUnitary ρ tUnit) (wkUnitary ρ uUnit)
+           (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)

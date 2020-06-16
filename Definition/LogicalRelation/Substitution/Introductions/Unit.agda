@@ -35,9 +35,8 @@ Unitᵗᵛ [Γ] ⊢Δ [σ] = let ⊢Unit  = Unitⱼ ⊢Δ
 starᵛ : ∀ {Γ l} ([Γ] : ⊩ᵛ Γ)
       → Γ ⊩ᵛ⟨ l ⟩ star ∷ Unit / [Γ] / Unitᵛ [Γ]
 starᵛ [Γ] ⊢Δ [σ] =
-  Unitₜ star (idRedTerm:*: (starⱼ ⊢Δ)) starᵣ
-    , (λ _ x₁ → Unitₜ₌ star star (idRedTerm:*: (starⱼ ⊢Δ)) (idRedTerm:*: (starⱼ ⊢Δ))
-                       (≅ₜ-starrefl ⊢Δ))
+  Unitₜ star (idRedTerm:*: (starⱼ ⊢Δ)) starₙ
+    , (λ _ x₁ → Unitₜ₌ (starⱼ ⊢Δ) (starⱼ ⊢Δ))
 
 -- Validity of η-unit.
 η-unitᵛ : ∀ {Γ l e e'} ([Γ] : ⊩ᵛ Γ)
@@ -55,8 +54,4 @@ starᵛ [Γ] ⊢Δ [σ] =
       [σe'] = irrelevanceTerm J UnitJ [σe']
       ⊢σe = escapeTerm UnitJ [σe]
       ⊢σe' = escapeTerm UnitJ [σe']
-  in  irrelevanceEqTerm UnitJ J
-                        (Unitₜ₌ _ _
-                          (idRedTerm:*: ⊢σe)
-                          (idRedTerm:*: ⊢σe')
-                          (≅ₜ-η-unit ⊢σe ⊢σe'))
+  in  irrelevanceEqTerm UnitJ J (Unitₜ₌ ⊢σe ⊢σe')

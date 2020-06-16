@@ -190,14 +190,12 @@ eqRelInstance = record {
                                u' , u'Whnf , u'Red = whNormTerm [e']
                                [u] = ⊢u-redₜ uRed
                                [u'] = ⊢u-redₜ u'Red
-                               uUnit = whnfUnitary [u] uWhnf
-                               u'Unit = whnfUnitary [u'] u'Whnf
                            in  [↑]ₜ Unit u u'
                                (red (idRed:*: (syntacticTerm [e])))
                                (redₜ uRed)
                                (redₜ u'Red)
                                Unitₙ uWhnf u'Whnf
-                               (η-unit [u] [u'] uUnit u'Unit);
+                               (η-unit [u] [u'] uWhnf u'Whnf);
   ≅-Π-cong = λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂);
   ≅ₜ-Π-cong = λ x x₁ x₂ → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
                               _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)

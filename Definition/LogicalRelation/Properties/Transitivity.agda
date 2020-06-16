@@ -163,17 +163,6 @@ transEqTermEmpty (Emptyₜ₌ k k′ d d′ t≡u prop)
   in Emptyₜ₌ k k″ d d″ (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ t≡u₁))
      (transEmpty-prop prop prop′)
 
-transEqTermUnit : ∀ {Γ n n′ n″}
-  → Γ ⊩Unit n  ≡ n′ ∷Unit
-  → Γ ⊩Unit n′ ≡ n″ ∷Unit
-  → Γ ⊩Unit n  ≡ n″ ∷Unit
-transEqTermUnit (Unitₜ₌ k k′ d d′ t≡u)
-                (Unitₜ₌ k₁ k″ d₁ d″ t≡u₁) =
-  let [n] = ⊢t-redₜ d
-      [n″] = ⊢t-redₜ d″
-      n≡n″ = ≅ₜ-η-unit [n] [n″]
-  in  Unitₜ₌ _ _ [ [n] , [n] , id [n] ] [ [n″] , [n″] , id [n″] ] n≡n″
-
 -- Transitivty of term equality.
 transEqTerm : ∀ {l Γ A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -188,7 +177,7 @@ transEqTerm (Uᵣ′ .⁰ 0<1 ⊢Γ)
       (transEq [t] [u] [u]₁ [t≡u] (irrelevanceEq [t]₁ [u] [t≡u]₁))
 transEqTerm (ℕᵣ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
 transEqTerm (Emptyᵣ D) [t≡u] [u≡v] = transEqTermEmpty [t≡u] [u≡v]
-transEqTerm (Unitᵣ D) [t≡u] [u≡v] = transEqTermUnit [t≡u] [u≡v]
+transEqTerm (Unitᵣ D) (Unitₜ₌ ⊢t _) (Unitₜ₌ _ ⊢v) = Unitₜ₌ ⊢t ⊢v
 transEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m))
                               (neₜ₌ k₁ m₁ d₁ d″ (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
   let k₁≡m = whrDet*Term (redₜ d₁ , ne neK₂) (redₜ d′ , ne neM)

@@ -190,31 +190,20 @@ _⊩Unit_ : (Γ : Con Term) (A : Term) → Set
 _⊩Unit_≡_ : (Γ : Con Term) (A B : Term) → Set
 Γ ⊩Unit A ≡ B = Γ ⊢ B ⇒* Unit
 
-data Unit-prop (Γ : Con Term) : (n : Term) → Set where
-  starᵣ : Unit-prop Γ star
-  ne    : ∀ {n} → Γ ⊩neNf n ∷ Unit → Unit-prop Γ n
-
 record _⊩Unit_∷Unit (Γ : Con Term) (t : Term) : Set where
   inductive
   constructor Unitₜ
   field
     n : Term
     d : Γ ⊢ t :⇒*: n ∷ Unit
-    prop : Unit-prop Γ n
+    prop : Whnf n
 
 -- Unit term equality
 record _⊩Unit_≡_∷Unit (Γ : Con Term) (t u : Term) : Set where
-  inductive
   constructor Unitₜ₌
   field
-    k k′ : Term
-    d : Γ ⊢ t :⇒*: k  ∷ Unit
-    d′ : Γ ⊢ u :⇒*: k′ ∷ Unit
-    k≡k′ : Γ ⊢ k ≅ k′ ∷ Unit
-
-unitary : ∀ {Γ n} → Unit-prop Γ n → Unitary n
-unitary starᵣ = starₙ
-unitary (ne (neNfₜ neK ⊢k k≡k)) = ne neK
+    ⊢t : Γ ⊢ t ∷ Unit
+    ⊢u : Γ ⊢ u ∷ Unit
 
 -- Type levels
 
@@ -370,8 +359,6 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
             × Γ ⊢ p ≅ p ∷ Σ F ▹ G
             × (Σ (Γ ⊩¹ fst p ∷ U.wk id F / [F] id (wf ⊢F)) λ [fst]
                  → Γ ⊩¹ snd p ∷ U.wk (lift id) G [ fst p ] / [G] id (wf ⊢F) [fst])
-            --× (∀ {ρ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
-            --  → Product-prop Δ (U.wk ρ F) (U.wk (lift ρ) G [ fst (U.wk ρ p) ]) ([F] [ρ] ⊢Δ) (U.wk ρ p))
 
     -- Term equality of Σ-type
     _⊩¹Σ_≡_∷_/_ : (Γ : Con Term) (t u A : Term) ([A] : Γ ⊩¹B⟨ BΣ ⟩ A) → Set
@@ -398,14 +385,6 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
       Bᵣ  : ∀ {A} W → Γ ⊩¹B⟨ W ⟩ A → Γ ⊩¹ A
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
             ([A] : Γ ⊩ A) → Γ ⊩¹ A
-
-    data Product-prop (Γ : Con Term) (F G : Term) ([F] : Γ ⊩¹ F) : (p : Term) → Set where
-      prodᵣ : ∀ {t u}
-              → Γ ⊩¹ t ∷ F / [F]
-              → Product-prop Γ F G [F] (prod t u)
-      ne    : ∀ {p} → Γ ⊩neNf p ∷ Σ F ▹ G
-              → Product-prop Γ F G [F] p
-
 
     _⊩¹_≡_/_ : (Γ : Con Term) (A B : Term) → Γ ⊩¹ A → Set
     Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B

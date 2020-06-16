@@ -241,11 +241,6 @@ data Natural : Term → Set where
   sucₙ  : ∀ {t}             → Natural (suc t)
   ne    : ∀ {n} → Neutral n → Natural n
 
--- A whnf of type Unit is either star or neutral.
-
-data Unitary : Term → Set where
-  starₙ : Unitary star
-  ne    : ∀ {s} → Neutral s → Unitary s
 
 -- A (small) type in whnf is either Π A B, ℕ, or neutral.
 -- Large types could also be U.
@@ -281,10 +276,6 @@ naturalWhnf : ∀ {n} → Natural n → Whnf n
 naturalWhnf sucₙ = sucₙ
 naturalWhnf zeroₙ = zeroₙ
 naturalWhnf (ne x) = ne x
-
-unitaryWhnf : ∀ {s} → Unitary s → Whnf s
-unitaryWhnf starₙ = starₙ
-unitaryWhnf (ne x) = ne x
 
 typeWhnf : ∀ {A} → Type A → Whnf A
 typeWhnf Πₙ = Πₙ
@@ -385,10 +376,6 @@ wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
 wkNatural ρ sucₙ    = sucₙ
 wkNatural ρ zeroₙ   = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
-
-wkUnitary : ∀ {t} ρ → Unitary t → Unitary (wk ρ t)
-wkUnitary ρ starₙ    = starₙ
-wkUnitary ρ (ne x) = ne (wkNeutral ρ x)
 
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ      = Πₙ
