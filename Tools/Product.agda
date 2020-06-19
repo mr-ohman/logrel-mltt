@@ -9,7 +9,6 @@ open import Agda.Primitive
 open import Agda.Builtin.Sigma public using (Σ; _,_)
 open import Agda.Builtin.Sigma using (fst; snd)
 
---infixr 4 _,_
 infixr 2 _×_
 
 -- Dependent pair type (aka dependent sum, Σ type).
@@ -18,20 +17,11 @@ private
   variable
       ℓ₁ ℓ₂ ℓ₃ : Level
 
-
-{-record Σ (A : Set ℓ₁) (B : A → Set ℓ₂) : Set (ℓ₁ ⊔ ℓ₂) where
-  constructor _,_
-  field
-    proj₁ : A
-    proj₂ : B proj₁-}
-
 proj₁ : ∀ {A : Set ℓ₁} {B : A → Set ℓ₂} → Σ A B → A
 proj₁ = fst
 
 proj₂ : ∀ {A : Set ℓ₁} {B : A → Set ℓ₂} → (S : Σ A B) → B (fst S)
 proj₂ = snd
-
---open Σ public
 
 -- Existential quantification.
 

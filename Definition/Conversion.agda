@@ -129,9 +129,6 @@ mutual
     suc-cong  : ∀ {m n}
               → Γ ⊢ m [conv↑] n ∷ ℕ
               → Γ ⊢ suc m [conv↓] suc n ∷ ℕ
-  {-η-eq-decl : ∀ {f F G}
-              → Γ ⊢ f ∷ Π F ▹ G
-              → Γ ⊢ f ≡ lam (f ∘ var 0) ∷ Σ F ▹ G-}
     η-eq      : ∀ {f g F G}
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G
@@ -139,10 +136,6 @@ mutual
               → Function g
               → Γ ∙ F ⊢ wk1 f ∘ var 0 [conv↑] wk1 g ∘ var 0 ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
-  {-Σ-η-decl  : ∀ {p F G}
-              → Γ ⊢ p ∷ Σ F ▹ G
-              → Product p
-              → Γ ⊢ p [conv↓] prod (fst p) (snd p) ∷ Σ F ▹ G-}
     Σ-η       : ∀ {p r F G}
               → Γ ⊢ p ∷ Σ F ▹ G
               → Γ ⊢ r ∷ Σ F ▹ G
