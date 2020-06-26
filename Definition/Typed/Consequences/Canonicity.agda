@@ -12,6 +12,8 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Fundamental.Reducibility
+open import Definition.Typed.Consequences.Inversion
+open import Definition.Typed.Consequences.Inequality
 
 open import Tools.Empty
 open import Tools.Nat

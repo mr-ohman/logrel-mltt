@@ -5,29 +5,34 @@
 
 module Tools.Product where
 
-infixr 4 _,_
+open import Agda.Primitive
+open import Agda.Builtin.Sigma public using (Σ; _,_)
+open import Agda.Builtin.Sigma using (fst; snd)
+
 infixr 2 _×_
 
 -- Dependent pair type (aka dependent sum, Σ type).
 
-record Σ (A : Set) (B : A → Set) : Set where
-  constructor _,_
-  field
-    proj₁ : A
-    proj₂ : B proj₁
+private
+  variable
+      ℓ₁ ℓ₂ ℓ₃ : Level
 
-open Σ public
+proj₁ : ∀ {A : Set ℓ₁} {B : A → Set ℓ₂} → Σ A B → A
+proj₁ = fst
+
+proj₂ : ∀ {A : Set ℓ₁} {B : A → Set ℓ₂} → (S : Σ A B) → B (fst S)
+proj₂ = snd
 
 -- Existential quantification.
 
-∃ : {A : Set} → (A → Set) → Set
+∃ : {A : Set ℓ₁} → (A → Set ℓ₂) → Set (ℓ₁ ⊔ ℓ₂)
 ∃ = Σ _
 
-∃₂ : {A : Set} {B : A → Set}
-     (C : (x : A) → B x → Set) → Set
+∃₂ : {A : Set ℓ₁} {B : A → Set ℓ₂}
+     (C : (x : A) → B x → Set ℓ₃) → Set (ℓ₁ ⊔ ℓ₂ ⊔ ℓ₃)
 ∃₂ C = ∃ λ a → ∃ λ b → C a b
 
 -- Cartesian product.
 
-_×_ : (A B : Set) → Set
+_×_ : (A : Set ℓ₁) (B : Set ℓ₂) → Set (ℓ₁ ⊔ ℓ₂)
 A × B = Σ A (λ x → B)

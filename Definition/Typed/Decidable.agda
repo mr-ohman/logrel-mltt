@@ -16,14 +16,12 @@ open import Tools.Nullary
 
 -- Decidability of conversion of well-formed types
 dec : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A ≡ B)
-dec ⊢A ⊢B =
-  let ⊢Γ≡Γ = reflConEq (wf ⊢A)
-  in  map soundnessConv↑ completeEq
-          (decConv↑ ⊢Γ≡Γ (completeEq (refl ⊢A)) (completeEq (refl ⊢B)))
+dec ⊢A ⊢B = map soundnessConv↑ completeEq
+                (decConv↑ (completeEq (refl ⊢A))
+                          (completeEq (refl ⊢B)))
 
 -- Decidability of conversion of well-formed terms
 decTerm : ∀ {t u A Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t ≡ u ∷ A)
-decTerm ⊢t ⊢u =
-  let ⊢Γ≡Γ = reflConEq (wfTerm ⊢t)
-  in  map soundnessConv↑Term completeEqTerm
-          (decConv↑Term ⊢Γ≡Γ (completeEqTerm (refl ⊢t)) (completeEqTerm (refl ⊢u)))
+decTerm ⊢t ⊢u = map soundnessConv↑Term completeEqTerm
+                    (decConv↑Term (completeEqTerm (refl ⊢t))
+                                  (completeEqTerm (refl ⊢u)))

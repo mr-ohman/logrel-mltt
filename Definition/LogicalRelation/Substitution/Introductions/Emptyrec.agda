@@ -33,7 +33,7 @@ open import Tools.Nat
 import Tools.PropositionalEquality as PE
 
 
--- Natural recursion closure reduction (requires reducible terms and equality).
+-- Empty elimination closure reduction (requires reducible terms and equality).
 Emptyrec-subst* : ∀ {Γ C n n′ l}
               → Γ ⊢ C
               → Γ ⊢ n ⇒* n′ ∷ Empty
@@ -46,7 +46,7 @@ Emptyrec-subst* C (x ⇨ n⇒n′) [Empty] [n′] =
       a , s = redSubstTerm x [Empty] q
   in  Emptyrec-subst C x ⇨ conv* (Emptyrec-subst* C n⇒n′ [Empty] [n′]) (refl C)
 
--- Reducibility of natural recursion under a valid substitution.
+-- Reducibility of empty elimination under a valid substitution.
 EmptyrecTerm : ∀ {F n Γ Δ σ l}
              ([Γ]  : ⊩ᵛ Γ)
              ([F]  : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -70,7 +70,7 @@ EmptyrecTerm {F} {n} {Γ} {Δ} {σ} {l} [Γ] [F] ⊢Δ [σ]
   in proj₁ (redSubst*Term reduction [σF] EmptyrecM)
 
 
--- Reducibility of natural recursion congurence under a valid substitution equality.
+-- Reducibility of empty elimination congruence under a valid substitution equality.
 Emptyrec-congTerm : ∀ {F F′ n m Γ Δ σ σ′ l}
                   ([Γ]      : ⊩ᵛ Γ)
                   ([F]      : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -135,9 +135,7 @@ Emptyrec-congTerm {F} {F′} {n} {m} {Γ} {Δ} {σ} {σ′} {l}
                               (convEqTerm₂ [σF] [σ′F′] [σF≡σ′F′]
                                            (symEqTerm [σ′F′] eq₂)))
 
-
-
--- Validity of empty recursion.
+-- Validity of empty elimination.
 Emptyrecᵛ : ∀ {F n Γ l} ([Γ] : ⊩ᵛ Γ)
           ([Empty]  : Γ ⊩ᵛ⟨ l ⟩ Empty / [Γ])
           ([F]  : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -158,7 +156,7 @@ Emptyrecᵛ {F} {n} {l = l} [Γ] [Empty] [F] [n]
                                        ⊢Δ [σ] [σ′] [σ≡σ′] [σn] [σ′n] [σn≡σ′n]
       in congTerm
 
--- Validity of natural recursion congurence.
+-- Validity of empty elimination congruence.
 Emptyrec-congᵛ : ∀ {F F′ n n′ Γ l} ([Γ] : ⊩ᵛ Γ)
           ([Empty]  : Γ ⊩ᵛ⟨ l ⟩ Empty / [Γ])
           ([F]  : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])

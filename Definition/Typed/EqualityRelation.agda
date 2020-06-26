@@ -108,7 +108,17 @@ record EqRelSet : Set₁ where
     ≅-Emptyrefl   : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty
     ≅ₜ-Emptyrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Empty ≅ Empty ∷ U
 
-    -- Π-congurence
+    -- Unit type reflexivity
+    ≅-Unitrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit
+    ≅ₜ-Unitrefl  : ∀ {Γ} → ⊢ Γ → Γ ⊢ Unit ≅ Unit ∷ U
+
+    -- Unit η-equality
+    ≅ₜ-η-unit : ∀ {Γ e e'}
+             → Γ ⊢ e ∷ Unit
+             → Γ ⊢ e' ∷ Unit
+             → Γ ⊢ e ≅ e' ∷ Unit
+
+    -- Π-congruence
 
     ≅-Π-cong  : ∀ {F G H E Γ}
               → Γ ⊢ F
@@ -122,32 +132,71 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Π F ▹ G ≅ Π H ▹ E ∷ U
 
+    -- Σ-congruence
+
+    ≅-Σ-cong  : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H
+              → Γ ∙ F ⊢ G ≅ E
+              → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E
+
+    ≅ₜ-Σ-cong : ∀ {F G H E Γ}
+              → Γ ⊢ F
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ∙ F ⊢ G ≅ E ∷ U
+              → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E ∷ U
+
     -- Zero reflexivity
     ≅ₜ-zerorefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
-    -- Successor congurence
+    -- Successor congruence
     ≅-suc-cong : ∀ {m n Γ} → Γ ⊢ m ≅ n ∷ ℕ → Γ ⊢ suc m ≅ suc n ∷ ℕ
 
     -- η-equality
     ≅-η-eq : ∀ {f g F G Γ}
-              → Γ ⊢ F
-              → Γ ⊢ f ∷ Π F ▹ G
-              → Γ ⊢ g ∷ Π F ▹ G
-              → Function f
-              → Function g
-              → Γ ∙ F ⊢ wk1 f ∘ var 0 ≅ wk1 g ∘ var 0 ∷ G
-              → Γ ⊢ f ≅ g ∷ Π F ▹ G
+           → Γ ⊢ F
+           → Γ ⊢ f ∷ Π F ▹ G
+           → Γ ⊢ g ∷ Π F ▹ G
+           → Function f
+           → Function g
+           → Γ ∙ F ⊢ wk1 f ∘ var 0 ≅ wk1 g ∘ var 0 ∷ G
+           → Γ ⊢ f ≅ g ∷ Π F ▹ G
+
+    -- η for product types
+    ≅-Σ-η : ∀ {p r F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
+          → Γ ⊢ p ∷ Σ F ▹ G
+          → Γ ⊢ r ∷ Σ F ▹ G
+          → Product p
+          → Product r
+          → Γ ⊢ fst p ≅ fst r ∷ F
+          → Γ ⊢ snd p ≅ snd r ∷ G [ fst p ]
+          → Γ ⊢ p ≅ r ∷ Σ F ▹ G
 
     -- Variable reflexivity
     ~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 
-    -- Application congurence
+    -- Application congruence
     ~-app : ∀ {a b f g F G Γ}
           → Γ ⊢ f ~ g ∷ Π F ▹ G
           → Γ ⊢ a ≅ b ∷ F
           → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
 
-    -- Natural recursion congurence
+    -- Product projections congruence
+    ~-fst : ∀ {p r F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
+          → Γ ⊢ p ~ r ∷ Σ F ▹ G
+          → Γ ⊢ fst p ~ fst r ∷ F
+
+    ~-snd : ∀ {p r F G Γ}
+          → Γ ⊢ F
+          → Γ ∙ F ⊢ G
+          → Γ ⊢ p ~ r ∷ Σ F ▹ G
+          → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
+
+    -- Natural recursion congruence
     ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
              → Γ ∙ ℕ ⊢ F ≅ F′
              → Γ     ⊢ z ≅ z′ ∷ F [ zero ]
@@ -155,13 +204,32 @@ record EqRelSet : Set₁ where
              → Γ     ⊢ n ~ n′ ∷ ℕ
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
 
-    -- Empty recursion congurence
+    -- Empty recursion congruence
     ~-Emptyrec : ∀ {n n′ F F′ Γ}
-             → Γ ⊢ F ≅ F′
-             → Γ     ⊢ n ~ n′ ∷ Empty
-             → Γ     ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
+               → Γ ⊢ F ≅ F′
+               → Γ ⊢ n ~ n′ ∷ Empty
+               → Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
 
+  -- Star reflexivity
+  ≅ₜ-starrefl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star ≅ star ∷ Unit
+  ≅ₜ-starrefl [Γ] = ≅ₜ-η-unit (starⱼ [Γ]) (starⱼ [Γ])
 
   -- Composition of universe and generic equality compatibility
   ~-to-≅ : ∀ {k l Γ} → Γ ⊢ k ~ l ∷ U → Γ ⊢ k ≅ l
   ~-to-≅ k~l = ≅-univ (~-to-≅ₜ k~l)
+
+  ≅-W-cong : ∀ {F G H E Γ} W
+          → Γ ⊢ F
+          → Γ ⊢ F ≅ H
+          → Γ ∙ F ⊢ G ≅ E
+          → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ ⟦ W ⟧ H ▹ E
+  ≅-W-cong BΠ = ≅-Π-cong
+  ≅-W-cong BΣ = ≅-Σ-cong
+
+  ≅ₜ-W-cong : ∀ {F G H E Γ} W
+            → Γ ⊢ F
+            → Γ ⊢ F ≅ H ∷ U
+            → Γ ∙ F ⊢ G ≅ E ∷ U
+            → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ ⟦ W ⟧ H ▹ E ∷ U
+  ≅ₜ-W-cong BΠ = ≅ₜ-Π-cong
+  ≅ₜ-W-cong BΣ = ≅ₜ-Σ-cong

@@ -153,7 +153,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                            (proj₁ ([F] ⊢Δ ([σ] , [m])))
       [σFₛₘ]′ = irrelevance′ (natrecIrrelevantSubst F z s m σ)
                              (proj₁ ([F] ⊢Δ ([σ] , [σsm])))
-      [σF₊ₘ] = substSΠ₁ (proj₁ ([F₊] ⊢Δ [σ])) [σℕ] [m]
+      [σF₊ₘ] = substSΠ₁ BΠ (proj₁ ([F₊] ⊢Δ [σ])) [σℕ] [m]
       natrecM = appTerm [σFₘ] [σFₛₘ]′ [σF₊ₘ]
                         (appTerm [σℕ] [σF₊ₘ]
                                  (proj₁ ([F₊] ⊢Δ [σ]))
@@ -267,7 +267,7 @@ natrecTerm {F} {z} {s} {n} {Γ} {Δ} {σ} {l} [Γ] [F] [F₀] [F₊] [z] [s] ⊢
                            (convTerm₂ [σFₙ] [σFₘ] [Fₙ≡Fₘ] natrecM))
 
 
--- Reducibility of natural recursion congurence under a valid substitution equality.
+-- Reducibility of natural recursion congruence under a valid substitution equality.
 natrec-congTerm : ∀ {F F′ z z′ s s′ n m Γ Δ σ σ′ l}
                   ([Γ]      : ⊩ᵛ Γ)
                   ([F]      : Γ ∙ ℕ ⊩ᵛ⟨ l ⟩ F / _∙_ {l = l} [Γ] (ℕᵛ [Γ]))
@@ -364,7 +364,7 @@ natrec-congTerm {F} {F′} {z} {z′} {s} {s′} {n} {m} {Γ} {Δ} {σ} {σ′} 
                             (proj₁ ([F] ⊢Δ ([σ] , [n′])))
       [σFₛₙ′]′ = irrelevance′ (natrecIrrelevantSubst F z s n′ σ)
                               (proj₁ ([F] ⊢Δ ([σ] , [σsn′])))
-      [σF₊ₙ′] = substSΠ₁ (proj₁ ([F₊] ⊢Δ [σ])) [σℕ] [n′]
+      [σF₊ₙ′] = substSΠ₁ BΠ (proj₁ ([F₊] ⊢Δ [σ])) [σℕ] [n′]
       [σ′sm′] = irrelevanceTerm {l = l} (ℕᵣ (idRed:*: (ℕⱼ ⊢Δ))) [σ′ℕ]
                                 (ℕₜ (suc m′) (idRedTerm:*: (sucⱼ ⊢m′)) m≡m (sucᵣ [m′]))
       [σ′m]′ , [σ′m≡σ′sm′] = redSubst*Term (redₜ d′) [σ′ℕ] [σ′sm′]
@@ -388,7 +388,7 @@ natrec-congTerm {F} {F′} {z} {z′} {s} {s′} {n} {m} {Γ} {Δ} {σ} {σ′} 
                               (proj₁ ([F′] ⊢Δ ([σ′] , [m′])))
       [σ′F′ₛₘ′]′ = irrelevance′ (natrecIrrelevantSubst F′ z′ s′ m′ σ′)
                                 (proj₁ ([F′] ⊢Δ ([σ′] , [σ′sm′])))
-      [σ′F′₊ₘ′] = substSΠ₁ (proj₁ ([F′₊] ⊢Δ [σ′])) [σ′ℕ] [m′]
+      [σ′F′₊ₘ′] = substSΠ₁ BΠ (proj₁ ([F′₊] ⊢Δ [σ′])) [σ′ℕ] [m′]
       [σFₙ′≡σ′Fₘ′] = irrelevanceEq″ (PE.sym (singleSubstComp n′ σ F))
                                      (PE.sym (singleSubstComp m′ σ′ F))
                                      (proj₁ ([F] ⊢Δ ([σ] , [n′]))) [σFₙ′]
@@ -737,8 +737,8 @@ natrec-congTerm {F} {F′} {z} {z′} {s} {s′} {n} {m} {Γ} {Δ} {σ} {σ′} 
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 [σn] (ℕₜ _ d₁ _ zeroᵣ)
-                (ℕₜ₌ _ _ d₂ d′ t≡u (sucᵣ prop₂)) =
-  ⊥-elim (zero≢suc (whrDet*Term (redₜ d₁ , zeroₙ) (redₜ d′ , sucₙ)))
+                (ℕₜ₌ _ _ d₂ d′ t≡u (sucᵣ prop₂)) with whrDet*Term (redₜ d₁ , zeroₙ) (redₜ d′ , sucₙ)
+... | ()
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 [σn] (ℕₜ n d₁ _ (ne (neNfₜ neK ⊢k k≡k)))
@@ -747,8 +747,8 @@ natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F�
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 (ℕₜ _ d _ zeroᵣ) [σm]
-                (ℕₜ₌ _ _ d₁ d′ t≡u (sucᵣ prop₂)) =
-  ⊥-elim (zero≢suc (whrDet*Term (redₜ d , zeroₙ) (redₜ d₁ , sucₙ)))
+                (ℕₜ₌ _ _ d₁ d′ t≡u (sucᵣ prop₂)) with whrDet*Term (redₜ d , zeroₙ) (redₜ d₁ , sucₙ)
+... | ()
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 (ℕₜ n d _ (ne (neNfₜ neK ⊢k k≡k))) [σm]
@@ -758,13 +758,13 @@ natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F�
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 (ℕₜ _ d _ (sucᵣ prop)) [σm]
-                (ℕₜ₌ _ _ d₂ d′ t≡u zeroᵣ) =
-  ⊥-elim (zero≢suc (whrDet*Term (redₜ d₂ , zeroₙ) (redₜ d , sucₙ)))
+                (ℕₜ₌ _ _ d₂ d′ t≡u zeroᵣ) with whrDet*Term (redₜ d₂ , zeroₙ) (redₜ d , sucₙ)
+... | ()
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 [σn] (ℕₜ _ d₁ _ (sucᵣ prop₁))
-                (ℕₜ₌ _ _ d₂ d′ t≡u zeroᵣ) =
-  ⊥-elim (zero≢suc (whrDet*Term (redₜ d′ , zeroₙ) (redₜ d₁ , sucₙ)))
+                (ℕₜ₌ _ _ d₂ d′ t≡u zeroᵣ) with whrDet*Term (redₜ d′ , zeroₙ) (redₜ d₁ , sucₙ)
+... | ()
 natrec-congTerm [Γ] [F] [F′] [F≡F′] [F₀] [F′₀] [F₀≡F′₀] [F₊] [F′₊] [F₊≡F′₊]
                 [z] [z′] [z≡z′] [s] [s′] [s≡s′] ⊢Δ [σ] [σ′] [σ≡σ′]
                 [σn] (ℕₜ n d₁ _ (ne (neNfₜ neK ⊢k k≡k)))
@@ -849,7 +849,7 @@ natrecᵛ {F} {z} {s} {n} {l = l} [Γ] [ℕ] [F] [F₀] [F₊] [Fₙ] [z] [s] [n
                                        [Γ] [F₊] [s])
                                ⊢Δ [σ] [σ′] [σ≡σ′] [σn]′ [σ′n]′ [σn≡σ′n]))
 
--- Validity of natural recursion congurence.
+-- Validity of natural recursion congruence.
 natrec-congᵛ : ∀ {F F′ z z′ s s′ n n′ Γ l} ([Γ] : ⊩ᵛ Γ)
           ([ℕ]  : Γ ⊩ᵛ⟨ l ⟩ ℕ / [Γ])
           ([F]  : Γ ∙ ℕ ⊩ᵛ⟨ l ⟩ F / [Γ] ∙ [ℕ])

@@ -26,9 +26,9 @@ appᵛ : ∀ {F G t u Γ l}
        ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ])
        ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Π F ▹ G / [Γ] / [ΠFG])
        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
-     → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
+     → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
 appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
-  let [G[u]] = substSΠ {F} {G} {u} [Γ] [F] [ΠFG] [u]
+  let [G[u]] = substSΠ {F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       [σt] = proj₁ ([t] ⊢Δ [σ])
@@ -49,7 +49,7 @@ appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
                                               [σu] [σu′]
                                               (proj₂ ([u] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
--- Application congurence of valid terms.
+-- Application congruence of valid terms.
 app-congᵛ : ∀ {F G t u a b Γ l}
             ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
@@ -59,10 +59,10 @@ app-congᵛ : ∀ {F G t u a b Γ l}
             ([b] : Γ ⊩ᵛ⟨ l ⟩ b ∷ F / [Γ] / [F])
             ([a≡b] : Γ ⊩ᵛ⟨ l ⟩ a ≡ b ∷ F / [Γ] / [F])
           → Γ ⊩ᵛ⟨ l ⟩ t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ]
-              / substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a]
+              / substSΠ {F} {G} {a} BΠ [Γ] [F] [ΠFG] [a]
 app-congᵛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
   let [σF] = proj₁ ([F] ⊢Δ [σ])
-      [G[a]]  = proj₁ (substSΠ {F} {G} {a} [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
+      [G[a]]  = proj₁ (substSΠ {F} {G} {a} BΠ [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
       [G[a]]′ = irrelevance′ (singleSubstLift G a) [G[a]]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       [σa] = proj₁ ([a] ⊢Δ [σ])

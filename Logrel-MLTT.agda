@@ -2,7 +2,7 @@
 
 -- A Logical Relation for Dependent Type Theory Formalized in Agda
 
-module Everything where
+module Logrel-MLTT where
 
 -- README
 import README

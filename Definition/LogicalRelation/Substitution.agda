@@ -24,11 +24,12 @@ mutual
 
   -- Validity of types
   _⊩ᵛ⟨_⟩_/_ : (Γ : Con Term) (l : TypeLevel) (A : Term) → ⊩ᵛ Γ → Set
-  Γ ⊩ᵛ⟨ l ⟩ A / [Γ] = ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
-                   → Σ (Δ ⊩⟨ l ⟩ subst σ A)
-                       (λ [Aσ] → ∀ {σ′} ([σ′] : Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ)
-                               → ([σ≡σ′] : Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
-                               → Δ ⊩⟨ l ⟩ subst σ A ≡ subst σ′ A / [Aσ])
+  Γ ⊩ᵛ⟨ l ⟩ A / [Γ] =
+    ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
+    → Σ (Δ ⊩⟨ l ⟩ subst σ A) (λ [Aσ]
+      → ∀ {σ′} ([σ′] : Δ ⊩ˢ σ′ ∷ Γ / [Γ] / ⊢Δ)
+        ([σ≡σ′] : Δ ⊩ˢ σ ≡ σ′ ∷ Γ / [Γ] / ⊢Δ / [σ])
+      → Δ ⊩⟨ l ⟩ subst σ A ≡ subst σ′ A / [Aσ])
 
   -- Logical relation for substitutions from a valid context
   _⊩ˢ_∷_/_/_ : (Δ : Con Term) (σ : Subst) (Γ : Con Term) ([Γ] : ⊩ᵛ Γ) (⊢Δ : ⊢ Δ)
@@ -36,7 +37,7 @@ mutual
   Δ ⊩ˢ σ ∷ .ε        / ε  / ⊢Δ                = ⊤
   Δ ⊩ˢ σ ∷ .(Γ ∙ A) / (_∙_ {Γ} {A} {l} [Γ] [A]) / ⊢Δ =
     Σ (Δ ⊩ˢ tail σ ∷ Γ / [Γ] / ⊢Δ) λ [tailσ] →
-    (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ ([A] ⊢Δ [tailσ]))
+      (Δ ⊩⟨ l ⟩ head σ ∷ subst (tail σ) A / proj₁ ([A] ⊢Δ [tailσ]))
 
   -- Logical relation for equality of substitutions from a valid context
   _⊩ˢ_≡_∷_/_/_/_ : (Δ : Con Term) (σ σ′ : Subst) (Γ : Con Term) ([Γ] : ⊩ᵛ Γ)

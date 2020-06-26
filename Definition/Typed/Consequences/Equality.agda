@@ -21,7 +21,7 @@ U≡A′ : ∀ {A Γ l} ([U] : Γ ⊩⟨ l ⟩U)
 U≡A′ (noemb [U]) [U≡A] = [U≡A]
 U≡A′ (emb 0<1 [U]) [U≡A] = U≡A′ [U] [U≡A]
 
--- If A is judgmentally equal to U, then A is propsitionally equal to U.
+-- If A is judgmentally equal to U, then A is propositionally equal to U.
 U≡A : ∀ {A Γ}
     → Γ ⊢ U ≡ A
     → A PE.≡ U
@@ -36,7 +36,7 @@ U≡A {A} U≡A | [U] , [A] , [U≡A] =
 ℕ≡A′ (noemb x) [ℕ≡A] whnfA = whnfRed* [ℕ≡A] whnfA
 ℕ≡A′ (emb 0<1 [ℕ]) [ℕ≡A] whnfA = ℕ≡A′ [ℕ] [ℕ≡A] whnfA
 
--- If A in WHNF is judgmentally equal to ℕ, then A is propsitionally equal to ℕ.
+-- If A in WHNF is judgmentally equal to ℕ, then A is propositionally equal to ℕ.
 ℕ≡A : ∀ {A Γ}
     → Γ ⊢ ℕ ≡ A
     → Whnf A
@@ -61,6 +61,21 @@ Empty≡A {A} Empty≡A whnfA with reducibleEq Empty≡A
 Empty≡A {A} Empty≡A whnfA | [Empty] , [A] , [Empty≡A] =
   Empty≡A′ (Empty-elim [Empty]) (irrelevanceEq [Empty] (Empty-intr (Empty-elim [Empty])) [Empty≡A]) whnfA
 
+Unit≡A′ : ∀ {A Γ l} ([Unit] : Γ ⊩⟨ l ⟩Unit Unit)
+    → Γ ⊩⟨ l ⟩ Unit ≡ A / (Unit-intr [Unit])
+    → Whnf A
+    → A PE.≡ Unit
+Unit≡A′ (noemb x) [Unit≡A] whnfA = whnfRed* [Unit≡A] whnfA
+Unit≡A′ (emb 0<1 [Unit]) [Unit≡A] whnfA = Unit≡A′ [Unit] [Unit≡A] whnfA
+
+Unit≡A : ∀ {A Γ}
+    → Γ ⊢ Unit ≡ A
+    → Whnf A
+    → A PE.≡ Unit
+Unit≡A {A} Unit≡A whnfA with reducibleEq Unit≡A
+Unit≡A {A} Unit≡A whnfA | [Unit] , [A] , [Unit≡A] =
+  Unit≡A′ (Unit-elim [Unit]) (irrelevanceEq [Unit] (Unit-intr (Unit-elim [Unit])) [Unit≡A]) whnfA
+
 ne≡A′ : ∀ {A K Γ l}
      → ([K] : Γ ⊩⟨ l ⟩ne K)
      → Γ ⊩⟨ l ⟩ K ≡ A / (ne-intr [K])
@@ -71,7 +86,7 @@ ne≡A′ (noemb [K]) (ne₌ M D′ neM K≡M) whnfA =
 ne≡A′ (emb 0<1 [K]) [K≡A] whnfA = ne≡A′ [K] [K≡A] whnfA
 
 -- If A in WHNF is judgmentally equal to K, then there exists a M such that
--- A is propsitionally equal to M.
+-- A is propositionally equal to M.
 ne≡A : ∀ {A K Γ}
     → Neutral K
     → Γ ⊢ K ≡ A
@@ -82,20 +97,30 @@ ne≡A {A} neK ne≡A whnfA | [ne] , [A] , [ne≡A] =
   ne≡A′ (ne-elim neK [ne])
         (irrelevanceEq [ne] (ne-intr (ne-elim neK [ne])) [ne≡A]) whnfA
 
-Π≡A′ : ∀ {A F G Γ l} ([Π] : Γ ⊩⟨ l ⟩Π Π F ▹ G)
-    → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ A / (Π-intr [Π])
+B≡A′ : ∀ {A F G Γ l} W ([W] : Γ ⊩⟨ l ⟩B⟨ W ⟩ ⟦ W ⟧ F ▹ G)
+    → Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ A / (B-intr W [W])
     → Whnf A
-    → ∃₂ λ H E → A PE.≡ Π H ▹ E
-Π≡A′ (noemb [Π]) (Π₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) whnfA =
+    → ∃₂ λ H E → A PE.≡ ⟦ W ⟧ H ▹ E
+B≡A′ W (noemb [W]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) whnfA =
   F′ , G′ , whnfRed* D′ whnfA
-Π≡A′ (emb 0<1 [Π]) [Π≡A] whnfA = Π≡A′ [Π] [Π≡A] whnfA
+B≡A′ W (emb 0<1 [W]) [W≡A] whnfA = B≡A′ W [W] [W≡A] whnfA
+
+Π≡A′ : ∀ {A F G Γ l} → _
+Π≡A′ {A} {F} {G} {Γ} {l} = B≡A′ {A} {F} {G} {Γ} {l} BΠ
+Σ≡A′ : ∀ {A F G Γ l} → _
+Σ≡A′ {A} {F} {G} {Γ} {l} = B≡A′ {A} {F} {G} {Γ} {l} BΣ
 
 -- If A is judgmentally equal to Π F ▹ G, then there exists H and E such that
--- A is propsitionally equal to  Π H ▹ E.
-Π≡A : ∀ {A F G Γ}
-    → Γ ⊢ Π F ▹ G ≡ A
+-- A is propositionally equal to  Π H ▹ E.
+B≡A : ∀ {A F G Γ} W
+    → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ A
     → Whnf A
-    → ∃₂ λ H E → A PE.≡ Π H ▹ E
-Π≡A {A} Π≡A whnfA with reducibleEq Π≡A
-Π≡A {A} Π≡A whnfA | [Π] , [A] , [Π≡A] =
-  Π≡A′ (Π-elim [Π]) (irrelevanceEq [Π] (Π-intr (Π-elim [Π])) [Π≡A]) whnfA
+    → ∃₂ λ H E → A PE.≡ ⟦ W ⟧ H ▹ E
+B≡A {A} W W≡A whnfA with reducibleEq W≡A
+B≡A {A} W W≡A whnfA | [W] , [A] , [W≡A] =
+  B≡A′ W (B-elim W [W]) (irrelevanceEq [W] (B-intr W (B-elim W [W])) [W≡A]) whnfA
+
+Π≡A : ∀ {A F G Γ} → _
+Π≡A {A} {F} {G} {Γ} = B≡A {A} {F} {G} {Γ} BΠ
+Σ≡A : ∀ {A F G Γ} → _
+Σ≡A {A} {F} {G} {Γ} = B≡A {A} {F} {G} {Γ} BΣ

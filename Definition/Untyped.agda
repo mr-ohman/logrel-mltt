@@ -13,6 +13,9 @@ import Tools.PropositionalEquality as PE
 infixl 30 _∙_
 infix 30 Π_▹_
 infixr 22 _▹▹_
+infix 30 Σ_▹_
+infixr 22 _××_
+infix 30 ⟦_⟧_▹_
 infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
 infix 25 _[_]
 infix 25 _[_]↑
@@ -33,13 +36,24 @@ record GenT (A : Set) : Set where
 
 data Kind : Set where
   Ukind : Kind
+
   Pikind : Kind
-  Natkind : Kind
   Lamkind : Kind
   Appkind : Kind
+
+  Sigmakind : Kind
+  Prodkind : Kind
+  Fstkind : Kind
+  Sndkind : Kind
+
+  Natkind : Kind
   Zerokind : Kind
   Suckind : Kind
   Natreckind : Kind
+
+  Unitkind : Kind
+  Starkind : Kind
+
   Emptykind : Kind
   Emptyreckind : Kind
 
@@ -62,8 +76,17 @@ pattern Univ u = gen (Ukind u) []
 Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
 Π A ▹ B = gen Pikind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
 
+Σ_▹_ : (A B : Term) → Term
+Σ A ▹ B = gen Sigmakind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
+
 ℕ      : Term                     -- Type of natural numbers.
 ℕ = gen Natkind []
+
+Empty : Term
+Empty = gen Emptykind []
+
+Unit  : Term
+Unit = gen Unitkind []
 
 -- Lambda-calculus.
 -- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
@@ -75,6 +98,16 @@ lam t = gen Lamkind (⟦ 1 , t ⟧ ∷ [])
 _∘_    : (t u : Term)     → Term  -- Application.
 t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
+-- Dependent products
+prod : (t u : Term) → Term
+prod t u = gen Prodkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+
+fst : (t : Term) → Term
+fst t = gen Fstkind (⟦ 0 , t ⟧ ∷ [])
+
+snd : (t : Term) → Term
+snd t = gen Sndkind (⟦ 0 , t ⟧ ∷ [])
+
 -- Introduction and elimination of natural numbers.
 zero   : Term                     -- Natural number zero.
 zero = gen Zerokind []
@@ -85,18 +118,31 @@ suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
 natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
-Empty : Term
-Empty = gen Emptykind []
+-- Unit type
+star : Term
+star = gen Starkind []
 
-Emptyrec : (A e : Term) -> Term
+-- Empty type
+Emptyrec : (A e : Term) → Term
 Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
+
+-- Binding types
+
+data BindingType : Set where
+  BΠ : BindingType
+  BΣ : BindingType
+
+⟦_⟧_▹_ : BindingType → Term → Term → Term
+⟦ BΠ ⟧ F ▹ G = Π F ▹ G
+⟦ BΣ ⟧ F ▹ G = Σ F ▹ G
 
 -- Injectivity of term constructors w.r.t. propositional equality.
 
--- If  Π F G = Π H E  then  F = H  and  G = E.
+-- If  W F G = W H E  then  F = H  and  G = E.
 
-Π-PE-injectivity : ∀ {F G H E} → Π F ▹ G PE.≡ Π H ▹ E → F PE.≡ H × G PE.≡ E
-Π-PE-injectivity PE.refl = PE.refl , PE.refl
+B-PE-injectivity : ∀ {F G H E} W → ⟦ W ⟧ F ▹ G PE.≡ ⟦ W ⟧ H ▹ E → F PE.≡ H × G PE.≡ E
+B-PE-injectivity BΠ PE.refl = PE.refl , PE.refl
+B-PE-injectivity BΣ PE.refl = PE.refl , PE.refl
 
 -- If  suc n = suc m  then  n = m.
 
@@ -110,10 +156,12 @@ suc-PE-injectivity PE.refl = PE.refl
 -- The variable blocks reduction of such terms.
 
 data Neutral : Term → Set where
-  var     : ∀ n                     → Neutral (var n)
-  ∘ₙ      : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
-  natrecₙ : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
-  Emptyrecₙ : ∀ {A e} -> Neutral e -> Neutral (Emptyrec A e)
+  var       : ∀ n                     → Neutral (var n)
+  ∘ₙ        : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
+  fstₙ      : ∀ {p}       → Neutral p → Neutral (fst p)
+  sndₙ      : ∀ {p}       → Neutral p → Neutral (snd p)
+  natrecₙ   : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
+  Emptyrecₙ : ∀ {A e}     → Neutral e → Neutral (Emptyrec A e)
 
 
 -- Weak head normal forms (whnfs).
@@ -123,18 +171,22 @@ data Neutral : Term → Set where
 data Whnf : Term → Set where
 
   -- Type constructors are whnfs.
-  Uₙ    : Whnf U
-  Πₙ    : ∀ {A B} → Whnf (Π A ▹ B)
-  ℕₙ    : Whnf ℕ
+  Uₙ     : Whnf U
+  Πₙ     : ∀ {A B} → Whnf (Π A ▹ B)
+  Σₙ     : ∀ {A B} → Whnf (Σ A ▹ B)
+  ℕₙ     : Whnf ℕ
+  Unitₙ  : Whnf Unit
   Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
   lamₙ  : ∀ {t} → Whnf (lam t)
   zeroₙ : Whnf zero
   sucₙ  : ∀ {t} → Whnf (suc t)
+  starₙ : Whnf star
+  prodₙ : ∀ {t u} → Whnf (prod t u)
 
   -- Neutrals are whnfs.
-  ne   : ∀ {n} → Neutral n → Whnf n
+  ne    : ∀ {n} → Neutral n → Whnf n
 
 
 -- Whnf inequalities.
@@ -142,26 +194,8 @@ data Whnf : Term → Set where
 -- Different whnfs are trivially distinguished by propositional equality.
 -- (The following statements are sometimes called "no-confusion theorems".)
 
-U≢ℕ : U PE.≢ ℕ
-U≢ℕ ()
-
-U≢Empty : U PE.≢ Empty
-U≢Empty ()
-
-U≢Π : ∀ {F G} → U PE.≢ Π F ▹ G
-U≢Π ()
-
 U≢ne : ∀ {K} → Neutral K → U PE.≢ K
 U≢ne () PE.refl
-
-ℕ≢Π : ∀ {F G} → ℕ PE.≢ Π F ▹ G
-ℕ≢Π ()
-
-ℕ≢Empty : ℕ PE.≢ Empty
-ℕ≢Empty ()
-
-Empty≢ℕ : Empty PE.≢ ℕ
-Empty≢ℕ ()
 
 ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
 ℕ≢ne () PE.refl
@@ -169,21 +203,34 @@ Empty≢ℕ ()
 Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
 Empty≢ne () PE.refl
 
-Empty≢Π : ∀ {F G} → Empty PE.≢ Π F ▹ G
-Empty≢Π ()
+Unit≢ne : ∀ {K} → Neutral K → Unit PE.≢ K
+Unit≢ne () PE.refl
 
-Π≢ne : ∀ {F G K} → Neutral K → Π F ▹ G PE.≢ K
-Π≢ne () PE.refl
+B≢ne : ∀ {F G K} W → Neutral K → ⟦ W ⟧ F ▹ G PE.≢ K
+B≢ne BΠ () PE.refl
+B≢ne BΣ () PE.refl
 
-zero≢suc : ∀ {n} → zero PE.≢ suc n
-zero≢suc ()
+U≢B : ∀ {F G} W → U PE.≢ ⟦ W ⟧ F ▹ G
+U≢B BΠ ()
+U≢B BΣ ()
+
+ℕ≢B : ∀ {F G} W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
+ℕ≢B BΠ ()
+ℕ≢B BΣ ()
+
+Empty≢B : ∀ {F G} W → Empty PE.≢ ⟦ W ⟧ F ▹ G
+Empty≢B BΠ ()
+Empty≢B BΣ ()
+
+Unit≢B : ∀ {F G} W → Unit PE.≢ ⟦ W ⟧ F ▹ G
+Unit≢B BΠ ()
+Unit≢B BΣ ()
 
 zero≢ne : ∀ {k} → Neutral k → zero PE.≢ k
 zero≢ne () PE.refl
 
 suc≢ne : ∀ {n k} → Neutral k → suc n PE.≢ k
 suc≢ne () PE.refl
-
 
 -- Several views on whnfs (note: not recursive).
 
@@ -194,20 +241,33 @@ data Natural : Term → Set where
   sucₙ  : ∀ {t}             → Natural (suc t)
   ne    : ∀ {n} → Neutral n → Natural n
 
+
 -- A (small) type in whnf is either Π A B, ℕ, or neutral.
 -- Large types could also be U.
 
 data Type : Term → Set where
   Πₙ : ∀ {A B} → Type (Π A ▹ B)
+  Σₙ : ∀ {A B} → Type (Σ A ▹ B)
   ℕₙ : Type ℕ
   Emptyₙ : Type Empty
+  Unitₙ : Type Unit
   ne : ∀{n} → Neutral n → Type n
 
--- A whnf of type Π A B is either lam t or neutral.
+⟦_⟧-type : ∀ (W : BindingType) {F} {G} → Type (⟦ W ⟧ F ▹ G)
+⟦ BΠ ⟧-type = Πₙ
+⟦ BΣ ⟧-type = Σₙ
+
+-- A whnf of type Π A ▹ B is either lam t or neutral.
 
 data Function : Term → Set where
-  lamₙ : ∀{t} → Function (lam t)
-  ne : ∀{n} → Neutral n → Function n
+  lamₙ : ∀ {t} → Function (lam t)
+  ne   : ∀ {n} → Neutral n → Function n
+
+-- A whnf of type Σ A ▹ B is either prod t u or neutral.
+
+data Product : Term → Set where
+  prodₙ : ∀ {t u} → Product (prod t u)
+  ne    : ∀ {n} → Neutral n → Product n
 
 -- These views classify only whnfs.
 -- Natural, Type, and Function are a subsets of Whnf.
@@ -219,13 +279,24 @@ naturalWhnf (ne x) = ne x
 
 typeWhnf : ∀ {A} → Type A → Whnf A
 typeWhnf Πₙ = Πₙ
+typeWhnf Σₙ = Σₙ
 typeWhnf ℕₙ = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
+typeWhnf Unitₙ = Unitₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
 functionWhnf lamₙ = lamₙ
 functionWhnf (ne x) = ne x
+
+productWhnf : ∀ {p} → Product p → Whnf p
+productWhnf prodₙ = prodₙ
+productWhnf (ne x) = ne x
+
+⟦_⟧ₙ : (W : BindingType) → ∀ {F G} → Whnf (⟦ W ⟧ F ▹ G)
+⟦_⟧ₙ BΠ = Πₙ
+⟦_⟧ₙ BΣ = Σₙ
+
 
 ------------------------------------------------------------------------
 -- Weakening
@@ -263,7 +334,7 @@ repeat f a 0 = a
 repeat f a (1+ n) = f (repeat f a n)
 
 -- Weakening of variables.
--- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar ρ x ∈ dom(Γ).
+-- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar η x ∈ dom(Γ).
 
 wkVar : (ρ : Wk) (n : Nat) → Nat
 wkVar id       n        = n
@@ -292,9 +363,11 @@ wk1 = wk (step id)
 -- Weakening of a neutral term.
 
 wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
-wkNeutral ρ (var n)    = var (wkVar ρ n)
-wkNeutral ρ (∘ₙ n)    = ∘ₙ (wkNeutral ρ n)
-wkNeutral ρ (natrecₙ n) = natrecₙ (wkNeutral ρ n)
+wkNeutral ρ (var n)       = var (wkVar ρ n)
+wkNeutral ρ (∘ₙ n)        = ∘ₙ (wkNeutral ρ n)
+wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
+wkNeutral ρ (sndₙ n)      = sndₙ (wkNeutral ρ n)
+wkNeutral ρ (natrecₙ n)   = natrecₙ (wkNeutral ρ n)
 wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
@@ -306,28 +379,43 @@ wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ      = Πₙ
+wkType ρ Σₙ      = Σₙ
 wkType ρ ℕₙ      = ℕₙ
 wkType ρ Emptyₙ  = Emptyₙ
+wkType ρ Unitₙ = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
-wkFunction ρ lamₙ    = lamₙ
+wkFunction ρ lamₙ   = lamₙ
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
+
+wkProduct : ∀ {t} ρ → Product t → Product (wk ρ t)
+wkProduct ρ prodₙ  = prodₙ
+wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
 wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
+wkWhnf ρ Σₙ      = Σₙ
 wkWhnf ρ ℕₙ      = ℕₙ
 wkWhnf ρ Emptyₙ  = Emptyₙ
+wkWhnf ρ Unitₙ   = Unitₙ
 wkWhnf ρ lamₙ    = lamₙ
+wkWhnf ρ prodₙ   = prodₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ
-wkWhnf ρ (ne x) = ne (wkNeutral ρ x)
+wkWhnf ρ starₙ   = starₙ
+wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
 -- Non-dependent version of Π.
 
 _▹▹_ : Term → Term → Term
 A ▹▹ B = Π A ▹ wk1 B
+
+-- Non-dependent products.
+
+_××_ : Term → Term → Term
+A ×× B = Σ A ▹ wk1 B
 
 ------------------------------------------------------------------------
 -- Substitution
@@ -466,3 +554,9 @@ t [ s ] = subst (sgSubst s) t
 
 _[_]↑ : (t : Term) (s : Term) → Term
 t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
+
+
+B-subst : (σ : Subst) (W : BindingType) (F G : Term)
+        → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
+B-subst σ BΠ F G = PE.refl
+B-subst σ BΣ F G = PE.refl

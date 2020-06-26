@@ -18,6 +18,8 @@ data UFull : Term → Set where
   ∃U  : UFull U
   ∃Π₁ : ∀ {F G} → UFull F → UFull (Π F ▹ G)
   ∃Π₂ : ∀ {F G} → UFull G → UFull (Π F ▹ G)
+  ∃Σ₁ : ∀ {F G} → UFull F → UFull (Σ F ▹ G)
+  ∃Σ₂ : ∀ {F G} → UFull G → UFull (Σ F ▹ G)
 
 -- Terms cannot contain U.
 noU : ∀ {t A Γ} → Γ ⊢ t ∷ A → ¬ (UFull t)
@@ -25,6 +27,8 @@ noU (ℕⱼ x) ()
 noU (Emptyⱼ x) ()
 noU (Πⱼ t ▹ t₁) (∃Π₁ ufull) = noU t ufull
 noU (Πⱼ t ▹ t₁) (∃Π₂ ufull) = noU t₁ ufull
+noU (Σⱼ t ▹ t₁) (∃Σ₁ ufull) = noU t ufull
+noU (Σⱼ t ▹ t₁) (∃Σ₂ ufull) = noU t₁ ufull
 noU (var x₁ x₂) ()
 noU (lamⱼ x t₁) ()
 noU (t ∘ⱼ t₁) ()
@@ -49,12 +53,20 @@ pilem : ∀ {F G H E}
 pilem (inj₁ x) = inj₁ (λ x₁ → x (∃Π₁ x₁)) , inj₁ (λ x₁ → x (∃Π₂ x₁))
 pilem (inj₂ x) = inj₂ (λ x₁ → x (∃Π₁ x₁)) , inj₂ (λ x₁ → x (∃Π₂ x₁))
 
+pilemΣ : ∀ {F G H E}
+      → (¬ UFull (Σ F ▹ G)) ⊎ (¬ UFull (Σ H ▹ E))
+      → (¬ UFull F) ⊎ (¬ UFull H) × (¬ UFull G) ⊎ (¬ UFull E)
+pilemΣ (inj₁ x) = inj₁ (λ x₁ → x (∃Σ₁ x₁)) , inj₁ (λ x₁ → x (∃Σ₂ x₁))
+pilemΣ (inj₂ x) = inj₂ (λ x₁ → x (∃Σ₁ x₁)) , inj₂ (λ x₁ → x (∃Σ₂ x₁))
+
 -- If type A does not contain U, then A can be a term of type U.
 inverseUniv : ∀ {A Γ} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUniv q (ℕⱼ x) = ℕⱼ x
 inverseUniv q (Emptyⱼ x) = Emptyⱼ x
+inverseUniv q (Unitⱼ x) = Unitⱼ x
 inverseUniv q (Uⱼ x) = ⊥-elim (q ∃U)
 inverseUniv q (Πⱼ A ▹ A₁) = Πⱼ inverseUniv (λ x → q (∃Π₁ x)) A ▹ inverseUniv (λ x → q (∃Π₂ x)) A₁
+inverseUniv q (Σⱼ A ▹ A₁) = Σⱼ inverseUniv (λ x → q (∃Σ₁ x)) A ▹ inverseUniv (λ x → q (∃Σ₂ x)) A₁
 inverseUniv q (univ x) = x
 
 -- If A is a neutral type, then A can be a term of U.
@@ -80,6 +92,9 @@ inverseUnivEq′ (inj₂ x) (trans A≡B A≡B₁) =
 inverseUnivEq′ q (Π-cong x A≡B A≡B₁) =
   let w , e = pilem q
   in  Π-cong x (inverseUnivEq′ w A≡B) (inverseUnivEq′ e A≡B₁)
+inverseUnivEq′ q (Σ-cong x A≡B A≡B₁) =
+  let w , e = pilemΣ q
+  in  Σ-cong x (inverseUnivEq′ w A≡B) (inverseUnivEq′ e A≡B₁)
 
 -- If A is a term of U, then the equality of types is an equality of terms of type U.
 inverseUnivEq : ∀ {A B Γ} → Γ ⊢ A ∷ U → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U

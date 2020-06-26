@@ -12,7 +12,7 @@ open import Definition.Typed.Consequences.Substitution
 open import Tools.Product
 
 
--- Congurence of the type of the successor case in natrec.
+-- Congruence of the type of the successor case in natrec.
 sucCong : ∀ {F G Γ} → Γ ∙ ℕ ⊢ F ≡ G
         → Γ ⊢ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
             ≡ Π ℕ ▹ (G ▹▹ G [ suc (var 0) ]↑)

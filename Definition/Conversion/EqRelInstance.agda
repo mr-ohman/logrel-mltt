@@ -22,6 +22,7 @@ open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
+open import Definition.Typed.Consequences.Inversion
 
 open import Tools.Nat
 open import Tools.Product
@@ -30,8 +31,13 @@ open import Tools.Function
 
 
 -- Algorithmic equality of neutrals with injected conversion.
-data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
-  ↑ : ∀ {B} → Γ ⊢ A ≡ B → Γ ⊢ k ~ l ↑ B → Γ ⊢ k ~ l ∷ A
+record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
+  inductive
+  constructor ↑
+  field
+    {B} : Term
+    A≡B : Γ ⊢ A ≡ B
+    k~↑l : Γ ⊢ k ~ l ↑ B
 
 -- Properties of algorithmic equality of neutrals with injected conversion.
 
@@ -53,8 +59,40 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       _ , ⊢f , _ = syntacticEqTerm (soundnessConv↑Term x₁)
   in  ↑ (substTypeEq G≡E (refl ⊢f))
         (app-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
-                       B≡ΠHE ([~] _ (red D) whnfB′ x))
+                            B≡ΠHE
+                            ([~] _ (red D) whnfB′ x))
              (convConvTerm x₁ F≡H))
+
+~-fst : ∀ {Γ p r F G}
+      → Γ ⊢ p ~ r ∷ Σ F ▹ G
+      → Γ ⊢ fst p ~ fst r ∷ F
+~-fst (↑ A≡B p~r) =
+  let _ , ⊢B = syntacticEq A≡B
+      B′ , whnfB′ , D = whNorm ⊢B
+      ΣFG≡B′ = trans A≡B (subset* (red D))
+      H , E , B≡ΣHE = Σ≡A ΣFG≡B′ whnfB′
+      F≡H , G≡E = Σ-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΣHE ΣFG≡B′)
+      p~r↓ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                      B≡ΣHE
+                      ([~] _ (red D) whnfB′ p~r)
+  in  ↑ F≡H (fst-cong p~r↓)
+
+~-snd : ∀ {Γ p r F G}
+      → Γ ⊢ p ~ r ∷ Σ F ▹ G
+      → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
+~-snd (↑ A≡B p~r) =
+  let ⊢ΣFG , ⊢B = syntacticEq A≡B
+      B′ , whnfB′ , D = whNorm ⊢B
+      ΣFG≡B′ = trans A≡B (subset* (red D))
+      H , E , B≡ΣHE = Σ≡A ΣFG≡B′ whnfB′
+      F≡H , G≡E = Σ-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) B≡ΣHE ΣFG≡B′)
+      p~r↓ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x)
+                      B≡ΣHE
+                      ([~] _ (red D) whnfB′ p~r)
+      ⊢F , ⊢G = syntacticΣ ⊢ΣFG
+      _ , ⊢p , _ = syntacticEqTerm (soundness~↑ p~r)
+      ⊢fst = fstⱼ ⊢F ⊢G (conv ⊢p (sym A≡B))
+  in  ↑ (substTypeEq G≡E (refl ⊢fst)) (snd-cong p~r↓)
 
 ~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
          → (Γ ∙ ℕ) ⊢ F [conv↑] F′ →
@@ -101,7 +139,7 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
         → Γ ⊢ k ~ m ∷ A
 ~-trans (↑ x x₁) (↑ x₂ x₃) =
   let ⊢Γ = wfEq x
-      k~m , _ = trans~↑ (reflConEq ⊢Γ) x₁ x₃
+      k~m , _ = trans~↑ x₁ x₃
   in  ↑ x k~m
 
 ~-wk : {k l A : Term} {ρ : Wk} {Γ Δ : Con Term} →
@@ -120,32 +158,71 @@ data _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
 
 -- Algorithmic equality instance of the generic equality relation.
 instance eqRelInstance : EqRelSet
-eqRelInstance = eqRel _⊢_[conv↑]_ _⊢_[conv↑]_∷_ _⊢_~_∷_
-                      ~-to-conv soundnessConv↑ soundnessConv↑Term
-                      univConv↑
-                      symConv symConvTerm ~-sym
-                      transConv transConvTerm ~-trans
-                      convConvTerm ~-conv
-                      wkConv↑ wkConv↑Term ~-wk
-                      reductionConv↑ reductionConv↑Term
-                      (liftConv ∘ᶠ U-refl)
-                      (liftConv ∘ᶠ ℕ-refl)
-                      (λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x)))
-                      (liftConv ∘ᶠ Empty-refl)
-                      (λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x)))
-                      (λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂))
-                      (λ x x₁ x₂ →
-                         let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
-                             _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
-                             ⊢Γ = wfTerm F∷U
-                             F<>H = univConv↑ x₁
-                             G<>E = univConv↑ x₂
-                             F≡H = soundnessConv↑ F<>H
-                             E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
-                         in  liftConvTerm (univ (Πⱼ F∷U ▹ G∷U) (Πⱼ H∷U ▹ E∷U′)
-                                                (Π-cong x F<>H G<>E)))
-
-                      (liftConvTerm ∘ᶠ zero-refl)
-                      (liftConvTerm ∘ᶠ suc-cong)
-                      (λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x x₁ x₂ x₃ x₄ x₅))
-                      ~-var ~-app ~-natrec ~-Emptyrec
+eqRelInstance = record {
+  _⊢_≅_ = _⊢_[conv↑]_;
+  _⊢_≅_∷_ = _⊢_[conv↑]_∷_;
+  _⊢_~_∷_ = _⊢_~_∷_;
+  ~-to-≅ₜ = ~-to-conv;
+  ≅-eq = soundnessConv↑;
+  ≅ₜ-eq = soundnessConv↑Term;
+  ≅-univ = univConv↑;
+  ≅-sym = symConv;
+  ≅ₜ-sym = symConvTerm;
+  ~-sym = ~-sym;
+  ≅-trans = transConv;
+  ≅ₜ-trans = transConvTerm;
+  ~-trans = ~-trans;
+  ≅-conv = convConvTerm;
+  ~-conv = ~-conv;
+  ≅-wk = wkConv↑;
+  ≅ₜ-wk = wkConv↑Term;
+  ~-wk = ~-wk;
+  ≅-red = λ x x₁ x₂ x₃ x₄ → reductionConv↑ x x₁ x₄;
+  ≅ₜ-red = λ x x₁ x₂ x₃ x₄ x₅ x₆ → reductionConv↑Term x x₁ x₂ x₆;
+  ≅-Urefl = liftConv ∘ᶠ U-refl;
+  ≅-ℕrefl = liftConv ∘ᶠ ℕ-refl;
+  ≅ₜ-ℕrefl = λ x → liftConvTerm (univ (ℕⱼ x) (ℕⱼ x) (ℕ-refl x));
+  ≅-Emptyrefl = liftConv ∘ᶠ Empty-refl;
+  ≅ₜ-Emptyrefl = λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x));
+  ≅-Unitrefl = liftConv ∘ᶠ Unit-refl;
+  ≅ₜ-Unitrefl = λ ⊢Γ → liftConvTerm (univ (Unitⱼ ⊢Γ) (Unitⱼ ⊢Γ) (Unit-refl ⊢Γ));
+  ≅ₜ-η-unit = λ [e] [e'] → let u , uWhnf , uRed = whNormTerm [e]
+                               u' , u'Whnf , u'Red = whNormTerm [e']
+                               [u] = ⊢u-redₜ uRed
+                               [u'] = ⊢u-redₜ u'Red
+                           in  [↑]ₜ Unit u u'
+                               (red (idRed:*: (syntacticTerm [e])))
+                               (redₜ uRed)
+                               (redₜ u'Red)
+                               Unitₙ uWhnf u'Whnf
+                               (η-unit [u] [u'] uWhnf u'Whnf);
+  ≅-Π-cong = λ x x₁ x₂ → liftConv (Π-cong x x₁ x₂);
+  ≅ₜ-Π-cong = λ x x₁ x₂ → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
+                              _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
+                              ⊢Γ = wfTerm F∷U
+                              F<>H = univConv↑ x₁
+                              G<>E = univConv↑ x₂
+                              F≡H = soundnessConv↑ F<>H
+                              E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
+                          in  liftConvTerm (univ (Πⱼ F∷U ▹ G∷U) (Πⱼ H∷U ▹ E∷U′)
+                                                (Π-cong x F<>H G<>E));
+  ≅-Σ-cong = λ x x₁ x₂ → liftConv (Σ-cong x x₁ x₂);
+  ≅ₜ-Σ-cong = λ x x₁ x₂ → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
+                              _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
+                              ⊢Γ = wfTerm F∷U
+                              F<>H = univConv↑ x₁
+                              G<>E = univConv↑ x₂
+                              F≡H = soundnessConv↑ F<>H
+                              E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
+                          in  liftConvTerm (univ (Σⱼ F∷U ▹ G∷U) (Σⱼ H∷U ▹ E∷U′)
+                                                (Σ-cong x F<>H G<>E));
+  ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
+  ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
+  ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x₁ x₂ x₃ x₄ x₅);
+  ≅-Σ-η = λ x x₁ x₂ x₃ x₄ x₅ x₆ x₇ → (liftConvTerm (Σ-η x₂ x₃ x₄ x₅ x₆ x₇));
+  ~-var = ~-var;
+  ~-app = ~-app;
+  ~-fst = λ x x₁ x₂ → ~-fst x₂;
+  ~-snd = λ x x₁ x₂ → ~-snd x₂;
+  ~-natrec = ~-natrec;
+  ~-Emptyrec = ~-Emptyrec }

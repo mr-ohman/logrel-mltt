@@ -36,7 +36,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       [liftσ] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ]
       [ΠFG] = Πᵛ {F} {G} [Γ] [F] [G]
-      _ , Πᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
+      _ , Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
         extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
       lamt : ∀ {Δ σ} (⊢Δ : ⊢ Δ) ([σ] : Δ ⊩ˢ σ ∷ Γ / [Γ] / ⊢Δ)
            → Δ ⊩⟨ l ⟩ subst σ (lam t) ∷ subst σ (Π F ▹ G) / proj₁ ([ΠFG] ⊢Δ [σ])
@@ -58,7 +58,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
                               (β-red ⊢wk1F (T.wkTerm (lift (step id))
                                                      (⊢Δ ∙ ⊢F ∙ ⊢wk1F) ⊢t)
                                                      (var (⊢Δ ∙ ⊢F) here))
-            _ , Πᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
+            _ , Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
         in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lamⱼ ⊢F ⊢t)) lamₙ
                (≅-η-eq ⊢F (lamⱼ ⊢F ⊢t) (lamⱼ ⊢F ⊢t) lamₙ lamₙ
@@ -149,7 +149,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   in  lamt ⊢Δ [σ]
   ,   (λ {σ′} [σ′] [σ≡σ′] →
          let [liftσ′] = liftSubstS {F = F} [Γ] ⊢Δ [F] [σ′]
-             _ , Πᵣ F″ G″ D″ ⊢F″ ⊢G″ A≡A″ [F]″ [G]″ G-ext′ =
+             _ , Bᵣ F″ G″ D″ ⊢F″ ⊢G″ A≡A″ [F]″ [G]″ G-ext′ =
                extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ′])))
              ⊢F′ = escape (proj₁ ([F] ⊢Δ [σ′]))
              [G]₁ = proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ])
@@ -303,7 +303,7 @@ lamᵛ {F} {G} {t} {Γ} {l} [Γ] [F] [G] [t] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
       [d′] = [ ⊢t₁ , ⊢u₁ , d₁ ]
       [ΠFG] = Πᵛ {F} {G} [Γ] [F] [G]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
-      _ , Πᵣ F′ G′ D′ ⊢F ⊢G A≡A [F]′ [G]′ G-ext = extractMaybeEmb (Π-elim [σΠFG])
+      _ , Bᵣ F′ G′ D′ ⊢F ⊢G A≡A [F]′ [G]′ G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [wk1F] = wk (step id) (⊢Δ ∙ ⊢F) [σF]
       var0′ = var (⊢Δ ∙ ⊢F) here

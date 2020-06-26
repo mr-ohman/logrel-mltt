@@ -6,9 +6,12 @@ open import Definition.Untyped as U hiding (wk)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
+open import Definition.Typed.Consequences.Syntactic
 open import Definition.Conversion
+open import Definition.Conversion.Soundness
 
 import Tools.PropositionalEquality as PE
+open import Tools.Product
 
 mutual
   -- Weakening of algorithmic equality of neutrals.
@@ -19,6 +22,12 @@ mutual
   wk~↑ ρ ⊢Δ (app-cong {G = G} t~u x) =
     PE.subst (λ x → _ ⊢ _ ~ _ ↑ x) (PE.sym (wk-β G))
              (app-cong (wk~↓ ρ ⊢Δ t~u) (wkConv↑Term ρ ⊢Δ x))
+  wk~↑ ρ ⊢Δ (fst-cong p~r) =
+    fst-cong (wk~↓ ρ ⊢Δ p~r)
+  wk~↑ ρ ⊢Δ (snd-cong {G = G} p~r) =
+    PE.subst (λ x → _ ⊢ _ ~ _ ↑ x)
+             (PE.sym (wk-β G))
+             (snd-cong (wk~↓ ρ ⊢Δ p~r))
   wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (natrec-cong {k} {l} {h} {g} {a₀} {b₀} {F} {G} x x₁ x₂ t~u) =
     PE.subst (λ x → _ ⊢ U.wk ρ (natrec F a₀ h k) ~ _ ↑ x) (PE.sym (wk-β F))
              (natrec-cong (wkConv↑ (lift [ρ]) (⊢Δ ∙ ℕⱼ ⊢Δ) x)
@@ -52,10 +61,14 @@ mutual
   wkConv↓ ρ ⊢Δ (U-refl x) = U-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ℕ-refl x) = ℕ-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (Empty-refl x) = Empty-refl ⊢Δ
+  wkConv↓ ρ ⊢Δ (Unit-refl x) = Unit-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ne x) = ne (wk~↓ ρ ⊢Δ x)
   wkConv↓ ρ ⊢Δ (Π-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
     in  Π-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
+  wkConv↓ ρ ⊢Δ (Σ-cong x A<>B A<>B₁) =
+    let ⊢ρF = wk ρ ⊢Δ x
+    in  Σ-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
 
   -- Weakening of algorithmic equality of terms.
   wkConv↑Term : ∀ {ρ t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
@@ -75,18 +88,33 @@ mutual
     ℕ-ins (wk~↓ ρ ⊢Δ x)
   wkConv↓Term ρ ⊢Δ (Empty-ins x) =
     Empty-ins (wk~↓ ρ ⊢Δ x)
+  wkConv↓Term ρ ⊢Δ (Unit-ins x) =
+    Unit-ins (wk~↓ ρ ⊢Δ x)
   wkConv↓Term {ρ} [ρ] ⊢Δ (ne-ins t u x x₁) =
     ne-ins (wkTerm [ρ] ⊢Δ t) (wkTerm [ρ] ⊢Δ u) (wkNeutral ρ x) (wk~↓ [ρ] ⊢Δ x₁)
   wkConv↓Term ρ ⊢Δ (univ x x₁ x₂) =
     univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↓ ρ ⊢Δ x₂)
   wkConv↓Term ρ ⊢Δ (zero-refl x) = zero-refl ⊢Δ
   wkConv↓Term ρ ⊢Δ (suc-cong t<>u) = suc-cong (wkConv↑Term ρ ⊢Δ t<>u)
-  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (η-eq {F = F} {G = G} x x₁ x₂ y y₁ t<>u) =
-    let ⊢ρF = wk [ρ] ⊢Δ x
-    in  η-eq ⊢ρF (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
+  wkConv↓Term {ρ} {Δ = Δ} [ρ] ⊢Δ (η-eq {F = F} {G = G} x₁ x₂ y y₁ t<>u) =
+    let ⊢F , _ = syntacticΠ (syntacticTerm x₁)
+        ⊢ρF = wk [ρ] ⊢Δ ⊢F
+    in  η-eq (wkTerm [ρ] ⊢Δ x₁) (wkTerm [ρ] ⊢Δ x₂)
              (wkFunction ρ y) (wkFunction ρ y₁)
              (PE.subst₃ (λ x y z → Δ ∙ U.wk ρ F ⊢ x [conv↑] y ∷ z)
                         (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)
                         (PE.cong₂ _∘_ (PE.sym (wk1-wk≡lift-wk1 _ _)) PE.refl)
                         PE.refl
                         (wkConv↑Term (lift [ρ]) (⊢Δ ∙ ⊢ρF) t<>u))
+  wkConv↓Term {ρ} [ρ] ⊢Δ (Σ-η {G = G} ⊢p ⊢r pProd rProd fstConv sndConv) =
+    Σ-η (wkTerm [ρ] ⊢Δ ⊢p)
+        (wkTerm [ρ] ⊢Δ ⊢r)
+        (wkProduct ρ pProd)
+        (wkProduct ρ rProd)
+        (wkConv↑Term [ρ] ⊢Δ fstConv)
+        (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
+                  (wk-β G)
+                  (wkConv↑Term [ρ] ⊢Δ sndConv))
+  wkConv↓Term {ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
+    η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
+           (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)
