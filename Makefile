@@ -1,15 +1,19 @@
 ## HTML Output ############################################################
 
-htmldir=$(HOME)/popl17/html
+htmldir=html
+# htmldir=$(HOME)/popl17/html
 # htmldir=/tmp/logrel-mltt/html
 
 # Agda-2.5.3 needed to generate the links we use in the paper
-agda=agda-2.5.3
+# Agda-2.5.4 ok from 2018-02-19
+# try latest Agda
+agda=agda
+main=Logrel-MLTT.agda
 
 .PHONY : clean pack check agda-check html loc agda-loc agda-woc
 
 html :
-	$(agda) --html --html-dir=$(htmldir) Everything.agda
+	$(agda) --html --html-dir=$(htmldir) $(main)
 
 
 ## Type Check Code ########################################################
@@ -19,12 +23,12 @@ check : agda-check
 # Type check the code
 
 agda-check:
-	$(agda) Everything.agda
+	$(agda) $(main)
 
 pack: clean
 	mkdir code
-	cp -r Definition Tools Everything.agda README.agda Makefile code/
-	$(agda) --html Everything.agda
+	cp -r Definition Tools $(main) README.agda Makefile code/
+	$(agda) --html $(main)
 	zip -r formalization code html
 
 clean:
