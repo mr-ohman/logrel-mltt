@@ -277,6 +277,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     record _⊩¹B⟨_⟩_ (Γ : Con Term) (W : BindingType) (A : Term) : Set where
       inductive
       constructor Bᵣ
+      eta-equality
       field
         F : Term
         G : Term
@@ -300,6 +301,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     record _⊩¹B⟨_⟩_≡_/_ (Γ : Con Term) (W : BindingType) (A B : Term) ([A] : Γ ⊩¹B⟨ W ⟩ A) : Set where
       inductive
       constructor B₌
+      eta-equality
       open _⊩¹B⟨_⟩_ [A]
       field
         F′     : Term
