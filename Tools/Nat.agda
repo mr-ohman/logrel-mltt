@@ -11,8 +11,7 @@ open import Tools.Bool
 -- We reexport Agda's built-in type of natural numbers.
 
 open import Agda.Builtin.Nat using (zero; suc)
-open import Agda.Builtin.Nat using (Nat) public
-open import Data.Nat using (_≤?_; _+_; _∸_) public
+open import Data.Nat using (_≤?_; _+_; _∸_) renaming (ℕ to Nat) public
 open import Data.Nat.Show using (show) public
 
 pattern 1+ n = suc n
@@ -41,4 +40,3 @@ _==_ : Nat → Nat → Bool
 m == n with m ≟ n
 ... | yes _ = true
 ... | no _  = false
-
