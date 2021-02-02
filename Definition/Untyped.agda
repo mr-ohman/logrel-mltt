@@ -8,9 +8,10 @@ open import Tools.Nat
 open import Tools.Product
 open import Tools.List
 import Tools.PropositionalEquality as PE
+open import Definition.Context
 
 
-infixl 30 _∙_
+-- infixl 30 _∙_
 infix 30 Π_▹_
 infixr 22 _▹▹_
 infix 30 Σ_▹_
@@ -23,9 +24,10 @@ infix 25 _[_]↑
 
 -- Typing contexts (snoc-lists, isomorphic to lists).
 
-data Con (A : Set) : Set where
-  ε   : Con A               -- Empty context.
-  _∙_ : Con A → A → Con A  -- Context extension.
+-- data Con (A : Set) : Set where
+--   ε   : Con A               -- Empty context.
+--   _∙_ : Con A → A → Con A   -- Context extension.
+
 
 record GenT (A : Set) : Set where
   inductive
@@ -82,10 +84,10 @@ pattern Univ u = gen (Ukind u) []
 ℕ      : Term                     -- Type of natural numbers.
 ℕ = gen Natkind []
 
-Empty : Term
+Empty : Term                      -- Empty type
 Empty = gen Emptykind []
 
-Unit  : Term
+Unit  : Term                      -- Unit type
 Unit = gen Unitkind []
 
 -- Lambda-calculus.
@@ -98,14 +100,14 @@ lam t = gen Lamkind (⟦ 1 , t ⟧ ∷ [])
 _∘_    : (t u : Term)     → Term  -- Application.
 t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
--- Dependent products
-prod : (t u : Term) → Term
+
+prod : (t u : Term) → Term        -- Dependent products
 prod t u = gen Prodkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
 
-fst : (t : Term) → Term
+fst : (t : Term) → Term           -- First projection
 fst t = gen Fstkind (⟦ 0 , t ⟧ ∷ [])
 
-snd : (t : Term) → Term
+snd : (t : Term) → Term           -- Second projection
 snd t = gen Sndkind (⟦ 0 , t ⟧ ∷ [])
 
 -- Introduction and elimination of natural numbers.
@@ -115,15 +117,14 @@ zero = gen Zerokind []
 suc    : (t : Term)       → Term  -- Successor.
 suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
 
-natrec : (A t u v : Term) → Term  -- Recursor (A is a binder).
+natrec : (A t u v : Term) → Term  -- Natural number recursor (A is a binder).
 natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
 
--- Unit type
-star : Term
+
+star : Term                       -- Unit element
 star = gen Starkind []
 
--- Empty type
-Emptyrec : (A e : Term) → Term
+Emptyrec : (A e : Term) → Term    -- Empty type recursor
 Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
 
 -- Binding types
@@ -242,7 +243,7 @@ data Natural : Term → Set where
   ne    : ∀ {n} → Neutral n → Natural n
 
 
--- A (small) type in whnf is either Π A B, ℕ, or neutral.
+-- A (small) type in whnf is either Π A B, Σ A B, ℕ, Empty, Unit or neutral.
 -- Large types could also be U.
 
 data Type : Term → Set where
@@ -270,27 +271,27 @@ data Product : Term → Set where
   ne    : ∀ {n} → Neutral n → Product n
 
 -- These views classify only whnfs.
--- Natural, Type, and Function are a subsets of Whnf.
+-- Natural, Type, Function and Product are a subsets of Whnf.
 
 naturalWhnf : ∀ {n} → Natural n → Whnf n
-naturalWhnf sucₙ = sucₙ
-naturalWhnf zeroₙ = zeroₙ
+naturalWhnf sucₙ   = sucₙ
+naturalWhnf zeroₙ  = zeroₙ
 naturalWhnf (ne x) = ne x
 
 typeWhnf : ∀ {A} → Type A → Whnf A
-typeWhnf Πₙ = Πₙ
-typeWhnf Σₙ = Σₙ
-typeWhnf ℕₙ = ℕₙ
+typeWhnf Πₙ     = Πₙ
+typeWhnf Σₙ     = Σₙ
+typeWhnf ℕₙ     = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
-typeWhnf Unitₙ = Unitₙ
+typeWhnf Unitₙ  = Unitₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : ∀ {f} → Function f → Whnf f
-functionWhnf lamₙ = lamₙ
+functionWhnf lamₙ   = lamₙ
 functionWhnf (ne x) = ne x
 
 productWhnf : ∀ {p} → Product p → Whnf p
-productWhnf prodₙ = prodₙ
+productWhnf prodₙ  = prodₙ
 productWhnf (ne x) = ne x
 
 ⟦_⟧ₙ : (W : BindingType) → ∀ {F G} → Whnf (⟦ W ⟧ F ▹ G)
@@ -337,9 +338,9 @@ repeat f a (1+ n) = f (repeat f a n)
 -- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar η x ∈ dom(Γ).
 
 wkVar : (ρ : Wk) (n : Nat) → Nat
-wkVar id       n        = n
-wkVar (step ρ) n        = 1+ (wkVar ρ n)
-wkVar (lift ρ) 0    = 0
+wkVar id       n      = n
+wkVar (step ρ) n      = 1+ (wkVar ρ n)
+wkVar (lift ρ) 0      = 0
 wkVar (lift ρ) (1+ n) = 1+ (wkVar ρ n)
 
   -- Weakening of terms.
@@ -373,16 +374,16 @@ wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 -- Weakening can be applied to our whnf views.
 
 wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
-wkNatural ρ sucₙ    = sucₙ
-wkNatural ρ zeroₙ   = zeroₙ
+wkNatural ρ sucₙ   = sucₙ
+wkNatural ρ zeroₙ  = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
 wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
-wkType ρ Πₙ      = Πₙ
-wkType ρ Σₙ      = Σₙ
-wkType ρ ℕₙ      = ℕₙ
-wkType ρ Emptyₙ  = Emptyₙ
-wkType ρ Unitₙ = Unitₙ
+wkType ρ Πₙ     = Πₙ
+wkType ρ Σₙ     = Σₙ
+wkType ρ ℕₙ     = ℕₙ
+wkType ρ Emptyₙ = Emptyₙ
+wkType ρ Unitₙ  = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
@@ -482,7 +483,7 @@ wk1Subst σ x = wk1 (σ x)
 -- If Γ ⊢ σ : Δ then Γ∙A ⊢ liftSubst σ : Δ∙A.
 
 liftSubst : (σ : Subst) → Subst
-liftSubst σ 0    = var 0
+liftSubst σ 0      = var 0
 liftSubst σ (1+ x) = wk1Subst σ x
 
 -- Transform a weakening into a substitution.
@@ -502,7 +503,7 @@ mutual
   substGen σ (⟦ l , t ⟧ ∷ g) = ⟦ l , (subst (repeat liftSubst σ l) t) ⟧ ∷ substGen σ g
 
   subst : (σ : Subst) (t : Term) → Term
-  subst σ (var x) = substVar σ x
+  subst σ (var x)   = substVar σ x
   subst σ (gen x c) = gen x (substGen σ c)
 
 -- Extend a substitution by adding a term as
@@ -511,7 +512,7 @@ mutual
 -- If Γ ⊢ σ : Δ and Γ ⊢ t : subst σ A then Γ ⊢ consSubst σ t : Δ∙A.
 
 consSubst : Subst → Term → Subst
-consSubst σ t 0    = t
+consSubst σ t 0      = t
 consSubst σ t (1+ n) = σ n
 
 -- Singleton substitution.
