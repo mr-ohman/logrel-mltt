@@ -1,34 +1,38 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 module Definition.Typed where
 
-open import Definition.Context
+-- open import Definition.Context
 open import Definition.Untyped
 
-open import Tools.Nat using (Nat)
+open import Tools.Fin
+open import Tools.Nat
+-- using (Nat)
 open import Tools.Product
 
-
--- infixl 30 _∙_
-infix 30 Πⱼ_▹_
-infix 30 Σⱼ_▹_
-infix 30 ⟦_⟧ⱼ_▹_
+infixl 30 _∙_
+-- infix 30 Πⱼ_▹_
+-- infix 30 Σⱼ_▹_
+-- infix 30 ⟦_⟧ⱼ_▹_
 
 variable
-  ℓ′ : Nat
+  ℓ ℓ′ : Nat
   Γ  : Con Term ℓ
+  A B F : Term ℓ
+  G : Term (1+ ℓ)
+  x : Fin ℓ
+
 
 -- Well-typed variables
-data _∷_∈_ : (x : Nat) (A : Term) (Γ : Con Term ℓ) → Set where
-  here  : ∀ {A}                       → 0 ∷ wk1 A ∈ (Γ ∙ A)
-  there : ∀ {A B x} → (h : x ∷ A ∈ Γ) → Nat.suc x ∷ wk1 A ∈ (Γ ∙ B)
+data _∷_∈_ : (x : Fin ℓ) (A : Term ℓ) (Γ : Con Term ℓ) → Set where
+  here  :  x0 ∷ wk1 A ∈ (Γ ∙ A)
+  there : (h : x ∷ A ∈ Γ) → (x +1) ∷ wk1 A ∈ (Γ ∙ B)
 
 mutual
   -- Well-formed context
   data ⊢_ : Con Term ℓ → Set where
     ε   : ⊢ ε
-    _∙_ : ∀ {A}
-        → ⊢ Γ
+    _∙_ : ⊢ Γ
         → Γ ⊢ A
         → ⊢ Γ ∙ A
 
@@ -38,16 +42,13 @@ mutual
     ℕⱼ     : ⊢ Γ → Γ ⊢ ℕ
     Emptyⱼ : ⊢ Γ → Γ ⊢ Empty
     Unitⱼ  : ⊢ Γ → Γ ⊢ Unit
-    Πⱼ_▹_  : ∀ {F G}
-           → Γ     ⊢ F
+    Πⱼ_▹_  : Γ     ⊢ F
            → Γ ∙ F ⊢ G
            → Γ     ⊢ Π F ▹ G
-    Σⱼ_▹_  : ∀ {F G}
-           → Γ     ⊢ F
+    Σⱼ_▹_  : Γ     ⊢ F
            → Γ ∙ F ⊢ G
            → Γ     ⊢ Σ F ▹ G
-    univ   : ∀ {A}
-           → Γ ⊢ A ∷ U
+    univ   : Γ ⊢ A ∷ U
            → Γ ⊢ A
 
   -- Well-formed term of a type
@@ -243,7 +244,7 @@ mutual
                   → Γ ⊢ e ∷ Unit
                   → Γ ⊢ e' ∷ Unit
                   → Γ ⊢ e ≡ e' ∷ Unit
-
+{-
 -- Term reduction
 data _⊢_⇒_∷_ (Γ : Con Term ℓ) : Term → Term → Term → Set where
   conv           : ∀ {A B t u}
@@ -398,3 +399,5 @@ data _⊢ˢ_≡_∷_ (Δ : Con Term ℓ′) (σ σ′ : Subst) : (Γ : Con Term 
      → Γ     ⊢ ⟦ W ⟧ F ▹ G ∷ U
 ⟦ BΠ ⟧ⱼᵤ ⊢F ▹ ⊢G = Πⱼ ⊢F ▹ ⊢G
 ⟦ BΣ ⟧ⱼᵤ ⊢F ▹ ⊢G = Σⱼ ⊢F ▹ ⊢G
+
+-}
