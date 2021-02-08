@@ -353,7 +353,7 @@ wkVar (lift ρ) (x +1) = (wkVar ρ x) +1
   -- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
 
 mutual
-  wkGen : {m n : Nat} {bs : List Nat} (ρ : Wk m n) (c : GenTs Term n bs ) → GenTs Term m bs
+  wkGen : {m n : Nat} {bs : List Nat} (ρ : Wk m n) (c : GenTs Term n bs) → GenTs Term m bs
   wkGen ρ [] = []
   wkGen ρ (_∷_ {b = b} t c) = (wk (liftn ρ b) t) ∷ (wkGen ρ c)
 
@@ -370,7 +370,7 @@ wk1 = wk (step id)
 
 -- Weakening of a neutral term.
 
-wkNeutral : ∀ ρ → Neutral t → Neutral (wk ρ t)
+wkNeutral : ∀ ρ → Neutral t → Neutral {n} (wk ρ t)
 wkNeutral ρ (var n)       = var (wkVar ρ n)
 wkNeutral ρ (∘ₙ n)        = ∘ₙ (wkNeutral ρ n)
 wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
@@ -380,12 +380,12 @@ wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
-wkNatural : ∀ ρ → Natural t → Natural (wk ρ t)
+wkNatural : ∀ ρ → Natural t → Natural {n} (wk ρ t)
 wkNatural ρ sucₙ   = sucₙ
 wkNatural ρ zeroₙ  = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
-wkType : ∀ ρ → Type t → Type (wk ρ t)
+wkType : ∀ ρ → Type t → Type {n} (wk ρ t)
 wkType ρ Πₙ     = Πₙ
 wkType ρ Σₙ     = Σₙ
 wkType ρ ℕₙ     = ℕₙ
@@ -393,15 +393,15 @@ wkType ρ Emptyₙ = Emptyₙ
 wkType ρ Unitₙ  = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
-wkFunction : ∀ ρ → Function t → Function (wk ρ t)
+wkFunction : ∀ ρ → Function t → Function {n} (wk ρ t)
 wkFunction ρ lamₙ   = lamₙ
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
 
-wkProduct : ∀ ρ → Product t → Product (wk ρ t)
+wkProduct : ∀ ρ → Product t → Product {n} (wk ρ t)
 wkProduct ρ prodₙ  = prodₙ
 wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
-wkWhnf : ∀ ρ → Whnf t → Whnf (wk ρ t)
+wkWhnf : ∀ ρ → Whnf t → Whnf {n} (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ Σₙ      = Σₙ
