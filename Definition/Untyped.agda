@@ -31,7 +31,7 @@ data Con (A : Nat → Set) : Nat → Set where
 
 private
   variable
-    n : Nat
+    n m : Nat
 
 data GenTs (A : Nat → Set) : Nat → List Nat → Set where
   [] : {n : Nat} → GenTs A n []
@@ -423,7 +423,7 @@ A ▹▹ B = Π A ▹ wk1 B
 
 _××_ : Term n → Term n → Term n
 A ×× B = Σ A ▹ wk1 B
-{-
+
 ------------------------------------------------------------------------
 -- Substitution
 
@@ -432,8 +432,8 @@ A ×× B = Σ A ▹ wk1 B
 
 -- The substitution σ itself is a map from natural numbers to terms.
 
-Subst : Nat → Set
-Subst n = Fin n → Term n
+Subst : Nat → Nat → Set
+Subst m n = Fin n → Term m
 
 -- Given closed contexts ⊢ Γ and ⊢ Δ,
 -- substitutions may be typed via Γ ⊢ σ : Δ meaning that
@@ -451,7 +451,7 @@ Subst n = Fin n → Term n
 --
 -- If Γ ⊢ σ : Δ∙A  then Γ ⊢ head σ : subst σ A.
 
-head : Subst (1+ n) → Term (1+ n)
+head : Subst m (1+ n) → Term m
 head σ = σ x0
 
 -- Remove the first variable instance of a substitution
@@ -459,9 +459,9 @@ head σ = σ x0
 --
 -- If Γ ⊢ σ : Δ∙A then Γ ⊢ tail σ : Δ.
 
-tail : Subst (1+ n) → Subst n
-tail σ x = {! σ  !} --n = σ ? --(n +1)
-
+tail : Subst m (1+ n) → Subst m n
+tail σ x = σ (x +1)
+{-
 -- Substitution of a variable.
 --
 -- If Γ ⊢ σ : Δ then Γ ⊢ substVar σ x : (subst σ Δ)(x).
