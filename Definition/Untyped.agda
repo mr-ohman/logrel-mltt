@@ -64,7 +64,6 @@ data Kind : (ns : List Nat) → Set where
 data Term (n : Nat) : Set where
   var : (x : Fin n) → Term n
   gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term n bs) → Term n
-  -- gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term (L.map (_+ n) bs)) → Term n
 
 private
   variable
