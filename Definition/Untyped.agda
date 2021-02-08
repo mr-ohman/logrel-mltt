@@ -9,34 +9,37 @@ open import Tools.Nat
 open import Tools.Product
 open import Tools.List
 import Tools.PropositionalEquality as PE
--- open import Definition.Context
 
 
 infixl 30 _∙_
 infix 30 Π_▹_
--- infixr 22 _▹▹_
+infixr 22 _▹▹_
 infix 30 Σ_▹_
--- infixr 22 _××_
+infixr 22 _××_
 infix 30 ⟦_⟧_▹_
--- infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
--- infix 25 _[_]
--- infix 25 _[_]↑
+infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
+infix 25 _[_]
+infix 25 _[_]↑
 
 
--- Typing contexts (snoc-lists, isomorphic to lists).
+-- Typing contexts (length indexed snoc-lists, isomorphic to lists).
 
 data Con (A : Nat → Set) : Nat → Set where
-  ε   : Con A 0               -- Empty context.
+  ε   :                             Con A 0        -- Empty context.
   _∙_ : {n : Nat} → Con A n → A n → Con A (1+ n)   -- Context extension.
 
 private
   variable
-    n m : Nat
+    n m ℓ : Nat
+
+-- Representation of sub terms using a list of binding levels
 
 data GenTs (A : Nat → Set) : Nat → List Nat → Set where
-  [] : {n : Nat} → GenTs A n []
+  []  : {n : Nat} → GenTs A n []
   _∷_ : {n b : Nat} {bs : List Nat} (t : A (b + n)) (ts : GenTs A n bs) → GenTs A n (b ∷ bs)
 
+-- Kinds are indexed on the number of expected sub terms
+-- and the number of new variables bound by each sub term
 
 data Kind : (ns : List Nat) → Set where
   Ukind : Kind []
@@ -61,6 +64,10 @@ data Kind : (ns : List Nat) → Set where
   Emptykind    : Kind []
   Emptyreckind : Kind (0 ∷ 0 ∷ [])
 
+-- Terms are indexed by its number of unbound variables and are either:
+-- de Bruijn style variables or
+-- generic terms, formed by their kind and sub terms
+
 data Term (n : Nat) : Set where
   var : (x : Fin n) → Term n
   gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term n bs) → Term n
@@ -77,32 +84,32 @@ private
 -- Π, lam, and natrec are binders.
 
 -- Type constructors.
-U      : Term n                    -- Universe.
+U      : Term n                      -- Universe.
 U = gen Ukind []
 
 Π_▹_ : (A : Term n) (B : Term (1+ n)) → Term n  -- Dependent function type (B is a binder).
 Π A ▹ B = gen Pikind (A ∷ B ∷ [])
 
-Σ_▹_ : (A : Term n) (B : Term (1+ n)) → Term n
+Σ_▹_ : (A : Term n) (B : Term (1+ n)) → Term n  -- Dependent sum type (B is a binder).
 Σ A ▹ B = gen Sigmakind (A ∷ B ∷ [])
 
-ℕ      : Term n                    -- Type of natural numbers.
+ℕ      : Term n                      -- Type of natural numbers.
 ℕ = gen Natkind []
 
-Empty : Term n                     -- Empty type
+Empty : Term n                       -- Empty type
 Empty = gen Emptykind []
 
-Unit  : Term n                     -- Unit type
+Unit  : Term n                       -- Unit type
 Unit = gen Unitkind []
 
 lam    : (t : Term (1+ n)) → Term n  -- Function abstraction (binder).
 lam t = gen Lamkind (t ∷ [])
 
-_∘_    : (t u : Term n) → Term n  -- Application.
+_∘_    : (t u : Term n) → Term n     -- Application.
 t ∘ u = gen Appkind (t ∷ u ∷ [])
 
 
-prod : (t u : Term n) → Term n        -- Dependent products
+prod : (t u : Term n) → Term n       -- Dependent products
 prod t u = gen Prodkind (t ∷ u ∷ [])
 
 fst : (t : Term n) → Term n          -- First projection
@@ -112,17 +119,17 @@ snd : (t : Term n) → Term n          -- Second projection
 snd t = gen Sndkind (t ∷ [])
 
 -- Introduction and elimination of natural numbers.
-zero   : Term n                    -- Natural number zero.
+zero   : Term n                      -- Natural number zero.
 zero = gen Zerokind []
 
-suc    : (t : Term n)       → Term n  -- Successor.
+suc    : (t : Term n)       → Term n -- Successor.
 suc t = gen Suckind (t ∷ [])
 
 natrec : (A : Term (1+ n)) (t u v : Term n) → Term n  -- Natural number recursor (A is a binder).
 natrec A t u v = gen Natreckind (A ∷ t ∷ u ∷ v ∷ [])
 
 
-star : Term n                      -- Unit element
+star : Term n                        -- Unit element
 star = gen Starkind []
 
 Emptyrec : (A e : Term n) → Term n   -- Empty type recursor
@@ -315,9 +322,9 @@ productWhnf (ne x) = ne x
 -- and this would be the natural extension of weakenings.
 
 data Wk : Nat → Nat → Set where
-  id    : {n : Nat} → Wk n n         -- η : Γ ≤ Γ.
-  step  : {n m : Nat} → Wk m n  → Wk (1+ m) n  -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
-  lift  : {n m : Nat} → Wk m n  → Wk (1+ m) (1+ n) -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
+  id    : {n : Nat} → Wk n n                      -- η : Γ ≤ Γ.
+  step  : {n m : Nat} → Wk m n → Wk (1+ m) n      -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
+  lift  : {n m : Nat} → Wk m n → Wk (1+ m) (1+ n) -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
 
 -- Composition of weakening.
 -- If η : Γ ≤ Δ and η′ : Δ ≤ Φ then η • η′ : Γ ≤ Φ.
@@ -333,7 +340,7 @@ lift η  • lift η′  =  lift  (η • η′)
 
 liftn : {k m : Nat} → Wk k m → (n : Nat) → Wk (n + k) (n + m)
 liftn ρ Nat.zero = ρ
-liftn ρ (1+ n) = lift (liftn ρ n)
+liftn ρ (1+ n)   = lift (liftn ρ n)
 
 repeat : {A : Set} → (A → A) → A → Nat → A
 repeat f a 0 = a
@@ -353,7 +360,7 @@ wkVar (lift ρ) (x +1) = (wkVar ρ x) +1
 
 mutual
   wkGen : {m n : Nat} {bs : List Nat} (ρ : Wk m n) (c : GenTs Term n bs) → GenTs Term m bs
-  wkGen ρ [] = []
+  wkGen ρ []                = []
   wkGen ρ (_∷_ {b = b} t c) = (wk (liftn ρ b) t) ∷ (wkGen ρ c)
 
   wk : {m n : Nat} (ρ : Wk m n) (t : Term n) → Term m
@@ -461,12 +468,12 @@ head σ = σ x0
 
 tail : Subst m (1+ n) → Subst m n
 tail σ x = σ (x +1)
-{-
+
 -- Substitution of a variable.
 --
 -- If Γ ⊢ σ : Δ then Γ ⊢ substVar σ x : (subst σ Δ)(x).
 
-substVar : (σ : Subst) (x : Nat) → Term n
+substVar : (σ : Subst m n) (x : Fin n) → Term m
 substVar σ x = σ x
 
 -- Identity substitution.
@@ -474,29 +481,33 @@ substVar σ x = σ x
 --
 -- Γ ⊢ idSubst : Γ.
 
-idSubst : Subst
+idSubst : Subst n n
 idSubst = var
 
 -- Weaken a substitution by one.
 --
 -- If Γ ⊢ σ : Δ then Γ∙A ⊢ wk1Subst σ : Δ.
 
-wk1Subst : Subst → Subst
+wk1Subst : Subst m n → Subst (1+ m) n
 wk1Subst σ x = wk1 (σ x)
 
 -- Lift a substitution.
 --
 -- If Γ ⊢ σ : Δ then Γ∙A ⊢ liftSubst σ : Δ∙A.
 
-liftSubst : (σ : Subst) → Subst
-liftSubst σ 0      = var 0
-liftSubst σ (1+ x) = wk1Subst σ x
+liftSubst : (σ : Subst m n) → Subst (1+ m) (1+ n)
+liftSubst σ x0     = var x0
+liftSubst σ (x +1) = wk1Subst σ x
+
+liftSubstn : {k m : Nat} → Subst k m → (n : Nat) → Subst (n + k) (n + m)
+liftSubstn σ Nat.zero = σ
+liftSubstn σ (1+ n)   = liftSubst (liftSubstn σ n)
 
 -- Transform a weakening into a substitution.
 --
 -- If ρ : Γ ≤ Δ then Γ ⊢ toSubst ρ : Δ.
 
-toSubst : {m : Nat} → Wk m n → Subst
+toSubst :  Wk m n → Subst m n
 toSubst pr x = var (wkVar pr x)
 
 -- Apply a substitution to a term.
@@ -504,11 +515,11 @@ toSubst pr x = var (wkVar pr x)
 -- If Γ ⊢ σ : Δ and Δ ⊢ t : A then Γ ⊢ subst σ t : subst σ A.
 
 mutual
-  substGen : (σ : Subst) (g : List (GenT Term)) → List (GenT Term)
-  substGen σ [] = []
-  substGen σ (⟦ l , t ⟧ ∷ g) = ⟦ l , (subst (repeat liftSubst σ l) t) ⟧ ∷ substGen σ g
+  substGen : {bs : List Nat} (σ : Subst m n) (g : GenTs Term n bs) → GenTs Term m bs
+  substGen σ  []      = []
+  substGen σ (_∷_ {b = b} t ts) = subst (liftSubstn σ b) t ∷ (substGen σ ts)
 
-  subst : (σ : Subst) (t : Term) → Term
+  subst : (σ : Subst m n) (t : Term n) → Term m
   subst σ (var x)   = substVar σ x
   subst σ (gen x c) = gen x (substGen σ c)
 
@@ -517,41 +528,41 @@ mutual
 --
 -- If Γ ⊢ σ : Δ and Γ ⊢ t : subst σ A then Γ ⊢ consSubst σ t : Δ∙A.
 
-consSubst : Subst → Term → Subst
-consSubst σ t 0      = t
-consSubst σ t (1+ n) = σ n
+consSubst : Subst m n → Term m → Subst m (1+ n)
+consSubst σ t  x0    = t
+consSubst σ t (x +1) = σ x
 
 -- Singleton substitution.
 --
 -- If Γ ⊢ t : A then Γ ⊢ sgSubst t : Γ∙A.
 
-sgSubst : Term → Subst
+sgSubst : Term n → Subst n (1+ n)
 sgSubst = consSubst idSubst
 
 -- Compose two substitutions.
 --
 -- If Γ ⊢ σ : Δ and Δ ⊢ σ′ : Φ then Γ ⊢ σ ₛ•ₛ σ′ : Φ.
 
-_ₛ•ₛ_ : Subst → Subst → Subst
+_ₛ•ₛ_ : Subst ℓ m → Subst m n → Subst ℓ n
 _ₛ•ₛ_ σ σ′ x = subst σ (σ′ x)
 
 -- Composition of weakening and substitution.
 --
 --  If ρ : Γ ≤ Δ and Δ ⊢ σ : Φ then Γ ⊢ ρ •ₛ σ : Φ.
 
-_•ₛ_ : Wk → Subst → Subst
+_•ₛ_ : Wk ℓ m → Subst m n → Subst ℓ n
 _•ₛ_ ρ σ x = wk ρ (σ x)
 
 --  If Γ ⊢ σ : Δ and ρ : Δ ≤ Φ then Γ ⊢ σ ₛ• ρ : Φ.
 
-_ₛ•_ : Subst → Wk → Subst
+_ₛ•_ : Subst ℓ m → Wk m n → Subst ℓ n
 _ₛ•_ σ ρ x = σ (wkVar ρ x)
 
 -- Substitute the first variable of a term with an other term.
 --
 -- If Γ∙A ⊢ t : B and Γ ⊢ s : A then Γ ⊢ t[s] : B[s].
 
-_[_] : (t : Term) (s : Term) → Term
+_[_] : (t : Term (1+ n)) (s : Term n) → Term n
 t [ s ] = subst (sgSubst s) t
 
 -- Substitute the first variable of a term with an other term,
@@ -559,12 +570,11 @@ t [ s ] = subst (sgSubst s) t
 --
 -- If Γ∙A ⊢ t : B and Γ∙A ⊢ s : A then Γ∙A ⊢ t[s]↑ : B[s]↑.
 
-_[_]↑ : (t : Term) (s : Term) → Term
+_[_]↑ : (t : Term (1+ n)) (s : Term (1+ n)) → Term (1+ n)
 t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
 
 
-B-subst : (σ : Subst) (W : BindingType) (F G : Term)
+B-subst : (σ : Subst m n) (W : BindingType) (F : Term n) (G : Term (1+ n))
         → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
 B-subst σ BΠ F G = PE.refl
 B-subst σ BΣ F G = PE.refl
--}
