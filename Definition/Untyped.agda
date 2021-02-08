@@ -9,15 +9,15 @@ open import Tools.Nat
 open import Tools.Product
 open import Tools.List
 import Tools.PropositionalEquality as PE
-open import Definition.Context
+-- open import Definition.Context
 
 
--- infixl 30 _∙_
--- infix 30 Π_▹_
+infixl 30 _∙_
+infix 30 Π_▹_
 -- infixr 22 _▹▹_
--- infix 30 Σ_▹_
+infix 30 Σ_▹_
 -- infixr 22 _××_
--- infix 30 ⟦_⟧_▹_
+infix 30 ⟦_⟧_▹_
 -- infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
 -- infix 25 _[_]
 -- infix 25 _[_]↑
@@ -25,16 +25,17 @@ open import Definition.Context
 
 -- Typing contexts (snoc-lists, isomorphic to lists).
 
--- data Con (A : Set) : Set where
---   ε   : Con A               -- Empty context.
---   _∙_ : Con A → A → Con A   -- Context extension.
+data Con (A : Nat → Set) : Nat → Set where
+  ε   : Con A 0               -- Empty context.
+  _∙_ : {n : Nat} → Con A n → A n → Con A (1+ n)   -- Context extension.
 
-variable
-  n : Nat
+private
+  variable
+    n : Nat
 
-data GenTs (A : Nat → Set) : List Nat → Set where
-  [] : GenTs A []
-  _∷_ : {n : Nat} {ns : List Nat} (t : A n) (ts : GenTs A ns) → GenTs A (n ∷ ns)
+data GenTs (A : Nat → Set) : Nat → List Nat → Set where
+  [] : {n : Nat} → GenTs A n []
+  _∷_ : {n b : Nat} {bs : List Nat} (t : A (b + n)) (ts : GenTs A n bs) → GenTs A n (b ∷ bs)
 
 
 data Kind : (ns : List Nat) → Set where
@@ -62,11 +63,13 @@ data Kind : (ns : List Nat) → Set where
 
 data Term (n : Nat) : Set where
   var : (x : Fin n) → Term n
-  gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term (L.map (_+ n) bs)) → Term n
+  gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term n bs) → Term n
+  -- gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term (L.map (_+ n) bs)) → Term n
 
-variable
-  A F H t u v : Term n
-  B E G       : Term (1+ n)
+private
+  variable
+    A F H t u v : Term n
+    B E G       : Term (1+ n)
 
 -- The Grammar of our language.
 
@@ -297,7 +300,7 @@ productWhnf (ne x) = ne x
 ⟦_⟧ₙ BΠ = Πₙ
 ⟦_⟧ₙ BΣ = Σₙ
 
-{-
+
 ------------------------------------------------------------------------
 -- Weakening
 
@@ -312,22 +315,26 @@ productWhnf (ne x) = ne x
 -- ``for all x ∈ dom(Δ) have Γ(x) ≤ Δ(x)'' (in the sense of subtyping)
 -- and this would be the natural extension of weakenings.
 
-data Wk : Set where
-  id    : Wk        -- η : Γ ≤ Γ.
-  step  : Wk  → Wk  -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
-  lift  : Wk  → Wk  -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
+data Wk : Nat → Nat → Set where
+  id    : {n : Nat} → Wk n n         -- η : Γ ≤ Γ.
+  step  : {n m : Nat} → Wk m n  → Wk (1+ m) n  -- If η : Γ ≤ Δ then step η : Γ∙A ≤ Δ.
+  lift  : {n m : Nat} → Wk m n  → Wk (1+ m) (1+ n) -- If η : Γ ≤ Δ then lift η : Γ∙A ≤ Δ∙A.
 
 -- Composition of weakening.
 -- If η : Γ ≤ Δ and η′ : Δ ≤ Φ then η • η′ : Γ ≤ Φ.
 
 infixl 30 _•_
 
-_•_                :  Wk → Wk → Wk
+_•_                :  {l m n : Nat} → Wk l m → Wk m n → Wk l n
 id      • η′       =  η′
 step η  • η′       =  step  (η • η′)
 lift η  • id       =  lift  η
 lift η  • step η′  =  step  (η • η′)
 lift η  • lift η′  =  lift  (η • η′)
+
+liftn : {k m : Nat} → Wk k m → (n : Nat) → Wk (n + k) (n + m)
+liftn ρ Nat.zero = ρ
+liftn ρ (1+ n) = lift (liftn ρ n)
 
 repeat : {A : Set} → (A → A) → A → Nat → A
 repeat f a 0 = a
@@ -336,33 +343,34 @@ repeat f a (1+ n) = f (repeat f a n)
 -- Weakening of variables.
 -- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar η x ∈ dom(Γ).
 
-wkVar : (ρ : Wk) (n : Nat) → Nat
-wkVar id       n      = n
-wkVar (step ρ) n      = 1+ (wkVar ρ n)
-wkVar (lift ρ) 0      = 0
-wkVar (lift ρ) (1+ n) = 1+ (wkVar ρ n)
+wkVar : {m n : Nat} (ρ : Wk m n) (x : Fin n) → Fin m
+wkVar id x            = x
+wkVar (step ρ) x      = (wkVar ρ x) +1
+wkVar (lift ρ) x0     = x0
+wkVar (lift ρ) (x +1) = (wkVar ρ x) +1
 
   -- Weakening of terms.
   -- If η : Γ ≤ Δ and Δ ⊢ t : A then Γ ⊢ wk η t : wk η A.
 
 mutual
-  wkGen : (ρ : Wk) (g : List (GenT Term)) → List (GenT Term)
+  wkGen : {m n : Nat} {bs : List Nat} (ρ : Wk m n) (c : GenTs Term n bs ) → GenTs Term m bs
   wkGen ρ [] = []
-  wkGen ρ (⟦ l , t ⟧ ∷ g) = ⟦ l , (wk (repeat lift ρ l) t) ⟧ ∷ wkGen ρ g
+  wkGen ρ (_∷_ {b = b} t c) = (wk (liftn ρ b) t) ∷ (wkGen ρ c)
 
-  wk : (ρ : Wk) (t : Term) → Term
-  wk ρ (var x) = var (wkVar ρ x)
-  wk ρ (gen x c) = gen x (wkGen ρ c)
+  wk : {m n : Nat} (ρ : Wk m n) (t : Term n) → Term m
+  wk ρ (var x)   = var (wkVar ρ x)
+  wk ρ (gen k c) = gen k (wkGen ρ c)
+
 
 -- Adding one variable to the context requires wk1.
 -- If Γ ⊢ t : B then Γ∙A ⊢ wk1 t : wk1 B.
 
-wk1 : Term → Term
+wk1 : Term n → Term (1+ n)
 wk1 = wk (step id)
 
 -- Weakening of a neutral term.
 
-wkNeutral : ∀ {t} ρ → Neutral t → Neutral (wk ρ t)
+wkNeutral : ∀ ρ → Neutral t → Neutral (wk ρ t)
 wkNeutral ρ (var n)       = var (wkVar ρ n)
 wkNeutral ρ (∘ₙ n)        = ∘ₙ (wkNeutral ρ n)
 wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
@@ -372,12 +380,12 @@ wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
-wkNatural : ∀ {t} ρ → Natural t → Natural (wk ρ t)
+wkNatural : ∀ ρ → Natural t → Natural (wk ρ t)
 wkNatural ρ sucₙ   = sucₙ
 wkNatural ρ zeroₙ  = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
-wkType : ∀ {t} ρ → Type t → Type (wk ρ t)
+wkType : ∀ ρ → Type t → Type (wk ρ t)
 wkType ρ Πₙ     = Πₙ
 wkType ρ Σₙ     = Σₙ
 wkType ρ ℕₙ     = ℕₙ
@@ -385,15 +393,15 @@ wkType ρ Emptyₙ = Emptyₙ
 wkType ρ Unitₙ  = Unitₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
-wkFunction : ∀ {t} ρ → Function t → Function (wk ρ t)
+wkFunction : ∀ ρ → Function t → Function (wk ρ t)
 wkFunction ρ lamₙ   = lamₙ
 wkFunction ρ (ne x) = ne (wkNeutral ρ x)
 
-wkProduct : ∀ {t} ρ → Product t → Product (wk ρ t)
+wkProduct : ∀ ρ → Product t → Product (wk ρ t)
 wkProduct ρ prodₙ  = prodₙ
 wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
-wkWhnf : ∀ {t} ρ → Whnf t → Whnf (wk ρ t)
+wkWhnf : ∀ ρ → Whnf t → Whnf (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ Σₙ      = Σₙ
@@ -409,14 +417,14 @@ wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
 -- Non-dependent version of Π.
 
-_▹▹_ : Term → Term → Term
+_▹▹_ : Term n → Term n → Term n
 A ▹▹ B = Π A ▹ wk1 B
 
 -- Non-dependent products.
 
-_××_ : Term → Term → Term
+_××_ : Term n → Term n → Term n
 A ×× B = Σ A ▹ wk1 B
-
+{-
 ------------------------------------------------------------------------
 -- Substitution
 
@@ -425,8 +433,8 @@ A ×× B = Σ A ▹ wk1 B
 
 -- The substitution σ itself is a map from natural numbers to terms.
 
-Subst : Set
-Subst = Nat → Term
+Subst : Nat → Set
+Subst n = Fin n → Term n
 
 -- Given closed contexts ⊢ Γ and ⊢ Δ,
 -- substitutions may be typed via Γ ⊢ σ : Δ meaning that
@@ -444,22 +452,22 @@ Subst = Nat → Term
 --
 -- If Γ ⊢ σ : Δ∙A  then Γ ⊢ head σ : subst σ A.
 
-head : Subst → Term
-head σ = σ 0
+head : Subst (1+ n) → Term (1+ n)
+head σ = σ x0
 
 -- Remove the first variable instance of a substitution
 -- and shift the rest to accommodate.
 --
 -- If Γ ⊢ σ : Δ∙A then Γ ⊢ tail σ : Δ.
 
-tail : Subst → Subst
-tail σ n = σ (1+ n)
+tail : Subst (1+ n) → Subst n
+tail σ x = {! σ  !} --n = σ ? --(n +1)
 
 -- Substitution of a variable.
 --
 -- If Γ ⊢ σ : Δ then Γ ⊢ substVar σ x : (subst σ Δ)(x).
 
-substVar : (σ : Subst) (x : Nat) → Term
+substVar : (σ : Subst) (x : Nat) → Term n
 substVar σ x = σ x
 
 -- Identity substitution.
@@ -489,7 +497,7 @@ liftSubst σ (1+ x) = wk1Subst σ x
 --
 -- If ρ : Γ ≤ Δ then Γ ⊢ toSubst ρ : Δ.
 
-toSubst : Wk → Subst
+toSubst : {m : Nat} → Wk m n → Subst
 toSubst pr x = var (wkVar pr x)
 
 -- Apply a substitution to a term.
