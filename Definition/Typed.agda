@@ -2,7 +2,7 @@
 
 module Definition.Typed where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 
 open import Tools.Fin
 open import Tools.Nat
@@ -12,6 +12,7 @@ infixl 30 _∙_
 infix 30 Πⱼ_▹_
 infix 30 Σⱼ_▹_
 infix 30 ⟦_⟧ⱼ_▹_
+
 
 private
   variable

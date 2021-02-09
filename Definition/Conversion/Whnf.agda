@@ -2,16 +2,21 @@
 
 module Definition.Conversion.Whnf where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Conversion
 
+open import Tools.Nat
 open import Tools.Product
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 mutual
   -- Extraction of neutrality from algorithmic equality of neutrals.
-  ne~↑ : ∀ {t u A Γ}
+  ne~↑ : ∀ {t u A}
        → Γ ⊢ t ~ u ↑ A
        → Neutral t × Neutral u
   ne~↑ (var-refl x₁ x≡y) = var _ , var _
@@ -30,13 +35,13 @@ mutual
 
   -- Extraction of neutrality and WHNF from algorithmic equality of neutrals
   -- with type in WHNF.
-  ne~↓ : ∀ {t u A Γ}
+  ne~↓ : ∀ {t u A}
        → Γ ⊢ t ~ u ↓ A
        → Whnf A × Neutral t × Neutral u
   ne~↓ ([~] A₁ D whnfB k~l) = whnfB , ne~↑ k~l
 
 -- Extraction of WHNF from algorithmic equality of types in WHNF.
-whnfConv↓ : ∀ {A B Γ}
+whnfConv↓ : ∀ {A B}
           → Γ ⊢ A [conv↓] B
           → Whnf A × Whnf B
 whnfConv↓ (U-refl x) = Uₙ , Uₙ
@@ -49,7 +54,7 @@ whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
 whnfConv↓ (Σ-cong x x₁ x₂) = Σₙ , Σₙ
 
 -- Extraction of WHNF from algorithmic equality of terms in WHNF.
-whnfConv↓Term : ∀ {t u A Γ}
+whnfConv↓Term : ∀ {t u A}
               → Γ ⊢ t [conv↓] u ∷ A
               → Whnf A × Whnf t × Whnf u
 whnfConv↓Term (ℕ-ins x) = let _ , neT , neU = ne~↓ x

@@ -5,6 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Properties.Reduction {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
+open import Definition.Untyped using (Con ; Term)
 open import Definition.Typed
 open import Definition.Typed.Properties
 import Definition.Typed.Weakening as Wk
@@ -14,12 +15,17 @@ open import Definition.LogicalRelation.Properties.Reflexivity
 open import Definition.LogicalRelation.Properties.Universe
 open import Definition.LogicalRelation.Properties.Escape
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Weak head expansion of reducible types.
-redSubst* : ∀ {A B l Γ}
+redSubst* : ∀ {A B l}
           → Γ ⊢ A ⇒* B
           → Γ ⊩⟨ l ⟩ B
           → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
@@ -48,7 +54,7 @@ redSubst* D (emb 0<1 x) with redSubst* D x
 redSubst* D (emb 0<1 x) | y , y₁ = emb 0<1 y , y₁
 
 -- Weak head expansion of reducible terms.
-redSubst*Term : ∀ {A t u l Γ}
+redSubst*Term : ∀ {A t u l}
               → Γ ⊢ t ⇒* u ∷ A
               → ([A] : Γ ⊩⟨ l ⟩ A)
               → Γ ⊩⟨ l ⟩ u ∷ A / [A]
@@ -107,7 +113,7 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G]
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 -- Weak head expansion of reducible types with single reduction step.
-redSubst : ∀ {A B l Γ}
+redSubst : ∀ {A B l}
          → Γ ⊢ A ⇒ B
          → Γ ⊩⟨ l ⟩ B
          → ∃ λ ([A] : Γ ⊩⟨ l ⟩ A)
@@ -115,7 +121,7 @@ redSubst : ∀ {A B l Γ}
 redSubst A⇒B [B] = redSubst* (A⇒B ⇨ id (escape [B])) [B]
 
 -- Weak head expansion of reducible terms with single reduction step.
-redSubstTerm : ∀ {A t u l Γ}
+redSubstTerm : ∀ {A t u l}
              → Γ ⊢ t ⇒ u ∷ A
              → ([A] : Γ ⊩⟨ l ⟩ A)
              → Γ ⊩⟨ l ⟩ u ∷ A / [A]

@@ -4,18 +4,23 @@ open import Definition.Typed.EqualityRelation
 
 module Definition.LogicalRelation.Properties.Reflexivity {{eqrel : EqRelSet}} where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Reflexivity of reducible types.
-reflEq : ∀ {l Γ A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]
+reflEq : ∀ {l A} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ A ≡ A / [A]
 reflEq (Uᵣ′ l′ l< ⊢Γ) = PE.refl
 reflEq (ℕᵣ D) = red D
 reflEq (Emptyᵣ D) = red D
@@ -28,7 +33,7 @@ reflEq (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
       (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
 reflEq (emb 0<1 [A]) = reflEq [A]
 
-reflNatural-prop : ∀ {Γ n}
+reflNatural-prop : ∀ {n}
                  → Natural-prop Γ n
                  → [Natural]-prop Γ n n
 reflNatural-prop (sucᵣ (ℕₜ n d t≡t prop)) =
@@ -37,13 +42,13 @@ reflNatural-prop (sucᵣ (ℕₜ n d t≡t prop)) =
 reflNatural-prop zeroᵣ = zeroᵣ
 reflNatural-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
 
-reflEmpty-prop : ∀ {Γ n}
+reflEmpty-prop : ∀ {n}
                  → Empty-prop Γ n
                  → [Empty]-prop Γ n n
 reflEmpty-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
 
 -- Reflexivity of reducible terms.
-reflEqTerm : ∀ {l Γ A t} ([A] : Γ ⊩⟨ l ⟩ A)
+reflEqTerm : ∀ {l A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
            → Γ ⊩⟨ l ⟩ t ≡ t ∷ A / [A]
 reflEqTerm (Uᵣ′ ⁰ 0<1 ⊢Γ) (Uₜ A d typeA A≡A [A]) =

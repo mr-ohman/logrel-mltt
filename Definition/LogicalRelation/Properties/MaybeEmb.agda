@@ -9,17 +9,23 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.LogicalRelation
 
+open import Tools.Nat
+
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Any level can be embedded into the highest level.
-maybeEmb : ∀ {l A Γ}
+maybeEmb : ∀ {l A}
          → Γ ⊩⟨ l ⟩ A
          → Γ ⊩⟨ ¹ ⟩ A
-maybeEmb {⁰} [A] = emb 0<1 [A]
-maybeEmb {¹} [A] = [A]
+maybeEmb {l = ⁰} [A] = emb 0<1 [A]
+maybeEmb {l = ¹} [A] = [A]
 
 -- The lowest level can be embedded in any level.
-maybeEmb′ : ∀ {l A Γ}
+maybeEmb′ : ∀ {l A}
           → Γ ⊩⟨ ⁰ ⟩ A
           → Γ ⊩⟨ l ⟩ A
-maybeEmb′ {⁰} [A] = [A]
-maybeEmb′ {¹} [A] = emb 0<1 [A]
+maybeEmb′ {l = ⁰} [A] = [A]
+maybeEmb′ {l = ¹} [A] = emb 0<1 [A]

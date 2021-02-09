@@ -5,7 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Application {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening using (id)
@@ -16,19 +16,24 @@ open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Helper function for application of specific type derivations.
-appTerm′ : ∀ {F G t u Γ l l′ l″}
+appTerm′ : ∀ {F G t u l l′ l″}
           ([F] : Γ ⊩⟨ l″ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ Π F ▹ G)
           ([t] : Γ ⊩⟨ l ⟩ t ∷ Π F ▹ G / B-intr BΠ [ΠFG])
           ([u] : Γ ⊩⟨ l″ ⟩ u ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ∷ G [ u ] / [G[u]]
-appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F′] [G′] G-ext))
+appTerm′ {Γ = Γ} {t = t} [F] [G[u]] (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F′] [G′] G-ext))
          (Πₜ f d funcF f≡f [f] [f]₁) [u] =
   let ΠFG≡ΠF′G′ = whnfRed* (red D) Πₙ
       F≡F′ , G≡G′ = B-PE-injectivity BΠ ΠFG≡ΠF′G′
@@ -45,7 +50,7 @@ appTerm′ {t = t} {Γ = Γ} [F] [G[u]] (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F′
 appTerm′ [F] [G[u]] (emb 0<1 x) [t] [u] = appTerm′ [F] [G[u]] x [t] [u]
 
 -- Application of reducible terms.
-appTerm : ∀ {F G t u Γ l l′ l″}
+appTerm : ∀ {F G t u l l′ l″}
           ([F] : Γ ⊩⟨ l″ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
@@ -57,7 +62,7 @@ appTerm [F] [G[u]] [ΠFG] [t] [u] =
   in  appTerm′ [F] [G[u]] (Π-elim [ΠFG]) [t]′ [u]
 
 -- Helper function for application congruence of specific type derivations.
-app-congTerm′ : ∀ {F G t t′ u u′ Γ l l′}
+app-congTerm′ : ∀ {n} {Γ : Con Term n} {F G t t′ u u′ l l′}
           ([F] : Γ ⊩⟨ l′ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ Π F ▹ G)
@@ -66,7 +71,7 @@ app-congTerm′ : ∀ {F G t t′ u u′ Γ l l′}
           ([u′] : Γ ⊩⟨ l′ ⟩ u′ ∷ F / [F])
           ([u≡u′] : Γ ⊩⟨ l′ ⟩ u ≡ u′ ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ≡ t′ ∘ u′ ∷ G [ u ] / [G[u]]
-app-congTerm′ {F′} {G′} {t = t} {t′ = t′} {Γ = Γ}
+app-congTerm′ {n} {Γ} {F′} {G′} {t = t} {t′ = t′}
               [F] [G[u]] (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
               (Πₜ₌ f g [ ⊢t , ⊢f , d ] [ ⊢t′ , ⊢g , d′ ] funcF funcG t≡u
                    (Πₜ f′ [ _ , ⊢f′ , d″ ] funcF′ f≡f [f] [f]₁)
@@ -78,9 +83,9 @@ app-congTerm′ {F′} {G′} {t = t} {t′ = t′} {Γ = Γ}
       f≡f′ = whrDet*Term (d , functionWhnf funcF) (d″ , functionWhnf funcF′)
       g≡g′ = whrDet*Term (d′ , functionWhnf funcG) (d‴ , functionWhnf funcG′)
       F≡wkidF′ = PE.trans F≡F′ (PE.sym (wk-id _))
-      t∘x≡wkidt∘x : {a b : Term} → wk id a ∘ b PE.≡ a ∘ b
+      t∘x≡wkidt∘x : {a b : Term n} → wk id a ∘ b PE.≡ a ∘ b
       t∘x≡wkidt∘x {a} {b} = PE.cong (λ x → x ∘ b) (wk-id a)
-      t∘x≡wkidt∘x′ : {a : Term} → wk id g′ ∘ a PE.≡ g ∘ a
+      t∘x≡wkidt∘x′ : {a : Term n} → wk id g′ ∘ a PE.≡ g ∘ a
       t∘x≡wkidt∘x′ {a} = PE.cong (λ x → x ∘ a) (PE.trans (wk-id _) (PE.sym g≡g′))
       wkidG₁[u]≡G[u] = PE.cong (λ x → x [ _ ])
                                (PE.trans (wk-lift-id _) (PE.sym G≡G′))
@@ -124,7 +129,7 @@ app-congTerm′ [F] [G[u]] (emb 0<1 x) [t≡t′] [u] [u′] [u≡u′] =
   app-congTerm′ [F] [G[u]] x [t≡t′] [u] [u′] [u≡u′]
 
 -- Application congruence of reducible terms.
-app-congTerm : ∀ {F G t t′ u u′ Γ l l′}
+app-congTerm : ∀ {F G t t′ u u′ l l′}
           ([F] : Γ ⊩⟨ l′ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
