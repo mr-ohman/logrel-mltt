@@ -5,7 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.SingleSubst {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening using (id)
@@ -19,17 +19,22 @@ open import Definition.LogicalRelation.Substitution.Properties
 open import Definition.LogicalRelation.Substitution.Conversion
 open import Definition.LogicalRelation.Substitution.Weakening
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Validity of substitution of single variable in types.
-substS : ∀ {F G t Γ l} ([Γ] : ⊩ᵛ Γ)
+substS : ∀ {F G t l} ([Γ] : ⊩ᵛ Γ)
          ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
          ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
          ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
        → Γ ⊩ᵛ⟨ l ⟩ G [ t ] / [Γ]
-substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
+substS {F = F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
   let Geq = substConsId G
       G[t] = proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ]))))
       G[t]′ = irrelevance′ Geq G[t]
@@ -44,7 +49,7 @@ substS {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
                                      (([σ≡σ′] , (proj₂ ([t] ⊢Δ [σ]) [σ′] [σ≡σ′])))))
 
 -- Validity of substitution of single variable in type equality.
-substSEq : ∀ {F F′ G G′ t t′ Γ l} ([Γ] : ⊩ᵛ Γ)
+substSEq : ∀ {F F′ G G′ t t′ l} ([Γ] : ⊩ᵛ Γ)
            ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
            ([F′] : Γ ⊩ᵛ⟨ l ⟩ F′ / [Γ])
            ([F≡F′] : Γ ⊩ᵛ⟨ l ⟩ F ≡ F′ / [Γ] / [F])
@@ -55,14 +60,14 @@ substSEq : ∀ {F F′ G G′ t t′ Γ l} ([Γ] : ⊩ᵛ Γ)
            ([t′] : Γ ⊩ᵛ⟨ l ⟩ t′ ∷ F′ / [Γ] / [F′])
            ([t≡t′] : Γ ⊩ᵛ⟨ l ⟩ t ≡ t′ ∷ F / [Γ] / [F])
          → Γ ⊩ᵛ⟨ l ⟩ G [ t ] ≡ G′ [ t′ ] / [Γ]
-                   / substS {F} {G} {t} [Γ] [F] [G] [t]
-substSEq {F} {F′} {G} {G′} {t} {t′}
+                   / substS {F = F} {G} {t} [Γ] [F] [G] [t]
+substSEq {F = F} {F′} {G} {G′} {t} {t′}
          [Γ] [F] [F′] [F≡F′] [G] [G′] [G≡G′] [t] [t′] [t≡t′] {σ = σ} ⊢Δ [σ] =
   let Geq = substConsId G
       G′eq = substConsId G′
       G[t] = (proj₁ ([G] ⊢Δ ([σ] , (proj₁ ([t] ⊢Δ [σ])))))
       G[t]′ = irrelevance′ Geq G[t]
-      [t]′ = convᵛ {t} {F} {F′} [Γ] [F] [F′] [F≡F′] [t]
+      [t]′ = convᵛ {t = t} {F} {F′} [Γ] [F] [F′] [F≡F′] [t]
       G′[t] = (proj₁ ([G′] ⊢Δ ([σ] , proj₁ ([t]′ ⊢Δ [σ]))))
       G[t]≡G′[t] = irrelevanceEq′ Geq G[t] G[t]′
                                   ([G≡G′] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -70,21 +75,21 @@ substSEq {F} {F′} {G} {G′} {t} {t′}
                        (proj₂ ([G′] ⊢Δ ([σ] , proj₁ ([t]′ ⊢Δ [σ])))
                               ([σ] , proj₁ ([t′] ⊢Δ [σ]))
                               (reflSubst [Γ] ⊢Δ [σ] ,
-                                convEqᵛ {t} {t′} {F} {F′}
+                                convEqᵛ {t = t} {t′} {F} {F′}
                                         [Γ] [F] [F′] [F≡F′] [t≡t′] ⊢Δ [σ]))
       G′[t′] = (proj₁ ([G′] ⊢Δ ([σ] , proj₁ ([t′] ⊢Δ [σ]))))
       G′[t′]′ = irrelevance′ G′eq G′[t′]
   in  transEq G[t]′ G′[t] G′[t′]′ G[t]≡G′[t] G′[t]≡G′[t′]
 
 -- Validity of substitution of single variable in terms.
-substSTerm : ∀ {F G t f Γ l} ([Γ] : ⊩ᵛ Γ)
+substSTerm : ∀ {F G t f l} ([Γ] : ⊩ᵛ Γ)
              ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
              ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
              ([f] : Γ ∙ F ⊩ᵛ⟨ l ⟩ f ∷ G / [Γ] ∙ [F] / [G])
              ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
            → Γ ⊩ᵛ⟨ l ⟩ f [ t ] ∷ G [ t ] / [Γ]
-                      / substS {F} {G} {t} [Γ] [F] [G] [t]
-substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
+                      / substS {F = F} {G} {t} [Γ] [F] [G] [t]
+substSTerm {F = F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
   let prfG = substConsId G
       prff = substConsId f
       G[t] = proj₁ ([G] ⊢Δ ([σ] , proj₁ ([t] ⊢Δ [σ])))
@@ -102,20 +107,20 @@ substSTerm {F} {G} {t} {f} [Γ] [F] [G] [f] [t] {σ = σ} ⊢Δ [σ] =
                   ([σ≡σ′] , proj₂ ([t] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
 -- Validity of substitution of single lifted variable in types.
-subst↑S : ∀ {F G t Γ l} ([Γ] : ⊩ᵛ Γ)
+subst↑S : ∀ {F G t l} ([Γ] : ⊩ᵛ Γ)
           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
           ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
           ([t] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
-                              / wk1ᵛ {F} {F} [Γ] [F] [F])
+                              / wk1ᵛ {A = F} {F} [Γ] [F] [F])
         → Γ ∙ F ⊩ᵛ⟨ l ⟩ G [ t ]↑ / [Γ] ∙ [F]
-subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
-  let [wk1F] = wk1ᵛ {F} {F} [Γ] [F] [F]
+subst↑S {F = F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
+  let [wk1F] = wk1ᵛ {A = F} {F} [Γ] [F] [F]
       [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
       [σwk1F]′ = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
       [t]′ = irrelevanceTerm′ (subst-wk F) [σwk1F] [σwk1F]′ (proj₁ ([t] ⊢Δ [σ]))
       G[t] = proj₁ ([G] {σ = consSubst (tail σ) (subst σ t)} ⊢Δ
                                (proj₁ [σ] , [t]′))
-      G[t]′ = irrelevance′ (substConsTailId {G} {t} {σ}) G[t]
+      G[t]′ = irrelevance′ (substConsTailId {σ = σ} {G} {t}) G[t]
   in  G[t]′
   ,   (λ {σ′} [σ′] [σ≡σ′] →
          let [σ′t] = irrelevanceTerm′ (subst-wk F)
@@ -127,41 +132,41 @@ subst↑S {F} {G} {t} [Γ] [F] [G] [t] {σ = σ} ⊢Δ [σ] =
              [σG[t]≡σ′G[t]] = proj₂ ([G] ⊢Δ (proj₁ [σ] , [t]′))
                                     (proj₁ [σ′] , [σ′t])
                                     (proj₁ [σ≡σ′] , [σt≡σ′t])
-         in irrelevanceEq″ (substConsTailId {G} {t} {σ}) (substConsTailId {G} {t} {σ′})
+         in irrelevanceEq″ (substConsTailId {σ = σ} {G} {t} ) (substConsTailId {σ = σ′} {G} {t})
                             G[t] G[t]′ [σG[t]≡σ′G[t]])
 
 -- Validity of substitution of single lifted variable in type equality.
-subst↑SEq : ∀ {F G G′ t t′ Γ l} ([Γ] : ⊩ᵛ Γ)
+subst↑SEq : ∀ {F G G′ t t′ l} ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
             ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
             ([G′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G′ / [Γ] ∙ [F])
             ([G≡G′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G ≡ G′ / [Γ] ∙ [F] / [G])
             ([t] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ∷ wk1 F / [Γ] ∙ [F]
-                                / wk1ᵛ {F} {F} [Γ] [F] [F])
+                                / wk1ᵛ {A = F} {F} [Γ] [F] [F])
             ([t′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t′ ∷ wk1 F / [Γ] ∙ [F]
-                                 / wk1ᵛ {F} {F} [Γ] [F] [F])
+                                 / wk1ᵛ {A = F} {F} [Γ] [F] [F])
             ([t≡t′] : Γ ∙ F ⊩ᵛ⟨ l ⟩ t ≡ t′ ∷ wk1 F / [Γ] ∙ [F]
-                                   / wk1ᵛ {F} {F} [Γ] [F] [F])
+                                   / wk1ᵛ {A = F} {F} [Γ] [F] [F])
           → Γ ∙ F ⊩ᵛ⟨ l ⟩ G [ t ]↑ ≡ G′ [ t′ ]↑ / [Γ] ∙ [F]
-                        / subst↑S {F} {G} {t} [Γ] [F] [G] [t]
-subst↑SEq {F} {G} {G′} {t} {t′}
+                        / subst↑S {F = F} {G} {t} [Γ] [F] [G] [t]
+subst↑SEq {F = F} {G} {G′} {t} {t′}
           [Γ] [F] [G] [G′] [G≡G′] [t] [t′] [t≡t′] {σ = σ} ⊢Δ [σ] =
-  let [wk1F] = wk1ᵛ {F} {F} [Γ] [F] [F]
+  let [wk1F] = wk1ᵛ {A = F} {F} [Γ] [F] [F]
       [σwk1F] = proj₁ ([wk1F] {σ = σ} ⊢Δ [σ])
       [σwk1F]′ = proj₁ ([F] {σ = tail σ} ⊢Δ (proj₁ [σ]))
       [t]′ = irrelevanceTerm′ (subst-wk F) [σwk1F] [σwk1F]′ (proj₁ ([t] ⊢Δ [σ]))
       [t′]′ = irrelevanceTerm′ (subst-wk F) [σwk1F] [σwk1F]′ (proj₁ ([t′] ⊢Δ [σ]))
       [t≡t′]′ = irrelevanceEqTerm′ (subst-wk F) [σwk1F] [σwk1F]′ ([t≡t′] ⊢Δ [σ])
       G[t] = proj₁ ([G] ⊢Δ (proj₁ [σ] , [t]′))
-      G[t]′ = irrelevance′ (substConsTailId {G} {t} {σ}) G[t]
+      G[t]′ = irrelevance′ (substConsTailId {σ = σ} {G} {t}) G[t]
       G′[t] = proj₁ ([G′] ⊢Δ (proj₁ [σ] , [t]′))
-      G′[t]′ = irrelevance′ (substConsTailId {G′} {t} {σ}) G′[t]
+      G′[t]′ = irrelevance′ (substConsTailId {σ = σ} {G′} {t}) G′[t]
       G′[t′] = proj₁ ([G′] ⊢Δ (proj₁ [σ] , [t′]′))
-      G′[t′]′ = irrelevance′ (substConsTailId {G′} {t′} {σ}) G′[t′]
-      G[t]≡G′[t] = irrelevanceEq″ (substConsTailId {G} {t} {σ}) (substConsTailId {G′} {t} {σ})
+      G′[t′]′ = irrelevance′ (substConsTailId {σ = σ} {G′} {t′}) G′[t′]
+      G[t]≡G′[t] = irrelevanceEq″ (substConsTailId {σ = σ} {G} {t}) (substConsTailId {σ = σ} {G′} {t})
                                    G[t] G[t]′ ([G≡G′] ⊢Δ (proj₁ [σ] , [t]′))
-      G′[t]≡G′[t′] = irrelevanceEq″ (substConsTailId {G′} {t} {σ})
-                                     (substConsTailId {G′} {t′} {σ})
+      G′[t]≡G′[t′] = irrelevanceEq″ (substConsTailId {σ = σ} {G′} {t})
+                                     (substConsTailId {σ = σ} {G′} {t′})
                                      G′[t] G′[t]′
                                      (proj₂ ([G′] ⊢Δ (proj₁ [σ] , [t]′))
                                             (proj₁ [σ] , [t′]′)
@@ -169,7 +174,7 @@ subst↑SEq {F} {G} {G′} {t} {t′}
   in  transEq G[t]′ G′[t]′ G′[t′]′ G[t]≡G′[t] G′[t]≡G′[t′]
 
 -- Helper function for reducible substitution of Π-types with specific typing derivations.
-substSΠ₁′ : ∀ {F G t Γ l l′} W
+substSΠ₁′ : ∀ {F G t l l′} W
            ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ W ⟩ ⟦ W ⟧ F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
            ([t] : Γ ⊩⟨ l′ ⟩ t ∷ F / [F])
@@ -184,7 +189,7 @@ substSΠ₁′ {t = t} W (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)) [F]�
 substSΠ₁′ W (emb 0<1 x) [F]₁ [t] = emb 0<1 (substSΠ₁′ W x [F]₁ [t])
 
 -- Reducible substitution of Π-types.
-substSΠ₁ : ∀ {F G t Γ l l′} W
+substSΠ₁ : ∀ {F G t l l′} W
            ([ΠFG] : Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G)
            ([F] : Γ ⊩⟨ l′ ⟩ F)
            ([t] : Γ ⊩⟨ l′ ⟩ t ∷ F / [F])
@@ -192,7 +197,7 @@ substSΠ₁ : ∀ {F G t Γ l l′} W
 substSΠ₁ W [ΠFG] [F] [t] = substSΠ₁′ W (B-elim W [ΠFG]) [F] [t]
 
 -- Helper function for reducible substitution of Π-congruence with specific typing derivations.
-substSΠ₂′ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴} W
+substSΠ₂′ : ∀ {F F′ G G′ t t′ l l′ l″ l‴} W
            ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ W ⟩ ⟦ W ⟧ F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ F′ ▹ G′ / B-intr W [ΠFG])
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -224,7 +229,7 @@ substSΠ₂′ W (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
 substSΠ₂′ W (emb 0<1 x) = substSΠ₂′ W x
 
 -- Reducible substitution of Π-congruence.
-substSΠ₂ : ∀ {F F′ G G′ t t′ Γ l l′ l″ l‴} W
+substSΠ₂ : ∀ {F F′ G G′ t t′ l l′ l″ l‴} W
            ([ΠFG] : Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G)
            ([ΠFG≡ΠF′G′] : Γ ⊩⟨ l ⟩ ⟦ W ⟧ F ▹ G ≡ ⟦ W ⟧ F′ ▹ G′ / [ΠFG])
            ([F] : Γ ⊩⟨ l′ ⟩ F)
@@ -240,13 +245,13 @@ substSΠ₂ W [ΠFG] [ΠFG≡ΠF′G′] =
   in  substSΠ₂′ W (B-elim W [ΠFG]) [ΠFG≡ΠF′G′]′
 
 -- Valid substitution of Π-types.
-substSΠ : ∀ {F G t Γ l} W
+substSΠ : ∀ {F G t l} W
           ([Γ] : ⊩ᵛ Γ)
           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
           ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ ⟦ W ⟧ F ▹ G / [Γ])
           ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
         → Γ ⊩ᵛ⟨ l ⟩ G [ t ] / [Γ]
-substSΠ {F} {G} {t} BΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
+substSΠ {F = F} {G} {t} BΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
   let ⊩σΠFG = [ΠFG] ⊢Δ [σ]
       --[σΠFG] = PE.subst (λ x → _ ⊩⟨ _ ⟩ x) (B-subst _ W F G) (proj₁ ⊩σΠFG)
       [σΠFG] = proj₁ ⊩σΠFG
@@ -270,7 +275,7 @@ substSΠ {F} {G} {t} BΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                              (proj₁ ([ΠFG] ⊢Δ [σ′]))
                                              (proj₁ ([F] ⊢Δ [σ′]))
                                              (proj₁ ([t] ⊢Δ [σ′])))))
-substSΠ {F} {G} {t} BΣ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
+substSΠ {F = F} {G} {t} BΣ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
   let ⊩σΠFG = [ΠFG] ⊢Δ [σ]
       [σΠFG] = proj₁ ⊩σΠFG
       [σG[t]] = substSΠ₁ BΣ [σΠFG]
@@ -295,7 +300,7 @@ substSΠ {F} {G} {t} BΣ [Γ] [F] [ΠFG] [t] ⊢Δ [σ] =
                                              (proj₁ ([t] ⊢Δ [σ′])))))
 
 -- Valid substitution of Π-congruence.
-substSΠEq : ∀ {F G F′ G′ t u Γ l} W
+substSΠEq : ∀ {F G F′ G′ t u l} W
             ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
             ([F′] : Γ ⊩ᵛ⟨ l ⟩ F′ / [Γ])
@@ -306,8 +311,8 @@ substSΠEq : ∀ {F G F′ G′ t u Γ l} W
             ([u]   : Γ ⊩ᵛ⟨ l ⟩ u ∷ F′ / [Γ] / [F′])
             ([t≡u] : Γ ⊩ᵛ⟨ l ⟩ t ≡ u ∷ F / [Γ] / [F])
           → Γ ⊩ᵛ⟨ l ⟩ G [ t ] ≡ G′ [ u ] / [Γ]
-                    / substSΠ {F} {G} {t} W [Γ] [F] [ΠFG] [t]
-substSΠEq {F} {G} {F′} {G′} {t} {u} BΠ [Γ] [F] [F′] [ΠFG] [ΠF′G′] [ΠFG≡ΠF′G′]
+                    / substSΠ {F = F} {G} {t} W [Γ] [F] [ΠFG] [t]
+substSΠEq {F = F} {G} {F′} {G′} {t} {u} BΠ [Γ] [F] [F′] [ΠFG] [ΠF′G′] [ΠFG≡ΠF′G′]
            [t] [u] [t≡u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       _ , Bᵣ F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁ = extractMaybeEmb (Π-elim [σΠFG])
@@ -333,8 +338,8 @@ substSΠEq {F} {G} {F′} {G′} {t} {u} BΠ [Γ] [F] [F′] [ΠFG] [ΠF′G′]
   in  irrelevanceEq″ (PE.sym (singleSubstLift G t))
                       (PE.sym (singleSubstLift G′ u))
                       [G[t]]
-                        (proj₁ (substSΠ {F} {G} {t} BΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ]))
-                      (substSΠ₂ {subst σ F} {subst σ F′}
+                        (proj₁ (substSΠ {F = F} {G} {t} BΠ [Γ] [F] [ΠFG] [t] ⊢Δ [σ]))
+                      (substSΠ₂ {F = subst σ F} {subst σ F′}
                                 {subst (liftSubst σ) G}
                                 {subst (liftSubst σ) G′}
                                 BΠ
@@ -342,7 +347,7 @@ substSΠEq {F} {G} {F′} {G′} {t} {u} BΠ [Γ] [F] [F′] [ΠFG] [ΠF′G′]
                                 ([ΠFG≡ΠF′G′] ⊢Δ [σ])
                                 [σF] [σF′] [σt] [σu] [σt≡σu] [G[t]] [G′[u]])
 
-substSΠEq {F} {G} {F′} {G′} {t} {u} BΣ [Γ] [F] [F′] [ΣFG] [ΣF′G′] [ΣFG≡ΣF′G′]
+substSΠEq {F = F} {G} {F′} {G′} {t} {u} BΣ [Γ] [F] [F′] [ΣFG] [ΣF′G′] [ΣFG≡ΣF′G′]
            [t] [u] [t≡u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
   let [σΣFG] = proj₁ ([ΣFG] ⊢Δ [σ])
       _ , Bᵣ F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁ = extractMaybeEmb (Σ-elim [σΣFG])
@@ -368,8 +373,8 @@ substSΠEq {F} {G} {F′} {G′} {t} {u} BΣ [Γ] [F] [F′] [ΣFG] [ΣF′G′]
   in  irrelevanceEq″ (PE.sym (singleSubstLift G t))
                       (PE.sym (singleSubstLift G′ u))
                       [G[t]]
-                        (proj₁ (substSΠ {F} {G} {t} BΣ [Γ] [F] [ΣFG] [t] ⊢Δ [σ]))
-                      (substSΠ₂ {subst σ F} {subst σ F′}
+                        (proj₁ (substSΠ {F = F} {G} {t} BΣ [Γ] [F] [ΣFG] [t] ⊢Δ [σ]))
+                      (substSΠ₂ {F = subst σ F} {subst σ F′}
                                 {subst (liftSubst σ) G}
                                 {subst (liftSubst σ) G′}
                                 BΣ

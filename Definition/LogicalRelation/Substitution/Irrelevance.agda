@@ -5,19 +5,25 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution.Irrelevance {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.LogicalRelation
 import Definition.LogicalRelation.Irrelevance as LR
 open import Definition.LogicalRelation.Substitution
 
+open import Tools.Nat
 open import Tools.Product
 open import Tools.Unit
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    m n : Nat
+    Γ : Con Term n
+    σ : Subst m n
 
 -- Irrelevance of valid substitutions with different derivations of contexts
-irrelevanceSubst : ∀ {σ Γ Δ}
+irrelevanceSubst : ∀ {Γ Δ}
                    ([Γ] [Γ]′ : ⊩ᵛ Γ)
                    (⊢Δ ⊢Δ′ : ⊢ Δ)
                  → Δ ⊩ˢ σ ∷ Γ / [Γ]  / ⊢Δ
@@ -32,7 +38,7 @@ irrelevanceSubst ([Γ] ∙ [A]) ([Γ]′ ∙ [A]′) ⊢Δ ⊢Δ′ ([tailσ] , 
 
 -- Irrelevance of valid substitutions with different contexts
 -- that are propositionally equal
-irrelevanceSubst′ : ∀ {σ Γ Δ Δ′}
+irrelevanceSubst′ : ∀ {Γ Δ Δ′}
                     (eq : Δ PE.≡ Δ′)
                     ([Γ] [Γ]′ : ⊩ᵛ Γ)
                     (⊢Δ  : ⊢ Δ)
@@ -43,7 +49,7 @@ irrelevanceSubst′ PE.refl [Γ] [Γ]′ ⊢Δ ⊢Δ′ [σ] = irrelevanceSubst 
 
 -- Irrelevance of valid substitution equality
 -- with different derivations of contexts
-irrelevanceSubstEq : ∀ {σ σ′ Γ Δ}
+irrelevanceSubstEq : ∀ {σ′ Γ Δ}
                      ([Γ] [Γ]′ : ⊩ᵛ Γ)
                      (⊢Δ ⊢Δ′ : ⊢ Δ)
                      ([σ]  : Δ ⊩ˢ σ ∷ Γ / [Γ]  / ⊢Δ)
@@ -58,7 +64,7 @@ irrelevanceSubstEq ([Γ] ∙ [A]) ([Γ]′ ∙ [A]′) ⊢Δ ⊢Δ′ [σ] [σ]�
                             (proj₂ [σ≡σ′])
 
 -- Irrelevance of valid types with different derivations of contexts
-irrelevance : ∀ {l A Γ}
+irrelevance : ∀ {l A}
               ([Γ] [Γ]′ : ⊩ᵛ Γ)
             → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
             → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]′
@@ -73,7 +79,7 @@ open import Definition.LogicalRelation.Properties
 
 -- Irrelevance of valid types with different derivations of contexts
 -- with lifting of eqaul types
-irrelevanceLift : ∀ {l A F H Γ}
+irrelevanceLift : ∀ {l A F H}
               ([Γ] : ⊩ᵛ Γ)
               ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
               ([H] : Γ ⊩ᵛ⟨ l ⟩ H / [Γ])
@@ -99,7 +105,7 @@ irrelevanceLift [Γ] [F] [H] [F≡H] [A] ⊢Δ ([tailσ] , [headσ]) =
 
 -- Irrelevance of valid type equality with different derivations of
 -- contexts and types
-irrelevanceEq : ∀ {l l′ A B Γ}
+irrelevanceEq : ∀ {l l′ A B}
                 ([Γ] [Γ]′ : ⊩ᵛ Γ)
                 ([A]  : Γ ⊩ᵛ⟨ l  ⟩ A / [Γ])
                 ([A]′ : Γ ⊩ᵛ⟨ l′ ⟩ A / [Γ]′)
@@ -112,7 +118,7 @@ irrelevanceEq [Γ] [Γ]′ [A] [A]′ [A≡B] ⊢Δ [σ] =
                        ([A≡B] ⊢Δ [σ]′)
 
 -- Irrelevance of valid terms with different derivations of contexts and types
-irrelevanceTerm : ∀ {l l′ A t Γ}
+irrelevanceTerm : ∀ {l l′ A t}
                   ([Γ] [Γ]′ : ⊩ᵛ Γ)
                   ([A]  : Γ ⊩ᵛ⟨ l  ⟩ A / [Γ])
                   ([A]′ : Γ ⊩ᵛ⟨ l′ ⟩ A / [Γ]′)
@@ -129,7 +135,7 @@ irrelevanceTerm [Γ] [Γ]′ [A] [A]′ [t] ⊢Δ [σ]′ =
 
 -- Irrelevance of valid terms with different derivations of
 -- contexts and types which are propositionally equal
-irrelevanceTerm′ : ∀ {l l′ A A′ t Γ}
+irrelevanceTerm′ : ∀ {l l′ A A′ t}
                    (eq : A PE.≡ A′)
                    ([Γ] [Γ]′ : ⊩ᵛ Γ)
                    ([A]  : Γ ⊩ᵛ⟨ l  ⟩ A / [Γ])
@@ -141,7 +147,7 @@ irrelevanceTerm′ {A = A} {t = t} PE.refl [Γ] [Γ]′ [A] [A]′ [t] =
 
 -- Irrelevance of valid terms with different derivations of
 -- contexts and types with a lifting of equal types
-irrelevanceTermLift : ∀ {l A F H t Γ}
+irrelevanceTermLift : ∀ {l A F H t}
               ([Γ] : ⊩ᵛ Γ)
               ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
               ([H] : Γ ⊩ᵛ⟨ l ⟩ H / [Γ])
@@ -170,7 +176,7 @@ irrelevanceTermLift [Γ] [F] [H] [F≡H] [A] [t] ⊢Δ ([tailσ] , [headσ]) =
 
 -- Irrelevance of valid term equality with different derivations of
 -- contexts and types
-irrelevanceEqTerm : ∀ {l l′ A t u Γ}
+irrelevanceEqTerm : ∀ {l l′ A t u}
                   ([Γ] [Γ]′ : ⊩ᵛ Γ)
                   ([A]  : Γ ⊩ᵛ⟨ l  ⟩ A / [Γ])
                   ([A]′ : Γ ⊩ᵛ⟨ l′ ⟩ A / [Γ]′)

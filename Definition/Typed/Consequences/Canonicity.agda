@@ -19,7 +19,6 @@ open import Tools.Empty
 open import Tools.Nat
 open import Tools.Product
 
-
 -- Turns a natural number into its term representation
 sucᵏ : Nat → Term
 sucᵏ 0 = zero

@@ -452,7 +452,7 @@ wkSingleSubstId F =
         (trans (substVar-to-subst (λ { x0 → refl ; (x +1) → refl}) F)
                (subst-id F))
 
-cons-wk-subst : ∀ (ρ : Wk m n) (σ : Subst n n) a t
+cons-wk-subst : ∀ (ρ : Wk m n) (σ : Subst n ℓ) a t
        → subst (sgSubst a ₛ• lift ρ ₛ•ₛ liftSubst σ) t
        ≡ subst (consSubst (ρ •ₛ σ) a) t
 cons-wk-subst ρ σ a = substVar-to-subst
