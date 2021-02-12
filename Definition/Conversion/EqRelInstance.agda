@@ -2,7 +2,7 @@
 
 module Definition.Conversion.EqRelInstance where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.Weakening using (_∷_⊆_; wkEq)
@@ -24,29 +24,35 @@ open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
 open import Definition.Typed.Consequences.Inversion
 
+open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 open import Tools.Function
 
+private
+  variable
+    m n : Nat
+    Γ : Con Term n
+    ρ : Wk m n
 
 -- Algorithmic equality of neutrals with injected conversion.
-record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
+record _⊢_~_∷_ (Γ : Con Term n) (k l A : Term n) : Set where
   inductive
   constructor ↑
   field
-    {B} : Term
+    {B} : Term n
     A≡B : Γ ⊢ A ≡ B
     k~↑l : Γ ⊢ k ~ l ↑ B
 
 -- Properties of algorithmic equality of neutrals with injected conversion.
 
-~-var : ∀ {x A Γ} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
+~-var : ∀ {x A} → Γ ⊢ var x ∷ A → Γ ⊢ var x ~ var x ∷ A
 ~-var x =
   let ⊢A = syntacticTerm x
   in  ↑ (refl ⊢A) (var-refl x PE.refl)
 
-~-app : ∀ {f g a b F G Γ}
+~-app : ∀ {f g a b F G}
       → Γ ⊢ f ~ g ∷ Π F ▹ G
       → Γ ⊢ a [conv↑] b ∷ F
       → Γ ⊢ f ∘ a ~ g ∘ b ∷ G [ a ]
@@ -63,7 +69,7 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
                             ([~] _ (red D) whnfB′ x))
              (convConvTerm x₁ F≡H))
 
-~-fst : ∀ {Γ p r F G}
+~-fst : ∀ {p r F G}
       → Γ ⊢ p ~ r ∷ Σ F ▹ G
       → Γ ⊢ fst p ~ fst r ∷ F
 ~-fst (↑ A≡B p~r) =
@@ -77,7 +83,7 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
                       ([~] _ (red D) whnfB′ p~r)
   in  ↑ F≡H (fst-cong p~r↓)
 
-~-snd : ∀ {Γ p r F G}
+~-snd : ∀ {p r F G}
       → Γ ⊢ p ~ r ∷ Σ F ▹ G
       → Γ ⊢ snd p ~ snd r ∷ G [ fst p ]
 ~-snd (↑ A≡B p~r) =
@@ -94,10 +100,10 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       ⊢fst = fstⱼ ⊢F ⊢G (conv ⊢p (sym A≡B))
   in  ↑ (substTypeEq G≡E (refl ⊢fst)) (snd-cong p~r↓)
 
-~-natrec : ∀ {z z′ s s′ n n′ F F′ Γ}
+~-natrec : ∀ {z z′ s s′ n n′ F F′}
          → (Γ ∙ ℕ) ⊢ F [conv↑] F′ →
       Γ ⊢ z [conv↑] z′ ∷ (F [ zero ]) →
-      Γ ⊢ s [conv↑] s′ ∷ (Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)) →
+      Γ ⊢ s [conv↑] s′ ∷ (Π ℕ ▹ (F ▹▹ F [ suc (var x0) ]↑)) →
       Γ ⊢ n ~ n′ ∷ ℕ →
       Γ ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ (F [ n ])
 ~-natrec x x₁ x₂ (↑ A≡B x₄) =
@@ -112,7 +118,7 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   in  ↑ (refl (substType ⊢F ⊢n))
         (natrec-cong x x₁ x₂ k~l′)
 
-~-Emptyrec : ∀ {n n′ F F′ Γ}
+~-Emptyrec : ∀ {n n′ F F′}
          → Γ ⊢ F [conv↑] F′ →
       Γ ⊢ n ~ n′ ∷ Empty →
       Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
@@ -128,13 +134,13 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
   in  ↑ (refl ⊢F)
         (Emptyrec-cong x k~l′)
 
-~-sym : {k l A : Term} {Γ : Con Term} → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ k ∷ A
+~-sym : ∀ {k l A} → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ k ∷ A
 ~-sym (↑ A≡B x) =
   let ⊢Γ = wfEq A≡B
       B , A≡B′ , l~k = sym~↑ (reflConEq ⊢Γ) x
   in  ↑ (trans A≡B A≡B′) l~k
 
-~-trans : {k l m A : Term} {Γ : Con Term}
+~-trans : ∀ {k l m A}
         → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ m ∷ A
         → Γ ⊢ k ~ m ∷ A
 ~-trans (↑ x x₁) (↑ x₂ x₃) =
@@ -142,16 +148,16 @@ record _⊢_~_∷_ (Γ : Con Term) (k l A : Term) : Set where
       k~m , _ = trans~↑ x₁ x₃
   in  ↑ x k~m
 
-~-wk : {k l A : Term} {ρ : Wk} {Γ Δ : Con Term} →
+~-wk : ∀ {k l A} {ρ : Wk m n} {Γ Δ} →
       ρ ∷ Δ ⊆ Γ →
       ⊢ Δ → Γ ⊢ k ~ l ∷ A → Δ ⊢ wk ρ k ~ wk ρ l ∷ wk ρ A
 ~-wk x x₁ (↑ x₂ x₃) = ↑ (wkEq x x₁ x₂) (wk~↑ x x₁ x₃)
 
-~-conv : {k l A B : Term} {Γ : Con Term} →
+~-conv : ∀ {k l A B} →
       Γ ⊢ k ~ l ∷ A → Γ ⊢ A ≡ B → Γ ⊢ k ~ l ∷ B
 ~-conv (↑ x x₁) x₂ = ↑ (trans (sym x₂) x) x₁
 
-~-to-conv : {k l A : Term} {Γ : Con Term} →
+~-to-conv : ∀ {k l A} →
       Γ ⊢ k ~ l ∷ A → Γ ⊢ k [conv↑] l ∷ A
 ~-to-conv (↑ x x₁) = convConvTerm (lift~toConv↑ x₁) (sym x)
 

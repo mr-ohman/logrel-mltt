@@ -2,7 +2,7 @@
 
 module Definition.Typed.Consequences.Consistency where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.EqRelInstance

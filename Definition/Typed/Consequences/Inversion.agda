@@ -2,7 +2,7 @@
 
 module Definition.Typed.Consequences.Inversion where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 
@@ -76,7 +76,7 @@ inversion-natrec (conv d x) = let a , b , c , d , e = inversion-natrec d
                               in  a , b , c , d , trans (sym x) e
 
 -- Inversion of application.
-inversion-app :  ∀ {Γ f a A} → Γ ⊢ (f ∘ a) ∷ A →
+inversion-app :  ∀ {f a A} → Γ ⊢ (f ∘ a) ∷ A →
   ∃₂ λ F G → Γ ⊢ f ∷ Π F ▹ G × Γ ⊢ a ∷ F × Γ ⊢ A ≡ G [ a ]
 inversion-app (d ∘ⱼ d₁) = _ , _ , d , d₁ , refl (substTypeΠ (syntacticTerm d) d₁)
 inversion-app (conv d x) = let a , b , c , d , e = inversion-app d

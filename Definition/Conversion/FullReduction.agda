@@ -2,7 +2,7 @@
 
 module Definition.Conversion.FullReduction where
 
-open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped as U hiding (wk ; _∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
@@ -14,39 +14,47 @@ open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.NeTypeEq
 open import Definition.Typed.Consequences.Substitution
 
+open import Tools.Fin
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    m : Nat
+    Γ : Con Term m
+    A B C : Term m
+    c g k n p u : Term m
 
 mutual
-  data NfNeutral : Term → Set where
-    var       : ∀ n                              → NfNeutral (var n)
-    ∘ₙ        : ∀ {k u}     → NfNeutral k → Nf u → NfNeutral (k ∘ u)
-    fstₙ      : ∀ {p}       → NfNeutral p        → NfNeutral (fst p)
-    sndₙ      : ∀ {p}       → NfNeutral p        → NfNeutral (snd p)
-    natrecₙ   : ∀ {C c g k} → Nf C → Nf c → Nf g → NfNeutral k
-                                                 → NfNeutral (natrec C c g k)
-    Emptyrecₙ : ∀ {C k}     → Nf C → NfNeutral k → NfNeutral (Emptyrec C k)
+  data NfNeutral {m : Nat} : Term m → Set where
+    var       : (x : Fin m)                             → NfNeutral (var x)
+    ∘ₙ        : {k u : Term m}     → NfNeutral k → Nf u → NfNeutral (k ∘ u)
+    fstₙ      : {p : Term m}       → NfNeutral p        → NfNeutral (fst p)
+    sndₙ      : {p : Term m}       → NfNeutral p        → NfNeutral (snd p)
+    natrecₙ   : {C : Term (1+ m)} {c g k : Term m}
+                     → Nf C → Nf c → Nf g → NfNeutral k → NfNeutral (natrec C c g k)
+    Emptyrecₙ : {C k : Term m}     → Nf C → NfNeutral k → NfNeutral (Emptyrec C k)
 
-  data Nf : Term → Set where
+  data Nf {m : Nat} : Term m → Set where
     Uₙ     : Nf U
-    Πₙ     : ∀ {A B} → Nf A → Nf B → Nf (Π A ▹ B)
-    Σₙ     : ∀ {A B} → Nf A → Nf B → Nf (Σ A ▹ B)
+    Πₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Π A ▹ B)
+    Σₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Σ A ▹ B)
     ℕₙ     : Nf ℕ
     Emptyₙ : Nf Empty
     Unitₙ  : Nf Unit
 
-    lamₙ   : ∀ {t} → Nf t → Nf (lam t)
-    prodₙ  : ∀ {t u} → Nf t → Nf u → Nf (prod t u)
+    lamₙ   : {t : Term (1+ m)} → Nf t → Nf (lam t)
+    prodₙ  : {t u : Term m} → Nf t → Nf u → Nf (prod t u)
     zeroₙ  : Nf zero
-    sucₙ   : ∀ {t} → Nf t → Nf (suc t)
+    sucₙ   : {t : Term m} → Nf t → Nf (suc t)
     starₙ  : Nf star
 
-    ne     : ∀ {n} → NfNeutral n → Nf n
+    ne     : {n : Term m} → NfNeutral n → Nf n
 
 
 mutual
-  fullRedNe : ∀ {t A Γ} → Γ ⊢ t ~ t ↑ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
+  fullRedNe : ∀ {t A} → Γ ⊢ t ~ t ↑ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
   fullRedNe (var-refl x _) = var _ , var _ , refl x
   fullRedNe (app-cong t u) =
     let t′ , nfT′ , t≡t′ = fullRedNe~↓ t
@@ -75,18 +83,18 @@ mutual
     in  Emptyrec C′ n′ , Emptyrecₙ nfC′ nfN′
      ,  Emptyrec-cong C≡C′ n≡n′
 
-  fullRedNe~↓ : ∀ {t A Γ} → Γ ⊢ t ~ t ↓ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
+  fullRedNe~↓ : ∀ {t A} → Γ ⊢ t ~ t ↓ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
   fullRedNe~↓ ([~] A D whnfB k~l) =
     let u , nf , t≡u = fullRedNe k~l
     in  u , nf , conv t≡u (subset* D)
 
-  fullRed : ∀ {A Γ} → Γ ⊢ A [conv↑] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
+  fullRed : ∀ {A} → Γ ⊢ A [conv↑] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
   fullRed ([↑] A′ B′ D D′ whnfA′ whnfB′ A′<>B′)
     rewrite whrDet* (D , whnfA′) (D′ , whnfB′) =
     let B″ , nf , B′≡B″ = fullRedConv↓ A′<>B′
     in  B″ , nf , trans (subset* D′) B′≡B″
 
-  fullRedConv↓ : ∀ {A Γ} → Γ ⊢ A [conv↓] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
+  fullRedConv↓ : ∀ {A} → Γ ⊢ A [conv↓] A → ∃ λ B → Nf B × Γ ⊢ A ≡ B
   fullRedConv↓ (U-refl ⊢Γ) = U , Uₙ , refl (Uⱼ ⊢Γ)
   fullRedConv↓ (ℕ-refl ⊢Γ) = ℕ , ℕₙ , refl (ℕⱼ ⊢Γ)
   fullRedConv↓ (Empty-refl ⊢Γ) = Empty , Emptyₙ , refl (Emptyⱼ ⊢Γ)
@@ -103,13 +111,13 @@ mutual
         G′ , nfG′ , G≡G′ = fullRed G
     in  Σ F′ ▹ G′ , Σₙ nfF′ nfG′ , Σ-cong ⊢F F≡F′ G≡G′
 
-  fullRedTerm : ∀ {t A Γ} → Γ ⊢ t [conv↑] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
+  fullRedTerm : ∀ {t A} → Γ ⊢ t [conv↑] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
   fullRedTerm ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
     rewrite whrDet*Term (d , whnft′) (d′ , whnfu′) =
     let u″ , nf , u′≡u″ = fullRedTermConv↓ t<>u
     in  u″ , nf , conv (trans (subset*Term d′) u′≡u″) (sym (subset* D))
 
-  fullRedTermConv↓ : ∀ {t A Γ} → Γ ⊢ t [conv↓] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
+  fullRedTermConv↓ : ∀ {t A} → Γ ⊢ t [conv↓] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
   fullRedTermConv↓ (ℕ-ins t) =
     let u , nf , t≡u = fullRedNe~↓ t
     in  u , ne nf , t≡u
@@ -139,7 +147,7 @@ mutual
         wk⊢F = wk (step id) ΓF⊢ ⊢F
         ΓFF'⊢ = ΓF⊢ ∙ wk⊢F
         wk⊢u = wkTerm (lift (step id)) ΓFF'⊢ ⊢u
-        λu∘0 = lam (U.wk (lift (step id)) u) ∘ var 0
+        λu∘0 = lam (U.wk (lift (step id)) u) ∘ var x0
     in  lam u , lamₙ nf
      ,  η-eq ⊢F ⊢t (lamⱼ ⊢F ⊢u)
                 (trans t∘0≡u (PE.subst₂ (λ x y → _ ⊢ x ≡ λu∘0 ∷ y)

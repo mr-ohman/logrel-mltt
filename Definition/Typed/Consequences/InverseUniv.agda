@@ -6,23 +6,30 @@ open import Definition.Untyped
 open import Definition.Typed
 open import Definition.Typed.Consequences.Syntactic
 
+open import Tools.Nat
 import Tools.Sum as Sum
 open import Tools.Sum using (_⊎_; inj₁; inj₂)
 open import Tools.Product
 open import Tools.Empty
 open import Tools.Nullary
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
+    A F H : Term n
+    G E : Term (1+ n)
 
 -- Proposition for terms if they contain a U.
-data UFull : Term → Set where
-  ∃U  : UFull U
-  ∃Π₁ : ∀ {F G} → UFull F → UFull (Π F ▹ G)
-  ∃Π₂ : ∀ {F G} → UFull G → UFull (Π F ▹ G)
-  ∃Σ₁ : ∀ {F G} → UFull F → UFull (Σ F ▹ G)
-  ∃Σ₂ : ∀ {F G} → UFull G → UFull (Σ F ▹ G)
+data UFull : Term n → Set where
+  ∃U  : UFull {n} U
+  ∃Π₁ : UFull F → UFull (Π F ▹ G)
+  ∃Π₂ : UFull G → UFull (Π F ▹ G)
+  ∃Σ₁ : UFull F → UFull (Σ F ▹ G)
+  ∃Σ₂ : UFull G → UFull (Σ F ▹ G)
 
 -- Terms cannot contain U.
-noU : ∀ {t A Γ} → Γ ⊢ t ∷ A → ¬ (UFull t)
+noU : ∀ {t A} → Γ ⊢ t ∷ A → ¬ (UFull t)
 noU (ℕⱼ x) ()
 noU (Emptyⱼ x) ()
 noU (Πⱼ t ▹ t₁) (∃Π₁ ufull) = noU t ufull
@@ -39,7 +46,7 @@ noU (Emptyrecⱼ x t) ()
 noU (conv t₁ x) ufull = noU t₁ ufull
 
 -- Neutrals cannot contain U.
-noUNe : ∀ {A} → Neutral A → ¬ (UFull A)
+noUNe : Neutral A → ¬ (UFull A)
 noUNe (var n) ()
 noUNe (∘ₙ neA) ()
 noUNe (natrecₙ neA) ()
@@ -47,20 +54,18 @@ noUNe (Emptyrecₙ neA) ()
 
 -- Helper function where if at least one Π-type does not contain U,
 -- one of F and H will not contain U and one of G and E will not contain U.
-pilem : ∀ {F G H E}
-      → (¬ UFull (Π F ▹ G)) ⊎ (¬ UFull (Π H ▹ E))
+pilem : (¬ UFull (Π F ▹ G)) ⊎ (¬ UFull (Π H ▹ E))
       → (¬ UFull F) ⊎ (¬ UFull H) × (¬ UFull G) ⊎ (¬ UFull E)
 pilem (inj₁ x) = inj₁ (λ x₁ → x (∃Π₁ x₁)) , inj₁ (λ x₁ → x (∃Π₂ x₁))
 pilem (inj₂ x) = inj₂ (λ x₁ → x (∃Π₁ x₁)) , inj₂ (λ x₁ → x (∃Π₂ x₁))
 
-pilemΣ : ∀ {F G H E}
-      → (¬ UFull (Σ F ▹ G)) ⊎ (¬ UFull (Σ H ▹ E))
+pilemΣ :(¬ UFull (Σ F ▹ G)) ⊎ (¬ UFull (Σ H ▹ E))
       → (¬ UFull F) ⊎ (¬ UFull H) × (¬ UFull G) ⊎ (¬ UFull E)
 pilemΣ (inj₁ x) = inj₁ (λ x₁ → x (∃Σ₁ x₁)) , inj₁ (λ x₁ → x (∃Σ₂ x₁))
 pilemΣ (inj₂ x) = inj₂ (λ x₁ → x (∃Σ₁ x₁)) , inj₂ (λ x₁ → x (∃Σ₂ x₁))
 
 -- If type A does not contain U, then A can be a term of type U.
-inverseUniv : ∀ {A Γ} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
+inverseUniv : ∀ {A} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUniv q (ℕⱼ x) = ℕⱼ x
 inverseUniv q (Emptyⱼ x) = Emptyⱼ x
 inverseUniv q (Unitⱼ x) = Unitⱼ x
@@ -70,12 +75,12 @@ inverseUniv q (Σⱼ A ▹ A₁) = Σⱼ inverseUniv (λ x → q (∃Σ₁ x)) A
 inverseUniv q (univ x) = x
 
 -- If A is a neutral type, then A can be a term of U.
-inverseUnivNe : ∀ {A Γ} → Neutral A → Γ ⊢ A → Γ ⊢ A ∷ U
+inverseUnivNe : ∀ {A} → Neutral A → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUnivNe neA ⊢A = inverseUniv (noUNe neA) ⊢A
 
 -- Helper function where if at least one type does not contain U, then the
 -- equality of types can be an equality of term of type U.
-inverseUnivEq′ : ∀ {A B Γ} → (¬ (UFull A)) ⊎ (¬ (UFull B)) → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
+inverseUnivEq′ : ∀ {A B} → (¬ (UFull A)) ⊎ (¬ (UFull B)) → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
 inverseUnivEq′ q (univ x) = x
 inverseUnivEq′ q (refl x) = refl (inverseUniv (Sum.id q) x)
 inverseUnivEq′ q (sym A≡B) = sym (inverseUnivEq′ (Sum.sym q) A≡B)
@@ -97,5 +102,5 @@ inverseUnivEq′ q (Σ-cong x A≡B A≡B₁) =
   in  Σ-cong x (inverseUnivEq′ w A≡B) (inverseUnivEq′ e A≡B₁)
 
 -- If A is a term of U, then the equality of types is an equality of terms of type U.
-inverseUnivEq : ∀ {A B Γ} → Γ ⊢ A ∷ U → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
+inverseUnivEq : ∀ {A B} → Γ ⊢ A ∷ U → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U
 inverseUnivEq A A≡B = inverseUnivEq′ (inj₁ (noU A)) A≡B

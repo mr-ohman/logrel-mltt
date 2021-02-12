@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Stability where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
@@ -29,7 +29,7 @@ mutual
   -- Syntactic validity and conversion substitution of a context equality.
   contextConvSubst : ⊢ Γ ≡ Δ → ⊢ Γ × ⊢ Δ × Δ ⊢ˢ idSubst ∷ Γ
   contextConvSubst ε = ε , ε , id
-  contextConvSubst (_∙_ {Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
+  contextConvSubst (_∙_ {Γ = Γ} {Δ} {A} {B} Γ≡Δ A≡B) =
     let ⊢Γ , ⊢Δ , [σ] = contextConvSubst Γ≡Δ
         ⊢A , ⊢B = syntacticEq A≡B
         Δ⊢B = stability Γ≡Δ ⊢B

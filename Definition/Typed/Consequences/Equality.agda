@@ -110,9 +110,9 @@ B≡A′ W (noemb [W]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) whnfA =
   F′ , G′ , whnfRed* D′ whnfA
 B≡A′ W (emb 0<1 [W]) [W≡A] whnfA = B≡A′ W [W] [W≡A] whnfA
 
-Π≡A′ : ∀ {A F G l} → _
+Π≡A′ : ∀ {Γ : Con Term n} {A F G l} → _
 Π≡A′ {Γ = Γ} {A} {F} {G} {l} = B≡A′ {Γ = Γ} {A} {F} {G} {l} BΠ
-Σ≡A′ : ∀ {A F G l} → _
+Σ≡A′ : ∀ {Γ : Con Term n} {A F G l} → _
 Σ≡A′ {Γ = Γ} {A} {F} {G} {l} = B≡A′ {Γ = Γ} {A} {F} {G} {l} BΣ
 
 -- If A is judgmentally equal to Π F ▹ G, then there exists H and E such that
@@ -125,7 +125,7 @@ B≡A {A} W W≡A whnfA with reducibleEq W≡A
 B≡A {A} W W≡A whnfA | [W] , [A] , [W≡A] =
   B≡A′ W (B-elim W [W]) (irrelevanceEq [W] (B-intr W (B-elim W [W])) [W≡A]) whnfA
 
-Π≡A : ∀ {A F G} → _
+Π≡A : ∀ {Γ : Con Term n} {A F G} → _
 Π≡A {Γ = Γ} {A} {F} {G} = B≡A {Γ = Γ} {A} {F} {G} BΠ
-Σ≡A : ∀ {A F G Γ} → _
+Σ≡A : ∀ {Γ : Con Term n} {A F G} → _
 Σ≡A {Γ = Γ} {A} {F} {G} = B≡A {Γ = Γ} {A} {F} {G} BΣ

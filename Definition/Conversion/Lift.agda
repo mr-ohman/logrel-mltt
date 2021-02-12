@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Lift where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening

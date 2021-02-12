@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Decidable where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
@@ -21,15 +21,17 @@ open import Definition.Typed.Consequences.NeTypeEq
 open import Definition.Typed.Consequences.SucCong
 open import Definition.Typed.Consequences.Inversion
 
+open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
 open import Tools.Empty
 open import Tools.Nullary
 import Tools.PropositionalEquality as PE
 
-variable
-  ℓ : Nat
-  Γ Δ : Con Term ℓ
+private
+  variable
+    ℓ : Nat
+    Γ Δ : Con Term ℓ
 
 -- Algorithmic equality of variables infers propositional equality.
 strongVarEq : ∀ {m n A} → Γ ⊢ var n ~ var m ↑ A → n PE.≡ m
@@ -119,7 +121,7 @@ mutual
   dec~↑ : ∀ {k l R T}
         → Γ ⊢ k ~ k ↑ R → Γ ⊢ l ~ l ↑ T
         → Dec (∃ λ A → Γ ⊢ k ~ l ↑ A)
-  dec~↑ (var-refl {n} x₂ x≡y) (var-refl {m} x₃ x≡y₁) with n ≟ m
+  dec~↑ (var-refl {n} x₂ x≡y) (var-refl {m} x₃ x≡y₁) with n ≟ⱽ m
   ... | yes PE.refl = yes (_ , var-refl x₂ x≡y₁)
   ... | no ¬p = no (λ { (A , k~l) → ¬p (strongVarEq k~l) })
   dec~↑ (var-refl x₁ x≡y) (app-cong x₂ x₃) = no (λ { (_ , ()) })

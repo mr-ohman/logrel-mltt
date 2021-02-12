@@ -173,10 +173,10 @@ mutual
         [U]′  = S.irrelevance {A = U} [Γ]₁ ([Γ] ∙ [F]) [U]₁
         [F]ₜ′ = S.irrelevanceTerm {A = U} {t = F} [Γ] [Γ] [U] (Uᵛ [Γ]) [F]ₜ
         [G]ₜ′ = S.irrelevanceTerm {A = U} {t = G} [Γ]₁ ([Γ] ∙ [F]) [U]₁
-                                  (λ {Δ} {σ} → [U]′ {Δ} {σ}) [G]ₜ
+                                  (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ}) [G]ₜ
     in  [Γ] , [U]
     ,   S.irrelevanceTerm {A = U} {t = Π F ▹ G} [Γ] [Γ] (Uᵛ [Γ]) [U]
-                          (Πᵗᵛ {F = F} {G} [Γ] [F] (λ {Δ} {σ} → [U]′ {Δ} {σ})
+                          (Πᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
   fundamentalTerm (Σⱼ_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
@@ -185,10 +185,10 @@ mutual
         [U]′  = S.irrelevance {A = U} [Γ]₁ ([Γ] ∙ [F]) [U]₁
         [F]ₜ′ = S.irrelevanceTerm {A = U} {t = F} [Γ] [Γ] [U] (Uᵛ [Γ]) [F]ₜ
         [G]ₜ′ = S.irrelevanceTerm {A = U} {t = G} [Γ]₁ ([Γ] ∙ [F]) [U]₁
-                                  (λ {Δ} {σ} → [U]′ {Δ} {σ}) [G]ₜ
+                                  (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ}) [G]ₜ
     in  [Γ] , [U]
     ,   S.irrelevanceTerm {A = U} {t = Σ F ▹ G} [Γ] [Γ] (Uᵛ [Γ]) [U]
-                          (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {Δ} {σ} → [U]′ {Δ} {σ})
+                          (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lamⱼ {F} {G} {t} ⊢F ⊢t)
@@ -325,24 +325,24 @@ mutual
         [U]₁′ = Uᵛ (_∙_ {A = F} [Γ] [F])
         [U]₂′ = Uᵛ (_∙_ {A = H} [Γ] [H])
         [G]ₜ′ = S.irrelevanceTerm {A = U} {t = G} [Γ]₂ ([Γ] ∙ [F])
-                                  [U]₁ (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [G]ₜ
+                                  [U]₁ (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [G]ₜ
         [E]ₜ′ = S.irrelevanceTermLift {A = U} {F = F} {H = H} {t = E}
                                       [Γ] [F] [H] [F≡H]
-                                      (λ {Δ} {σ} → [U]₁′ {Δ} {σ})
+                                      (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ})
                   (S.irrelevanceTerm {A = U} {t = E} [Γ]₂ ([Γ] ∙ [F])
-                                     [U]₁ (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [E]ₜ)
+                                     [U]₁ (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [E]ₜ)
         [F≡H]ₜ′ = S.irrelevanceEqTerm {A = U} {t = F} {u = H}
                                       [Γ]₁ [Γ] [U] (Uᵛ [Γ]) [F≡H]ₜ
         [G≡E]ₜ′ = S.irrelevanceEqTerm {A = U} {t = G} {u = E} [Γ]₂
                                       (_∙_ {A = F} [Γ] [F]) [U]₁
-                                      (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [G≡E]ₜ
+                                      (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [G≡E]ₜ
     in  [Γ]
     ,   modelsTermEq
           [U]′
-          (Πᵗᵛ {F = F} {G} [Γ] [F] (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [F]ₜ′ [G]ₜ′)
-          (Πᵗᵛ {F = H} {E} [Γ] [H] (λ {Δ} {σ} → [U]₂′ {Δ} {σ}) [H]ₜ′ [E]ₜ′)
+          (Πᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [F]ₜ′ [G]ₜ′)
+          (Πᵗᵛ {F = H} {E} [Γ] [H] (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ}) [H]ₜ′ [E]ₜ′)
           (Π-congᵗᵛ {F = F} {G} {H} {E} [Γ] [F] [H]
-                    (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) (λ {Δ} {σ} → [U]₂′ {Δ} {σ})
+                    (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ})
                     [F]ₜ′ [G]ₜ′ [H]ₜ′ [E]ₜ′ [F≡H]ₜ′ [G≡E]ₜ′)
   fundamentalTermEq (Σ-cong {E} {F} {G} {H} ⊢F F≡H G≡E)
     with fundamental ⊢F | fundamentalTermEq F≡H | fundamentalTermEq G≡E
@@ -358,24 +358,24 @@ mutual
         [U]₁′ = Uᵛ (_∙_ {A = F} [Γ] [F])
         [U]₂′ = Uᵛ (_∙_ {A = H} [Γ] [H])
         [G]ₜ′ = S.irrelevanceTerm {A = U} {t = G} [Γ]₂ ([Γ] ∙ [F])
-                                  [U]₁ (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [G]ₜ
+                                  [U]₁ (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [G]ₜ
         [E]ₜ′ = S.irrelevanceTermLift {A = U} {F = F} {H = H} {t = E}
                                       [Γ] [F] [H] [F≡H]
-                                      (λ {Δ} {σ} → [U]₁′ {Δ} {σ})
+                                      (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ})
                   (S.irrelevanceTerm {A = U} {t = E} [Γ]₂ ([Γ] ∙ [F])
-                                     [U]₁ (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [E]ₜ)
+                                     [U]₁ (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [E]ₜ)
         [F≡H]ₜ′ = S.irrelevanceEqTerm {A = U} {t = F} {u = H}
                                       [Γ]₁ [Γ] [U] (Uᵛ [Γ]) [F≡H]ₜ
         [G≡E]ₜ′ = S.irrelevanceEqTerm {A = U} {t = G} {u = E} [Γ]₂
                                       (_∙_ {A = F} [Γ] [F]) [U]₁
-                                      (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [G≡E]ₜ
+                                      (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [G≡E]ₜ
     in  [Γ]
     ,   modelsTermEq
           [U]′
-          (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) [F]ₜ′ [G]ₜ′)
-          (Σᵗᵛ {F = H} {E} [Γ] [H] (λ {Δ} {σ} → [U]₂′ {Δ} {σ}) [H]ₜ′ [E]ₜ′)
+          (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) [F]ₜ′ [G]ₜ′)
+          (Σᵗᵛ {F = H} {E} [Γ] [H] (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ}) [H]ₜ′ [E]ₜ′)
           (Σ-congᵗᵛ {F = F} {G} {H} {E} [Γ] [F] [H]
-                    (λ {Δ} {σ} → [U]₁′ {Δ} {σ}) (λ {Δ} {σ} → [U]₂′ {Δ} {σ})
+                    (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ})
                     [F]ₜ′ [G]ₜ′ [H]ₜ′ [E]ₜ′ [F≡H]ₜ′ [G≡E]ₜ′)
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b)
     with fundamentalTermEq f≡g | fundamentalTermEq a≡b

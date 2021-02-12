@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Soundness where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Conversion
@@ -71,7 +71,7 @@ mutual
          (sym (subset* D))
 
   -- Algorithmic equality of terms in WHNF is well-formed.
-  soundnessConv↓Term : ∀ {a b A Γ} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
+  soundnessConv↓Term : ∀ {a b A} → Γ ⊢ a [conv↓] b ∷ A → Γ ⊢ a ≡ b ∷ A
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
   soundnessConv↓Term (Empty-ins x) = soundness~↓ x
   soundnessConv↓Term (Unit-ins x) = soundness~↓ x

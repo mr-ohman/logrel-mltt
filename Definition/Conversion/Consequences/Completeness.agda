@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Consequences.Completeness where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Conversion
 
