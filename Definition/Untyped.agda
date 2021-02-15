@@ -4,6 +4,7 @@
 
 module Definition.Untyped where
 
+open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
 open import Tools.List
@@ -12,14 +13,14 @@ open import Definition.Context
 
 
 -- infixl 30 _∙_
-infix 30 Π_▹_
-infixr 22 _▹▹_
-infix 30 Σ_▹_
-infixr 22 _××_
-infix 30 ⟦_⟧_▹_
-infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
-infix 25 _[_]
-infix 25 _[_]↑
+-- infix 30 Π_▹_
+-- infixr 22 _▹▹_
+-- infix 30 Σ_▹_
+-- infixr 22 _××_
+-- infix 30 ⟦_⟧_▹_
+-- infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
+-- infix 25 _[_]
+-- infix 25 _[_]↑
 
 
 -- Typing contexts (snoc-lists, isomorphic to lists).
@@ -28,40 +29,44 @@ infix 25 _[_]↑
 --   ε   : Con A               -- Empty context.
 --   _∙_ : Con A → A → Con A   -- Context extension.
 
+variable
+  n : Nat
 
-record GenT (A : Set) : Set where
-  inductive
-  constructor ⟦_,_⟧
-  field
-    l : Nat
-    t : A
+data GenTs (A : Nat → Set) : List Nat → Set where
+  [] : GenTs A []
+  _∷_ : {n : Nat} {ns : List Nat} (t : A n) (ts : GenTs A ns) → GenTs A (n ∷ ns)
 
-data Kind : Set where
-  Ukind : Kind
 
-  Pikind : Kind
-  Lamkind : Kind
-  Appkind : Kind
+data Kind : (ns : List Nat) → Set where
+  Ukind : Kind []
 
-  Sigmakind : Kind
-  Prodkind : Kind
-  Fstkind : Kind
-  Sndkind : Kind
+  Pikind  : Kind (0 ∷ 1 ∷ [])
+  Lamkind : Kind (1 ∷ [])
+  Appkind : Kind (0 ∷ 0 ∷ [])
 
-  Natkind : Kind
-  Zerokind : Kind
-  Suckind : Kind
-  Natreckind : Kind
+  Sigmakind : Kind (0 ∷ 1 ∷ [])
+  Prodkind  : Kind (0 ∷ 0 ∷ [])
+  Fstkind   : Kind (0 ∷ [])
+  Sndkind   : Kind (0 ∷ [])
 
-  Unitkind : Kind
-  Starkind : Kind
+  Natkind    : Kind []
+  Zerokind   : Kind []
+  Suckind    : Kind (0 ∷ [])
+  Natreckind : Kind (1 ∷ 0 ∷ 0 ∷ 0 ∷ [])
 
-  Emptykind : Kind
-  Emptyreckind : Kind
+  Unitkind : Kind []
+  Starkind : Kind []
 
-data Term : Set where
-  var : (x : Nat) → Term
-  gen : (k : Kind) (c : List (GenT Term)) → Term
+  Emptykind    : Kind []
+  Emptyreckind : Kind (0 ∷ 0 ∷ [])
+
+data Term (n : Nat) : Set where
+  var : (x : Fin n) → Term n
+  gen : {bs : List Nat} (k : Kind bs) (c : GenTs Term (L.map (_+ n) bs)) → Term n
+
+variable
+  A F H t u v : Term n
+  B E G       : Term (1+ n)
 
 -- The Grammar of our language.
 
@@ -70,62 +75,56 @@ data Term : Set where
 -- Π, lam, and natrec are binders.
 
 -- Type constructors.
-U      : Term                     -- Universe.
+U      : Term n                    -- Universe.
 U = gen Ukind []
 
-pattern Univ u = gen (Ukind u) []
+Π_▹_ : (A : Term n) (B : Term (1+ n)) → Term n  -- Dependent function type (B is a binder).
+Π A ▹ B = gen Pikind (A ∷ B ∷ [])
 
-Π_▹_   : (A B : Term)     → Term  -- Dependent function type (B is a binder).
-Π A ▹ B = gen Pikind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
+Σ_▹_ : (A : Term n) (B : Term (1+ n)) → Term n
+Σ A ▹ B = gen Sigmakind (A ∷ B ∷ [])
 
-Σ_▹_ : (A B : Term) → Term
-Σ A ▹ B = gen Sigmakind (⟦ 0 , A ⟧ ∷ ⟦ 1 , B ⟧ ∷ [])
-
-ℕ      : Term                     -- Type of natural numbers.
+ℕ      : Term n                    -- Type of natural numbers.
 ℕ = gen Natkind []
 
-Empty : Term                      -- Empty type
+Empty : Term n                     -- Empty type
 Empty = gen Emptykind []
 
-Unit  : Term                      -- Unit type
+Unit  : Term n                     -- Unit type
 Unit = gen Unitkind []
 
--- Lambda-calculus.
--- var    : (x : Nat)        → Term  -- Variable (de Bruijn index).
--- var = var
+lam    : (t : Term (1+ n)) → Term n  -- Function abstraction (binder).
+lam t = gen Lamkind (t ∷ [])
 
-lam    : (t : Term)       → Term  -- Function abstraction (binder).
-lam t = gen Lamkind (⟦ 1 , t ⟧ ∷ [])
-
-_∘_    : (t u : Term)     → Term  -- Application.
-t ∘ u = gen Appkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+_∘_    : (t u : Term n) → Term n  -- Application.
+t ∘ u = gen Appkind (t ∷ u ∷ [])
 
 
-prod : (t u : Term) → Term        -- Dependent products
-prod t u = gen Prodkind (⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ [])
+prod : (t u : Term n) → Term n        -- Dependent products
+prod t u = gen Prodkind (t ∷ u ∷ [])
 
-fst : (t : Term) → Term           -- First projection
-fst t = gen Fstkind (⟦ 0 , t ⟧ ∷ [])
+fst : (t : Term n) → Term n          -- First projection
+fst t = gen Fstkind (t ∷ [])
 
-snd : (t : Term) → Term           -- Second projection
-snd t = gen Sndkind (⟦ 0 , t ⟧ ∷ [])
+snd : (t : Term n) → Term n          -- Second projection
+snd t = gen Sndkind (t ∷ [])
 
 -- Introduction and elimination of natural numbers.
-zero   : Term                     -- Natural number zero.
+zero   : Term n                    -- Natural number zero.
 zero = gen Zerokind []
 
-suc    : (t : Term)       → Term  -- Successor.
-suc t = gen Suckind (⟦ 0 , t ⟧ ∷ [])
+suc    : (t : Term n)       → Term n  -- Successor.
+suc t = gen Suckind (t ∷ [])
 
-natrec : (A t u v : Term) → Term  -- Natural number recursor (A is a binder).
-natrec A t u v = gen Natreckind (⟦ 1 , A ⟧ ∷ ⟦ 0 , t ⟧ ∷ ⟦ 0 , u ⟧ ∷ ⟦ 0 , v ⟧ ∷ [])
+natrec : (A : Term (1+ n)) (t u v : Term n) → Term n  -- Natural number recursor (A is a binder).
+natrec A t u v = gen Natreckind (A ∷ t ∷ u ∷ v ∷ [])
 
 
-star : Term                       -- Unit element
+star : Term n                      -- Unit element
 star = gen Starkind []
 
-Emptyrec : (A e : Term) → Term    -- Empty type recursor
-Emptyrec A e = gen Emptyreckind (⟦ 0 , A ⟧ ∷ ⟦ 0 , e ⟧ ∷ [])
+Emptyrec : (A e : Term n) → Term n   -- Empty type recursor
+Emptyrec A e = gen Emptyreckind (A ∷ e ∷ [])
 
 -- Binding types
 
@@ -133,7 +132,7 @@ data BindingType : Set where
   BΠ : BindingType
   BΣ : BindingType
 
-⟦_⟧_▹_ : BindingType → Term → Term → Term
+⟦_⟧_▹_ : BindingType → Term n → Term (1+ n) → Term n
 ⟦ BΠ ⟧ F ▹ G = Π F ▹ G
 ⟦ BΣ ⟧ F ▹ G = Σ F ▹ G
 
@@ -141,13 +140,13 @@ data BindingType : Set where
 
 -- If  W F G = W H E  then  F = H  and  G = E.
 
-B-PE-injectivity : ∀ {F G H E} W → ⟦ W ⟧ F ▹ G PE.≡ ⟦ W ⟧ H ▹ E → F PE.≡ H × G PE.≡ E
+B-PE-injectivity : ∀ W → ⟦ W ⟧ F ▹ G PE.≡ ⟦ W ⟧ H ▹ E → F PE.≡ H × G PE.≡ E
 B-PE-injectivity BΠ PE.refl = PE.refl , PE.refl
 B-PE-injectivity BΣ PE.refl = PE.refl , PE.refl
 
 -- If  suc n = suc m  then  n = m.
 
-suc-PE-injectivity : ∀ {n m} → suc n PE.≡ suc m → n PE.≡ m
+suc-PE-injectivity : suc t PE.≡ suc u → t PE.≡ u
 suc-PE-injectivity PE.refl = PE.refl
 
 
@@ -156,38 +155,38 @@ suc-PE-injectivity PE.refl = PE.refl
 -- A term is neutral if it has a variable in head position.
 -- The variable blocks reduction of such terms.
 
-data Neutral : Term → Set where
-  var       : ∀ n                     → Neutral (var n)
-  ∘ₙ        : ∀ {k u}     → Neutral k → Neutral (k ∘ u)
-  fstₙ      : ∀ {p}       → Neutral p → Neutral (fst p)
-  sndₙ      : ∀ {p}       → Neutral p → Neutral (snd p)
-  natrecₙ   : ∀ {C c g k} → Neutral k → Neutral (natrec C c g k)
-  Emptyrecₙ : ∀ {A e}     → Neutral e → Neutral (Emptyrec A e)
+data Neutral : Term n → Set where
+  var       : (x : Fin n) → Neutral (var x)
+  ∘ₙ        : Neutral t   → Neutral (t ∘ u)
+  fstₙ      : Neutral t   → Neutral (fst t)
+  sndₙ      : Neutral t   → Neutral (snd t)
+  natrecₙ   : Neutral v   → Neutral (natrec G t u v)
+  Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
 
 
 -- Weak head normal forms (whnfs).
 
 -- These are the (lazy) values of our language.
 
-data Whnf : Term → Set where
+data Whnf {n : Nat} : Term n → Set where
 
   -- Type constructors are whnfs.
   Uₙ     : Whnf U
-  Πₙ     : ∀ {A B} → Whnf (Π A ▹ B)
-  Σₙ     : ∀ {A B} → Whnf (Σ A ▹ B)
+  Πₙ     : Whnf (Π A ▹ B)
+  Σₙ     : Whnf (Σ A ▹ B)
   ℕₙ     : Whnf ℕ
   Unitₙ  : Whnf Unit
   Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
-  lamₙ  : ∀ {t} → Whnf (lam t)
+  lamₙ  : Whnf (lam t)
   zeroₙ : Whnf zero
-  sucₙ  : ∀ {t} → Whnf (suc t)
+  sucₙ  : Whnf (suc t)
   starₙ : Whnf star
-  prodₙ : ∀ {t u} → Whnf (prod t u)
+  prodₙ : Whnf (prod t u)
 
   -- Neutrals are whnfs.
-  ne    : ∀ {n} → Neutral n → Whnf n
+  ne    : Neutral t → Whnf t
 
 
 -- Whnf inequalities.
@@ -195,90 +194,90 @@ data Whnf : Term → Set where
 -- Different whnfs are trivially distinguished by propositional equality.
 -- (The following statements are sometimes called "no-confusion theorems".)
 
-U≢ne : ∀ {K} → Neutral K → U PE.≢ K
+U≢ne : Neutral A → U PE.≢ A
 U≢ne () PE.refl
 
-ℕ≢ne : ∀ {K} → Neutral K → ℕ PE.≢ K
+ℕ≢ne : Neutral A → ℕ PE.≢ A
 ℕ≢ne () PE.refl
 
-Empty≢ne : ∀ {K} → Neutral K → Empty PE.≢ K
+Empty≢ne : Neutral A → Empty PE.≢ A
 Empty≢ne () PE.refl
 
-Unit≢ne : ∀ {K} → Neutral K → Unit PE.≢ K
+Unit≢ne : Neutral A → Unit PE.≢ A
 Unit≢ne () PE.refl
 
-B≢ne : ∀ {F G K} W → Neutral K → ⟦ W ⟧ F ▹ G PE.≢ K
+B≢ne : ∀ W → Neutral A → ⟦ W ⟧ F ▹ G PE.≢ A
 B≢ne BΠ () PE.refl
 B≢ne BΣ () PE.refl
 
-U≢B : ∀ {F G} W → U PE.≢ ⟦ W ⟧ F ▹ G
+U≢B : ∀ W → U PE.≢ ⟦ W ⟧ F ▹ G
 U≢B BΠ ()
 U≢B BΣ ()
 
-ℕ≢B : ∀ {F G} W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
+ℕ≢B : ∀ W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
 ℕ≢B BΠ ()
 ℕ≢B BΣ ()
 
-Empty≢B : ∀ {F G} W → Empty PE.≢ ⟦ W ⟧ F ▹ G
+Empty≢B : ∀ W → Empty PE.≢ ⟦ W ⟧ F ▹ G
 Empty≢B BΠ ()
 Empty≢B BΣ ()
 
-Unit≢B : ∀ {F G} W → Unit PE.≢ ⟦ W ⟧ F ▹ G
+Unit≢B : ∀ W → Unit PE.≢ ⟦ W ⟧ F ▹ G
 Unit≢B BΠ ()
 Unit≢B BΣ ()
 
-zero≢ne : ∀ {k} → Neutral k → zero PE.≢ k
+zero≢ne : Neutral t → zero PE.≢ t
 zero≢ne () PE.refl
 
-suc≢ne : ∀ {n k} → Neutral k → suc n PE.≢ k
+suc≢ne : Neutral t → suc u PE.≢ t
 suc≢ne () PE.refl
 
 -- Several views on whnfs (note: not recursive).
 
 -- A whnf of type ℕ is either zero, suc t, or neutral.
 
-data Natural : Term → Set where
-  zeroₙ :                     Natural zero
-  sucₙ  : ∀ {t}             → Natural (suc t)
-  ne    : ∀ {n} → Neutral n → Natural n
+data Natural {n : Nat} : Term n → Set where
+  zeroₙ :             Natural zero
+  sucₙ  :             Natural (suc t)
+  ne    : Neutral t → Natural t
 
 
 -- A (small) type in whnf is either Π A B, Σ A B, ℕ, Empty, Unit or neutral.
 -- Large types could also be U.
 
-data Type : Term → Set where
-  Πₙ : ∀ {A B} → Type (Π A ▹ B)
-  Σₙ : ∀ {A B} → Type (Σ A ▹ B)
-  ℕₙ : Type ℕ
-  Emptyₙ : Type Empty
-  Unitₙ : Type Unit
-  ne : ∀{n} → Neutral n → Type n
+data Type {n : Nat} : Term n → Set where
+  Πₙ     :             Type (Π A ▹ B)
+  Σₙ     :             Type (Σ A ▹ B)
+  ℕₙ     :             Type ℕ
+  Emptyₙ :             Type Empty
+  Unitₙ  :             Type Unit
+  ne     : Neutral t → Type t
 
-⟦_⟧-type : ∀ (W : BindingType) {F} {G} → Type (⟦ W ⟧ F ▹ G)
+⟦_⟧-type : ∀ (W : BindingType) → Type (⟦ W ⟧ F ▹ G)
 ⟦ BΠ ⟧-type = Πₙ
 ⟦ BΣ ⟧-type = Σₙ
 
 -- A whnf of type Π A ▹ B is either lam t or neutral.
 
-data Function : Term → Set where
-  lamₙ : ∀ {t} → Function (lam t)
-  ne   : ∀ {n} → Neutral n → Function n
+data Function {n : Nat} : Term n → Set where
+  lamₙ : Function (lam t)
+  ne   : Neutral t → Function t
 
 -- A whnf of type Σ A ▹ B is either prod t u or neutral.
 
-data Product : Term → Set where
-  prodₙ : ∀ {t u} → Product (prod t u)
-  ne    : ∀ {n} → Neutral n → Product n
+data Product {n : Nat} : Term n → Set where
+  prodₙ : Product (prod t u)
+  ne    : Neutral t → Product t
 
 -- These views classify only whnfs.
 -- Natural, Type, Function and Product are a subsets of Whnf.
 
-naturalWhnf : ∀ {n} → Natural n → Whnf n
+naturalWhnf : Natural t → Whnf t
 naturalWhnf sucₙ   = sucₙ
 naturalWhnf zeroₙ  = zeroₙ
 naturalWhnf (ne x) = ne x
 
-typeWhnf : ∀ {A} → Type A → Whnf A
+typeWhnf : Type A → Whnf A
 typeWhnf Πₙ     = Πₙ
 typeWhnf Σₙ     = Σₙ
 typeWhnf ℕₙ     = ℕₙ
@@ -286,19 +285,19 @@ typeWhnf Emptyₙ = Emptyₙ
 typeWhnf Unitₙ  = Unitₙ
 typeWhnf (ne x) = ne x
 
-functionWhnf : ∀ {f} → Function f → Whnf f
+functionWhnf : Function t → Whnf t
 functionWhnf lamₙ   = lamₙ
 functionWhnf (ne x) = ne x
 
-productWhnf : ∀ {p} → Product p → Whnf p
+productWhnf : Product t → Whnf t
 productWhnf prodₙ  = prodₙ
 productWhnf (ne x) = ne x
 
-⟦_⟧ₙ : (W : BindingType) → ∀ {F G} → Whnf (⟦ W ⟧ F ▹ G)
+⟦_⟧ₙ : (W : BindingType) → Whnf (⟦ W ⟧ F ▹ G)
 ⟦_⟧ₙ BΠ = Πₙ
 ⟦_⟧ₙ BΣ = Σₙ
 
-
+{-
 ------------------------------------------------------------------------
 -- Weakening
 
@@ -561,3 +560,4 @@ B-subst : (σ : Subst) (W : BindingType) (F G : Term)
         → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
 B-subst σ BΠ F G = PE.refl
 B-subst σ BΣ F G = PE.refl
+-}
