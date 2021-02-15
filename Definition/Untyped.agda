@@ -23,6 +23,8 @@ infix 25 _[_]↑
 
 
 -- Typing contexts (length indexed snoc-lists, isomorphic to lists).
+-- Terms added to the context are well scoped in the sense that it cannot
+-- contain more unbound variables than can be looked up in the context.
 
 data Con (A : Nat → Set) : Nat → Set where
   ε   :                             Con A 0        -- Empty context.

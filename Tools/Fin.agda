@@ -10,6 +10,9 @@ open import Data.Fin.Properties using (suc-injective)
 
 open import Data.Fin public using (Fin) renaming (zero to x0 ; suc to _+1)
 
+
+-- Decidability of equality
+
 _≟ⱽ_ : {n : Nat} → (x y : Fin n) → Dec (x ≡ y)
 x0 ≟ⱽ x0 = yes refl
 x0 ≟ⱽ (y +1) = no (λ ())
