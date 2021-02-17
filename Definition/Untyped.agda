@@ -344,10 +344,6 @@ liftn : {k m : Nat} → Wk k m → (n : Nat) → Wk (n + k) (n + m)
 liftn ρ Nat.zero = ρ
 liftn ρ (1+ n)   = lift (liftn ρ n)
 
--- repeat : {A : Set} → (A → A) → A → Nat → A
--- repeat f a 0 = a
--- repeat f a (1+ n) = f (repeat f a n)
-
 -- Weakening of variables.
 -- If η : Γ ≤ Δ and x ∈ dom(Δ) then wkVar η x ∈ dom(Γ).
 
