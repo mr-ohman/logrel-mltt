@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Lift where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Weakening
@@ -18,12 +18,18 @@ open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Reduction
 
+open import Tools.Fin
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Lifting of algorithmic equality of types from WHNF to generic types.
-liftConv : ∀ {A B Γ}
+liftConv : ∀ {A B}
           → Γ ⊢ A [conv↓] B
           → Γ ⊢ A [conv↑] B
 liftConv A<>B =
@@ -32,7 +38,7 @@ liftConv A<>B =
   in  [↑] _ _ (id ⊢A) (id ⊢B) whnfA whnfB A<>B
 
 -- Lifting of algorithmic equality of terms from WHNF to generic terms.
-liftConvTerm : ∀ {t u A Γ}
+liftConvTerm : ∀ {t u A}
              → Γ ⊢ t [conv↓] u ∷ A
              → Γ ⊢ t [conv↑] u ∷ A
 liftConvTerm t<>u =
@@ -43,7 +49,7 @@ liftConvTerm t<>u =
 
 mutual
   -- Helper function for lifting from neutrals to generic terms in WHNF.
-  lift~toConv↓′ : ∀ {t u A A′ Γ l}
+  lift~toConv↓′ : ∀ {t u A A′ l}
                 → Γ ⊩⟨ l ⟩ A′
                 → Γ ⊢ A′ ⇒* A
                 → Γ ⊢ t ~ u ↓ A
@@ -72,7 +78,7 @@ mutual
         ⊢F , ⊢G = syntacticΠ ⊢ΠFG
         neT , neU = ne~↑ k~l
         ⊢Γ = wf ⊢F
-        var0 = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var 0) (var (⊢Γ ∙ ⊢F) here)
+        var0 = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var x0) (var (⊢Γ ∙ ⊢F) here)
                        (refl (var (⊢Γ ∙ ⊢F) here))
         0≡0 = lift~toConv↑′ ([F] (step id) (⊢Γ ∙ ⊢F)) (var-refl (var (⊢Γ ∙ ⊢F) here) PE.refl)
         k∘0≡l∘0 = lift~toConv↑′ ([G] (step id) (⊢Γ ∙ ⊢F) var0)
@@ -109,7 +115,7 @@ mutual
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.
-  lift~toConv↑′ : ∀ {t u A Γ l}
+  lift~toConv↑′ : ∀ {t u A l}
                 → Γ ⊩⟨ l ⟩ A
                 → Γ ⊢ t ~ u ↑ A
                 → Γ ⊢ t [conv↑] u ∷ A
@@ -122,14 +128,14 @@ mutual
              (ne neT) (ne neU) (lift~toConv↓′ [A] (red D) t~u↓)
 
 -- Lifting of algorithmic equality of terms from neutrals to generic terms in WHNF.
-lift~toConv↓ : ∀ {t u A Γ}
+lift~toConv↓ : ∀ {t u A}
              → Γ ⊢ t ~ u ↓ A
              → Γ ⊢ t [conv↓] u ∷ A
 lift~toConv↓ ([~] A₁ D whnfB k~l) =
   lift~toConv↓′ (reducible (proj₁ (syntacticRed D))) D ([~] A₁ D whnfB k~l)
 
 -- Lifting of algorithmic equality of terms from neutrals to generic terms.
-lift~toConv↑ : ∀ {t u A Γ}
+lift~toConv↑ : ∀ {t u A}
              → Γ ⊢ t ~ u ↑ A
              → Γ ⊢ t [conv↑] u ∷ A
 lift~toConv↑ t~u =

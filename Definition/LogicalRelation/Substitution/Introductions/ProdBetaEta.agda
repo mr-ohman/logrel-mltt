@@ -5,7 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.ProdBetaEta {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped as U hiding (wk)
+open import Definition.Untyped as U hiding (wk ; _∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.Properties
@@ -28,25 +28,30 @@ open import Definition.LogicalRelation.Substitution.Introductions.Prod
 open import Definition.LogicalRelation.Substitution.Introductions.Fst
 open import Definition.LogicalRelation.Substitution.Introductions.Snd
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
-Σ-β₁ᵛ : ∀ {F G t u Γ l}
+Σ-β₁ᵛ : ∀ {F G t u l}
         ([Γ] : ⊩ᵛ Γ)
         ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
         ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
         ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
-        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ G [ t ] / [Γ] / substS {F} {G} [Γ] [F] [G] [t])
+        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ G [ t ] / [Γ] / substS {F = F} {G} [Γ] [F] [G] [t])
       → Γ ⊩ᵛ⟨ l ⟩ fst (prod t u) ≡ t ∷ F / [Γ] / [F]
-Σ-β₁ᵛ {F} {G} {t} {u} {Γ} {l} [Γ] [F] [G] [t] [u] =
-  let [Gt] = substS {F} {G} {t} [Γ] [F] [G] [t]
+Σ-β₁ᵛ {Γ = Γ} {F} {G} {t} {u} {l} [Γ] [F] [G] [t] [u] =
+  let [Gt] = substS {F = F} {G} {t} [Γ] [F] [G] [t]
       fst⇒t : Γ ⊩ᵛ fst (prod t u) ⇒ t ∷ F / [Γ]
-      fst⇒t = (λ {Δ} {σ} ⊢Δ [σ] →
+      fst⇒t = (λ {_} {Δ} {σ} ⊢Δ [σ] →
                 let ⊩σF = proj₁ ([F] ⊢Δ [σ])
                     ⊢σF = escape ⊩σF
 
-                    [Fσ] = liftSubstS {F = F} {σ = σ} [Γ] ⊢Δ [F] [σ]
+                    [Fσ] = liftSubstS {σ = σ} {F = F} [Γ] ⊢Δ [F] [σ]
                     ⊩σG : Δ ∙ subst σ F ⊩⟨ l ⟩ subst (liftSubst σ) G
                     ⊩σG = proj₁ ([G] (⊢Δ ∙ ⊢σF) [Fσ])
                     ⊢σG = escape ⊩σG
@@ -61,38 +66,38 @@ import Tools.PropositionalEquality as PE
                     ⊩σu = irrelevanceTerm′ (singleSubstLift G t) ⊩σGt₁ ⊩σGt ⊩σu₁
                     ⊢σu = escapeTerm ⊩σGt ⊩σu
                 in  Σ-β₁ ⊢σF ⊢σG ⊢σt ⊢σu)
-  in  proj₂ (redSubstTermᵛ {F} {fst (prod t u)} {t} [Γ] fst⇒t [F] [t])
+  in  proj₂ (redSubstTermᵛ {A = F} {fst (prod t u)} {t} [Γ] fst⇒t [F] [t])
 
-Σ-β₂ᵛ : ∀ {F G t u Γ l}
+Σ-β₂ᵛ : ∀ {F G t u l}
         ([Γ] : ⊩ᵛ Γ)
         ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
         ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
         ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
-        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ G [ t ] / [Γ] / substS {F} {G} [Γ] [F] [G] [t])
+        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ G [ t ] / [Γ] / substS {F = F} {G} [Γ] [F] [G] [t])
       → Γ ⊩ᵛ⟨ l ⟩ snd (prod t u) ≡ u ∷ G [ fst (prod t u) ] / [Γ]
-          / substS {F} {G} [Γ] [F] [G]
-                   (fstᵛ {F} {G} {prod t u} [Γ] [F] [G]
-                         (prodᵛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u]))
-Σ-β₂ᵛ {F} {G} {t} {u} {Γ} {l} [Γ] [F] [G] [t] [u] =
-  let [Gt] = substS {F} {G} {t} [Γ] [F] [G] [t]
-      [prod] = prodᵛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u]
-      [fst] = fstᵛ {F} {G} {prod t u} [Γ] [F] [G] [prod]
-      [Gfst] = substS {F} {G} {fst (prod t u)} [Γ] [F] [G] [fst]
-      [fst≡t] = Σ-β₁ᵛ {F} {G} {t} {u} [Γ] [F] [G] [t] [u]
-      [Gfst≡Gt] = substSEq {F} {F} {G} {G} {fst (prod t u)} {t}
-                           [Γ] [F] [F] (reflᵛ {F} [Γ] [F])
-                               [G] [G] (reflᵛ {G} {Γ ∙ F} ([Γ] ∙ [F]) [G])
+          / substS {F = F} {G} [Γ] [F] [G]
+                   (fstᵛ {F = F} {G} {prod t u} [Γ] [F] [G]
+                         (prodᵛ {F = F} {G} {t} {u} [Γ] [F] [G] [t] [u]))
+Σ-β₂ᵛ {Γ = Γ} {F} {G} {t} {u} {l} [Γ] [F] [G] [t] [u] =
+  let [Gt] = substS {F = F} {G} {t} [Γ] [F] [G] [t]
+      [prod] = prodᵛ {F = F} {G} {t} {u} [Γ] [F] [G] [t] [u]
+      [fst] = fstᵛ {F = F} {G} {prod t u} [Γ] [F] [G] [prod]
+      [Gfst] = substS {F = F} {G} {fst (prod t u)} [Γ] [F] [G] [fst]
+      [fst≡t] = Σ-β₁ᵛ {F = F} {G} {t} {u} [Γ] [F] [G] [t] [u]
+      [Gfst≡Gt] = substSEq {F = F} {F} {G} {G} {fst (prod t u)} {t}
+                           [Γ] [F] [F] (reflᵛ {A = F} [Γ] [F])
+                               [G] [G] (reflᵛ {Γ = Γ ∙ F} {A = G} ([Γ] ∙ [F]) [G])
                                [fst] [t] [fst≡t]
 
-      [u]Gfst = conv₂ᵛ {u} {G [ fst (prod t u) ]} {G [ t ]}
+      [u]Gfst = conv₂ᵛ {t = u} {G [ fst (prod t u) ]} {G [ t ]}
                        [Γ] [Gfst] [Gt] [Gfst≡Gt] [u]
 
       snd⇒t : Γ ⊩ᵛ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ] / [Γ]
-      snd⇒t = (λ {Δ} {σ} ⊢Δ [σ] →
+      snd⇒t = (λ {_} {Δ} {σ} ⊢Δ [σ] →
                 let ⊩σF = proj₁ ([F] ⊢Δ [σ])
                     ⊢σF = escape ⊩σF
 
-                    [Fσ] = liftSubstS {F = F} {σ = σ} [Γ] ⊢Δ [F] [σ]
+                    [Fσ] = liftSubstS {σ = σ} {F = F} [Γ] ⊢Δ [F] [σ]
                     ⊩σG : Δ ∙ subst σ F ⊩⟨ l ⟩ subst (liftSubst σ) G
                     ⊩σG = proj₁ ([G] (⊢Δ ∙ ⊢σF) [Fσ])
                     ⊢σG = escape ⊩σG
@@ -113,9 +118,9 @@ import Tools.PropositionalEquality as PE
                                            (singleSubstLift G (fst (prod t u)))
                                            (refl (escape (proj₁ ([Gfst] ⊢Δ [σ]))))
               in  conv snd⇒t σGfst≡σGfst)
-  in  proj₂ (redSubstTermᵛ {G [ fst (prod t u) ]} {snd (prod t u)} {u} [Γ] snd⇒t [Gfst] [u]Gfst)
+  in  proj₂ (redSubstTermᵛ {A = G [ fst (prod t u) ]} {snd (prod t u)} {u} [Γ] snd⇒t [Gfst] [u]Gfst)
 
-Σ-η′ : ∀ {F G p r Γ l l′}
+Σ-η′ : ∀ {F G p r l l′}
          ([F] : Γ ⊩⟨ l′ ⟩ F)
          ([Gfstp] : Γ ⊩⟨ l′ ⟩ G [ fst p ])
          ([ΣFG]₁ : Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G )
@@ -124,7 +129,7 @@ import Tools.PropositionalEquality as PE
          ([fst≡] : Γ ⊩⟨ l′ ⟩ fst p ≡ fst r ∷ F / [F])
          ([snd≡] : Γ ⊩⟨ l′ ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Gfstp])
        → Γ ⊩⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / B-intr BΣ [ΣFG]₁
-Σ-η′ {F} {G} {p} {r} {Γ} {l} {l′}
+Σ-η′ {Γ = Γ} {F} {G} {p} {r} {l} {l′}
      [F] [Gfstp]
      [ΣFG]₁@(noemb (Bᵣ F₁ G₁ D ⊢F ⊢G A≡A [F]₁ [G]₁ G-ext))
      [p]@(Σₜ p′ dₚ p′Prod p′≅p′ wk[fstp′] wk[sndp′])
@@ -223,7 +228,7 @@ import Tools.PropositionalEquality as PE
           wk[snd′≡]
 Σ-η′ [F] [Gfst] (emb 0<1 x) = Σ-η′ [F] [Gfst] x
 
-Σ-η″ : ∀ {F G p r Γ l}
+Σ-η″ : ∀ {F G p r l}
         ([F] : Γ ⊩⟨ l ⟩ F)
         ([Gfst] : Γ ⊩⟨ l ⟩ G [ fst p ])
         ([ΣFG] : Γ ⊩⟨ l ⟩ Σ F ▹ G)
@@ -232,27 +237,27 @@ import Tools.PropositionalEquality as PE
         ([fst≡] : Γ ⊩⟨ l ⟩ fst p ≡ fst r ∷ F / [F])
         ([snd≡] : Γ ⊩⟨ l ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Gfst])
       → Γ ⊩⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / [ΣFG]
-Σ-η″ {F} {G} {t} {Γ} {l} [F] [Gfst] [ΣFG] [p] [r] [fst≡] [snd≡] =
+Σ-η″ {Γ = Γ} {F} {G} {t} {l} [F] [Gfst] [ΣFG] [p] [r] [fst≡] [snd≡] =
   let [ΣFG]′ = B-intr BΣ (B-elim BΣ [ΣFG])
       [p]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [p]
       [r]′ = irrelevanceTerm [ΣFG] [ΣFG]′ [r]
       [p≡]′ = Σ-η′ [F] [Gfst] (B-elim BΣ [ΣFG]) [p]′ [r]′ [fst≡] [snd≡]
   in  irrelevanceEqTerm [ΣFG]′ [ΣFG] [p≡]′
 
-Σ-ηᵛ : ∀ {F G p r Γ l}
+Σ-ηᵛ : ∀ {F G p r l}
          ([Γ] : ⊩ᵛ Γ)
          ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
          ([G] : Γ ∙ F ⊩ᵛ⟨ l ⟩ G / [Γ] ∙ [F])
-       → let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G] in
+       → let [ΣFG] = Σᵛ {F = F} {G} [Γ] [F] [G] in
          ([p] : Γ ⊩ᵛ⟨ l ⟩ p ∷ Σ F ▹ G / [Γ] / [ΣFG])
          ([r] : Γ ⊩ᵛ⟨ l ⟩ r ∷ Σ F ▹ G / [Γ] / [ΣFG])
          ([fst≡] : Γ ⊩ᵛ⟨ l ⟩ fst p ≡ fst r ∷ F / [Γ] / [F])
-       → let [Gfst] = substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {p} [Γ] [F] [G] [p]) in
+       → let [Gfst] = substS {F = F} {G} [Γ] [F] [G] (fstᵛ {F = F} {G} {p} [Γ] [F] [G] [p]) in
          ([snd≡] : Γ ⊩ᵛ⟨ l ⟩ snd p ≡ snd r ∷ G [ fst p ] / [Γ] / [Gfst])
        → Γ ⊩ᵛ⟨ l ⟩ p ≡ r ∷ Σ F ▹ G / [Γ] / [ΣFG]
-Σ-ηᵛ {F} {G} {p} {r} {Γ} {l} [Γ] [F] [G] [p] [r] [fst≡] [snd≡] {Δ} {σ} ⊢Δ [σ] =
-  let [ΣFG] = Σᵛ {F} {G} [Γ] [F] [G]
-      [Gfst] = substS {F} {G} [Γ] [F] [G] (fstᵛ {F} {G} {p} [Γ] [F] [G] [p])
+Σ-ηᵛ {Γ = Γ} {F} {G} {p} {r} {l} [Γ] [F] [G] [p] [r] [fst≡] [snd≡] {Δ} {σ} ⊢Δ [σ] =
+  let [ΣFG] = Σᵛ {F = F} {G} [Γ] [F] [G]
+      [Gfst] = substS {F = F} {G} [Γ] [F] [G] (fstᵛ {F = F} {G} {p} [Γ] [F] [G] [p])
       ⊩σF = proj₁ ([F] ⊢Δ [σ])
       ⊩σGfst₁ = proj₁ ([Gfst] ⊢Δ [σ])
       ⊩σGfst = irrelevance′ (singleSubstLift G (fst p)) ⊩σGfst₁

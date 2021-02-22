@@ -7,12 +7,18 @@ open EqRelSet {{...}}
 
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
+open import Definition.Untyped using (Con ; Term)
 
+open import Tools.Nat
 open import Tools.Product
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Weak head expansion of valid terms.
-redSubstTermᵛ : ∀ {A t u l Γ}
+redSubstTermᵛ : ∀ {A t u l}
               → ([Γ] : ⊩ᵛ Γ)
               → Γ ⊩ᵛ t ⇒ u ∷ A / [Γ]
               → ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])

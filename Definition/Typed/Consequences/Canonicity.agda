@@ -19,9 +19,12 @@ open import Tools.Empty
 open import Tools.Nat
 open import Tools.Product
 
+private
+  variable
+    n : Nat
 
 -- Turns a natural number into its term representation
-sucᵏ : Nat → Term
+sucᵏ : Nat → Term n
 sucᵏ 0 = zero
 sucᵏ (1+ n) = suc (sucᵏ n)
 

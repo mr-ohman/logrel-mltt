@@ -7,12 +7,18 @@ open EqRelSet {{...}}
 
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Substitution
+open import Definition.Untyped using (Con ; Term)
 
+open import Tools.Nat
 open import Tools.Product
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Reflexivity of valid types.
-reflᵛ : ∀ {A Γ l}
+reflᵛ : ∀ {A l}
         ([Γ] : ⊩ᵛ Γ)
         ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
       → Γ ⊩ᵛ⟨ l ⟩ A ≡ A / [Γ] / [A]
@@ -20,7 +26,7 @@ reflᵛ [Γ] [A] ⊢Δ [σ] =
   reflEq (proj₁ ([A] ⊢Δ [σ]))
 
 -- Reflexivity of valid terms.
-reflᵗᵛ : ∀ {A t Γ l}
+reflᵗᵛ : ∀ {A t l}
          ([Γ] : ⊩ᵛ Γ)
          ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
          ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ A / [Γ] / [A])

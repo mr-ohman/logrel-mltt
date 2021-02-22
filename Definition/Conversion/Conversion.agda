@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Conversion where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.Typed.RedSteps
@@ -16,13 +16,18 @@ open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Equality
 open import Definition.Typed.Consequences.Reduction
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ Δ : Con Term n
 
 mutual
   -- Conversion of algorithmic equality.
-  convConv↑Term : ∀ {t u A B Γ Δ}
+  convConv↑Term : ∀ {t u A B}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
                 → Γ ⊢ t [conv↑] u ∷ A
@@ -37,7 +42,7 @@ mutual
              (convConv↓Term Γ≡Δ B₁≡B′ whnfB′ t<>u)
 
   -- Conversion of algorithmic equality with terms and types in WHNF.
-  convConv↓Term : ∀ {t u A B Γ Δ}
+  convConv↓Term : ∀ {t u A B}
                 → ⊢ Γ ≡ Δ
                 → Γ ⊢ A ≡ B
                 → Whnf B
@@ -85,7 +90,7 @@ mutual
     in  η-unit [t] [u] tUnit uUnit
 
 -- Conversion of algorithmic equality with the same context.
-convConvTerm : ∀ {t u A B Γ}
+convConvTerm : ∀ {t u A B}
               → Γ ⊢ t [conv↑] u ∷ A
               → Γ ⊢ A ≡ B
               → Γ ⊢ t [conv↑] u ∷ B

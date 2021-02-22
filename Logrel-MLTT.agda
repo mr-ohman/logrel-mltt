@@ -17,6 +17,7 @@ import Tools.Function
 import Tools.Nullary
 import Tools.List
 import Tools.PropositionalEquality
+import Tools.Fin
 
 -- Grammar of the language
 import Definition.Untyped

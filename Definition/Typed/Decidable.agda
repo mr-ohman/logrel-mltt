@@ -11,17 +11,22 @@ open import Definition.Conversion.Soundness
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Consequences.Completeness
 
+open import Tools.Nat
 open import Tools.Nullary
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Decidability of conversion of well-formed types
-dec : ∀ {A B Γ} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A ≡ B)
+dec : ∀ {A B} → Γ ⊢ A → Γ ⊢ B → Dec (Γ ⊢ A ≡ B)
 dec ⊢A ⊢B = map soundnessConv↑ completeEq
                 (decConv↑ (completeEq (refl ⊢A))
                           (completeEq (refl ⊢B)))
 
 -- Decidability of conversion of well-formed terms
-decTerm : ∀ {t u A Γ} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t ≡ u ∷ A)
+decTerm : ∀ {t u A} → Γ ⊢ t ∷ A → Γ ⊢ u ∷ A → Dec (Γ ⊢ t ≡ u ∷ A)
 decTerm ⊢t ⊢u = map soundnessConv↑Term completeEqTerm
                     (decConv↑Term (completeEqTerm (refl ⊢t))
                                   (completeEqTerm (refl ⊢u)))

@@ -2,7 +2,7 @@
 
 module Definition.Conversion.Transitivity where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
@@ -28,10 +28,14 @@ open import Tools.Product
 open import Tools.Empty
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ Δ : Con Term n
 
 mutual
   -- Transitivity of algorithmic equality of neutrals.
-  trans~↑ : ∀ {t u v A B Γ}
+  trans~↑ : ∀ {t u v A B}
          → Γ ⊢ t ~ u ↑ A
          → Γ ⊢ u ~ v ↑ B
          → Γ ⊢ t ~ v ↑ A
@@ -72,7 +76,7 @@ mutual
     in  Emptyrec-cong A<>C t~v , A≡B
 
   -- Transitivity of algorithmic equality of neutrals with types in WHNF.
-  trans~↓ : ∀ {t u v A B Γ}
+  trans~↓ : ∀ {t u v A B}
           → Γ ⊢ t ~ u ↓ A
           → Γ ⊢ u ~ v ↓ B
           → Γ ⊢ t ~ v ↓ A
@@ -85,7 +89,7 @@ mutual
                      (subset* D₁))
 
   -- Transitivity of algorithmic equality of types.
-  transConv↑ : ∀ {A B C Γ}
+  transConv↑ : ∀ {A B C}
             → Γ ⊢ A [conv↑] B
             → Γ ⊢ B [conv↑] C
             → Γ ⊢ A [conv↑] C
@@ -97,7 +101,7 @@ mutual
                               (whrDet* (D₁ , whnfA″)
                                         (D′ , whnfB′))
                               A′<>B″))
-  transConv↑′ : ∀ {A B C Γ Δ}
+  transConv↑′ : ∀ {A B C}
               → ⊢ Γ ≡ Δ
               → Γ ⊢ A [conv↑] B
               → Δ ⊢ B [conv↑] C
@@ -106,7 +110,7 @@ mutual
     transConv↑ aConvB (stabilityConv↑ (symConEq Γ≡Δ) bConvC)
 
   -- Transitivity of algorithmic equality of types in WHNF.
-  transConv↓ : ∀ {A B C Γ}
+  transConv↓ : ∀ {A B C}
             → Γ ⊢ A [conv↓] B
             → Γ ⊢ B [conv↓] C
             → Γ ⊢ A [conv↓] C
@@ -134,7 +138,7 @@ mutual
   transConv↓ (ne ([~] A₁ D whnfB ())) (Σ-cong x₁ x₂ x₃)
 
   -- Transitivity of algorithmic equality of terms.
-  transConv↑Term : ∀ {t u v A B Γ}
+  transConv↑Term : ∀ {t u v A B}
                 → Γ ⊢ A ≡ B
                 → Γ ⊢ t [conv↑] u ∷ A
                 → Γ ⊢ u [conv↑] v ∷ B
@@ -153,7 +157,7 @@ mutual
                                                     (d₁′ , whnfu′))
                                        t<>u₁))
 
-  transConv↑Term′ : ∀ {t u v A B Γ Δ}
+  transConv↑Term′ : ∀ {t u v A B}
                   → ⊢ Γ ≡ Δ
                   → Γ ⊢ A ≡ B
                   → Γ ⊢ t [conv↑] u ∷ A
@@ -163,7 +167,7 @@ mutual
     transConv↑Term A≡B tConvU (stabilityConv↑Term (symConEq Γ≡Δ) uConvV)
 
   -- Transitivity of algorithmic equality of terms in WHNF.
-  transConv↓Term : ∀ {t u v A B Γ}
+  transConv↓Term : ∀ {t u v A B}
                 → Γ ⊢ A ≡ B
                 → Γ ⊢ t [conv↓] u ∷ A
                 → Γ ⊢ u [conv↓] v ∷ B
@@ -264,14 +268,14 @@ mutual
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢Σⱼ (sym A≡B))
 
 -- Transitivity of algorithmic equality of types of the same context.
-transConv : ∀ {A B C Γ}
+transConv : ∀ {A B C}
           → Γ ⊢ A [conv↑] B
           → Γ ⊢ B [conv↑] C
           → Γ ⊢ A [conv↑] C
 transConv A<>B B<>C = transConv↑ A<>B B<>C
 
 -- Transitivity of algorithmic equality of terms of the same context.
-transConvTerm : ∀ {t u v A Γ}
+transConvTerm : ∀ {t u v A}
               → Γ ⊢ t [conv↑] u ∷ A
               → Γ ⊢ u [conv↑] v ∷ A
               → Γ ⊢ t [conv↑] v ∷ A

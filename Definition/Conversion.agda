@@ -4,9 +4,10 @@
 
 module Definition.Conversion where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 
+open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
@@ -19,9 +20,14 @@ infix 10 _⊢_[conv↓]_
 infix 10 _⊢_[conv↑]_∷_
 infix 10 _⊢_[conv↓]_∷_
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
+
 mutual
   -- Neutral equality.
-  data _⊢_~_↑_ (Γ : Con Term) : (k l A : Term) → Set where
+  data _⊢_~_↑_ (Γ : Con Term n) : (k l A : Term n) → Set where
     var-refl      : ∀ {x y A}
                   → Γ ⊢ var x ∷ A
                   → x PE.≡ y
@@ -39,7 +45,7 @@ mutual
     natrec-cong   : ∀ {k l h g a₀ b₀ F G}
                   → Γ ∙ ℕ ⊢ F [conv↑] G
                   → Γ ⊢ a₀ [conv↑] b₀ ∷ F [ zero ]
-                  → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var 0) ]↑)
+                  → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var x0) ]↑)
                   → Γ ⊢ k ~ l ↓ ℕ
                   → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
     Emptyrec-cong : ∀ {k l F G}
@@ -48,21 +54,21 @@ mutual
                   → Γ ⊢ Emptyrec F k ~ Emptyrec G l ↑ F
 
   -- Neutral equality with types in WHNF.
-  record _⊢_~_↓_ (Γ : Con Term) (k l B : Term) : Set where
+  record _⊢_~_↓_ (Γ : Con Term n) (k l B : Term n) : Set where
     inductive
     constructor [~]
     field
-      A     : Term
+      A     : Term n
       D     : Γ ⊢ A ⇒* B
       whnfB : Whnf B
       k~l   : Γ ⊢ k ~ l ↑ A
 
   -- Type equality.
-  record _⊢_[conv↑]_ (Γ : Con Term) (A B : Term) : Set where
+  record _⊢_[conv↑]_ (Γ : Con Term n) (A B : Term n) : Set where
     inductive
     constructor [↑]
     field
-      A′ B′  : Term
+      A′ B′  : Term n
       D      : Γ ⊢ A ⇒* A′
       D′     : Γ ⊢ B ⇒* B′
       whnfA′ : Whnf A′
@@ -70,7 +76,7 @@ mutual
       A′<>B′ : Γ ⊢ A′ [conv↓] B′
 
   -- Type equality with types in WHNF.
-  data _⊢_[conv↓]_ (Γ : Con Term) : (A B : Term) → Set where
+  data _⊢_[conv↓]_ (Γ : Con Term n) : (A B : Term n) → Set where
     U-refl     : ⊢ Γ → Γ ⊢ U [conv↓] U
     ℕ-refl     : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     Empty-refl : ⊢ Γ → Γ ⊢ Empty [conv↓] Empty
@@ -90,11 +96,11 @@ mutual
                → Γ ⊢ Σ F ▹ G [conv↓] Σ H ▹ E
 
   -- Term equality.
-  record _⊢_[conv↑]_∷_ (Γ : Con Term) (t u A : Term) : Set where
+  record _⊢_[conv↑]_∷_ (Γ : Con Term n) (t u A : Term n) : Set where
     inductive
     constructor [↑]ₜ
     field
-      B t′ u′ : Term
+      B t′ u′ : Term n
       D       : Γ ⊢ A ⇒* B
       d       : Γ ⊢ t ⇒* t′ ∷ B
       d′      : Γ ⊢ u ⇒* u′ ∷ B
@@ -104,7 +110,7 @@ mutual
       t<>u    : Γ ⊢ t′ [conv↓] u′ ∷ B
 
   -- Term equality with types and terms in WHNF.
-  data _⊢_[conv↓]_∷_ (Γ : Con Term) : (t u A : Term) → Set where
+  data _⊢_[conv↓]_∷_ (Γ : Con Term n) : (t u A : Term n) → Set where
     ℕ-ins     : ∀ {k l}
               → Γ ⊢ k ~ l ↓ ℕ
               → Γ ⊢ k [conv↓] l ∷ ℕ
@@ -134,7 +140,7 @@ mutual
               → Γ ⊢ g ∷ Π F ▹ G
               → Function f
               → Function g
-              → Γ ∙ F ⊢ wk1 f ∘ var 0 [conv↑] wk1 g ∘ var 0 ∷ G
+              → Γ ∙ F ⊢ wk1 f ∘ var x0 [conv↑] wk1 g ∘ var x0 ∷ G
               → Γ ⊢ f [conv↓] g ∷ Π F ▹ G
     Σ-η       : ∀ {p r F G}
               → Γ ⊢ p ∷ Σ F ▹ G
@@ -151,5 +157,5 @@ mutual
               → Whnf l
               → Γ ⊢ k [conv↓] l ∷ Unit
 
-star-refl : ∀ {Γ} → ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
+star-refl : ⊢ Γ → Γ ⊢ star [conv↓] star ∷ Unit
 star-refl ⊢Γ = η-unit (starⱼ ⊢Γ) (starⱼ ⊢Γ) starₙ starₙ

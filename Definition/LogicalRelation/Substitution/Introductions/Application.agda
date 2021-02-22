@@ -5,7 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Substitution.Introductions.Application {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
 open import Definition.LogicalRelation
@@ -15,20 +15,25 @@ open import Definition.LogicalRelation.Application
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Application of valid terms.
-appᵛ : ∀ {F G t u Γ l}
+appᵛ : ∀ {F G t u l}
        ([Γ] : ⊩ᵛ Γ)
        ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
        ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ])
        ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ Π F ▹ G / [Γ] / [ΠFG])
        ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
-     → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
-appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
-  let [G[u]] = substSΠ {F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
+     → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G [ u ] / [Γ] / substSΠ {F = F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
+appᵛ {F = F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
+  let [G[u]] = substSΠ {F = F} {G} {u} BΠ [Γ] [F] [ΠFG] [u]
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       [σt] = proj₁ ([t] ⊢Δ [σ])
@@ -50,7 +55,7 @@ appᵛ {F} {G} {t} {u} [Γ] [F] [ΠFG] [t] [u] {σ = σ} ⊢Δ [σ] =
                                               (proj₂ ([u] ⊢Δ [σ]) [σ′] [σ≡σ′])))
 
 -- Application congruence of valid terms.
-app-congᵛ : ∀ {F G t u a b Γ l}
+app-congᵛ : ∀ {F G t u a b l}
             ([Γ] : ⊩ᵛ Γ)
             ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
             ([ΠFG] : Γ ⊩ᵛ⟨ l ⟩ Π F ▹ G / [Γ])
@@ -59,10 +64,10 @@ app-congᵛ : ∀ {F G t u a b Γ l}
             ([b] : Γ ⊩ᵛ⟨ l ⟩ b ∷ F / [Γ] / [F])
             ([a≡b] : Γ ⊩ᵛ⟨ l ⟩ a ≡ b ∷ F / [Γ] / [F])
           → Γ ⊩ᵛ⟨ l ⟩ t ∘ a ≡ u ∘ b ∷ G [ a ] / [Γ]
-              / substSΠ {F} {G} {a} BΠ [Γ] [F] [ΠFG] [a]
-app-congᵛ {F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
+              / substSΠ {F = F} {G} {a} BΠ [Γ] [F] [ΠFG] [a]
+app-congᵛ {F = F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [σ] =
   let [σF] = proj₁ ([F] ⊢Δ [σ])
-      [G[a]]  = proj₁ (substSΠ {F} {G} {a} BΠ [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
+      [G[a]]  = proj₁ (substSΠ {F = F} {G} {a} BΠ [Γ] [F] [ΠFG] [a] ⊢Δ [σ])
       [G[a]]′ = irrelevance′ (singleSubstLift G a) [G[a]]
       [σΠFG] = proj₁ ([ΠFG] ⊢Δ [σ])
       [σa] = proj₁ ([a] ⊢Δ [σ])

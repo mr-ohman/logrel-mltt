@@ -5,18 +5,23 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Properties.Escape {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Weakening
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Reducible types are well-formed.
-escape : ∀ {l Γ A} → Γ ⊩⟨ l ⟩ A → Γ ⊢ A
+escape : ∀ {l A} → Γ ⊩⟨ l ⟩ A → Γ ⊢ A
 escape (Uᵣ′ l′ l< ⊢Γ) = Uⱼ ⊢Γ
 escape (ℕᵣ [ ⊢A , ⊢B , D ]) = ⊢A
 escape (Emptyᵣ [ ⊢A , ⊢B , D ]) = ⊢A
@@ -26,7 +31,7 @@ escape (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) = ⊢A
 escape (emb 0<1 A) = escape A
 
 -- Reducible type equality respect the equality relation.
-escapeEq : ∀ {l Γ A B} → ([A] : Γ ⊩⟨ l ⟩ A)
+escapeEq : ∀ {l A B} → ([A] : Γ ⊩⟨ l ⟩ A)
             → Γ ⊩⟨ l ⟩ A ≡ B / [A]
             → Γ ⊢ A ≅ B
 escapeEq (Uᵣ′ l′ l< ⊢Γ) PE.refl = ≅-Urefl ⊢Γ
@@ -41,7 +46,7 @@ escapeEq (Bᵣ′ W F G D ⊢F ⊢G A≡A [F] [G] G-ext)
 escapeEq (emb 0<1 A) A≡B = escapeEq A A≡B
 
 -- Reducible terms are well-formed.
-escapeTerm : ∀ {l Γ A t} → ([A] : Γ ⊩⟨ l ⟩ A)
+escapeTerm : ∀ {l A t} → ([A] : Γ ⊩⟨ l ⟩ A)
               → Γ ⊩⟨ l ⟩ t ∷ A / [A]
               → Γ ⊢ t ∷ A
 escapeTerm (Uᵣ′ l′ l< ⊢Γ) (Uₜ A [ ⊢t , ⊢u , d ] typeA A≡A [A]) = ⊢t
@@ -62,7 +67,7 @@ escapeTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
 escapeTerm (emb 0<1 A) t = escapeTerm A t
 
 -- Reducible term equality respect the equality relation.
-escapeTermEq : ∀ {l Γ A t u} → ([A] : Γ ⊩⟨ l ⟩ A)
+escapeTermEq : ∀ {l A t u} → ([A] : Γ ⊩⟨ l ⟩ A)
                 → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
                 → Γ ⊢ t ≅ u ∷ A
 escapeTermEq (Uᵣ′ l′ l< ⊢Γ) (Uₜ₌ A B d d′ typeA typeB A≡B [A] [B] [A≡B]) =

@@ -2,15 +2,21 @@
 
 module Definition.Conversion.Reduction where
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 open import Definition.Typed.RedSteps
 open import Definition.Conversion
 
+open import Tools.Nat
+
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Weak head expansion of algorithmic equality of types.
-reductionConv↑ : ∀ {A A′ B B′ Γ}
+reductionConv↑ : ∀ {A A′ B B′}
                → Γ ⊢ A ⇒* A′
                → Γ ⊢ B ⇒* B′
                → Γ ⊢ A′ [conv↑] B′
@@ -19,7 +25,7 @@ reductionConv↑ A⇒* B⇒* ([↑] A″ B″ D D′ whnfA″ whnfB″ A″<>B�
   [↑] A″ B″ (A⇒* ⇨* D) (B⇒* ⇨* D′) whnfA″ whnfB″ A″<>B″
 
 -- Weak head expansion of algorithmic equality of terms.
-reductionConv↑Term : ∀ {t t′ u u′ A B Γ}
+reductionConv↑Term : ∀ {t t′ u u′ A B}
                    → Γ ⊢ A ⇒* B
                    → Γ ⊢ t ⇒* t′ ∷ B
                    → Γ ⊢ u ⇒* u′ ∷ B

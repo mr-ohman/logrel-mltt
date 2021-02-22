@@ -5,7 +5,7 @@ open import Definition.Typed.EqualityRelation
 module Definition.LogicalRelation.Properties.Transitivity {{eqrel : EqRelSet}} where
 open EqRelSet {{...}}
 
-open import Definition.Untyped
+open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
 import Definition.Typed.Weakening as Wk
@@ -15,13 +15,18 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties.Conversion
 open import Definition.LogicalRelation.Properties.Symmetry
 
+open import Tools.Nat
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 mutual
   -- Helper function for transitivity of type equality using shape views.
-  transEqT : ∀ {Γ A B C l l′ l″}
+  transEqT : ∀ {n} {Γ : Con Term n} {A B C l l′ l″}
              {[A] : Γ ⊩⟨ l ⟩ A} {[B] : Γ ⊩⟨ l′ ⟩ B} {[C] : Γ ⊩⟨ l″ ⟩ C}
            → ShapeView₃ Γ l l′ l″ A B C [A] [B] [C]
            → Γ ⊩⟨ l ⟩  A ≡ B / [A]
@@ -37,7 +42,7 @@ mutual
                  | whrDet* (red D₂ , ne neK₂) (red D″ , ne neM₁) =
     ne₌ M₁ D″ neM₁
         (~-trans K≡M K≡M₁)
-  transEqT {Γ} {l = l} {l′ = l′} {l″ = l″}
+  transEqT {n} {Γ} {l = l} {l′ = l′} {l″ = l″}
            (Bᵥ W (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                  (Bᵣ F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁ G-ext₁)
                  (Bᵣ F₂ G₂ D₂ ⊢F₂ ⊢G₂ A≡A₂ [F]₂ [G]₂ G-ext₂))
@@ -46,33 +51,34 @@ mutual
     let ΠF₁G₁≡ΠF′G′    = whrDet* (red D₁ , ⟦ W ⟧ₙ) (D′  , ⟦ W ⟧ₙ)
         F₁≡F′  , G₁≡G′ = B-PE-injectivity W ΠF₁G₁≡ΠF′G′
         F₂≡F″ , G₂≡G″  = B-PE-injectivity W (whrDet* (red D₂ , ⟦ W ⟧ₙ) (D″ , ⟦ W ⟧ₙ))
-        substLift {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ wk (lift ρ) x [ a ]
-        [F′] : ∀ {ρ Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′
-        [F′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
-        [F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l″ ⟩ wk ρ F″
-        [F″] {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₂≡F″ ([F]₂ [ρ] ⊢Δ)
-        [F′≡F″] : ∀ {ρ} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′ ≡ wk ρ F″ / [F′] [ρ] ⊢Δ
-        [F′≡F″] {ρ} [ρ] ⊢Δ = irrelevanceEq′ (PE.cong (wk ρ) F₁≡F′)
+        substLift : ∀ {m n Δ l a} (ρ : Wk m n) x → Set
+        substLift {_} {_} {Δ} {l} {a} ρ x = Δ ⊩⟨ l ⟩ wk (lift ρ) x [ a ]
+        [F′] : ∀ {m} {ρ : Wk m n} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′
+        [F′] {_} {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
+        [F″] : ∀ {m} {ρ : Wk m n} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l″ ⟩ wk ρ F″
+        [F″] {_} {ρ} [ρ] ⊢Δ = PE.subst (λ x → _ ⊩⟨ _ ⟩ wk ρ x) F₂≡F″ ([F]₂ [ρ] ⊢Δ)
+        [F′≡F″] : ∀ {m} {ρ : Wk m n} {Δ} [ρ] ⊢Δ → Δ ⊩⟨ l′ ⟩ wk ρ F′ ≡ wk ρ F″ / [F′] [ρ] ⊢Δ
+        [F′≡F″] {_} {ρ} [ρ] ⊢Δ = irrelevanceEq′ (PE.cong (wk ρ) F₁≡F′)
                                       ([F]₁ [ρ] ⊢Δ) ([F′] [ρ] ⊢Δ) ([F≡F′]₁ [ρ] ⊢Δ)
-        [G′] : ∀ {ρ Δ a} [ρ] ⊢Δ
+        [G′] : ∀ {m} {ρ : Wk m n} {Δ a} [ρ] ⊢Δ
              → Δ ⊩⟨ l′ ⟩ a ∷ wk ρ F′ / [F′] [ρ] ⊢Δ
              → Δ ⊩⟨ l′ ⟩ wk (lift ρ) G′ [ a ]
-        [G′] {ρ} [ρ] ⊢Δ [a] =
+        [G′] {m} {ρ} [ρ] ⊢Δ [a] =
           let [a′] = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₁≡F′))
                                       ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a]
           in  PE.subst (substLift ρ) G₁≡G′ ([G]₁ [ρ] ⊢Δ [a′])
-        [G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
+        [G″] : ∀ {m} {ρ : Wk m n} {Δ a} [ρ] ⊢Δ
              → Δ ⊩⟨ l″ ⟩ a ∷ wk ρ F″ / [F″] [ρ] ⊢Δ
              → Δ ⊩⟨ l″ ⟩ wk (lift ρ) G″ [ a ]
-        [G″] {ρ} [ρ] ⊢Δ [a] =
+        [G″] {_} {ρ} [ρ] ⊢Δ [a] =
           let [a″] = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₂≡F″))
                                       ([F″] [ρ] ⊢Δ) ([F]₂ [ρ] ⊢Δ) [a]
           in  PE.subst (substLift ρ) G₂≡G″ ([G]₂ [ρ] ⊢Δ [a″])
-        [G′≡G″] : ∀ {ρ Δ a} [ρ] ⊢Δ
+        [G′≡G″] : ∀ {m} {ρ : Wk m n} {Δ a} [ρ] ⊢Δ
                   ([a] : Δ ⊩⟨ l′ ⟩ a ∷ wk ρ F′ / [F′] [ρ] ⊢Δ)
                 → Δ ⊩⟨ l′ ⟩ wk (lift ρ) G′  [ a ]
                           ≡ wk (lift ρ) G″ [ a ] / [G′] [ρ] ⊢Δ [a]
-        [G′≡G″] {ρ} [ρ] ⊢Δ [a′] =
+        [G′≡G″] {_} {ρ} [ρ] ⊢Δ [a′] =
           let [a]₁ = irrelevanceTerm′ (PE.cong (wk ρ) (PE.sym F₁≡F′))
                                       ([F′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ) [a′]
           in  irrelevanceEq′ (PE.cong (λ x → wk (lift ρ) x [ _ ]) G₁≡G′)
@@ -92,7 +98,7 @@ mutual
   transEqT (emb¹¹⁰ AB) A≡B B≡C = transEqT AB A≡B B≡C
 
   -- Transitivty of type equality.
-  transEq : ∀ {Γ A B C l l′ l″}
+  transEq : ∀ {A B C l l′ l″}
             ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B) ([C] : Γ ⊩⟨ l″ ⟩ C)
           → Γ ⊩⟨ l ⟩  A ≡ B / [A]
           → Γ ⊩⟨ l′ ⟩ B ≡ C / [B]
@@ -101,7 +107,7 @@ mutual
     transEqT (combine (goodCases [A] [B] A≡B) (goodCases [B] [C] B≡C)) A≡B B≡C
 
   -- Transitivty of type equality with some propositonally equal types.
-  transEq′ : ∀ {Γ A B B′ C C′ l l′ l″} → B PE.≡ B′ → C PE.≡ C′
+  transEq′ : ∀ {A B B′ C C′ l l′ l″} → B PE.≡ B′ → C PE.≡ C′
            → ([A] : Γ ⊩⟨ l ⟩ A) ([B] : Γ ⊩⟨ l′ ⟩ B) ([C] : Γ ⊩⟨ l″ ⟩ C)
            → Γ ⊩⟨ l ⟩  A ≡ B′ / [A]
            → Γ ⊩⟨ l′ ⟩ B ≡ C′ / [B]
@@ -109,7 +115,7 @@ mutual
   transEq′ PE.refl PE.refl [A] [B] [C] A≡B B≡C = transEq [A] [B] [C] A≡B B≡C
 
 
-transEqTermNe : ∀ {Γ n n′ n″ A}
+transEqTermNe : ∀ {n n′ n″ A}
               → Γ ⊩neNf n  ≡ n′  ∷ A
               → Γ ⊩neNf n′ ≡ n″ ∷ A
               → Γ ⊩neNf n  ≡ n″ ∷ A
@@ -117,7 +123,7 @@ transEqTermNe (neNfₜ₌ neK neM k≡m) (neNfₜ₌ neK₁ neM₁ k≡m₁) =
   neNfₜ₌ neK neM₁ (~-trans k≡m k≡m₁)
 
 mutual
-  transEqTermℕ : ∀ {Γ n n′ n″}
+  transEqTermℕ : ∀ {n n′ n″}
                → Γ ⊩ℕ n  ≡ n′  ∷ℕ
                → Γ ⊩ℕ n′ ≡ n″ ∷ℕ
                → Γ ⊩ℕ n  ≡ n″ ∷ℕ
@@ -130,7 +136,7 @@ mutual
     in  ℕₜ₌ k k″ d d″ (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ t≡u₁))
             (transNatural-prop prop prop′)
 
-  transNatural-prop : ∀ {Γ k k′ k″}
+  transNatural-prop : ∀ {k k′ k″}
                     → [Natural]-prop Γ k k′
                     → [Natural]-prop Γ k′ k″
                     → [Natural]-prop Γ k k″
@@ -143,14 +149,14 @@ mutual
     ne (transEqTermNe [k≡k′] [k′≡k″])
 
 -- Empty
-transEmpty-prop : ∀ {Γ k k′ k″}
+transEmpty-prop : ∀ {k k′ k″}
   → [Empty]-prop Γ k k′
   → [Empty]-prop Γ k′ k″
   → [Empty]-prop Γ k k″
 transEmpty-prop (ne [k≡k′]) (ne [k′≡k″]) =
   ne (transEqTermNe [k≡k′] [k′≡k″])
 
-transEqTermEmpty : ∀ {Γ n n′ n″}
+transEqTermEmpty : ∀ {n n′ n″}
   → Γ ⊩Empty n  ≡ n′ ∷Empty
   → Γ ⊩Empty n′ ≡ n″ ∷Empty
   → Γ ⊩Empty n  ≡ n″ ∷Empty
@@ -164,7 +170,7 @@ transEqTermEmpty (Emptyₜ₌ k k′ d d′ t≡u prop)
      (transEmpty-prop prop prop′)
 
 -- Transitivty of term equality.
-transEqTerm : ∀ {l Γ A t u v}
+transEqTerm : ∀ {l A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
             → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
             → Γ ⊩⟨ l ⟩ u ≡ v ∷ A / [A]

@@ -11,11 +11,16 @@ open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Fundamental.Reducibility
 
+open import Tools.Nat
 open import Tools.Product
 
+private
+  variable
+    n : Nat
+    Γ : Con Term n
 
 -- Helper function where all reducible types can be reduced to WHNF.
-whNorm′ : ∀ {A Γ l} ([A] : Γ ⊩⟨ l ⟩ A)
+whNorm′ : ∀ {A l} ([A] : Γ ⊩⟨ l ⟩ A)
                 → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 whNorm′ (Uᵣ′ .⁰ 0<1 ⊢Γ) = U , Uₙ , idRed:*: (Uⱼ ⊢Γ)
 whNorm′ (ℕᵣ D) = ℕ , ℕₙ , D
@@ -27,11 +32,11 @@ whNorm′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Σ F ▹ G , Σₙ , 
 whNorm′ (emb 0<1 [A]) = whNorm′ [A]
 
 -- Well-formed types can all be reduced to WHNF.
-whNorm : ∀ {A Γ} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
+whNorm : ∀ {A} → Γ ⊢ A → ∃ λ B → Whnf B × Γ ⊢ A :⇒*: B
 whNorm A = whNorm′ (reducible A)
 
 -- Helper function where reducible all terms can be reduced to WHNF.
-whNormTerm′ : ∀ {a A Γ l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
+whNormTerm′ : ∀ {a A l} ([A] : Γ ⊩⟨ l ⟩ A) → Γ ⊩⟨ l ⟩ a ∷ A / [A]
                 → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 whNormTerm′ (Uᵣ x) (Uₜ A d typeA A≡A [t]) = A , typeWhnf typeA , d
 whNormTerm′ (ℕᵣ x) (ℕₜ n d n≡n prop) =
@@ -51,12 +56,12 @@ whNormTerm′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Σₜ p d pProd p�
 whNormTerm′ (emb 0<1 [A]) [a] = whNormTerm′ [A] [a]
 
 -- Well-formed terms can all be reduced to WHNF.
-whNormTerm : ∀ {a A Γ} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
+whNormTerm : ∀ {a A} → Γ ⊢ a ∷ A → ∃ λ b → Whnf b × Γ ⊢ a :⇒*: b ∷ A
 whNormTerm {a} {A} ⊢a =
   let [A] , [a] = reducibleTerm ⊢a
   in  whNormTerm′ [A] [a]
 
-redMany : ∀ {t u A Γ} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ⇒* u ∷ A
+redMany : ∀ {t u A} → Γ ⊢ t ⇒ u ∷ A → Γ ⊢ t ⇒* u ∷ A
 redMany d =
   let _ , _ , ⊢u = syntacticEqTerm (subsetTerm d)
   in  d ⇨ id ⊢u
