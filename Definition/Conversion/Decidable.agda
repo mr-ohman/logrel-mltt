@@ -487,10 +487,10 @@ mutual
   decConv↓Term (Σ-η ⊢t _ tProd _ fstConvT sndConvT)
                (Σ-η ⊢u _ uProd _ fstConvU sndConvU)
     with decConv↑Term fstConvT fstConvU
-  ... | yes P with let ⊢F , ⊢G = syntacticΣ (syntacticTerm ⊢t)
+  ... | yes P with(let ⊢F , ⊢G = syntacticΣ (syntacticTerm ⊢t)
                        fstt≡fstu = soundnessConv↑Term P
                        Gfstt≡Gfstu = substTypeEq (refl ⊢G) fstt≡fstu
-                   in  decConv↑TermConv Gfstt≡Gfstu sndConvT sndConvU
+                   in  decConv↑TermConv Gfstt≡Gfstu sndConvT sndConvU)
   ... | yes Q = yes (Σ-η ⊢t ⊢u tProd uProd P Q)
   ... | no ¬Q = no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q } )
   decConv↓Term (Σ-η _ _ _ _ _ _) (Σ-η _ _ _ _ _ _)
