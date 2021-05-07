@@ -7,7 +7,7 @@ htmldir=html
 # Agda-2.5.3 needed to generate the links we use in the paper
 # Agda-2.5.4 ok from 2018-02-19
 # try latest Agda
-agda=time agda +RTS -s -RTS
+agda=time agda +RTS -s -RTS -v profile:7
 main=Logrel-MLTT.agda
 
 .PHONY : clean pack check agda-check html loc agda-loc agda-woc
