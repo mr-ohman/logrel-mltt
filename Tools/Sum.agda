@@ -19,3 +19,13 @@ id (inj₂ x) = x
 sym : ∀ {A B} → A ⊎ B → B ⊎ A
 sym (inj₁ x) = inj₂ x
 sym (inj₂ x) = inj₁ x
+
+-- Bifunctor instances.
+
+first : ∀{A A' B} → (A → A') → A ⊎ B → A' ⊎ B
+first f (inj₁ a) = inj₁ (f a)
+first f (inj₂ b) = inj₂ b
+
+second : ∀{A B B'} → (B → B') → A ⊎ B → A ⊎ B'
+second f (inj₁ a) = inj₁ a
+second f (inj₂ b) = inj₂ (f b)
