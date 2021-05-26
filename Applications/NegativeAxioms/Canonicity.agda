@@ -33,63 +33,28 @@ Inconsistent Γ = ∃ λ t → Γ ⊢ t ∷ Empty
 -- A choiceful type can only be eliminated through branching
 -- (via a recursor).
 
-Choiceful : Ty m → Set
--- Types: yes
-Choiceful (gen Emptykind _)               = ⊤
-Choiceful (gen Natkind _)                 = ⊤
--- Types: no
-Choiceful (gen Pikind _)                  = ⊥
-Choiceful (gen Sigmakind _)               = ⊥
-Choiceful (gen Unitkind _)                = ⊥
-Choiceful (gen Ukind _)                   = ⊥
--- Terms: no
-Choiceful (var _)                         = ⊥
-Choiceful (gen Lamkind _)                 = ⊥
-Choiceful (gen Appkind _)                 = ⊥
-Choiceful (gen Prodkind _)                = ⊥
-Choiceful (gen Fstkind _)                 = ⊥
-Choiceful (gen Sndkind _)                 = ⊥
-Choiceful (gen Zerokind _)                = ⊥
-Choiceful (gen Suckind _)                 = ⊥
-Choiceful (gen Natreckind _)              = ⊥
-Choiceful (gen Starkind _)                = ⊥
-Choiceful (gen Emptyreckind _)            = ⊥
+data Choiceful : Ty m → Set where
+  empty : Choiceful {m = m} Empty
+  nat   : Choiceful {m = m} ℕ
 
 -- A type is negative if it is normal enough to see that its ending in ⊥,
 -- and it is actually ending in ⊥.
 -- Think: ¬A.
 
-NegativeType : Ty m → Set
--- Types: yes
-NegativeType (gen Emptykind _)               = ⊤
-NegativeType (gen Pikind (A ∷ (B ∷ [])))     = NegativeType B
-NegativeType (gen Sigmakind (A ∷ (B ∷ [])))  = NegativeType A × NegativeType B
--- Types: no
-NegativeType (gen Natkind _)                 = ⊥
-NegativeType (gen Unitkind _)                = ⊥
-NegativeType (gen Ukind _)                   = ⊥
--- Terms: no
-NegativeType (var _)                         = ⊥
-NegativeType (gen Lamkind _)                 = ⊥
-NegativeType (gen Appkind _)                 = ⊥
-NegativeType (gen Prodkind _)                = ⊥
-NegativeType (gen Fstkind _)                 = ⊥
-NegativeType (gen Sndkind _)                 = ⊥
-NegativeType (gen Zerokind _)                = ⊥
-NegativeType (gen Suckind _)                 = ⊥
-NegativeType (gen Natreckind _)              = ⊥
-NegativeType (gen Starkind _)                = ⊥
-NegativeType (gen Emptyreckind _)            = ⊥
+data NegativeType : Ty m → Set where
+  empty : NegativeType {m = m} Empty
+  pi    : NegativeType B → NegativeType (Π A ▹ B)
+  sigma : NegativeType A → NegativeType B → NegativeType (Σ A ▹ B)
 
 -- A context is negative if all of its type entries are negative.
 
-NegativeContext : Con Ty m → Set
-NegativeContext ε       = ⊤
-NegativeContext (Γ ∙ A) = NegativeContext Γ × NegativeType A
+data NegativeContext : Con Ty m → Set where
+  ε   : NegativeContext ε
+  _∙_ : NegativeContext Γ → NegativeType A → NegativeContext (Γ ∙ A)
 
 lookupNegative : NegativeContext Γ → (x ∷ A ∈ Γ) → NegativeType A
-lookupNegative (nΓ , nA) here      = {! nA !}  -- need to weaken predicate
-lookupNegative (nΓ , nA) (there h) = {!lookupNegative nΓ h!}
+lookupNegative (nΓ ∙ nA) here      = {! nA !}  -- need to weaken predicate
+lookupNegative (nΓ ∙ nA) (there h) = {!lookupNegative nΓ h!}
 
 -- If we can prove something in a negative context,
 -- we can also prove absurdity.
@@ -98,21 +63,21 @@ lookupNegative (nΓ , nA) (there h) = {!lookupNegative nΓ h!}
 
 module NegativeNeProvesFalse (nΓ : NegativeContext Γ) where
 
-  hyp : (x ∷ A ∈ Γ) → Choiceful A → Inconsistent Γ
-  hyp {A = A} h cA with lookupNegative nΓ h
-  ... | z = {!!}
+  hyp : ⊢ Γ → x ∷ A ∈ Γ → Choiceful A → Inconsistent Γ
+  hyp ⊢Γ h cA with lookupNegative nΓ h
+  hyp ⊢Γ h empty | empty = var _ , var ⊢Γ h
 
-{-
-  lem : (d : Γ ⊢ u ∷ A)
+  lem : Choiceful A
+      → (d : Γ ⊢ u ∷ A)
       → (n : NfNeutral u)
-      → ∃ λ t → Γ ⊢ t ∷ Empty
-  lem (var x x₁       ) (var _             ) = {!!}
-  lem (d ∘ⱼ _         ) (∘ₙ n _            ) = lem d n
-  lem (fstⱼ _ _ d     ) (fstₙ n            ) = lem d n
-  lem (sndⱼ _ _ d     ) (sndₙ n            ) = lem d n
-  lem (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n) = lem d n
-  lem (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _    ) = _ , d
-  lem (conv d _       ) n                    = lem d n
+      → Inconsistent Γ
+  lem cA (var ⊢Γ h       ) (var _           ) = hyp ⊢Γ h cA
+  lem cA (d ∘ⱼ _         ) (∘ₙ n _          ) = lem {!!} d n
+  lem cA (fstⱼ _ _ d     ) (fstₙ n          ) = lem {!!} d n
+  lem cA (sndⱼ _ _ d     ) (sndₙ n          ) = lem {!!} d n
+  lem cA (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) = lem {!!} d n
+  lem cA (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = _ , d
+  lem cA (conv d _       ) n                  = lem {!!} d n  -- impossible
 
 -- -}
 -- -}
