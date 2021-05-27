@@ -20,7 +20,7 @@ open import Tools.Empty
 open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
-open import Tools.Sum using (_⊎_; inj₁; inj₂; first)
+open import Tools.Sum using (_⊎_; inj₁; inj₂)
 open import Tools.Unit
 
 -- Preliminaries
@@ -43,11 +43,6 @@ private
 data Numeral {m : Nat} : Term m → Set where
   zeroₙ : Numeral zero
   sucₙ  : Numeral t → Numeral (suc t)
-
--- A context is inconsistent if it allows us to derive absurdity.
-
-Inconsistent : Cxt m → Set
-Inconsistent Γ = ∃ λ t → Γ ⊢ t ∷ Empty
 
 -- Negative types
 ---------------------------------------------------------------------------
@@ -154,69 +149,59 @@ lookupNegative ⊢Γ∙A@(⊢Γ ∙ Γ⊢A) (nΓ ∙ nA) (there h)
 -- Main results
 ---------------------------------------------------------------------------
 
-module Main (nΓ : NegativeContext Γ) where
+-- We assume a negative, consistent context.
+
+module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Empty → ⊥) where
 
   -- Lemma: A neutral has negative type in a consistent negative context.
 
-  nene : (d : Γ ⊢ u ∷ A)
-     → (n : NfNeutral u)
-     → NegativeType Γ A ⊎ Inconsistent Γ
-  nene (var ⊢Γ h       ) (var _           ) = inj₁ (lookupNegative ⊢Γ nΓ h)
-  nene (d ∘ⱼ ⊢t        ) (∘ₙ n _          ) = first (λ n → appNeg n (refl (syntacticTerm d)) ⊢t)          (nene d n)
-  nene (fstⱼ ⊢A A⊢B d  ) (fstₙ n          ) = first (λ n → fstNeg n (refl (Σⱼ ⊢A ▹ A⊢B)))                 (nene d n)
-  nene (sndⱼ ⊢A A⊢B d  ) (sndₙ n          ) = first (λ n → sndNeg n (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)) (nene d n)
-  nene (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) with nene d n
-  ... | inj₁ nℕ = ⊥-elim (¬negℕ nℕ ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
-  ... | inj₂ ⊢⊥ = inj₂ ⊢⊥
-  nene (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = inj₂ (_ , d)
-  nene (conv d c       ) n                  = first (λ n → conv n c) (nene d n)
+  neNeg : (d : Γ ⊢ u ∷ A) (n : NfNeutral u) → NegativeType Γ A
+  neNeg (var ⊢Γ h       ) (var _           ) = lookupNegative ⊢Γ nΓ h
+  neNeg (d ∘ⱼ ⊢t        ) (∘ₙ n _          ) = appNeg (neNeg d n) (refl (syntacticTerm d)) ⊢t
+  neNeg (fstⱼ ⊢A A⊢B d  ) (fstₙ n          ) = fstNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B))
+  neNeg (sndⱼ ⊢A A⊢B d  ) (sndₙ n          ) = sndNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)
+  neNeg (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) = ⊥-elim (¬negℕ (neNeg d n) ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
+  neNeg (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = ⊥-elim (consistent d)
+  neNeg (conv d c       ) n                  = conv (neNeg d n) c
 
   -- Lemma: A normal form of type ℕ is a numeral in a consistent negative context.
 
   nfN : (d : Γ ⊢ u ∷ A)
       → (n : Nf u)
       → (c : Γ ⊢ A ≡ ℕ)
-      → Numeral u ⊎ Inconsistent Γ
+      → Numeral u
 
-  -- Neutrals
-  nfN d (ne n) c with nene d n
-  ... | inj₁ nA = ⊥-elim (¬negℕ nA c)
-  ... | inj₂ ⊢⊥ = inj₂ ⊢⊥
+  -- Neutrals: type is not ℕ since it must be negative
+  nfN d (ne n) c = ⊥-elim (¬negℕ (neNeg d n) c)
 
   -- Numerals
-  nfN (zeroⱼ x) zeroₙ c = inj₁ zeroₙ
-  nfN (sucⱼ d) (sucₙ n) c = first sucₙ (nfN d n c)
+  nfN (zeroⱼ x) zeroₙ   c = zeroₙ
+  nfN (sucⱼ d) (sucₙ n) c = sucₙ (nfN d n c)
 
   -- Conversion
   nfN (conv d c) n c' = nfN d n (trans c c')
 
   -- Impossible cases: type is not ℕ
 
-  -- Canonical types
+  -- * Canonical types
   nfN (Πⱼ _ ▹ _)      (Πₙ _ _)    c = ⊥-elim (U≢ℕ c)
   nfN (Σⱼ _ ▹ _)      (Σₙ _ _)    c = ⊥-elim (U≢ℕ c)
   nfN (ℕⱼ _)           ℕₙ         c = ⊥-elim (U≢ℕ c)
   nfN (Emptyⱼ _)       Emptyₙ     c = ⊥-elim (U≢ℕ c)
   nfN (Unitⱼ _)        Unitₙ      c = ⊥-elim (U≢ℕ c)
 
-  -- Canonical forms
+  -- * Canonical forms
   nfN (lamⱼ _ _)      (lamₙ _)    c = ⊥-elim (ℕ≢Π (sym c))
   nfN (prodⱼ _ _ _ _) (prodₙ _ _) c = ⊥-elim (ℕ≢Σ (sym c))
   nfN (starⱼ _)       starₙ       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
   -- q.e.d
 
-  -- Canonicity theorem
 
-  thm : (k : Inconsistent Γ → ⊥) (⊢t : Γ ⊢ t ∷ ℕ) → ∃ λ u → Numeral u × Γ ⊢ t ≡ u ∷ ℕ
+  -- Canonicity theorem: Any well-typed term Γ ⊢ t : ℕ is convertible to a numeral.
 
-  thm k ⊢t with fullRedTerm (completeEqTerm (refl ⊢t))
-  ... | u , nf , eq with nfN (proj₂ (proj₂ (syntacticEqTerm eq))) nf (refl (ℕⱼ (wfTerm ⊢t)))
-  ... | inj₁ num = u , num , eq
-  ... | inj₂ ¬k  = ⊥-elim (k ¬k)
+  thm : (⊢t : Γ ⊢ t ∷ ℕ) → ∃ λ u → Numeral u × Γ ⊢ t ≡ u ∷ ℕ
+
+  thm ⊢t with fullRedTerm (completeEqTerm (refl ⊢t))
+  ... | u , nf , eq = u , nfN (proj₂ (proj₂ (syntacticEqTerm eq))) nf (refl (ℕⱼ (wfTerm ⊢t))) , eq
 
 -- Q.E.D. 2021-05-27
-
--- -}
--- -}
--- -}
--- -}
