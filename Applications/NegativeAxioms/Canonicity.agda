@@ -23,7 +23,8 @@ open import Tools.Product
 open import Tools.Sum using (_⊎_; inj₁; inj₂; first)
 open import Tools.Unit
 
--- Contexts of only negative hypotheses
+-- Preliminaries
+---------------------------------------------------------------------------
 
 private
   Ty  = Term
@@ -48,9 +49,11 @@ data Numeral {m : Nat} : Term m → Set where
 Inconsistent : Cxt m → Set
 Inconsistent Γ = ∃ λ t → Γ ⊢ t ∷ Empty
 
--- A type is negative if it is normal enough to see that its ending in ⊥,
--- and it is actually ending in ⊥.
--- Think: ¬A.
+-- Negative types
+---------------------------------------------------------------------------
+
+-- A type is negative if all of its branches end in ⊥.
+-- The prime example is negation ¬A.
 
 data NegativeType (Γ : Cxt m) : Ty m → Set where
   empty : NegativeType Γ Empty
@@ -58,7 +61,7 @@ data NegativeType (Γ : Cxt m) : Ty m → Set where
   sigma : Γ ⊢ A → NegativeType Γ A → NegativeType (Γ ∙ A) B → NegativeType Γ (Σ A ▹ B)
   conv  : NegativeType Γ A → Γ ⊢ A ≡ B → NegativeType Γ B
 
--- Negative types are closed under weakening
+-- Negative types are closed under weakening.
 
 wkNeg : ρ ∷ Δ ⊆ Γ → ⊢ Δ → NegativeType Γ A → NegativeType Δ (U.wk ρ A)
 
@@ -131,6 +134,9 @@ appNeg (conv n c)    c' = appNeg n (trans c c')
 ¬negℕ (sigma _ _ _) c = ℕ≢Σ (sym c)
 ¬negℕ (conv n c)   c' = ¬negℕ n (trans c c')
 
+-- Negative contexts
+---------------------------------------------------------------------------
+
 -- A context is negative if all of its type entries are negative.
 
 data NegativeContext : Con Ty m → Set where
@@ -145,11 +151,12 @@ lookupNegative ⊢Γ∙A            (nΓ ∙ nA) here
 lookupNegative ⊢Γ∙A@(⊢Γ ∙ Γ⊢A) (nΓ ∙ nA) (there h)
   = wkNeg (step id) ⊢Γ∙A (lookupNegative ⊢Γ nΓ h)
 
--- Main results.
+-- Main results
+---------------------------------------------------------------------------
 
 module Main (nΓ : NegativeContext Γ) where
 
-  -- A neutral has negative type in a consistent negative context.
+  -- Lemma: A neutral has negative type in a consistent negative context.
 
   nene : (d : Γ ⊢ u ∷ A)
      → (n : NfNeutral u)
@@ -164,7 +171,7 @@ module Main (nΓ : NegativeContext Γ) where
   nene (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = inj₂ (_ , d)
   nene (conv d c       ) n                  = first (λ n → conv n c) (nene d n)
 
-  -- A normal form of type ℕ is a numeral in a consistent negative context.
+  -- Lemma: A normal form of type ℕ is a numeral in a consistent negative context.
 
   nfN : (d : Γ ⊢ u ∷ A)
       → (n : Nf u)
@@ -196,7 +203,7 @@ module Main (nΓ : NegativeContext Γ) where
   nfN (lamⱼ _ _)      (lamₙ _)    c = ⊥-elim (ℕ≢Π (sym c))
   nfN (prodⱼ _ _ _ _) (prodₙ _ _) c = ⊥-elim (ℕ≢Σ (sym c))
   nfN (starⱼ _)       starₙ       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
-
+  -- q.e.d
 
   -- Canonicity theorem
 
