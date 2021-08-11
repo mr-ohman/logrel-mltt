@@ -90,3 +90,6 @@ import Definition.Conversion.Consequences.Completeness
 
 -- Decidability of conversion
 import Definition.Typed.Decidable
+
+-- Application: consistent negative axioms preserve canonicity
+import Application.NegativeAxioms.Canonicity
