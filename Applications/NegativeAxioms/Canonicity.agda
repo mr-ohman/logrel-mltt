@@ -1,4 +1,4 @@
--- Prove that consistent negative axioms do not jeopardize canonicity.
+-- Proof that consistent negative axioms do not jeopardize canonicity.
 -- https://www.cs.bham.ac.uk/~mhe/papers/negative-axioms.pdf
 
 module Applications.NegativeAxioms.Canonicity where
@@ -30,13 +30,13 @@ private
   Ty  = Term
   Cxt = Con Ty
   variable
-    m m' : Nat
-    x : Fin m
-    ρ : Wk m m'
-    σ : Subst m m'
-    Γ Δ : Con Term m
+    m m'  : Nat
+    x     : Fin m
+    ρ     : Wk m m'
+    σ     : Subst m m'
+    Γ Δ   : Con Term m
     A B C : Term m
-    t u : Term m
+    t u   : Term m
 
 -- Numerals
 
@@ -51,12 +51,23 @@ data Numeral {m : Nat} : Term m → Set where
 -- The prime example is negation ¬A.
 
 data NegativeType (Γ : Cxt m) : Ty m → Set where
-  empty : NegativeType Γ Empty
-  pi    : Γ ⊢ A → NegativeType (Γ ∙ A) B → NegativeType Γ (Π A ▹ B)
-  sigma : Γ ⊢ A → NegativeType Γ A → NegativeType (Γ ∙ A) B → NegativeType Γ (Σ A ▹ B)
-  conv  : NegativeType Γ A → Γ ⊢ A ≡ B → NegativeType Γ B
 
--- Negative types are closed under weakening.
+  empty : NegativeType Γ Empty
+
+  pi    : Γ ⊢ A
+        → NegativeType (Γ ∙ A) B
+        → NegativeType Γ (Π A ▹ B)
+
+  sigma : Γ ⊢ A
+        → NegativeType Γ A
+        → NegativeType (Γ ∙ A) B
+        → NegativeType Γ (Σ A ▹ B)
+
+  conv  : NegativeType Γ A
+        → Γ ⊢ A ≡ B
+        → NegativeType Γ B
+
+-- Lemma: Negative types are closed under weakening.
 
 wkNeg : ρ ∷ Δ ⊆ Γ → ⊢ Δ → NegativeType Γ A → NegativeType Δ (U.wk ρ A)
 
@@ -74,7 +85,7 @@ wkNeg w ⊢Δ (sigma dA nA nB)
 wkNeg w ⊢Δ (conv n c)
   = conv (wkNeg w ⊢Δ n) (wkEq w ⊢Δ c)
 
--- Negative types are closed under parallel substitution
+-- Lemma: Negative types are closed under parallel substitution.
 
 subNeg : NegativeType Γ A → Δ ⊢ˢ σ ∷ Γ → ⊢ Δ → NegativeType Δ (subst σ A)
 
@@ -90,12 +101,12 @@ subNeg (sigma ⊢A nA nB) s ⊢Δ
 
 subNeg (conv n c) s ⊢Δ = conv (subNeg n s ⊢Δ) (substitutionEq c (substRefl s) ⊢Δ)
 
--- Negative types are closed under single substitution
+-- Corollary: Negative types are closed under single substitution.
 
 subNeg1 : NegativeType (Γ ∙ A) B → Γ ⊢ t ∷ A → NegativeType Γ (B [ t ])
 subNeg1 n ⊢t = subNeg n (singleSubst ⊢t) (wfTerm ⊢t)
 
--- The first component of a negative Σ-type is negative
+-- Lemma: The first component of a negative Σ-type is negative.
 
 fstNeg : NegativeType Γ C → Γ ⊢ C ≡ Σ A ▹ B → NegativeType Γ A
 fstNeg empty          c = ⊥-elim (Empty≢Σⱼ c)
@@ -103,7 +114,7 @@ fstNeg (pi _ _)       c = ⊥-elim (Π≢Σ c)
 fstNeg (sigma _ nA _) c = conv nA (proj₁ (Σ-injectivity c))
 fstNeg (conv n c)    c' = fstNeg n (trans c c')
 
--- Any instance of the second component of a negative Σ-type is negative.
+-- Lemma: Any instance of the second component of a negative Σ-type is negative.
 
 sndNeg : NegativeType Γ C → Γ ⊢ C ≡ Σ A ▹ B → Γ ⊢ t ∷ A → NegativeType Γ (B [ t ])
 sndNeg empty          c = ⊥-elim (Empty≢Σⱼ c)
@@ -112,7 +123,7 @@ sndNeg (sigma _ _ nB) c ⊢t = let (cA , cB) = Σ-injectivity c in
   subNeg (conv nB cB) (singleSubst (conv ⊢t (sym cA))) (wfTerm ⊢t)
 sndNeg (conv n c)    c' = sndNeg n (trans c c')
 
--- Any instance of the codomain of a negative Π-type is negative.
+-- Lemma: Any instance of the codomain of a negative Π-type is negative.
 
 appNeg : NegativeType Γ C → Γ ⊢ C ≡ Π A ▹ B → Γ ⊢ t ∷ A → NegativeType Γ (B [ t ])
 appNeg empty          c = ⊥-elim (Empty≢Πⱼ c)
@@ -121,7 +132,7 @@ appNeg (pi _ nB) c ⊢t = let (cA , cB) = injectivity c in
   subNeg (conv nB cB) (singleSubst (conv ⊢t (sym cA))) (wfTerm ⊢t)
 appNeg (conv n c)    c' = appNeg n (trans c c')
 
--- The type ℕ is not negative.
+-- Lemma: The type ℕ is not negative.
 
 ¬negℕ : NegativeType Γ C → Γ ⊢ C ≡ ℕ → ⊥
 ¬negℕ empty         c = ℕ≢Emptyⱼ (sym c)
@@ -138,7 +149,7 @@ data NegativeContext : Con Ty m → Set where
   ε   : NegativeContext ε
   _∙_ : NegativeContext Γ → NegativeType Γ A → NegativeContext (Γ ∙ A)
 
--- Any entry in negative context is a negative type (needs weakening).
+-- Lemma: Any entry in negative context is a negative type (needs weakening).
 
 lookupNegative : ⊢ Γ → NegativeContext Γ → (x ∷ A ∈ Γ) → NegativeType Γ A
 lookupNegative ⊢Γ∙A            (nΓ ∙ nA) here
@@ -171,17 +182,17 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
       → (c : Γ ⊢ A ≡ ℕ)
       → Numeral u
 
-  -- Neutrals: type is not ℕ since it must be negative
+  -- Case: neutrals. The type cannot be ℕ since it must be negative.
   nfN d (ne n) c = ⊥-elim (¬negℕ (neNeg d n) c)
 
-  -- Numerals
+  -- Case: numerals.
   nfN (zeroⱼ x) zeroₙ   c = zeroₙ
   nfN (sucⱼ d) (sucₙ n) c = sucₙ (nfN d n c)
 
-  -- Conversion
+  -- Case: conversion.
   nfN (conv d c) n c' = nfN d n (trans c c')
 
-  -- Impossible cases: type is not ℕ
+  -- Impossible cases: type is not ℕ.
 
   -- * Canonical types
   nfN (Πⱼ _ ▹ _)      (Πₙ _ _)    c = ⊥-elim (U≢ℕ c)
