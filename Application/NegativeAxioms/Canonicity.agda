@@ -1,7 +1,7 @@
 -- Proof that consistent negative axioms do not jeopardize canonicity.
 -- https://www.cs.bham.ac.uk/~mhe/papers/negative-axioms.pdf
 
-module Applications.NegativeAxioms.Canonicity where
+module Application.NegativeAxioms.Canonicity where
 
 open import Definition.Untyped as U
 
