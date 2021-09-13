@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -57,6 +57,64 @@ neuEq [A] neA neB A B A~B =
                 [A]
                 (neuEq′ (ne-elim neA [A]) neA neB A B A~B)
 
+
+mutual
+  neuStr : ∀ {n} (neN : Neutral n)
+         → Γ ⊢ n ∷ Str
+         → Γ ⊢ n ~ n ∷ Str
+         → Γ ⊩Str n ∷Str
+  _⊩Str_∷Str.n (neuStr {n = n} neN ⊢n n~n) = n
+  _⊩Str_∷Str.d (neuStr {n = n} neN ⊢n n~n) = idRedTerm:*: ⊢n
+  _⊩Str_∷Str.n≡n (neuStr {n = n} neN ⊢n n~n) = ~-to-≅ₜ n~n
+  _⊩Str_∷Str.prop (neuStr {n = n} neN ⊢n n~n) = neuStr-prop neN ⊢n n~n
+
+  neuStr-prop : ∀ {n} (neN : Neutral n)
+              → Γ ⊢ n ∷ Str
+              → Γ ⊢ n ~ n ∷ Str
+              → Str-prop Γ n
+  Str-prop.whnf (neuStr-prop neN ⊢n n~n) = ne neN
+  Str-prop.hdᵣ (neuStr-prop neN ⊢n n~n) =
+    ℕₜ (hd _) (idRedTerm:*: (hdⱼ ⊢n)) (~-to-≅ₜ (~-hd n~n))
+       (ne (neNfₜ (hdₙ neN) (hdⱼ ⊢n) (~-hd n~n)))
+  Str-prop.tlᵣ (neuStr-prop neN ⊢n n~n) = neuStr (tlₙ neN) (tlⱼ ⊢n) (~-tl n~n)
+
+mutual
+  neuEqStr : ∀ {n n′} (neN : Neutral n) (neN′ : Neutral n′)
+           → Γ ⊢ n ∷ Str
+           → Γ ⊢ n′ ∷ Str
+           → Γ ⊢ n ~ n′ ∷ Str
+           → Γ ⊩Str n ≡ n′ ∷Str
+  _⊩Str_≡_∷Str.k (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) = n
+  _⊩Str_≡_∷Str.k′ (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) = n′
+  _⊩Str_≡_∷Str.d (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+    idRedTerm:*: ⊢n
+  _⊩Str_≡_∷Str.d′ (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+    idRedTerm:*: ⊢n′
+  _⊩Str_≡_∷Str.k≡k′ (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+    ~-to-≅ₜ n~n′
+  -- _⊩Str_≡_∷Str.[k] (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+  --   neuStr neN ⊢n (~-trans n~n′ (~-sym n~n′))
+  -- _⊩Str_≡_∷Str.[k′] (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+  --   neuStr neN′ ⊢n′ (~-trans (~-sym n~n′) n~n′)
+  _⊩Str_≡_∷Str.prop (neuEqStr {n = n} {n′} neN neN′ ⊢n ⊢n′ n~n′) =
+    neu[Str]-prop neN neN′ ⊢n ⊢n′ n~n′
+
+  neu[Str]-prop : ∀ {n n′} (neN : Neutral n) (neN′ : Neutral n′)
+                → Γ ⊢ n ∷ Str
+                → Γ ⊢ n′ ∷ Str
+                → Γ ⊢ n ~ n′ ∷ Str
+                → [Str]-prop Γ n n′
+  [Str]-prop.whnf (neu[Str]-prop neN neN′ ⊢n ⊢n′ n~n′) = ne neN
+  [Str]-prop.whnf′ (neu[Str]-prop neN neN′ ⊢n ⊢n′ n~n′) = ne neN′
+  [Str]-prop.hdᵣ (neu[Str]-prop neN neN′ ⊢n ⊢n′ n~n′) =
+    let ⊢hd = hdⱼ ⊢n
+        ⊢hd′ = hdⱼ ⊢n′
+        hd~hd′ = ~-hd n~n′
+    in ℕₜ₌ (hd _) (hd _) (idRedTerm:*: ⊢hd) (idRedTerm:*: ⊢hd′)
+           (~-to-≅ₜ hd~hd′) (ne (neNfₜ₌ (hdₙ neN) (hdₙ neN′) hd~hd′))
+  [Str]-prop.tlᵣ (neu[Str]-prop neN neN′ ⊢n ⊢n′ n~n′) =
+    neuEqStr (tlₙ neN) (tlₙ neN′) (tlⱼ ⊢n) (tlⱼ ⊢n′) (~-tl n~n′)
+
 mutual
   -- Neutral reflexive terms are reducible.
   neuTerm : ∀ {l A n} ([A] : Γ ⊩⟨ l ⟩ A) (neN : Neutral n)
@@ -79,6 +137,10 @@ mutual
     let A≡Unit  = subset* D
         n~n′ = ~-conv n~n A≡Unit
     in  Unitₜ _ (idRedTerm:*: (conv n A≡Unit)) (ne neN)
+  neuTerm (Strᵣ [ ⊢A , ⊢B , D ]) neN n n~n =
+    let A≡Str  = subset* D
+        n~n′ = ~-conv n~n A≡Str
+    in neuStr neN (conv n A≡Str) n~n′
   neuTerm (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) neN n n~n =
     let A≡K = subset* D
     in  neₜ _ (idRedTerm:*: (conv n A≡K)) (neNfₜ neN (conv n A≡K)
@@ -167,6 +229,10 @@ mutual
   neuEqTerm (Unitᵣ [ ⊢A , ⊢B , D ]) neN neN′ n n′ n~n′ =
     let A≡Unit = subset* D
     in  Unitₜ₌ (conv n A≡Unit) (conv n′ A≡Unit)
+  neuEqTerm (Strᵣ [ ⊢A , ⊢B , D ]) neN neN′ n n′ n~n′ =
+    let A≡Str = subset* D
+    in neuEqStr neN neN′ (conv n A≡Str) (conv n′ A≡Str) (~-conv n~n′ A≡Str)
+    -- neuEqStr neN neN′ (conv n A≡Unit) (conv n′ A≡Unit) n~n′
   neuEqTerm (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neN neN′ n n′ n~n′ =
     let A≡K = subset* D
     in  neₜ₌ _ _ (idRedTerm:*: (conv n A≡K)) (idRedTerm:*: (conv n′ A≡K))

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed.Properties where
 
@@ -24,6 +24,7 @@ wfTerm (ℕⱼ ⊢Γ) = ⊢Γ
 wfTerm (Emptyⱼ ⊢Γ) = ⊢Γ
 wfTerm (Unitⱼ ⊢Γ) = ⊢Γ
 wfTerm (Πⱼ F ▹ G) = wfTerm F
+wfTerm (Strⱼ ⊢Γ) = ⊢Γ
 wfTerm (var ⊢Γ x₁) = ⊢Γ
 wfTerm (lamⱼ F t) with wfTerm t
 wfTerm (lamⱼ F t) | ⊢Γ ∙ F′ = ⊢Γ
@@ -38,11 +39,15 @@ wfTerm (Σⱼ a ▹ a₁) = wfTerm a
 wfTerm (prodⱼ F G a a₁) = wfTerm a
 wfTerm (fstⱼ _ _ a) = wfTerm a
 wfTerm (sndⱼ _ _ a) = wfTerm a
+wfTerm (hdⱼ s) = wfTerm s
+wfTerm (tlⱼ s) = wfTerm s
+wfTerm (coiterⱼ _ s _ _) = wfTerm s
 
 wf : Γ ⊢ A → ⊢ Γ
 wf (ℕⱼ ⊢Γ) = ⊢Γ
 wf (Emptyⱼ ⊢Γ) = ⊢Γ
 wf (Unitⱼ ⊢Γ) = ⊢Γ
+wf (Strⱼ ⊢Γ) = ⊢Γ
 wf (Uⱼ ⊢Γ) = ⊢Γ
 wf (Πⱼ F ▹ G) = wf F
 wf (Σⱼ F ▹ G) = wf F
@@ -69,6 +74,11 @@ wfEqTerm (snd-cong _ _ a) = wfEqTerm a
 wfEqTerm (Σ-η _ _ x _ _ _) = wfTerm x
 wfEqTerm (Σ-β₁ F G x x₁) = wfTerm x
 wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
+wfEqTerm (hd-cong s≡s') = wfEqTerm s≡s'
+wfEqTerm (tl-cong s≡s') = wfEqTerm s≡s'
+wfEqTerm (coiter-cong ⊢A s≡s' ⊢h ⊢t) = wfEqTerm s≡s'
+wfEqTerm (hd-β ⊢A ⊢s ⊢h ⊢t) = wfTerm ⊢s
+wfEqTerm (tl-β ⊢A ⊢s ⊢h ⊢t) = wfTerm ⊢s
 
 wfEq : Γ ⊢ A ≡ B → ⊢ Γ
 wfEq (univ A≡B) = wfEqTerm A≡B
@@ -95,6 +105,10 @@ subsetTerm (fst-subst F G x) = fst-cong F G (subsetTerm x)
 subsetTerm (snd-subst F G x) = snd-cong F G (subsetTerm x)
 subsetTerm (Σ-β₁ F G x x₁) = Σ-β₁ F G x x₁
 subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
+subsetTerm (hd-subst s⇒s') = hd-cong (subsetTerm s⇒s')
+subsetTerm (tl-subst s⇒s') = tl-cong (subsetTerm s⇒s')
+subsetTerm (hd-β ⊢A ⊢s ⊢h ⊢t) = hd-β ⊢A ⊢s ⊢h ⊢t
+subsetTerm (tl-β ⊢A ⊢s ⊢h ⊢t) = tl-β ⊢A ⊢s ⊢h ⊢t
 
 subset : Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
 subset (univ A⇒B) = univ (subsetTerm A⇒B)
@@ -121,6 +135,10 @@ redFirstTerm (fst-subst F G x) = fstⱼ F G (redFirstTerm x)
 redFirstTerm (snd-subst F G x) = sndⱼ F G (redFirstTerm x)
 redFirstTerm (Σ-β₁ F G x x₁) = fstⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (Σ-β₂ F G x x₁) = sndⱼ F G (prodⱼ F G x x₁)
+redFirstTerm (hd-subst s⇒s') = hdⱼ (redFirstTerm s⇒s')
+redFirstTerm (tl-subst s⇒s') = tlⱼ (redFirstTerm s⇒s')
+redFirstTerm (hd-β ⊢A ⊢s ⊢h ⊢t) = hdⱼ (coiterⱼ ⊢A ⊢s ⊢h ⊢t)
+redFirstTerm (tl-β ⊢A ⊢s ⊢h ⊢t) = tlⱼ (coiterⱼ ⊢A ⊢s ⊢h ⊢t)
 
 redFirst : Γ ⊢ A ⇒ B → Γ ⊢ A
 redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
@@ -144,6 +162,8 @@ noNe (fstⱼ _ _ ⊢t) (fstₙ neT) = noNe ⊢t neT
 noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
+noNe (hdⱼ ⊢t) (hdₙ neT) = noNe ⊢t neT
+noNe (tlⱼ ⊢t) (tlₙ neT) = noNe ⊢t neT
 
 -- Neutrals do not weak head reduce
 
@@ -159,6 +179,10 @@ neRedTerm (fst-subst _ _ d) (fstₙ n) = neRedTerm d n
 neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
 neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
 neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
+neRedTerm (hd-subst s⇒s') (hdₙ nes) = neRedTerm s⇒s' nes
+neRedTerm (tl-subst s⇒s') (tlₙ nes) = neRedTerm s⇒s' nes
+neRedTerm (hd-β ⊢A ⊢s ⊢h ⊢t) (hdₙ ())
+neRedTerm (tl-β ⊢A ⊢s ⊢h ⊢t) (tlₙ ())
 
 neRed : (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
@@ -177,6 +201,10 @@ whnfRedTerm (fst-subst _ _ d) (ne (fstₙ n)) = neRedTerm d n
 whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
 whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
 whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
+whnfRedTerm (hd-subst s⇒s') (ne (hdₙ nes)) = neRedTerm s⇒s' nes
+whnfRedTerm (tl-subst s⇒s') (ne (tlₙ nes)) = neRedTerm s⇒s' nes
+whnfRedTerm (hd-β ⊢A ⊢s ⊢h ⊢t) (ne (hdₙ ()))
+whnfRedTerm (tl-β ⊢A ⊢s ⊢h ⊢t) (ne (tlₙ ()))
 
 whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
@@ -194,6 +222,8 @@ whnfRed*Term (id x) zeroₙ = PE.refl
 whnfRed*Term (id x) sucₙ = PE.refl
 whnfRed*Term (id x) starₙ = PE.refl
 whnfRed*Term (id x) (ne x₁) = PE.refl
+whnfRed*Term (id x) Strₙ = PE.refl
+whnfRed*Term (id x) coiterₙ = PE.refl
 whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)
 whnfRed*Term (x ⇨ d) (ne x₁) = ⊥-elim (neRedTerm x x₁)
 
@@ -227,6 +257,14 @@ whrDetTerm (fst-subst _ _ x) (Σ-β₁ F G x₁ x₂) = ⊥-elim (whnfRedTerm x 
 whrDetTerm (snd-subst _ _ x) (Σ-β₂ F G x₁ x₂) = ⊥-elim (whnfRedTerm x prodₙ)
 whrDetTerm (Σ-β₁ F G x x₁) (fst-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
 whrDetTerm (Σ-β₂ F G x x₁) (snd-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
+whrDetTerm (hd-subst s⇒s') (hd-subst s⇒s'') = PE.cong hd (whrDetTerm s⇒s' s⇒s'')
+whrDetTerm (hd-subst s⇒s') (hd-β ⊢A ⊢s ⊢h ⊢t) = ⊥-elim (whnfRedTerm s⇒s' coiterₙ)
+whrDetTerm (tl-subst s⇒s') (tl-subst s⇒s'') = PE.cong tl (whrDetTerm s⇒s' s⇒s'')
+whrDetTerm (tl-subst s⇒s') (tl-β ⊢A ⊢s ⊢h ⊢t) = ⊥-elim (whnfRedTerm s⇒s' coiterₙ)
+whrDetTerm (hd-β ⊢A ⊢s ⊢h ⊢t) (hd-subst s⇒s') = ⊥-elim (whnfRedTerm s⇒s' coiterₙ)
+whrDetTerm (hd-β ⊢A ⊢s ⊢h ⊢t) (hd-β _ _ _ _) = PE.refl
+whrDetTerm (tl-β ⊢A ⊢s ⊢h ⊢t) (tl-subst s⇒s') = ⊥-elim (whnfRedTerm s⇒s' coiterₙ)
+whrDetTerm (tl-β ⊢A ⊢s ⊢h ⊢t) (tl-β _ _ _ _) = PE.refl
 
 whrDet : (d : Γ ⊢ A ⇒ B) (d′ : Γ ⊢ A ⇒ B′) → B PE.≡ B′
 whrDet (univ x) (univ x₁) = whrDetTerm x x₁
@@ -261,6 +299,22 @@ idRed:*: A = [ A , A , id A ]
 
 idRedTerm:*: : Γ ⊢ t ∷ A → Γ ⊢ t :⇒*: t ∷ A
 idRedTerm:*: t = [ t , t , id t ]
+
+-- Append of syntactic reduction
+
+appendRed* : ∀ {A B C} → Γ ⊢ A ⇒* B → Γ ⊢ B ⇒* C → Γ ⊢ A ⇒* C
+appendRed* (id x) d' = d'
+appendRed* (x ⇨ d) d' = x ⇨ appendRed* d d'
+
+appendRedTerm* : ∀ {t u v} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ u ⇒* v ∷ A → Γ ⊢ t ⇒* v ∷ A
+appendRedTerm* (id x) d' = d'
+appendRedTerm* (x ⇨ d) d' = x ⇨ appendRedTerm* d d'
+
+appendRed:*: : ∀ {A B C} → Γ ⊢ A :⇒*: B → Γ ⊢ B :⇒*: C → Γ ⊢ A :⇒*: C
+appendRed:*: [ ⊢A , ⊢B , D ] [ ⊢A₁ , ⊢B₁ , D₁ ] = [ ⊢A , ⊢B₁ , appendRed* D D₁ ]
+
+appendRedTerm:*: : ∀ {t u v} → Γ ⊢ t :⇒*: u ∷ A → Γ ⊢ u :⇒*: v ∷ A → Γ ⊢ t :⇒*: v ∷ A
+appendRedTerm:*: [ ⊢t , ⊢u , d ] [ ⊢t₁ , ⊢u₁ , d₁ ] = [ ⊢t , ⊢u₁ , (appendRedTerm* d d₁) ]
 
 -- U cannot be a term
 

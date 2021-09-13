@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed where
 
@@ -42,6 +42,7 @@ mutual
     ℕⱼ     : ⊢ Γ → Γ ⊢ ℕ
     Emptyⱼ : ⊢ Γ → Γ ⊢ Empty
     Unitⱼ  : ⊢ Γ → Γ ⊢ Unit
+    Strⱼ   : ⊢ Γ → Γ ⊢ Str
     Πⱼ_▹_  : Γ     ⊢ F
            → Γ ∙ F ⊢ G
            → Γ     ⊢ Π F ▹ G
@@ -64,6 +65,7 @@ mutual
     ℕⱼ        : ⊢ Γ → Γ ⊢ ℕ ∷ U
     Emptyⱼ    : ⊢ Γ → Γ ⊢ Empty ∷ U
     Unitⱼ     : ⊢ Γ → Γ ⊢ Unit ∷ U
+    Strⱼ      : ⊢ Γ → Γ ⊢ Str ∷ U
 
     var       : ∀ {A x}
               → ⊢ Γ
@@ -112,6 +114,21 @@ mutual
               → Γ ⊢ A → Γ ⊢ e ∷ Empty → Γ ⊢ Emptyrec A e ∷ A
 
     starⱼ     : ⊢ Γ → Γ ⊢ star ∷ Unit
+
+    hdⱼ       : ∀ {t}
+              → Γ ⊢ t ∷ Str
+              → Γ ⊢ hd t ∷ ℕ
+
+    tlⱼ       : ∀ {t}
+              → Γ ⊢ t ∷ Str
+              → Γ ⊢ tl t ∷ Str
+
+    coiterⱼ   : ∀ {A s h t}
+              → Γ ⊢ A
+              → Γ ⊢ s ∷ A
+              → Γ ⊢ h ∷ A ▹▹ ℕ
+              → Γ ⊢ t ∷ A ▹▹ A
+              → Γ ⊢ coiter A s h t ∷ Str
 
     conv      : ∀ {t A B}
               → Γ ⊢ t ∷ A
@@ -244,6 +261,31 @@ mutual
                   → Γ ⊢ e ∷ Unit
                   → Γ ⊢ e' ∷ Unit
                   → Γ ⊢ e ≡ e' ∷ Unit
+    hd-cong       : ∀ {s s'}
+                  → Γ ⊢ s ≡ s' ∷ Str
+                  → Γ ⊢ hd s ≡ hd s' ∷ ℕ
+    tl-cong       : ∀ {s s'}
+                  → Γ ⊢ s ≡ s' ∷ Str
+                  → Γ ⊢ tl s ≡ tl s' ∷ Str
+    coiter-cong   : ∀ {A A' s s' h h' t t'}
+                  → Γ ⊢ A ≡ A'
+                  → Γ ⊢ s ≡ s' ∷ A
+                  → Γ ⊢ h ≡ h' ∷ A ▹▹ ℕ
+                  → Γ ⊢ t ≡ t' ∷ A ▹▹ A
+                  → Γ ⊢ coiter A s h t ≡ coiter A' s' h' t' ∷ Str
+    hd-β          : ∀ {A s h t}
+                  → Γ ⊢ A
+                  → Γ ⊢ s ∷ A
+                  → Γ ⊢ h ∷ A ▹▹ ℕ
+                  → Γ ⊢ t ∷ A ▹▹ A
+                  → Γ ⊢ hd (coiter A s h t) ≡ h ∘ s ∷ ℕ
+    tl-β          : ∀ {A s h t}
+                  → Γ ⊢ A
+                  → Γ ⊢ s ∷ A
+                  → Γ ⊢ h ∷ A ▹▹ ℕ
+                  → Γ ⊢ t ∷ A ▹▹ A
+                  → Γ ⊢ tl (coiter A s h t) ≡ coiter A (t ∘ s) h t ∷ Str
+
 
 -- Term reduction
 data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set where
@@ -304,6 +346,24 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ A
                  → Γ     ⊢ n ⇒ n′ ∷ Empty
                  → Γ     ⊢ Emptyrec A n ⇒ Emptyrec A n′ ∷ A
+  hd-subst       : ∀ {s s'}
+                 → Γ ⊢ s ⇒ s' ∷ Str
+                 → Γ ⊢ hd s ⇒ hd s' ∷ ℕ
+  tl-subst       : ∀ {s s'}
+                 → Γ ⊢ s ⇒ s' ∷ Str
+                 → Γ ⊢ tl s ⇒ tl s' ∷ Str
+  hd-β           : ∀ {A s h t}
+                 → Γ ⊢ A
+                 → Γ ⊢ s ∷ A
+                 → Γ ⊢ h ∷ A ▹▹ ℕ
+                 → Γ ⊢ t ∷ A ▹▹ A
+                 → Γ ⊢ hd (coiter A s h t) ⇒ h ∘ s ∷ ℕ
+  tl-β           : ∀ {A s h t}
+                 → Γ ⊢ A
+                 → Γ ⊢ s ∷ A
+                 → Γ ⊢ h ∷ A ▹▹ ℕ
+                 → Γ ⊢ t ∷ A ▹▹ A
+                 → Γ ⊢ tl (coiter A s h t) ⇒ coiter A (t ∘ s) h t ∷ Str
 
 -- Type reduction
 data _⊢_⇒_ (Γ : Con Term n) : Term n → Term n → Set where

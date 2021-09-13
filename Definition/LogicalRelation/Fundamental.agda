@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -45,6 +45,7 @@ mutual
   fundamental (ℕⱼ x) = valid x , ℕᵛ (valid x)
   fundamental (Emptyⱼ x) = valid x , Emptyᵛ (valid x)
   fundamental (Unitⱼ x) = valid x , Unitᵛ (valid x)
+  fundamental (Strⱼ x) = valid x ,  Strᵛ (valid x) 
   fundamental (Uⱼ x) = valid x , Uᵛ (valid x)
   fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
   fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
@@ -166,6 +167,7 @@ mutual
   fundamentalTerm (ℕⱼ x) = valid x , Uᵛ (valid x) , ℕᵗᵛ (valid x)
   fundamentalTerm (Emptyⱼ x) = valid x , Uᵛ (valid x) , Emptyᵗᵛ (valid x)
   fundamentalTerm (Unitⱼ x) = valid x , Uᵛ (valid x) , Unitᵗᵛ (valid x)
+  fundamentalTerm (Strⱼ x) = valid x , Uᵛ (valid x) ,  Strᵗᵛ (valid x)
   fundamentalTerm (Πⱼ_▹_ {F} {G} ⊢F ⊢G)
     with fundamentalTerm ⊢F | fundamentalTerm ⊢G
   ... | [Γ] , [U] , [F]ₜ | [Γ]₁ , [U]₁ , [G]ₜ =
@@ -265,6 +267,15 @@ mutual
           [t]′ = S.irrelevanceTerm {A = A} {t = t} [Γ] [Γ]′ [A′] [A′]₁ [t]
       in  [Γ]′ , [A]
       ,   convᵛ {t = t} {A} {B} [Γ]′ [A′]₁ [A] [A′≡A] [t]′
+  fundamentalTerm (hdⱼ {t = t} d) with fundamentalTerm d
+  ... | [Γ] , [A] , [t] =
+    let [t]′ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = t} [Γ] [Γ] [A] (Strᵛ [Γ]) [t]
+    in [Γ] , ℕᵛ [Γ] , hdᵛ {l = ¹} {s = t} [Γ] [t]′
+  fundamentalTerm (tlⱼ {t = t} d)  with fundamentalTerm d
+  ... | [Γ] , [A] , [t] =
+    let [t]′ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = t} [Γ] [Γ] [A] (Strᵛ [Γ]) [t]
+    in [Γ] , Strᵛ [Γ] , tlᵛ {l = ¹} {s = t} [Γ] [t]′
+  fundamentalTerm (coiterⱼ x d d₁ d₂) = {!!}
 
   -- Fundamental theorem for term equality.
   fundamentalTermEq : ∀ {A t t′} → Γ ⊢ t ≡ t′ ∷ A
@@ -758,6 +769,11 @@ mutual
         [p≡r] = Σ-ηᵛ {F = F} {G} {p} {r}
                      [Γ] [F] [G] [p] [r] [fst≡] [snd≡]
     in  [Γ] , modelsTermEq [ΣFG] [p] [r] [p≡r]
+  fundamentalTermEq (hd-cong s≡s') = {!!}
+  fundamentalTermEq (tl-cong s≡s') = {!!}
+  fundamentalTermEq (coiter-cong ⊢A s≡s' ⊢h ⊢t) = {!!}
+  fundamentalTermEq (hd-β ⊢A ⊢s ⊢h ⊢t) = {!!}
+  fundamentalTermEq (tl-β ⊢A ⊢s ⊢h ⊢t) = {!!}
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

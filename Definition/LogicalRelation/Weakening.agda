@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -102,6 +102,40 @@ wkEqTermUnit : ∀ {t u} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
 wkEqTermUnit {ρ = ρ} [ρ] ⊢Δ (Unitₜ₌ ⊢t ⊢u) =
   Unitₜ₌ (T.wkTerm [ρ] ⊢Δ ⊢t) (T.wkTerm [ρ] ⊢Δ ⊢u)
 
+-- Str
+mutual
+  wkTermStr : ∀ {n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+            → Γ ⊩Str n ∷Str → Δ ⊩Str U.wk ρ n ∷Str
+  _⊩Str_∷Str.n (wkTermStr {ρ = ρ} [ρ] ⊢Δ w) = U.wk ρ (S.n w)
+  _⊩Str_∷Str.d (wkTermStr {ρ = ρ} [ρ] ⊢Δ w) = wkRed:*:Term [ρ] ⊢Δ (S.d w)
+  _⊩Str_∷Str.n≡n (wkTermStr {ρ = ρ} [ρ] ⊢Δ w) = ≅ₜ-wk [ρ] ⊢Δ (S.n≡n w)
+  _⊩Str_∷Str.prop (wkTermStr {ρ = ρ} [ρ] ⊢Δ w) = wkStr-prop [ρ] ⊢Δ (S.prop w)
+
+  wkStr-prop : ∀ {n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+                 → Str-prop Γ n → Str-prop Δ (U.wk ρ n)
+  Str-prop.whnf (wkStr-prop {ρ = ρ} [ρ] ⊢Δ w) = wkStream ρ (Sp.whnf w)
+  Str-prop.hdᵣ (wkStr-prop {ρ = ρ} [ρ] ⊢Δ w) = wkTermℕ [ρ] ⊢Δ (Sp.hdᵣ w)
+  Str-prop.tlᵣ (wkStr-prop {ρ = ρ} [ρ] ⊢Δ w) = wkTermStr [ρ] ⊢Δ (Sp.tlᵣ w)
+
+mutual
+  wkEqTermStr : ∀ {t u} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+            → Γ ⊩Str t ≡ u ∷Str
+            → Δ ⊩Str U.wk ρ t ≡ U.wk ρ u ∷Str
+  _⊩Str_≡_∷Str.k (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = U.wk ρ (S≡.k w)
+  _⊩Str_≡_∷Str.k′ (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = U.wk ρ (S≡.k′ w)
+  _⊩Str_≡_∷Str.d (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = wkRed:*:Term [ρ] ⊢Δ (S≡.d w)
+  _⊩Str_≡_∷Str.d′ (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = wkRed:*:Term [ρ] ⊢Δ (S≡.d′ w)
+  _⊩Str_≡_∷Str.k≡k′ (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = ≅ₜ-wk [ρ] ⊢Δ (S≡.k≡k′ w)
+  _⊩Str_≡_∷Str.prop (wkEqTermStr {ρ = ρ} [ρ] ⊢Δ w) = wk[Str]-prop [ρ] ⊢Δ (S≡.prop w)
+
+  wk[Str]-prop : ∀ {t u} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+               → [Str]-prop Γ t u
+               → [Str]-prop Δ (U.wk ρ t) (U.wk ρ u)
+  [Str]-prop.whnf (wk[Str]-prop {ρ = ρ} [ρ] ⊢Δ w) = wkStream ρ (S≡p.whnf w)
+  [Str]-prop.whnf′ (wk[Str]-prop {ρ = ρ} [ρ] ⊢Δ w) = wkStream ρ (S≡p.whnf′ w)
+  [Str]-prop.hdᵣ (wk[Str]-prop {ρ = ρ} [ρ] ⊢Δ w) = wkEqTermℕ [ρ] ⊢Δ (S≡p.hdᵣ w)
+  [Str]-prop.tlᵣ (wk[Str]-prop {ρ = ρ} [ρ] ⊢Δ w) = wkEqTermStr [ρ] ⊢Δ (S≡p.tlᵣ w)
+
 -- Weakening of the logical relation
 
 wk : ∀ {m} {ρ : Wk m n} {Γ Δ A l} → ρ ∷ Δ ⊆ Γ → ⊢ Δ → Γ ⊩⟨ l ⟩ A → Δ ⊩⟨ l ⟩ U.wk ρ A
@@ -109,6 +143,7 @@ wk ρ ⊢Δ (Uᵣ′ l′ l< ⊢Γ) = Uᵣ′ l′ l< ⊢Δ
 wk ρ ⊢Δ (ℕᵣ D) = ℕᵣ (wkRed:*: ρ ⊢Δ D)
 wk ρ ⊢Δ (Emptyᵣ D) = Emptyᵣ (wkRed:*: ρ ⊢Δ D)
 wk ρ ⊢Δ (Unitᵣ D) = Unitᵣ (wkRed:*: ρ ⊢Δ D)
+wk ρ ⊢Δ (Strᵣ D) = Strᵣ (wkRed:*: ρ ⊢Δ D)
 wk {ρ = ρ} [ρ] ⊢Δ (ne′ K D neK K≡K) =
   ne′ (U.wk ρ K) (wkRed:*: [ρ] ⊢Δ D) (wkNeutral ρ neK) (~-wk [ρ] ⊢Δ K≡K)
 wk {m = m} {ρ} {Γ} {Δ} {A} {l} [ρ] ⊢Δ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
@@ -197,6 +232,7 @@ wkEq ρ ⊢Δ (Uᵣ′ _ _ _) PE.refl = PE.refl
 wkEq ρ ⊢Δ (ℕᵣ D) A≡B = wkRed* ρ ⊢Δ A≡B
 wkEq ρ ⊢Δ (Emptyᵣ D) A≡B = wkRed* ρ ⊢Δ A≡B
 wkEq ρ ⊢Δ (Unitᵣ D) A≡B = wkRed* ρ ⊢Δ A≡B
+wkEq ρ ⊢Δ (Strᵣ D) A≡B = wkRed* ρ ⊢Δ A≡B
 wkEq {ρ = ρ} [ρ] ⊢Δ (ne′ _ _ _ _) (ne₌ M D′ neM K≡M) =
   ne₌ (U.wk ρ M) (wkRed:*: [ρ] ⊢Δ D′)
       (wkNeutral ρ neM) (~-wk [ρ] ⊢Δ K≡M)
@@ -252,6 +288,7 @@ wkTerm {ρ = ρ} [ρ] ⊢Δ (Uᵣ′ .⁰ 0<1 ⊢Γ) (Uₜ A d typeA A≡A [t]) 
 wkTerm ρ ⊢Δ (ℕᵣ D) [t] = wkTermℕ ρ ⊢Δ [t]
 wkTerm ρ ⊢Δ (Emptyᵣ D) [t] = wkTermEmpty ρ ⊢Δ [t]
 wkTerm ρ ⊢Δ (Unitᵣ D) [t] = wkTermUnit ρ ⊢Δ [t]
+wkTerm ρ ⊢Δ (Strᵣ D) [t] = wkTermStr ρ ⊢Δ [t]
 wkTerm {ρ = ρ} [ρ] ⊢Δ (ne′ K D neK K≡K) (neₜ k d nf) =
   neₜ (U.wk ρ k) (wkRed:*:Term [ρ] ⊢Δ d) (wkTermNe [ρ] ⊢Δ nf)
 wkTerm {ρ = ρ} [ρ] ⊢Δ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (Πₜ f d funcF f≡f [f] [f]₁) =
@@ -330,6 +367,7 @@ wkEqTerm {ρ = ρ} [ρ] ⊢Δ (Uᵣ′ .⁰ 0<1 ⊢Γ) (Uₜ₌ A B d d′ typeA
 wkEqTerm ρ ⊢Δ (ℕᵣ D) [t≡u] = wkEqTermℕ ρ ⊢Δ [t≡u]
 wkEqTerm ρ ⊢Δ (Emptyᵣ D) [t≡u] = wkEqTermEmpty ρ ⊢Δ [t≡u]
 wkEqTerm ρ ⊢Δ (Unitᵣ D) [t≡u] = wkEqTermUnit ρ ⊢Δ [t≡u]
+wkEqTerm ρ ⊢Δ (Strᵣ D) [t≡u] = wkEqTermStr ρ ⊢Δ [t≡u]
 wkEqTerm {ρ  = ρ} [ρ] ⊢Δ (ne′ K D neK K≡K) (neₜ₌ k m d d′ nf) =
   neₜ₌ (U.wk ρ k) (U.wk ρ m)
        (wkRed:*:Term [ρ] ⊢Δ d) (wkRed:*:Term [ρ] ⊢Δ d′)

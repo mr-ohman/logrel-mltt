@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed.EqualityRelation where
 
@@ -115,6 +115,10 @@ record EqRelSet : Set₁ where
     ≅-Unitrefl   : ⊢ Γ → Γ ⊢ Unit ≅ Unit
     ≅ₜ-Unitrefl  : ⊢ Γ → Γ ⊢ Unit ≅ Unit ∷ U
 
+    -- Stream type reflexivity
+    ≅-Strrefl   : ⊢ Γ → Γ ⊢ Str ≅ Str
+    ≅ₜ-Strrefl  : ⊢ Γ → Γ ⊢ Str ≅ Str ∷ U
+
     -- Unit η-equality
     ≅ₜ-η-unit : Γ ⊢ e ∷ Unit
               → Γ ⊢ e′ ∷ Unit
@@ -212,6 +216,23 @@ record EqRelSet : Set₁ where
                → Γ ⊢ n ~ n′ ∷ Empty
                → Γ ⊢ Emptyrec F n ~ Emptyrec F′ n′ ∷ F
 
+    -- hd congruence
+    ~-hd : ∀ {s s'}
+        → Γ ⊢ s ~ s' ∷ Str
+        → Γ ⊢ hd s ~ hd s' ∷ ℕ
+
+    ~-tl : ∀ {s s'}
+         → Γ ⊢ s ~ s' ∷ Str
+         → Γ ⊢ tl s ~ tl s' ∷ Str
+
+    -- coiter congruence (??)
+    ≅ₜ-coiter-cong : ∀ {A A' s s' h h' t t'}
+                   → Γ ⊢ A ≅ A'
+                   → Γ ⊢ s ≅ s' ∷ A
+                   → Γ ⊢ h ≅ h' ∷ A ▹▹ ℕ
+                   → Γ ⊢ t ≅ t' ∷ A ▹▹ A
+                   → Γ ⊢ coiter A s h t ≅ coiter A' s' h' t' ∷ Str
+
   -- Star reflexivity
   ≅ₜ-starrefl : ⊢ Γ → Γ ⊢ star ≅ star ∷ Unit
   ≅ₜ-starrefl [Γ] = ≅ₜ-η-unit (starⱼ [Γ]) (starⱼ [Γ])
@@ -235,3 +256,6 @@ record EqRelSet : Set₁ where
             → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ ⟦ W ⟧ H ▹ E ∷ U
   ≅ₜ-W-cong BΠ = ≅ₜ-Π-cong
   ≅ₜ-W-cong BΣ = ≅ₜ-Σ-cong
+
+
+

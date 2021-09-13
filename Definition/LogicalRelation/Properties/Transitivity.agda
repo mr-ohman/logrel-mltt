@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -35,6 +35,7 @@ mutual
   transEqT (ℕᵥ D D′ D″) A≡B B≡C = B≡C
   transEqT (Emptyᵥ D D′ D″) A≡B B≡C = B≡C
   transEqT (Unitᵥ D D′ D″) A≡B B≡C = B≡C
+  transEqT (Strᵥ D D′ D″) A≡B B≡C = B≡C
   transEqT (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K) (ne K₁ D₁ neK₁ _)
                (ne K₂ D₂ neK₂ _))
            (ne₌ M D′ neM K≡M) (ne₌ M₁ D″ neM₁ K≡M₁)
@@ -169,6 +170,42 @@ transEqTermEmpty (Emptyₜ₌ k k′ d d′ t≡u prop)
   in Emptyₜ₌ k k″ d d″ (≅ₜ-trans t≡u (PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ t≡u₁))
      (transEmpty-prop prop prop′)
 
+
+mutual
+
+  transEqTermStr : ∀ {n n′ n″}
+               → Γ ⊩Str n  ≡ n′  ∷Str
+               → Γ ⊩Str n′ ≡ n″ ∷Str
+               → Γ ⊩Str n  ≡ n″ ∷Str
+  _⊩Str_≡_∷Str.k (transEqTermStr d d') = S≡.k d
+  _⊩Str_≡_∷Str.k′ (transEqTermStr d d') = S≡.k′ d'
+  _⊩Str_≡_∷Str.d (transEqTermStr d d') = S≡.d d
+  _⊩Str_≡_∷Str.d′ (transEqTermStr d d') = S≡.d′ d'
+  -- _⊩Str_≡_∷Str.[k] (transEqTermStr d d') = S≡.[k] d
+  -- _⊩Str_≡_∷Str.[k′] (transEqTermStr d d') = S≡.[k′] d'
+  _⊩Str_≡_∷Str.k≡k′ (transEqTermStr d d') =
+    let k₁Whnf = streamWhnf (proj₁ (splitStr (S≡.prop d')))
+        k′Whnf = streamWhnf (proj₂ (splitStr (S≡.prop d)))
+        k₁≡k′  = whrDet*Term (redₜ (S≡.d d') , k₁Whnf) (redₜ (S≡.d′ d) , k′Whnf)
+        k′≅k″ = PE.subst (λ x → _ ⊢ x ≅ _ ∷ _) k₁≡k′ (S≡.k≡k′ d')
+    in ≅ₜ-trans (S≡.k≡k′ d) k′≅k″
+  _⊩Str_≡_∷Str.prop (transEqTermStr d d') =
+    let k₁Whnf = streamWhnf (proj₁ (splitStr (S≡.prop d')))
+        k′Whnf = streamWhnf (proj₂ (splitStr (S≡.prop d)))
+        k₁≡k′  = whrDet*Term (redₜ (S≡.d d') , k₁Whnf) (redₜ (S≡.d′ d) , k′Whnf)
+        prop = PE.subst (λ x → [Str]-prop _ x _) k₁≡k′ (S≡.prop d')
+    in transStr-prop (S≡.prop d) prop
+
+
+  transStr-prop : ∀ {k k′ k″}
+                    → [Str]-prop Γ k k′
+                    → [Str]-prop Γ k′ k″
+                    → [Str]-prop Γ k k″
+  [Str]-prop.whnf (transStr-prop d d') = S≡p.whnf d
+  [Str]-prop.whnf′ (transStr-prop d d') = S≡p.whnf′ d'
+  [Str]-prop.hdᵣ (transStr-prop d d') = transEqTermℕ (S≡p.hdᵣ d) (S≡p.hdᵣ d')
+  [Str]-prop.tlᵣ (transStr-prop d d') = transEqTermStr (S≡p.tlᵣ d) (S≡p.tlᵣ d')
+
 -- Transitivty of term equality.
 transEqTerm : ∀ {l A t u v}
               ([A] : Γ ⊩⟨ l ⟩ A)
@@ -184,6 +221,7 @@ transEqTerm (Uᵣ′ .⁰ 0<1 ⊢Γ)
 transEqTerm (ℕᵣ D) [t≡u] [u≡v] = transEqTermℕ [t≡u] [u≡v]
 transEqTerm (Emptyᵣ D) [t≡u] [u≡v] = transEqTermEmpty [t≡u] [u≡v]
 transEqTerm (Unitᵣ D) (Unitₜ₌ ⊢t _) (Unitₜ₌ _ ⊢v) = Unitₜ₌ ⊢t ⊢v
+transEqTerm (Strᵣ D) [t≡u] [u≡v] = transEqTermStr [t≡u] [u≡v]
 transEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m))
                               (neₜ₌ k₁ m₁ d₁ d″ (neNfₜ₌ neK₂ neM₁ k≡m₁)) =
   let k₁≡m = whrDet*Term (redₜ d₁ , ne neK₂) (redₜ d′ , ne neM)

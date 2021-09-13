@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -25,6 +25,7 @@ reflEq (Uᵣ′ l′ l< ⊢Γ) = PE.refl
 reflEq (ℕᵣ D) = red D
 reflEq (Emptyᵣ D) = red D
 reflEq (Unitᵣ D) = red D
+reflEq (Strᵣ D) = red D
 reflEq (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) =
   ne₌ _ [ ⊢A , ⊢B , D ] neK K≡K
 reflEq (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
@@ -47,20 +48,42 @@ reflEmpty-prop : ∀ {n}
                  → [Empty]-prop Γ n n
 reflEmpty-prop (ne (neNfₜ neK ⊢k k≡k)) = ne (neNfₜ₌ neK neK k≡k)
 
+
+reflℕEqTerm : ∀ {n} → Γ ⊩ℕ n ∷ℕ → Γ ⊩ℕ n ≡ n ∷ℕ
+reflℕEqTerm (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
+  ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
+      (reflNatural-prop prop)
+
+mutual
+  reflStrEqTerm : ∀ {s} → Γ ⊩Str s ∷Str → Γ ⊩Str s ≡ s ∷Str
+  _⊩Str_≡_∷Str.k (reflStrEqTerm d) = d .S.n
+  _⊩Str_≡_∷Str.k′ (reflStrEqTerm d) = d .S.n
+  _⊩Str_≡_∷Str.d (reflStrEqTerm d) = d .S.d
+  _⊩Str_≡_∷Str.d′ (reflStrEqTerm d) = d .S.d
+  _⊩Str_≡_∷Str.k≡k′ (reflStrEqTerm d) = d .S.n≡n
+  -- _⊩Str_≡_∷Str.[k] (reflStrEqTerm d) = whnfStrRed d
+  -- _⊩Str_≡_∷Str.[k′] (reflStrEqTerm d) = whnfStrRed d
+  _⊩Str_≡_∷Str.prop (reflStrEqTerm d) = reflStr-prop (d .S.prop)
+
+  reflStr-prop : ∀ {s} → Str-prop Γ s → [Str]-prop Γ s s
+  [Str]-prop.whnf (reflStr-prop d) = d .Sp.whnf
+  [Str]-prop.whnf′ (reflStr-prop d) = d .Sp.whnf
+  [Str]-prop.hdᵣ (reflStr-prop d) = reflℕEqTerm (d .Sp.hdᵣ)
+  [Str]-prop.tlᵣ (reflStr-prop d) = reflStrEqTerm (d .Sp.tlᵣ)
+
 -- Reflexivity of reducible terms.
 reflEqTerm : ∀ {l A t} ([A] : Γ ⊩⟨ l ⟩ A)
            → Γ ⊩⟨ l ⟩ t ∷ A / [A]
            → Γ ⊩⟨ l ⟩ t ≡ t ∷ A / [A]
 reflEqTerm (Uᵣ′ ⁰ 0<1 ⊢Γ) (Uₜ A d typeA A≡A [A]) =
   Uₜ₌ A A d d typeA typeA A≡A [A] [A] (reflEq [A])
-reflEqTerm (ℕᵣ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
-  ℕₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
-      (reflNatural-prop prop)
+reflEqTerm (ℕᵣ D) n = reflℕEqTerm n
 reflEqTerm (Emptyᵣ D) (Emptyₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   Emptyₜ₌ n n [ ⊢t , ⊢u , d ] [ ⊢t , ⊢u , d ] t≡t
     (reflEmpty-prop prop)
 reflEqTerm (Unitᵣ D) (Unitₜ n [ ⊢t , ⊢u , d ] prop) =
   Unitₜ₌ ⊢t ⊢t
+reflEqTerm (Strᵣ D) d = reflStrEqTerm d
 reflEqTerm (ne′ K D neK K≡K) (neₜ k d (neNfₜ neK₁ ⊢k k≡k)) =
   neₜ₌ k k d d (neNfₜ₌ neK₁ neK₁ k≡k)
 reflEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Πₜ f d funcF f≡f [f] [f]₁) =
