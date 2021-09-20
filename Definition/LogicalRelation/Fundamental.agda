@@ -275,7 +275,13 @@ mutual
   ... | [Γ] , [A] , [t] =
     let [t]′ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = t} [Γ] [Γ] [A] (Strᵛ [Γ]) [t]
     in [Γ] , Strᵛ [Γ] , tlᵛ {l = ¹} {s = t} [Γ] [t]′
-  fundamentalTerm (coiterⱼ x d d₁ d₂) = {!!}
+  fundamentalTerm (coiterⱼ {A = A} {s} {h} {t} ⊢A ⊢s ⊢h ⊢t) with fundamentalTerm ⊢s with fundamentalTerm ⊢h with fundamentalTerm ⊢t
+  ... | [Γ] , [A] , [s] | [Γ]₁ , [A▹▹ℕ]₁ , [h]₁ | [Γ]₂ , [A▹▹A]₂ , [t]₂ =
+    let [A▹▹ℕ] = ▹▹ᵛ {F = A} {G = ℕ} [Γ] [A] (ℕᵛ [Γ])
+        [A▹▹A] = ▹▹ᵛ {F = A} {G = A} [Γ] [A] [A]
+        [h] = S.irrelevanceTerm  {l′ = ¹} {A = A ▹▹ ℕ} {t = h} [Γ]₁ [Γ] [A▹▹ℕ]₁ [A▹▹ℕ] [h]₁
+        [t] = S.irrelevanceTerm  {l′ = ¹} {A = A ▹▹ A} {t = t} [Γ]₂ [Γ] [A▹▹A]₂ [A▹▹A] [t]₂
+    in [Γ] , Strᵛ [Γ] , coiterᵛ {A = A} {h = h} {t = t} [Γ] [A] {s = s} [s] [h] [t]
 
   -- Fundamental theorem for term equality.
   fundamentalTermEq : ∀ {A t t′} → Γ ⊢ t ≡ t′ ∷ A
@@ -769,11 +775,61 @@ mutual
         [p≡r] = Σ-ηᵛ {F = F} {G} {p} {r}
                      [Γ] [F] [G] [p] [r] [fst≡] [snd≡]
     in  [Γ] , modelsTermEq [ΣFG] [p] [r] [p≡r]
-  fundamentalTermEq (hd-cong s≡s') = {!!}
-  fundamentalTermEq (tl-cong s≡s') = {!!}
-  fundamentalTermEq (coiter-cong ⊢A s≡s' ⊢h ⊢t) = {!!}
-  fundamentalTermEq (hd-β ⊢A ⊢s ⊢h ⊢t) = {!!}
-  fundamentalTermEq (tl-β ⊢A ⊢s ⊢h ⊢t) = {!!}
+  fundamentalTermEq (hd-cong {s = s} {s' = s'} s≡s') with fundamentalTermEq s≡s'
+  ... | [Γ] , modelsTermEq [A] [s] [s'] [s≡s'] =
+    let [s]₁ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = s} [Γ] [Γ] [A] (Strᵛ [Γ]) [s]
+        [s']₁ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = s'} [Γ] [Γ] [A] (Strᵛ [Γ]) [s']
+        [s≡s']₁ = S.irrelevanceEqTerm {l′ = ¹} {A = Str} {t = s} {u = s'} [Γ] [Γ] [A] (Strᵛ [Γ]) [s≡s']
+    in [Γ] , modelsTermEq (ℕᵛ [Γ]) (hdᵛ {l = ¹} {s = s} [Γ] [s]₁) (hdᵛ {l = ¹} {s = s'} [Γ] [s']₁) (hd-congᵛ {l = ¹} {s = s} {s' = s'} [Γ] [s≡s']₁)
+  fundamentalTermEq (tl-cong {s = s} {s' = s'} s≡s') with fundamentalTermEq s≡s'
+  ... | [Γ] , modelsTermEq [A] [s] [s'] [s≡s'] =
+    let [s]₁ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = s} [Γ] [Γ] [A] (Strᵛ [Γ]) [s]
+        [s']₁ = S.irrelevanceTerm {l′ = ¹} {A = Str} {t = s'} [Γ] [Γ] [A] (Strᵛ [Γ]) [s']
+        [s≡s']₁ = S.irrelevanceEqTerm {l′ = ¹} {A = Str} {t = s} {u = s'} [Γ] [Γ] [A] (Strᵛ [Γ]) [s≡s']
+    in [Γ] , modelsTermEq (Strᵛ [Γ]) (tlᵛ {l = ¹} {s = s} [Γ] [s]₁) (tlᵛ {l = ¹} {s = s'} [Γ] [s']₁) (tl-congᵛ {l = ¹} {s = s} {s' = s'} [Γ] [s≡s']₁)
+  fundamentalTermEq (coiter-cong {A = A} {A'} {s} {s'} {h} {h'} {t} {t'} A≡A' s≡s' h≡h' t≡t')
+    with fundamentalEq A≡A' with fundamentalTermEq s≡s' with fundamentalTermEq h≡h' with fundamentalTermEq t≡t'
+  ... | [Γ] , [A] , [A'] , [A≡A'] | [Γ]₁ , modelsTermEq [A]₁ [s]₁ [s']₁ [s≡s']₁ | [Γ]₂ , modelsTermEq [A▹▹ℕ]₂ [h]₂ [h']₂ [h≡h']₂ | [Γ]₃ , modelsTermEq [A▹▹A]₃ [t]₃ [t']₃ [t≡t']₃ =
+    let [s] = S.irrelevanceTerm {A = A} {t = s} [Γ]₁ [Γ] [A]₁ [A] [s]₁
+        [s'] = convᵛ {t = s'} {A = A} {B = A'} [Γ] [A] [A'] [A≡A'] (S.irrelevanceTerm {A = A} {t = s'} [Γ]₁ [Γ] [A]₁ [A] [s']₁)
+        [s≡s'] = S.irrelevanceEqTerm {A = A} {t = s} {u = s'} [Γ]₁ [Γ] [A]₁ [A] [s≡s']₁
+        [A▹▹ℕ] = ▹▹ᵛ {F = A} {G = ℕ} [Γ] [A] (ℕᵛ [Γ])
+        [A'▹▹ℕ] = ▹▹ᵛ {F = A'} {G = ℕ} [Γ] [A'] (ℕᵛ [Γ])
+        [A▹▹ℕ≡A'▹▹ℕ] = ▹▹-congᵛ {F = A} {F′ = A'} {G = ℕ} {G′ = ℕ}  [Γ] [A] [A'] [A≡A'] (ℕᵛ [Γ]) (ℕᵛ [Γ]) (reflᵛ {A = ℕ} {l = ¹} [Γ] (ℕᵛ [Γ]))
+        -- [A▹▹ℕ] = S.irrelevance {A = A ▹▹ ℕ} [Γ]₂ [Γ] [A▹▹ℕ]₂
+        [h] = S.irrelevanceTerm {A = A ▹▹ ℕ} {t = h} [Γ]₂ [Γ] [A▹▹ℕ]₂ [A▹▹ℕ] [h]₂
+        [h'] = convᵛ {t = h'} {A = A ▹▹ ℕ} {B = A' ▹▹ ℕ} [Γ] [A▹▹ℕ] [A'▹▹ℕ] [A▹▹ℕ≡A'▹▹ℕ] (S.irrelevanceTerm {A = A ▹▹ ℕ} {t = h'} [Γ]₂ [Γ] [A▹▹ℕ]₂ [A▹▹ℕ] [h']₂)
+        [h≡h'] = S.irrelevanceEqTerm {A = A ▹▹ ℕ} {t = h} {u = h'} [Γ]₂ [Γ] [A▹▹ℕ]₂ [A▹▹ℕ] [h≡h']₂
+        [A▹▹A] = ▹▹ᵛ {F = A} {G = A} [Γ] [A] [A]
+        [A'▹▹A'] = ▹▹ᵛ {F = A'} {G = A'} [Γ] [A'] [A']
+        [A▹▹A≡A'▹▹A'] = ▹▹-congᵛ {F = A} {F′ = A'} {G = A} {G′ = A'}  [Γ] [A] [A'] [A≡A'] [A] [A'] [A≡A']
+        -- [A▹▹A] = S.irrelevance {A = A ▹▹ A} [Γ]₃ [Γ] [A▹▹A]₃
+        [t] = S.irrelevanceTerm {A = A ▹▹ A} {t = t} [Γ]₃ [Γ] [A▹▹A]₃ [A▹▹A] [t]₃
+        [t'] = convᵛ {t = t'} {A = A ▹▹ A} {B = A' ▹▹ A'} [Γ] [A▹▹A] [A'▹▹A'] [A▹▹A≡A'▹▹A'] (S.irrelevanceTerm {A = A ▹▹ A} {t = t'} [Γ]₃ [Γ] [A▹▹A]₃ [A▹▹A] [t']₃)
+        [t≡t'] = S.irrelevanceEqTerm {A = A ▹▹ A} {t = t} {u = t'} [Γ]₃ [Γ] [A▹▹A]₃ [A▹▹A] [t≡t']₃
+        [coiter] = coiterᵛ {A = A} {h = h} {t = t} [Γ] [A] {s = s} [s] [h] [t]
+        [coiter'] = coiterᵛ {A = A'} {h = h'} {t = t'} [Γ] [A'] {s = s'} [s'] [h'] [t']
+        [coiter≡] = coiter-congᵛ {A = A} {A' = A'} {s = s} {s' = s'} {h = h} {h' = h'} {t = t} {t' = t'} [Γ] [A] [A'] [A▹▹ℕ] [A'▹▹ℕ] [A▹▹A] [A'▹▹A'] [A≡A'] [s] [s'] [s≡s'] [h] [h'] [h≡h'] [t] [t'] [t≡t']
+    in [Γ] , modelsTermEq (Strᵛ [Γ]) [coiter] [coiter'] [coiter≡]
+  fundamentalTermEq (hd-β {A = A} {s} {h} {t} ⊢A ⊢s ⊢h ⊢t) with fundamentalTerm ⊢s with fundamentalTerm ⊢h with fundamentalTerm ⊢t
+  ... | [Γ] , [A] , [s] | [Γ]₁ , [A▹▹ℕ]₁ , [h]₁ | [Γ]₂ , [A▹▹A]₂ , [t]₂ =
+    let [A▹▹ℕ] = ▹▹ᵛ {F = A} {G = ℕ} [Γ] [A] (ℕᵛ [Γ])
+        [h] = S.irrelevanceTerm {A = A ▹▹ ℕ} {t = h} [Γ]₁ [Γ] [A▹▹ℕ]₁ [A▹▹ℕ] [h]₁
+        [A▹▹A] = ▹▹ᵛ {F = A} {G = A} [Γ] [A] [A]
+        [t] = S.irrelevanceTerm {A = A ▹▹ A} {t = t} [Γ]₂ [Γ] [A▹▹A]₂ [A▹▹A] [t]₂
+        [hs] = appᵛ {F = A} {G = ℕ} {t = h} {u = s} [Γ] [A] [A▹▹ℕ] [h] [s]
+        [hd] = hdᵛ {l = ¹} {s = coiter A s h t} [Γ] (coiterᵛ {A = A} {h = h} {t = t} [Γ] [A] {s = s} [s] [h] [t])
+    in [Γ] , modelsTermEq (ℕᵛ [Γ]) [hd] [hs] (hd-βᵛ {A = A} {s} {h} {t} [Γ] [A] [A▹▹ℕ] [A▹▹A] [s] [h] [t])
+  fundamentalTermEq (tl-β {A = A} {s} {h} {t} ⊢A ⊢s ⊢h ⊢t) with fundamentalTerm ⊢s with fundamentalTerm ⊢h with fundamentalTerm ⊢t
+  ... | [Γ] , [A] , [s] | [Γ]₁ , [A▹▹ℕ]₁ , [h]₁ | [Γ]₂ , [A▹▹A]₂ , [t]₂ =
+    let [A▹▹ℕ] = ▹▹ᵛ {F = A} {G = ℕ} [Γ] [A] (ℕᵛ [Γ])
+        [h] = S.irrelevanceTerm {A = A ▹▹ ℕ} {t = h} [Γ]₁ [Γ] [A▹▹ℕ]₁ [A▹▹ℕ] [h]₁
+        [A▹▹A] = ▹▹ᵛ {F = A} {G = A} [Γ] [A] [A]
+        [t] = S.irrelevanceTerm {A = A ▹▹ A} {t = t} [Γ]₂ [Γ] [A▹▹A]₂ [A▹▹A] [t]₂
+        [ts] = app-▹▹ᵛ {F = A} {G = A} {t = t} {u = s} [Γ] [A] [A] [A▹▹A] [t] [s]
+        [coiter] = coiterᵛ {A = A} {h = h} {t = t} [Γ] [A] {s = t ∘ s} [ts] [h] [t]
+        [tl] = tlᵛ {l = ¹} {s = coiter A s h t} [Γ] (coiterᵛ {A = A} {h = h} {t = t} [Γ] [A] {s = s} [s] [h] [t])
+    in [Γ] , modelsTermEq (Strᵛ [Γ]) [tl] [coiter] (tl-βᵛ {A = A} {s} {h} {t} [Γ] [A] [A▹▹ℕ] [A▹▹A] [s] [h] [t] [coiter])
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
