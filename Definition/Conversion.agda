@@ -52,6 +52,12 @@ mutual
                   → Γ ⊢ F [conv↑] G
                   → Γ ⊢ k ~ l ↓ Empty
                   → Γ ⊢ Emptyrec F k ~ Emptyrec G l ↑ F
+    hd-cong       : ∀ {s w}
+                  → Γ ⊢ s ~ w ↓ Str
+                  → Γ ⊢ hd s ~ hd w ↑ ℕ
+    tl-cong       : ∀ {s w}
+                  → Γ ⊢ s ~ w ↓ Str
+                  → Γ ⊢ tl s ~ tl w ↑ Str
 
   -- Neutral equality with types in WHNF.
   record _⊢_~_↓_ (Γ : Con Term n) (k l B : Term n) : Set where
@@ -81,6 +87,7 @@ mutual
     ℕ-refl     : ⊢ Γ → Γ ⊢ ℕ [conv↓] ℕ
     Empty-refl : ⊢ Γ → Γ ⊢ Empty [conv↓] Empty
     Unit-refl  : ⊢ Γ → Γ ⊢ Unit [conv↓] Unit
+    Str-refl   : ⊢ Γ → Γ ⊢ Str [conv↓] Str
     ne         : ∀ {K L}
                → Γ ⊢ K ~ L ↓ U
                → Γ ⊢ K [conv↓] L
@@ -120,6 +127,9 @@ mutual
     Unit-ins  : ∀ {k l}
               → Γ ⊢ k ~ l ↓ Unit
               → Γ ⊢ k [conv↓] l ∷ Unit
+    Str-ins   : ∀ {s w}
+              → Γ ⊢ s ~ w ↓ Str
+              → Γ ⊢ s [conv↓] w ∷ Str
     ne-ins    : ∀ {k l M N}
               → Γ ⊢ k ∷ N
               → Γ ⊢ l ∷ N
@@ -135,6 +145,12 @@ mutual
     suc-cong  : ∀ {m n}
               → Γ ⊢ m [conv↑] n ∷ ℕ
               → Γ ⊢ suc m [conv↓] suc n ∷ ℕ
+    coiter-cong : ∀ {A B s w h g t u}
+              → Γ ⊢ A [conv↑] B
+              → Γ ⊢ s [conv↑] w ∷ A
+              → Γ ⊢ h [conv↑] g ∷ A ▹▹ ℕ
+              → Γ ⊢ t [conv↑] u ∷ A ▹▹ A
+              → Γ ⊢ coiter A s h t [conv↓] coiter B w g u ∷ Str
     η-eq      : ∀ {f g F G}
               → Γ ⊢ f ∷ Π F ▹ G
               → Γ ⊢ g ∷ Π F ▹ G

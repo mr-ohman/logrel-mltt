@@ -89,6 +89,25 @@ U≢Unitⱼ U≡Unit =
   let _ , ⊢Unit = syntacticEq U≡Unit
   in  U≢Unit-red (id ⊢Unit) U≡Unit
 
+
+-- U and Str
+U≢Str′ : ∀ {B l l′}
+       ([U] : Γ ⊩′⟨ l ⟩U)
+       ([Str] : Γ ⊩Str B)
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (Strᵣ [Str]) → ⊥
+U≢Str′ a b ()
+
+U≢Str-red : ∀ {B} → Γ ⊢ B ⇒* Str → Γ ⊢ U ≡ B → ⊥
+U≢Str-red D = A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩Str B) Uᵣ Strᵣ
+                (λ x → extractMaybeEmb (U-elim x))
+                (λ x → extractMaybeEmb (Str-elim′ D x))
+                U≢Str′
+
+U≢Strⱼ : Γ ⊢ U ≡ Str → ⊥
+U≢Strⱼ U≡Str =
+  let _ , ⊢Str = syntacticEq U≡Str
+  in  U≢Str-red (id ⊢Str) U≡Str
+
 -- ℕ and Empty
 
 ℕ≢Empty′ : ∀ {B l l'}
@@ -127,6 +146,25 @@ U≢Unitⱼ U≡Unit =
   let _ , ⊢Unit = syntacticEq ℕ≡Unit
   in  ℕ≢Unit-red (id ⊢Unit) ℕ≡Unit
 
+-- ℕ and Str
+
+ℕ≢Str′ : ∀ {B l l'}
+           ([ℕ] : Γ ⊩ℕ ℕ)
+           ([Str] : Γ ⊩Str B)
+           → ShapeView Γ l l' _ _ (ℕᵣ [ℕ]) (Strᵣ [Str]) → ⊥
+ℕ≢Str′ a b ()
+
+ℕ≢Str-red : ∀ {B} → Γ ⊢ B ⇒* Str → Γ ⊢ ℕ ≡ B → ⊥
+ℕ≢Str-red D = A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩Str B) ℕᵣ Strᵣ
+                (λ x → extractMaybeEmb (ℕ-elim x))
+                (λ x → extractMaybeEmb (Str-elim′ D x))
+                ℕ≢Str′
+
+ℕ≢Strⱼ : Γ ⊢ ℕ ≡ Str → ⊥
+ℕ≢Strⱼ ℕ≡Str =
+  let _ , ⊢Str = syntacticEq ℕ≡Str
+  in  ℕ≢Str-red (id ⊢Str) ℕ≡Str
+
 -- Empty and Unit
 
 Empty≢Unit′ : ∀ {B l l'}
@@ -145,6 +183,44 @@ Empty≢Unitⱼ : Γ ⊢ Empty ≡ Unit → ⊥
 Empty≢Unitⱼ Empty≡Unit =
   let _ , ⊢Unit = syntacticEq Empty≡Unit
   in  Empty≢Unit-red (id ⊢Unit) Empty≡Unit
+
+-- Empty and Str
+
+Empty≢Str′ : ∀ {B l l'}
+           ([Empty] : Γ ⊩Empty Empty)
+           ([Str] : Γ ⊩Str B)
+           → ShapeView Γ l l' _ _ (Emptyᵣ [Empty]) (Strᵣ [Str]) → ⊥
+Empty≢Str′ a b ()
+
+Empty≢Str-red : ∀ {B} → Γ ⊢ B ⇒* Str → Γ ⊢ Empty ≡ B → ⊥
+Empty≢Str-red D = A≢B (λ Γ l A → Γ ⊩Empty A) (λ Γ l B → Γ ⊩Str B) Emptyᵣ Strᵣ
+                (λ x → extractMaybeEmb (Empty-elim x))
+                (λ x → extractMaybeEmb (Str-elim′ D x))
+                Empty≢Str′
+
+Empty≢Strⱼ : Γ ⊢ Empty ≡ Str → ⊥
+Empty≢Strⱼ Empty≡Str =
+  let _ , ⊢Str = syntacticEq Empty≡Str
+  in  Empty≢Str-red (id ⊢Str) Empty≡Str
+
+-- Unit and Str
+
+Unit≢Str′ : ∀ {B l l'}
+           ([Unit] : Γ ⊩Unit Unit)
+           ([Str] : Γ ⊩Str B)
+           → ShapeView Γ l l' _ _ (Unitᵣ [Unit]) (Strᵣ [Str]) → ⊥
+Unit≢Str′ a b ()
+
+Unit≢Str-red : ∀ {B} → Γ ⊢ B ⇒* Str → Γ ⊢ Unit ≡ B → ⊥
+Unit≢Str-red D = A≢B (λ Γ l A → Γ ⊩Unit A) (λ Γ l B → Γ ⊩Str B) Unitᵣ Strᵣ
+                (λ x → extractMaybeEmb (Unit-elim x))
+                (λ x → extractMaybeEmb (Str-elim′ D x))
+                Unit≢Str′
+
+Unit≢Strⱼ : Γ ⊢ Unit ≡ Str → ⊥
+Unit≢Strⱼ Unit≡Str =
+  let _ , ⊢Str = syntacticEq Unit≡Str
+  in  Unit≢Str-red (id ⊢Str) Unit≡Str
 
 -- Universe and binding types
 
@@ -262,6 +338,30 @@ Unit≢Πⱼ {Γ = Γ} {F} {G} = Unit≢Bⱼ {Γ = Γ} {F} {G} BΠ
 Unit≢Σⱼ : ∀ {Γ : Con Term n} {F G} → _
 Unit≢Σⱼ {Γ = Γ} {F} {G} = Unit≢Bⱼ {Γ = Γ} {F} {G} BΣ
 
+-- Str and Π
+Str≢B′ : ∀ {A B l l′} W
+       ([Str] : Γ ⊩Str A)
+       ([W] : Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ B)
+     → ShapeView Γ l l′ _ _ (Strᵣ [Str]) (Bᵣ W [W]) → ⊥
+Str≢B′ W a b ()
+
+Str≢B-red : ∀ {A B F G} W → Γ ⊢ A ⇒* Str → Γ ⊢ B ⇒* ⟦ W ⟧ F ▹ G → Γ ⊢ A ≡ B → ⊥
+Str≢B-red W D D′ = A≢B (λ Γ l A → Γ ⊩Str A)
+                    (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) Strᵣ (Bᵣ W)
+                    (λ x → extractMaybeEmb (Str-elim′ D x))
+                    (λ x → extractMaybeEmb (B-elim′ W D′ x))
+                    (Str≢B′ W)
+
+Str≢Bⱼ : ∀ {F G} W → Γ ⊢ Str ≡ ⟦ W ⟧ F ▹ G → ⊥
+Str≢Bⱼ W Str≡W =
+  let ⊢Str , ⊢W = syntacticEq Str≡W
+  in  Str≢B-red W (id ⊢Str) (id ⊢W) Str≡W
+
+Str≢Πⱼ : ∀ {Γ : Con Term n} {F G} → _
+Str≢Πⱼ {Γ = Γ} {F} {G} = Str≢Bⱼ {Γ = Γ} {F} {G} BΠ
+Str≢Σⱼ : ∀ {Γ : Con Term n} {F G} → _
+Str≢Σⱼ {Γ = Γ} {F} {G} = Str≢Bⱼ {Γ = Γ} {F} {G} BΣ
+
 ℕ≢ne′ : ∀ {A K l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([K] : Γ ⊩ne K)
@@ -315,6 +415,24 @@ Unit≢neⱼ : ∀ {K} → Neutral K → Γ ⊢ Unit ≡ K → ⊥
 Unit≢neⱼ neK Unit≡K =
   let ⊢Unit , ⊢K = syntacticEq Unit≡K
   in  Unit≢ne-red (id ⊢Unit) (id ⊢K) neK Unit≡K
+
+-- Str and neutral
+Str≢ne′ : ∀ {A K l l′}
+       ([Str] : Γ ⊩Str A)
+       ([K] : Γ ⊩ne K)
+     → ShapeView Γ l l′ _ _ (Strᵣ [Str]) (ne [K]) → ⊥
+Str≢ne′ a b ()
+
+Str≢ne-red : ∀ {A B K} → Γ ⊢ A ⇒* Str → Γ ⊢ B ⇒* K → Neutral K → Γ ⊢ A ≡ B → ⊥
+Str≢ne-red D D′ neK = A≢B (λ Γ l A → Γ ⊩Str A) (λ Γ l B → Γ ⊩ne B) Strᵣ ne
+                        (λ x → extractMaybeEmb (Str-elim′ D x))
+                        (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
+                        Str≢ne′
+
+Str≢neⱼ : ∀ {K} → Neutral K → Γ ⊢ Str ≡ K → ⊥
+Str≢neⱼ neK Str≡K =
+  let ⊢Str , ⊢K = syntacticEq Str≡K
+  in  Str≢ne-red (id ⊢Str) (id ⊢K) neK Str≡K
 
 B≢ne′ : ∀ {A K l l′} W
        ([W] : Γ ⊩′⟨ l ⟩B⟨ W ⟩ A)

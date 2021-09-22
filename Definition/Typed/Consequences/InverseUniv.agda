@@ -73,6 +73,7 @@ inverseUniv q (Uⱼ x) = ⊥-elim (q ∃U)
 inverseUniv q (Πⱼ A ▹ A₁) = Πⱼ inverseUniv (λ x → q (∃Π₁ x)) A ▹ inverseUniv (λ x → q (∃Π₂ x)) A₁
 inverseUniv q (Σⱼ A ▹ A₁) = Σⱼ inverseUniv (λ x → q (∃Σ₁ x)) A ▹ inverseUniv (λ x → q (∃Σ₂ x)) A₁
 inverseUniv q (univ x) = x
+inverseUniv q (Strⱼ x) = Strⱼ x
 
 -- If A is a neutral type, then A can be a term of U.
 inverseUnivNe : ∀ {A} → Neutral A → Γ ⊢ A → Γ ⊢ A ∷ U

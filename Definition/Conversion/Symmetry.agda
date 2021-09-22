@@ -5,6 +5,7 @@ module Definition.Conversion.Symmetry where
 open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
+import Definition.Typed.Weakening as W
 open import Definition.Conversion
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
@@ -74,6 +75,16 @@ mutual
     in  _ , soundnessConv↑ x
     , Emptyrec-cong (symConv↑ Γ≡Δ x)
                     (PE.subst (λ x₁ → _ ⊢ _ ~ _ ↓ x₁) B≡Empty u~t)
+  sym~↑ Γ≡Δ (hd-cong s~u) =
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , u~s = sym~↓ Γ≡Δ s~u
+        B≡Str = Str≡A A≡B whnfB
+    in ℕ , refl (ℕⱼ ⊢Γ) , hd-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Str u~s)
+  sym~↑ Γ≡Δ (tl-cong s~u) =
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , u~s = sym~↓ Γ≡Δ s~u
+        B≡Str = Str≡A A≡B whnfB
+    in Str , refl (Strⱼ ⊢Γ) , tl-cong (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Str u~s)
 
   -- Symmetry of algorithmic equality of neutrals of types in WHNF.
   sym~↓ : ∀ {t u A} → ⊢ Γ ≡ Δ → Γ ⊢ t ~ u ↓ A
@@ -105,6 +116,9 @@ mutual
   symConv↓ Γ≡Δ (Unit-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  Unit-refl ⊢Δ
+  symConv↓ Γ≡Δ (Str-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Str-refl ⊢Δ
   symConv↓ Γ≡Δ (ne A~B) =
     let B , whnfB , U≡B , B~A = sym~↓ Γ≡Δ A~B
         B≡U = U≡A U≡B
@@ -140,6 +154,10 @@ mutual
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
         B≡Unit = Unit≡A A≡B whnfB
     in  Unit-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Unit u~t)
+  symConv↓Term Γ≡Δ (Str-ins t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        B≡Str = Str≡A A≡B whnfB
+    in  Str-ins (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Str u~t)
   symConv↓Term Γ≡Δ (ne-ins t u x t~u) =
     let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
     in  ne-ins (stabilityTerm Γ≡Δ u) (stabilityTerm Γ≡Δ t) x u~t
@@ -149,6 +167,19 @@ mutual
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  zero-refl ⊢Δ
   symConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (symConv↑Term Γ≡Δ t<>u)
+  symConv↓Term Γ≡Δ (coiter-cong A s h t) =
+    let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+        A≡B = soundnessConv↑ A
+        [↑] _ _ D _ _ _ _ = A
+        ⊢A = redFirst* D
+        ⊢Γ≡Γ = reflConEq ⊢Γ
+        s′ = symConv↑Term ⊢Γ≡Γ s
+        h′ = symConv↑Term ⊢Γ≡Γ h
+        t′ = symConv↑Term ⊢Γ≡Γ t
+    in coiter-cong (symConv↑ Γ≡Δ A)
+                   (convConv↑Term Γ≡Δ A≡B s′)
+                   (convConv↑Term Γ≡Δ (Π-cong ⊢A A≡B (refl (ℕⱼ (⊢Γ ∙ ⊢A)))) h′)
+                   (convConv↑Term Γ≡Δ (Π-cong ⊢A A≡B (W.wkEq (W.step W.id) (⊢Γ ∙ ⊢A) A≡B)) t′)
   symConv↓Term Γ≡Δ (η-eq x₁ x₂ y y₁ t<>u) =
     let ⊢F , _ = syntacticΠ (syntacticTerm x₁)
     in  η-eq (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₁)

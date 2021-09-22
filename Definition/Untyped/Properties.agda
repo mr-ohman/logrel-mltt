@@ -575,3 +575,14 @@ wk1-sgSubst t t' rewrite wk1-tailId t =
         (substCompEq t)
         (substVar-to-subst (substVar-sgSubst-tail t') t))
       (subst-id t)
+
+subst-liftSubst-wk1 : ∀ {k n} (A : Term n) (σ : _ → Term k) → subst (liftSubst σ) (wk1 A) ≡ wk1 (subst σ A)
+subst-liftSubst-wk1 A σ = trans (subst-wk A)
+      (trans (substVar-to-subst (aux σ) A)
+                (sym (wk-subst A)))
+    where
+      open import Tools.Fin
+
+      aux : ∀ {n m} (σ : Subst n m) x → (liftSubst σ ₛ• step id) x ≡ (step id •ₛ σ) x
+      aux σ x0 = refl
+      aux σ (_+1 x) = refl

@@ -39,6 +39,12 @@ inversion-Unit : ∀ {C} → Γ ⊢ Unit ∷ C → Γ ⊢ C ≡ U
 inversion-Unit (Unitⱼ x) = refl (Uⱼ x)
 inversion-Unit (conv x x₁) = trans (sym x₁) (inversion-Unit x)
 
+-- Inversion of Stream
+inversion-Str : ∀ {C} → Γ ⊢ Str ∷ C → Γ ⊢ C ≡ U
+inversion-Str (Strⱼ x) = refl (Uⱼ x)
+inversion-Str (conv d x) = trans (sym x) (inversion-Str d)
+
+
 -- Inversion of Π-types.
 inversion-Π : ∀ {F G C}
             → Γ ⊢ Π F ▹ G ∷ C → Γ ⊢ F ∷ U × Γ ∙ F ⊢ G ∷ U × Γ ⊢ C ≡ U
@@ -74,6 +80,14 @@ inversion-natrec : ∀ {c g n A C} → Γ ⊢ natrec C c g n ∷ A
 inversion-natrec (natrecⱼ x d d₁ n) = x , d , d₁ , n , refl (substType x n)
 inversion-natrec (conv d x) = let a , b , c , d , e = inversion-natrec d
                               in  a , b , c , d , trans (sym x) e
+
+-- Inversion of coiter
+
+inversion-coiter : ∀ {A s h t C} → Γ ⊢ coiter A s h t ∷ C → (Γ ⊢ A) × Γ ⊢ s ∷ A × Γ ⊢ h ∷ A ▹▹ ℕ × Γ ⊢ t ∷ A ▹▹ A × Γ ⊢ C ≡ Str
+inversion-coiter (coiterⱼ x d d₁ d₂) = x , d , d₁ , d₂ , refl (Strⱼ (wf x))
+inversion-coiter (conv d x) =
+  let A , s , h , t , C≡Str = inversion-coiter d
+  in A , s , h , t , trans (sym x) C≡Str
 
 -- Inversion of application.
 inversion-app :  ∀ {f a A} → Γ ⊢ (f ∘ a) ∷ A →
@@ -116,6 +130,7 @@ whnfProduct x Πₙ =
 whnfProduct x Σₙ =
   let _ , _ , Σ≡U = inversion-Σ x
   in  ⊥-elim (U≢Σ (sym Σ≡U))
+whnfProduct x Strₙ = ⊥-elim (U≢Σ (sym (inversion-Str x)))
 whnfProduct x ℕₙ = ⊥-elim (U≢Σ (sym (inversion-ℕ x)))
 whnfProduct x Unitₙ = ⊥-elim (U≢Σ (sym (inversion-Unit x)))
 whnfProduct x Emptyₙ = ⊥-elim (U≢Σ (sym (inversion-Empty x)))
@@ -126,4 +141,7 @@ whnfProduct x zeroₙ = ⊥-elim (ℕ≢Σ (sym (inversion-zero x)))
 whnfProduct x sucₙ =
   let _ , A≡ℕ = inversion-suc x
   in  ⊥-elim (ℕ≢Σ (sym A≡ℕ))
+whnfProduct x coiterₙ =
+  let _ , _ , _ , _ , A≡ℕ = inversion-coiter x
+  in  ⊥-elim  (Str≢Σⱼ (sym A≡ℕ))
 whnfProduct x starₙ = ⊥-elim (Unit≢Σⱼ (sym (inversion-star x)))

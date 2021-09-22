@@ -4,6 +4,7 @@ module Definition.Typed.Consequences.NeTypeEq where
 
 open import Definition.Untyped
 open import Definition.Typed
+open import Definition.Typed.Properties
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Substitution
@@ -43,6 +44,8 @@ neTypeEq (natrecₙ neT) (natrecⱼ x t∷A t∷A₁ t∷A₂) (natrecⱼ x₁ t
   refl (substType x₁ t∷B₂)
 neTypeEq (Emptyrecₙ neT) (Emptyrecⱼ x t∷A) (Emptyrecⱼ x₁ t∷B) =
   refl x₁
+neTypeEq (hdₙ x) (hdⱼ x₁) (hdⱼ x₂) = refl (ℕⱼ (wfTerm x₁))
+neTypeEq (tlₙ x) (tlⱼ x₁) (tlⱼ x₂) = refl (Strⱼ (wfTerm x₁))
 neTypeEq x (conv t∷A x₁) t∷B = let q = neTypeEq x t∷A t∷B
                                in  trans (sym x₁) q
 neTypeEq x t∷A (conv t∷B x₃) = let q = neTypeEq x t∷A t∷B

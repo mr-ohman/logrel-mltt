@@ -141,20 +141,10 @@ tl-congᵛ {l = l} {s} {s'} [Γ] [s≡s'] {σ} ⊢Δ [σ] =
 
 
 
-subst-liftSubst-wk1 : ∀ {k n} {A : Term n} {σ : _ → Term k} → subst (liftSubst σ) (wk1 A) PE.≡ wk1 (subst σ A)
-subst-liftSubst-wk1 {A = A} {σ} = PE.trans (subst-wk A)
-      (PE.trans (substVar-to-subst (aux σ) A)
-                (PE.sym (wk-subst A)))
-    where
-      open import Tools.Fin
-
-      aux : ∀ {n m} (σ : Subst n m) x → (liftSubst σ ₛ• step id) x PE.≡ (step id •ₛ σ) x
-      aux σ x0 = PE.refl
-      aux σ (_+1 x) = PE.refl
 
 subst-▹▹ : ∀ {l k n} (A : Term n) {Δ} (σ : _ → Term k) ([A▹▹A] : Δ ⊩⟨ l ⟩ subst σ (A ▹▹ A)) →  Δ ⊢ subst σ (A ▹▹ A) ≡ subst σ A ▹▹ subst σ A
 subst-▹▹ A {Δ} σ [A▹▹A] = PE.subst (λ x → Δ ⊢ subst σ (A ▹▹ A) ≡ Π subst σ A ▹ x)
-                               (subst-liftSubst-wk1 {A = A} {σ = σ}) (refl (escape [A▹▹A]))
+                               (subst-liftSubst-wk1 A σ) (refl (escape [A▹▹A]))
 
 
 module Coiter {l} {A} {h t : Term _ }
@@ -185,7 +175,7 @@ module Coiter {l} {A} {h t : Term _ }
     h' = subst σ h
     t' = subst σ t
 
-    eqA = subst-liftSubst-wk1 {A = A} {σ = σ}
+    eqA = subst-liftSubst-wk1 A σ
 
     eqt : Δ ⊢ subst σ (A ▹▹ A) ≡ A' ▹▹ A'
     eqt = PE.subst (λ x → Δ ⊢ subst σ (A ▹▹ A) ≡ Π A' ▹ x)
@@ -255,7 +245,7 @@ module Coiter {l} {A} {h t : Term _ }
 
       eqt' : Δ ⊢ subst σ' (A ▹▹ A) ≡ A'' ▹▹ A''
       eqt' = PE.subst (λ x → Δ ⊢ subst σ' (A ▹▹ A) ≡ Π A'' ▹ x)
-                    (subst-liftSubst-wk1 {A = A} {σ = σ'}) (refl (escape [A▹▹A]''))
+                    (subst-liftSubst-wk1 A σ') (refl (escape [A▹▹A]''))
 
       ⊢A'' = escape [A]''
       ⊢h'' = escapeTerm [A▹▹ℕ]'' [h]''
@@ -312,7 +302,7 @@ module Coiter {l} {A} {h t : Term _ }
 
               eqSubst = PE.trans (PE.cong (λ A → A [ s' ]) eqA) (wk1-sgSubst A' s')
               wk[A]' = PE.subst (λ A → Δ ⊩⟨ l ⟩ A) (PE.sym eqSubst) [A]'
-              eqSubst' = PE.trans (PE.cong (λ A → A [ s'' ]) (subst-liftSubst-wk1 {A = A} {σ = σ'})) (wk1-sgSubst A'' s'')
+              eqSubst' = PE.trans (PE.cong (λ A → A [ s'' ]) (subst-liftSubst-wk1 A σ')) (wk1-sgSubst A'' s'')
               wk[A]'' = PE.subst (λ A → Δ ⊩⟨ l ⟩ A) (PE.sym eqSubst') [A]''
 
               [ts']₀ = appTerm [A]' wk[A]' [A▹▹A]' [t]' [s]'
@@ -415,7 +405,7 @@ module CoiterCongTerm {l A A' h h' t t'}
 
   eqt : Δ ⊢ subst σ (A ▹▹ A) ≡ Aσ ▹▹ Aσ
   eqt = PE.subst (λ x → Δ ⊢ subst σ (A ▹▹ A) ≡ Π Aσ ▹ x)
-                (subst-liftSubst-wk1 {A = A} {σ = σ}) (refl (escape [A▹▹Aσ]))
+                (subst-liftSubst-wk1 A σ) (refl (escape [A▹▹Aσ]))
 
   ⊢Aσ = escape [Aσ]
   ⊢hσ = escapeTerm [A▹▹ℕσ] [hσ]
@@ -424,7 +414,7 @@ module CoiterCongTerm {l A A' h h' t t'}
 
   eqt' : Δ ⊢ subst σ' (A' ▹▹ A') ≡ Aσ' ▹▹ Aσ'
   eqt' = PE.subst (λ x → Δ ⊢ subst σ' (A' ▹▹ A') ≡ Π Aσ' ▹ x)
-                (subst-liftSubst-wk1 {A = A'} {σ = σ'}) (refl (escape [A▹▹Aσ']))
+                (subst-liftSubst-wk1 A' σ') (refl (escape [A▹▹Aσ']))
 
   ⊢Aσ' = escape [Aσ']
   ⊢hσ' = escapeTerm [A▹▹ℕσ'] [hσ']
@@ -502,9 +492,9 @@ module CoiterCongTerm {l A A' h h' t t'}
       let ⊢s₁ = escapeTerm [Aσ] [s₁]
           ⊢s₁' = escapeTerm [Aσ'] [s₁']
 
-          eqSubst = PE.trans (PE.cong (λ A → A [ s₁ ]) (subst-liftSubst-wk1 {A = A} {σ = σ})) (wk1-sgSubst Aσ s₁)
+          eqSubst = PE.trans (PE.cong (λ A → A [ s₁ ]) (subst-liftSubst-wk1 A σ)) (wk1-sgSubst Aσ s₁)
           wk[Aσ] = PE.subst (λ A → Δ ⊩⟨ l ⟩ A) (PE.sym eqSubst) [Aσ]
-          eqSubstσ = PE.trans (PE.cong (λ A → A [ s₁' ]) (subst-liftSubst-wk1 {A = A'} {σ = σ'})) (wk1-sgSubst Aσ' s₁')
+          eqSubstσ = PE.trans (PE.cong (λ A → A [ s₁' ]) (subst-liftSubst-wk1 A' σ')) (wk1-sgSubst Aσ' s₁')
           wk[Aσ'] = PE.subst (λ A → Δ ⊩⟨ l ⟩ A) (PE.sym eqSubstσ) [Aσ']
 
           [ts₁]₀ = appTerm [Aσ] wk[Aσ] [A▹▹Aσ] [tσ] [s₁]

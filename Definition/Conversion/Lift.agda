@@ -67,6 +67,9 @@ mutual
   lift~toConv↓′ (Unitᵣ D) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , Unitₙ) (D₁ , whnfB)) =
     Unit-ins ([~] A D₂ Unitₙ k~l)
+  lift~toConv↓′ (Strᵣ D) D₁ ([~] A D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , Strₙ) (D₁ , whnfB)) =
+    Str-ins ([~] A D₂ Strₙ k~l)
   lift~toConv↓′ (ne′ K D neK K≡K) D₁ ([~] A D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , ne neK) (D₁ , whnfB)) =
     let _ , ⊢t , ⊢u = syntacticEqTerm (soundness~↑ k~l)

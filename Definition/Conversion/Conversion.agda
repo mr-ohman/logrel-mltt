@@ -54,6 +54,8 @@ mutual
     Empty-ins (stability~↓ Γ≡Δ x)
   convConv↓Term Γ≡Δ A≡B whnfB (Unit-ins x) rewrite Unit≡A A≡B whnfB =
     Unit-ins (stability~↓ Γ≡Δ x)
+  convConv↓Term Γ≡Δ A≡B whnfB (Str-ins x) rewrite Str≡A A≡B whnfB =
+    Str-ins (stability~↓ Γ≡Δ x)
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) with ne≡A x A≡B whnfB
   convConv↓Term Γ≡Δ A≡B whnfB (ne-ins t u x x₁) | B , neB , PE.refl =
     ne-ins (stabilityTerm Γ≡Δ (conv t A≡B)) (stabilityTerm Γ≡Δ (conv u A≡B))
@@ -65,6 +67,11 @@ mutual
     in  zero-refl ⊢Δ
   convConv↓Term Γ≡Δ A≡B whnfB (suc-cong x) rewrite ℕ≡A A≡B whnfB =
     suc-cong (stabilityConv↑Term Γ≡Δ x)
+  convConv↓Term Γ≡Δ A≡B whnfB (coiter-cong A s h t) rewrite Str≡A A≡B whnfB =
+    coiter-cong (stabilityConv↑ Γ≡Δ A)
+                (stabilityConv↑Term Γ≡Δ s)
+                (stabilityConv↑Term Γ≡Δ h)
+                (stabilityConv↑Term Γ≡Δ t)
   convConv↓Term Γ≡Δ A≡B whnfB (η-eq x₁ x₂ y y₁ x₃) with Π≡A A≡B whnfB
   convConv↓Term Γ≡Δ A≡B whnfB (η-eq x₁ x₂ y y₁ x₃) | F′ , G′ , PE.refl =
     let F≡F′ , G≡G′ = injectivity A≡B

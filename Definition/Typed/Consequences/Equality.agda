@@ -81,6 +81,21 @@ Unit≡A {A} Unit≡A whnfA with reducibleEq Unit≡A
 Unit≡A {A} Unit≡A whnfA | [Unit] , [A] , [Unit≡A] =
   Unit≡A′ (Unit-elim [Unit]) (irrelevanceEq [Unit] (Unit-intr (Unit-elim [Unit])) [Unit≡A]) whnfA
 
+Str≡A′ : ∀ {A l} ([Str] : Γ ⊩⟨ l ⟩Str Str)
+    → Γ ⊩⟨ l ⟩ Str ≡ A / (Str-intr [Str])
+    → Whnf A
+    → A PE.≡ Str
+Str≡A′ (noemb x) [Str≡A] whnfA = whnfRed* [Str≡A] whnfA
+Str≡A′ (emb 0<1 [Str]) [Str≡A] whnfA = Str≡A′ [Str] [Str≡A] whnfA
+
+Str≡A : ∀ {A}
+    → Γ ⊢ Str ≡ A
+    → Whnf A
+    → A PE.≡ Str
+Str≡A {A} Str≡A whnfA with reducibleEq Str≡A
+Str≡A {A} Str≡A whnfA | [Str] , [A] , [Str≡A] =
+  Str≡A′ (Str-elim [Str]) (irrelevanceEq [Str] (Str-intr (Str-elim [Str])) [Str≡A]) whnfA
+
 ne≡A′ : ∀ {A K l}
      → ([K] : Γ ⊩⟨ l ⟩ne K)
      → Γ ⊩⟨ l ⟩ K ≡ A / (ne-intr [K])

@@ -134,6 +134,28 @@ record _⊢_~_∷_ (Γ : Con Term n) (k l A : Term n) : Set where
   in  ↑ (refl ⊢F)
         (Emptyrec-cong x k~l′)
 
+~-hd : ∀ {s s′}
+     → Γ ⊢ s ~ s′ ∷ Str
+     → Γ ⊢ hd s ~ hd s′ ∷ ℕ
+~-hd (↑ A≡B x) =
+  let _ , ⊢B = syntacticEq A≡B
+      _ , whnfB , DB = whNorm ⊢B
+      B≡Str = Str≡A (trans A≡B (subset* (red DB))) whnfB
+      ⊢Γ = wfEq A≡B
+      s~s′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Str ([~] _ (red DB) whnfB x)
+  in ↑ (refl (ℕⱼ ⊢Γ)) (hd-cong s~s′)
+
+~-tl : ∀ {s s′}
+     → Γ ⊢ s ~ s′ ∷ Str
+     → Γ ⊢ tl s ~ tl s′ ∷ Str
+~-tl (↑ A≡B x) =
+  let _ , ⊢B = syntacticEq A≡B
+      _ , whnfB , DB = whNorm ⊢B
+      B≡Str = Str≡A (trans A≡B (subset* (red DB))) whnfB
+      ⊢Γ = wfEq A≡B
+      s~s′ = PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡Str ([~] _ (red DB) whnfB x)
+  in ↑ (refl (Strⱼ ⊢Γ)) (tl-cong s~s′)
+
 ~-sym : ∀ {k l A} → Γ ⊢ k ~ l ∷ A → Γ ⊢ l ~ k ∷ A
 ~-sym (↑ A≡B x) =
   let ⊢Γ = wfEq A≡B
@@ -192,6 +214,8 @@ eqRelInstance = record {
   ≅ₜ-Emptyrefl = λ x → liftConvTerm (univ (Emptyⱼ x) (Emptyⱼ x) (Empty-refl x));
   ≅-Unitrefl = liftConv ∘ᶠ Unit-refl;
   ≅ₜ-Unitrefl = λ ⊢Γ → liftConvTerm (univ (Unitⱼ ⊢Γ) (Unitⱼ ⊢Γ) (Unit-refl ⊢Γ));
+  ≅-Strrefl = liftConv ∘ᶠ Str-refl;
+  ≅ₜ-Strrefl = λ ⊢Γ → liftConvTerm (univ (Strⱼ ⊢Γ) (Strⱼ ⊢Γ) (Str-refl ⊢Γ));
   ≅ₜ-η-unit = λ [e] [e'] → let u , uWhnf , uRed = whNormTerm [e]
                                u' , u'Whnf , u'Red = whNormTerm [e']
                                [u] = ⊢u-redₜ uRed
@@ -224,6 +248,7 @@ eqRelInstance = record {
                                                 (Σ-cong x F<>H G<>E));
   ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
   ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
+  ≅ₜ-coiter-cong =  λ A s h t → liftConvTerm (coiter-cong A s h t)  ;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x₁ x₂ x₃ x₄ x₅);
   ≅-Σ-η = λ x x₁ x₂ x₃ x₄ x₅ x₆ x₇ → (liftConvTerm (Σ-η x₂ x₃ x₄ x₅ x₆ x₇));
   ~-var = ~-var;
@@ -231,4 +256,7 @@ eqRelInstance = record {
   ~-fst = λ x x₁ x₂ → ~-fst x₂;
   ~-snd = λ x x₁ x₂ → ~-snd x₂;
   ~-natrec = ~-natrec;
-  ~-Emptyrec = ~-Emptyrec }
+  ~-Emptyrec = ~-Emptyrec ;
+  ~-hd = ~-hd ;
+  ~-tl = ~-tl
+  }
