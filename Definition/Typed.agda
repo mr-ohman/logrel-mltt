@@ -399,7 +399,7 @@ _⊢_↘_ : (Γ : Con Term n) → Term n → Term n → Set
 _⊢_↘_∷_ : (Γ : Con Term n) → Term n → Term n → Term n → Set
 Γ ⊢ t ↘ u ∷ A = Γ ⊢ t ⇒* u ∷ A × Whnf u
 
--- Type eqaulity with well-formed types
+-- Type equality with well-formed types
 _⊢_:≡:_ : (Γ : Con Term n) → Term n → Term n → Set
 Γ ⊢ A :≡: B = Γ ⊢ A × Γ ⊢ B × (Γ ⊢ A ≡ B)
 
