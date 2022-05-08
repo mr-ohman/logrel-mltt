@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -210,6 +210,75 @@ record _⊩Unit_≡_∷Unit (Γ : Con Term ℓ) (t u : Term ℓ) : Set where
     ⊢t : Γ ⊢ t ∷ Unit
     ⊢u : Γ ⊢ u ∷ Unit
 
+
+
+
+-- Reducibility of Str
+
+_⊩Str_ : (Γ : Con Term ℓ) (A : Term ℓ) → Set
+Γ ⊩Str A = Γ ⊢ A :⇒*: Str
+
+_⊩Str_≡_ : (Γ : Con Term ℓ) (A B : Term ℓ) → Set
+Γ ⊩Str A ≡ B = Γ ⊢ B ⇒* Str
+
+mutual
+  -- Stream term
+  record _⊩Str_∷Str (Γ : Con Term ℓ) (t : Term ℓ) : Set where
+    coinductive
+    constructor Strₜ
+    field
+      n : Term ℓ
+      d : Γ ⊢ t :⇒*: n ∷ Str
+      n≡n : Γ ⊢ n ≅ n ∷ Str
+      prop : Str-prop Γ n
+
+  -- WHNF property of Streams
+  record Str-prop (Γ : Con Term ℓ) (n : Term ℓ) : Set where
+    coinductive
+    constructor Strᵣ
+    field
+      whnf : Stream n
+      hdᵣ : Γ ⊩ℕ hd n ∷ℕ
+      tlᵣ : Γ ⊩Str tl n ∷Str
+
+module S = _⊩Str_∷Str
+module Sp = Str-prop
+
+-- whnfStrRed : ∀ {s} ([s] : Γ ⊩Str s ∷Str) → Γ ⊩Str S.n [s] ∷Str
+-- whnfStrRed d with d .S.d
+-- ... | [ _ , ⊢n , _ ] = Strₜ (d .S.n) (idRedTerm:*: ⊢n) (d .S.n≡n) (d .S.prop)
+
+
+mutual
+  record _⊩Str_≡_∷Str (Γ : Con Term ℓ) (t u : Term ℓ) : Set where
+    coinductive
+    constructor Strₜ₌
+    field
+      k k′ : Term ℓ
+      d : Γ ⊢ t :⇒*: k  ∷ Str
+      d′ : Γ ⊢ u :⇒*: k′ ∷ Str
+      k≡k′ : Γ ⊢ k ≅ k′ ∷ Str
+      -- [k] : Γ ⊩Str k ∷Str
+      -- [k′] : Γ ⊩Str k′ ∷Str
+      prop : [Str]-prop Γ k k′
+
+  -- WHNF property of Natural number term equality
+  record [Str]-prop (Γ : Con Term ℓ) (n n′ : Term ℓ) : Set where
+    coinductive
+    constructor Strᵣ₌
+    field
+      whnf : Stream n
+      whnf′ : Stream n′
+      hdᵣ : Γ ⊩ℕ hd n ≡ hd n′ ∷ℕ
+      tlᵣ : Γ ⊩Str tl n ≡ tl n′ ∷Str
+
+module S≡ = _⊩Str_≡_∷Str
+module S≡p = [Str]-prop
+
+splitStr : ∀ {n n'} → [Str]-prop Γ n n' → Stream n × Stream n'
+splitStr d = d .S≡p.whnf , d .S≡p.whnf′
+
+
 -- Type levels
 
 data TypeLevel : Set where
@@ -386,6 +455,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     data _⊩¹_ (Γ : Con Term ℓ) : Term ℓ → Set where
       Uᵣ  : Γ ⊩¹U → Γ ⊩¹ U
       ℕᵣ  : ∀ {A} → Γ ⊩ℕ A → Γ ⊩¹ A
+      Strᵣ  : ∀ {A} → Γ ⊩Str A → Γ ⊩¹ A
       Emptyᵣ : ∀ {A} → Γ ⊩Empty A → Γ ⊩¹ A
       Unitᵣ : ∀ {A} → Γ ⊩Unit A → Γ ⊩¹ A
       ne  : ∀ {A} → Γ ⊩ne A → Γ ⊩¹ A
@@ -393,9 +463,52 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
       emb : ∀ {A l′} (l< : l′ < l) (let open LogRelKit (rec l<))
             ([A] : Γ ⊩ A) → Γ ⊩¹ A
 
+    -- -- Stream term
+    -- record _⊩Str_∷Str (Γ : Con Term ℓ) (t : Term ℓ) : Set where
+    --   inductive
+    --   constructor Strₜ
+    --   field
+    --     n : Term ℓ
+    --     d : Γ ⊢ t :⇒*: n ∷ Str
+    --     n≡n : Γ ⊢ n ≅ n ∷ Str
+    --     prop : Str-prop Γ n
+
+    -- -- WHNF property of Streams
+    -- data Str-prop (Γ : Con Term ℓ) : (n : Term ℓ) → Set where
+    --   coiterᵣ  : ∀ {A s h t}
+    --           → ([A] : Γ ⊩¹ A)
+    --           → (Γ ⊩¹ s ∷ A / [A])
+    --           → (Γ ⊩¹ h ∷ A ▹▹ ℕ /  {! [A] ▸▸ ℕᵣ !})
+    --           → (Γ ⊩¹ t ∷ A ▹▹ Str /  {! [A] ▸▸ Strᵣ !})
+    --           → Str-prop Γ (coiter A s h t)
+    --   ne    : ∀ {n} → Γ ⊩neNf n ∷ Str → Str-prop Γ n
+
+    -- record _⊩Str_≡_∷Str (Γ : Con Term ℓ) (t u : Term ℓ) : Set where
+    --   inductive
+    --   constructor Strₜ₌
+    --   field
+    --     k k′ : Term ℓ
+    --     d : Γ ⊢ t :⇒*: k  ∷ Str
+    --     d′ : Γ ⊢ u :⇒*: k′ ∷ Str
+    --     k≡k′ : Γ ⊢ k ≅ k′ ∷ Str
+    --     prop : [Str]-prop Γ k k′
+
+    -- -- WHNF property of Natural number term equality
+    -- data [Str]-prop (Γ : Con Term ℓ) : (n n′ : Term ℓ) → Set where
+    --   coiterᵣ₌  : ∀ {A A' s s' h h' t t'}
+    --             → ([A] : Γ ⊩¹ A)
+    --             → ([A≡A'] : Γ ⊩¹ A ≡ A' / [A])
+    --             → (Γ ⊩¹ s ≡ s' ∷ A / [A])
+    --             → (Γ ⊩¹ h ≡ h' ∷ A ▹▹ ℕ /  {! [A] ▸▸ ℕᵣ !})
+    --             → (Γ ⊩¹ t ≡ t' ∷ A ▹▹ Str /  {! [A] ▸▸ Strᵣ !})
+    --             → [Str]-prop Γ (coiter A s h t) (coiter A' s' h' t')
+    --   ne    : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ Str → [Str]-prop Γ n n′
+
+
     _⊩¹_≡_/_ : (Γ : Con Term ℓ) (A B : Term ℓ) → Γ ⊩¹ A → Set
     Γ ⊩¹ A ≡ B / Uᵣ UA = Γ ⊩¹U≡ B
     Γ ⊩¹ A ≡ B / ℕᵣ D = Γ ⊩ℕ A ≡ B
+    Γ ⊩¹ A ≡ B / Strᵣ D = Γ ⊩Str A ≡ B
     Γ ⊩¹ A ≡ B / Emptyᵣ D = Γ ⊩Empty A ≡ B
     Γ ⊩¹ A ≡ B / Unitᵣ D = Γ ⊩Unit A ≡ B
     Γ ⊩¹ A ≡ B / ne neA = Γ ⊩ne A ≡ B / neA
@@ -406,6 +519,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     _⊩¹_∷_/_ : (Γ : Con Term ℓ) (t A : Term ℓ) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ∷U/ l<
     Γ ⊩¹ t ∷ A / ℕᵣ D = Γ ⊩ℕ t ∷ℕ
+    Γ ⊩¹ t ∷ A / Strᵣ D = Γ ⊩Str t ∷Str
     Γ ⊩¹ t ∷ A / Emptyᵣ D = Γ ⊩Empty t ∷Empty
     Γ ⊩¹ t ∷ A / Unitᵣ D = Γ ⊩Unit t ∷Unit
     Γ ⊩¹ t ∷ A / ne neA = Γ ⊩ne t ∷ A / neA
@@ -417,6 +531,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     _⊩¹_≡_∷_/_ : (Γ : Con Term ℓ) (t u A : Term ℓ) → Γ ⊩¹ A → Set
     Γ ⊩¹ t ≡ u ∷ .U / Uᵣ (Uᵣ l′ l< ⊢Γ) = Γ ⊩¹U t ≡ u ∷U/ l<
     Γ ⊩¹ t ≡ u ∷ A / ℕᵣ D = Γ ⊩ℕ t ≡ u ∷ℕ
+    Γ ⊩¹ t ≡ u ∷ A / Strᵣ D = Γ ⊩Str t ≡ u ∷Str
     Γ ⊩¹ t ≡ u ∷ A / Emptyᵣ D = Γ ⊩Empty t ≡ u ∷Empty
     Γ ⊩¹ t ≡ u ∷ A / Unitᵣ D = Γ ⊩Unit t ≡ u ∷Unit
     Γ ⊩¹ t ≡ u ∷ A / ne neA = Γ ⊩ne t ≡ u ∷ A / neA
@@ -429,7 +544,7 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
     kit = Kit _⊩¹U _⊩¹B⟨_⟩_
               _⊩¹_ _⊩¹_≡_/_ _⊩¹_∷_/_ _⊩¹_≡_∷_/_
 
-open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; Unitᵣ; ne; Bᵣ; B₌; emb; Uₜ; Uₜ₌)
+open LogRel public using (Uᵣ; ℕᵣ; Emptyᵣ; Unitᵣ; Strᵣ; ne; Bᵣ; B₌; emb; Uₜ; Uₜ₌)
 
 -- Patterns for the non-records of Π
 pattern Πₜ f d funcF f≡f [f] [f]₁ = f , d , funcF , f≡f , [f] , [f]₁

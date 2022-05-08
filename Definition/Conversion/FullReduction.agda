@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Conversion.FullReduction where
 
@@ -35,22 +35,26 @@ mutual
     natrecₙ   : {C : Term (1+ m)} {c g k : Term m}
                      → Nf C → Nf c → Nf g → NfNeutral k → NfNeutral (natrec C c g k)
     Emptyrecₙ : {C k : Term m}     → Nf C → NfNeutral k → NfNeutral (Emptyrec C k)
+    hdₙ       : {k : Term m}       → NfNeutral k        → NfNeutral (hd k)
+    tlₙ       : {k : Term m}       → NfNeutral k        → NfNeutral (tl k)
 
   data Nf {m : Nat} : Term m → Set where
-    Uₙ     : Nf U
-    Πₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Π A ▹ B)
-    Σₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Σ A ▹ B)
-    ℕₙ     : Nf ℕ
-    Emptyₙ : Nf Empty
-    Unitₙ  : Nf Unit
+    Uₙ      : Nf U
+    Πₙ      : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Π A ▹ B)
+    Σₙ      : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Σ A ▹ B)
+    ℕₙ      : Nf ℕ
+    Emptyₙ  : Nf Empty
+    Unitₙ   : Nf Unit
+    Strₙ    : Nf Str
 
-    lamₙ   : {t : Term (1+ m)} → Nf t → Nf (lam t)
-    prodₙ  : {t u : Term m} → Nf t → Nf u → Nf (prod t u)
-    zeroₙ  : Nf zero
-    sucₙ   : {t : Term m} → Nf t → Nf (suc t)
-    starₙ  : Nf star
+    lamₙ    : {t : Term (1+ m)} → Nf t → Nf (lam t)
+    prodₙ   : {t u : Term m} → Nf t → Nf u → Nf (prod t u)
+    zeroₙ   : Nf zero
+    sucₙ    : {t : Term m} → Nf t → Nf (suc t)
+    starₙ   : Nf star
+    coiterₙ : {A s h t : Term m} → Nf A → Nf s → Nf h → Nf t → Nf (coiter A s h t)
 
-    ne     : {n : Term m} → NfNeutral n → Nf n
+    ne      : {n : Term m} → NfNeutral n → Nf n
 
 
 mutual
@@ -82,6 +86,12 @@ mutual
         n′ , nfN′ , n≡n′ = fullRedNe~↓ n
     in  Emptyrec C′ n′ , Emptyrecₙ nfC′ nfN′
      ,  Emptyrec-cong C≡C′ n≡n′
+  fullRedNe (hd-cong s) =
+    let s′ , nfS′ , s≡s′ = fullRedNe~↓ s
+    in hd s′ , hdₙ nfS′ , hd-cong s≡s′
+  fullRedNe (tl-cong s) =
+    let s′ , nfS′ , s≡s′ = fullRedNe~↓ s
+    in tl s′ , tlₙ nfS′ , tl-cong s≡s′
 
   fullRedNe~↓ : ∀ {t A} → Γ ⊢ t ~ t ↓ A → ∃ λ u → NfNeutral u × Γ ⊢ t ≡ u ∷ A
   fullRedNe~↓ ([~] A D whnfB k~l) =
@@ -99,6 +109,7 @@ mutual
   fullRedConv↓ (ℕ-refl ⊢Γ) = ℕ , ℕₙ , refl (ℕⱼ ⊢Γ)
   fullRedConv↓ (Empty-refl ⊢Γ) = Empty , Emptyₙ , refl (Emptyⱼ ⊢Γ)
   fullRedConv↓ (Unit-refl ⊢Γ) = Unit , Unitₙ , refl (Unitⱼ ⊢Γ)
+  fullRedConv↓ (Str-refl ⊢Γ) = Str , Strₙ , refl (Strⱼ ⊢Γ)
   fullRedConv↓ (ne A) =
     let B , nf , A≡B = fullRedNe~↓ A
     in  B , ne nf , univ A≡B
@@ -127,6 +138,9 @@ mutual
   fullRedTermConv↓ (Unit-ins t) =
     let u , nf , t≡u = fullRedNe~↓ t
     in  u , ne nf , t≡u
+  fullRedTermConv↓ (Str-ins t) =
+    let u , nf , t≡u = fullRedNe~↓ t
+    in  u , ne nf , t≡u
   fullRedTermConv↓ (ne-ins ⊢t _ _ t) =
     let u , nfU , t≡u = fullRedNe~↓ t
         _ , ⊢t∷M , _ = syntacticEqTerm t≡u
@@ -139,6 +153,12 @@ mutual
   fullRedTermConv↓ (suc-cong t) =
     let u , nf , t≡u = fullRedTerm t
     in  suc u , sucₙ nf , suc-cong t≡u
+  fullRedTermConv↓ (coiter-cong A s h t) =
+    let B , nfB , B≡A = fullRed A
+        w , nfw , w≡s = fullRedTerm s
+        g , nfg , g≡h = fullRedTerm h
+        u , nfu , u≡t = fullRedTerm t
+    in coiter B w g u , coiterₙ nfB nfw nfg nfu , coiter-cong B≡A w≡s g≡h u≡t
   fullRedTermConv↓ (η-eq ⊢t _ _ _ t∘0) =
     let u , nf , t∘0≡u = fullRedTerm t∘0
         _ , _ , ⊢u = syntacticEqTerm t∘0≡u

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Conversion.Whnf where
 
@@ -32,6 +32,10 @@ mutual
                                   in  natrecₙ q , natrecₙ w
   ne~↑ (Emptyrec-cong x x₁) = let _ , q , w = ne~↓ x₁
                               in Emptyrecₙ q , Emptyrecₙ w
+  ne~↑ (hd-cong x) = let _ , q , w = ne~↓ x
+                     in hdₙ q , hdₙ w
+  ne~↑ (tl-cong x) = let _ , q , w = ne~↓ x
+                     in tlₙ q , tlₙ w
 
   -- Extraction of neutrality and WHNF from algorithmic equality of neutrals
   -- with type in WHNF.
@@ -48,6 +52,7 @@ whnfConv↓ (U-refl x) = Uₙ , Uₙ
 whnfConv↓ (ℕ-refl x) = ℕₙ , ℕₙ
 whnfConv↓ (Empty-refl x) = Emptyₙ , Emptyₙ
 whnfConv↓ (Unit-refl x) = Unitₙ , Unitₙ
+whnfConv↓ (Str-refl x) = Strₙ , Strₙ
 whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
                    in  ne neA , ne neB
 whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
@@ -63,12 +68,15 @@ whnfConv↓Term (Empty-ins x) = let _ , neT , neU = ne~↓ x
                               in Emptyₙ , ne neT , ne neU
 whnfConv↓Term (Unit-ins x) = let _ , neT , neU = ne~↓ x
                              in Unitₙ , ne neT , ne neU
+whnfConv↓Term (Str-ins x) = let _ , neT , neU = ne~↓ x
+                             in Strₙ , ne neT , ne neU
 whnfConv↓Term (ne-ins t u x x₁) =
   let _ , neT , neU = ne~↓ x₁
   in ne x , ne neT , ne neU
 whnfConv↓Term (univ x x₁ x₂) = Uₙ , whnfConv↓ x₂
 whnfConv↓Term (zero-refl x) = ℕₙ , zeroₙ , zeroₙ
 whnfConv↓Term (suc-cong x) = ℕₙ , sucₙ , sucₙ
+whnfConv↓Term (coiter-cong _ _ _ _) = Strₙ , coiterₙ , coiterₙ
 whnfConv↓Term (η-eq x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functionWhnf y₁
 whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , productWhnf rProd
 whnfConv↓Term (η-unit _ _ tWhnf uWhnf) = Unitₙ , tWhnf , uWhnf

@@ -1,6 +1,6 @@
 -- Raw terms, weakening (renaming) and substitution.
 
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Untyped where
 
@@ -66,6 +66,11 @@ data Kind : (ns : List Nat) → Set where
   Emptykind    : Kind []
   Emptyreckind : Kind (0 ∷ 0 ∷ [])
 
+  Streamkind : Kind []
+  Streamhdkind : Kind (0 ∷ [])
+  Streamtlkind : Kind (0 ∷ [])
+  Streamcoiterkind : Kind (0 ∷ 0 ∷ 0 ∷ 0 ∷ [])
+
 -- Terms are indexed by its number of unbound variables and are either:
 -- de Bruijn style variables or
 -- generic terms, formed by their kind and sub terms
@@ -76,7 +81,7 @@ data Term (n : Nat) : Set where
 
 private
   variable
-    A F H t u v : Term n
+    A F H s h t u v : Term n
     B E G       : Term (1+ n)
 
 -- The Grammar of our language.
@@ -137,6 +142,20 @@ star = gen Starkind []
 Emptyrec : (A e : Term n) → Term n   -- Empty type recursor
 Emptyrec A e = gen Emptyreckind (A ∷ e ∷ [])
 
+
+Str : Term n                   -- Stream of ℕ type
+Str = gen Streamkind []
+
+hd : Term n → Term n
+hd t = gen Streamhdkind (t ∷ [])
+
+tl : Term n → Term n
+tl t = gen Streamtlkind (t ∷ [])
+
+coiter : (A s hd tl : Term n) → Term n
+coiter A s hd tl = gen Streamcoiterkind (A ∷ s ∷ hd ∷ tl ∷ [])
+
+
 -- Binding types
 
 data BindingType : Set where
@@ -161,6 +180,8 @@ suc-PE-injectivity : suc t PE.≡ suc u → t PE.≡ u
 suc-PE-injectivity PE.refl = PE.refl
 
 
+-- missing hd,tl,coiter-PE-injectivity ?
+
 -- Neutral terms.
 
 -- A term is neutral if it has a variable in head position.
@@ -173,6 +194,8 @@ data Neutral : Term n → Set where
   sndₙ      : Neutral t   → Neutral (snd t)
   natrecₙ   : Neutral v   → Neutral (natrec G t u v)
   Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
+  hdₙ       : Neutral t   → Neutral (hd t)
+  tlₙ       : Neutral t   → Neutral (tl t)
 
 
 -- Weak head normal forms (whnfs).
@@ -188,6 +211,7 @@ data Whnf {n : Nat} : Term n → Set where
   ℕₙ     : Whnf ℕ
   Unitₙ  : Whnf Unit
   Emptyₙ : Whnf Empty
+  Strₙ   : Whnf Str
 
   -- Introductions are whnfs.
   lamₙ  : Whnf (lam t)
@@ -195,6 +219,7 @@ data Whnf {n : Nat} : Term n → Set where
   sucₙ  : Whnf (suc t)
   starₙ : Whnf star
   prodₙ : Whnf (prod t u)
+  coiterₙ : Whnf (coiter A s h t)
 
   -- Neutrals are whnfs.
   ne    : Neutral t → Whnf t
@@ -221,6 +246,9 @@ B≢ne : ∀ W → Neutral A → ⟦ W ⟧ F ▹ G PE.≢ A
 B≢ne BΠ () PE.refl
 B≢ne BΣ () PE.refl
 
+Str≢ne : Neutral A → Str PE.≢ A
+Str≢ne () PE.refl
+
 U≢B : ∀ W → U PE.≢ ⟦ W ⟧ F ▹ G
 U≢B BΠ ()
 U≢B BΣ ()
@@ -237,11 +265,19 @@ Unit≢B : ∀ W → Unit PE.≢ ⟦ W ⟧ F ▹ G
 Unit≢B BΠ ()
 Unit≢B BΣ ()
 
+Str≢B : ∀ W → Str PE.≢ ⟦ W ⟧ F ▹ G
+Str≢B BΠ ()
+Str≢B BΣ ()
+
 zero≢ne : Neutral t → zero PE.≢ t
 zero≢ne () PE.refl
 
 suc≢ne : Neutral t → suc u PE.≢ t
 suc≢ne () PE.refl
+
+
+coiter≢ne : Neutral u → coiter A s h t PE.≢ u
+coiter≢ne () PE.refl
 
 -- Several views on whnfs (note: not recursive).
 
@@ -262,6 +298,7 @@ data Type {n : Nat} : Term n → Set where
   ℕₙ     :             Type ℕ
   Emptyₙ :             Type Empty
   Unitₙ  :             Type Unit
+  Strₙ   :             Type Str
   ne     : Neutral t → Type t
 
 ⟦_⟧-type : ∀ (W : BindingType) → Type (⟦ W ⟧ F ▹ G)
@@ -280,6 +317,11 @@ data Product {n : Nat} : Term n → Set where
   prodₙ : Product (prod t u)
   ne    : Neutral t → Product t
 
+-- A whnf of type Stream is either coiter A s h t or neutral
+data Stream {n : Nat} : Term n → Set where
+  coiterₙ : Stream (coiter A s h t)
+  ne      : Neutral t → Stream t
+
 -- These views classify only whnfs.
 -- Natural, Type, Function and Product are a subsets of Whnf.
 
@@ -294,6 +336,7 @@ typeWhnf Σₙ     = Σₙ
 typeWhnf ℕₙ     = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
 typeWhnf Unitₙ  = Unitₙ
+typeWhnf Strₙ  = Strₙ
 typeWhnf (ne x) = ne x
 
 functionWhnf : Function t → Whnf t
@@ -303,6 +346,10 @@ functionWhnf (ne x) = ne x
 productWhnf : Product t → Whnf t
 productWhnf prodₙ  = prodₙ
 productWhnf (ne x) = ne x
+
+streamWhnf : Stream t → Whnf t
+streamWhnf coiterₙ = coiterₙ
+streamWhnf (ne x) = ne x
 
 ⟦_⟧ₙ : (W : BindingType) → Whnf (⟦ W ⟧ F ▹ G)
 ⟦_⟧ₙ BΠ = Πₙ
@@ -381,6 +428,8 @@ wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
 wkNeutral ρ (sndₙ n)      = sndₙ (wkNeutral ρ n)
 wkNeutral ρ (natrecₙ n)   = natrecₙ (wkNeutral ρ n)
 wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
+wkNeutral ρ (hdₙ n)       = hdₙ (wkNeutral ρ n)
+wkNeutral ρ (tlₙ n)       = tlₙ (wkNeutral ρ n)
 
 -- Weakening can be applied to our whnf views.
 
@@ -395,6 +444,7 @@ wkType ρ Σₙ     = Σₙ
 wkType ρ ℕₙ     = ℕₙ
 wkType ρ Emptyₙ = Emptyₙ
 wkType ρ Unitₙ  = Unitₙ
+wkType ρ Strₙ  = Strₙ
 wkType ρ (ne x) = ne (wkNeutral ρ x)
 
 wkFunction : ∀ ρ → Function t → Function {n} (wk ρ t)
@@ -405,6 +455,10 @@ wkProduct : ∀ ρ → Product t → Product {n} (wk ρ t)
 wkProduct ρ prodₙ  = prodₙ
 wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
+wkStream : ∀ ρ → Stream t → Stream {n} (wk ρ t)
+wkStream ρ coiterₙ = coiterₙ
+wkStream ρ (ne x) = ne (wkNeutral ρ x)
+
 wkWhnf : ∀ ρ → Whnf t → Whnf {n} (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
@@ -412,11 +466,13 @@ wkWhnf ρ Σₙ      = Σₙ
 wkWhnf ρ ℕₙ      = ℕₙ
 wkWhnf ρ Emptyₙ  = Emptyₙ
 wkWhnf ρ Unitₙ   = Unitₙ
+wkWhnf ρ Strₙ   = Strₙ
 wkWhnf ρ lamₙ    = lamₙ
 wkWhnf ρ prodₙ   = prodₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ
 wkWhnf ρ starₙ   = starₙ
+wkWhnf ρ coiterₙ = coiterₙ
 wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
 -- Non-dependent version of Π.

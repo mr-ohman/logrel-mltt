@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Conversion.Soundness where
 
@@ -40,6 +40,8 @@ mutual
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
   soundness~↑ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (soundnessConv↑ x₁) (soundness~↓ k~l)
+  soundness~↑ (hd-cong x) = hd-cong (soundness~↓ x)
+  soundness~↑ (tl-cong x) = tl-cong (soundness~↓ x)
 
   -- Algorithmic equality of neutrals in WHNF is well-formed.
   soundness~↓ : ∀ {k l A} → Γ ⊢ k ~ l ↓ A → Γ ⊢ k ≡ l ∷ A
@@ -56,6 +58,7 @@ mutual
   soundnessConv↓ (ℕ-refl ⊢Γ) = refl (ℕⱼ ⊢Γ)
   soundnessConv↓ (Empty-refl ⊢Γ) = refl (Emptyⱼ ⊢Γ)
   soundnessConv↓ (Unit-refl ⊢Γ) = refl (Unitⱼ ⊢Γ)
+  soundnessConv↓ (Str-refl ⊢Γ) = refl (Strⱼ ⊢Γ)
   soundnessConv↓ (ne x) = univ (soundness~↓ x)
   soundnessConv↓ (Π-cong F c c₁) =
     Π-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
@@ -75,6 +78,7 @@ mutual
   soundnessConv↓Term (ℕ-ins x) = soundness~↓ x
   soundnessConv↓Term (Empty-ins x) = soundness~↓ x
   soundnessConv↓Term (Unit-ins x) = soundness~↓ x
+  soundnessConv↓Term (Str-ins x) = soundness~↓ x
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)
@@ -83,6 +87,7 @@ mutual
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zeroⱼ ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
+  soundnessConv↓Term (coiter-cong A s h t) = coiter-cong (soundnessConv↑ A) (soundnessConv↑Term s) (soundnessConv↑Term h) (soundnessConv↑Term t)
   soundnessConv↓Term (η-eq x x₁ y y₁ c) =
     let ⊢ΠFG = syntacticTerm x
         ⊢F , _ = syntacticΠ ⊢ΠFG

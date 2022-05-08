@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed.EqRelInstance where
 
@@ -38,6 +38,8 @@ eqRelInstance = record {
   ≅-Urefl = refl ∘ᶠ Uⱼ;
   ≅-ℕrefl = refl ∘ᶠ ℕⱼ;
   ≅ₜ-ℕrefl = refl ∘ᶠ ℕⱼ;
+  ≅-Strrefl = refl ∘ᶠ Strⱼ ;
+  ≅ₜ-Strrefl = refl ∘ᶠ Strⱼ ;
   ≅-Emptyrefl = refl ∘ᶠ Emptyⱼ;
   ≅ₜ-Emptyrefl = refl ∘ᶠ Emptyⱼ;
   ≅-Unitrefl = refl ∘ᶠ Unitⱼ;
@@ -56,4 +58,7 @@ eqRelInstance = record {
   ~-fst = fst-cong;
   ~-snd = snd-cong;
   ~-natrec = natrec-cong;
-  ~-Emptyrec = Emptyrec-cong }
+  ~-Emptyrec = Emptyrec-cong;
+  ~-hd = hd-cong ;
+  ~-tl = tl-cong ;
+  ≅ₜ-coiter-cong = coiter-cong }

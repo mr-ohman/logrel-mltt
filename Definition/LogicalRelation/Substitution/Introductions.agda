@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -17,4 +17,6 @@ open import Definition.LogicalRelation.Substitution.Introductions.Natrec public
 open import Definition.LogicalRelation.Substitution.Introductions.Empty public
 open import Definition.LogicalRelation.Substitution.Introductions.Emptyrec public
 open import Definition.LogicalRelation.Substitution.Introductions.Unit public
+open import Definition.LogicalRelation.Substitution.Introductions.Stream public
 open import Definition.LogicalRelation.Substitution.Introductions.Universe public
+

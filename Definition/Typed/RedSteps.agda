@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed.RedSteps where
 
@@ -38,3 +38,13 @@ app-subst* : Γ ⊢ t ⇒* t′ ∷ Π A ▹ B → Γ ⊢ a ∷ A
            → Γ ⊢ t ∘ a ⇒* t′ ∘ a ∷ B [ a ]
 app-subst* (id x) a₁ = id (x ∘ⱼ a₁)
 app-subst* (x ⇨ t⇒t′) a₁ = app-subst x a₁ ⇨ app-subst* t⇒t′ a₁
+
+-- hd substitution of reduction closures
+hd-subst* : Γ ⊢ t ⇒* t′ ∷ Str → Γ ⊢ hd t ⇒* hd t′ ∷ ℕ
+hd-subst* (id x) = id (hdⱼ x)
+hd-subst* (x ⇨ d) = hd-subst x ⇨ hd-subst* d
+
+-- tl substitution of reduction closures
+tl-subst* : Γ ⊢ t ⇒* t′ ∷ Str → Γ ⊢ tl t ⇒* tl t′ ∷ Str
+tl-subst* (id x) = id (tlⱼ x)
+tl-subst* (x ⇨ d) = tl-subst x ⇨ tl-subst* d

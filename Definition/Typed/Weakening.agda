@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Typed.Weakening where
 
@@ -67,6 +67,7 @@ mutual
   wk ρ ⊢Δ (Emptyⱼ ⊢Γ) = Emptyⱼ ⊢Δ
   wk ρ ⊢Δ (Unitⱼ ⊢Γ) = Unitⱼ ⊢Δ
   wk ρ ⊢Δ (Uⱼ ⊢Γ) = Uⱼ ⊢Δ
+  wk ρ ⊢Δ (Strⱼ ⊢Γ) = Strⱼ ⊢Δ
   wk ρ ⊢Δ (Πⱼ F ▹ G) = let ρF = wk ρ ⊢Δ F
                        in  Πⱼ ρF ▹ (wk (lift ρ) (⊢Δ ∙ ρF) G)
   wk ρ ⊢Δ (Σⱼ F ▹ G) = let ρF = wk ρ ⊢Δ F
@@ -80,6 +81,7 @@ mutual
   wkTerm ρ ⊢Δ (ℕⱼ ⊢Γ) = ℕⱼ ⊢Δ
   wkTerm ρ ⊢Δ (Emptyⱼ ⊢Γ) = Emptyⱼ ⊢Δ
   wkTerm ρ ⊢Δ (Unitⱼ ⊢Γ) = Unitⱼ ⊢Δ
+  wkTerm ρ ⊢Δ (Strⱼ ⊢Γ) = Strⱼ ⊢Δ
   wkTerm ρ ⊢Δ (Πⱼ F ▹ G) = let ρF = wkTerm ρ ⊢Δ F
                            in  Πⱼ ρF ▹ (wkTerm (lift ρ) (⊢Δ ∙ univ ρF) G)
   wkTerm ρ ⊢Δ (Σⱼ F ▹ G) = let ρF = wkTerm ρ ⊢Δ F
@@ -121,6 +123,11 @@ mutual
     (Emptyrecⱼ (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢e))
   wkTerm ρ ⊢Δ (starⱼ ⊢Γ) = starⱼ ⊢Δ
   wkTerm ρ ⊢Δ (conv t A≡B) = conv (wkTerm ρ ⊢Δ t) (wkEq ρ ⊢Δ A≡B)
+  wkTerm ρ ⊢Δ (hdⱼ s) = hdⱼ (wkTerm ρ ⊢Δ s)
+  wkTerm ρ ⊢Δ (tlⱼ s) = tlⱼ (wkTerm ρ ⊢Δ s)
+  wkTerm {Δ = Δ} ρ ⊢Δ (coiterⱼ A s h t) =
+    let ⊢t' = PE.subst (λ x → Δ ⊢ _ ∷ Π U.wk _ _ ▹ x) (PE.sym (wk1-wk≡lift-wk1 _ _)) (wkTerm ρ ⊢Δ t)
+    in coiterⱼ (wk ρ ⊢Δ A) (wkTerm ρ ⊢Δ s) (wkTerm ρ ⊢Δ h) ⊢t'
 
   wkEq : ρ ∷ Δ ⊆ Γ →
        let ρA = U.wk ρ A
@@ -250,6 +257,17 @@ mutual
     (Emptyrec-cong (wkEq [ρ] ⊢Δ A≡A')
       (wkEqTerm [ρ] ⊢Δ e≡e'))
   wkEqTerm ρ ⊢Δ (η-unit e e') = η-unit (wkTerm ρ ⊢Δ e) (wkTerm ρ ⊢Δ e')
+  wkEqTerm ρ ⊢Δ (hd-cong s≡s') = hd-cong (wkEqTerm ρ ⊢Δ s≡s')
+  wkEqTerm ρ ⊢Δ (tl-cong s≡s') = tl-cong (wkEqTerm ρ ⊢Δ s≡s')
+  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (coiter-cong {A} A≡A' s≡s' h≡h' t≡t') =
+    let ρt≡t' = PE.subst (λ x → Δ ⊢ _ ≡ _ ∷ Π U.wk ρ A ▹ x) (PE.sym (wk1-wk≡lift-wk1 ρ A)) (wkEqTerm [ρ] ⊢Δ t≡t')
+    in coiter-cong (wkEq [ρ] ⊢Δ A≡A') (wkEqTerm [ρ] ⊢Δ s≡s') (wkEqTerm [ρ] ⊢Δ h≡h') ρt≡t'
+  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (hd-β {A} ⊢A ⊢s ⊢h ⊢t) =
+    let ⊢t' = PE.subst (λ x → Δ ⊢ _ ∷ Π U.wk ρ A ▹ x) (PE.sym (wk1-wk≡lift-wk1 ρ A)) (wkTerm [ρ] ⊢Δ ⊢t)
+    in (hd-β (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢s) (wkTerm [ρ] ⊢Δ ⊢h) ⊢t')
+  wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (tl-β {A} ⊢A ⊢s ⊢h ⊢t) =
+    let ⊢t' = PE.subst (λ x → Δ ⊢ _ ∷ Π U.wk ρ A ▹ x) (PE.sym (wk1-wk≡lift-wk1 ρ A)) (wkTerm [ρ] ⊢Δ ⊢t)
+    in (tl-β (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢s) (wkTerm [ρ] ⊢Δ ⊢h) ⊢t')
 
 mutual
   wkRed : ρ ∷ Δ ⊆ Γ →
@@ -333,6 +351,14 @@ mutual
   wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrec-subst {A = A} ⊢A n⇒n′) =
     (Emptyrec-subst (wk [ρ] ⊢Δ ⊢A)
                     (wkRedTerm [ρ] ⊢Δ n⇒n′))
+  wkRedTerm [ρ] ⊢Δ (hd-subst s⇒s′) = hd-subst (wkRedTerm [ρ] ⊢Δ s⇒s′)
+  wkRedTerm [ρ] ⊢Δ (tl-subst s⇒s′) = tl-subst (wkRedTerm [ρ] ⊢Δ s⇒s′)
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (hd-β {A} ⊢A ⊢s ⊢h ⊢t) =
+    let ⊢t' = PE.subst (λ x → Δ ⊢ _ ∷ Π U.wk ρ A ▹ x) (PE.sym (wk1-wk≡lift-wk1 ρ A)) (wkTerm [ρ] ⊢Δ ⊢t)
+    in (hd-β (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢s) (wkTerm [ρ] ⊢Δ ⊢h) ⊢t')
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (tl-β {A} ⊢A ⊢s ⊢h ⊢t) =
+    let ⊢t' = PE.subst (λ x → Δ ⊢ _ ∷ Π U.wk ρ A ▹ x) (PE.sym (wk1-wk≡lift-wk1 ρ A)) (wkTerm [ρ] ⊢Δ ⊢t)
+    in (tl-β (wk [ρ] ⊢Δ ⊢A) (wkTerm [ρ] ⊢Δ ⊢s) (wkTerm [ρ] ⊢Δ ⊢h) ⊢t')
 
 wkRed* : ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A

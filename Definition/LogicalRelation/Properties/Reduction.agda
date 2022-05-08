@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -41,6 +41,9 @@ redSubst* D (Emptyᵣ [ ⊢B , ⊢Empty , D′ ]) =
 redSubst* D (Unitᵣ [ ⊢B , ⊢Unit , D′ ]) =
   let ⊢A = redFirst* D
   in  Unitᵣ ([ ⊢A , ⊢Unit , D ⇨* D′ ]) , D′
+redSubst* D (Strᵣ [ ⊢B , ⊢Str , D′ ]) =
+  let ⊢A = redFirst* D
+  in  Strᵣ ([ ⊢A , ⊢Str , D ⇨* D′ ]) , D′
 redSubst* D (ne′ K [ ⊢B , ⊢K , D′ ] neK K≡K) =
   let ⊢A = redFirst* D
   in  (ne′ K [ ⊢A , ⊢K , D ⇨* D′ ] neK K≡K)
@@ -86,6 +89,20 @@ redSubst*Term t⇒u (Unitᵣ D) (Unitₜ n [ ⊢u , ⊢n , d ] prop) =
       t⇒u′ = conv* t⇒u A≡Unit
   in  Unitₜ n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] prop
   ,   Unitₜ₌ ⊢t ⊢u
+redSubst*Term t⇒u (Strᵣ D) [u] with S.d [u]
+... | [ ⊢u , ⊢n , d ] =
+  let n = S.n [u]
+      n≡n = S.n≡n [u]
+      prop = S.prop [u]
+      A≡Str  = subset* (red D)
+      ⊢t   = conv (redFirst*Term t⇒u) A≡Str
+      t⇒u′ = conv* t⇒u A≡Str
+      [t] = Strₜ n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] n≡n prop
+      -- [n] = whnfStrRed [u]
+  in  [t]
+  ,   Strₜ₌ n n [ ⊢t , ⊢n , t⇒u′ ⇨∷* d ] [ ⊢u , ⊢n , d ]
+            n≡n -- [n] [n]
+            (reflStr-prop prop)
 redSubst*Term t⇒u (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] (neNfₜ neK₁ ⊢k k≡k)) =
   let A≡K  = subset* (red D)
       [d]  = [ ⊢t , ⊢u , d ]

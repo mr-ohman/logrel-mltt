@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -32,6 +32,7 @@ mutual
   symEqT (ℕᵥ D D′) A≡B = red D
   symEqT (Emptyᵥ D D′) A≡B = red D
   symEqT (Unitᵥ D D′) A≡B = red D
+  symEqT (Strᵥ D D′) A≡B = red D
   symEqT (ne (ne K D neK K≡K) (ne K₁ D₁ neK₁ K≡K₁)) (ne₌ M D′ neM K≡M)
          rewrite whrDet* (red D′ , ne neM) (red D₁ , ne neK₁) =
     ne₌ _ D neK
@@ -89,18 +90,46 @@ symEmpty-prop : ∀ {k k′}
               → [Empty]-prop Γ k′ k
 symEmpty-prop (ne prop) = ne (symNeutralTerm prop)
 
+
+symℕEqTerm : ∀ {k k′}
+           → Γ ⊩ℕ k ≡ k′ ∷ℕ
+           → Γ ⊩ℕ k′ ≡ k ∷ℕ
+symℕEqTerm (ℕₜ₌ k k′ d d′ t≡u prop) =
+  ℕₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symNatural-prop prop)
+
+mutual
+  symStrEqTerm : ∀ {k k′}
+              → Γ ⊩Str k ≡ k′ ∷Str
+              → Γ ⊩Str k′ ≡ k ∷Str
+  _⊩Str_≡_∷Str.k (symStrEqTerm d) = S≡.k′ d
+  _⊩Str_≡_∷Str.k′ (symStrEqTerm d) = S≡.k d
+  _⊩Str_≡_∷Str.d (symStrEqTerm d) = S≡.d′ d
+  _⊩Str_≡_∷Str.d′ (symStrEqTerm d) = S≡.d d
+  _⊩Str_≡_∷Str.k≡k′ (symStrEqTerm d) = ≅ₜ-sym (S≡.k≡k′ d)
+  -- _⊩Str_≡_∷Str.[k] (symStrEqTerm d) = S≡.[k′] d
+  -- _⊩Str_≡_∷Str.[k′] (symStrEqTerm d) = S≡.[k] d
+  _⊩Str_≡_∷Str.prop (symStrEqTerm d) = symStr-prop (S≡.prop d)
+
+  symStr-prop : ∀ {k k′}
+              → [Str]-prop Γ k k′
+              → [Str]-prop Γ k′ k
+  [Str]-prop.whnf (symStr-prop d) = S≡p.whnf′ d
+  [Str]-prop.whnf′ (symStr-prop d) = S≡p.whnf d
+  [Str]-prop.hdᵣ (symStr-prop d) = symℕEqTerm (S≡p.hdᵣ d)
+  [Str]-prop.tlᵣ (symStr-prop d) = symStrEqTerm (S≡p.tlᵣ d)
+
 -- Symmetry of term equality.
 symEqTerm : ∀ {l A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
           → Γ ⊩⟨ l ⟩ u ≡ t ∷ A / [A]
 symEqTerm (Uᵣ′ .⁰ 0<1 ⊢Γ) (Uₜ₌ A B d d′ typeA typeB A≡B [A] [B] [A≡B]) =
   Uₜ₌ B A d′ d typeB typeA (≅ₜ-sym A≡B) [B] [A] (symEq [A] [B] [A≡B])
-symEqTerm (ℕᵣ D) (ℕₜ₌ k k′ d d′ t≡u prop) =
-  ℕₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symNatural-prop prop)
+symEqTerm (ℕᵣ D) d = symℕEqTerm d
 symEqTerm (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ t≡u prop) =
   Emptyₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symEmpty-prop prop)
 symEqTerm (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
   Unitₜ₌ ⊢u ⊢t
+symEqTerm (Strᵣ D) d = symStrEqTerm d
 symEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ nf) =
   neₜ₌ m k d′ d (symNeutralTerm nf)
 symEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)

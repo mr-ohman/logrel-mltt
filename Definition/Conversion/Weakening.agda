@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Conversion.Weakening where
 
@@ -44,6 +44,8 @@ mutual
                           (wk~↓ [ρ] ⊢Δ t~u))
   wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (Emptyrec-cong {k} {l} {F} {G} x t~u) =
     Emptyrec-cong (wkConv↑ [ρ] ⊢Δ x) (wk~↓ [ρ] ⊢Δ t~u)
+  wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (hd-cong x) = hd-cong (wk~↓ [ρ] ⊢Δ x)
+  wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (tl-cong x) = tl-cong (wk~↓ [ρ] ⊢Δ x)
 
   -- Weakening of algorithmic equality of neutrals in WHNF.
   wk~↓ : ∀ {t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
@@ -68,6 +70,7 @@ mutual
   wkConv↓ ρ ⊢Δ (ℕ-refl x) = ℕ-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (Empty-refl x) = Empty-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (Unit-refl x) = Unit-refl ⊢Δ
+  wkConv↓ ρ ⊢Δ (Str-refl x) = Str-refl ⊢Δ
   wkConv↓ ρ ⊢Δ (ne x) = ne (wk~↓ ρ ⊢Δ x)
   wkConv↓ ρ ⊢Δ (Π-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
@@ -96,12 +99,21 @@ mutual
     Empty-ins (wk~↓ ρ ⊢Δ x)
   wkConv↓Term ρ ⊢Δ (Unit-ins x) =
     Unit-ins (wk~↓ ρ ⊢Δ x)
+  wkConv↓Term ρ ⊢Δ (Str-ins x) =
+    Str-ins (wk~↓ ρ ⊢Δ x)
   wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (ne-ins t u x x₁) =
     ne-ins (wkTerm [ρ] ⊢Δ t) (wkTerm [ρ] ⊢Δ u) (wkNeutral ρ x) (wk~↓ [ρ] ⊢Δ x₁)
   wkConv↓Term ρ ⊢Δ (univ x x₁ x₂) =
     univ (wkTerm ρ ⊢Δ x) (wkTerm ρ ⊢Δ x₁) (wkConv↓ ρ ⊢Δ x₂)
   wkConv↓Term ρ ⊢Δ (zero-refl x) = zero-refl ⊢Δ
   wkConv↓Term ρ ⊢Δ (suc-cong t<>u) = suc-cong (wkConv↑Term ρ ⊢Δ t<>u)
+  wkConv↓Term {ρ = ρ₀} {Δ = Δ} ρ ⊢Δ (coiter-cong {A₀} A s h t) =
+    coiter-cong (wkConv↑ ρ ⊢Δ A)
+                (wkConv↑Term ρ ⊢Δ s)
+                (wkConv↑Term ρ ⊢Δ h)
+                (PE.subst (λ x → Δ ⊢ _ [conv↑] _ ∷ Π U.wk ρ₀ A₀ ▹ x)
+                          (PE.sym (wk1-wk≡lift-wk1 ρ₀ A₀))
+                          (wkConv↑Term ρ ⊢Δ t))
   wkConv↓Term {ρ = ρ} {Δ = Δ} [ρ] ⊢Δ (η-eq {F = F} {G = G} x₁ x₂ y y₁ t<>u) =
     let ⊢F , _ = syntacticΠ (syntacticTerm x₁)
         ⊢ρF = wk [ρ] ⊢Δ ⊢F

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Definition.Conversion.Stability where
 
@@ -112,6 +112,10 @@ stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
 stabilityRedTerm Γ≡Δ (Emptyrec-subst x d) =
   Emptyrec-subst (stability Γ≡Δ x) (stabilityRedTerm Γ≡Δ d)
+stabilityRedTerm Γ≡Δ (hd-subst d) = hd-subst (stabilityRedTerm Γ≡Δ d)
+stabilityRedTerm Γ≡Δ (tl-subst d) = tl-subst (stabilityRedTerm Γ≡Δ d)
+stabilityRedTerm Γ≡Δ (hd-β A s h t) = hd-β (stability Γ≡Δ A) (stabilityTerm Γ≡Δ s) (stabilityTerm Γ≡Δ h) (stabilityTerm Γ≡Δ t)
+stabilityRedTerm Γ≡Δ (tl-β A s h t) = tl-β (stability Γ≡Δ A) (stabilityTerm Γ≡Δ s) (stabilityTerm Γ≡Δ h) (stabilityTerm Γ≡Δ t)
 
 -- Stability of type reductions.
 stabilityRed : ∀ {A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A ⇒ B
@@ -150,6 +154,8 @@ mutual
   stability~↑ Γ≡Δ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (stabilityConv↑ Γ≡Δ x₁)
                 (stability~↓ Γ≡Δ k~l)
+  stability~↑ Γ≡Δ (hd-cong x) = hd-cong (stability~↓ Γ≡Δ x)
+  stability~↑ Γ≡Δ (tl-cong x) = tl-cong (stability~↓ Γ≡Δ x)
 
   -- Stability of algorithmic equality of neutrals of types in WHNF.
   stability~↓ : ∀ {k l A}
@@ -185,6 +191,9 @@ mutual
   stabilityConv↓ Γ≡Δ (Unit-refl x) =
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  Unit-refl ⊢Δ
+  stabilityConv↓ Γ≡Δ (Str-refl x) =
+    let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+    in  Str-refl ⊢Δ
   stabilityConv↓ Γ≡Δ (ne x) =
     ne (stability~↓ Γ≡Δ x)
   stabilityConv↓ Γ≡Δ (Π-cong F A<>B A<>B₁) =
@@ -215,6 +224,8 @@ mutual
     Empty-ins (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (Unit-ins x) =
     Unit-ins (stability~↓ Γ≡Δ x)
+  stabilityConv↓Term Γ≡Δ (Str-ins x) =
+    Str-ins (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (ne-ins t u neN x) =
     ne-ins (stabilityTerm Γ≡Δ t) (stabilityTerm Γ≡Δ u) neN (stability~↓ Γ≡Δ x)
   stabilityConv↓Term Γ≡Δ (univ x x₁ x₂) =
@@ -223,6 +234,11 @@ mutual
     let _ , ⊢Δ , _ = contextConvSubst Γ≡Δ
     in  zero-refl ⊢Δ
   stabilityConv↓Term Γ≡Δ (suc-cong t<>u) = suc-cong (stabilityConv↑Term Γ≡Δ t<>u)
+  stabilityConv↓Term Γ≡Δ (coiter-cong A s h t) =
+    coiter-cong (stabilityConv↑ Γ≡Δ A)
+                (stabilityConv↑Term Γ≡Δ s)
+                (stabilityConv↑Term Γ≡Δ h)
+                (stabilityConv↑Term Γ≡Δ t)
   stabilityConv↓Term Γ≡Δ (η-eq x x₁ y y₁ t<>u) =
     let ⊢F , ⊢G = syntacticΠ (syntacticTerm x)
     in  η-eq (stabilityTerm Γ≡Δ x) (stabilityTerm Γ≡Δ x₁)

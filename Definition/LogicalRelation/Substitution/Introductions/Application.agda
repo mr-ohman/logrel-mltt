@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 open import Definition.Typed.EqualityRelation
 
@@ -13,6 +13,7 @@ open import Definition.LogicalRelation.Irrelevance
 open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Application
 open import Definition.LogicalRelation.Substitution
+import Definition.LogicalRelation.Substitution.Irrelevance as S
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
 
 open import Tools.Nat
@@ -75,3 +76,15 @@ app-congᵛ {F = F} {G} {a = a} [Γ] [F] [ΠFG] [t≡u] [a] [b] [a≡b] ⊢Δ [�
   in  irrelevanceEqTerm′ (PE.sym (singleSubstLift G a)) [G[a]]′ [G[a]]
                          (app-congTerm [σF] [G[a]]′ [σΠFG] ([t≡u] ⊢Δ [σ])
                                        [σa] [σb] ([a≡b] ⊢Δ [σ]))
+
+app-▹▹ᵛ : ∀ {F G t u l}
+          ([Γ] : ⊩ᵛ Γ)
+          ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+          ([G] : Γ ⊩ᵛ⟨ l ⟩ G / [Γ])
+          ([F▹▹G] : Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ])
+          ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F ▹▹ G / [Γ] / [F▹▹G])
+          ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
+        → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G / [Γ] / [G]
+app-▹▹ᵛ {F = F} {G} {t} {u} [Γ] [F] [G] [F▹▹G] [t] [u] =
+  S.irrelevanceTerm′ {A = wk1 G [ u ]} {A′ = G} {t = t ∘ u} (wk1-sgSubst G u) [Γ] [Γ]
+    (substSΠ {F = F} {wk1 G} {u} BΠ [Γ] [F] [F▹▹G] [u]) [G] (appᵛ {F = F} {G = wk1 G} {t = t} {u = u} [Γ] [F] [F▹▹G] [t] [u])
