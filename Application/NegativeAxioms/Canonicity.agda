@@ -1,7 +1,7 @@
 -- Proof that consistent negative axioms do not jeopardize canonicity.
 -- https://www.cs.bham.ac.uk/~mhe/papers/negative-axioms.pdf
 
-{-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Application.NegativeAxioms.Canonicity where
 
@@ -142,6 +142,14 @@ appNeg (conv n c)    c' = appNeg n (trans c c')
 ¬negℕ (sigma _ _ _) c = ℕ≢Σ (sym c)
 ¬negℕ (conv n c)   c' = ¬negℕ n (trans c c')
 
+-- Lemma: The type Str is not negative.
+
+¬negStr : NegativeType Γ C → Γ ⊢ C ≡ Str → ⊥
+¬negStr empty         c = Empty≢Strⱼ c
+¬negStr (pi _ _)      c = Str≢Πⱼ (sym c)
+¬negStr (sigma _ _ _) c = Str≢Σⱼ (sym c)
+¬negStr (conv n c)   c' = ¬negStr n (trans c c')
+
 -- Negative contexts
 ---------------------------------------------------------------------------
 
@@ -175,6 +183,8 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   neNeg (sndⱼ ⊢A A⊢B d  ) (sndₙ n          ) = sndNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)
   neNeg (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) = ⊥-elim (¬negℕ (neNeg d n) ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
   neNeg (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = ⊥-elim (consistent d)
+  neNeg (hdⱼ d          ) (hdₙ n           ) = ⊥-elim (¬negStr (neNeg d n) ⊢Str) where ⊢Str = refl (Strⱼ (wfTerm d))
+  neNeg (tlⱼ d          ) (tlₙ n           ) = ⊥-elim (¬negStr (neNeg d n) ⊢Str) where ⊢Str = refl (Strⱼ (wfTerm d))
   neNeg (conv d c       ) n                  = conv (neNeg d n) c
 
   -- Lemma: A normal form of type ℕ is a numeral in a consistent negative context.
@@ -202,11 +212,13 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   nfN (ℕⱼ _)           ℕₙ         c = ⊥-elim (U≢ℕ c)
   nfN (Emptyⱼ _)       Emptyₙ     c = ⊥-elim (U≢ℕ c)
   nfN (Unitⱼ _)        Unitₙ      c = ⊥-elim (U≢ℕ c)
+  nfN (Strⱼ _)         Strₙ       c = ⊥-elim (U≢ℕ c)
 
   -- * Canonical forms
-  nfN (lamⱼ _ _)      (lamₙ _)    c = ⊥-elim (ℕ≢Π (sym c))
-  nfN (prodⱼ _ _ _ _) (prodₙ _ _) c = ⊥-elim (ℕ≢Σ (sym c))
-  nfN (starⱼ _)       starₙ       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
+  nfN (lamⱼ _ _)        (lamₙ _)          c = ⊥-elim (ℕ≢Π (sym c))
+  nfN (prodⱼ _ _ _ _)   (prodₙ _ _)       c = ⊥-elim (ℕ≢Σ (sym c))
+  nfN (starⱼ _)          starₙ            c = ⊥-elim (ℕ≢Unitⱼ (sym c))
+  nfN (coiterⱼ _ _ _ _) (coiterₙ _ _ _ _) c = ⊥-elim (ℕ≢Strⱼ (sym c))
   -- q.e.d
 
 
