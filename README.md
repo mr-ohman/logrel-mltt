@@ -19,6 +19,10 @@ Since then, the project has been extended in the following ways:
 
   - An proof that consistent axioms preserve canonicity by Andreas Abel (@andreasabel, 2021).
 
+... and extensions available separately in their own branches:
+
+  - Stream of natural numbers type added by Kenji Maillard, available in branch [`stream-nat`](/../../tree/stream-nat) (@kyoDralliam, 2022).
+
 
 ### Dependencies ###
 
