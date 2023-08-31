@@ -1,2 +1,3 @@
+name: logrel-mltt
 depend: standard-library
 include: .
