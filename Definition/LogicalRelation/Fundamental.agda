@@ -52,6 +52,9 @@ mutual
   fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
   fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
     [Γ] , Σᵛ {F = F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
+  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B) with fundamental ⊢A | fundamental ⊢B
+  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B) | [Γ] , [A] | [Δ] , [B] =
+    [Γ] , {!!}
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
     [Γ] , univᵛ {A = A} [Γ] [U] [A]
@@ -116,6 +119,7 @@ mutual
       ,   Σᵛ {F = F} {G} [Γ] [F] [G]′
       ,   Σᵛ {F = H} {E} [Γ] [H] [E]′
       ,   Σ-congᵛ {F = F} {G} {H} {E} [Γ] [F] [G]′ [H] [E]′ [F≡H] [G≡E]′
+  fundamentalEq (∪-cong {A} {B} {C} {D} A≡B C≡D) = {!!}
 
   -- Fundamental theorem for variables.
   fundamentalVar : ∀ {A x}
@@ -190,6 +194,7 @@ mutual
     ,   S.irrelevanceTerm {A = U} {t = Σ F ▹ G} [Γ] [Γ] (Uᵛ [Γ]) [U]
                           (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
+  fundamentalTerm (_∪ⱼ_ {A} {B} ⊢A ⊢B) = {!!}
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lamⱼ {F} {G} {t} ⊢F ⊢t)
     with fundamental ⊢F | fundamentalTerm ⊢t
@@ -232,6 +237,9 @@ mutual
         [Gfst] = substS {F = F} {G} [Γ] [F] [G] [fst]
         [snd] = sndᵛ {F = F} {G} [Γ] [F] [G] [t]
     in  [Γ] , [Gfst] , [snd]
+  fundamentalTerm (injlⱼ {A} {B} {t} ⊢t) = {!!}
+  fundamentalTerm (injrⱼ {A} {B} {t} ⊢t) = {!!}
+  fundamentalTerm (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v) = {!!}
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
   fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
@@ -377,6 +385,7 @@ mutual
           (Σ-congᵗᵛ {F = F} {G} {H} {E} [Γ] [F] [H]
                     (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ})
                     [F]ₜ′ [G]ₜ′ [H]ₜ′ [E]ₜ′ [F≡H]ₜ′ [G≡E]ₜ′)
+  fundamentalTermEq (∪-cong {A} {B} {C} {D} A≡B C≡D) = {!!}
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b)
     with fundamentalTermEq f≡g | fundamentalTermEq a≡b
   ... | [Γ] , modelsTermEq [ΠFG] [f] [g] [f≡g]
@@ -758,6 +767,11 @@ mutual
         [p≡r] = Σ-ηᵛ {F = F} {G} {p} {r}
                      [Γ] [F] [G] [p] [r] [fst≡] [snd≡]
     in  [Γ] , modelsTermEq [ΣFG] [p] [r] [p≡r]
+  fundamentalTermEq (injl-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′) = {!!}
+  fundamentalTermEq (injr-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′) = {!!}
+  fundamentalTermEq (cases-cong {t} {t′} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B t≡t′ u≡u′ v≡v′) = {!!}
+  fundamentalTermEq (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
+  fundamentalTermEq (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

@@ -12,6 +12,8 @@ open import Definition.LogicalRelation
 
 open import Tools.Nat
 open import Tools.Product
+open import Tools.Sum
+  using (_⊎_ ; inj₁ ; inj₂)
 import Tools.PropositionalEquality as PE
 
 private
@@ -31,6 +33,10 @@ reflEq (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
    B₌ _ _ D A≡A
       (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
       (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
+reflEq (∪ᵣ (LogRel.∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) =
+  ∪₌ _ _ (red D) A≡A
+     (λ p ⊢Δ → reflEq ([S] p ⊢Δ))
+     (λ [ρ] ⊢Δ → reflEq ([T] [ρ] ⊢Δ))
 reflEq (emb 0<1 [A]) = reflEq [A]
 
 reflNatural-prop : ∀ {n}
@@ -70,4 +76,8 @@ reflEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Σₜ p d pPro
   Σₜ₌ p p d d pProd pProd p≅p [t] [t] [fst] [fst]
     (reflEqTerm ([F] id (wf ⊢F)) [fst])
     (reflEqTerm ([G] id (wf ⊢F) [fst]) [snd])
+reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(p , a , b , c , inj₁ (i , x)) =
+  p , a , p , a , b , b , c , [t] , [t] , inj₁ (i , i , reflEqTerm ([S] id (wf ⊢S)) x)
+reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(p , a , b , c , inj₂ (i , x)) =
+  p , a , p , a , b , b , c , [t] , [t] , inj₂ (i , i , reflEqTerm ([T] id (wf ⊢T)) x)
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t

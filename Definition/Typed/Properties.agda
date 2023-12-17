@@ -24,6 +24,7 @@ wfTerm (ℕⱼ ⊢Γ) = ⊢Γ
 wfTerm (Emptyⱼ ⊢Γ) = ⊢Γ
 wfTerm (Unitⱼ ⊢Γ) = ⊢Γ
 wfTerm (Πⱼ F ▹ G) = wfTerm F
+wfTerm (A ∪ⱼ B) = wfTerm A
 wfTerm (var ⊢Γ x₁) = ⊢Γ
 wfTerm (lamⱼ F t) with wfTerm t
 wfTerm (lamⱼ F t) | ⊢Γ ∙ F′ = ⊢Γ
@@ -38,6 +39,9 @@ wfTerm (Σⱼ a ▹ a₁) = wfTerm a
 wfTerm (prodⱼ F G a a₁) = wfTerm a
 wfTerm (fstⱼ _ _ a) = wfTerm a
 wfTerm (sndⱼ _ _ a) = wfTerm a
+wfTerm (injlⱼ a) = wfTerm a
+wfTerm (injrⱼ a) = wfTerm a
+wfTerm (casesⱼ a b c) = wfTerm a
 
 wf : Γ ⊢ A → ⊢ Γ
 wf (ℕⱼ ⊢Γ) = ⊢Γ
@@ -46,6 +50,7 @@ wf (Unitⱼ ⊢Γ) = ⊢Γ
 wf (Uⱼ ⊢Γ) = ⊢Γ
 wf (Πⱼ F ▹ G) = wf F
 wf (Σⱼ F ▹ G) = wf F
+wf (A ∪ⱼ B) = wf A
 wf (univ A) = wfTerm A
 
 wfEqTerm : Γ ⊢ t ≡ u ∷ A → ⊢ Γ
@@ -69,6 +74,12 @@ wfEqTerm (snd-cong _ _ a) = wfEqTerm a
 wfEqTerm (Σ-η _ _ x _ _ _) = wfTerm x
 wfEqTerm (Σ-β₁ F G x x₁) = wfTerm x
 wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
+wfEqTerm (∪-cong a b) = wfEqTerm a
+wfEqTerm (injl-cong a b c) = wfEqTerm c
+wfEqTerm (injr-cong a b c) = wfEqTerm c
+wfEqTerm (cases-cong a b c d e) = wfEqTerm c
+wfEqTerm (∪-β₁ a b c d e) = wfTerm c
+wfEqTerm (∪-β₂ a b c d e) = wfTerm c
 
 wfEq : Γ ⊢ A ≡ B → ⊢ Γ
 wfEq (univ A≡B) = wfEqTerm A≡B
@@ -77,6 +88,7 @@ wfEq (sym A≡B) = wfEq A≡B
 wfEq (trans A≡B B≡C) = wfEq A≡B
 wfEq (Π-cong F F≡H G≡E) = wf F
 wfEq (Σ-cong F x₁ x₂) = wf F
+wfEq (∪-cong x₁ x₂) = wfEq x₁
 
 
 -- Reduction is a subset of conversion
@@ -144,6 +156,7 @@ noNe (fstⱼ _ _ ⊢t) (fstₙ neT) = noNe ⊢t neT
 noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
+noNe (casesⱼ ⊢t ⊢u ⊢v) (casesₙ neT) = noNe ⊢t neT
 
 -- Neutrals do not weak head reduce
 
@@ -182,17 +195,20 @@ whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
 
 whnfRed*Term : (d : Γ ⊢ t ⇒* u ∷ A) (w : Whnf t) → t PE.≡ u
-whnfRed*Term (id x) Uₙ = PE.refl
-whnfRed*Term (id x) Πₙ = PE.refl
-whnfRed*Term (id x) Σₙ = PE.refl
-whnfRed*Term (id x) ℕₙ = PE.refl
-whnfRed*Term (id x) Emptyₙ = PE.refl
-whnfRed*Term (id x) Unitₙ = PE.refl
-whnfRed*Term (id x) lamₙ = PE.refl
-whnfRed*Term (id x) prodₙ = PE.refl
-whnfRed*Term (id x) zeroₙ = PE.refl
-whnfRed*Term (id x) sucₙ = PE.refl
-whnfRed*Term (id x) starₙ = PE.refl
+whnfRed*Term (id x) Uₙ      = PE.refl
+whnfRed*Term (id x) Πₙ      = PE.refl
+whnfRed*Term (id x) Σₙ      = PE.refl
+whnfRed*Term (id x) ∪ₙ      = PE.refl
+whnfRed*Term (id x) ℕₙ      = PE.refl
+whnfRed*Term (id x) Emptyₙ  = PE.refl
+whnfRed*Term (id x) Unitₙ   = PE.refl
+whnfRed*Term (id x) lamₙ    = PE.refl
+whnfRed*Term (id x) prodₙ   = PE.refl
+whnfRed*Term (id x) zeroₙ   = PE.refl
+whnfRed*Term (id x) sucₙ    = PE.refl
+whnfRed*Term (id x) injlₙ   = PE.refl
+whnfRed*Term (id x) injrₙ   = PE.refl
+whnfRed*Term (id x) starₙ   = PE.refl
 whnfRed*Term (id x) (ne x₁) = PE.refl
 whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)
 whnfRed*Term (x ⇨ d) (ne x₁) = ⊥-elim (neRedTerm x x₁)

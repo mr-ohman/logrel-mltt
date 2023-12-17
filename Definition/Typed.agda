@@ -12,6 +12,7 @@ infixl 30 _∙_
 infix 30 Πⱼ_▹_
 infix 30 Σⱼ_▹_
 infix 30 ⟦_⟧ⱼ_▹_
+infix 30 _∪ⱼ_
 
 
 private
@@ -48,6 +49,9 @@ mutual
     Σⱼ_▹_  : Γ     ⊢ F
            → Γ ∙ F ⊢ G
            → Γ     ⊢ Σ F ▹ G
+    _∪ⱼ_   : Γ ⊢ A
+           → Γ ⊢ B
+           → Γ ⊢ A ∪ B
     univ   : Γ ⊢ A ∷ U
            → Γ ⊢ A
 
@@ -61,6 +65,10 @@ mutual
               → Γ     ⊢ F ∷ U
               → Γ ∙ F ⊢ G ∷ U
               → Γ     ⊢ Σ F ▹ G ∷ U
+    _∪ⱼ_      : ∀ {A B}
+              → Γ ⊢ A ∷ U
+              → Γ ⊢ B ∷ U
+              → Γ ⊢ A ∪ B ∷ U
     ℕⱼ        : ⊢ Γ → Γ ⊢ ℕ ∷ U
     Emptyⱼ    : ⊢ Γ → Γ ⊢ Empty ∷ U
     Unitⱼ     : ⊢ Γ → Γ ⊢ Unit ∷ U
@@ -95,6 +103,18 @@ mutual
               → Γ ∙ F ⊢ G
               → Γ ⊢ t ∷ Σ F ▹ G
               → Γ ⊢ snd t ∷ G [ fst t ]
+
+    injlⱼ     : ∀ {A B t}
+              → Γ ⊢ t ∷ A
+              → Γ ⊢ injl t ∷ A ∪ B
+    injrⱼ     : ∀ {A B t}
+              → Γ ⊢ t ∷ B
+              → Γ ⊢ injr t ∷ A ∪ B
+    casesⱼ    : ∀ {A B C t u v}
+              → Γ ⊢ t ∷ A ∪ B
+              → Γ ⊢ u ∷ A ▹▹ C
+              → Γ ⊢ v ∷ B ▹▹ C
+              → Γ ⊢ cases t u v ∷ C
 
     zeroⱼ     : ⊢ Γ
               → Γ ⊢ zero ∷ ℕ
@@ -143,6 +163,10 @@ mutual
            → Γ     ⊢ F ≡ H
            → Γ ∙ F ⊢ G ≡ E
            → Γ     ⊢ Σ F ▹ G ≡ Σ H ▹ E
+    ∪-cong : ∀ {A B C D}
+           → Γ ⊢ A ≡ B
+           → Γ ⊢ C ≡ D
+           → Γ ⊢ A ∪ C ≡ B ∪ D
 
   -- Term equality
   data _⊢_≡_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set where
@@ -170,6 +194,10 @@ mutual
                   → Γ     ⊢ F ≡ H       ∷ U
                   → Γ ∙ F ⊢ G ≡ E       ∷ U
                   → Γ     ⊢ Σ F ▹ G ≡ Σ H ▹ E ∷ U
+    ∪-cong        : ∀ {A B C D}
+                  → Γ ⊢ A ≡ B ∷ U
+                  → Γ ⊢ C ≡ D ∷ U
+                  → Γ ⊢ A ∪ C ≡ B ∪ D ∷ U
     app-cong      : ∀ {a b f g F G}
                   → Γ ⊢ f ≡ g ∷ Π F ▹ G
                   → Γ ⊢ a ≡ b ∷ F
@@ -215,6 +243,37 @@ mutual
                   → Γ ⊢ fst p ≡ fst r ∷ F
                   → Γ ⊢ snd p ≡ snd r ∷ G [ fst p ]
                   → Γ ⊢ p ≡ r ∷ Σ F ▹ G
+    injl-cong     : ∀ {t t' A B}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ t ≡ t' ∷ A
+                  → Γ ⊢ injl t ≡ injl t' ∷ A ∪ B
+    injr-cong     : ∀ {t t' A B}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ t ≡ t' ∷ B
+                  → Γ ⊢ injr t ≡ injr t' ∷ A ∪ B
+    cases-cong    : ∀ {t t' u u' v v' A B C}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ t ≡ t' ∷ A ∪ B
+                  → Γ ⊢ u ≡ u' ∷ A ▹▹ C
+                  → Γ ⊢ v ≡ v' ∷ B ▹▹ C
+                  → Γ ⊢ cases t u v ≡ cases t' u' v' ∷ C
+    ∪-β₁          : ∀ {A B C t u v}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ t ∷ A
+                  → Γ ⊢ u ∷ A ▹▹ C
+                  → Γ ⊢ v ∷ B ▹▹ C
+                  → Γ ⊢ cases (injl t) u v ≡ u ∘ t ∷ C
+    ∪-β₂          : ∀ {A B C t u v}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ t ∷ B
+                  → Γ ⊢ u ∷ A ▹▹ C
+                  → Γ ⊢ v ∷ B ▹▹ C
+                  → Γ ⊢ cases (injr t) u v ≡ v ∘ t ∷ C
     suc-cong      : ∀ {m n}
                   → Γ ⊢ m ≡ n ∷ ℕ
                   → Γ ⊢ suc m ≡ suc n ∷ ℕ

@@ -43,11 +43,10 @@ mutual
         F₁≡F′ , G₁≡G′ = B-PE-injectivity W ΠF₁G₁≡ΠF′G′
         [F₁≡F] : ∀ {ℓ} {Δ : Con Term ℓ} {ρ} [ρ] ⊢Δ → _
         [F₁≡F] {_} {Δ} {ρ} [ρ] ⊢Δ =
-          let ρF′≡ρF₁ ρ = PE.cong (wk ρ) (PE.sym F₁≡F′)
-              [ρF′] {ρ} [ρ] ⊢Δ = PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
-          in  irrelevanceEq′ {Γ = Δ} (ρF′≡ρF₁ ρ)
-                             ([ρF′] [ρ] ⊢Δ) ([F]₁ [ρ] ⊢Δ)
-                             (symEq ([F] [ρ] ⊢Δ) ([ρF′] [ρ] ⊢Δ)
+          let [ρF′] = PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)
+          in  irrelevanceEq′ {Γ = Δ} (PE.cong (wk ρ) (PE.sym F₁≡F′))
+                             [ρF′] ([F]₁ [ρ] ⊢Δ)
+                             (symEq ([F] [ρ] ⊢Δ) [ρF′]
                                     ([F≡F′] [ρ] ⊢Δ))
     in  B₌ _ _ (red D) (≅-sym (PE.subst (λ x → Γ ⊢ ⟦ W ⟧ F ▹ G ≅ x) (PE.sym ΠF₁G₁≡ΠF′G′) A≡B))
           [F₁≡F]
@@ -61,6 +60,20 @@ mutual
                                   ([G]₁ [ρ] ⊢Δ [a])
                                   (symEq ([G] [ρ] ⊢Δ [a]₁) [ρG′a]
                                          ([G≡G′] [ρ] ⊢Δ [a]₁)))
+  symEqT {Γ = Γ} (∪ᵥ (∪ᵣ F G D ⊢F ⊢G A≡A [F] [G]) (∪ᵣ F₁ G₁ D₁ ⊢F₁ ⊢G₁ A≡A₁ [F]₁ [G]₁))
+                 (∪₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
+    let ΠF₁G₁≡ΠF′G′   = whrDet* (red D₁ , ∪ₙ) (D′ , ∪ₙ)
+        F₁≡F′ , G₁≡G′ = ∪-PE-injectivity ΠF₁G₁≡ΠF′G′
+    in ∪₌ _ _ (red D) (≅-sym (PE.subst (λ x → Γ ⊢ F ∪ G ≅ x) (PE.sym ΠF₁G₁≡ΠF′G′) A≡B))
+          (λ {m} {ρ} {Δ} [ρ] ⊢Δ →
+            irrelevanceEq′ {Γ = Δ} (PE.cong (wk ρ) (PE.sym F₁≡F′))
+                           (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)) ([F]₁ [ρ] ⊢Δ)
+                           (symEq ([F] [ρ] ⊢Δ) (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)) ([F≡F′] [ρ] ⊢Δ)))
+          (λ {m} {ρ} {Δ} [ρ] ⊢Δ →
+            irrelevanceEq′ {Γ = Δ} (PE.cong (wk ρ) (PE.sym G₁≡G′))
+                           (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) G₁≡G′ ([G]₁ [ρ] ⊢Δ)) ([G]₁ [ρ] ⊢Δ)
+                           (symEq ([G] [ρ] ⊢Δ) (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) G₁≡G′ ([G]₁ [ρ] ⊢Δ)) ([G≡G′] [ρ] ⊢Δ)))
+ --[G₁≡G]
   symEqT (Uᵥ (Uᵣ _ _ _) (Uᵣ _ _ _)) A≡B = PE.refl
   symEqT (emb⁰¹ x) A≡B = symEqT x A≡B
   symEqT (emb¹⁰ x) A≡B = symEqT x A≡B
@@ -117,4 +130,10 @@ symEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             ([G] Wk.id ⊢Γ [fstp]) ([G] Wk.id ⊢Γ [fstr])
             [Gfstp≡Gfstr]
             (symEqTerm ([G] Wk.id ⊢Γ [fstp]) [snd≡]))
+symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+          (∪₁ₜ₌ p pa r ra c d p≅r e f i j x) =
+  ∪₁ₜ₌ r ra p pa d c (≅ₜ-sym p≅r) f e j i (symEqTerm ([F] Wk.id (wf ⊢F)) x)
+symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+          (∪₂ₜ₌ p pa r ra c d p≅r e f i j x) =
+  ∪₂ₜ₌ r ra p pa d c (≅ₜ-sym p≅r) f e j i (symEqTerm ([G] Wk.id (wf ⊢G)) x)
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

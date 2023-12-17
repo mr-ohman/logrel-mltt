@@ -15,6 +15,7 @@ infixl 30 _∙_
 infix 30 Π_▹_
 infixr 22 _▹▹_
 infix 30 Σ_▹_
+infix 30 _∪_
 infixr 22 _××_
 infix 30 ⟦_⟧_▹_
 infixl 30 _ₛ•ₛ_ _•ₛ_ _ₛ•_
@@ -66,6 +67,11 @@ data Kind : (ns : List Nat) → Set where
   Emptykind    : Kind []
   Emptyreckind : Kind (0 ∷ 0 ∷ [])
 
+  Unionkind  : Kind (0 ∷ 0 ∷ [])
+  Inlkind    : Kind (0 ∷ [])
+  Inrkind    : Kind (0 ∷ [])
+  Caseskind  : Kind (0 ∷ 0 ∷ 0 ∷ [])
+
 -- Terms are indexed by its number of unbound variables and are either:
 -- de Bruijn style variables or
 -- generic terms, formed by their kind and sub terms
@@ -76,8 +82,8 @@ data Term (n : Nat) : Set where
 
 private
   variable
-    A F H t u v : Term n
-    B E G       : Term (1+ n)
+    A F H S T S₁ T₁ t a u v : Term n
+    B E G                   : Term (1+ n)
 
 -- The Grammar of our language.
 
@@ -137,6 +143,22 @@ star = gen Starkind []
 Emptyrec : (A e : Term n) → Term n   -- Empty type recursor
 Emptyrec A e = gen Emptyreckind (A ∷ e ∷ [])
 
+_∪_ : (A B : Term n) → Term n
+A ∪ B = gen Unionkind (A ∷ B ∷ [])
+
+injl : (t : Term n) → Term n
+injl t = gen Inlkind (t ∷ [])
+
+injr : (t : Term n) → Term n
+injr t = gen Inrkind (t ∷ [])
+
+cases : (t u v : Term n) → Term n
+cases t u v = gen Caseskind (t ∷ u ∷ v ∷ [])
+
+Id : Term n
+Id = lam (var Fin.zero)
+
+
 -- Binding types
 
 data BindingType : Set where
@@ -155,10 +177,25 @@ B-PE-injectivity : ∀ W → ⟦ W ⟧ F ▹ G PE.≡ ⟦ W ⟧ H ▹ E → F PE
 B-PE-injectivity BΠ PE.refl = PE.refl , PE.refl
 B-PE-injectivity BΣ PE.refl = PE.refl , PE.refl
 
+-- If S ∪ T = S₁ ∪ T₁  then  S = S₁  and  T = T₁.
+
+∪-PE-injectivity : S ∪ T PE.≡ S₁ ∪ T₁ → S PE.≡ S₁ × T PE.≡ T₁
+∪-PE-injectivity PE.refl = PE.refl , PE.refl
+
 -- If  suc n = suc m  then  n = m.
 
 suc-PE-injectivity : suc t PE.≡ suc u → t PE.≡ u
 suc-PE-injectivity PE.refl = PE.refl
+
+-- If  injl n = injl m  then  n = m.
+
+injl-PE-injectivity : injl t PE.≡ injl u → t PE.≡ u
+injl-PE-injectivity PE.refl = PE.refl
+
+-- If  injr n = injr m  then  n = m.
+
+injr-PE-injectivity : injr t PE.≡ injr u → t PE.≡ u
+injr-PE-injectivity PE.refl = PE.refl
 
 
 -- Neutral terms.
@@ -173,6 +210,7 @@ data Neutral : Term n → Set where
   sndₙ      : Neutral t   → Neutral (snd t)
   natrecₙ   : Neutral v   → Neutral (natrec G t u v)
   Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
+  casesₙ    : Neutral t   → Neutral (cases t u v)
 
 
 -- Weak head normal forms (whnfs).
@@ -185,6 +223,7 @@ data Whnf {n : Nat} : Term n → Set where
   Uₙ     : Whnf U
   Πₙ     : Whnf (Π A ▹ B)
   Σₙ     : Whnf (Σ A ▹ B)
+  ∪ₙ     : Whnf (F ∪ H)
   ℕₙ     : Whnf ℕ
   Unitₙ  : Whnf Unit
   Emptyₙ : Whnf Empty
@@ -195,6 +234,8 @@ data Whnf {n : Nat} : Term n → Set where
   sucₙ  : Whnf (suc t)
   starₙ : Whnf star
   prodₙ : Whnf (prod t u)
+  injlₙ : Whnf (injl t)
+  injrₙ : Whnf (injr t)
 
   -- Neutrals are whnfs.
   ne    : Neutral t → Whnf t
@@ -221,21 +262,40 @@ B≢ne : ∀ W → Neutral A → ⟦ W ⟧ F ▹ G PE.≢ A
 B≢ne BΠ () PE.refl
 B≢ne BΣ () PE.refl
 
+∪≢ne : Neutral A → F ∪ H PE.≢ A
+∪≢ne () PE.refl
+
 U≢B : ∀ W → U PE.≢ ⟦ W ⟧ F ▹ G
 U≢B BΠ ()
 U≢B BΣ ()
+
+U≢∪ : U PE.≢ F ∪ H
+U≢∪ ()
 
 ℕ≢B : ∀ W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
 ℕ≢B BΠ ()
 ℕ≢B BΣ ()
 
+ℕ≢∪ : ℕ PE.≢ F ∪ H
+ℕ≢∪ ()
+
 Empty≢B : ∀ W → Empty PE.≢ ⟦ W ⟧ F ▹ G
 Empty≢B BΠ ()
 Empty≢B BΣ ()
 
+Empty≢∪ : Empty PE.≢ F ∪ H
+Empty≢∪ ()
+
+∪≢B : ∀ W → A ∪ t PE.≢ ⟦ W ⟧ F ▹ G
+∪≢B BΠ ()
+∪≢B BΣ ()
+
 Unit≢B : ∀ W → Unit PE.≢ ⟦ W ⟧ F ▹ G
 Unit≢B BΠ ()
 Unit≢B BΣ ()
+
+Unit≢∪ : Unit PE.≢ F ∪ H
+Unit≢∪ ()
 
 zero≢ne : Neutral t → zero PE.≢ t
 zero≢ne () PE.refl
@@ -259,6 +319,7 @@ data Natural {n : Nat} : Term n → Set where
 data Type {n : Nat} : Term n → Set where
   Πₙ     :             Type (Π A ▹ B)
   Σₙ     :             Type (Σ A ▹ B)
+  ∪ₙ     :             Type (F ∪ H)
   ℕₙ     :             Type ℕ
   Emptyₙ :             Type Empty
   Unitₙ  :             Type Unit
@@ -280,6 +341,26 @@ data Product {n : Nat} : Term n → Set where
   prodₙ : Product (prod t u)
   ne    : Neutral t → Product t
 
+data InjectionL {n : Nat} : Term n → Term n → Set where
+  injlₙ : InjectionL (injl t) t
+  ne    : Neutral t → InjectionL t t
+
+data InjectionR {n : Nat} : Term n → Term n → Set where
+  injrₙ : InjectionR (injr t) t
+  ne    : Neutral t → InjectionR t t
+
+InjectionL-PE-injectivity : InjectionL t a → InjectionL u v → t PE.≡ u → a PE.≡ v
+InjectionL-PE-injectivity injlₙ injlₙ PE.refl = PE.refl
+InjectionL-PE-injectivity (ne x) (ne x₁) PE.refl = PE.refl
+
+InjectionR-PE-injectivity : InjectionR t a → InjectionR u v → t PE.≡ u → a PE.≡ v
+InjectionR-PE-injectivity injrₙ injrₙ PE.refl = PE.refl
+InjectionR-PE-injectivity (ne x) (ne x₁) PE.refl = PE.refl
+
+InjectionL-InjectionR : InjectionL t a → InjectionR u v → t PE.≡ u → Neutral t × Neutral u
+InjectionL-InjectionR injlₙ (ne ()) PE.refl
+InjectionL-InjectionR (ne x) (ne x₁) PE.refl = x , x₁
+
 -- These views classify only whnfs.
 -- Natural, Type, Function and Product are a subsets of Whnf.
 
@@ -291,6 +372,7 @@ naturalWhnf (ne x) = ne x
 typeWhnf : Type A → Whnf A
 typeWhnf Πₙ     = Πₙ
 typeWhnf Σₙ     = Σₙ
+typeWhnf ∪ₙ     = ∪ₙ
 typeWhnf ℕₙ     = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
 typeWhnf Unitₙ  = Unitₙ
@@ -303,6 +385,14 @@ functionWhnf (ne x) = ne x
 productWhnf : Product t → Whnf t
 productWhnf prodₙ  = prodₙ
 productWhnf (ne x) = ne x
+
+injectionLWhnf : InjectionL t a → Whnf t
+injectionLWhnf injlₙ  = injlₙ
+injectionLWhnf (ne a) = ne a
+
+injectionRWhnf : InjectionR t a → Whnf t
+injectionRWhnf injrₙ  = injrₙ
+injectionRWhnf (ne a) = ne a
 
 ⟦_⟧ₙ : (W : BindingType) → Whnf (⟦ W ⟧ F ▹ G)
 ⟦_⟧ₙ BΠ = Πₙ
@@ -381,6 +471,7 @@ wkNeutral ρ (fstₙ n)      = fstₙ (wkNeutral ρ n)
 wkNeutral ρ (sndₙ n)      = sndₙ (wkNeutral ρ n)
 wkNeutral ρ (natrecₙ n)   = natrecₙ (wkNeutral ρ n)
 wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
+wkNeutral ρ (casesₙ e)    = casesₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
@@ -392,6 +483,7 @@ wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 wkType : ∀ ρ → Type t → Type {n} (wk ρ t)
 wkType ρ Πₙ     = Πₙ
 wkType ρ Σₙ     = Σₙ
+wkType ρ ∪ₙ     = ∪ₙ
 wkType ρ ℕₙ     = ℕₙ
 wkType ρ Emptyₙ = Emptyₙ
 wkType ρ Unitₙ  = Unitₙ
@@ -405,10 +497,19 @@ wkProduct : ∀ ρ → Product t → Product {n} (wk ρ t)
 wkProduct ρ prodₙ  = prodₙ
 wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
+wkInjectionL : ∀ ρ → InjectionL t a → InjectionL {n} (wk ρ t) (wk ρ a)
+wkInjectionL ρ injlₙ  = injlₙ
+wkInjectionL ρ (ne a) = ne (wkNeutral ρ a)
+
+wkInjectionR : ∀ ρ → InjectionR t a → InjectionR {n} (wk ρ t) (wk ρ a)
+wkInjectionR ρ injrₙ  = injrₙ
+wkInjectionR ρ (ne a) = ne (wkNeutral ρ a)
+
 wkWhnf : ∀ ρ → Whnf t → Whnf {n} (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ Σₙ      = Σₙ
+wkWhnf ρ ∪ₙ      = ∪ₙ
 wkWhnf ρ ℕₙ      = ℕₙ
 wkWhnf ρ Emptyₙ  = Emptyₙ
 wkWhnf ρ Unitₙ   = Unitₙ
@@ -416,6 +517,8 @@ wkWhnf ρ lamₙ    = lamₙ
 wkWhnf ρ prodₙ   = prodₙ
 wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ
+wkWhnf ρ injlₙ   = injlₙ
+wkWhnf ρ injrₙ   = injrₙ
 wkWhnf ρ starₙ   = starₙ
 wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
