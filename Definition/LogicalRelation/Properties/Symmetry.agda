@@ -131,9 +131,12 @@ symEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             [Gfstp≡Gfstr]
             (symEqTerm ([G] Wk.id ⊢Γ [fstp]) [snd≡]))
 symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-          (∪₁ₜ₌ p pa r ra c d p≅r e f i j x) =
-  ∪₁ₜ₌ r ra p pa d c (≅ₜ-sym p≅r) f e j i (symEqTerm ([F] Wk.id (wf ⊢F)) x)
+          (∪₁ₜ₌ p r c d p≅r e f pa ra i j x) =
+  ∪₁ₜ₌ r p d c (≅ₜ-sym p≅r) f e ra pa j i (symEqTerm ([F] Wk.id (wf ⊢F)) x)
 symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-          (∪₂ₜ₌ p pa r ra c d p≅r e f i j x) =
-  ∪₂ₜ₌ r ra p pa d c (≅ₜ-sym p≅r) f e j i (symEqTerm ([G] Wk.id (wf ⊢G)) x)
+          (∪₂ₜ₌ p r c d p≅r e f pa ra i j x) =
+  ∪₂ₜ₌ r p d c (≅ₜ-sym p≅r) f e ra pa j i (symEqTerm ([G] Wk.id (wf ⊢G)) x)
+symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+          (∪₃ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k)) =
+  ∪₃ₜ₌ r p d c (≅ₜ-sym p≅r) f e (neNfₜ₌ neL neK (~-sym k≡k))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

@@ -76,8 +76,10 @@ reflEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) [t]@(Σₜ p d pPro
   Σₜ₌ p p d d pProd pProd p≅p [t] [t] [fst] [fst]
     (reflEqTerm ([F] id (wf ⊢F)) [fst])
     (reflEqTerm ([G] id (wf ⊢F) [fst]) [snd])
-reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(p , a , b , c , inj₁ (i , x)) =
-  p , a , p , a , b , b , c , [t] , [t] , inj₁ (i , i , reflEqTerm ([S] id (wf ⊢S)) x)
-reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(p , a , b , c , inj₂ (i , x)) =
-  p , a , p , a , b , b , c , [t] , [t] , inj₂ (i , i , reflEqTerm ([T] id (wf ⊢T)) x)
+reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(∪₁ₜ p b c pa i x) =
+  ∪₁ₜ₌ p p b b c [t] [t] pa pa i i (reflEqTerm ([S] id (wf ⊢S)) x)
+reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(∪₂ₜ p b c pa i x) =
+  ∪₂ₜ₌ p p b b c [t] [t] pa pa i i (reflEqTerm ([T] id (wf ⊢T)) x)
+reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(∪₃ₜ p b c (neNfₜ neK ⊢k k≡k)) =
+  ∪₃ₜ₌ p p b b c [t] [t] (neNfₜ₌ neK neK k≡k)
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t

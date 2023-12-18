@@ -69,7 +69,7 @@ escapeTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
 escapeTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                (Σₜ p [ ⊢t , ⊢u , d ] pProd p≅p [fst] [snd]) =
   conv ⊢t (sym (subset* (red D)))
-escapeTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , a , [ ⊢t , ⊢u , d ] , b , c) =
+escapeTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , [ ⊢t , ⊢u , d ] , b , c) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (emb 0<1 A) t = escapeTerm A t
 
@@ -101,8 +101,10 @@ escapeTermEq (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
 escapeTermEq (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                  (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) =
   ≅ₜ-red (red D) (redₜ d) (redₜ d′) Σₙ (productWhnf pProd) (productWhnf rProd) p≅r
-escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (Πₜ₌ p pa r ra c d e f g (inj₁ (i , j , x))) =
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₁ₜ₌ p r c d e f g pa ra i j x) =
   ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (injectionLWhnf i) (injectionLWhnf j) e
-escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (Πₜ₌ p pa r ra c d e f g (inj₂ (i , j , x))) =
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₂ₜ₌ p r c d e f g pa ra i j x) =
   ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (injectionRWhnf i) (injectionRWhnf j) e
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₃ₜ₌ p r c d e f g (neNfₜ₌ neK neM k≡m)) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (ne neK) (ne neM) e
 escapeTermEq (emb 0<1 A) t≡u = escapeTermEq A t≡u

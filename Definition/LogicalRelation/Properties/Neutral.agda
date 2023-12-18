@@ -138,6 +138,10 @@ mutual
     in  Σₜ _ (idRedTerm:*: ⊢n) (ne neN) (~-to-≅ₜ n~n)
            [fst]
            [snd]
+  neuTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) neN ⊢n n~n =
+    ∪₃ₜ _ (idRedTerm:*: (conv ⊢n (subset* (red D))))
+        (~-to-≅ₜ (~-conv n~n (subset* (red D))))
+        (neNfₜ neN (conv ⊢n (subset* (red D))) (~-conv n~n (subset* (red D))))
   neuTerm (emb 0<1 x) neN n = neuTerm x neN n
 
   -- Neutrally equal terms are of reducible equality.
@@ -260,4 +264,12 @@ mutual
             (ne neN) (ne neN′) (~-to-≅ₜ n~n′Σ)
             (neuTerm [ΣFG] neN ⊢n n~n) (neuTerm [ΣFG] neN′ ⊢n′ n′~n′)
             [fstn] [fstn′] [fstn≡fstn′] [sndn≡sndn′]
+  neuEqTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN neN′ ⊢n ⊢n′ n~n′ =
+    ∪₃ₜ₌ _ _
+         (idRedTerm:*: (conv ⊢n (subset* D)))
+         (idRedTerm:*: (conv ⊢n′ (subset* D)))
+         (≅-conv (~-to-≅ₜ n~n′) (subset* D))
+         (neuTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN ⊢n (~-trans n~n′ (~-sym n~n′)))
+         (neuTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN′ ⊢n′ (~-trans (~-sym n~n′) n~n′))
+         (neNfₜ₌ neN neN′ (~-conv n~n′ (subset* D)))
   neuEqTerm (emb 0<1 x) neN neN′ n:≡:n′ = neuEqTerm x neN neN′ n:≡:n′

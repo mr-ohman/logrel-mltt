@@ -8,6 +8,7 @@ open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
 open import Tools.List
+open import Tools.Empty using (⊥; ⊥-elim)
 import Tools.PropositionalEquality as PE
 
 
@@ -155,8 +156,13 @@ injr t = gen Inrkind (t ∷ [])
 cases : (t u v : Term n) → Term n
 cases t u v = gen Caseskind (t ∷ u ∷ v ∷ [])
 
+-- Identity function
 Id : Term n
 Id = lam (var Fin.zero)
+
+-- Constant zero function
+C0 : Term n
+C0 = lam zero
 
 
 -- Binding types
@@ -341,25 +347,31 @@ data Product {n : Nat} : Term n → Set where
   prodₙ : Product (prod t u)
   ne    : Neutral t → Product t
 
+data Injection {n : Nat} : Term n → Set where
+  injlₙ : Injection (injl t)
+  injrₙ : Injection (injr t)
+  ne    : Neutral t → Injection t
+
 data InjectionL {n : Nat} : Term n → Term n → Set where
   injlₙ : InjectionL (injl t) t
-  ne    : Neutral t → InjectionL t t
 
 data InjectionR {n : Nat} : Term n → Term n → Set where
   injrₙ : InjectionR (injr t) t
-  ne    : Neutral t → InjectionR t t
 
 InjectionL-PE-injectivity : InjectionL t a → InjectionL u v → t PE.≡ u → a PE.≡ v
 InjectionL-PE-injectivity injlₙ injlₙ PE.refl = PE.refl
-InjectionL-PE-injectivity (ne x) (ne x₁) PE.refl = PE.refl
 
 InjectionR-PE-injectivity : InjectionR t a → InjectionR u v → t PE.≡ u → a PE.≡ v
 InjectionR-PE-injectivity injrₙ injrₙ PE.refl = PE.refl
-InjectionR-PE-injectivity (ne x) (ne x₁) PE.refl = PE.refl
 
-InjectionL-InjectionR : InjectionL t a → InjectionR u v → t PE.≡ u → Neutral t × Neutral u
-InjectionL-InjectionR injlₙ (ne ()) PE.refl
-InjectionL-InjectionR (ne x) (ne x₁) PE.refl = x , x₁
+InjectionL-InjectionR : InjectionL t a → InjectionR u v → t PE.≡ u → ⊥
+InjectionL-InjectionR injlₙ injrₙ ()
+
+InjectionL-Neutral : InjectionL t a → Neutral u → t PE.≡ u → ⊥
+InjectionL-Neutral injlₙ () PE.refl
+
+InjectionR-Neutral : InjectionR t a → Neutral u → t PE.≡ u → ⊥
+InjectionR-Neutral injrₙ () PE.refl
 
 -- These views classify only whnfs.
 -- Natural, Type, Function and Product are a subsets of Whnf.
@@ -388,11 +400,9 @@ productWhnf (ne x) = ne x
 
 injectionLWhnf : InjectionL t a → Whnf t
 injectionLWhnf injlₙ  = injlₙ
-injectionLWhnf (ne a) = ne a
 
 injectionRWhnf : InjectionR t a → Whnf t
 injectionRWhnf injrₙ  = injrₙ
-injectionRWhnf (ne a) = ne a
 
 ⟦_⟧ₙ : (W : BindingType) → Whnf (⟦ W ⟧ F ▹ G)
 ⟦_⟧ₙ BΠ = Πₙ
@@ -499,11 +509,9 @@ wkProduct ρ (ne x) = ne (wkNeutral ρ x)
 
 wkInjectionL : ∀ ρ → InjectionL t a → InjectionL {n} (wk ρ t) (wk ρ a)
 wkInjectionL ρ injlₙ  = injlₙ
-wkInjectionL ρ (ne a) = ne (wkNeutral ρ a)
 
 wkInjectionR : ∀ ρ → InjectionR t a → InjectionR {n} (wk ρ t) (wk ρ a)
 wkInjectionR ρ injrₙ  = injrₙ
-wkInjectionR ρ (ne a) = ne (wkNeutral ρ a)
 
 wkWhnf : ∀ ρ → Whnf t → Whnf {n} (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ

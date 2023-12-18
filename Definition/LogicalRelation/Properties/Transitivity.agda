@@ -223,7 +223,7 @@ transEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
             (Πₜ₌ f g d d′ funcF funcG f≡g [f] [g] [f≡g])
             (Πₜ₌ f₁ g₁ d₁ d₁′ funcF₁ funcG₁ f≡g₁ [f]₁ [g]₁ [f≡g]₁)
             rewrite whrDet*Term (redₜ d′ , functionWhnf funcG)
-                            (redₜ d₁ , functionWhnf funcF₁) =
+                                (redₜ d₁ , functionWhnf funcF₁) =
   Πₜ₌ f g₁ d d₁′ funcF funcG₁ (≅ₜ-trans f≡g f≡g₁) [f] [g]₁
       (λ ρ ⊢Δ [a] → transEqTerm ([G] ρ ⊢Δ [a])
                                 ([f≡g] ρ ⊢Δ [a])
@@ -245,38 +245,55 @@ transEqTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
           (transEqTerm ([F] Wk.id ⊢Γ) [fst≡] [fst≡]₁)
           [snd≡]′
 transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-            (∪₁ₜ₌ p pa r ra c d p≅r e f i j x)
-            (∪₁ₜ₌ p₁ pa₁ r₁ ra₁ c₁ d₁ p≅r₁ e₁ f₁ i₁ j₁ x₁)
+            (∪₁ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₁ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁)
             rewrite whrDet*Term (redₜ d  , injectionLWhnf j)
                                 (redₜ c₁ , injectionLWhnf i₁)
                   | InjectionL-PE-injectivity
                       j i₁
                       (whrDet*Term (redₜ d  , injectionLWhnf j)
                                    (redₜ c₁ , injectionLWhnf i₁)) =
-  ∪₁ₜ₌ p pa r₁ ra₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ i j₁
+  ∪₁ₜ₌ p r₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ pa ra₁ i j₁
        (transEqTerm ([F] Wk.id (wf ⊢F)) x x₁)
 transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-            (∪₂ₜ₌ p pa r ra c d p≅r e f i j x)
-            (∪₂ₜ₌ p₁ pa₁ r₁ ra₁ c₁ d₁ p≅r₁ e₁ f₁ i₁ j₁ x₁)
+            (∪₂ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₂ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁)
             rewrite whrDet*Term (redₜ d  , injectionRWhnf j)
                                 (redₜ c₁ , injectionRWhnf i₁)
                   | InjectionR-PE-injectivity
                       j i₁
                       (whrDet*Term (redₜ d  , injectionRWhnf j)
                                    (redₜ c₁ , injectionRWhnf i₁)) =
-  ∪₂ₜ₌ p pa r₁ ra₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ i j₁
+  ∪₂ₜ₌ p r₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ pa ra₁ i j₁
        (transEqTerm ([G] Wk.id (wf ⊢G)) x x₁)
 transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-            (∪₁ₜ₌ p pa r ra c d p≅r e f i j x)
-            (∪₂ₜ₌ p₁ pa₁ r₁ ra₁ c₁ d₁ p≅r₁ e₁ f₁ i₁ j₁ x₁)
-            rewrite whrDet*Term (redₜ d  , injectionLWhnf j)
-                                (redₜ c₁ , injectionRWhnf i₁) =
-  ∪₁ₜ₌ p pa r₁ ra₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ i {!j₁!}
-       {!transEqTerm ([F] Wk.id (wf ⊢F)) x x₁!}
+            (∪₁ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₂ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁) =
+  ⊥-elim (InjectionL-InjectionR j i₁ (whrDet*Term (redₜ d , injectionLWhnf j) (redₜ c₁ , injectionRWhnf i₁)))
 transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
-            (∪₂ₜ₌ p pa r ra c d p≅r e f i j x)
-            (∪₁ₜ₌ p₁ pa₁ r₁ ra₁ c₁ d₁ p≅r₁ e₁ f₁ i₁ j₁ x₁)
-            rewrite whrDet*Term (redₜ d  , injectionRWhnf j)
-                                (redₜ c₁ , injectionLWhnf i₁) =
-  {!!}
+            (∪₂ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₁ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁) =
+  ⊥-elim (InjectionL-InjectionR i₁ j (whrDet*Term (redₜ c₁ , injectionLWhnf i₁) (redₜ d , injectionRWhnf j)))
+transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+            (∪₁ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₃ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ (neNfₜ₌ neK neL k≡k)) =
+  ⊥-elim (InjectionL-Neutral j neK (whrDet*Term (redₜ d , injectionLWhnf j) (redₜ c₁ , ne neK)))
+transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+            (∪₂ₜ₌ p r c d p≅r e f pa ra i j x)
+            (∪₃ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ (neNfₜ₌ neK neL k≡k)) =
+  ⊥-elim (InjectionR-Neutral j neK (whrDet*Term (redₜ d , injectionRWhnf j) (redₜ c₁ , ne neK)))
+transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+            (∪₃ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k))
+            (∪₁ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁) =
+  ⊥-elim (InjectionL-Neutral i₁ neL (whrDet*Term (redₜ c₁ , injectionLWhnf i₁) (redₜ d , ne neL)))
+transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+            (∪₃ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k))
+            (∪₂ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ pa₁ ra₁ i₁ j₁ x₁) =
+  ⊥-elim (InjectionR-Neutral i₁ neL (whrDet*Term (redₜ c₁ , injectionRWhnf i₁) (redₜ d , ne neL)))
+transEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+            (∪₃ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k))
+            (∪₃ₜ₌ p₁ r₁ c₁ d₁ p≅r₁ e₁ f₁ (neNfₜ₌ neK₁ neL₁ k≡k₁))
+            rewrite whrDet*Term (redₜ d  , ne neL)
+                                (redₜ c₁ , ne neK₁) =
+  ∪₃ₜ₌ p r₁ c d₁ (≅ₜ-trans p≅r p≅r₁) e f₁ (neNfₜ₌ neK neL₁ (~-trans k≡k k≡k₁))
 transEqTerm (emb 0<1 x) t≡u u≡v = transEqTerm x t≡u u≡v

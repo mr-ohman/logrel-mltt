@@ -418,29 +418,31 @@ module LogRel (l : TypeLevel) (rec : ∀ {l′} → l′ < l → LogRelKit) wher
                → ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
                → Δ ⊩¹ U.wk ρ T ≡ U.wk ρ T′ / [T] [ρ] ⊢Δ
 
+    data Injection-prop (Γ : Con Term ℓ) (A : Term ℓ) (L : Term ℓ → Set) (R : Term ℓ → Set) : (n : Term ℓ) → Set where
+      injlᵣ  : ∀ {a} → L a → Injection-prop Γ A L R (injl a)
+      injrᵣ  : ∀ {a} → R a → Injection-prop Γ A L R (injr a)
+      ne     : ∀ {a} → Γ ⊩neNf a ∷ A → Injection-prop Γ A L R a
+
     -- Term reducibility of ∪-type
     _⊩¹∪_∷_/_ : (Γ : Con Term ℓ) (t A : Term ℓ) ([A] : Γ ⊩¹∪ A) → Set
     Γ ⊩¹∪ t ∷ A / [A]@(∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) =
-      ∃₂ λ p pa → Γ ⊢ t :⇒*: p ∷ S ∪ T
-                × Γ ⊢ p ≅ p ∷ S ∪ T
-                × ((InjectionL p pa × Γ ⊩¹ pa ∷ U.wk id S / [S] id (wf ⊢S))
-                 ⊎ (InjectionR p pa × Γ ⊩¹ pa ∷ U.wk id T / [T] id (wf ⊢T)))
+      ∃ λ p → Γ ⊢ t :⇒*: p ∷ S ∪ T
+            × Γ ⊢ p ≅ p ∷ S ∪ T
+            × ((∃ λ a → InjectionL p a × Γ ⊩¹ a ∷ U.wk id S / [S] id (wf ⊢S))
+            ⊎ ((∃ λ a → InjectionR p a × Γ ⊩¹ a ∷ U.wk id T / [T] id (wf ⊢T))
+            ⊎ (Γ ⊩neNf p ∷ S ∪ T)))
 
     -- Term equality of ∪-type
     _⊩¹∪_≡_∷_/_ : (Γ : Con Term ℓ) (t u A : Term ℓ) ([A] : Γ ⊩¹∪ A) → Set
     Γ ⊩¹∪ t ≡ u ∷ A / [A]@(∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) =
-      ∃₂ λ p pa →
-      ∃₂ λ r ra → Γ ⊢ t :⇒*: p ∷ S ∪ T
-                × Γ ⊢ u :⇒*: r ∷ S ∪ T
-                × Γ ⊢ p ≅ r ∷ S ∪ T
-                × Γ ⊩¹∪ t ∷ A / [A]
-                × Γ ⊩¹∪ u ∷ A / [A]
-                × ((InjectionL p pa
-                  × InjectionL r ra
-                  × Γ ⊩¹ pa ≡ ra ∷ U.wk id S / [S] id (wf ⊢S))
-                 ⊎ (InjectionR p pa
-                  × InjectionR r ra
-                  × Γ ⊩¹ pa ≡ ra ∷ U.wk id T / [T] id (wf ⊢T)))
+      ∃₂ λ p r → Γ ⊢ t :⇒*: p ∷ S ∪ T
+               × Γ ⊢ u :⇒*: r ∷ S ∪ T
+               × Γ ⊢ p ≅ r ∷ S ∪ T
+               × Γ ⊩¹∪ t ∷ A / [A]
+               × Γ ⊩¹∪ u ∷ A / [A]
+               × ((∃₂ λ pa ra → InjectionL p pa × InjectionL r ra × Γ ⊩¹ pa ≡ ra ∷ U.wk id S / [S] id (wf ⊢S))
+               ⊎ ((∃₂ λ pa ra → InjectionR p pa × InjectionR r ra × Γ ⊩¹ pa ≡ ra ∷ U.wk id T / [T] id (wf ⊢T))
+               ⊎ (Γ ⊩neNf p ≡ r ∷ S ∪ T)))
 
     -- Logical relation definition
     data _⊩¹_ (Γ : Con Term ℓ) : Term ℓ → Set where
@@ -500,10 +502,12 @@ pattern Πₜ f d funcF f≡f [f] [f]₁ = f , d , funcF , f≡f , [f] , [f]₁
 pattern Πₜ₌ f g d d′ funcF funcG f≡g [f] [g] [f≡g] = f , g , d , d′ , funcF , funcG , f≡g , [f] , [g] , [f≡g]
 pattern Σₜ p d pProd p≅p [fst] [snd] = p , d , pProd , p≅p , ([fst] , [snd])
 pattern Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡] = p , r , d , d′ , pProd , rProd , p≅r , [t] , [u] , ([fstp] , [fstr] , [fst≡] , [snd≡])
-pattern ∪₁ₜ p pa d p≅p i x = p , pa , d , p≅p , inj₁ (i , x)
-pattern ∪₂ₜ p pa d p≅p i x = p , pa , d , p≅p , inj₂ (i , x)
-pattern ∪₁ₜ₌ p pa r ra c d p≅r e f i j x = p , pa , r , ra , c , d , p≅r , e , f , inj₁ (i , j , x)
-pattern ∪₂ₜ₌ p pa r ra c d p≅r e f i j x = p , pa , r , ra , c , d , p≅r , e , f , inj₂ (i , j , x)
+pattern ∪₁ₜ p d p≅p pa i x = p , d , p≅p , inj₁ (pa , i , x)
+pattern ∪₂ₜ p d p≅p pa i x = p , d , p≅p , inj₂ (inj₁ (pa , i , x))
+pattern ∪₃ₜ p d p≅p x = p , d , p≅p , inj₂ (inj₂ x)
+pattern ∪₁ₜ₌ p r c d p≅r e f pa ra i j x = p , r , c , d , p≅r , e , f , inj₁ (pa , ra , i , j , x)
+pattern ∪₂ₜ₌ p r c d p≅r e f pa ra i j x = p , r , c , d , p≅r , e , f , inj₂ (inj₁ (pa , ra , i , j , x))
+pattern ∪₃ₜ₌ p r c d p≅r e f x = p , r , c , d , p≅r , e , f , inj₂ (inj₂ x)
 
 pattern Uᵣ′ a b c = Uᵣ (Uᵣ a b c)
 pattern ne′ a b c d = ne (ne a b c d)
