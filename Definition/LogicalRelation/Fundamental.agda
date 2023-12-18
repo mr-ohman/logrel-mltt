@@ -46,15 +46,24 @@ mutual
   fundamental (Emptyⱼ x) = valid x , Emptyᵛ (valid x)
   fundamental (Unitⱼ x) = valid x , Unitᵛ (valid x)
   fundamental (Uⱼ x) = valid x , Uᵛ (valid x)
-  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
-  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
-    [Γ] , Πᵛ {F = F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
-  fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G) with fundamental ⊢F | fundamental ⊢G
-  fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G) | [Γ] , [F] | [Γ∙F] , [G] =
-    [Γ] , Σᵛ {F = F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
-  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B) with fundamental ⊢A | fundamental ⊢B
-  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B) | [Γ] , [A] | [Δ] , [B] =
-    [Γ] , {!!}
+  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G)
+    with fundamental ⊢F | fundamental ⊢G
+  fundamental (Πⱼ_▹_ {F} {G} ⊢F ⊢G)
+    | [Γ] , [F]
+    | [Γ∙F] , [G] =
+      [Γ] , Πᵛ {F = F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
+  fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G)
+    with fundamental ⊢F | fundamental ⊢G
+  fundamental (Σⱼ_▹_ {F} {G} ⊢F ⊢G)
+    | [Γ] , [F]
+    | [Γ∙F] , [G] =
+      [Γ] , Σᵛ {F = F} {G} [Γ] [F] (S.irrelevance {A = G} [Γ∙F] ([Γ] ∙ [F]) [G])
+  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B)
+    with fundamental ⊢A | fundamental ⊢B
+  fundamental (_∪ⱼ_ {A} {B} ⊢A ⊢B)
+    | [Γ] , [A]
+    | [Δ] , [B] =
+      [Γ] , ∪ᵛ {F = A} {B} [Γ] [A] (S.irrelevance {A = B} [Δ] [Γ] [B])
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
     [Γ] , univᵛ {A = A} [Γ] [U] [A]
@@ -119,7 +128,18 @@ mutual
       ,   Σᵛ {F = F} {G} [Γ] [F] [G]′
       ,   Σᵛ {F = H} {E} [Γ] [H] [E]′
       ,   Σ-congᵛ {F = F} {G} {H} {E} [Γ] [F] [G]′ [H] [E]′ [F≡H] [G≡E]′
-  fundamentalEq (∪-cong {A} {B} {C} {D} A≡B C≡D) = {!!}
+  fundamentalEq (∪-cong {A} {B} {C} {D} A≡B C≡D)
+    with fundamentalEq A≡B | fundamentalEq C≡D
+  fundamentalEq (∪-cong {A} {B} {C} {D} A≡B C≡D)
+    | [Γ]  , [A] , [B] , [A≡B]
+    | [Γ]₁ , [C] , [D] , [C≡D] =
+      let [C]′   = S.irrelevance {A = C} [Γ]₁ [Γ] [C]
+          [D]′   = S.irrelevance {A = D} [Γ]₁ [Γ] [D]
+          [C≡D]′ = S.irrelevanceEq {A = C} {B = D} [Γ]₁ [Γ] [C] [C]′ [C≡D]
+      in  [Γ]
+      ,   ∪ᵛ {F = A} {C} [Γ] [A] [C]′
+      ,   ∪ᵛ {F = B} {D} [Γ] [B] [D]′
+      ,   ∪-congᵛ {F = A} {C} {B} {D} [Γ] [A] [C]′ [B] [D]′ [A≡B] [C≡D]′
 
   -- Fundamental theorem for variables.
   fundamentalVar : ∀ {A x}

@@ -687,3 +687,8 @@ B-subst : (σ : Subst m n) (W : BindingType) (F : Term n) (G : Term (1+ n))
         → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
 B-subst σ BΠ F G = PE.refl
 B-subst σ BΣ F G = PE.refl
+
+
+∪-subst : (σ : Subst m n) (F : Term n) (G : Term n)
+        → subst σ (F ∪ G) PE.≡ (subst σ F) ∪ (subst σ G)
+∪-subst σ F G = PE.refl

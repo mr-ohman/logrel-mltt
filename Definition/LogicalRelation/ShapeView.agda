@@ -48,6 +48,9 @@ _⊩⟨_⟩ne_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
 _⊩⟨_⟩B⟨_⟩_ : (Γ : Con Term n) (l : TypeLevel) (W : BindingType) (A : Term n) → Set
 Γ ⊩⟨ l ⟩B⟨ W ⟩ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ A)
 
+_⊩⟨_⟩∪_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
+Γ ⊩⟨ l ⟩∪ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩∪ A)
+
 -- Construct a general reducible type from a specific
 
 U-intr : ∀ {l} → Γ ⊩⟨ l ⟩U → Γ ⊩⟨ l ⟩ U
@@ -208,6 +211,28 @@ B-elim W [Π] = B-elim′ W (id (escape [Π])) [Π]
 
 Σ-elim : ∀ {F G l} → Γ ⊩⟨ l ⟩ Σ F ▹ G → Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G
 Σ-elim [Σ] = B-elim′ BΣ (id (escape [Σ])) [Σ]
+
+∪-elim′ : ∀ {A F G l} → Γ ⊢ A ⇒* F ∪ G → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩∪ A
+∪-elim′ D (Uᵣ′ l′ l< ⊢Γ) =
+  ⊥-elim (U≢∪ (whrDet* (id (Uⱼ ⊢Γ) , Uₙ) (D , ∪ₙ)))
+∪-elim′ D (ℕᵣ D′) =
+  ⊥-elim (ℕ≢∪ (whrDet* (red D′ , ℕₙ) (D , ∪ₙ)))
+∪-elim′ D (Emptyᵣ D′) =
+  ⊥-elim (Empty≢∪ (whrDet* (red D′ , Emptyₙ) (D , ∪ₙ)))
+∪-elim′ D (Unitᵣ D′) =
+  ⊥-elim (Unit≢∪ (whrDet* (red D′ , Unitₙ) (D , ∪ₙ)))
+∪-elim′ D (ne′ K D′ neK K≡K) =
+  ⊥-elim (∪≢ne neK (whrDet* (D , ∪ₙ) (red D′ , ne neK)))
+∪-elim′ D (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
+  ⊥-elim (∪≢B W (whrDet* (D , ∪ₙ) (red D′ , ⟦ W ⟧ₙ)))
+∪-elim′ D (∪ᵣ (∪ᵣ S T D₁ ⊢S ⊢T A≡A [S] [T])) =
+  noemb (∪ᵣ S T D₁ ⊢S ⊢T A≡A [S] [T])
+∪-elim′ D (emb 0<1 x) with ∪-elim′ D x
+∪-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+∪-elim′ D (emb 0<1 x) | emb () x₂
+
+∪-elim : ∀ {F G l} → Γ ⊩⟨ l ⟩ F ∪ G → Γ ⊩⟨ l ⟩∪ F ∪ G
+∪-elim [∪] = ∪-elim′ (id (escape [∪])) [∪]
 
 -- Extract a type and a level from a maybe embedding
 extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l′ → ⊩⟨ l′ ⟩

@@ -148,6 +148,18 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E ∷ U
 
+    -- Π-congruence
+
+    ≅-∪-cong  : ∀ {F G H E}
+              → Γ ⊢ F ≅ H
+              → Γ ⊢ G ≅ E
+              → Γ ⊢ F ∪ G ≅ H ∪ E
+
+    ≅ₜ-∪-cong : ∀ {F G H E}
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ⊢ G ≅ E ∷ U
+              → Γ ⊢ F ∪ G ≅ H ∪ E ∷ U
+
     -- Zero reflexivity
     ≅ₜ-zerorefl : ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
