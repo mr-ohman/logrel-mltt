@@ -50,6 +50,10 @@ redSubst* D (Bᵣ′ W F G [ ⊢B , ⊢ΠFG , D′ ] ⊢F ⊢G A≡A [F] [G] G-e
   in  (Bᵣ′ W F G [ ⊢A , ⊢ΠFG , D ⇨* D′ ] ⊢F ⊢G A≡A [F] [G] G-ext)
   ,   (B₌ _ _ D′ A≡A (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
         (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a])))
+redSubst* D (∪ᵣ′ F G [ ⊢B , ⊢ΠFG , D′ ] ⊢F ⊢G A≡A [F] [G]) =
+  let ⊢A = redFirst* D
+  in ∪ᵣ′ F G [ ⊢A , ⊢ΠFG , D ⇨* D′ ] ⊢F ⊢G A≡A [F] [G] ,
+     ∪₌ _ _ D′ A≡A (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ)) (λ ρ ⊢Δ → reflEq ([G] ρ ⊢Δ))
 redSubst* D (emb 0<1 x) with redSubst* D x
 redSubst* D (emb 0<1 x) | y , y₁ = emb 0<1 y , y₁
 
@@ -110,6 +114,27 @@ redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G]
   ,   Σₜ₌ p p [d′] [d] pProd pProd p≅p [u′] [u] [fst] [fst]
           (reflEqTerm ([F] Wk.id (wf ⊢F)) [fst])
           (reflEqTerm ([G] Wk.id (wf ⊢F) [fst]) [snd])
+redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+                  [u]@(∪₁ₜ p [d]@([ ⊢t , ⊢u , d ]) p≅p pa i x) =
+  let A≡∪FG = subset* (red D)
+      t⇒u′  = conv* t⇒u A≡∪FG
+      [d′] = [ conv (redFirst*Term t⇒u) A≡∪FG , ⊢u , conv* t⇒u A≡∪FG ⇨∷* d ]
+      [u′] = ∪₁ₜ p [d′] p≅p pa i x
+  in [u′] , ∪₁ₜ₌ p p [d′] [d] p≅p [u′] [u] pa pa i i (reflEqTerm ([F] Wk.id (wf ⊢F)) x)
+redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+                  [u]@(∪₂ₜ p [d]@([ ⊢t , ⊢u , d ]) p≅p pa i x) =
+  let A≡∪FG = subset* (red D)
+      t⇒u′  = conv* t⇒u A≡∪FG
+      [d′] = [ conv (redFirst*Term t⇒u) A≡∪FG , ⊢u , conv* t⇒u A≡∪FG ⇨∷* d ]
+      [u′] = ∪₂ₜ p [d′] p≅p pa i x
+  in [u′] , ∪₂ₜ₌ p p [d′] [d] p≅p [u′] [u] pa pa i i (reflEqTerm ([G] Wk.id (wf ⊢G)) x)
+redSubst*Term {A} {t} {u} {l} {Γ} t⇒u (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
+                  [u]@(∪₃ₜ p [d]@([ ⊢t , ⊢u , d ]) p≅p (neNfₜ neK ⊢k k≡k)) =
+  let A≡∪FG = subset* (red D)
+      t⇒u′  = conv* t⇒u A≡∪FG
+      [d′] = [ conv (redFirst*Term t⇒u) A≡∪FG , ⊢u , conv* t⇒u A≡∪FG ⇨∷* d ]
+      [u′] = ∪₃ₜ p [d′] p≅p (neNfₜ neK ⊢k k≡k)
+  in [u′] , ∪₃ₜ₌ p p [d′] [d] p≅p [u′] [u] (neNfₜ₌ neK neK k≡k)
 redSubst*Term t⇒u (emb 0<1 x) [u] = redSubst*Term t⇒u x [u]
 
 -- Weak head expansion of reducible types with single reduction step.
