@@ -214,7 +214,15 @@ mutual
     ,   S.irrelevanceTerm {A = U} {t = Σ F ▹ G} [Γ] [Γ] (Uᵛ [Γ]) [U]
                           (Σᵗᵛ {F = F} {G} [Γ] [F] (λ {_} {Δ} {σ} → [U]′ {Δ = Δ} {σ})
                                [F]ₜ′ [G]ₜ′)
-  fundamentalTerm (_∪ⱼ_ {A} {B} ⊢A ⊢B) = {!!}
+  fundamentalTerm (_∪ⱼ_ {A} {B} ⊢A ⊢B)
+    with fundamentalTerm ⊢A | fundamentalTerm ⊢B
+  ... | [Γ]  , [U]  , [A]ₜ
+      | [Γ]₁ , [U]₁ , [B]ₜ =
+    let [A]ₜ′ = S.irrelevanceTerm {A = U} {t = A} [Γ] [Γ] [U] (Uᵛ [Γ]) [A]ₜ
+        [B]ₜ′ = S.irrelevanceTerm {A = U} {t = B} [Γ]₁ [Γ] [U]₁ (Uᵛ [Γ]) [B]ₜ
+    in [Γ] , [U]
+     , S.irrelevanceTerm {A = U} {t = A ∪ B} [Γ] [Γ] (Uᵛ [Γ]) [U]
+                         (∪ᵗᵛ {F = A} {B} [Γ] [A]ₜ′ [B]ₜ′)
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lamⱼ {F} {G} {t} ⊢F ⊢t)
     with fundamental ⊢F | fundamentalTerm ⊢t
@@ -257,8 +265,12 @@ mutual
         [Gfst] = substS {F = F} {G} [Γ] [F] [G] [fst]
         [snd] = sndᵛ {F = F} {G} [Γ] [F] [G] [t]
     in  [Γ] , [Gfst] , [snd]
-  fundamentalTerm (injlⱼ {A} {B} {t} ⊢t) = {!!}
-  fundamentalTerm (injrⱼ {A} {B} {t} ⊢t) = {!!}
+  fundamentalTerm (injlⱼ {A} {B} {t} ⊢t ⊢B)
+    with fundamentalTerm ⊢t | fundamental ⊢B
+  ... | [Γ] , [A] , [t] | [Γ]₁ , [B] =
+    let [B]′ = S.irrelevance {A = B} [Γ]₁ [Γ] [B]
+    in [Γ] , ∪ᵛ {F = A} {B} [Γ] [A] [B]′ , {!!} -- need a injlᵛ
+  fundamentalTerm (injrⱼ {A} {B} {t} ⊢A ⊢t) = {!!}
   fundamentalTerm (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v) = {!!}
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t

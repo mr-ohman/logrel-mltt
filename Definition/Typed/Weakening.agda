@@ -109,8 +109,8 @@ mutual
         ρG = wk (lift ρ) (⊢Δ ∙ ρF) ⊢G
         ρt = wkTerm ρ ⊢Δ t
     in  PE.subst (λ x → _ ⊢ snd _ ∷ x) (PE.sym (wk-β G)) (sndⱼ ρF ρG ρt)
-  wkTerm ρ ⊢Δ (injlⱼ {A} {B} {t} t∷) = injlⱼ (wkTerm ρ ⊢Δ t∷)
-  wkTerm ρ ⊢Δ (injrⱼ {A} {B} {t} t∷) = injrⱼ (wkTerm ρ ⊢Δ t∷)
+  wkTerm ρ ⊢Δ (injlⱼ {A} {B} {t} t∷ ⊢B) = injlⱼ (wkTerm ρ ⊢Δ t∷) (wk ρ ⊢Δ ⊢B)
+  wkTerm ρ ⊢Δ (injrⱼ {A} {B} {t} ⊢A t∷) = injrⱼ (wk ρ ⊢Δ ⊢A) (wkTerm ρ ⊢Δ t∷)
   wkTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (casesⱼ {A} {B} {C} {t} {u} {v} t∷ u∷ v∷) =
     casesⱼ (wkTerm p ⊢Δ t∷)
            (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ u∷))

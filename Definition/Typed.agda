@@ -106,8 +106,10 @@ mutual
 
     injlⱼ     : ∀ {A B t}
               → Γ ⊢ t ∷ A
+              → Γ ⊢ B
               → Γ ⊢ injl t ∷ A ∪ B
     injrⱼ     : ∀ {A B t}
+              → Γ ⊢ A
               → Γ ⊢ t ∷ B
               → Γ ⊢ injr t ∷ A ∪ B
     casesⱼ    : ∀ {A B C t u v}

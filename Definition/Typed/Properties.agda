@@ -39,8 +39,8 @@ wfTerm (Σⱼ a ▹ a₁) = wfTerm a
 wfTerm (prodⱼ F G a a₁) = wfTerm a
 wfTerm (fstⱼ _ _ a) = wfTerm a
 wfTerm (sndⱼ _ _ a) = wfTerm a
-wfTerm (injlⱼ a) = wfTerm a
-wfTerm (injrⱼ a) = wfTerm a
+wfTerm (injlⱼ a _) = wfTerm a
+wfTerm (injrⱼ _ a) = wfTerm a
 wfTerm (casesⱼ a b c) = wfTerm a
 
 wf : Γ ⊢ A → ⊢ Γ
