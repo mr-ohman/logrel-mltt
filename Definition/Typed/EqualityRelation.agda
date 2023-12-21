@@ -160,6 +160,20 @@ record EqRelSet : Set₁ where
               → Γ ⊢ G ≅ E ∷ U
               → Γ ⊢ F ∪ G ≅ H ∪ E ∷ U
 
+    -- congruence for injl
+    ≅-injl-cong : ∀ {p r F G}
+          → Γ ⊢ F -- needed?
+          → Γ ⊢ G
+          → Γ ⊢ p ≅ r ∷ F
+          → Γ ⊢ injl p ≅ injl r ∷ F ∪ G
+
+    -- congruence for injr
+    ≅-injr-cong : ∀ {p r F G}
+          → Γ ⊢ F
+          → Γ ⊢ G -- needed?
+          → Γ ⊢ p ≅ r ∷ G
+          → Γ ⊢ injr p ≅ injr r ∷ F ∪ G
+
     -- Zero reflexivity
     ≅ₜ-zerorefl : ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 

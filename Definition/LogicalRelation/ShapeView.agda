@@ -77,6 +77,10 @@ B-intr : ∀ {A l} W → Γ ⊩⟨ l ⟩B⟨ W ⟩ A → Γ ⊩⟨ l ⟩ A
 B-intr W (noemb x) = Bᵣ W x
 B-intr W (emb 0<1 x) = emb 0<1 (B-intr W x)
 
+∪-intr : ∀ {A l} → Γ ⊩⟨ l ⟩∪ A → Γ ⊩⟨ l ⟩ A
+∪-intr (noemb x) = ∪ᵣ x
+∪-intr (emb 0<1 x) = emb 0<1 (∪-intr x)
+
 -- Construct a specific reducible type from a general with some criterion
 
 U-elim : ∀ {l} → Γ ⊩⟨ l ⟩ U → Γ ⊩⟨ l ⟩U

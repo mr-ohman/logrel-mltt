@@ -358,6 +358,14 @@ data InjectionL {n : Nat} : Term n → Term n → Set where
 data InjectionR {n : Nat} : Term n → Term n → Set where
   injrₙ : InjectionR (injr t) t
 
+data InjectionLN {n : Nat} : Term n → Set where
+  injlₙ : InjectionLN (injl t)
+  ne    : Neutral t → InjectionLN t
+
+data InjectionRN {n : Nat} : Term n → Set where
+  injrₙ : InjectionRN (injl t)
+  ne    : Neutral t → InjectionRN t
+
 InjectionL-PE-injectivity : InjectionL t a → InjectionL u v → t PE.≡ u → a PE.≡ v
 InjectionL-PE-injectivity injlₙ injlₙ PE.refl = PE.refl
 
