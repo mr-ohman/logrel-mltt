@@ -48,6 +48,9 @@ _⊩⟨_⟩ne_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
 _⊩⟨_⟩B⟨_⟩_ : (Γ : Con Term n) (l : TypeLevel) (W : BindingType) (A : Term n) → Set
 Γ ⊩⟨ l ⟩B⟨ W ⟩ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ A)
 
+_⊩⟨_⟩▹▹_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
+Γ ⊩⟨ l ⟩▹▹ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩▹▹ A)
+
 _⊩⟨_⟩∪_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
 Γ ⊩⟨ l ⟩∪ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩∪ A)
 
@@ -80,6 +83,10 @@ B-intr W (emb 0<1 x) = emb 0<1 (B-intr W x)
 ∪-intr : ∀ {A l} → Γ ⊩⟨ l ⟩∪ A → Γ ⊩⟨ l ⟩ A
 ∪-intr (noemb x) = ∪ᵣ x
 ∪-intr (emb 0<1 x) = emb 0<1 (∪-intr x)
+
+▹▹-intr : ∀ {A l} → Γ ⊩⟨ l ⟩▹▹ A → Γ ⊩⟨ l ⟩ A
+▹▹-intr (noemb x) = Bᵣ BΠ x
+▹▹-intr (emb 0<1 x) = emb 0<1 (▹▹-intr x)
 
 -- Construct a specific reducible type from a general with some criterion
 

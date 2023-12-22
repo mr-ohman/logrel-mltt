@@ -269,8 +269,14 @@ mutual
     with fundamentalTerm ⊢t | fundamental ⊢B
   ... | [Γ] , [A] , [t] | [Γ]₁ , [B] =
     let [B]′ = S.irrelevance {A = B} [Γ]₁ [Γ] [B]
-    in [Γ] , ∪ᵛ {F = A} {B} [Γ] [A] [B]′ , {!!} -- need a injlᵛ
-  fundamentalTerm (injrⱼ {A} {B} {t} ⊢A ⊢t) = {!!}
+    in [Γ] , ∪ᵛ {F = A} {B} [Γ] [A] [B]′ ,
+       injlᵛ {A = A} {B} {t} [Γ] [A] [B]′ [t]
+  fundamentalTerm (injrⱼ {A} {B} {t} ⊢A ⊢t)
+    with fundamentalTerm ⊢t | fundamental ⊢A
+  ... | [Γ] , [B] , [t] | [Γ]₁ , [A] =
+    let [A]′ = S.irrelevance {A = A} [Γ]₁ [Γ] [A]
+    in [Γ] , ∪ᵛ {F = A} {B} [Γ] [A]′ [B] ,
+       injrᵛ {A = A} {B} {t} [Γ] [A]′ [B] [t]
   fundamentalTerm (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v) = {!!}
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
@@ -417,7 +423,22 @@ mutual
           (Σ-congᵗᵛ {F = F} {G} {H} {E} [Γ] [F] [H]
                     (λ {_} {Δ} {σ} → [U]₁′ {Δ = Δ} {σ}) (λ {_} {Δ} {σ} → [U]₂′ {Δ = Δ} {σ})
                     [F]ₜ′ [G]ₜ′ [H]ₜ′ [E]ₜ′ [F≡H]ₜ′ [G≡E]ₜ′)
-  fundamentalTermEq (∪-cong {A} {B} {C} {D} A≡B C≡D) = {!!}
+  fundamentalTermEq (∪-cong {A} {B} {C} {D} A≡B C≡D)
+    with fundamentalTermEq A≡B | fundamentalTermEq C≡D
+  ... | [Γ]₁ , modelsTermEq [U] [A]ₜ [B]ₜ [A≡B]ₜ
+      | [Γ]₂ , modelsTermEq [U]₁ [C]ₜ [D]ₜ [C≡D]ₜ =
+    let [U]₁′   = Uᵛ [Γ]₁
+        [A]ₜ′   = S.irrelevanceTerm {A = U} {t = A} [Γ]₁ [Γ]₁ [U] [U]₁′ [A]ₜ
+        [B]ₜ′   = S.irrelevanceTerm {A = U} {t = B} [Γ]₁ [Γ]₁ [U] [U]₁′ [B]ₜ
+        [C]ₜ′   = S.irrelevanceTerm {A = U} {t = C} [Γ]₂ [Γ]₁ [U]₁ [U]₁′ [C]ₜ
+        [D]ₜ′   = S.irrelevanceTerm {A = U} {t = D} [Γ]₂ [Γ]₁ [U]₁ [U]₁′ [D]ₜ
+        [A≡B]ₜ′ = S.irrelevanceEqTerm {A = U} {t = A} {u = B} [Γ]₁ [Γ]₁ [U] [U]₁′ [A≡B]ₜ
+        [C≡D]ₜ′ = S.irrelevanceEqTerm {A = U} {t = C} {u = D} [Γ]₂ [Γ]₁ [U]₁ [U]₁′ [C≡D]ₜ
+    in [Γ]₁ ,
+       modelsTermEq [U]₁′
+         (∪ᵗᵛ {F = A} {C} [Γ]₁ [A]ₜ′ [C]ₜ′)
+         (∪ᵗᵛ {F = B} {D} [Γ]₁ [B]ₜ′ [D]ₜ′)
+         (∪-congᵗᵛ {F = A} {C} {B} {D} [Γ]₁ [A]ₜ′ [C]ₜ′ [B]ₜ′ [D]ₜ′ [A≡B]ₜ′ [C≡D]ₜ′)
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b)
     with fundamentalTermEq f≡g | fundamentalTermEq a≡b
   ... | [Γ] , modelsTermEq [ΠFG] [f] [g] [f≡g]
@@ -799,9 +820,36 @@ mutual
         [p≡r] = Σ-ηᵛ {F = F} {G} {p} {r}
                      [Γ] [F] [G] [p] [r] [fst≡] [snd≡]
     in  [Γ] , modelsTermEq [ΣFG] [p] [r] [p≡r]
-  fundamentalTermEq (injl-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′) = {!!}
-  fundamentalTermEq (injr-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′) = {!!}
-  fundamentalTermEq (cases-cong {t} {t′} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B t≡t′ u≡u′ v≡v′) = {!!}
+  fundamentalTermEq (injl-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢A | fundamental ⊢B
+  ... | [Γ] , modelsTermEq [A] [t] [t′] [t≡t′] | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂ =
+    let [B] = S.irrelevance {A = B} [Γ]₂ [Γ] [B]₂
+        [∪AB] = ∪ᵛ {F = A} {B} [Γ] [A] [B]
+    in  [Γ] , modelsTermEq [∪AB]
+                (injlᵛ {A = A} {B} {t} [Γ] [A] [B] [t])
+                (injlᵛ {A = A} {B} {t′} [Γ] [A] [B] [t′])
+                (injl-congᵛ {A = A} {B} {t} {t′} [Γ] [A] [B] [t] [t′] [t≡t′])
+  fundamentalTermEq (injr-cong {t} {t′} {A} {B} ⊢A ⊢B t≡t′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢A | fundamental ⊢B
+  ... | [Γ] , modelsTermEq [B] [t] [t′] [t≡t′] | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂ =
+    let [A] = S.irrelevance {A = A} [Γ]₁ [Γ] [A]₁
+        [∪AB] = ∪ᵛ {F = A} {B} [Γ] [A] [B]
+    in  [Γ] , modelsTermEq [∪AB]
+                (injrᵛ {A = A} {B} {t} [Γ] [A] [B] [t])
+                (injrᵛ {A = A} {B} {t′} [Γ] [A] [B] [t′])
+                (injr-congᵛ {A = A} {B} {t} {t′} [Γ] [A] [B] [t] [t′] [t≡t′])
+  fundamentalTermEq (cases-cong {t} {t′} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B t≡t′ u≡u′ v≡v′)
+    with fundamental ⊢A
+       | fundamental ⊢B
+       | fundamentalTermEq t≡t′
+       | fundamentalTermEq u≡u′
+       | fundamentalTermEq v≡v′
+  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂
+      | [Γ]₃ , modelsTermEq [A∪B] [t] [t′] [t≡t′]
+      | [Γ]₄ , modelsTermEq [A▹▹C] [u] [u′] [u≡u′]
+      | [Γ]₅ , modelsTermEq [B▹▹C] [v] [v′] [v≡v′] =
+    let [Γ]  = [Γ]₁
+    in [Γ] , modelsTermEq {!!} {!!} {!!} {!!}
   fundamentalTermEq (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
   fundamentalTermEq (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
 

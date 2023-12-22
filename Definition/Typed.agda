@@ -344,6 +344,13 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ u ∷ G [ t ]
                  -- TODO(WN): Prove that 𝔍 ∷ G [ t ] is admissible
                  → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ]
+  cases-subst    : ∀ {t t' u v A B C}
+                 → Γ ⊢ A
+                 → Γ ⊢ B
+                 → Γ ⊢ u ∷ A ▹▹ C
+                 → Γ ⊢ v ∷ B ▹▹ C
+                 → Γ ⊢ t ⇒ t' ∷ A ∪ B
+                 → Γ ⊢ cases t u v ⇒ cases t' u v ∷ C
   natrec-subst   : ∀ {z s n n′ F}
                  → Γ ∙ ℕ ⊢ F
                  → Γ     ⊢ z ∷ F [ zero ]

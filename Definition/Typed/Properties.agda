@@ -107,6 +107,7 @@ subsetTerm (fst-subst F G x) = fst-cong F G (subsetTerm x)
 subsetTerm (snd-subst F G x) = snd-cong F G (subsetTerm x)
 subsetTerm (Σ-β₁ F G x x₁) = Σ-β₁ F G x x₁
 subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
+subsetTerm (cases-subst A B u v x) = cases-cong A B (subsetTerm x) (refl u) (refl v)
 
 subset : Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
 subset (univ A⇒B) = univ (subsetTerm A⇒B)
@@ -133,6 +134,7 @@ redFirstTerm (fst-subst F G x) = fstⱼ F G (redFirstTerm x)
 redFirstTerm (snd-subst F G x) = sndⱼ F G (redFirstTerm x)
 redFirstTerm (Σ-β₁ F G x x₁) = fstⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (Σ-β₂ F G x x₁) = sndⱼ F G (prodⱼ F G x x₁)
+redFirstTerm (cases-subst A B u v x) = casesⱼ (redFirstTerm x) u v
 
 redFirst : Γ ⊢ A ⇒ B → Γ ⊢ A
 redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
@@ -172,6 +174,7 @@ neRedTerm (fst-subst _ _ d) (fstₙ n) = neRedTerm d n
 neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
 neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
 neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
+neRedTerm (cases-subst _ _ _ _ d) (casesₙ x) = neRedTerm d x
 
 neRed : (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
@@ -190,6 +193,7 @@ whnfRedTerm (fst-subst _ _ d) (ne (fstₙ n)) = neRedTerm d n
 whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
 whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
 whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
+whnfRedTerm (cases-subst _ _ _ _ d) (ne (casesₙ x)) = neRedTerm d x
 
 whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
@@ -232,6 +236,7 @@ whrDetTerm (natrec-subst x x₁ x₂ d) (natrec-subst x₃ x₄ x₅ d′) rewri
 whrDetTerm (natrec-zero x x₁ x₂) (natrec-zero x₃ x₄ x₅) = PE.refl
 whrDetTerm (natrec-suc x x₁ x₂ x₃) (natrec-suc x₄ x₅ x₆ x₇) = PE.refl
 whrDetTerm (Emptyrec-subst x d) (Emptyrec-subst x₂ d′) rewrite whrDetTerm d d′ = PE.refl
+whrDetTerm (cases-subst _ _ _ _ x) (cases-subst _ _ _ _ y) rewrite whrDetTerm x y = PE.refl
 
 whrDetTerm (app-subst d x) (β-red x₁ x₂ x₃) = ⊥-elim (whnfRedTerm d lamₙ)
 whrDetTerm (β-red x x₁ x₂) (app-subst d x₃) = ⊥-elim (whnfRedTerm d lamₙ)

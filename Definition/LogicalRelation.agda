@@ -228,7 +228,7 @@ record LogRelKit : Set₁ where
   field
     _⊩U : (Γ : Con Term ℓ) → Set
     _⊩B⟨_⟩_ : (Γ : Con Term ℓ) (W : BindingType) → Term ℓ → Set
-    _⊩∪_ : (Γ : Con Term ℓ) → Term ℓ → Set
+    _⊩∪_ : (Γ : Con Term ℓ) → Term ℓ → Set -- needed?
 
     _⊩_ : (Γ : Con Term ℓ) → Term ℓ → Set
     _⊩_≡_/_ : (Γ : Con Term ℓ) (A B : Term ℓ) → Γ ⊩ A → Set
@@ -530,6 +530,9 @@ _⊩′⟨_⟩U : (Γ : Con Term ℓ) (l : TypeLevel) → Set
 
 _⊩′⟨_⟩B⟨_⟩_ : (Γ : Con Term ℓ) (l : TypeLevel) (W : BindingType) → Term ℓ → Set
 Γ ⊩′⟨ l ⟩B⟨ W ⟩ A = Γ ⊩B⟨ W ⟩ A where open LogRelKit (kit l)
+
+_⊩′⟨_⟩▹▹_ : (Γ : Con Term ℓ) (l : TypeLevel) → Term ℓ → Set
+Γ ⊩′⟨ l ⟩▹▹ A = Γ ⊩B⟨ BΠ ⟩ A where open LogRelKit (kit l) --Γ ⊩▹▹ A
 
 _⊩′⟨_⟩∪_ : (Γ : Con Term ℓ) (l : TypeLevel) → Term ℓ → Set
 Γ ⊩′⟨ l ⟩∪ A = Γ ⊩∪ A where open LogRelKit (kit l)

@@ -363,6 +363,12 @@ mutual
   wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrec-subst {A = A} ⊢A n⇒n′) =
     (Emptyrec-subst (wk [ρ] ⊢Δ ⊢A)
                     (wkRedTerm [ρ] ⊢Δ n⇒n′))
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (cases-subst {u = u} {v = v} {A = F} {B = G} {C = C} ⊢F ⊢G ⊢u ⊢v t⇒t′) =
+    cases-subst (wk [ρ] ⊢Δ ⊢F)
+                (wk [ρ] ⊢Δ ⊢G)
+                (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ F C) (wkTerm [ρ] ⊢Δ ⊢u))
+                (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ G C) (wkTerm [ρ] ⊢Δ ⊢v))
+                (wkRedTerm [ρ] ⊢Δ t⇒t′)
 
 wkRed* : ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
