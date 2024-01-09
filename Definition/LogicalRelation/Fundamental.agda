@@ -277,7 +277,11 @@ mutual
     let [A]′ = S.irrelevance {A = A} [Γ]₁ [Γ] [A]
     in [Γ] , ∪ᵛ {F = A} {B} [Γ] [A]′ [B] ,
        injrᵛ {A = A} {B} {t} [Γ] [A]′ [B] [t]
-  fundamentalTerm (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v) = {!!}
+  fundamentalTerm (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v ⊢C)
+    with fundamentalTerm ⊢t | fundamentalTerm ⊢u | fundamentalTerm ⊢v | fundamental ⊢C
+  ... | [Γ] , [∪AB] , [t] | [Γ]₁ , [AC] , [u] | [Γ]₂ , [BC] | [Γ]₃ , [C] =
+    let [C]₁ = S.irrelevance {A = C} [Γ]₃ [Γ] [C]
+    in [Γ] , [C]₁ , {!!}
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
   fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
@@ -838,7 +842,7 @@ mutual
                 (injrᵛ {A = A} {B} {t} [Γ] [A] [B] [t])
                 (injrᵛ {A = A} {B} {t′} [Γ] [A] [B] [t′])
                 (injr-congᵛ {A = A} {B} {t} {t′} [Γ] [A] [B] [t] [t′] [t≡t′])
-  fundamentalTermEq (cases-cong {t} {t′} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B t≡t′ u≡u′ v≡v′)
+  fundamentalTermEq (cases-cong {t} {t′} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢C ⊢B t≡t′ u≡u′ v≡v′)
     with fundamental ⊢A
        | fundamental ⊢B
        | fundamentalTermEq t≡t′

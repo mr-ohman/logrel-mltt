@@ -41,7 +41,7 @@ wfTerm (fstⱼ _ _ a) = wfTerm a
 wfTerm (sndⱼ _ _ a) = wfTerm a
 wfTerm (injlⱼ a _) = wfTerm a
 wfTerm (injrⱼ _ a) = wfTerm a
-wfTerm (casesⱼ a b c) = wfTerm a
+wfTerm (casesⱼ a _ _ _) = wfTerm a
 
 wf : Γ ⊢ A → ⊢ Γ
 wf (ℕⱼ ⊢Γ) = ⊢Γ
@@ -77,9 +77,9 @@ wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
 wfEqTerm (∪-cong a b) = wfEqTerm a
 wfEqTerm (injl-cong a b c) = wfEqTerm c
 wfEqTerm (injr-cong a b c) = wfEqTerm c
-wfEqTerm (cases-cong a b c d e) = wfEqTerm c
-wfEqTerm (∪-β₁ a b c d e) = wfTerm c
-wfEqTerm (∪-β₂ a b c d e) = wfTerm c
+wfEqTerm (cases-cong A B C t u v) = wfEqTerm t
+wfEqTerm (∪-β₁ _ _ _ t _ _) = wfTerm t
+wfEqTerm (∪-β₂ _ _ _ t _ _) = wfTerm t
 
 wfEq : Γ ⊢ A ≡ B → ⊢ Γ
 wfEq (univ A≡B) = wfEqTerm A≡B
@@ -107,7 +107,9 @@ subsetTerm (fst-subst F G x) = fst-cong F G (subsetTerm x)
 subsetTerm (snd-subst F G x) = snd-cong F G (subsetTerm x)
 subsetTerm (Σ-β₁ F G x x₁) = Σ-β₁ F G x x₁
 subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
-subsetTerm (cases-subst A B u v x) = cases-cong A B (subsetTerm x) (refl u) (refl v)
+subsetTerm (cases-subst A B C u v x) = cases-cong A B C (subsetTerm x) (refl u) (refl v)
+subsetTerm (∪-β₁ A B C t u v) = ∪-β₁ A B C t u v
+subsetTerm (∪-β₂ A B C t u v) = ∪-β₂ A B C t u v
 
 subset : Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
 subset (univ A⇒B) = univ (subsetTerm A⇒B)
@@ -134,7 +136,9 @@ redFirstTerm (fst-subst F G x) = fstⱼ F G (redFirstTerm x)
 redFirstTerm (snd-subst F G x) = sndⱼ F G (redFirstTerm x)
 redFirstTerm (Σ-β₁ F G x x₁) = fstⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (Σ-β₂ F G x x₁) = sndⱼ F G (prodⱼ F G x x₁)
-redFirstTerm (cases-subst A B u v x) = casesⱼ (redFirstTerm x) u v
+redFirstTerm (cases-subst A B C u v x) = casesⱼ (redFirstTerm x) u v C
+redFirstTerm (∪-β₁ A B C t u v) = casesⱼ (injlⱼ t B) u v C
+redFirstTerm (∪-β₂ A B C t u v) = casesⱼ (injrⱼ A t) u v C
 
 redFirst : Γ ⊢ A ⇒ B → Γ ⊢ A
 redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
@@ -158,7 +162,7 @@ noNe (fstⱼ _ _ ⊢t) (fstₙ neT) = noNe ⊢t neT
 noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
-noNe (casesⱼ ⊢t ⊢u ⊢v) (casesₙ neT) = noNe ⊢t neT
+noNe (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesₙ neT) = noNe ⊢t neT
 
 -- Neutrals do not weak head reduce
 
@@ -174,7 +178,9 @@ neRedTerm (fst-subst _ _ d) (fstₙ n) = neRedTerm d n
 neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
 neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
 neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
-neRedTerm (cases-subst _ _ _ _ d) (casesₙ x) = neRedTerm d x
+neRedTerm (cases-subst _ _ _ _ _ d) (casesₙ x) = neRedTerm d x
+neRedTerm (∪-β₁ A B C t u v) (casesₙ ())
+neRedTerm (∪-β₂ A B C t u v) (casesₙ ())
 
 neRed : (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
@@ -193,7 +199,9 @@ whnfRedTerm (fst-subst _ _ d) (ne (fstₙ n)) = neRedTerm d n
 whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
 whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
 whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
-whnfRedTerm (cases-subst _ _ _ _ d) (ne (casesₙ x)) = neRedTerm d x
+whnfRedTerm (cases-subst _ _ _ _ _ d) (ne (casesₙ x)) = neRedTerm d x
+whnfRedTerm (∪-β₁ A B C t u v) (ne (casesₙ ()))
+whnfRedTerm (∪-β₂ A B C t u v) (ne (casesₙ ()))
 
 whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
@@ -236,7 +244,9 @@ whrDetTerm (natrec-subst x x₁ x₂ d) (natrec-subst x₃ x₄ x₅ d′) rewri
 whrDetTerm (natrec-zero x x₁ x₂) (natrec-zero x₃ x₄ x₅) = PE.refl
 whrDetTerm (natrec-suc x x₁ x₂ x₃) (natrec-suc x₄ x₅ x₆ x₇) = PE.refl
 whrDetTerm (Emptyrec-subst x d) (Emptyrec-subst x₂ d′) rewrite whrDetTerm d d′ = PE.refl
-whrDetTerm (cases-subst _ _ _ _ x) (cases-subst _ _ _ _ y) rewrite whrDetTerm x y = PE.refl
+whrDetTerm (cases-subst _ _ _ _ _ x) (cases-subst _ _ _ _ _ y) rewrite whrDetTerm x y = PE.refl
+whrDetTerm (∪-β₁ _ _ _ _ _ _) (∪-β₁ _ _ _ _ _ _) = PE.refl
+whrDetTerm (∪-β₂ _ _ _ _ _ _) (∪-β₂ _ _ _ _ _ _) = PE.refl
 
 whrDetTerm (app-subst d x) (β-red x₁ x₂ x₃) = ⊥-elim (whnfRedTerm d lamₙ)
 whrDetTerm (β-red x x₁ x₂) (app-subst d x₃) = ⊥-elim (whnfRedTerm d lamₙ)
@@ -248,6 +258,10 @@ whrDetTerm (fst-subst _ _ x) (Σ-β₁ F G x₁ x₂) = ⊥-elim (whnfRedTerm x 
 whrDetTerm (snd-subst _ _ x) (Σ-β₂ F G x₁ x₂) = ⊥-elim (whnfRedTerm x prodₙ)
 whrDetTerm (Σ-β₁ F G x x₁) (fst-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
 whrDetTerm (Σ-β₂ F G x x₁) (snd-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
+whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₁ A B C t u v) = ⊥-elim (whnfRedTerm x injlₙ)
+whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₂ A B C t u v) = ⊥-elim (whnfRedTerm x injrₙ)
+whrDetTerm (∪-β₁ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injlₙ)
+whrDetTerm (∪-β₂ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injrₙ)
 
 whrDet : (d : Γ ⊢ A ⇒ B) (d′ : Γ ⊢ A ⇒ B′) → B PE.≡ B′
 whrDet (univ x) (univ x₁) = whrDetTerm x x₁

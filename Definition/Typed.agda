@@ -116,6 +116,7 @@ mutual
               → Γ ⊢ t ∷ A ∪ B
               → Γ ⊢ u ∷ A ▹▹ C
               → Γ ⊢ v ∷ B ▹▹ C
+              → Γ ⊢ C -- necessary?
               → Γ ⊢ cases t u v ∷ C
 
     zeroⱼ     : ⊢ Γ
@@ -258,6 +259,7 @@ mutual
     cases-cong    : ∀ {t t' u u' v v' A B C}
                   → Γ ⊢ A
                   → Γ ⊢ B
+                  → Γ ⊢ C -- necessary?
                   → Γ ⊢ t ≡ t' ∷ A ∪ B
                   → Γ ⊢ u ≡ u' ∷ A ▹▹ C
                   → Γ ⊢ v ≡ v' ∷ B ▹▹ C
@@ -265,6 +267,7 @@ mutual
     ∪-β₁          : ∀ {A B C t u v}
                   → Γ ⊢ A
                   → Γ ⊢ B
+                  → Γ ⊢ C -- necessary?
                   → Γ ⊢ t ∷ A
                   → Γ ⊢ u ∷ A ▹▹ C
                   → Γ ⊢ v ∷ B ▹▹ C
@@ -272,6 +275,7 @@ mutual
     ∪-β₂          : ∀ {A B C t u v}
                   → Γ ⊢ A
                   → Γ ⊢ B
+                  → Γ ⊢ C -- necessary?
                   → Γ ⊢ t ∷ B
                   → Γ ⊢ u ∷ A ▹▹ C
                   → Γ ⊢ v ∷ B ▹▹ C
@@ -347,10 +351,27 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
   cases-subst    : ∀ {t t' u v A B C}
                  → Γ ⊢ A
                  → Γ ⊢ B
+                 → Γ ⊢ C -- necessary?
                  → Γ ⊢ u ∷ A ▹▹ C
                  → Γ ⊢ v ∷ B ▹▹ C
                  → Γ ⊢ t ⇒ t' ∷ A ∪ B
                  → Γ ⊢ cases t u v ⇒ cases t' u v ∷ C
+  ∪-β₁           : ∀ {A B C t u v}
+                 → Γ ⊢ A
+                 → Γ ⊢ B
+                 → Γ ⊢ C -- necessary?
+                 → Γ ⊢ t ∷ A
+                 → Γ ⊢ u ∷ A ▹▹ C
+                 → Γ ⊢ v ∷ B ▹▹ C
+                 → Γ ⊢ cases (injl t) u v ⇒ u ∘ t ∷ C
+  ∪-β₂           : ∀ {A B C t u v}
+                 → Γ ⊢ A
+                 → Γ ⊢ B
+                 → Γ ⊢ C -- necessary?
+                 → Γ ⊢ t ∷ B
+                 → Γ ⊢ u ∷ A ▹▹ C
+                 → Γ ⊢ v ∷ B ▹▹ C
+                 → Γ ⊢ cases (injr t) u v ⇒ v ∘ t ∷ C
   natrec-subst   : ∀ {z s n n′ F}
                  → Γ ∙ ℕ ⊢ F
                  → Γ     ⊢ z ∷ F [ zero ]

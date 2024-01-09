@@ -111,10 +111,11 @@ mutual
     in  PE.subst (λ x → _ ⊢ snd _ ∷ x) (PE.sym (wk-β G)) (sndⱼ ρF ρG ρt)
   wkTerm ρ ⊢Δ (injlⱼ {A} {B} {t} t∷ ⊢B) = injlⱼ (wkTerm ρ ⊢Δ t∷) (wk ρ ⊢Δ ⊢B)
   wkTerm ρ ⊢Δ (injrⱼ {A} {B} {t} ⊢A t∷) = injrⱼ (wk ρ ⊢Δ ⊢A) (wkTerm ρ ⊢Δ t∷)
-  wkTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (casesⱼ {A} {B} {C} {t} {u} {v} t∷ u∷ v∷) =
-    casesⱼ (wkTerm p ⊢Δ t∷)
-           (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ u∷))
-           (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ v∷))
+  wkTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (casesⱼ {A} {B} {C} {t} {u} {v} ⊢t ⊢u ⊢v ⊢C) =
+    casesⱼ (wkTerm p ⊢Δ ⊢t)
+           (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ ⊢u))
+           (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ ⊢v))
+           (wk p ⊢Δ ⊢C)
   wkTerm ρ ⊢Δ (zeroⱼ ⊢Γ) = zeroⱼ ⊢Δ
   wkTerm ρ ⊢Δ (sucⱼ n) = sucⱼ (wkTerm ρ ⊢Δ n)
   wkTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrecⱼ {G = G} {s = s} ⊢G ⊢z ⊢s ⊢n) =
@@ -226,21 +227,22 @@ mutual
     injl-cong (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wkEqTerm p ⊢Δ x)
   wkEqTerm p ⊢Δ (injr-cong {t} {t'} {A} {B} ⊢A ⊢B x) =
     injr-cong (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wkEqTerm p ⊢Δ x)
-  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (cases-cong {t} {t'} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B t∷ u∷ v∷) =
+  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (cases-cong {t} {t'} {u} {u'} {v} {v'} {A} {B} {C} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
     cases-cong
       (wk p ⊢Δ ⊢A)
       (wk p ⊢Δ ⊢B)
-      (wkEqTerm p ⊢Δ t∷)
-      (PE.subst (λ x → Δ ⊢ U.wk ρ u ≡ U.wk ρ u' ∷ x) (wk-▹▹ ρ A C) (wkEqTerm p ⊢Δ u∷))
-      (PE.subst (λ x → Δ ⊢ U.wk ρ v ≡ U.wk ρ v' ∷ x) (wk-▹▹ ρ B C) (wkEqTerm p ⊢Δ v∷))
-  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B t∷ u∷ v∷) =
-    ∪-β₁ (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wkTerm p ⊢Δ t∷)
-         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ u∷))
-         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ v∷))
-  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B t∷ u∷ v∷) =
-    ∪-β₂ (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wkTerm p ⊢Δ t∷)
-         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ u∷))
-         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ v∷))
+      (wk p ⊢Δ ⊢C)
+      (wkEqTerm p ⊢Δ ⊢t)
+      (PE.subst (λ x → Δ ⊢ U.wk ρ u ≡ U.wk ρ u' ∷ x) (wk-▹▹ ρ A C) (wkEqTerm p ⊢Δ ⊢u))
+      (PE.subst (λ x → Δ ⊢ U.wk ρ v ≡ U.wk ρ v' ∷ x) (wk-▹▹ ρ B C) (wkEqTerm p ⊢Δ ⊢v))
+  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+    ∪-β₁ (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wk p ⊢Δ ⊢C) (wkTerm p ⊢Δ ⊢t)
+         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ ⊢u))
+         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ ⊢v))
+  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+    ∪-β₂ (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wk p ⊢Δ ⊢C) (wkTerm p ⊢Δ ⊢t)
+         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ ⊢u))
+         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ ⊢v))
   wkEqTerm ρ ⊢Δ (suc-cong m≡n) = suc-cong (wkEqTerm ρ ⊢Δ m≡n)
   wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s′ = s′} {F = F}
                                      F≡F′ z≡z′ s≡s′ n≡n′) =
@@ -363,12 +365,23 @@ mutual
   wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (Emptyrec-subst {A = A} ⊢A n⇒n′) =
     (Emptyrec-subst (wk [ρ] ⊢Δ ⊢A)
                     (wkRedTerm [ρ] ⊢Δ n⇒n′))
-  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (cases-subst {u = u} {v = v} {A = F} {B = G} {C = C} ⊢F ⊢G ⊢u ⊢v t⇒t′) =
-    cases-subst (wk [ρ] ⊢Δ ⊢F)
-                (wk [ρ] ⊢Δ ⊢G)
-                (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ F C) (wkTerm [ρ] ⊢Δ ⊢u))
-                (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ G C) (wkTerm [ρ] ⊢Δ ⊢v))
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (cases-subst {u = u} {v = v} {A = A} {B = B} {C = C} ⊢A ⊢B ⊢C ⊢u ⊢v t⇒t′) =
+    cases-subst (wk [ρ] ⊢Δ ⊢A)
+                (wk [ρ] ⊢Δ ⊢B)
+                (wk [ρ] ⊢Δ ⊢C)
+                (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm [ρ] ⊢Δ ⊢u))
+                (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm [ρ] ⊢Δ ⊢v))
                 (wkRedTerm [ρ] ⊢Δ t⇒t′)
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (∪-β₁ {A = A} {B = B} {C = C} {t = t} {u = u} {v = v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+    ∪-β₁ (wk [ρ] ⊢Δ ⊢A) (wk [ρ] ⊢Δ ⊢B) (wk [ρ] ⊢Δ ⊢C)
+         (wkTerm [ρ] ⊢Δ ⊢t)
+         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm [ρ] ⊢Δ ⊢u))
+         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm [ρ] ⊢Δ ⊢v))
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (∪-β₂ {A = A} {B = B} {C = C} {t = t} {u = u} {v = v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+    ∪-β₂ (wk [ρ] ⊢Δ ⊢A) (wk [ρ] ⊢Δ ⊢B) (wk [ρ] ⊢Δ ⊢C)
+         (wkTerm [ρ] ⊢Δ ⊢t)
+         (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm [ρ] ⊢Δ ⊢u))
+         (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm [ρ] ⊢Δ ⊢v))
 
 wkRed* : ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
