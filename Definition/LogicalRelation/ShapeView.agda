@@ -49,7 +49,7 @@ _⊩⟨_⟩B⟨_⟩_ : (Γ : Con Term n) (l : TypeLevel) (W : BindingType) (A : 
 Γ ⊩⟨ l ⟩B⟨ W ⟩ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ A)
 
 _⊩⟨_⟩▹▹_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
-Γ ⊩⟨ l ⟩▹▹ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩▹▹ A)
+Γ ⊩⟨ l ⟩▹▹ A = {--Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ A--} MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩▹▹ A)
 
 _⊩⟨_⟩∪_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
 Γ ⊩⟨ l ⟩∪ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩∪ A)
@@ -83,10 +83,6 @@ B-intr W (emb 0<1 x) = emb 0<1 (B-intr W x)
 ∪-intr : ∀ {A l} → Γ ⊩⟨ l ⟩∪ A → Γ ⊩⟨ l ⟩ A
 ∪-intr (noemb x) = ∪ᵣ x
 ∪-intr (emb 0<1 x) = emb 0<1 (∪-intr x)
-
-▹▹-intr : ∀ {A l} → Γ ⊩⟨ l ⟩▹▹ A → Γ ⊩⟨ l ⟩ A
-▹▹-intr (noemb x) = Bᵣ BΠ x
-▹▹-intr (emb 0<1 x) = emb 0<1 (▹▹-intr x)
 
 -- Construct a specific reducible type from a general with some criterion
 
@@ -222,6 +218,13 @@ B-elim W [Π] = B-elim′ W (id (escape [Π])) [Π]
 
 Σ-elim : ∀ {F G l} → Γ ⊩⟨ l ⟩ Σ F ▹ G → Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G
 Σ-elim [Σ] = B-elim′ BΣ (id (escape [Σ])) [Σ]
+
+▹▹-intr : ∀ {A l} → Γ ⊩⟨ l ⟩▹▹ A → Γ ⊩⟨ l ⟩ A
+▹▹-intr (noemb x) = Bᵣ BΠ x
+▹▹-intr (emb 0<1 x) = emb 0<1 (▹▹-intr x)
+
+▹▹-elim : ∀ {A B l} → Γ ⊩⟨ l ⟩ A ▹▹ B → Γ ⊩⟨ l ⟩▹▹ A ▹▹ B
+▹▹-elim h = Π-elim h
 
 ∪-elim′ : ∀ {A F G l} → Γ ⊢ A ⇒* F ∪ G → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩∪ A
 ∪-elim′ D (Uᵣ′ l′ l< ⊢Γ) =
