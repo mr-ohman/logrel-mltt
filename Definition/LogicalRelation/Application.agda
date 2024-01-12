@@ -62,14 +62,14 @@ appTerm [F] [G[u]] [ΠFG] [t] [u] =
   in  appTerm′ [F] [G[u]] (Π-elim [ΠFG]) [t]′ [u]
 
 -- Helper function for application congruence of specific type derivations.
-app-congTerm′ : ∀ {n} {Γ : Con Term n} {F G t t′ u u′ l l′}
-          ([F] : Γ ⊩⟨ l′ ⟩ F)
+app-congTerm′ : ∀ {n} {Γ : Con Term n} {F G t t′ u u′ l l′ l″}
+          ([F] : Γ ⊩⟨ l″ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ Π F ▹ G)
           ([t≡t′] : Γ ⊩⟨ l ⟩ t ≡ t′ ∷ Π F ▹ G / B-intr BΠ [ΠFG])
-          ([u] : Γ ⊩⟨ l′ ⟩ u ∷ F / [F])
-          ([u′] : Γ ⊩⟨ l′ ⟩ u′ ∷ F / [F])
-          ([u≡u′] : Γ ⊩⟨ l′ ⟩ u ≡ u′ ∷ F / [F])
+          ([u] : Γ ⊩⟨ l″ ⟩ u ∷ F / [F])
+          ([u′] : Γ ⊩⟨ l″ ⟩ u′ ∷ F / [F])
+          ([u≡u′] : Γ ⊩⟨ l″ ⟩ u ≡ u′ ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ≡ t′ ∘ u′ ∷ G [ u ] / [G[u]]
 app-congTerm′ {n} {Γ} {F′} {G′} {t = t} {t′ = t′}
               [F] [G[u]] (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F]₁ [G] G-ext))
@@ -129,14 +129,14 @@ app-congTerm′ [F] [G[u]] (emb 0<1 x) [t≡t′] [u] [u′] [u≡u′] =
   app-congTerm′ [F] [G[u]] x [t≡t′] [u] [u′] [u≡u′]
 
 -- Application congruence of reducible terms.
-app-congTerm : ∀ {F G t t′ u u′ l l′}
-          ([F] : Γ ⊩⟨ l′ ⟩ F)
+app-congTerm : ∀ {F G t t′ u u′ l l′ l″}
+          ([F] : Γ ⊩⟨ l″ ⟩ F)
           ([G[u]] : Γ ⊩⟨ l′ ⟩ G [ u ])
           ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
           ([t≡t′] : Γ ⊩⟨ l ⟩ t ≡ t′ ∷ Π F ▹ G / [ΠFG])
-          ([u] : Γ ⊩⟨ l′ ⟩ u ∷ F / [F])
-          ([u′] : Γ ⊩⟨ l′ ⟩ u′ ∷ F / [F])
-          ([u≡u′] : Γ ⊩⟨ l′ ⟩ u ≡ u′ ∷ F / [F])
+          ([u] : Γ ⊩⟨ l″ ⟩ u ∷ F / [F])
+          ([u′] : Γ ⊩⟨ l″ ⟩ u′ ∷ F / [F])
+          ([u≡u′] : Γ ⊩⟨ l″ ⟩ u ≡ u′ ∷ F / [F])
         → Γ ⊩⟨ l′ ⟩ t ∘ u ≡ t′ ∘ u′ ∷ G [ u ] / [G[u]]
 app-congTerm [F] [G[u]] [ΠFG] [t≡t′] =
   let [t≡t′]′ = irrelevanceEqTerm [ΠFG] (B-intr BΠ (Π-elim [ΠFG])) [t≡t′]

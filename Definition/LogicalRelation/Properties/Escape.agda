@@ -59,7 +59,7 @@ escapeTerm (ℕᵣ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (Emptyᵣ D) (Emptyₜ e [ ⊢t , ⊢u , d ] t≡t prop) =
   conv ⊢t (sym (subset* (red D)))
-escapeTerm (Unitᵣ D) (Unitₜ e [ ⊢t , ⊢u , d ] prop) =
+escapeTerm (Unitᵣ D) (Unitₜ e [ ⊢t , ⊢u , d ] k≡k prop) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] nf) =
   conv ⊢t (sym (subset* (red D)))
@@ -87,7 +87,7 @@ escapeTermEq (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ k≡k′ prop) =
   let natK , natK′ = esplit prop
   in  ≅ₜ-red (red D) (redₜ d) (redₜ d′) Emptyₙ
              (ne natK) (ne natK′) k≡k′
-escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
+escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ k k′ [ ⊢t , ⊢x , d ] [ ⊢u , ⊢y , e ] k≡k′ prop) =
   let t≅u = ≅ₜ-η-unit ⊢t ⊢u
       A≡Unit = subset* (red D)
   in  ≅-conv t≅u (sym A≡Unit)

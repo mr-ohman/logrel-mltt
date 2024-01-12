@@ -189,6 +189,20 @@ esplit (ne (neNfₜ₌ neK neM k≡m)) = neK , neM
 
 -- Reducibility of Unit
 
+-- WHNF property of unit terms
+data Unit-prop (Γ : Con Term ℓ) : (n : Term ℓ) → Set where
+  starᵣ : Unit-prop Γ star
+  ne    : ∀ {n} → Γ ⊩neNf n ∷ Unit → Unit-prop Γ n
+
+-- WHNF property of unit term equality
+[Unit]-prop : (Γ : Con Term ℓ) (n n′ : Term ℓ) → Set
+[Unit]-prop Γ n n′ = Unit-prop Γ n × Unit-prop Γ n′
+{--
+data [Unit]-prop (Γ : Con Term ℓ) : (n n′ : Term ℓ) → Set where
+  starᵣ : [Unit]-prop Γ star star
+  ne    : ∀ {n n′} → Γ ⊩neNf n ≡ n′ ∷ Unit → [Unit]-prop Γ n n′
+--}
+
 -- Unit type
 _⊩Unit_ : (Γ : Con Term ℓ) (A : Term ℓ) → Set
 Γ ⊩Unit A = Γ ⊢ A :⇒*: Unit
@@ -201,16 +215,33 @@ record _⊩Unit_∷Unit (Γ : Con Term ℓ) (t : Term ℓ) : Set where
   inductive
   constructor Unitₜ
   field
-    n : Term ℓ
-    d : Γ ⊢ t :⇒*: n ∷ Unit
-    prop : Whnf n
+    n    : Term ℓ
+    d    : Γ ⊢ t :⇒*: n ∷ Unit
+    k≡k  : Γ ⊢ n ≅ n ∷ Unit
+    prop : Unit-prop Γ n --Whnf n
 
 -- Unit term equality
 record _⊩Unit_≡_∷Unit (Γ : Con Term ℓ) (t u : Term ℓ) : Set where
   constructor Unitₜ₌
   field
-    ⊢t : Γ ⊢ t ∷ Unit
-    ⊢u : Γ ⊢ u ∷ Unit
+--    ⊢t : Γ ⊢ t ∷ Unit
+--    ⊢u : Γ ⊢ u ∷ Unit
+    k k′ : Term ℓ
+    d    : Γ ⊢ t :⇒*: k ∷ Unit
+    d′   : Γ ⊢ u :⇒*: k′ ∷ Unit
+    k≡k′ : Γ ⊢ k ≅ k′ ∷ Unit
+    prop : [Unit]-prop Γ k k′
+
+usplit′ : ∀ {a} → Unit-prop Γ a → NUnit a
+usplit′ starᵣ = starₙ
+usplit′ (ne (neNfₜ neK ⊢k k≡k)) = ne neK
+
+usplit : ∀ {a b} → [Unit]-prop Γ a b → NUnit a × NUnit b
+usplit (u , v) = usplit′ u , usplit′ v
+{--
+usplit starᵣ = starₙ , starₙ
+usplit (ne (neNfₜ₌ neK neM k≡m)) = ne neK , ne neM
+--}
 
 -- Type levels
 

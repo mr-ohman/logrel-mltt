@@ -318,6 +318,12 @@ data Natural {n : Nat} : Term n → Set where
   sucₙ  :             Natural (suc t)
   ne    : Neutral t → Natural t
 
+-- A whnf of type Unit is either star or neutral.
+
+data NUnit {n : Nat} : Term n → Set where
+  starₙ :             NUnit star
+  ne    : Neutral t → NUnit t
+
 
 -- A (small) type in whnf is either Π A B, Σ A B, ℕ, Empty, Unit or neutral.
 -- Large types could also be U.
@@ -388,6 +394,10 @@ naturalWhnf : Natural t → Whnf t
 naturalWhnf sucₙ   = sucₙ
 naturalWhnf zeroₙ  = zeroₙ
 naturalWhnf (ne x) = ne x
+
+nunitWhnf : NUnit t → Whnf t
+nunitWhnf starₙ  = starₙ
+nunitWhnf (ne x) = ne x
 
 typeWhnf : Type A → Whnf A
 typeWhnf Πₙ     = Πₙ

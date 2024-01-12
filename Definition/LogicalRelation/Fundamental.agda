@@ -854,8 +854,8 @@ mutual
       | [Γ]₅ , modelsTermEq [B▹▹C] [v] [v′] [v≡v′] =
     let [Γ]  = [Γ]₁
     in [Γ] , modelsTermEq {!!} {!!} {!!} {!!}
-  fundamentalTermEq (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
-  fundamentalTermEq (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢t ⊢u ⊢v) = {!!}
+  fundamentalTermEq (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) = {!!}
+  fundamentalTermEq (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) = {!!}
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)

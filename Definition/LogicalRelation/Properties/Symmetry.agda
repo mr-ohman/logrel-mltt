@@ -102,6 +102,15 @@ symEmpty-prop : ∀ {k k′}
               → [Empty]-prop Γ k′ k
 symEmpty-prop (ne prop) = ne (symNeutralTerm prop)
 
+sym[Unit]-prop : ∀ {k k′}
+               → [Unit]-prop Γ k k′
+               → [Unit]-prop Γ k′ k
+sym[Unit]-prop (u , v) = v , u
+{--
+sym[Unit]-prop starᵣ = starᵣ
+sym[Unit]-prop (ne prop) = ne (symNeutralTerm prop)
+--}
+
 -- Symmetry of term equality.
 symEqTerm : ∀ {l A t u} ([A] : Γ ⊩⟨ l ⟩ A)
           → Γ ⊩⟨ l ⟩ t ≡ u ∷ A / [A]
@@ -112,8 +121,8 @@ symEqTerm (ℕᵣ D) (ℕₜ₌ k k′ d d′ t≡u prop) =
   ℕₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symNatural-prop prop)
 symEqTerm (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ t≡u prop) =
   Emptyₜ₌ k′ k d′ d (≅ₜ-sym t≡u) (symEmpty-prop prop)
-symEqTerm (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
-  Unitₜ₌ ⊢u ⊢t
+symEqTerm (Unitᵣ D) (Unitₜ₌ k k′ d d′ k≡k′ prop) =
+  Unitₜ₌ k′ k d′ d (≅ₜ-sym k≡k′) (sym[Unit]-prop prop)
 symEqTerm (ne′ K D neK K≡K) (neₜ₌ k m d d′ nf) =
   neₜ₌ m k d′ d (symNeutralTerm nf)
 symEqTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)

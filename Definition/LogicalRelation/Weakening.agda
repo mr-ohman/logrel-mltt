@@ -92,17 +92,35 @@ wkEqTermEmpty {ρ = ρ} [ρ] ⊢Δ (Emptyₜ₌ k k′ d d′ t≡u prop) =
       (wkRed:*:Term [ρ] ⊢Δ d′) (≅ₜ-wk [ρ] ⊢Δ t≡u)
       (wk[Empty]-prop [ρ] ⊢Δ prop)
 
+wkUnit-prop : ∀ {n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+            → Unit-prop Γ n
+            → Unit-prop Δ (U.wk ρ n)
+wkUnit-prop ρ ⊢Δ starᵣ = starᵣ
+wkUnit-prop ρ ⊢Δ (ne x) = ne (wkTermNe ρ ⊢Δ x)
+
 -- Unit
 wkTermUnit : ∀ {n} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
            → Γ ⊩Unit n ∷Unit → Δ ⊩Unit U.wk ρ n ∷Unit
-wkTermUnit {ρ = ρ} [ρ] ⊢Δ (Unitₜ n d prop) =
-  Unitₜ (U.wk ρ n) (wkRed:*:Term [ρ] ⊢Δ d) (wkWhnf ρ prop)
+wkTermUnit {ρ = ρ} [ρ] ⊢Δ (Unitₜ n d k≡k prop) =
+  Unitₜ (U.wk ρ n) (wkRed:*:Term [ρ] ⊢Δ d)
+        (≅ₜ-wk [ρ] ⊢Δ k≡k)  (wkUnit-prop [ρ] ⊢Δ prop)
+
+wk[Unit]-prop : ∀ {n n′} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
+              → [Unit]-prop Γ n n′
+              → [Unit]-prop Δ (U.wk ρ n) (U.wk ρ n′)
+wk[Unit]-prop ρ ⊢Δ (u , v) = wkUnit-prop ρ ⊢Δ u , wkUnit-prop ρ ⊢Δ v
+{--
+wk[Unit]-prop ρ ⊢Δ starᵣ = starᵣ
+wk[Unit]-prop ρ ⊢Δ (ne x) = ne (wkEqTermNe ρ ⊢Δ x)
+--}
 
 wkEqTermUnit : ∀ {t u} → ρ ∷ Δ ⊆ Γ → (⊢Δ : ⊢ Δ)
           → Γ ⊩Unit t ≡ u ∷Unit
           → Δ ⊩Unit U.wk ρ t ≡ U.wk ρ u ∷Unit
-wkEqTermUnit {ρ = ρ} [ρ] ⊢Δ (Unitₜ₌ ⊢t ⊢u) =
-  Unitₜ₌ (T.wkTerm [ρ] ⊢Δ ⊢t) (T.wkTerm [ρ] ⊢Δ ⊢u)
+wkEqTermUnit {ρ = ρ} [ρ] ⊢Δ (Unitₜ₌ k k′ d d′ k≡k′ prop) =
+  Unitₜ₌ (U.wk ρ k) (U.wk ρ k′)
+         (wkRed:*:Term [ρ] ⊢Δ d) (wkRed:*:Term [ρ] ⊢Δ d′)
+         (≅ₜ-wk [ρ] ⊢Δ k≡k′) (wk[Unit]-prop [ρ] ⊢Δ prop)
 
 -- Weakening of the logical relation
 
