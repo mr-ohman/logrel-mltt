@@ -36,16 +36,61 @@ private
     n : Nat
     Γ : Con Term n
 
-cases-subst* : ∀ {A B C t t′ u v}
-             → Γ ⊢ A
-             → Γ ⊢ B
-             → Γ ⊢ C
-             → Γ ⊢ u ∷ A ▹▹ C
-             → Γ ⊢ v ∷ B ▹▹ C
-             → Γ ⊢ t ⇒* t′ ∷ A ∪ B
-             → Γ ⊢ cases t u v ⇒* cases t′ u v ∷ C
-cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v (id x) = id (casesⱼ x ⊢u ⊢v ⊢C)
-cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v (x ⇨ t⇒t′) = cases-subst ⊢A ⊢B ⊢C ⊢u ⊢v x ⇨ cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v t⇒t′
+⊩neNfₗ : ∀ {n : Nat} {Γ : Con Term n} {A k k′ : Term n}
+       → Γ ⊢ k ∷ A
+       → Γ ⊩neNf k ≡ k′ ∷ A
+       → Γ ⊩neNf k ∷ A
+⊩neNfₗ {n} {Γ} {A} {k} {k′} h (neNfₜ₌ neK neM k≡m) = neNfₜ neK h (~-trans k≡m (~-sym k≡m))
+
+[Natural]-propₗ : ∀ {n : Nat} {Γ : Con Term n} {k k′ : Term n}
+                → Γ ⊢ k ∷ ℕ
+                → [Natural]-prop Γ k k′
+                → Natural-prop Γ k
+[Natural]-propₗ {n} {Γ} {k} {.(suc _)} h (sucᵣ (ℕₜ₌ k₁ k₂ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop)) =
+  sucᵣ (ℕₜ _ [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Natural]-propₗ ⊢₂ prop))
+[Natural]-propₗ {n} {Γ} {k} {.zero} h zeroᵣ = zeroᵣ
+[Natural]-propₗ {n} {Γ} {k} {k'} h (ne x) = ne (⊩neNfₗ h x)
+
+[Empty]-propₗ : ∀ {n : Nat} {Γ : Con Term n} {k k′ : Term n}
+              → Γ ⊢ k ∷ Empty
+              → [Empty]-prop Γ k k′
+              → Empty-prop Γ k
+[Empty]-propₗ {n} {Γ} {k} {k′} ⊢k (ne (neNfₜ₌ neK neM k≡m)) =
+  ne (neNfₜ neK ⊢k (~-trans k≡m (~-sym k≡m)))
+
+-- move to where it belongs
+⊩ₗ : ∀ {Γ : Con Term n} {A a b l}
+     ([A] : Γ ⊩⟨ l ⟩ A)
+   → Γ ⊩⟨ l ⟩ a ≡ b ∷ A / [A]
+   → Γ ⊩⟨ l ⟩ a ∷ A / [A]
+⊩ₗ {Γ = Γ} {A = .U} {a = a} {b = b} {l} (Uᵣ x) (Uₜ₌ A B d d′ typeA typeB A≡B [t] [u] [t≡u]) =
+  Uₜ A d typeA (≅ₜ-trans A≡B (≅ₜ-sym A≡B)) [t]
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (ℕᵣ x) (ℕₜ₌ k k′ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop) =
+  ℕₜ k [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Natural]-propₗ ⊢₂ prop)
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Emptyᵣ x) (Emptyₜ₌ k k′ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop) =
+  Emptyₜ k [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Empty]-propₗ ⊢₂ prop)
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Unitᵣ [ ⊢A , ⊢B , D ]) (Unitₜ₌ k k′ d d′ k≡k′ (prop , prop₁)) =
+  Unitₜ k d (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) prop
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m)) =
+  neₜ k d (neNfₜ neK₁ (⊢u-redₜ d) (~-trans k≡m (~-sym k≡m)))
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                                       (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g]) = [f]
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+                                       (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) = [t]
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , r , c , d , p≅r , e , f , x) = e
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {¹} (emb {_} {.⁰} 0<1 [A]) h = ⊩ₗ [A] h
+
+-- move to where it belongs
+⊩ᵣ : ∀ {Γ : Con Term n} {A a b l}
+     ([A] : Γ ⊩⟨ l ⟩ A)
+   → Γ ⊩⟨ l ⟩ a ≡ b ∷ A / [A]
+   → Γ ⊩⟨ l ⟩ b ∷ A / [A]
+⊩ᵣ {Γ = Γ} {A = A} {a = a} {b = b} {l} [A] h =
+  ⊩ₗ [A] (symEqTerm [A] h)
+
+redSecond*Term : ∀ {A t u} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ u ∷ A
+redSecond*Term (id t) = t
+redSecond*Term (t⇒t′ ⇨ t′⇒*u) = redSecond*Term t′⇒*u
 
 ▹▹∘ⱼ : ∀ {g a F G}
      → Γ ⊢     g ∷ F ▹▹ G
@@ -56,9 +101,16 @@ cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v (x ⇨ t⇒t′) = cases-subst ⊢A ⊢B �
            (wk1-sgSubst G a)
            (⊢g ∘ⱼ ⊢a)
 
-redSecond*Term : ∀ {A t u} → Γ ⊢ t ⇒* u ∷ A → Γ ⊢ u ∷ A
-redSecond*Term (id t) = t
-redSecond*Term (t⇒t′ ⇨ t′⇒*u) = redSecond*Term t′⇒*u
+cases-subst* : ∀ {A B C t t′ u v}
+             → Γ ⊢ A
+             → Γ ⊢ B
+             → Γ ⊢ C
+             → Γ ⊢ u ∷ A ▹▹ C
+             → Γ ⊢ v ∷ B ▹▹ C
+             → Γ ⊢ t ⇒* t′ ∷ A ∪ B
+             → Γ ⊢ cases t u v ⇒* cases t′ u v ∷ C
+cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v (id x) = id (casesⱼ x ⊢u ⊢v ⊢C)
+cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v (x ⇨ t⇒t′) = cases-subst ⊢A ⊢B ⊢C ⊢u ⊢v x ⇨ cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v t⇒t′
 
 cases-subst*ₗ : ∀ {A B C t t′ u v x}
               → Γ ⊢ A
@@ -90,30 +142,6 @@ cases-subst*ᵣ ⊢A ⊢B ⊢C ⊢u ⊢v ⊢x t⇒t′ injrₙ =
   ⇨∷* (∪-β₂ ⊢A ⊢B ⊢C ⊢x ⊢u ⊢v
        ⇨ id (▹▹∘ⱼ ⊢v ⊢x))
 
-{--
-substS▹▹ : ∀ {Γ : Con Term n} {F G t l}
-           ([Γ] : ⊩ᵛ Γ)
-           ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
-           ([FG] : Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ])
-           ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
-         → Γ ⊩ᵛ⟨ l ⟩ G / [Γ]
-substS▹▹ {Γ = Γ} {F = F} {G} {t} {l} [Γ] [F] [FG] [t] =
-  PE.subst (λ x → Γ ⊩ᵛ⟨ l ⟩ x / [Γ]) (wk1-sgSubst G t)
-           (substSΠ {_} {Γ} {F} {wk1 G} {t} BΠ [Γ] [F] [FG] [t])
---}
-
-{--
-▹▹appᵛ : ∀ {Γ : Con Term n} {F G t u l}
-         ([Γ] : ⊩ᵛ Γ)
-         ([F] : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
-         ([FG] : Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ])
-         ([t] : Γ ⊩ᵛ⟨ l ⟩ t ∷ F ▹▹ G / [Γ] / [FG])
-         ([u] : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
-       → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G / [Γ] / substS▹▹ {F = F} {G} {u} [Γ] [F] [FG] [u]
-▹▹appᵛ {Γ = Γ} {F = F} {G} {t} {u} {l} [Γ] [F] [FG] [t] [u] =
-  {!PE.subst (λ x → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ x / [Γ] / substS▹▹ {F = F} {G} {u} [Γ] [F] [FG] [u]) (wk1-sgSubst G t)!}
---}
-
 appTermNd : ∀ {Γ : Con Term n} {F G t u l l′ l″}
             ([F] : Γ ⊩⟨ l″ ⟩ F)
             ([G] : Γ ⊩⟨ l′ ⟩ G)
@@ -128,6 +156,24 @@ appTermNd {Γ = Γ} {F = F} {G = G} {t = t} {u = u} {l} {l′} {l″} [F] [G] [F
                    (appTerm [F]
                             (PE.subst (λ x → Γ ⊩⟨ l′ ⟩ x) (PE.sym (wk1-sgSubst G u)) [G])
                             [FG] [t] [u])
+
+substS▹▹ : ∀ {Γ : Con Term n} {F G t l}
+           ([Γ]  : ⊩ᵛ Γ)
+           ([F]  : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+           ([FG] : Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ])
+           ([t]  : Γ ⊩ᵛ⟨ l ⟩ t ∷ F / [Γ] / [F])
+         → Γ ⊩ᵛ⟨ l ⟩ G / [Γ]
+substS▹▹ {Γ = Γ} {F = F} {G} {t} {l} [Γ] [F] [FG] [t] =
+  PE.subst (λ x → Γ ⊩ᵛ⟨ l ⟩ x / [Γ]) (wk1-sgSubst G t)
+           (substSΠ {_} {Γ} {F} {wk1 G} {t} BΠ [Γ] [F] [FG] [t])
+
+subst▹▹ : {m n : Nat} (σ : Subst m n) (a b : Term n)
+        → subst σ (a ▹▹ b)
+        PE.≡ subst σ a ▹▹ subst σ b
+subst▹▹ {m} {n} σ a b =
+  PE.cong₂ (λ x y → Π x ▹ y)
+           PE.refl
+           (PE.trans (subst-wk b) (PE.sym (wk-subst b)))
 
 app-congTermNd : ∀ {Γ : Con Term n} {F G t t′ u u′ l l′ l″}
                  ([F] : Γ ⊩⟨ l″ ⟩ F)
@@ -148,6 +194,30 @@ app-congTermNd {Γ = Γ} {F = F} {G = G} {t = t} {t′ = t′} {u = u} {u′ = u
       (PE.subst (λ x → Γ ⊩⟨ l′ ⟩ x) (PE.sym (wk1-sgSubst G u)) [G])
       [FG] [t≡t′] [u] [u′] [u≡u′])
 
+▹▹appᵛ : ∀ {Γ : Con Term n} {F G t u l}
+         ([Γ]  : ⊩ᵛ Γ)
+         ([F]  : Γ ⊩ᵛ⟨ l ⟩ F / [Γ])
+         ([G]  : Γ ⊩ᵛ⟨ l ⟩ G / [Γ])
+         ([FG] : Γ ⊩ᵛ⟨ l ⟩ F ▹▹ G / [Γ])
+         ([t]  : Γ ⊩ᵛ⟨ l ⟩ t ∷ F ▹▹ G / [Γ] / [FG])
+         ([u]  : Γ ⊩ᵛ⟨ l ⟩ u ∷ F / [Γ] / [F])
+       → Γ ⊩ᵛ⟨ l ⟩ t ∘ u ∷ G / [Γ] / [G]
+▹▹appᵛ {Γ = Γ} {F = F} {G} {t} {u} {l} [Γ] [F] [G] [FG] [t] [u] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+  let [σF]    = proj₁ ([F] ⊢Δ [σ])
+      [σG]    = proj₁ ([G] ⊢Δ [σ])
+      [σFG]   = proj₁ ([FG] ⊢Δ [σ])
+      [σF▹▹G] = irrelevance′ (subst▹▹ σ F G) [σFG]
+      [σt]    = proj₁ ([t] ⊢Δ [σ])
+      [σu]    = proj₁ ([u] ⊢Δ [σ])
+  in appTermNd [σF] [σG] [σF▹▹G]
+               (irrelevanceTerm′ (subst▹▹ σ F G) [σFG] [σF▹▹G] [σt])
+               [σu] ,
+     λ {σ′} [σ′] [σ≡σ′] →
+       let [σu≡u′] = proj₂ ([u] ⊢Δ [σ]) [σ′] [σ≡σ′]
+           [σt≡t′] = proj₂ ([t] ⊢Δ [σ]) [σ′] [σ≡σ′]
+       in app-congTermNd [σF] [σG] [σF▹▹G]
+                         (irrelevanceEqTerm′ (subst▹▹ σ F G) [σFG] [σF▹▹G] [σt≡t′])
+                         [σu] (⊩ᵣ [σF] [σu≡u′]) [σu≡u′]
 
 -- Reducibility of cases with a specific typing derivation
 cases′ : ∀ {A B C t u v l l′}
@@ -249,58 +319,6 @@ cases″ {Γ = Γ} {A = A} {B = B} {C = C} {t = t} {u = u} {v = v} {l} {l′} [C
          (irrelevanceTerm [∪AB] (∪-intr (∪-elim [∪AB])) [t])
          (irrelevanceTerm [▹▹AC] (▹▹-intr (▹▹-elim [▹▹AC])) [u])
          (irrelevanceTerm [▹▹BC] (▹▹-intr (▹▹-elim [▹▹BC])) [v])
-
-⊩neNfₗ : ∀ {n : Nat} {Γ : Con Term n} {A k k′ : Term n}
-       → Γ ⊢ k ∷ A
-       → Γ ⊩neNf k ≡ k′ ∷ A
-       → Γ ⊩neNf k ∷ A
-⊩neNfₗ {n} {Γ} {A} {k} {k′} h (neNfₜ₌ neK neM k≡m) = neNfₜ neK h (~-trans k≡m (~-sym k≡m))
-
-[Natural]-propₗ : ∀ {n : Nat} {Γ : Con Term n} {k k′ : Term n}
-                → Γ ⊢ k ∷ ℕ
-                → [Natural]-prop Γ k k′
-                → Natural-prop Γ k
-[Natural]-propₗ {n} {Γ} {k} {.(suc _)} h (sucᵣ (ℕₜ₌ k₁ k₂ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop)) =
-  sucᵣ (ℕₜ _ [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Natural]-propₗ ⊢₂ prop))
-[Natural]-propₗ {n} {Γ} {k} {.zero} h zeroᵣ = zeroᵣ
-[Natural]-propₗ {n} {Γ} {k} {k'} h (ne x) = ne (⊩neNfₗ h x)
-
-[Empty]-propₗ : ∀ {n : Nat} {Γ : Con Term n} {k k′ : Term n}
-              → Γ ⊢ k ∷ Empty
-              → [Empty]-prop Γ k k′
-              → Empty-prop Γ k
-[Empty]-propₗ {n} {Γ} {k} {k′} ⊢k (ne (neNfₜ₌ neK neM k≡m)) =
-  ne (neNfₜ neK ⊢k (~-trans k≡m (~-sym k≡m)))
-
--- move to where it belongs
-⊩ₗ : ∀ {Γ : Con Term n} {A a b l}
-     ([A] : Γ ⊩⟨ l ⟩ A)
-   → Γ ⊩⟨ l ⟩ a ≡ b ∷ A / [A]
-   → Γ ⊩⟨ l ⟩ a ∷ A / [A]
-⊩ₗ {Γ = Γ} {A = .U} {a = a} {b = b} {l} (Uᵣ x) (Uₜ₌ A B d d′ typeA typeB A≡B [t] [u] [t≡u]) =
-  Uₜ A d typeA (≅ₜ-trans A≡B (≅ₜ-sym A≡B)) [t]
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (ℕᵣ x) (ℕₜ₌ k k′ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop) =
-  ℕₜ k [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Natural]-propₗ ⊢₂ prop)
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Emptyᵣ x) (Emptyₜ₌ k k′ [ ⊢₁ , ⊢₂ , d ] d′ k≡k′ prop) =
-  Emptyₜ k [ ⊢₁ , ⊢₂ , d ] (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) ([Empty]-propₗ ⊢₂ prop)
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Unitᵣ [ ⊢A , ⊢B , D ]) (Unitₜ₌ k k′ d d′ k≡k′ (prop , prop₁)) =
-  Unitₜ k d (≅ₜ-trans k≡k′ (≅ₜ-sym k≡k′)) prop
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (ne′ K D neK K≡K) (neₜ₌ k m d d′ (neNfₜ₌ neK₁ neM k≡m)) =
-  neₜ k d (neNfₜ neK₁ (⊢u-redₜ d) (~-trans k≡m (~-sym k≡m)))
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-                                       (Πₜ₌ f g d d' funcF funcG f≡g [f] [g] [f≡g]) = [f]
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
-                                       (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) = [t]
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , r , c , d , p≅r , e , f , x) = e
-⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {¹} (emb {_} {.⁰} 0<1 [A]) h = ⊩ₗ [A] h
-
--- move to where it belongs
-⊩ᵣ : ∀ {Γ : Con Term n} {A a b l}
-     ([A] : Γ ⊩⟨ l ⟩ A)
-   → Γ ⊩⟨ l ⟩ a ≡ b ∷ A / [A]
-   → Γ ⊩⟨ l ⟩ b ∷ A / [A]
-⊩ᵣ {Γ = Γ} {A = A} {a = a} {b = b} {l} [A] h =
-  ⊩ₗ [A] (symEqTerm [A] h)
 
 cases-cong′ : ∀ {A B C t t′ u u′ v v′ l l′}
             ([C] : Γ ⊩⟨ l ⟩ C)
@@ -489,14 +507,6 @@ cases-cong″ {Γ = Γ} {A = A} {B = B} {C = C} {t} {t′} {u} {u′} {v} {v′}
               (irrelevanceEqTerm [∪AB] (∪-intr (∪-elim [∪AB])) [t≡t′])
               (irrelevanceEqTerm [▹▹AC] (▹▹-intr (▹▹-elim [▹▹AC])) [u≡u′])
               (irrelevanceEqTerm [▹▹BC] (▹▹-intr (▹▹-elim [▹▹BC])) [v≡v′])
-
-subst▹▹ : {m n : Nat} (σ : Subst m n) (a b : Term n)
-        → subst σ (a ▹▹ b)
-        PE.≡ subst σ a ▹▹ subst σ b
-subst▹▹ {m} {n} σ a b =
-  PE.cong₂ (λ x y → Π x ▹ y)
-           PE.refl
-           (PE.trans (subst-wk b) (PE.sym (wk-subst b)))
 
 -- Validity of cases
 casesᵛ : ∀ {Γ : Con Term n} {A B C t u v l}
