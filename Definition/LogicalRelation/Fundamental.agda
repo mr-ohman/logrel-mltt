@@ -908,7 +908,7 @@ mutual
                     (casesᵛ {A = A} {B} {C} {t = injl t} {u = u} {v = v} [Γ] [A] [B] [C]
                             (injlᵛ {A = A} {B = B} {t = t} [Γ] [A] [B] [t]) [u] [v])
                     (▹▹appᵛ {F = A} {G = C} {t = u} {u = t} [Γ] [A] [C] [A▹▹C] [u]′ [t])
-                    {!!}
+                    (cases-βₗᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [C] [A] [B] [t] [u] [v])
   fundamentalTermEq (∪-β₂ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v)
     with fundamental ⊢A
        | fundamental ⊢B
@@ -936,7 +936,7 @@ mutual
                     (casesᵛ {A = A} {B} {C} {t = injr t} {u = u} {v = v} [Γ] [A] [B] [C]
                             (injrᵛ {A = A} {B = B} {t = t} [Γ] [A] [B] [t]) [u] [v])
                     (▹▹appᵛ {F = B} {G = C} {t = v} {u = t} [Γ] [B] [C] [B▹▹C] [v]′ [t])
-                    {!!}
+                    (cases-βᵣᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [C] [A] [B] [t] [u] [v])
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
