@@ -566,12 +566,26 @@ cases-congᵛ : ∀ {Γ : Con Term n} {A B C t t′ u u′ v v′ l}
               ([u≡u′] : Γ ⊩ᵛ⟨ l ⟩ u ≡ u′ ∷ A ▹▹ C / [Γ] / ▹▹ᵛ {F = A} {C} [Γ] [A] [C])
               ([v≡v'] : Γ ⊩ᵛ⟨ l ⟩ v ≡ v′ ∷ B ▹▹ C / [Γ] / ▹▹ᵛ {F = B} {C} [Γ] [B] [C])
             → Γ ⊩ᵛ⟨ l ⟩ cases t u v ≡ cases t′ u′ v′ ∷ C / [Γ] / [C]
-cases-congᵛ {Γ = Γ} {A} {B} {C} {t} {t′} {u} {u′} {v} {v′} {l} [Γ] [A] [B] [C] [t≡t′] [u≡u′] [v≡v'] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
-  {!!}
-{--
-  let [ΣFG] = Σᵛ {F = F} {G} [Γ] [F] [G]
-      ⊩σF = proj₁ ([F] ⊢Δ [σ])
-      ⊩σΣFG = proj₁ ([ΣFG] ⊢Δ [σ])
+cases-congᵛ {Γ = Γ} {A} {B} {C} {t} {t′} {u} {u′} {v} {v′} {l} [Γ] [A] [B] [C] [t≡t′] [u≡u′] [v≡v′] {Δ = Δ} {σ = σ} ⊢Δ [σ] =
+  let [∪AB]  = ∪ᵛ {F = A} {B} [Γ] [A] [B]
+      [▹▹AC] = ▹▹ᵛ {F = A} {C} [Γ] [A] [C]
+      [▹▹BC] = ▹▹ᵛ {F = B} {C} [Γ] [B] [C]
+      ⊩σC    = proj₁ ([C] ⊢Δ [σ])
+      ⊩σ∪AB  = proj₁ ([∪AB] ⊢Δ [σ])
+      ⊩σ▹▹AC = proj₁ ([▹▹AC] ⊢Δ [σ])
+      ⊩σ▹▹BC = proj₁ ([▹▹BC] ⊢Δ [σ])
       ⊩σt≡t′ = [t≡t′] ⊢Δ [σ]
-  in  fst-cong″ ⊩σF ⊩σΣFG ⊩σt≡t′
---}
+      ⊩σu≡u′ = [u≡u′] ⊢Δ [σ]
+      ⊩σv≡v′ = [v≡v′] ⊢Δ [σ]
+  in  cases-cong″ ⊩σC ⊩σ∪AB
+                  (PE.subst (λ x → Δ ⊩⟨ l ⟩ x) (subst▹▹ σ A C) ⊩σ▹▹AC)
+                  (PE.subst (λ x → Δ ⊩⟨ l ⟩ x) (subst▹▹ σ B C) ⊩σ▹▹BC)
+                  ⊩σt≡t′
+                  (irrelevanceEqTerm′ (subst▹▹ σ A C)
+                                      (proj₁ (▹▹ᵛ {_} {Γ} {A} {C} [Γ] [A] [C] ⊢Δ [σ]))
+                                      (PE.subst (λ x → Δ ⊩⟨ l ⟩ x) (subst▹▹ σ A C) ⊩σ▹▹AC)
+                                      ⊩σu≡u′)
+                  (irrelevanceEqTerm′ (subst▹▹ σ B C)
+                                      (proj₁ (▹▹ᵛ {_} {Γ} {B} {C} [Γ] [B] [C] ⊢Δ [σ]))
+                                      (PE.subst (λ x → Δ ⊩⟨ l ⟩ x) (subst▹▹ σ B C) ⊩σ▹▹BC)
+                                      ⊩σv≡v′)

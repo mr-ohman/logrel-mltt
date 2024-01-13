@@ -6,6 +6,7 @@ module Definition.LogicalRelation.Substitution.Introductions {{eqrel : EqRelSet}
 
 open import Definition.LogicalRelation.Substitution.Introductions.Pi public
 open import Definition.LogicalRelation.Substitution.Introductions.Union public
+open import Definition.LogicalRelation.Substitution.Introductions.Cases public
 open import Definition.LogicalRelation.Substitution.Introductions.Injection public
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst public
 open import Definition.LogicalRelation.Substitution.Introductions.Lambda public
