@@ -2,8 +2,9 @@
 
 module Definition.Typed.Consequences.Inequality where
 
-open import Definition.Untyped hiding (U≢ne; ℕ≢ne; B≢ne; U≢B; ℕ≢B)
+open import Definition.Untyped hiding (U≢ne; ℕ≢ne; B≢ne; U≢B; ℕ≢B; U≢∪; ℕ≢∪)
 open import Definition.Typed
+open import Definition.Typed.Properties using (subset* ; wfEq ; whnfRed* ; idRed:*:)
 open import Definition.Typed.EqRelInstance
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Irrelevance
@@ -171,6 +172,60 @@ U≢Π : ∀ {Γ : Con Term n} {F G} → _
 U≢Π {Γ = Γ} {F} {G} = U≢B {Γ = Γ} {F} {G} BΠ
 U≢Σ : ∀ {Γ : Con Term n} {F G} → _
 U≢Σ {Γ = Γ} {F} {G} = U≢B {Γ = Γ} {F} {G} BΣ
+
+U≢∪′ : ∀ {B l l′}
+       ([U] : Γ ⊩′⟨ l ⟩U)
+       ([∪] : Γ ⊩′⟨ l′ ⟩∪ B)
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (∪ᵣ [∪]) → ⊥
+U≢∪′ a b ()
+
+U≢∪-red : ∀ {C A B} → Γ ⊢ C ⇒* A ∪ B → Γ ⊢ U ≡ C → ⊥
+U≢∪-red {_} {Γ} {C} {A} {B} D =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩′⟨ l ⟩∪ B) Uᵣ ∪ᵣ
+      (λ x → extractMaybeEmb (U-elim x))
+      (λ x → extractMaybeEmb (∪-elim′ D x))
+      U≢∪′
+
+U≢∪ : ∀ {A B} → Γ ⊢ U ≡ A ∪ B → ⊥
+U≢∪ U≡∪ =
+  let _ , ⊢W = syntacticEq U≡∪
+  in  U≢∪-red (id ⊢W) U≡∪
+
+ℕ≢∪′ : ∀ {A B l l′}
+       ([ℕ] : Γ ⊩ℕ A)
+       ([∪] : Γ ⊩′⟨ l′ ⟩∪ B)
+     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (∪ᵣ [∪]) → ⊥
+ℕ≢∪′ a b ()
+
+ℕ≢∪-red : ∀ {C A B} → Γ ⊢ C ⇒* A ∪ B → Γ ⊢ ℕ ≡ C → ⊥
+ℕ≢∪-red {_} {Γ} {C} {A} {B} D =
+  A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩′⟨ l ⟩∪ B) ℕᵣ ∪ᵣ
+      (λ x → extractMaybeEmb (ℕ-elim x))
+      (λ x → extractMaybeEmb (∪-elim′ D x))
+      ℕ≢∪′
+
+ℕ≢∪ : ∀ {A B} → Γ ⊢ ℕ ≡ A ∪ B → ⊥
+ℕ≢∪ ℕ≡∪ =
+  let _ , ⊢W = syntacticEq ℕ≡∪
+  in  ℕ≢∪-red (id ⊢W) ℕ≡∪
+
+B≢∪′ : ∀ W {A B l l′}
+       ([W] : Γ ⊩′⟨ l ⟩B⟨ W ⟩ A)
+       ([∪] : Γ ⊩′⟨ l′ ⟩∪ B)
+     → ShapeView Γ l l′ _ _ (Bᵣ W [W]) (∪ᵣ [∪]) → ⊥
+B≢∪′ W a b ()
+
+B≢∪-red : ∀ W {C A B F G} → Γ ⊢ C ⇒* A ∪ B → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ C → ⊥
+B≢∪-red {_} {Γ} W {C} {A} {B} {F} {G} D =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) (λ Γ l B → Γ ⊩′⟨ l ⟩∪ B) (Bᵣ W) ∪ᵣ
+      (λ x → extractMaybeEmb (B-elim W x))
+      (λ x → extractMaybeEmb (∪-elim′ D x))
+      (B≢∪′ W)
+
+B≢∪ : ∀ W {A B F G} → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ A ∪ B → ⊥
+B≢∪ W B≡∪ =
+  let _ , ⊢W = syntacticEq B≡∪
+  in  B≢∪-red W (id ⊢W) B≡∪
 
 U≢ne′ : ∀ {K l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
