@@ -78,8 +78,8 @@ mutual
   soundnessConv↓Term (ne-ins t u x x₁) =
     let _ , neA , _ = ne~↓ x₁
         _ , t∷M , _ = syntacticEqTerm (soundness~↓ x₁)
-        M≡A = neTypeEq neA t∷M t
-    in  conv (soundness~↓ x₁) M≡A
+--        M≡A = neTypeEq neA t∷M t
+    in  conv (soundness~↓ x₁) {!!} --M≡A
   soundnessConv↓Term (univ x x₁ x₂) = inverseUnivEq x (soundnessConv↓ x₂)
   soundnessConv↓Term (zero-refl ⊢Γ) = refl (zeroⱼ ⊢Γ)
   soundnessConv↓Term (suc-cong c) = suc-cong (soundnessConv↑Term c)
