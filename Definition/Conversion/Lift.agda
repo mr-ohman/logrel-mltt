@@ -112,6 +112,9 @@ mutual
                       (lift~toConv↑′ wk[F] wkfst~))
             (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x) wkLiftId
                       (lift~toConv↑′ wk[Gfst] wksnd~))
+  lift~toConv↓′ (∪ᵣ′ A B D ⊢A ⊢B A≡A [A] [B]) D₁ ([~] A₁ D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , ∪ₙ) (D₁ , whnfB)) =
+    {!!}
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.

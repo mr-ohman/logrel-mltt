@@ -112,6 +112,30 @@ stabilityRedTerm Γ≡Δ (natrec-suc x x₁ x₂ x₃) =
                  (stabilityTerm Γ≡Δ x₂) (stabilityTerm Γ≡Δ x₃)
 stabilityRedTerm Γ≡Δ (Emptyrec-subst x d) =
   Emptyrec-subst (stability Γ≡Δ x) (stabilityRedTerm Γ≡Δ d)
+stabilityRedTerm Γ≡Δ (cases-subst ⊢A ⊢B ⊢C ⊢u ⊢v ⊢t) =
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+  in  cases-subst (stability Γ≡Δ ⊢A)
+                  (stability Γ≡Δ ⊢B)
+                  (stability Γ≡Δ ⊢C)
+                  (stabilityTerm Γ≡Δ ⊢u)
+                  (stabilityTerm Γ≡Δ ⊢v)
+                  (stabilityRedTerm Γ≡Δ ⊢t)
+stabilityRedTerm Γ≡Δ (∪-β₁ ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+  in  ∪-β₁ (stability Γ≡Δ ⊢A)
+           (stability Γ≡Δ ⊢B)
+           (stability Γ≡Δ ⊢C)
+           (stabilityTerm Γ≡Δ ⊢t)
+           (stabilityTerm Γ≡Δ ⊢u)
+           (stabilityTerm Γ≡Δ ⊢v)
+stabilityRedTerm Γ≡Δ (∪-β₂ ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+  in  ∪-β₂ (stability Γ≡Δ ⊢A)
+           (stability Γ≡Δ ⊢B)
+           (stability Γ≡Δ ⊢C)
+           (stabilityTerm Γ≡Δ ⊢t)
+           (stabilityTerm Γ≡Δ ⊢u)
+           (stabilityTerm Γ≡Δ ⊢v)
 
 -- Stability of type reductions.
 stabilityRed : ∀ {A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A ⇒ B

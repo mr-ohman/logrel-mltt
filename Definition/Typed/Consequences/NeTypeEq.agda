@@ -45,10 +45,8 @@ neTypeEq (natrecₙ neT) (natrecⱼ x t∷A t∷A₁ t∷A₂) (natrecⱼ x₁ t
   refl (substType x₁ t∷B₂)
 neTypeEq (Emptyrecₙ neT) (Emptyrecⱼ x t∷A) (Emptyrecⱼ x₁ t∷B) =
   refl x₁
-neTypeEq (casesₙ neT) (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesⱼ ⊢t₁ ⊢u₁ ⊢v₁ ⊢C₁)
-  with neTypeEq neT ⊢t₁ ⊢t
-... | q =
-  {!u might not be neutral → Add the type we're elimating into to cases as we do with empty and nat!}
+neTypeEq (casesₙ neT) (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesⱼ ⊢t₁ ⊢u₁ ⊢v₁ ⊢C₁) =
+  refl ⊢C
 neTypeEq x (conv t∷A x₁) t∷B = let q = neTypeEq x t∷A t∷B
                                in  trans (sym x₁) q
 neTypeEq x t∷A (conv t∷B x₃) = let q = neTypeEq x t∷A t∷B
