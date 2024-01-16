@@ -33,6 +33,19 @@ private
     Δ : Con Term m
     σ σ′ : Subst m n
 
+-- move to where it belongs
+⊩ᵛ-sym : ∀ {n} {Γ : Con Term n} {A B l}
+           ([Γ] : ⊩ᵛ Γ)
+           ([A] : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+           ([B] : Γ ⊩ᵛ⟨ l ⟩ B / [Γ])
+         → Γ ⊩ᵛ⟨ l ⟩ A ≡ B / [Γ] / [A]
+         → Γ ⊩ᵛ⟨ l ⟩ B ≡ A / [Γ] / [B]
+⊩ᵛ-sym {n = n} {Γ} {A} {B} {l} [Γ] [A] [B] [A≡B] {k} {Δ} {σ} ⊢Δ [σ] =
+  symEq {A = subst σ A} {B = subst σ B}
+        (proj₁ ([A] ⊢Δ [σ]))
+        (proj₁ ([B] ⊢Δ [σ]))
+        ([A≡B] ⊢Δ [σ])
+
 mutual
   -- Fundamental theorem for contexts.
   valid : ⊢ Γ → ⊩ᵛ Γ
@@ -880,14 +893,16 @@ mutual
        modelsTermEq [C]
                     (casesᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [A] [B] [C] [t] [u] [v])
                     (S.irrelevanceTerm″ {A = C′} {A′ = C} {t = cases C′ t′ u′ v′}
-                      [Γ] [Γ] [C′] [C] {!!}
+                      [Γ] [Γ] [C′] [C] (⊩ᵛ-sym {A = C} {B = C′} [Γ] [C] [C′] [C≡C′])
                       (casesᵛ {A = A} {B} {C′} {t = t′} {u = u′} {v = v′} [Γ] [A] [B] [C′] [t′]
                         (S.irrelevanceTerm″ {A = A ▹▹ C} {A′ = A ▹▹ C′} {t = u′}
                           [Γ] [Γ] (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) (▹▹ᵛ {F = A} {C′} [Γ] [A] [C′])
-                          {!!} [u′])
+                          (▹▹-congᵛ′ {A = A} {C = C} {C′ = C′} [Γ] [A] [C] [C′] [C≡C′])
+                          [u′])
                         (S.irrelevanceTerm″ {A = B ▹▹ C} {A′ = B ▹▹ C′} {t = v′} [Γ] [Γ]
                           (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) (▹▹ᵛ {F = B} {C′} [Γ] [B] [C′])
-                          {!!} [v′])))
+                          (▹▹-congᵛ′ {A = B} {C = C} {C′ = C′} [Γ] [B] [C] [C′] [C≡C′])
+                          [v′])))
                     (cases-congᵛ
                       {A = A} {B} {C} {C′} {t = t} {t′ = t′} {u = u} {u′ = u′} {v = v} {v′ = v′} [Γ] [A] [B]
                       [C] [C′] [C≡C′]

@@ -20,6 +20,7 @@ open import Definition.LogicalRelation.Properties
 open import Definition.LogicalRelation.Application
 open import Definition.LogicalRelation.Substitution
 open import Definition.LogicalRelation.Substitution.Properties
+open import Definition.LogicalRelation.Substitution.Reflexivity
 open import Definition.LogicalRelation.Substitution.Introductions.Union
 open import Definition.LogicalRelation.Substitution.Introductions.Pi
 open import Definition.LogicalRelation.Substitution.Introductions.SingleSubst
@@ -496,6 +497,16 @@ escapeTerm′ {n} {Γ} {l} {A = A} {A′ = A′} {t} [A] [A′] [A≡A′] h =
   ⊩▹▹-cong′ [A] [C] [C′] [C≡C′] x
 ⊩▹▹-cong {n = n} {Γ} {.¹} {l′} {A} {C} {C′} [A] [C] [C′] [C≡C′] (emb 0<1 (noemb x)) =
   irrelevanceEq (Bᵣ BΠ (⊩′▹▹⁰¹ x)) (emb 0<1 (Bᵣ BΠ x)) (⊩▹▹-cong′ [A] [C] [C′] [C≡C′] (⊩′▹▹⁰¹ x))
+
+▹▹-congᵛ′ : ∀ {n} {Γ : Con Term n} {l A C C′}
+             ([Γ]     : ⊩ᵛ Γ)
+             ([A]    : Γ ⊩ᵛ⟨ l ⟩ A / [Γ])
+             ([C]    : Γ ⊩ᵛ⟨ l ⟩ C / [Γ])
+             ([C′]   : Γ ⊩ᵛ⟨ l ⟩ C′ / [Γ])
+             ([C≡C′] : Γ ⊩ᵛ⟨ l ⟩ C ≡ C′ / [Γ] / [C])
+           → Γ ⊩ᵛ⟨ l ⟩ A ▹▹ C ≡ A ▹▹ C′ / [Γ] / ▹▹ᵛ {F = A} {C} [Γ] [A] [C]
+▹▹-congᵛ′ {n = n} {Γ} {l} {A} {C} {C′} [Γ] [A] [C] [C′] [C≡C′] =
+  nd-congᵛ {F = A} {F′ = A} {G = C} {G′ = C′} BΠ [Γ] [A] [A] (reflᵛ {A = A} [Γ] [A]) [C] [C′] [C≡C′]
 
 cases-cong′ : ∀ {A B C C′ t t′ u u′ v v′ l l′}
             ([C]    : Γ ⊩⟨ l ⟩ C)
