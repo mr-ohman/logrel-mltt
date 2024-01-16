@@ -71,7 +71,7 @@ data Kind : (ns : List Nat) → Set where
   Unionkind  : Kind (0 ∷ 0 ∷ [])
   Inlkind    : Kind (0 ∷ [])
   Inrkind    : Kind (0 ∷ [])
-  Caseskind  : Kind (0 ∷ 0 ∷ 0 ∷ [])
+  Caseskind  : Kind (0 ∷ 0 ∷ 0 ∷ 0 ∷ [])
 
 -- Terms are indexed by its number of unbound variables and are either:
 -- de Bruijn style variables or
@@ -153,8 +153,8 @@ injl t = gen Inlkind (t ∷ [])
 injr : (t : Term n) → Term n
 injr t = gen Inrkind (t ∷ [])
 
-cases : (t u v : Term n) → Term n
-cases t u v = gen Caseskind (t ∷ u ∷ v ∷ [])
+cases : (C t u v : Term n) → Term n
+cases C t u v = gen Caseskind (C ∷ t ∷ u ∷ v ∷ [])
 
 -- Identity function
 Id : Term n
@@ -216,7 +216,7 @@ data Neutral : Term n → Set where
   sndₙ      : Neutral t   → Neutral (snd t)
   natrecₙ   : Neutral v   → Neutral (natrec G t u v)
   Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
-  casesₙ    : Neutral t   → Neutral (cases t u v)
+  casesₙ    : Neutral t   → Neutral (cases A t u v)
 
 
 -- Weak head normal forms (whnfs).

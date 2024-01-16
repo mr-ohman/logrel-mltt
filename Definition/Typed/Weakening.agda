@@ -231,7 +231,7 @@ mutual
     cases-cong
       (wk p ⊢Δ ⊢A)
       (wk p ⊢Δ ⊢B)
-      (wk p ⊢Δ ⊢C)
+      (wkEq p ⊢Δ ⊢C)
       (wkEqTerm p ⊢Δ ⊢t)
       (PE.subst (λ x → Δ ⊢ U.wk ρ u ≡ U.wk ρ u' ∷ x) (wk-▹▹ ρ A C) (wkEqTerm p ⊢Δ ⊢u))
       (PE.subst (λ x → Δ ⊢ U.wk ρ v ≡ U.wk ρ v' ∷ x) (wk-▹▹ ρ B C) (wkEqTerm p ⊢Δ ⊢v))

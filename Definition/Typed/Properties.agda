@@ -90,6 +90,84 @@ wfEq (Π-cong F F≡H G≡E) = wf F
 wfEq (Σ-cong F x₁ x₂) = wf F
 wfEq (∪-cong x₁ x₂) = wfEq x₁
 
+{--
+mutual
+  eqTermₗ : Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A
+  eqTermₗ (refl x) = x
+  eqTermₗ (sym h) = {!!}
+  eqTermₗ (trans h h₁) = eqTermₗ h
+  eqTermₗ (conv h x) = conv (eqTermₗ h) x
+  eqTermₗ (Π-cong x h h₁) = Πⱼ (eqTermₗ h) ▹ (eqTermₗ h₁)
+  eqTermₗ (Σ-cong x h h₁) = Σⱼ (eqTermₗ h) ▹ (eqTermₗ h₁)
+  eqTermₗ (∪-cong h h₁) = (eqTermₗ h) ∪ⱼ (eqTermₗ h₁)
+  eqTermₗ (app-cong h h₁) = (eqTermₗ h) ∘ⱼ (eqTermₗ h₁)
+  eqTermₗ (β-red x x₁ x₂) = (lamⱼ x x₁) ∘ⱼ x₂
+  eqTermₗ (η-eq x x₁ x₂ h) = x₁
+  eqTermₗ (fst-cong x x₁ h) = fstⱼ x x₁ (eqTermₗ h)
+  eqTermₗ (snd-cong x x₁ h) = sndⱼ x x₁ (eqTermₗ h)
+  eqTermₗ (Σ-β₁ x x₁ x₂ x₃) = fstⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
+  eqTermₗ (Σ-β₂ x x₁ x₂ x₃) = sndⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
+  eqTermₗ (Σ-η x x₁ x₂ x₃ h h₁) = x₂
+  eqTermₗ (injl-cong x x₁ h) = injlⱼ (eqTermₗ h) x₁
+  eqTermₗ (injr-cong x x₁ h) = injrⱼ x (eqTermₗ h)
+  eqTermₗ (cases-cong x x₁ x₂ h h₁ h₂) = casesⱼ (eqTermₗ h) (eqTermₗ h₁) (eqTermₗ h₂) (typeConvₗ x₂)
+  eqTermₗ (∪-β₁ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injlⱼ x₃ x₁) x₄ x₅ x₂
+  eqTermₗ (∪-β₂ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injrⱼ x x₃) x₄ x₅ x₂
+  eqTermₗ (suc-cong h) = sucⱼ (eqTermₗ h)
+  eqTermₗ (natrec-cong x h h₁ h₂) = natrecⱼ (typeConvₗ x) (eqTermₗ h) (eqTermₗ h₁) (eqTermₗ h₂)
+  eqTermₗ (natrec-zero x x₁ x₂) = natrecⱼ x x₁ x₂ (zeroⱼ (wfTerm x₁))
+  eqTermₗ (natrec-suc x x₁ x₂ x₃) = natrecⱼ x₁ x₂ x₃ (sucⱼ x)
+  eqTermₗ (Emptyrec-cong x h) = Emptyrecⱼ (typeConvₗ x) (eqTermₗ h)
+  eqTermₗ (η-unit x x₁) = x
+
+{--
+  eqTermᵣ : Γ ⊢ t ≡ u ∷ A → Γ ⊢ u ∷ A
+  eqTermᵣ (refl x) = x
+  eqTermᵣ (sym h) = {!!}
+  eqTermᵣ (trans h h₁) = ? --eqTermᵣ h
+  eqTermᵣ (conv h x) = conv (eqTermᵣ h) x
+  eqTermᵣ (Π-cong x h h₁) = Πⱼ (eqTermᵣ h) ▹ ? --(eqTermᵣ h₁)
+  eqTermᵣ (Σ-cong x h h₁) = Σⱼ (eqTermᵣ h) ▹ ? --(eqTermᵣ h₁)
+  eqTermᵣ (∪-cong h h₁) = (eqTermᵣ h) ∪ⱼ (eqTermᵣ h₁)
+  eqTermᵣ (app-cong h h₁) = ? --(eqTermᵣ h) ∘ⱼ (eqTermᵣ h₁)
+  eqTermᵣ (β-red x x₁ x₂) = (lamⱼ x x₁) ∘ⱼ x₂
+  eqTermᵣ (η-eq x x₁ x₂ h) = x₁
+  eqTermᵣ (fst-cong x x₁ h) = fstⱼ x x₁ (eqTermᵣ h)
+  eqTermᵣ (snd-cong x x₁ h) = sndⱼ x x₁ (eqTermᵣ h)
+  eqTermᵣ (Σ-β₁ x x₁ x₂ x₃) = fstⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
+  eqTermᵣ (Σ-β₂ x x₁ x₂ x₃) = sndⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
+  eqTermᵣ (Σ-η x x₁ x₂ x₃ h h₁) = x₂
+  eqTermᵣ (injl-cong x x₁ h) = injlⱼ (eqTermᵣ h) x₁
+  eqTermᵣ (injr-cong x x₁ h) = injrⱼ x (eqTermᵣ h)
+  eqTermᵣ (cases-cong x x₁ x₂ h h₁ h₂) = casesⱼ (eqTermᵣ h) (eqTermᵣ h₁) (eqTermᵣ h₂) (typeConvₗ x₂)
+  eqTermᵣ (∪-β₁ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injlⱼ x₃ x₁) x₄ x₅ x₂
+  eqTermᵣ (∪-β₂ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injrⱼ x x₃) x₄ x₅ x₂
+  eqTermᵣ (suc-cong h) = sucⱼ (eqTermᵣ h)
+  eqTermᵣ (natrec-cong x h h₁ h₂) = natrecⱼ (typeConvₗ x) (eqTermᵣ h) (eqTermᵣ h₁) (eqTermᵣ h₂)
+  eqTermᵣ (natrec-zero x x₁ x₂) = natrecⱼ x x₁ x₂ (zeroⱼ (wfTerm x₁))
+  eqTermᵣ (natrec-suc x x₁ x₂ x₃) = natrecⱼ x₁ x₂ x₃ (sucⱼ x)
+  eqTermᵣ (Emptyrec-cong x h) = Emptyrecⱼ (typeConvₗ x) (eqTermᵣ h)
+  eqTermᵣ (η-unit x x₁) = x
+--}
+
+  typeConvₗ : Γ ⊢ A ≡ B → Γ ⊢ A
+  typeConvₗ (univ x) = univ (eqTermₗ x)
+  typeConvₗ (refl x) = x
+  typeConvₗ (sym h) = typeConvᵣ h
+  typeConvₗ (trans h h₁) = typeConvₗ h
+  typeConvₗ (Π-cong x h h₁) = Πⱼ x ▹ (typeConvₗ h₁)
+  typeConvₗ (Σ-cong x h h₁) = Σⱼ x ▹ (typeConvₗ h₁)
+  typeConvₗ (∪-cong h h₁) = (typeConvₗ h) ∪ⱼ (typeConvₗ h₁)
+
+  typeConvᵣ : Γ ⊢ A ≡ B → Γ ⊢ B
+  typeConvᵣ (univ x) = univ {!!}
+  typeConvᵣ (refl x) = x
+  typeConvᵣ (sym h) = typeConvₗ h
+  typeConvᵣ (trans h h₁) = typeConvᵣ h₁
+  typeConvᵣ (Π-cong x h h₁) = Πⱼ {!typeConvᵣ x!} ▹ {!!}
+  typeConvᵣ (Σ-cong x h h₁) = {!!}
+  typeConvᵣ (∪-cong h h₁) = {!!}
+--}
 
 -- Reduction is a subset of conversion
 
@@ -107,7 +185,7 @@ subsetTerm (fst-subst F G x) = fst-cong F G (subsetTerm x)
 subsetTerm (snd-subst F G x) = snd-cong F G (subsetTerm x)
 subsetTerm (Σ-β₁ F G x x₁) = Σ-β₁ F G x x₁
 subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
-subsetTerm (cases-subst A B C u v x) = cases-cong A B C (subsetTerm x) (refl u) (refl v)
+subsetTerm (cases-subst A B C u v x) = cases-cong A B (refl C) {--C--} (subsetTerm x) (refl u) (refl v)
 subsetTerm (∪-β₁ A B C t u v) = ∪-β₁ A B C t u v
 subsetTerm (∪-β₂ A B C t u v) = ∪-β₂ A B C t u v
 

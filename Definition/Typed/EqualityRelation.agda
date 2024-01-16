@@ -233,14 +233,15 @@ record EqRelSet : Set₁ where
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
 
     -- Cases recursion congruence
-    ~-cases : ∀ {t t′ u u′ v v′ A B C}
+    ~-cases : ∀ {t t′ u u′ v v′ A B C C′}
               → Γ ⊢ A
               → Γ ⊢ B
-              → Γ ⊢ C
+--              → Γ ⊢ C
+              → Γ ⊢ C ≅ C′
               → Γ ⊢ t ~ t′ ∷ A ∪ B
               → Γ ⊢ u ≅ u′ ∷ A ▹▹ C
               → Γ ⊢ v ≅ v′ ∷ B ▹▹ C
-              → Γ ⊢ cases t u v ~ cases t′ u′ v′ ∷ C
+              → Γ ⊢ cases C t u v ~ cases C′ t′ u′ v′ ∷ C
 
     -- Empty recursion congruence
     ~-Emptyrec : ∀ {n n′ F F′}

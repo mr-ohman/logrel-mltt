@@ -850,14 +850,14 @@ mutual
                 (injrᵛ {A = A} {B} {t} [Γ] [A] [B] [t])
                 (injrᵛ {A = A} {B} {t′} [Γ] [A] [B] [t′])
                 (injr-congᵛ {A = A} {B} {t} {t′} [Γ] [A] [B] [t] [t′] [t≡t′])
-  fundamentalTermEq (cases-cong {t} {t′} {u} {u′} {v} {v′} {A} {B} {C} ⊢A ⊢B ⊢C t≡t′ u≡u′ v≡v′)
+  fundamentalTermEq (cases-cong {t} {t′} {u} {u′} {v} {v′} {A} {B} {C} {C′} ⊢A ⊢B ⊢C≡C′ t≡t′ u≡u′ v≡v′)
     with fundamental ⊢A
        | fundamental ⊢B
-       | fundamental ⊢C
+       | fundamentalEq ⊢C≡C′
        | fundamentalTermEq t≡t′
        | fundamentalTermEq u≡u′
        | fundamentalTermEq v≡v′
-  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂ | [Γ]₃ , [C]₃
+  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂ | [Γ]₃ , [C]₃ , [C′]₃ , [C≡C′]₃
       | [Γ]₄ , modelsTermEq [A∪B]₄ [t]₄ [t′]₄ [t≡t′]₄
       | [Γ]₅ , modelsTermEq [A▹▹C]₅ [u]₅ [u′]₅ [u≡u′]₅
       | [Γ]₆ , modelsTermEq [B▹▹C]₆ [v]₆ [v′]₆ [v≡v′]₆ =
@@ -865,21 +865,24 @@ mutual
         [A]    = S.irrelevance {A = A} [Γ]₁ [Γ] [A]₁
         [B]    = S.irrelevance {A = B} [Γ]₂ [Γ] [B]₂
         [C]    = S.irrelevance {A = C} [Γ]₃ [Γ] [C]₃
+        [C′]   = S.irrelevance {A = C′} [Γ]₃ [Γ] [C′]₃
         [t]    = S.irrelevanceTerm {A = A ∪ B} {t = t} [Γ]₄ [Γ] [A∪B]₄ (∪ᵛ {F = A} {B} [Γ] [A] [B]) [t]₄
         [u]    = S.irrelevanceTerm {A = A ▹▹ C} {t = u} [Γ]₅ [Γ] [A▹▹C]₅ (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) [u]₅
         [v]    = S.irrelevanceTerm {A = B ▹▹ C} {t = v} [Γ]₆ [Γ] [B▹▹C]₆ (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) [v]₆
-        [t]′   = S.irrelevanceTerm {A = A ∪ B} {t = t′} [Γ]₄ [Γ] [A∪B]₄ (∪ᵛ {F = A} {B} [Γ] [A] [B]) [t′]₄
-        [u]′   = S.irrelevanceTerm {A = A ▹▹ C} {t = u′} [Γ]₅ [Γ] [A▹▹C]₅ (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) [u′]₅
-        [v]′   = S.irrelevanceTerm {A = B ▹▹ C} {t = v′} [Γ]₆ [Γ] [B▹▹C]₆ (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) [v′]₆
+        [t′]   = S.irrelevanceTerm {A = A ∪ B} {t = t′} [Γ]₄ [Γ] [A∪B]₄ (∪ᵛ {F = A} {B} [Γ] [A] [B]) [t′]₄
+        [u′]   = S.irrelevanceTerm {A = A ▹▹ C} {t = u′} [Γ]₅ [Γ] [A▹▹C]₅ (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) [u′]₅
+        [v′]   = S.irrelevanceTerm {A = B ▹▹ C} {t = v′} [Γ]₆ [Γ] [B▹▹C]₆ (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) [v′]₆
+        [C≡C′] = S.irrelevanceEq {A = C} {B = C′} [Γ]₃ [Γ] [C]₃ [C] [C≡C′]₃
         [t≡t′] = S.irrelevanceEqTerm {A = A ∪ B} {t = t} {u = t′}  [Γ]₄ [Γ] [A∪B]₄ (∪ᵛ {F = A} {B} [Γ] [A] [B]) [t≡t′]₄
         [u≡u′] = S.irrelevanceEqTerm {A = A ▹▹ C} {t = u} {u = u′} [Γ]₅ [Γ] [A▹▹C]₅ (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) [u≡u′]₅
         [v≡v′] = S.irrelevanceEqTerm {A = B ▹▹ C} {t = v} {u = v′} [Γ]₆ [Γ] [B▹▹C]₆ (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) [v≡v′]₆
     in [Γ] ,
        modelsTermEq [C]
                     (casesᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [A] [B] [C] [t] [u] [v])
-                    (casesᵛ {A = A} {B} {C} {t = t′} {u = u′} {v = v′} [Γ] [A] [B] [C] [t]′ [u]′ [v]′)
+                    {!!} --(casesᵛ {A = A} {B} {C′} {t = t′} {u = u′} {v = v′} [Γ] [A] [B] [C′] [t′] ? {--[u′]--} ? {--[v′]--})
                     (cases-congᵛ
-                      {A = A} {B} {C} {t = t} {t′ = t′} {u = u} {u′ = u′} {v = v} {v′ = v′} [Γ] [A] [B] [C]
+                      {A = A} {B} {C} {C′} {t = t} {t′ = t′} {u = u} {u′ = u′} {v = v} {v′ = v′} [Γ] [A] [B]
+                      [C] [C′] [C≡C′]
                       [t≡t′] [u≡u′] [v≡v′])
   fundamentalTermEq (∪-β₁ {A} {B} {C} {t} {u} {v} ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v)
     with fundamental ⊢A
