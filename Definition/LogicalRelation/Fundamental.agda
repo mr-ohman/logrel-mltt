@@ -879,7 +879,15 @@ mutual
     in [Γ] ,
        modelsTermEq [C]
                     (casesᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [A] [B] [C] [t] [u] [v])
-                    {!!} --(casesᵛ {A = A} {B} {C′} {t = t′} {u = u′} {v = v′} [Γ] [A] [B] [C′] [t′] ? {--[u′]--} ? {--[v′]--})
+                    (S.irrelevanceTerm″ {A = C′} {A′ = C} {t = cases C′ t′ u′ v′}
+                      [Γ] [Γ] [C′] [C] {!!}
+                      (casesᵛ {A = A} {B} {C′} {t = t′} {u = u′} {v = v′} [Γ] [A] [B] [C′] [t′]
+                        (S.irrelevanceTerm″ {A = A ▹▹ C} {A′ = A ▹▹ C′} {t = u′}
+                          [Γ] [Γ] (▹▹ᵛ {F = A} {C} [Γ] [A] [C]) (▹▹ᵛ {F = A} {C′} [Γ] [A] [C′])
+                          {!!} [u′])
+                        (S.irrelevanceTerm″ {A = B ▹▹ C} {A′ = B ▹▹ C′} {t = v′} [Γ] [Γ]
+                          (▹▹ᵛ {F = B} {C} [Γ] [B] [C]) (▹▹ᵛ {F = B} {C′} [Γ] [B] [C′])
+                          {!!} [v′])))
                     (cases-congᵛ
                       {A = A} {B} {C} {C′} {t = t} {t′ = t′} {u = u} {u′ = u′} {v = v} {v′ = v′} [Γ] [A] [B]
                       [C] [C′] [C≡C′]
