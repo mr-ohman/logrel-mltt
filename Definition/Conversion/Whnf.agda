@@ -71,4 +71,6 @@ whnfConv↓Term (zero-refl x) = ℕₙ , zeroₙ , zeroₙ
 whnfConv↓Term (suc-cong x) = ℕₙ , sucₙ , sucₙ
 whnfConv↓Term (η-eq x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functionWhnf y₁
 whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , productWhnf rProd
+whnfConv↓Term (∪₁-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionLWhnf pInj , injectionLWhnf rInj
+whnfConv↓Term (∪₂-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionRWhnf pInj , injectionRWhnf rInj
 whnfConv↓Term (η-unit _ _ tWhnf uWhnf) = Unitₙ , tWhnf , uWhnf

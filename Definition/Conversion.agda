@@ -150,6 +150,20 @@ mutual
               → Γ ⊢ fst p [conv↑] fst r ∷ F
               → Γ ⊢ snd p [conv↑] snd r ∷ G [ fst p ]
               → Γ ⊢ p [conv↓] r ∷ Σ F ▹ G
+    ∪₁-η      : ∀ {p r pa ra A B}
+              → Γ ⊢ p ∷ A ∪ B
+              → Γ ⊢ r ∷ A ∪ B
+              → InjectionL p pa
+              → InjectionL r ra
+              → Γ ⊢ pa [conv↑] ra ∷ A
+              → Γ ⊢ p [conv↓] r ∷ A ∪ B
+    ∪₂-η      : ∀ {p r pa ra A B}
+              → Γ ⊢ p ∷ A ∪ B
+              → Γ ⊢ r ∷ A ∪ B
+              → InjectionR p pa
+              → InjectionR r ra
+              → Γ ⊢ pa [conv↑] ra ∷ B -- This could be: Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ B
+              → Γ ⊢ p [conv↓] r ∷ A ∪ B
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit

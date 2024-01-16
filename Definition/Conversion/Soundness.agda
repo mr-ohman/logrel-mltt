@@ -93,4 +93,14 @@ mutual
         fst≡ = soundnessConv↑Term fstConv
         snd≡ = soundnessConv↑Term sndConv
     in  Σ-η ⊢F ⊢G ⊢p ⊢r fst≡ snd≡
+  soundnessConv↓Term (∪₁-η ⊢p ⊢r injlₙ injlₙ cnv) =
+    let ⊢∪AB    = syntacticTerm ⊢p
+        ⊢A , ⊢B = syntactic∪ ⊢∪AB
+        p≡ = soundnessConv↑Term cnv
+    in  injl-cong ⊢A ⊢B p≡
+  soundnessConv↓Term (∪₂-η ⊢p ⊢r injrₙ injrₙ cnv) =
+    let ⊢∪AB    = syntacticTerm ⊢p
+        ⊢A , ⊢B = syntactic∪ ⊢∪AB
+        p≡ = soundnessConv↑Term cnv
+    in  injr-cong ⊢A ⊢B p≡
   soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]
