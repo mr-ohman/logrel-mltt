@@ -163,6 +163,16 @@ mutual
                                                     (soundnessConv↑Term fstConv))
         Δsnd≡ = convConvTerm Δsnd≡₁ ΔGfstt≡Gfstu
     in  Σ-η Δ⊢r Δ⊢p rProd pProd Δfst≡ Δsnd≡
+  symConv↓Term Γ≡Δ (∪₁-η ⊢p ⊢r pInj rInj cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in ∪₁-η Δ⊢r Δ⊢p rInj pInj Δc≡
+  symConv↓Term Γ≡Δ (∪₂-η ⊢p ⊢r pInj rInj cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in ∪₂-η Δ⊢r Δ⊢p rInj pInj Δc≡
   symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

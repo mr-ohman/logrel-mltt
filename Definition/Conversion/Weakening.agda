@@ -121,6 +121,18 @@ mutual
         (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
                   (wk-β G)
                   (wkConv↑Term [ρ] ⊢Δ sndConv))
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₁-η {A = A} {B = B} ⊢p ⊢r pInj rInj cnv) =
+    ∪₁-η (wkTerm [ρ] ⊢Δ ⊢p)
+         (wkTerm [ρ] ⊢Δ ⊢r)
+         (wkInjectionL ρ pInj)
+         (wkInjectionL ρ rInj)
+         (wkConv↑Term [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₂-η {A = A} {B = B} ⊢p ⊢r pInj rInj cnv) =
+    ∪₂-η (wkTerm [ρ] ⊢Δ ⊢p)
+         (wkTerm [ρ] ⊢Δ ⊢r)
+         (wkInjectionR ρ pInj)
+         (wkInjectionR ρ rInj)
+         (wkConv↑Term [ρ] ⊢Δ cnv)
   wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
     η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
            (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)

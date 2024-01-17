@@ -84,6 +84,26 @@ mutual
             rProd
             (convConv↑Term Γ≡Δ F≡ fstConv)
             (convConv↑Term Γ≡Δ (substTypeEq G≡ (refl ⊢fst)) sndConv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₁-η ⊢p ⊢r pInj rInj cnv)
+    with ∪≡A A≡B whnfB
+  ... | C , D , PE.refl =
+    let C≡ , D≡ = ∪-injectivity A≡B
+        ⊢C = proj₁ (syntacticEq C≡)
+        ⊢D = proj₁ (syntacticEq D≡)
+    in  ∪₁-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pInj rInj
+             (convConv↑Term Γ≡Δ C≡ cnv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₂-η ⊢p ⊢r pInj rInj cnv)
+    with ∪≡A A≡B whnfB
+  ... | C , D , PE.refl =
+    let C≡ , D≡ = ∪-injectivity A≡B
+        ⊢C = proj₁ (syntacticEq C≡)
+        ⊢D = proj₁ (syntacticEq D≡)
+    in  ∪₂-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pInj rInj
+             (convConv↑Term Γ≡Δ D≡ cnv)
   convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

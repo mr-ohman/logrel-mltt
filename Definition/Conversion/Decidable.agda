@@ -395,7 +395,8 @@ mutual
 
   -- Decidability of algorithmic equality of terms.
   decConv↑Term : ∀ {t u A}
-               → Γ ⊢ t [conv↑] t ∷ A → Γ ⊢ u [conv↑] u ∷ A
+               → Γ ⊢ t [conv↑] t ∷ A
+               → Γ ⊢ u [conv↑] u ∷ A
                → Dec (Γ ⊢ t [conv↑] u ∷ A)
   decConv↑Term ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
                ([↑]ₜ B₁ t″ u″ D₁ d₁ d″ whnfB₁ whnft″ whnfu″ t<>u₁)
@@ -433,7 +434,8 @@ mutual
 
   -- Decidability of algorithmic equality of terms in WHNF.
   decConv↓Term : ∀ {t u A}
-               → Γ ⊢ t [conv↓] t ∷ A → Γ ⊢ u [conv↓] u ∷ A
+               → Γ ⊢ t [conv↓] t ∷ A
+               → Γ ⊢ u [conv↓] u ∷ A
                → Dec (Γ ⊢ t [conv↓] u ∷ A)
   -- True cases
   decConv↓Term (zero-refl x) (zero-refl x₁) = yes (zero-refl x)
@@ -495,6 +497,28 @@ mutual
   ... | no ¬Q = no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q } )
   decConv↓Term (Σ-η _ _ _ _ _ _) (Σ-η _ _ _ _ _ _)
     | no ¬P = no (λ { (Σ-η _ _ _ _ P _) → ¬P P } )
+  decConv↓Term (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) (∪₁-η {p₁} {.p₁} {pa₁} {.pa₁} ⊢u ⊢v injlₙ injlₙ cnv′)
+    with decConv↑Term cnv cnv′
+  ... | yes P = yes (∪₁-η ⊢t ⊢u injlₙ injlₙ P)
+  ... | no P = no (λ { (∪₁-η x x₁ injlₙ injlₙ x₄) → P x₄ })
+  decConv↓Term (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) (∪₂-η {p₁} {.p₁} {pa₁} {.pa₁} ⊢u ⊢v injrₙ injrₙ cnv′)
+    with decConv↑Term cnv cnv′
+  ... | yes P = yes (∪₂-η ⊢t ⊢u injrₙ injrₙ P)
+  ... | no P = no (λ { (∪₂-η x x₁ injrₙ injrₙ x₄) → P x₄ })
+  decConv↓Term (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) (∪₂-η {p₁} {.p₁} {pa₁} {.pa₁} ⊢u ⊢v injrₙ injrₙ cnv′) =
+    no c
+    where
+    c : ∀ {Γ} → ¬ Γ ⊢ injl pa [conv↓] injr pa₁ ∷ A ∪ B
+    c (ne-ins x x₁ () x₃)
+    c (∪₁-η x x₁ x₂ () x₄)
+    c (∪₂-η x x₁ () x₃ x₄)
+  decConv↓Term (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) (∪₁-η {p₁} {.p₁} {pa₁} {.pa₁} ⊢u ⊢v injlₙ injlₙ cnv′) =
+    no c
+    where
+    c : ∀ {Γ} → ¬ Γ ⊢ injr pa [conv↓] injl pa₁ ∷ A ∪ B
+    c (ne-ins x x₁ () x₃)
+    c (∪₁-η x x₁ () x₂ x₄)
+    c (∪₂-η x x₁ x₃ () x₄)
   decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁)
                with decConv↑Term x₅ x₁₁
   decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁) | yes p =

@@ -255,8 +255,16 @@ mutual
     Σ-η (stabilityTerm Γ≡Δ ⊢p) (stabilityTerm Γ≡Δ ⊢r)
         pProd rProd
         (stabilityConv↑Term Γ≡Δ fstConv) (stabilityConv↑Term Γ≡Δ sndConv)
-  stabilityConv↓Term Γ≡Δ (∪₁-η ⊢p ⊢r pInj rInj cnv) = {!!}
-  stabilityConv↓Term Γ≡Δ (∪₂-η ⊢p ⊢r pInj rInj cnv) = {!!}
+  stabilityConv↓Term Γ≡Δ (∪₁-η ⊢p ⊢r pInj rInj cnv) =
+    ∪₁-η (stabilityTerm Γ≡Δ ⊢p)
+         (stabilityTerm Γ≡Δ ⊢r)
+         pInj rInj
+         (stabilityConv↑Term Γ≡Δ cnv)
+  stabilityConv↓Term Γ≡Δ (∪₂-η ⊢p ⊢r pInj rInj cnv) =
+    ∪₂-η (stabilityTerm Γ≡Δ ⊢p)
+         (stabilityTerm Γ≡Δ ⊢r)
+         pInj rInj
+         (stabilityConv↑Term Γ≡Δ cnv)
   stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

@@ -129,3 +129,20 @@ B≡A {A} W W≡A whnfA | [W] , [A] , [W≡A] =
 Π≡A {Γ = Γ} {A} {F} {G} = B≡A {Γ = Γ} {A} {F} {G} BΠ
 Σ≡A : ∀ {Γ : Con Term n} {A F G} → _
 Σ≡A {Γ = Γ} {A} {F} {G} = B≡A {Γ = Γ} {A} {F} {G} BΣ
+
+∪≡A′ : ∀ {A B C l}
+         ([∪] : Γ ⊩⟨ l ⟩∪ B ∪ C)
+       → Γ ⊩⟨ l ⟩ B ∪ C ≡ A / (∪-intr [∪])
+       → Whnf A
+       → ∃₂ λ D E → A PE.≡ D ∪ E
+∪≡A′ (noemb [∪]) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) whnfA =
+  S′ , T′ , whnfRed* D′ whnfA
+∪≡A′ (emb 0<1 [∪]) [∪≡A] whnfA = ∪≡A′ [∪] [∪≡A] whnfA
+
+∪≡A : ∀ {A B C}
+    → Γ ⊢ B ∪ C ≡ A
+    → Whnf A
+    → ∃₂ λ D E → A PE.≡ D ∪ E
+∪≡A {A} {B} {C} ∪≡A whnfA with reducibleEq ∪≡A
+∪≡A {A} {B} {C} ∪≡A whnfA | [∪] , [A] , [∪≡A] =
+  ∪≡A′ (∪-elim [∪]) (irrelevanceEq [∪] (∪-intr (∪-elim [∪])) [∪≡A]) whnfA
