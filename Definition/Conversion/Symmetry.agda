@@ -5,6 +5,7 @@ module Definition.Conversion.Symmetry where
 open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
+open import Definition.Typed.Weakening using (▹▹-cong)
 open import Definition.Conversion
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
@@ -66,6 +67,17 @@ mutual
                     (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
                     (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
                     (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
+  sym~↑ Γ≡Δ (cases-cong ⊢C t~t′ ⊢u ⊢v) =
+    let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , t′~t = sym~↓ Γ≡Δ t~t′
+        D , E , ≡∪ = ∪≡A A≡B whnfB
+        X≡ , Y≡ = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡∪ A≡B)
+        C≡ = soundnessConv↑ ⊢C
+    in  _ ,  C≡ ,
+        cases-cong (symConv↑ Γ≡Δ ⊢C)
+                   (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡∪ t′~t)
+                   (convConvTerm (symConv↑Term Γ≡Δ ⊢u) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq X≡)) X≡ C≡)))
+                   (convConvTerm (symConv↑Term Γ≡Δ ⊢v) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq Y≡)) Y≡ C≡)))
   sym~↑ Γ≡Δ (Emptyrec-cong x t~u) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u

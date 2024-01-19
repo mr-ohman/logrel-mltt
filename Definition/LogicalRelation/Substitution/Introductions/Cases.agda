@@ -325,19 +325,6 @@ typedRed : ∀ {A B} → Γ ⊢ A ⇒* B → Γ ⊢ A
 typedRed (id x) = x
 typedRed (univ x ⇨ h) = univ (redFirstTerm x)
 
-▹▹-intro : ∀ {A B}
-           → Γ ⊢ A
-           → Γ ⊢ B
-           → Γ ⊢ A ▹▹ B
-▹▹-intro ⊢A ⊢B = Πⱼ ⊢A ▹ ⊢wk (step id) (wf ⊢A ∙ ⊢A) ⊢B
-
-▹▹-cong : ∀ {A B C D}
-           → Γ ⊢ A
-           → Γ ⊢ A ≡ B
-           → Γ ⊢ C ≡ D
-           → Γ ⊢ A ▹▹ C ≡ B ▹▹ D
-▹▹-cong ⊢A ⊢A≡B ⊢C≡D = Π-cong ⊢A ⊢A≡B (⊢wkEq (step id) (wf ⊢A ∙ ⊢A) ⊢C≡D)
-
 escapeTerm′ : ∀ {n} {Γ : Con Term n} {l A A′ t}
                 ([A]    : Γ ⊩⟨ l ⟩ A)
                 ([A′]   : Γ ⊩⟨ l ⟩ A′)

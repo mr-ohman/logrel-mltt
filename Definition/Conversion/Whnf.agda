@@ -28,10 +28,15 @@ mutual
   ne~↑ (snd-cong x) =
     let _ , pNe , rNe = ne~↓ x
     in  sndₙ pNe , sndₙ rNe
-  ne~↑ (natrec-cong x x₁ x₂ x₃) = let _ , q , w = ne~↓ x₃
-                                  in  natrecₙ q , natrecₙ w
-  ne~↑ (Emptyrec-cong x x₁) = let _ , q , w = ne~↓ x₁
-                              in Emptyrecₙ q , Emptyrecₙ w
+  ne~↑ (natrec-cong x x₁ x₂ x₃) =
+    let _ , q , w = ne~↓ x₃
+    in  natrecₙ q , natrecₙ w
+  ne~↑ (cases-cong ⊢C ⊢t ⊢u ⊢v) =
+    let _ , q , w = ne~↓ ⊢t
+    in  casesₙ q , casesₙ w
+  ne~↑ (Emptyrec-cong x x₁) =
+    let _ , q , w = ne~↓ x₁
+    in  Emptyrecₙ q , Emptyrecₙ w
 
   -- Extraction of neutrality and WHNF from algorithmic equality of neutrals
   -- with type in WHNF.
@@ -73,4 +78,5 @@ whnfConv↓Term (η-eq x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functio
 whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , productWhnf rProd
 whnfConv↓Term (∪₁-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionLWhnf pInj , injectionLWhnf rInj
 whnfConv↓Term (∪₂-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionRWhnf pInj , injectionRWhnf rInj
+--whnfConv↓Term (∪₃-η ⊢p ⊢r pNeu rNeu) = ∪ₙ , ne pNeu , ne rNeu
 whnfConv↓Term (η-unit _ _ tWhnf uWhnf) = Unitₙ , tWhnf , uWhnf

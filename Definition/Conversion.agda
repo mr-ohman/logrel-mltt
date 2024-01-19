@@ -48,6 +48,12 @@ mutual
                   → Γ ⊢ h [conv↑] g ∷ Π ℕ ▹ (F ▹▹ F [ suc (var x0) ]↑)
                   → Γ ⊢ k ~ l ↓ ℕ
                   → Γ ⊢ natrec F a₀ h k ~ natrec G b₀ g l ↑ F [ k ]
+    cases-cong    : ∀ {t t' u u' v v' A B C C'}
+                  → Γ ⊢ C [conv↑] C'
+                  → Γ ⊢ t ~ t' ↓ A ∪ B
+                  → Γ ⊢ u [conv↑] u' ∷ A ▹▹ C
+                  → Γ ⊢ v [conv↑] v' ∷ B ▹▹ C
+                  → Γ ⊢ cases C t u v ~ cases C' t' u' v' ↑ C
     Emptyrec-cong : ∀ {k l F G}
                   → Γ ⊢ F [conv↑] G
                   → Γ ⊢ k ~ l ↓ Empty
@@ -155,15 +161,21 @@ mutual
               → Γ ⊢ r ∷ A ∪ B
               → InjectionL p pa
               → InjectionL r ra
-              → Γ ⊢ pa [conv↑] ra ∷ A
+              → Γ ⊢ pa [conv↑] ra ∷ A -- This could be: Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ B
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
     ∪₂-η      : ∀ {p r pa ra A B}
               → Γ ⊢ p ∷ A ∪ B
               → Γ ⊢ r ∷ A ∪ B
               → InjectionR p pa
               → InjectionR r ra
-              → Γ ⊢ pa [conv↑] ra ∷ B -- This could be: Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ B
+              → Γ ⊢ pa [conv↑] ra ∷ B
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
+{--    ∪₃-η      : ∀ {p r A B}
+              → Γ ⊢ p ∷ A ∪ B
+              → Γ ⊢ r ∷ A ∪ B
+              → Neutral p
+              → Neutral r
+              → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit

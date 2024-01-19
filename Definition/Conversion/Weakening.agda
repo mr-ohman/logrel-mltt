@@ -42,6 +42,16 @@ mutual
                           (PE.subst (λ x → Δ ⊢ U.wk ρ h [conv↑] U.wk ρ g ∷ x)
                                     (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
                           (wk~↓ [ρ] ⊢Δ t~u))
+  wk~↑ {ρ = ρ} {Δ = Δ} [ρ] ⊢Δ (cases-cong {t} {t′} {u} {u′} {v} {v′} {A} {B} {C} {C′} ⊢C ⊢t ⊢u ⊢v) =
+    cases-cong {A = U.wk ρ A} {B = U.wk ρ B} {C = U.wk ρ C} {C' = U.wk ρ C′}
+               (wkConv↑ [ρ] ⊢Δ ⊢C)
+               (wk~↓ [ρ] ⊢Δ ⊢t)
+               (PE.subst (λ x → Δ ⊢ U.wk ρ u [conv↑] U.wk ρ u′ ∷ x)
+                         (wk-▹▹ ρ A C)
+                         (wkConv↑Term [ρ] ⊢Δ ⊢u))
+               (PE.subst (λ x → Δ ⊢ U.wk ρ v [conv↑] U.wk ρ v′ ∷ x)
+                         (wk-▹▹ ρ B C)
+                         (wkConv↑Term [ρ] ⊢Δ ⊢v))
   wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (Emptyrec-cong {k} {l} {F} {G} x t~u) =
     Emptyrec-cong (wkConv↑ [ρ] ⊢Δ x) (wk~↓ [ρ] ⊢Δ t~u)
 

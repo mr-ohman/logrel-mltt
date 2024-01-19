@@ -110,8 +110,9 @@ mutual
     in  η-unit [t] [u] tUnit uUnit
 
 -- Conversion of algorithmic equality with the same context.
-convConvTerm : ∀ {t u A B}
-              → Γ ⊢ t [conv↑] u ∷ A
-              → Γ ⊢ A ≡ B
-              → Γ ⊢ t [conv↑] u ∷ B
-convConvTerm t<>u A≡B = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u
+abstract
+  convConvTerm : ∀ {t u A B}
+               → Γ ⊢ t [conv↑] u ∷ A
+               → Γ ⊢ A ≡ B
+               → Γ ⊢ t [conv↑] u ∷ B
+  convConvTerm t<>u A≡B = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u

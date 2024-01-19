@@ -171,6 +171,11 @@ mutual
                    (stabilityConv↑Term Γ≡Δ x₂)
                    (stabilityConv↑Term Γ≡Δ x₃)
                    (stability~↓ Γ≡Δ k~l)
+  stability~↑ Γ≡Δ (cases-cong ⊢C ⊢t ⊢u ⊢v) =
+    cases-cong (stabilityConv↑ Γ≡Δ ⊢C)
+               (stability~↓ Γ≡Δ ⊢t)
+               (stabilityConv↑Term Γ≡Δ ⊢u)
+               (stabilityConv↑Term Γ≡Δ ⊢v)
   stability~↑ Γ≡Δ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (stabilityConv↑ Γ≡Δ x₁)
                 (stability~↓ Γ≡Δ k~l)

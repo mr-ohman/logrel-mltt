@@ -20,7 +20,7 @@ private
     n : Nat
     Γ : Con Term n
 
-mutual
+abstract mutual
   -- Algorithmic equality of neutrals is well-formed.
   soundness~↑ : ∀ {k l A} → Γ ⊢ k ~ l ↑ A → Γ ⊢ k ≡ l ∷ A
   soundness~↑ (var-refl x x≡y) = PE.subst (λ y → _ ⊢ _ ≡ var y ∷ _) x≡y (refl x)
@@ -38,6 +38,13 @@ mutual
   soundness~↑ (natrec-cong x₁ x₂ x₃ k~l) =
     natrec-cong (soundnessConv↑ x₁) (soundnessConv↑Term x₂)
                 (soundnessConv↑Term x₃) (soundness~↓ k~l)
+  soundness~↑ (cases-cong {A = A} {B = B} {C} {C′} ⊢C ⊢t ⊢u ⊢v) =
+    cases-cong (proj₁ (syntactic∪ (proj₁ (syntacticEqTerm (soundness~↓ ⊢t)))))
+               (proj₂ (syntactic∪ (proj₁ (syntacticEqTerm (soundness~↓ ⊢t)))))
+               (soundnessConv↑ ⊢C)
+               (soundness~↓ ⊢t)
+               (soundnessConv↑Term ⊢u)
+               (soundnessConv↑Term ⊢v)
   soundness~↑ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (soundnessConv↑ x₁) (soundness~↓ k~l)
 
@@ -103,4 +110,5 @@ mutual
         ⊢A , ⊢B = syntactic∪ ⊢∪AB
         p≡ = soundnessConv↑Term cnv
     in  injr-cong ⊢A ⊢B p≡
+--  soundnessConv↓Term (∪₃-η ⊢p ⊢r pNeu rNeu) = {!!}
   soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]

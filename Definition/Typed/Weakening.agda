@@ -5,6 +5,7 @@ module Definition.Typed.Weakening where
 open import Definition.Untyped as U hiding (wk ; _∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
+open import Definition.Typed.Properties using (wf)
 
 open import Tools.Nat
 import Tools.PropositionalEquality as PE
@@ -411,3 +412,16 @@ wkRed:*:Term : ρ ∷ Δ ⊆ Γ →
              in ⊢ Δ → Γ ⊢ t :⇒*: u ∷ A → Δ ⊢ ρt :⇒*: ρu ∷ ρA
 wkRed:*:Term ρ ⊢Δ [ ⊢t , ⊢u , d ] =
   [ wkTerm ρ ⊢Δ ⊢t , wkTerm ρ ⊢Δ ⊢u , wkRed*Term ρ ⊢Δ d ]
+
+▹▹-intro : ∀ {A B}
+           → Γ ⊢ A
+           → Γ ⊢ B
+           → Γ ⊢ A ▹▹ B
+▹▹-intro ⊢A ⊢B = Πⱼ ⊢A ▹ wk (step id) (wf ⊢A ∙ ⊢A) ⊢B
+
+▹▹-cong : ∀ {A B C D}
+           → Γ ⊢ A
+           → Γ ⊢ A ≡ B
+           → Γ ⊢ C ≡ D
+           → Γ ⊢ A ▹▹ C ≡ B ▹▹ D
+▹▹-cong ⊢A ⊢A≡B ⊢C≡D = Π-cong ⊢A ⊢A≡B (wkEq (step id) (wf ⊢A ∙ ⊢A) ⊢C≡D)
