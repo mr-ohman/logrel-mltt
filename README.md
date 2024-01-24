@@ -27,7 +27,7 @@ Since then, the project has been extended in the following ways:
 ### Dependencies ###
 
 This project is written in Agda.
-It has been tested to be working with Agda version ≥ 2.6.1 and the
+It is compatible with Agda version ≥ 2.6.1 and the
 [matching standard library](https://wiki.portal.chalmers.se/agda/Libraries/StandardLibrary).
-The full list of compatible Agda versions can be found in the
+The full list of tested Agda versions can be found in the
 [continuous integration script](.github/workflows/agda-ci.yml).
