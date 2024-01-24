@@ -1,0 +1,56 @@
+name: agda-ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    name: Agda ${{ matrix.agda }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        agda: [2.6.1.3, 2.6.2.2, 2.6.3, 2.6.4, 2.6.4.1]
+
+    steps:
+
+      # Checkout to $HOME empties $HOME so we have to do it before we put stuff there.
+      - uses: actions/checkout@v4
+
+      - name: Setup Agda
+        uses: wenkokke/setup-agda@latest
+        id:   setup
+        with:
+          agda-version: ${{ matrix.agda }}
+          agda-stdlib-version: recommended
+
+      - name: Restore cache
+        uses: actions/cache/restore@v4
+        id:   cache
+        env:
+          key: ${{ runner.os }}-agda-${{ steps.setup.outputs.agda-version }}
+        with:
+          key:          ${{ env.key }}-commit-${{ github.sha }}
+          restore-keys: ${{ env.key }}-
+          path: |
+            _build
+            ~/.agda/libraries.d
+
+      - name: Build
+        run: make
+
+      - name: Save cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+          path: |
+            _build
+            ~/.agda/libraries.d
