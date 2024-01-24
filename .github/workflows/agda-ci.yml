@@ -1,15 +1,12 @@
 name: agda-ci
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+  push:         { branches: [master] }
+  pull_request: { branches: [master] }
   workflow_dispatch:
 
 jobs:
   build:
-
     name: Agda ${{ matrix.agda }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
@@ -18,10 +15,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         agda:
-          - 2.5.2
-          - 2.5.3
-          - 2.5.4.2
-          - 2.6.0.1
+          ## we need std-lib >= 1.0 which is not compatible with Agda 2.5.*
+          # - 2.6.0.1  ## build error: Ambiguous module Wk
           - 2.6.1.3
           - 2.6.2.2
           - 2.6.3
@@ -35,7 +30,8 @@ jobs:
 
       - name: Setup Agda
         uses: wenkokke/setup-agda@main
-          # 2024-01-24 should use @latest but this does not have 2.6.4.1 yet
+          # 2024-01-24 we should use @latest but this does not have 2.6.4.1 yet
+          # https://github.com/wenkokke/setup-agda/issues/205
         id:   setup
         with:
           agda-version: ${{ matrix.agda }}
