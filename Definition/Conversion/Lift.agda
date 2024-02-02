@@ -14,6 +14,7 @@ open import Definition.Conversion.Soundness
 open import Definition.Conversion.Weakening
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.Properties
+open import Definition.LogicalRelation.ShapeView
 open import Definition.LogicalRelation.Fundamental.Reducibility
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Reduction
@@ -27,6 +28,21 @@ private
   variable
     n : Nat
     Γ : Con Term n
+
+
+[conv↑]→[conv↓] : ∀ {A B t u}
+                → Whnf B
+                → Neutral t
+                → Neutral u
+                → Γ ⊢ t [conv↑] u ∷ A
+                → Γ ⊢ A ⇒* B
+                → Γ ⊢ t [conv↓] u ∷ B
+[conv↑]→[conv↓] {A = A} {B = B} {t = t} {u = u} nfB net neu ([↑]ₜ B₁ t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u) ⊢r
+  with whnfRed*Term d (ne net)
+     | whnfRed*Term d′ (ne neu)
+     | whrDet* (D , whnfB) (⊢r , nfB)
+... | PE.refl | PE.refl | PE.refl =
+  t<>u
 
 -- Lifting of algorithmic equality of types from WHNF to generic types.
 liftConv : ∀ {A B}
@@ -114,7 +130,14 @@ mutual
                       (lift~toConv↑′ wk[Gfst] wksnd~))
   lift~toConv↓′ (∪ᵣ′ A B D ⊢A ⊢B A≡A [A] [B]) D₁ ([~] A₁ D₂ whnfB k~l)
                 rewrite PE.sym (whrDet* (red D , ∪ₙ) (D₁ , whnfB)) =
-    {!!}
+    let neT , neU = ne~↑ k~l
+        t~u↓ = [~] A₁ D₂ ∪ₙ k~l
+        ⊢∪FG , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ t~u↓)
+        ⊢F , ⊢G = syntactic∪ ⊢∪FG
+        ⊢Γ = wf ⊢F
+        ⊢A , ⊢≡AB = redSubst* D₂ (∪-intr (noemb (∪ᵣ A B (idRed:*: (⊢F ∪ⱼ ⊢G)) ⊢F ⊢G (refl (⊢F ∪ⱼ ⊢G)) [A] [B])))
+        --conv₁ = lift~toConv↑′ ⊢A k~l
+    in  {!!} --∪₃-η t~u↓
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.

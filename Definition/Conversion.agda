@@ -100,6 +100,10 @@ mutual
                → Γ ⊢ F [conv↑] H
                → Γ ∙ F ⊢ G [conv↑] E
                → Γ ⊢ Σ F ▹ G [conv↓] Σ H ▹ E
+    ∪-cong     : ∀ {A B C D}
+               → Γ ⊢ A [conv↑] B
+               → Γ ⊢ C [conv↑] D
+               → Γ ⊢ A ∪ C [conv↓] B ∪ D
 
   -- Term equality.
   record _⊢_[conv↑]_∷_ (Γ : Con Term n) (t u A : Term n) : Set where
@@ -170,12 +174,16 @@ mutual
               → InjectionR r ra
               → Γ ⊢ pa [conv↑] ra ∷ B
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
-{--    ∪₃-η      : ∀ {p r A B}
-              → Γ ⊢ p ∷ A ∪ B
-              → Γ ⊢ r ∷ A ∪ B
-              → Neutral p
-              → Neutral r
+{--    ∪₃-η      : ∀ {p r A B C D}
+--              → Γ ⊢ p ∷ A ∪ B -- needed?
+--              → Γ ⊢ r ∷ A ∪ B -- needed?
+              → Γ ⊢ p ~ r ↓ C ∪ D
+              → Γ ⊢ A [conv↑] C
+              → Γ ⊢ B [conv↑] D
               → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
+    ∪₃-η      : ∀ {p r A B}
+              → Γ ⊢ p ~ r ↓ A ∪ B
+              → Γ ⊢ p [conv↓] r ∷ A ∪ B
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit

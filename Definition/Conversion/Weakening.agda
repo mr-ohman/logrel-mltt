@@ -85,6 +85,8 @@ mutual
   wkConv↓ ρ ⊢Δ (Σ-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
     in  Σ-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
+  wkConv↓ ρ ⊢Δ (∪-cong A<>B A<>B₁) =
+    ∪-cong (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ ρ ⊢Δ A<>B₁)
 
   -- Weakening of algorithmic equality of terms.
   wkConv↑Term : ∀ {t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
@@ -143,6 +145,8 @@ mutual
          (wkInjectionR ρ pInj)
          (wkInjectionR ρ rInj)
          (wkConv↑Term [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₃-η {A = A} {B = B} cnv {--c₁ c₂--}) =
+    ∪₃-η (wk~↓ [ρ] ⊢Δ cnv) {--(wkConv↑ [ρ] ⊢Δ c₁) (wkConv↑ [ρ] ⊢Δ c₂)--}
   wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
     η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
            (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)

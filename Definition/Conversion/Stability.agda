@@ -222,6 +222,9 @@ mutual
   stabilityConv↓ Γ≡Δ (Σ-cong F A<>B A<>B₁) =
     Σ-cong (stability Γ≡Δ F) (stabilityConv↑ Γ≡Δ A<>B)
            (stabilityConv↑ (Γ≡Δ ∙ refl F) A<>B₁)
+  stabilityConv↓ Γ≡Δ (∪-cong A<>B A<>B₁) =
+    ∪-cong (stabilityConv↑ Γ≡Δ A<>B)
+           (stabilityConv↑ Γ≡Δ A<>B₁)
 
   -- Stability of algorithmic equality of terms.
   stabilityConv↑Term : ∀ {t u A}
@@ -270,6 +273,10 @@ mutual
          (stabilityTerm Γ≡Δ ⊢r)
          pInj rInj
          (stabilityConv↑Term Γ≡Δ cnv)
+  stabilityConv↓Term Γ≡Δ (∪₃-η p~r {--c₁ c₂--}) =
+    ∪₃-η (stability~↓ Γ≡Δ p~r)
+--         (stabilityConv↑ Γ≡Δ c₁)
+--         (stabilityConv↑ Γ≡Δ c₂)
   stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]
