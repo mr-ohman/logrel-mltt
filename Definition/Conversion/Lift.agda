@@ -137,7 +137,7 @@ mutual
         ⊢Γ = wf ⊢F
         ⊢A , ⊢≡AB = redSubst* D₂ (∪-intr (noemb (∪ᵣ A B (idRed:*: (⊢F ∪ⱼ ⊢G)) ⊢F ⊢G (refl (⊢F ∪ⱼ ⊢G)) [A] [B])))
         --conv₁ = lift~toConv↑′ ⊢A k~l
-    in  {!!} --∪₃-η t~u↓
+    in  ∪₃-η (refl ⊢F) (refl ⊢G) t~u↓
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.

@@ -131,6 +131,9 @@ mutual
         _ , ⊢H = syntacticEq (stabilityEq Γ≡Δ F≡H)
     in  Σ-cong ⊢H (symConv↑ Γ≡Δ A<>B)
                   (symConv↑ (Γ≡Δ ∙ F≡H) A<>B₁)
+  symConv↓ Γ≡Δ (∪-cong A<>B A<>B₁) =
+    ∪-cong (symConv↑ Γ≡Δ A<>B)
+           (symConv↑ Γ≡Δ A<>B₁)
 
   -- Symmetry of algorithmic equality of terms.
   symConv↑Term : ∀ {t u A} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↑] u ∷ A → Δ ⊢ u [conv↑] t ∷ A
@@ -179,16 +182,23 @@ mutual
     let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
         Δ⊢r = stabilityTerm Γ≡Δ ⊢r
         Δc≡ = symConv↑Term Γ≡Δ cnv
-    in ∪₁-η Δ⊢r Δ⊢p rInj pInj Δc≡
+    in  ∪₁-η Δ⊢r Δ⊢p rInj pInj Δc≡
   symConv↓Term Γ≡Δ (∪₂-η ⊢p ⊢r pInj rInj cnv) =
     let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
         Δ⊢r = stabilityTerm Γ≡Δ ⊢r
         Δc≡ = symConv↑Term Γ≡Δ cnv
-    in ∪₂-η Δ⊢r Δ⊢p rInj pInj Δc≡
+    in  ∪₂-η Δ⊢r Δ⊢p rInj pInj Δc≡
+  symConv↓Term Γ≡Δ (∪₃-η c₁ c₂ t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        A′ , B′ , z = ∪≡A A≡B whnfB
+        A≡ , B≡ = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) z A≡B)
+    in  ∪₃-η (stabilityEq Γ≡Δ (trans (sym A≡) c₁))
+             (stabilityEq Γ≡Δ (trans (sym B≡) c₂))
+             (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) z u~t)
   symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]
-    in  (η-unit [u] [t] uUnit tUnit)
+    in  η-unit [u] [t] uUnit tUnit
 
 symConv↓Term′ : ∀ {t u A} → Γ ⊢ t [conv↓] u ∷ A → Γ ⊢ u [conv↓] t ∷ A
 symConv↓Term′ tConvU =

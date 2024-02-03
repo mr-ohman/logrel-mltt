@@ -145,8 +145,8 @@ mutual
          (wkInjectionR ρ pInj)
          (wkInjectionR ρ rInj)
          (wkConv↑Term [ρ] ⊢Δ cnv)
-  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₃-η {A = A} {B = B} cnv {--c₁ c₂--}) =
-    ∪₃-η (wk~↓ [ρ] ⊢Δ cnv) {--(wkConv↑ [ρ] ⊢Δ c₁) (wkConv↑ [ρ] ⊢Δ c₂)--}
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₃-η {A = A} {B = B} {C = C} {D = D} c₁ c₂ cnv) =
+    ∪₃-η (wkEq [ρ] ⊢Δ c₁) (wkEq [ρ] ⊢Δ c₂) (wk~↓ [ρ] ⊢Δ cnv)
   wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
     η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
            (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)

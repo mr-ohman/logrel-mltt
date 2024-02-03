@@ -273,10 +273,10 @@ mutual
          (stabilityTerm Γ≡Δ ⊢r)
          pInj rInj
          (stabilityConv↑Term Γ≡Δ cnv)
-  stabilityConv↓Term Γ≡Δ (∪₃-η p~r {--c₁ c₂--}) =
-    ∪₃-η (stability~↓ Γ≡Δ p~r)
---         (stabilityConv↑ Γ≡Δ c₁)
---         (stabilityConv↑ Γ≡Δ c₂)
+  stabilityConv↓Term Γ≡Δ (∪₃-η c₁ c₂ p~r) =
+    ∪₃-η (stabilityEq Γ≡Δ c₁)
+         (stabilityEq Γ≡Δ c₂)
+         (stability~↓ Γ≡Δ p~r)
   stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

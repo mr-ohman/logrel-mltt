@@ -112,11 +112,11 @@ abstract mutual
         ⊢A , ⊢B = syntactic∪ ⊢∪AB
         p≡ = soundnessConv↑Term cnv
     in  injr-cong ⊢A ⊢B p≡
-  soundnessConv↓Term (∪₃-η p~r {--c₁ c₂--}) =
+  soundnessConv↓Term (∪₃-η c₁ c₂ p~r) =
     let a≡b  = soundness~↓ p~r
         ⊢A∪B = proj₁ (syntacticEqTerm a≡b)
         ⊢A   = proj₁ (syntactic∪ ⊢A∪B)
         ⊢B   = proj₂ (syntactic∪ ⊢A∪B)
-    in  conv a≡b (∪-cong (refl ⊢A) (refl ⊢B))
+    in  conv a≡b (∪-cong c₁ c₂) --( (refl ⊢A) (refl ⊢B))
  --conv a≡b (∪-cong (sym (soundnessConv↑ c₁)) (sym (soundnessConv↑ c₂)))
   soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]

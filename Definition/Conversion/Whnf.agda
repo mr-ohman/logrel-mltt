@@ -79,5 +79,5 @@ whnfConv↓Term (η-eq x₁ x₂ y y₁ x₃) = Πₙ , functionWhnf y , functio
 whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , productWhnf rProd
 whnfConv↓Term (∪₁-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionLWhnf pInj , injectionLWhnf rInj
 whnfConv↓Term (∪₂-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionRWhnf pInj , injectionRWhnf rInj
-whnfConv↓Term (∪₃-η p~r {--c₁ c₂--}) = ∪ₙ , ne (proj₁ (proj₂ (ne~↓ p~r))) , ne (proj₂ (proj₂ (ne~↓ p~r)))
+whnfConv↓Term (∪₃-η c₁ c₂ p~r) = ∪ₙ , ne (proj₁ (proj₂ (ne~↓ p~r))) , ne (proj₂ (proj₂ (ne~↓ p~r)))
 whnfConv↓Term (η-unit _ _ tWhnf uWhnf) = Unitₙ , tWhnf , uWhnf

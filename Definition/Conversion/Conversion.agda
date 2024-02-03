@@ -180,20 +180,19 @@ mutual
              (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
              pInj rInj
              (convConv↑Term Γ≡Δ D≡ cnv)
-  convConv↓Term Γ≡Δ A≡B whnfB (∪₃-η p~r {--c₁ c₂--})
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₃-η c₁ c₂ p~r)
     with ∪≡A A≡B whnfB
   ... | C , D , PE.refl =
     let C≡ , D≡ = ∪-injectivity A≡B
-    in  ∪₃-η {!!}
-{--
-          (stability~↓ Γ≡Δ p~r)
-          {!!} {!!}
---}
+    in  ∪₃-η (stabilityEq Γ≡Δ (trans c₁ C≡))
+             (stabilityEq Γ≡Δ (trans c₂ D≡))
+             (stability~↓ Γ≡Δ p~r)
   convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]
     in  η-unit [t] [u] tUnit uUnit
 
+{--
   conv~↓ : ∀ {t u A B}
            → Whnf A
            → Whnf B
@@ -203,8 +202,6 @@ mutual
            → Δ ⊢ t ~ u ↓ B
   conv~↓ {t = t} {u = u} {A = A} {B = B} whnfA whnfB Γ≡Δ A≡B ([~] A₁ D whnfB₁ k~l) =
     [~] {!!} {!!} whnfB {!!}
-
-
 
   -- In the app case, we would need to turn the B in Γ ⊢ G [ t ] ≡ B into a substitution
   conv~↑ : ∀ {t u A B}
@@ -229,6 +226,7 @@ mutual
     {!!}
   conv~↑ {t = .(Emptyrec A _)} {u = .(Emptyrec _ _)} {A = A} {B = B} A≡B (Emptyrec-cong x x₁) =
     {!!}
+--}
 
 -- Conversion of algorithmic equality with the same context.
 abstract

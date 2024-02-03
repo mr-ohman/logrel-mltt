@@ -165,7 +165,10 @@ mutual
               → Γ ⊢ r ∷ A ∪ B
               → InjectionL p pa
               → InjectionL r ra
-              → Γ ⊢ pa [conv↑] ra ∷ A -- This could be: Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ B
+              → Γ ⊢ pa [conv↑] ra ∷ A
+              -- This could be:
+              -- → Γ ⊢ cases p (lam zero) (lam one) [conv↑] cases r (lam zero) (lam one) ∷ ℕ
+              -- → Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ A
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
     ∪₂-η      : ∀ {p r pa ra A B}
               → Γ ⊢ p ∷ A ∪ B
@@ -181,9 +184,14 @@ mutual
               → Γ ⊢ A [conv↑] C
               → Γ ⊢ B [conv↑] D
               → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
-    ∪₃-η      : ∀ {p r A B}
+{--    ∪₃-η      : ∀ {p r A B}
               → Γ ⊢ p ~ r ↓ A ∪ B
-              → Γ ⊢ p [conv↓] r ∷ A ∪ B
+              → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
+    ∪₃-η      : ∀ {p r A B C D}
+              → Γ ⊢ A ≡ C
+              → Γ ⊢ B ≡ D
+              → Γ ⊢ p ~ r ↓ A ∪ B
+              → Γ ⊢ p [conv↓] r ∷ C ∪ D
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit

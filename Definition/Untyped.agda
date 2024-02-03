@@ -134,6 +134,9 @@ zero = gen Zerokind []
 suc    : (t : Term n)       → Term n -- Successor.
 suc t = gen Suckind (t ∷ [])
 
+one : Term n
+one = suc zero
+
 natrec : (A : Term (1+ n)) (t u v : Term n) → Term n  -- Natural number recursor (A is a binder).
 natrec A t u v = gen Natreckind (A ∷ t ∷ u ∷ v ∷ [])
 
