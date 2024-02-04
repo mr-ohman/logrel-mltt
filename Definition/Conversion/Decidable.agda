@@ -559,10 +559,26 @@ mutual
     c (ne-ins x x₁ () x₃)
     c (∪₁-η x x₁ () x₂ x₄)
     c (∪₂-η x x₁ x₃ () x₄)
-  decConv↓Term (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) = {!!}
-  decConv↓Term (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) = {!!}
-  decConv↓Term (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) = {!!}
-  decConv↓Term (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) = {!!}
+  decConv↓Term {Γ = Γ} (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) =
+    no (λ x → decConv↓Term-∪ᵣ x ⊢q q)
+    where
+    q : ∀ E F → ¬ (Γ ⊢ injl pa ~ p₁ ↓ E ∪ F)
+    q E F ([~] A D whnfB ())
+  decConv↓Term {Γ = Γ} (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) =
+    no (λ x → decConv↓Term-∪ᵣ x ⊢q q)
+    where
+    q : ∀ E F → ¬ (Γ ⊢ injr pa ~ p₁ ↓ E ∪ F)
+    q E F ([~] A D whnfB ())
+  decConv↓Term {Γ = Γ} (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) (∪₁-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injlₙ injlₙ cnv) =
+    no (λ x → decConv↓Term-∪ₗ x ⊢q q)
+    where
+    q : ∀ E F → ¬ (Γ ⊢ p₁ ~ injl pa ↓ E ∪ F)
+    q E F ([~] A D whnfB ())
+  decConv↓Term {Γ = Γ} (∪₃-η {p₁} {.p₁} ⊢A ⊢B ⊢q) (∪₂-η {p} {.p} {pa} {.pa} {A} {B} ⊢t ⊢p injrₙ injrₙ cnv) =
+    no (λ x → decConv↓Term-∪ₗ x ⊢q q)
+    where
+    q : ∀ E F → ¬ (Γ ⊢ p₁ ~ injr pa ↓ E ∪ F)
+    q E F ([~] A D whnfB ())
   decConv↓Term {Γ = Γ} (∪₃-η {p} {.p} ⊢A ⊢B ⊢p) (∪₃-η {p₁} {.p₁} {A = A₁} {B = B₁} {C = C₁} {D = D₁} ⊢A′ ⊢B′ ⊢p′)
     with dec~↓ ⊢p ⊢p′
   ... | yes (A , k~l) =

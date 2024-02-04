@@ -119,6 +119,24 @@ decConv↓Term-ℕ (ne-ins x x₁ () x₃) t~t ¬u~u
 decConv↓Term-ℕ (zero-refl x) ([~] A D whnfB ()) ¬u~u
 decConv↓Term-ℕ (suc-cong x) ([~] A D whnfB ()) ¬u~u
 
+decConv↓Term-∪ₗ : ∀ {t u A B C D}
+               → Γ ⊢ t [conv↓] u ∷ A ∪ B
+               → Γ ⊢ t ~ t ↓ C ∪ D
+               → ((E F : Term ℓ) → ¬ (Γ ⊢ t ~ u ↓ E ∪ F))
+               → ⊥
+decConv↓Term-∪ₗ (∪₁-η x x₁ injlₙ injlₙ x₄) () r
+decConv↓Term-∪ₗ (∪₂-η x x₁ injrₙ injrₙ x₄) () r
+decConv↓Term-∪ₗ (∪₃-η x x₁ x₂) q r = r _ _ x₂
+
+decConv↓Term-∪ᵣ : ∀ {t u A B C D}
+               → Γ ⊢ t [conv↓] u ∷ A ∪ B
+               → Γ ⊢ u ~ u ↓ C ∪ D
+               → ((E F : Term ℓ) → ¬ (Γ ⊢ t ~ u ↓ E ∪ F))
+               → ⊥
+decConv↓Term-∪ᵣ (∪₁-η x x₁ injlₙ injlₙ x₄) () r
+decConv↓Term-∪ᵣ (∪₂-η x x₁ injrₙ injrₙ x₄) () r
+decConv↓Term-∪ᵣ (∪₃-η x x₁ x₂) q r = r _ _ x₂
+
 -- Helper function for extensional equality of Unit.
 decConv↓Term-Unit : ∀ {t u}
               → Γ ⊢ t [conv↓] t ∷ Unit → Γ ⊢ u [conv↓] u ∷ Unit
