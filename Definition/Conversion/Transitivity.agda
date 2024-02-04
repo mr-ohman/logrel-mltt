@@ -224,15 +224,29 @@ mutual
         _ , _ , vWhnf = whnfConv↓Term uConvV
     in  η-unit [t] [v] tUnit vWhnf
 
-  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∪₁-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∪₂-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∪₃-η _ _ _) = {!!}
-  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∪₁-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∪₂-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∪₃-η _ _ _) = {!!}
-  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₁-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₂-η _ _ _ _ _) = {!!}
-  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₃-η _ _ _) = {!!}
+  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ injlₙ x₅) (∪₁-η x₆ x₇ injlₙ x₉ x₁₀) =
+    let A≡ , B≡ = ∪-injectivity A≡B
+    in  ∪₁-η x₁ (conv x₇ (sym A≡B)) x₃ x₉ (transConv↑Term A≡ x₅ x₁₀)
+  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ injlₙ x₅) (∪₂-η x₆ x₇ () x₉ x₁₀)
+  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∪₃-η x₆ x₇ x₈) =
+    let n₁ , n₂ , n₃ = ne~↓ x₈
+    in  ⊥-elim (InjectionL-Neutral x₄ n₂ PE.refl)
+  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ injrₙ x₅) (∪₁-η x₆ x₇ () x₉ x₁₀)
+  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ injrₙ x₅) (∪₂-η x₆ x₇ injrₙ x₉ x₁₀) =
+    let A≡ , B≡ = ∪-injectivity A≡B
+    in  ∪₂-η x₁ (conv x₇ (sym A≡B)) x₃ x₉ (transConv↑Term B≡ x₅ x₁₀)
+  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∪₃-η x₆ x₇ x₈) =
+    let n₁ , n₂ , n₃ = ne~↓ x₈
+    in  ⊥-elim (InjectionR-Neutral x₄ n₂ PE.refl)
+  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₁-η x₆ x₇ x₈ x₉ x₁₀) =
+    let n₁ , n₂ , n₃ = ne~↓ x₃
+    in  ⊥-elim (InjectionL-Neutral x₈ n₃ PE.refl)
+  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₂-η x₆ x₇ x₈ x₉ x₁₀) =
+    let n₁ , n₂ , n₃ = ne~↓ x₃
+    in  ⊥-elim (InjectionR-Neutral x₈ n₃ PE.refl)
+  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∪₃-η x₆ x₇ x₈) =
+    let ≡1 , ≡2 = trans~↓ x₃ x₈
+    in  ∪₃-η x₁ x₂ ≡1
 
   -- Refutable cases
   transConv↓Term A≡B (ℕ-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.ℕ≢ne x₂ A≡B)
