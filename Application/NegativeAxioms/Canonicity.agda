@@ -5,7 +5,7 @@
 
 module Application.NegativeAxioms.Canonicity where
 
-open import Definition.Untyped as U
+open import Definition.Untyped as U hiding (ℕ≢∪ ; Empty≢∪)
 
 open import Definition.Typed
 open import Definition.Typed.Properties
@@ -142,6 +142,12 @@ appNeg (conv n c)    c' = appNeg n (trans c c')
 ¬negℕ (sigma _ _ _) c = ℕ≢Σ (sym c)
 ¬negℕ (conv n c)   c' = ¬negℕ n (trans c c')
 
+¬neg∪ : NegativeType Γ C → Γ ⊢ C ≡ A ∪ B → ⊥
+¬neg∪ empty         c = Empty≢∪ c
+¬neg∪ (pi _ _)      c = B≢∪ BΠ c
+¬neg∪ (sigma _ _ _) c = B≢∪ BΣ c
+¬neg∪ (conv n c)   c' = ¬neg∪ n (trans c c')
+
 -- Negative contexts
 ---------------------------------------------------------------------------
 
@@ -174,6 +180,7 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   neNeg (fstⱼ ⊢A A⊢B d  ) (fstₙ n          ) = fstNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B))
   neNeg (sndⱼ ⊢A A⊢B d  ) (sndₙ n          ) = sndNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)
   neNeg (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) = ⊥-elim (¬negℕ (neNeg d n) ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
+  neNeg (casesⱼ d _ _ _ ) (casesₙ _ n _ _  ) = ⊥-elim (¬neg∪ (neNeg d n) (refl (syntacticTerm d)))
   neNeg (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = ⊥-elim (consistent d)
   neNeg (conv d c       ) n                  = conv (neNeg d n) c
 
@@ -199,6 +206,7 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   -- * Canonical types
   nfN (Πⱼ _ ▹ _)      (Πₙ _ _)    c = ⊥-elim (U≢ℕ c)
   nfN (Σⱼ _ ▹ _)      (Σₙ _ _)    c = ⊥-elim (U≢ℕ c)
+  nfN (_ ∪ⱼ _)        (∪ₙ _ _)    c = ⊥-elim (U≢ℕ c)
   nfN (ℕⱼ _)           ℕₙ         c = ⊥-elim (U≢ℕ c)
   nfN (Emptyⱼ _)       Emptyₙ     c = ⊥-elim (U≢ℕ c)
   nfN (Unitⱼ _)        Unitₙ      c = ⊥-elim (U≢ℕ c)
@@ -206,6 +214,8 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   -- * Canonical forms
   nfN (lamⱼ _ _)      (lamₙ _)    c = ⊥-elim (ℕ≢Π (sym c))
   nfN (prodⱼ _ _ _ _) (prodₙ _ _) c = ⊥-elim (ℕ≢Σ (sym c))
+  nfN (injlⱼ _ _)     (injlₙ _)   c = ⊥-elim (ℕ≢∪ (sym c))
+  nfN (injrⱼ _ _)     (injrₙ _)   c = ⊥-elim (ℕ≢∪ (sym c))
   nfN (starⱼ _)       starₙ       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
   -- q.e.d
 

@@ -190,8 +190,22 @@ mutual
         snd≡sndprod = trans snd≡snd′ (sym sndprod≡snd′)
     in  prod fst′ snd′ , prodₙ nfFst′ nfSnd′
       , Σ-η ⊢F ⊢G ⊢t ⊢prod fst≡fstprod snd≡sndprod
-  fullRedTermConv↓ (∪₁-η ⊢p ⊢r i j ⊢pa) = {!!}
-  fullRedTermConv↓ (∪₂-η ⊢p ⊢r i j ⊢pa) = {!!}
-  fullRedTermConv↓ (∪₃-η c₁ c₂ ⊢p) = {!!}
+  fullRedTermConv↓ (∪₁-η ⊢p ⊢r injlₙ injlₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∪                   = syntacticTerm ⊢p
+        ⊢A , ⊢B              = syntactic∪ ⊢∪
+    in  injl pa′ ,
+        injlₙ nfPa′ ,
+        injl-cong ⊢A ⊢B pa≡pa′
+  fullRedTermConv↓ (∪₂-η ⊢p ⊢r injrₙ injrₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∪                   = syntacticTerm ⊢p
+        ⊢A , ⊢B              = syntactic∪ ⊢∪
+    in  injr pa′ ,
+        injrₙ nfPa′ ,
+        injr-cong ⊢A ⊢B pa≡pa′
+  fullRedTermConv↓ (∪₃-η c₁ c₂ ⊢p) =
+    let u , nfU , ⊢u = fullRedNe~↓ ⊢p
+    in  u , ne nfU , conv ⊢u (∪-cong c₁ c₂)
   fullRedTermConv↓ (η-unit ⊢t _ tUnit _) =
     star , starₙ , η-unit ⊢t (starⱼ (wfTerm ⊢t))
