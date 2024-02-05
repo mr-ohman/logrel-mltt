@@ -259,7 +259,6 @@ mutual
     cases-cong    : ∀ {t t' u u' v v' A B C C'}
                   → Γ ⊢ A
                   → Γ ⊢ B
---                  → Γ ⊢ C -- necessary?
                   → Γ ⊢ C ≡ C'
                   → Γ ⊢ t ≡ t' ∷ A ∪ B
                   → Γ ⊢ u ≡ u' ∷ A ▹▹ C
@@ -281,24 +280,6 @@ mutual
                   → Γ ⊢ u ∷ A ▹▹ C
                   → Γ ⊢ v ∷ B ▹▹ C
                   → Γ ⊢ cases C (injr t) u v ≡ v ∘ t ∷ C
-{--    ∪-η₁          :  ∀ {p r A B}
-                  → Γ ⊢ A
-                  → Γ ⊢ B
-                  → Γ ⊢ p ∷ A ∪ B
-                  → Γ ⊢ r ∷ A ∪ B
-                  → Γ ⊢ cases ℕ p (lam zero) (lam one) ≡ zero ∷ ℕ
-                  → Γ ⊢ cases ℕ r (lam zero) (lam one) ≡ zero ∷ ℕ
-                  → Γ ⊢ cases A p Id Id ≡ cases A r Id Id ∷ A
-                  → Γ ⊢ p ≡ r ∷ A ∪ B
-    ∪-η₂          :  ∀ {p r A B}
-                  → Γ ⊢ A
-                  → Γ ⊢ B
-                  → Γ ⊢ p ∷ A ∪ B
-                  → Γ ⊢ r ∷ A ∪ B
-                  → Γ ⊢ cases ℕ p (lam zero) (lam one) ≡ one ∷ ℕ
-                  → Γ ⊢ cases ℕ r (lam zero) (lam one) ≡ one ∷ ℕ
-                  → Γ ⊢ cases A p Id Id ≡ cases A r Id Id ∷ B
-                  → Γ ⊢ p ≡ r ∷ A ∪ B--}
     suc-cong      : ∀ {m n}
                   → Γ ⊢ m ≡ n ∷ ℕ
                   → Γ ⊢ suc m ≡ suc n ∷ ℕ
