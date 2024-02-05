@@ -442,6 +442,12 @@ InjectionL-Neutral injlₙ () PE.refl
 InjectionR-Neutral : InjectionR t a → Neutral u → t PE.≡ u → ⊥
 InjectionR-Neutral injrₙ () PE.refl
 
+TruncI-PE-injectivity : TruncI t a → TruncI u v → t PE.≡ u → a PE.≡ v
+TruncI-PE-injectivity ∥ᵢₙ ∥ᵢₙ PE.refl = PE.refl
+
+TruncI-Neutral : TruncI t a → Neutral u → t PE.≡ u → ⊥
+TruncI-Neutral ∥ᵢₙ () PE.refl
+
 -- These views classify only whnfs.
 -- Natural, Type, Function and Product are a subsets of Whnf.
 
@@ -599,6 +605,9 @@ wkInjectionL ρ injlₙ  = injlₙ
 
 wkInjectionR : ∀ ρ → InjectionR t a → InjectionR {n} (wk ρ t) (wk ρ a)
 wkInjectionR ρ injrₙ  = injrₙ
+
+wkTruncI : ∀ ρ → TruncI t a → TruncI {n} (wk ρ t) (wk ρ a)
+wkTruncI ρ ∥ᵢₙ  = ∥ᵢₙ
 
 wkWhnf : ∀ ρ → Whnf t → Whnf {n} (wk ρ t)
 wkWhnf ρ Uₙ      = Uₙ

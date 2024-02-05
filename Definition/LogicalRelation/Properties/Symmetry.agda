@@ -73,7 +73,15 @@ mutual
             irrelevanceEq′ {Γ = Δ} (PE.cong (wk ρ) (PE.sym G₁≡G′))
                            (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) G₁≡G′ ([G]₁ [ρ] ⊢Δ)) ([G]₁ [ρ] ⊢Δ)
                            (symEq ([G] [ρ] ⊢Δ) (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) G₁≡G′ ([G]₁ [ρ] ⊢Δ)) ([G≡G′] [ρ] ⊢Δ)))
- --[G₁≡G]
+  symEqT {Γ = Γ} (∥ᵥ (∥ᵣ F D ⊢F A≡A [F]) (∥ᵣ F₁ D₁ ⊢F₁ A≡A₁ [F]₁))
+                 (∥₌ F′ D′ A≡B [F≡F′]) =
+    let ∥F₁≡∥F′ = whrDet* (red D₁ , ∥ₙ) (D′ , ∥ₙ)
+        F₁≡F′   = ∥-PE-injectivity ∥F₁≡∥F′
+    in ∥₌ _ (red D) (≅-sym (PE.subst (λ x → Γ ⊢ ∥ F ∥ ≅ x) (PE.sym ∥F₁≡∥F′) A≡B))
+          (λ {m} {ρ} {Δ} [ρ] ⊢Δ →
+            irrelevanceEq′ {Γ = Δ} (PE.cong (wk ρ) (PE.sym F₁≡F′))
+                           (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)) ([F]₁ [ρ] ⊢Δ)
+                           (symEq ([F] [ρ] ⊢Δ) (PE.subst (λ x → Δ ⊩⟨ _ ⟩ wk ρ x) F₁≡F′ ([F]₁ [ρ] ⊢Δ)) ([F≡F′] [ρ] ⊢Δ)))
   symEqT (Uᵥ (Uᵣ _ _ _) (Uᵣ _ _ _)) A≡B = PE.refl
   symEqT (emb⁰¹ x) A≡B = symEqT x A≡B
   symEqT (emb¹⁰ x) A≡B = symEqT x A≡B
@@ -148,4 +156,10 @@ symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
 symEqTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G])
           (∪₃ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k)) =
   ∪₃ₜ₌ r p d c (≅ₜ-sym p≅r) f e (neNfₜ₌ neL neK (~-sym k≡k))
+symEqTerm (∥ᵣ′ F D ⊢F A≡A [F])
+          (∥₁ₜ₌ p r c d p≅r e f pa ra i j x) =
+  ∥₁ₜ₌ r p d c (≅ₜ-sym p≅r) f e ra pa j i (symEqTerm ([F] Wk.id (wf ⊢F)) x)
+symEqTerm (∥ᵣ′ F D ⊢F A≡A [F])
+          (∥₂ₜ₌ p r c d p≅r e f (neNfₜ₌ neK neL k≡k)) =
+  ∥₂ₜ₌ r p d c (≅ₜ-sym p≅r) f e (neNfₜ₌ neL neK (~-sym k≡k))
 symEqTerm (emb 0<1 x) t≡u = symEqTerm x t≡u

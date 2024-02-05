@@ -79,6 +79,7 @@ private
 ⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                                        (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) = [t]
 ⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , r , c , d , p≅r , e , f , x) = e
+⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {l} (∥ᵣ′ S D ⊢S A≡A [S]) (p , r , c , d , p≅r , e , f , x) = e
 ⊩ₗ {Γ = Γ} {A = A} {a = a} {b = b} {¹} (emb {_} {.⁰} 0<1 [A]) h = ⊩ₗ [A] h
 
 -- move to where it belongs

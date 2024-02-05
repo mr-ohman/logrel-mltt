@@ -102,6 +102,13 @@ mutual
                                               ([S]₁ [ρ] ⊢Δ) ([S≡S′] [ρ] ⊢Δ))
            (λ {_} {ρ} [ρ] ⊢Δ → irrelevanceEq′ (PE.cong (wk ρ) T≡T₁) ([T] [ρ] ⊢Δ)
                                               ([T]₁ [ρ] ⊢Δ) ([T≡T′] [ρ] ⊢Δ))
+  irrelevanceEqT {Γ = Γ} (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁)) (∥₌ S′ D′ A≡B [S≡S′]) =
+    let ∥S≡∥S₁ = whrDet* (red D , ∥ₙ) (red D₁ , ∥ₙ)
+        S≡S₁   = ∥-PE-injectivity ∥S≡∥S₁
+    in  ∥₌ S′ D′
+           (PE.subst (λ x → Γ ⊢ x ≅ ∥ S′ ∥) ∥S≡∥S₁ A≡B)
+           (λ {_} {ρ} [ρ] ⊢Δ → irrelevanceEq′ (PE.cong (wk ρ) S≡S₁) ([S] [ρ] ⊢Δ)
+                                              ([S]₁ [ρ] ⊢Δ) ([S≡S′] [ρ] ⊢Δ))
   irrelevanceEqT (emb⁰¹ x) A≡B = irrelevanceEqT x A≡B
   irrelevanceEqT (emb¹⁰ x) A≡B = irrelevanceEqT x A≡B
 
@@ -214,6 +221,26 @@ mutual
            (neNfₜ neK
                   (PE.subst (λ x → Γ ⊢ p ∷ x) ∪ST≡∪S₁T₁ ⊢k)
                   (PE.subst (λ x → Γ ⊢ p ~ p ∷ x) ∪ST≡∪S₁T₁ k≡k))
+  irrelevanceTermT {Γ = Γ} {t = t} (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁))
+                   (∥₁ₜ p c d pa i e) =
+    let ∥S≡∥S₁ = whrDet* (red D , ∥ₙ) (red D₁ , ∥ₙ)
+        S≡S₁   = ∥-PE-injectivity ∥S≡∥S₁
+    in ∥₁ₜ p
+           (PE.subst (λ x → Γ ⊢ t :⇒*: p ∷ x) ∥S≡∥S₁ c)
+           (PE.subst (λ x → Γ ⊢ p ≅ p ∷ x) ∥S≡∥S₁ d)
+           pa i
+           (irrelevanceTerm′ (PE.cong (wk id) S≡S₁) ([S] Wk.id (wf ⊢S))
+                             ([S]₁ Wk.id (wf ⊢S₁)) e)
+  irrelevanceTermT {Γ = Γ} {t = t} (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁))
+                   (∥₂ₜ p c d (neNfₜ neK ⊢k k≡k)) =
+    let ∥S≡∥S₁ = whrDet* (red D , ∥ₙ) (red D₁ , ∥ₙ)
+        S≡S₁   = ∥-PE-injectivity ∥S≡∥S₁
+    in ∥₂ₜ p
+           (PE.subst (λ x → Γ ⊢ t :⇒*: p ∷ x) ∥S≡∥S₁ c)
+           (PE.subst (λ x → Γ ⊢ p ≅ p ∷ x) ∥S≡∥S₁ d)
+           (neNfₜ neK
+                  (PE.subst (λ x → Γ ⊢ p ∷ x) ∥S≡∥S₁ ⊢k)
+                  (PE.subst (λ x → Γ ⊢ p ~ p ∷ x) ∥S≡∥S₁ k≡k))
   irrelevanceTermT (emb⁰¹ x) t = irrelevanceTermT x t
   irrelevanceTermT (emb¹⁰ x) t = irrelevanceTermT x t
 
@@ -334,5 +361,31 @@ mutual
             (irrelevanceTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪ᵣ′ S₁ T₁ D₁ ⊢S₁ ⊢T₁ A≡A₁ [S]₁ [T]₁) f)
             (irrelevanceTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪ᵣ′ S₁ T₁ D₁ ⊢S₁ ⊢T₁ A≡A₁ [S]₁ [T]₁) g)
             (neNfₜ₌ neK neL (PE.subst (λ x → Γ ⊢ p ~ r ∷ x) ∪ST≡∪S₁T₁ k≡k))
+  irrelevanceEqTermT {Γ = Γ} {t = t} {u = u}
+                     (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁))
+                     (∥₁ₜ₌ p r c d e f g pa ra i j z) =
+    let ∥S≡∥S₁ = whrDet* (red D , ∥ₙ) (red D₁ , ∥ₙ)
+        S≡S₁   = ∥-PE-injectivity ∥S≡∥S₁
+    in ∥₁ₜ₌ p r
+            (PE.subst (λ x → Γ ⊢ t :⇒*: p ∷ x) ∥S≡∥S₁ c)
+            (PE.subst (λ x → Γ ⊢ u :⇒*: r ∷ x) ∥S≡∥S₁ d)
+            (PE.subst (λ x → Γ ⊢ p ≅ r ∷ x) ∥S≡∥S₁ e)
+            (irrelevanceTerm (∥ᵣ′ S D ⊢S A≡A [S]) (∥ᵣ′ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) f)
+            (irrelevanceTerm (∥ᵣ′ S D ⊢S A≡A [S]) (∥ᵣ′ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) g)
+            pa ra i j
+            (irrelevanceEqTerm′ (PE.cong (wk id) S≡S₁) ([S] Wk.id (wf ⊢S))
+                                ([S]₁ Wk.id (wf ⊢S₁)) z)
+  irrelevanceEqTermT {Γ = Γ} {t = t} {u = u}
+                     (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁))
+                     (∥₂ₜ₌ p r c d e f g (neNfₜ₌ neK neL k≡k)) =
+    let ∥S≡∥S₁ = whrDet* (red D , ∥ₙ) (red D₁ , ∥ₙ)
+        S≡S₁   = ∥-PE-injectivity ∥S≡∥S₁
+    in ∥₂ₜ₌ p r
+            (PE.subst (λ x → Γ ⊢ t :⇒*: p ∷ x) ∥S≡∥S₁ c)
+            (PE.subst (λ x → Γ ⊢ u :⇒*: r ∷ x) ∥S≡∥S₁ d)
+            (PE.subst (λ x → Γ ⊢ p ≅ r ∷ x) ∥S≡∥S₁ e)
+            (irrelevanceTerm (∥ᵣ′ S D ⊢S A≡A [S]) (∥ᵣ′ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) f)
+            (irrelevanceTerm (∥ᵣ′ S D ⊢S A≡A [S]) (∥ᵣ′ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) g)
+            (neNfₜ₌ neK neL (PE.subst (λ x → Γ ⊢ p ~ r ∷ x) ∥S≡∥S₁ k≡k))
   irrelevanceEqTermT (emb⁰¹ x) t≡u = irrelevanceEqTermT x t≡u
   irrelevanceEqTermT (emb¹⁰ x) t≡u = irrelevanceEqTermT x t≡u

@@ -148,7 +148,7 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E ∷ U
 
-    -- Π-congruence
+    -- ∪-congruence
 
     ≅-∪-cong  : ∀ {F G H E}
               → Γ ⊢ F ≅ H
@@ -159,6 +159,16 @@ record EqRelSet : Set₁ where
               → Γ ⊢ F ≅ H ∷ U
               → Γ ⊢ G ≅ E ∷ U
               → Γ ⊢ F ∪ G ≅ H ∪ E ∷ U
+
+    -- ∥-congruence
+
+    ≅-∥-cong  : ∀ {F H}
+              → Γ ⊢ F ≅ H
+              → Γ ⊢ ∥ F ∥ ≅ ∥ H ∥
+
+    ≅ₜ-∥-cong : ∀ {F H}
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ⊢ ∥ F ∥ ≅ ∥ H ∥ ∷ U
 
     -- congruence for injl
     ≅-injl-cong : ∀ {p r F G}
@@ -173,6 +183,12 @@ record EqRelSet : Set₁ where
           → Γ ⊢ G -- needed?
           → Γ ⊢ p ≅ r ∷ G
           → Γ ⊢ injr p ≅ injr r ∷ F ∪ G
+
+    -- congruence for ∥ᵢ
+    ≅-∥ᵢ-cong : ∀ {p r F}
+          → Γ ⊢ F -- needed?
+          → Γ ⊢ p ≅ r ∷ F
+          → Γ ⊢ ∥ᵢ p ≅ ∥ᵢ r ∷ ∥ F ∥
 
     -- Zero reflexivity
     ≅ₜ-zerorefl : ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ

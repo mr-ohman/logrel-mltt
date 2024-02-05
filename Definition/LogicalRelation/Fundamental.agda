@@ -77,6 +77,11 @@ mutual
     | [Γ] , [A]
     | [Δ] , [B] =
       [Γ] , ∪ᵛ {F = A} {B} [Γ] [A] (S.irrelevance {A = B} [Δ] [Γ] [B])
+  fundamental (∥_∥ⱼ {A} ⊢A)
+    with fundamental ⊢A
+  fundamental (∥_∥ⱼ {A} ⊢A)
+    | [Γ] , [A] =
+      [Γ] , ∥ᵛ {F = A} [Γ] [A]
   fundamental (univ {A} ⊢A) with fundamentalTerm ⊢A
   fundamental (univ {A} ⊢A) | [Γ] , [U] , [A] =
     [Γ] , univᵛ {A = A} [Γ] [U] [A]
@@ -153,6 +158,14 @@ mutual
       ,   ∪ᵛ {F = A} {C} [Γ] [A] [C]′
       ,   ∪ᵛ {F = B} {D} [Γ] [B] [D]′
       ,   ∪-congᵛ {F = A} {C} {B} {D} [Γ] [A] [C]′ [B] [D]′ [A≡B] [C≡D]′
+  fundamentalEq (∥-cong {A} {B} A≡B)
+    with fundamentalEq A≡B
+  fundamentalEq (∥-cong {A} {B} A≡B)
+    | [Γ] , [A] , [B] , [A≡B] =
+      [Γ]
+      , ∥ᵛ {F = A} [Γ] [A]
+      , ∥ᵛ {F = B} [Γ] [B]
+      , ∥-congᵛ {F = A} {B} [Γ] [A] [B] [A≡B]
 
   -- Fundamental theorem for variables.
   fundamentalVar : ∀ {A x}
@@ -236,6 +249,13 @@ mutual
     in [Γ] , [U]
      , S.irrelevanceTerm {A = U} {t = A ∪ B} [Γ] [Γ] (Uᵛ [Γ]) [U]
                          (∪ᵗᵛ {F = A} {B} [Γ] [A]ₜ′ [B]ₜ′)
+  fundamentalTerm (∥_∥ⱼ {A} ⊢A)
+    with fundamentalTerm ⊢A
+  ... | [Γ]  , [U]  , [A]ₜ =
+    let [A]ₜ′ = S.irrelevanceTerm {A = U} {t = A} [Γ] [Γ] [U] (Uᵛ [Γ]) [A]ₜ
+    in [Γ] , [U]
+     , S.irrelevanceTerm {A = U} {t = ∥ A ∥} [Γ] [Γ] (Uᵛ [Γ]) [U]
+                         (∥ᵗᵛ {F = A} [Γ] [A]ₜ′)
   fundamentalTerm (var ⊢Γ x∷A) = valid ⊢Γ , fundamentalVar x∷A (valid ⊢Γ)
   fundamentalTerm (lamⱼ {F} {G} {t} ⊢F ⊢t)
     with fundamental ⊢F | fundamentalTerm ⊢t
@@ -303,6 +323,13 @@ mutual
         [v]₁  = S.irrelevanceTerm {A = B ▹▹ C} {t = v} [Γ]₂ [Γ] [BC] (▹▹ᵛ {F = B} {C} [Γ] [B]₁ [C]₁) [v]
     in [Γ] , [C]₁ ,
        casesᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [A]₁ [B]₁ [C]₁ [t]₁ [u]₁ [v]₁
+  fundamentalTerm (∥ᵢⱼ {A} {a} ⊢a)
+    with fundamentalTerm ⊢a
+  ... | [Γ] , [A] , [a] =
+    [Γ] ,
+    ∥ᵛ {F = A} [Γ] [A] ,
+    ∥ᵢᵛ {A = A} {a} [Γ] [A] [a]
+  fundamentalTerm (∥ₑⱼ {A} {B} {a} {f} ⊢a ⊢f ⊢B) = {!!}
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
   fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
@@ -464,6 +491,18 @@ mutual
          (∪ᵗᵛ {F = A} {C} [Γ]₁ [A]ₜ′ [C]ₜ′)
          (∪ᵗᵛ {F = B} {D} [Γ]₁ [B]ₜ′ [D]ₜ′)
          (∪-congᵗᵛ {F = A} {C} {B} {D} [Γ]₁ [A]ₜ′ [C]ₜ′ [B]ₜ′ [D]ₜ′ [A≡B]ₜ′ [C≡D]ₜ′)
+  fundamentalTermEq (∥-cong {A} {B} A≡B)
+    with fundamentalTermEq A≡B
+  ... | [Γ]₁ , modelsTermEq [U] [A]ₜ [B]ₜ [A≡B]ₜ =
+    let [U]₁′   = Uᵛ [Γ]₁
+        [A]ₜ′   = S.irrelevanceTerm {A = U} {t = A} [Γ]₁ [Γ]₁ [U] [U]₁′ [A]ₜ
+        [B]ₜ′   = S.irrelevanceTerm {A = U} {t = B} [Γ]₁ [Γ]₁ [U] [U]₁′ [B]ₜ
+        [A≡B]ₜ′ = S.irrelevanceEqTerm {A = U} {t = A} {u = B} [Γ]₁ [Γ]₁ [U] [U]₁′ [A≡B]ₜ
+    in [Γ]₁ ,
+       modelsTermEq [U]₁′
+         (∥ᵗᵛ {F = A} [Γ]₁ [A]ₜ′)
+         (∥ᵗᵛ {F = B} [Γ]₁ [B]ₜ′)
+         (∥-congᵗᵛ {F = A} {B} [Γ]₁ [A]ₜ′ [B]ₜ′ [A≡B]ₜ′)
   fundamentalTermEq (app-cong {a} {b} {f} {g} {F} {G} f≡g a≡b)
     with fundamentalTermEq f≡g | fundamentalTermEq a≡b
   ... | [Γ] , modelsTermEq [ΠFG] [f] [g] [f≡g]
