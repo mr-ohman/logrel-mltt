@@ -73,6 +73,10 @@ data Kind : (ns : List Nat) → Set where
   Inrkind    : Kind (0 ∷ [])
   Caseskind  : Kind (0 ∷ 0 ∷ 0 ∷ 0 ∷ [])
 
+  Trunckind  : Kind (0 ∷ [])
+  TruncIkind : Kind (0 ∷ [])
+  TruncEkind : Kind (0 ∷ 0 ∷ 0 ∷ [])
+
 -- Terms are indexed by its number of unbound variables and are either:
 -- de Bruijn style variables or
 -- generic terms, formed by their kind and sub terms
@@ -83,8 +87,8 @@ data Term (n : Nat) : Set where
 
 private
   variable
-    A F H S T S₁ T₁ t a u v : Term n
-    B E G                   : Term (1+ n)
+    A F H S T S₁ T₁ f t a u v : Term n
+    B E G                     : Term (1+ n)
 
 -- The Grammar of our language.
 
@@ -140,6 +144,15 @@ one = suc zero
 natrec : (A : Term (1+ n)) (t u v : Term n) → Term n  -- Natural number recursor (A is a binder).
 natrec A t u v = gen Natreckind (A ∷ t ∷ u ∷ v ∷ [])
 
+
+∥_∥ : (A : Term n) → Term n
+∥ A ∥  = gen Trunckind (A ∷ [])
+
+∥ᵢ : (a : Term n) → Term n
+∥ᵢ a = gen TruncIkind (a ∷ [])
+
+∥ₑ : (A f a : Term n) → Term n
+∥ₑ A f a = gen TruncEkind (A ∷ f ∷ a ∷ [])
 
 star : Term n                        -- Unit element
 star = gen Starkind []
@@ -220,6 +233,7 @@ data Neutral : Term n → Set where
   natrecₙ   : Neutral v   → Neutral (natrec G t u v)
   Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
   casesₙ    : Neutral t   → Neutral (cases A t u v)
+  ∥ₑₙ       : Neutral a   → Neutral (∥ₑ A f a)
 
 
 -- Weak head normal forms (whnfs).
@@ -235,6 +249,7 @@ data Whnf {n : Nat} : Term n → Set where
   ∪ₙ     : Whnf (F ∪ H)
   ℕₙ     : Whnf ℕ
   Unitₙ  : Whnf Unit
+  ∥ₙ     : Whnf ∥ A ∥
   Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
@@ -245,6 +260,7 @@ data Whnf {n : Nat} : Term n → Set where
   prodₙ : Whnf (prod t u)
   injlₙ : Whnf (injl t)
   injrₙ : Whnf (injr t)
+  ∥ᵢₙ   : Whnf (∥ᵢ a)
 
   -- Neutrals are whnfs.
   ne    : Neutral t → Whnf t
@@ -327,6 +343,12 @@ data NUnit {n : Nat} : Term n → Set where
   starₙ :             NUnit star
   ne    : Neutral t → NUnit t
 
+-- A whnf of type truncation is either ∥ᵢ or neutral.
+
+data NTrunc {n : Nat} : Term n → Set where
+  ∥ᵢₙ :             NTrunc (∥ᵢ a)
+  ne  : Neutral t → NTrunc t
+
 
 -- A (small) type in whnf is either Π A B, Σ A B, ℕ, Empty, Unit or neutral.
 -- Large types could also be U.
@@ -335,6 +357,7 @@ data Type {n : Nat} : Term n → Set where
   Πₙ     :             Type (Π A ▹ B)
   Σₙ     :             Type (Σ A ▹ B)
   ∪ₙ     :             Type (F ∪ H)
+  ∥ₙ     :             Type ∥ A ∥
   ℕₙ     :             Type ℕ
   Emptyₙ :             Type Empty
   Unitₙ  :             Type Unit
@@ -402,10 +425,15 @@ nunitWhnf : NUnit t → Whnf t
 nunitWhnf starₙ  = starₙ
 nunitWhnf (ne x) = ne x
 
+ntruncWhnf : NTrunc t → Whnf t
+ntruncWhnf ∥ᵢₙ = ∥ᵢₙ
+ntruncWhnf (ne x) = ne x
+
 typeWhnf : Type A → Whnf A
 typeWhnf Πₙ     = Πₙ
 typeWhnf Σₙ     = Σₙ
 typeWhnf ∪ₙ     = ∪ₙ
+typeWhnf ∥ₙ     = ∥ₙ
 typeWhnf ℕₙ     = ℕₙ
 typeWhnf Emptyₙ = Emptyₙ
 typeWhnf Unitₙ  = Unitₙ
@@ -503,6 +531,7 @@ wkNeutral ρ (sndₙ n)      = sndₙ (wkNeutral ρ n)
 wkNeutral ρ (natrecₙ n)   = natrecₙ (wkNeutral ρ n)
 wkNeutral ρ (Emptyrecₙ e) = Emptyrecₙ (wkNeutral ρ e)
 wkNeutral ρ (casesₙ e)    = casesₙ (wkNeutral ρ e)
+wkNeutral ρ (∥ₑₙ e)       = ∥ₑₙ (wkNeutral ρ e)
 
 -- Weakening can be applied to our whnf views.
 
@@ -511,10 +540,15 @@ wkNatural ρ sucₙ   = sucₙ
 wkNatural ρ zeroₙ  = zeroₙ
 wkNatural ρ (ne x) = ne (wkNeutral ρ x)
 
+wkTrunc : ∀ ρ → NTrunc t → NTrunc {n} (wk ρ t)
+wkTrunc ρ ∥ᵢₙ = ∥ᵢₙ
+wkTrunc ρ (ne x) = ne (wkNeutral ρ x)
+
 wkType : ∀ ρ → Type t → Type {n} (wk ρ t)
 wkType ρ Πₙ     = Πₙ
 wkType ρ Σₙ     = Σₙ
 wkType ρ ∪ₙ     = ∪ₙ
+wkType ρ ∥ₙ     = ∥ₙ
 wkType ρ ℕₙ     = ℕₙ
 wkType ρ Emptyₙ = Emptyₙ
 wkType ρ Unitₙ  = Unitₙ
@@ -539,6 +573,7 @@ wkWhnf ρ Uₙ      = Uₙ
 wkWhnf ρ Πₙ      = Πₙ
 wkWhnf ρ Σₙ      = Σₙ
 wkWhnf ρ ∪ₙ      = ∪ₙ
+wkWhnf ρ ∥ₙ      = ∥ₙ
 wkWhnf ρ ℕₙ      = ℕₙ
 wkWhnf ρ Emptyₙ  = Emptyₙ
 wkWhnf ρ Unitₙ   = Unitₙ
@@ -548,6 +583,7 @@ wkWhnf ρ zeroₙ   = zeroₙ
 wkWhnf ρ sucₙ    = sucₙ
 wkWhnf ρ injlₙ   = injlₙ
 wkWhnf ρ injrₙ   = injrₙ
+wkWhnf ρ ∥ᵢₙ     = ∥ᵢₙ
 wkWhnf ρ starₙ   = starₙ
 wkWhnf ρ (ne x)  = ne (wkNeutral ρ x)
 
