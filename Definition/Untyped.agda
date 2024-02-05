@@ -144,15 +144,14 @@ one = suc zero
 natrec : (A : Term (1+ n)) (t u v : Term n) → Term n  -- Natural number recursor (A is a binder).
 natrec A t u v = gen Natreckind (A ∷ t ∷ u ∷ v ∷ [])
 
-
 ∥_∥ : (A : Term n) → Term n
 ∥ A ∥  = gen Trunckind (A ∷ [])
 
 ∥ᵢ : (a : Term n) → Term n
 ∥ᵢ a = gen TruncIkind (a ∷ [])
 
-∥ₑ : (A f a : Term n) → Term n
-∥ₑ A f a = gen TruncEkind (A ∷ f ∷ a ∷ [])
+∥ₑ : (A a f : Term n) → Term n
+∥ₑ A a f = gen TruncEkind (A ∷ a ∷ f ∷ [])
 
 star : Term n                        -- Unit element
 star = gen Starkind []
@@ -204,6 +203,11 @@ B-PE-injectivity BΣ PE.refl = PE.refl , PE.refl
 ∪-PE-injectivity : S ∪ T PE.≡ S₁ ∪ T₁ → S PE.≡ S₁ × T PE.≡ T₁
 ∪-PE-injectivity PE.refl = PE.refl , PE.refl
 
+-- If ∥ S ∥ = ∥ S₁ ∥  then  S = S₁.
+
+∥-PE-injectivity : ∥ S ∥ PE.≡ ∥ S₁ ∥ → S PE.≡ S₁
+∥-PE-injectivity PE.refl = PE.refl
+
 -- If  suc n = suc m  then  n = m.
 
 suc-PE-injectivity : suc t PE.≡ suc u → t PE.≡ u
@@ -233,7 +237,7 @@ data Neutral : Term n → Set where
   natrecₙ   : Neutral v   → Neutral (natrec G t u v)
   Emptyrecₙ : Neutral t   → Neutral (Emptyrec A t)
   casesₙ    : Neutral t   → Neutral (cases A t u v)
-  ∥ₑₙ       : Neutral a   → Neutral (∥ₑ A f a)
+  ∥ₑₙ       : Neutral a   → Neutral (∥ₑ A a f)
 
 
 -- Weak head normal forms (whnfs).
@@ -247,9 +251,9 @@ data Whnf {n : Nat} : Term n → Set where
   Πₙ     : Whnf (Π A ▹ B)
   Σₙ     : Whnf (Σ A ▹ B)
   ∪ₙ     : Whnf (F ∪ H)
+  ∥ₙ     : Whnf ∥ A ∥
   ℕₙ     : Whnf ℕ
   Unitₙ  : Whnf Unit
-  ∥ₙ     : Whnf ∥ A ∥
   Emptyₙ : Whnf Empty
 
   -- Introductions are whnfs.
@@ -290,12 +294,18 @@ B≢ne BΣ () PE.refl
 ∪≢ne : Neutral A → F ∪ H PE.≢ A
 ∪≢ne () PE.refl
 
+∥≢ne : Neutral A → ∥ F ∥ PE.≢ A
+∥≢ne () PE.refl
+
 U≢B : ∀ W → U PE.≢ ⟦ W ⟧ F ▹ G
 U≢B BΠ ()
 U≢B BΣ ()
 
 U≢∪ : U PE.≢ F ∪ H
 U≢∪ ()
+
+U≢∥ : U PE.≢ ∥ F ∥
+U≢∥ ()
 
 ℕ≢B : ∀ W → ℕ PE.≢ ⟦ W ⟧ F ▹ G
 ℕ≢B BΠ ()
@@ -304,6 +314,9 @@ U≢∪ ()
 ℕ≢∪ : ℕ PE.≢ F ∪ H
 ℕ≢∪ ()
 
+ℕ≢∥ : ℕ PE.≢ ∥ F ∥
+ℕ≢∥ ()
+
 Empty≢B : ∀ W → Empty PE.≢ ⟦ W ⟧ F ▹ G
 Empty≢B BΠ ()
 Empty≢B BΣ ()
@@ -311,9 +324,19 @@ Empty≢B BΣ ()
 Empty≢∪ : Empty PE.≢ F ∪ H
 Empty≢∪ ()
 
+Empty≢∥ : Empty PE.≢ ∥ F ∥
+Empty≢∥ ()
+
 ∪≢B : ∀ W → A ∪ t PE.≢ ⟦ W ⟧ F ▹ G
 ∪≢B BΠ ()
 ∪≢B BΣ ()
+
+∥≢B : ∀ W → ∥ A ∥ PE.≢ ⟦ W ⟧ F ▹ G
+∥≢B BΠ ()
+∥≢B BΣ ()
+
+∥≢∪ : ∥ A ∥ PE.≢ S ∪ T
+∥≢∪ ()
 
 Unit≢B : ∀ W → Unit PE.≢ ⟦ W ⟧ F ▹ G
 Unit≢B BΠ ()
@@ -321,6 +344,9 @@ Unit≢B BΣ ()
 
 Unit≢∪ : Unit PE.≢ F ∪ H
 Unit≢∪ ()
+
+Unit≢∥ : Unit PE.≢ ∥ F ∥
+Unit≢∥ ()
 
 zero≢ne : Neutral t → zero PE.≢ t
 zero≢ne () PE.refl
@@ -378,6 +404,9 @@ data Function {n : Nat} : Term n → Set where
 data Product {n : Nat} : Term n → Set where
   prodₙ : Product (prod t u)
   ne    : Neutral t → Product t
+
+data TruncI {n : Nat} : Term n → Term n → Set where
+  ∥ᵢₙ : TruncI (∥ᵢ t) t
 
 data Injection {n : Nat} : Term n → Set where
   injlₙ : Injection (injl t)
@@ -452,6 +481,9 @@ injectionLWhnf injlₙ  = injlₙ
 
 injectionRWhnf : InjectionR t a → Whnf t
 injectionRWhnf injrₙ  = injrₙ
+
+TruncIWhnf : TruncI t a → Whnf t
+TruncIWhnf ∥ᵢₙ  = ∥ᵢₙ
 
 ⟦_⟧ₙ : (W : BindingType) → Whnf (⟦ W ⟧ F ▹ G)
 ⟦_⟧ₙ BΠ = Πₙ
@@ -739,13 +771,15 @@ t [ s ] = subst (sgSubst s) t
 _[_]↑ : (t : Term (1+ n)) (s : Term (1+ n)) → Term (1+ n)
 t [ s ]↑ = subst (consSubst (wk1Subst idSubst) s) t
 
-
 B-subst : (σ : Subst m n) (W : BindingType) (F : Term n) (G : Term (1+ n))
         → subst σ (⟦ W ⟧ F ▹ G) PE.≡ ⟦ W ⟧ (subst σ F) ▹ (subst (liftSubst σ) G)
 B-subst σ BΠ F G = PE.refl
 B-subst σ BΣ F G = PE.refl
 
-
 ∪-subst : (σ : Subst m n) (F : Term n) (G : Term n)
         → subst σ (F ∪ G) PE.≡ (subst σ F) ∪ (subst σ G)
 ∪-subst σ F G = PE.refl
+
+∥-subst : (σ : Subst m n) (F : Term n)
+        → subst σ ∥ F ∥ PE.≡ ∥ subst σ F ∥
+∥-subst σ F = PE.refl

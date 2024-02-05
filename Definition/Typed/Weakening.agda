@@ -73,6 +73,7 @@ mutual
   wk ρ ⊢Δ (Σⱼ F ▹ G) = let ρF = wk ρ ⊢Δ F
                        in  Σⱼ ρF ▹ (wk (lift ρ) (⊢Δ ∙ ρF) G)
   wk ρ ⊢Δ (A ∪ⱼ B) = (wk ρ ⊢Δ A) ∪ⱼ (wk ρ ⊢Δ B)
+  wk ρ ⊢Δ (∥ A ∥ⱼ) = ∥ wk ρ ⊢Δ A ∥ⱼ
   wk ρ ⊢Δ (univ A) = univ (wkTerm ρ ⊢Δ A)
 
   wkTerm : {Δ : Con Term m} {ρ : Wk m n} → ρ ∷ Δ ⊆ Γ →
@@ -87,6 +88,7 @@ mutual
   wkTerm ρ ⊢Δ (Σⱼ F ▹ G) = let ρF = wkTerm ρ ⊢Δ F
                            in  Σⱼ ρF ▹ (wkTerm (lift ρ) (⊢Δ ∙ univ ρF) G)
   wkTerm ρ ⊢Δ (A ∪ⱼ B) = (wkTerm ρ ⊢Δ A) ∪ⱼ (wkTerm ρ ⊢Δ B)
+  wkTerm ρ ⊢Δ (∥ A ∥ⱼ) = ∥ wkTerm ρ ⊢Δ A ∥ⱼ
   wkTerm ρ ⊢Δ (var ⊢Γ x) = var ⊢Δ (wkIndex ρ ⊢Δ x)
   wkTerm ρ ⊢Δ (lamⱼ F t) = let ρF = wk ρ ⊢Δ F
                            in lamⱼ ρF (wkTerm (lift ρ) (⊢Δ ∙ ρF) t)
@@ -117,6 +119,11 @@ mutual
            (PE.subst (λ x → Δ ⊢ U.wk ρ u ∷ x) (wk-▹▹ ρ A C) (wkTerm p ⊢Δ ⊢u))
            (PE.subst (λ x → Δ ⊢ U.wk ρ v ∷ x) (wk-▹▹ ρ B C) (wkTerm p ⊢Δ ⊢v))
            (wk p ⊢Δ ⊢C)
+  wkTerm ρ ⊢Δ (∥ᵢⱼ {A} {a} ⊢a) = ∥ᵢⱼ (wkTerm ρ ⊢Δ ⊢a)
+  wkTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∥ₑⱼ {A} {B} {a} {f} ⊢a ⊢f ⊢B) =
+    ∥ₑⱼ (wkTerm p ⊢Δ ⊢a)
+        (PE.subst (λ x → Δ ⊢ U.wk ρ f ∷ x) (wk-▹▹ ρ A ∥ B ∥) (wkTerm p ⊢Δ ⊢f))
+        (wk p ⊢Δ ⊢B)
   wkTerm ρ ⊢Δ (zeroⱼ ⊢Γ) = zeroⱼ ⊢Δ
   wkTerm ρ ⊢Δ (sucⱼ n) = sucⱼ (wkTerm ρ ⊢Δ n)
   wkTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrecⱼ {G = G} {s = s} ⊢G ⊢z ⊢s ⊢n) =
@@ -147,6 +154,7 @@ mutual
                                  in  Σ-cong ρF (wkEq ρ ⊢Δ F≡H)
                                                (wkEq (lift ρ) (⊢Δ ∙ ρF) G≡E)
   wkEq ρ ⊢Δ (∪-cong A≡B C≡D) = ∪-cong (wkEq ρ ⊢Δ A≡B) (wkEq ρ ⊢Δ C≡D)
+  wkEq ρ ⊢Δ (∥-cong A≡B) = ∥-cong (wkEq ρ ⊢Δ A≡B)
 
   wkEqTerm : {Δ : Con Term m} {ρ : Wk m n} → ρ ∷ Δ ⊆ Γ →
            let ρA = U.wk ρ A
@@ -167,6 +175,8 @@ mutual
                   (wkEqTerm (lift ρ) (⊢Δ ∙ ρF) G≡E)
   wkEqTerm ρ ⊢Δ (∪-cong A≡B C≡D) =
     ∪-cong (wkEqTerm ρ ⊢Δ A≡B) (wkEqTerm ρ ⊢Δ C≡D)
+  wkEqTerm ρ ⊢Δ (∥-cong A≡B) =
+    ∥-cong (wkEqTerm ρ ⊢Δ A≡B)
   wkEqTerm ρ ⊢Δ (app-cong {G = G} f≡g a≡b) =
     PE.subst (λ x → _ ⊢ _ ≡ _ ∷ x)
              (PE.sym (wk-β G))

@@ -33,10 +33,13 @@ reflEq (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) =
    B₌ _ _ D A≡A
       (λ ρ ⊢Δ → reflEq ([F] ρ ⊢Δ))
       (λ ρ ⊢Δ [a] → reflEq ([G] ρ ⊢Δ [a]))
-reflEq (∪ᵣ (LogRel.∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) =
+reflEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) =
   ∪₌ _ _ (red D) A≡A
      (λ p ⊢Δ → reflEq ([S] p ⊢Δ))
      (λ [ρ] ⊢Δ → reflEq ([T] [ρ] ⊢Δ))
+reflEq (∥ᵣ′ S D ⊢S A≡A [S]) =
+  ∥₌ _ (red D) A≡A
+     (λ p ⊢Δ → reflEq ([S] p ⊢Δ))
 reflEq (emb 0<1 [A]) = reflEq [A]
 
 reflNatural-prop : ∀ {n}
@@ -91,4 +94,8 @@ reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(∪₂ₜ p b c pa i x
   ∪₂ₜ₌ p p b b c [t] [t] pa pa i i (reflEqTerm ([T] id (wf ⊢T)) x)
 reflEqTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) [t]@(∪₃ₜ p b c (neNfₜ neK ⊢k k≡k)) =
   ∪₃ₜ₌ p p b b c [t] [t] (neNfₜ₌ neK neK k≡k)
+reflEqTerm (∥ᵣ′ S D ⊢S A≡A [S]) [t]@(∥₁ₜ p b c pa i x) =
+  ∥₁ₜ₌ p p b b c [t] [t] pa pa i i (reflEqTerm ([S] id (wf ⊢S)) x)
+reflEqTerm (∥ᵣ′ S D ⊢S A≡A [S]) [t]@(∥₂ₜ p b c (neNfₜ neK ⊢k k≡k)) =
+  ∥₂ₜ₌ p p b b c [t] [t] (neNfₜ₌ neK neK k≡k)
 reflEqTerm (emb 0<1 [A]) t = reflEqTerm [A] t

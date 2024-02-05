@@ -52,6 +52,8 @@ mutual
     _∪ⱼ_   : Γ ⊢ A
            → Γ ⊢ B
            → Γ ⊢ A ∪ B
+    ∥_∥ⱼ   : Γ ⊢ A
+           → Γ ⊢ ∥ A ∥
     univ   : Γ ⊢ A ∷ U
            → Γ ⊢ A
 
@@ -69,6 +71,9 @@ mutual
               → Γ ⊢ A ∷ U
               → Γ ⊢ B ∷ U
               → Γ ⊢ A ∪ B ∷ U
+    ∥_∥ⱼ      : ∀ {A}
+              → Γ ⊢ A ∷ U
+              → Γ ⊢ ∥ A ∥ ∷ U
     ℕⱼ        : ⊢ Γ → Γ ⊢ ℕ ∷ U
     Emptyⱼ    : ⊢ Γ → Γ ⊢ Empty ∷ U
     Unitⱼ     : ⊢ Γ → Γ ⊢ Unit ∷ U
@@ -118,6 +123,15 @@ mutual
               → Γ ⊢ v ∷ B ▹▹ C
               → Γ ⊢ C -- necessary?
               → Γ ⊢ cases C t u v ∷ C
+
+    ∥ᵢⱼ       : ∀ {A t}
+              → Γ ⊢ t ∷ A
+              → Γ ⊢ ∥ᵢ t ∷ ∥ A ∥
+    ∥ₑⱼ       : ∀ {A B a f}
+              → Γ ⊢ a ∷ ∥ A ∥
+              → Γ ⊢ f ∷ A ▹▹ ∥ B ∥
+              → Γ ⊢ B -- necessary?
+              → Γ ⊢ ∥ₑ B a f ∷ ∥ B ∥
 
     zeroⱼ     : ⊢ Γ
               → Γ ⊢ zero ∷ ℕ
@@ -170,6 +184,9 @@ mutual
            → Γ ⊢ A ≡ B
            → Γ ⊢ C ≡ D
            → Γ ⊢ A ∪ C ≡ B ∪ D
+    ∥-cong : ∀ {A B}
+           → Γ ⊢ A ≡ B
+           → Γ ⊢ ∥ A ∥ ≡ ∥ B ∥
 
   -- Term equality
   data _⊢_≡_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set where
@@ -201,6 +218,9 @@ mutual
                   → Γ ⊢ A ≡ B ∷ U
                   → Γ ⊢ C ≡ D ∷ U
                   → Γ ⊢ A ∪ C ≡ B ∪ D ∷ U
+    ∥-cong        : ∀ {A B}
+                  → Γ ⊢ A ≡ B ∷ U
+                  → Γ ⊢ ∥ A ∥ ≡ ∥ B ∥ ∷ U
     app-cong      : ∀ {a b f g F G}
                   → Γ ⊢ f ≡ g ∷ Π F ▹ G
                   → Γ ⊢ a ≡ b ∷ F

@@ -25,6 +25,7 @@ wfTerm (Emptyⱼ ⊢Γ) = ⊢Γ
 wfTerm (Unitⱼ ⊢Γ) = ⊢Γ
 wfTerm (Πⱼ F ▹ G) = wfTerm F
 wfTerm (A ∪ⱼ B) = wfTerm A
+wfTerm (∥ A ∥ⱼ) = wfTerm A
 wfTerm (var ⊢Γ x₁) = ⊢Γ
 wfTerm (lamⱼ F t) with wfTerm t
 wfTerm (lamⱼ F t) | ⊢Γ ∙ F′ = ⊢Γ
@@ -42,6 +43,8 @@ wfTerm (sndⱼ _ _ a) = wfTerm a
 wfTerm (injlⱼ a _) = wfTerm a
 wfTerm (injrⱼ _ a) = wfTerm a
 wfTerm (casesⱼ a _ _ _) = wfTerm a
+wfTerm (∥ᵢⱼ a) = wfTerm a
+wfTerm (∥ₑⱼ a f B) = wfTerm a
 
 wf : Γ ⊢ A → ⊢ Γ
 wf (ℕⱼ ⊢Γ) = ⊢Γ
@@ -51,6 +54,7 @@ wf (Uⱼ ⊢Γ) = ⊢Γ
 wf (Πⱼ F ▹ G) = wf F
 wf (Σⱼ F ▹ G) = wf F
 wf (A ∪ⱼ B) = wf A
+wf (∥ A ∥ⱼ) = wf A
 wf (univ A) = wfTerm A
 
 wfEqTerm : Γ ⊢ t ≡ u ∷ A → ⊢ Γ
@@ -75,6 +79,7 @@ wfEqTerm (Σ-η _ _ x _ _ _) = wfTerm x
 wfEqTerm (Σ-β₁ F G x x₁) = wfTerm x
 wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
 wfEqTerm (∪-cong a b) = wfEqTerm a
+wfEqTerm (∥-cong a) = wfEqTerm a
 wfEqTerm (injl-cong a b c) = wfEqTerm c
 wfEqTerm (injr-cong a b c) = wfEqTerm c
 wfEqTerm (cases-cong A B C t u v) = wfEqTerm t
@@ -89,6 +94,7 @@ wfEq (trans A≡B B≡C) = wfEq A≡B
 wfEq (Π-cong F F≡H G≡E) = wf F
 wfEq (Σ-cong F x₁ x₂) = wf F
 wfEq (∪-cong x₁ x₂) = wfEq x₁
+wfEq (∥-cong x) = wfEq x
 
 {--
 mutual
@@ -241,6 +247,7 @@ noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
 noNe (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesₙ neT) = noNe ⊢t neT
+noNe (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑₙ neT) = noNe ⊢a neT
 
 -- Neutrals do not weak head reduce
 
@@ -289,6 +296,7 @@ whnfRed*Term (id x) Uₙ      = PE.refl
 whnfRed*Term (id x) Πₙ      = PE.refl
 whnfRed*Term (id x) Σₙ      = PE.refl
 whnfRed*Term (id x) ∪ₙ      = PE.refl
+whnfRed*Term (id x) ∥ₙ      = PE.refl
 whnfRed*Term (id x) ℕₙ      = PE.refl
 whnfRed*Term (id x) Emptyₙ  = PE.refl
 whnfRed*Term (id x) Unitₙ   = PE.refl
@@ -298,6 +306,7 @@ whnfRed*Term (id x) zeroₙ   = PE.refl
 whnfRed*Term (id x) sucₙ    = PE.refl
 whnfRed*Term (id x) injlₙ   = PE.refl
 whnfRed*Term (id x) injrₙ   = PE.refl
+whnfRed*Term (id x) ∥ᵢₙ     = PE.refl
 whnfRed*Term (id x) starₙ   = PE.refl
 whnfRed*Term (id x) (ne x₁) = PE.refl
 whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)

@@ -30,7 +30,8 @@ escape (Emptyᵣ [ ⊢A , ⊢B , D ]) = ⊢A
 escape (Unitᵣ [ ⊢A , ⊢B , D ]) = ⊢A
 escape (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) = ⊢A
 escape (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) = ⊢A
-escape (∪ᵣ (∪ᵣ S T [ ⊢A , ⊢B , D ] ⊢S ⊢T A≡A [S] [T])) = ⊢A
+escape (∪ᵣ′ S T [ ⊢A , ⊢B , D ] ⊢S ⊢T A≡A [S] [T]) = ⊢A
+escape (∥ᵣ′ S [ ⊢A , ⊢B , D ] ⊢S A≡A [S]) = ⊢A
 escape (emb 0<1 A) = escape A
 
 -- Reducible type equality respect the equality relation.
@@ -46,8 +47,10 @@ escapeEq (ne′ K D neK K≡K) (ne₌ M D′ neM K≡M) =
 escapeEq (Bᵣ′ W F G D ⊢F ⊢G A≡A [F] [G] G-ext)
              (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
   ≅-red (red D) D′ ⟦ W ⟧ₙ ⟦ W ⟧ₙ A≡B
-escapeEq (∪ᵣ (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+escapeEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
   ≅-red (red D) D′ ∪ₙ ∪ₙ A≡B
+escapeEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₌ S′ D′ A≡B [S≡S′]) =
+  ≅-red (red D) D′ ∥ₙ ∥ₙ A≡B
 escapeEq (emb 0<1 A) A≡B = escapeEq A A≡B
 
 -- Reducible terms are well-formed.
@@ -70,6 +73,8 @@ escapeTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                (Σₜ p [ ⊢t , ⊢u , d ] pProd p≅p [fst] [snd]) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , [ ⊢t , ⊢u , d ] , b , c) =
+  conv ⊢t (sym (subset* (red D)))
+escapeTerm (∥ᵣ′ S D ⊢S A≡A [S]) (p , [ ⊢t , ⊢u , d ] , b , c) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (emb 0<1 A) t = escapeTerm A t
 
@@ -107,4 +112,8 @@ escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₂ₜ₌ p r c d e f
   ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (injectionRWhnf i) (injectionRWhnf j) e
 escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₃ₜ₌ p r c d e f g (neNfₜ₌ neK neM k≡m)) =
   ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (ne neK) (ne neM) e
+escapeTermEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₁ₜ₌ p r c d e f g pa ra i j x) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∥ₙ (TruncIWhnf i) (TruncIWhnf j) e
+escapeTermEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₂ₜ₌ p r c d e f g (neNfₜ₌ neK neM k≡m)) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∥ₙ (ne neK) (ne neM) e
 escapeTermEq (emb 0<1 A) t≡u = escapeTermEq A t≡u
