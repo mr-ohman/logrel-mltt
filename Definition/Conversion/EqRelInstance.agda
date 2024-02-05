@@ -5,7 +5,7 @@ module Definition.Conversion.EqRelInstance where
 open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
-open import Definition.Typed.Weakening using (_∷_⊆_; wkEq)
+open import Definition.Typed.Weakening using (_∷_⊆_; wkEq; ▹▹-cong)
 open import Definition.Conversion
 open import Definition.Conversion.Reduction
 open import Definition.Conversion.Universe
@@ -161,6 +161,27 @@ record _⊢_~_∷_ (Γ : Con Term n) (k l A : Term n) : Set where
       Γ ⊢ k ~ l ∷ A → Γ ⊢ k [conv↑] l ∷ A
 ~-to-conv (↑ x x₁) = convConvTerm (lift~toConv↑ x₁) (sym x)
 
+~-cases : ∀ {A B C C′ B₁ u u′ v v′ t t′}
+        → Γ ⊢ A
+        → Γ ⊢ B
+        → Γ ⊢ C [conv↑] C′
+        → Γ ⊢ u [conv↑] u′ ∷ A ▹▹ C
+        → Γ ⊢ v [conv↑] v′ ∷ B ▹▹ C
+        → Γ ⊢ A ∪ B ≡ B₁
+        → Γ ⊢ t ~ t′ ↑ B₁
+        → Γ ⊢ cases C t u v ~ cases C′ t′ u′ v′ ∷ C
+~-cases {A = A} {B} {C} {C′} {B₁} {u} {u′} {v} {v′} {t} {t′} ⊢A ⊢B C≡C′ u≡u′ v≡v′ ∪≡ t≡t′ =
+  let C≡           = soundnessConv↑ C≡C′
+      ⊢C , ⊢C′     = syntacticEq C≡
+      ⊢AB , ⊢B₁    = syntacticEq ∪≡
+      B₂ , wB , rB = whNorm ⊢B₁
+      eB           = subset* (red rB)
+      D , E , ≡DE  = ∪≡A (trans ∪≡ eB) wB
+      C≡ , D≡      = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡DE (trans ∪≡ eB))
+  in  ↑ (refl ⊢C) (cases-cong C≡C′
+                              (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡DE ([~] B₁ (red rB) wB t≡t′))
+                              (convConvTerm u≡u′ (▹▹-cong ⊢A C≡ (refl ⊢C)))
+                              (convConvTerm v≡v′ (▹▹-cong ⊢B D≡ (refl ⊢C))))
 
 -- Algorithmic equality instance of the generic equality relation.
 instance eqRelInstance : EqRelSet
@@ -222,6 +243,20 @@ eqRelInstance = record {
                               E∷U′ = stabilityTerm (reflConEq ⊢Γ ∙ F≡H) E∷U
                           in  liftConvTerm (univ (Σⱼ F∷U ▹ G∷U) (Σⱼ H∷U ▹ E∷U′)
                                                 (Σ-cong x F<>H G<>E));
+  ≅-∪-cong = λ x₁ x₂ → liftConv (∪-cong x₁ x₂);
+  ≅ₜ-∪-cong = λ x₁ x₂ → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x₁)
+                            _ , G∷U , E∷U = syntacticEqTerm (soundnessConv↑Term x₂)
+                            ⊢Γ = wfTerm F∷U
+                            F<>H = univConv↑ x₁
+                            G<>E = univConv↑ x₂
+                            F≡H = soundnessConv↑ F<>H
+                        in  liftConvTerm (univ (F∷U ∪ⱼ G∷U) (H∷U ∪ⱼ E∷U)
+                                                (∪-cong F<>H G<>E));
+  ≅-injl-cong = λ x₁ x₂ x₃ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₃)
+                             in liftConvTerm (∪₁-η (injlⱼ y₁ x₂) (injlⱼ y₂ x₂) injlₙ injlₙ x₃);
+  ≅-injr-cong = λ x₁ x₂ x₃ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₃)
+                             in liftConvTerm (∪₂-η (injrⱼ x₁ y₁) (injrⱼ x₁ y₂) injrₙ injrₙ x₃);
+  ~-cases = λ x₁ x₂ x₃ (↑ z x₄) x₅ x₆ → ~-cases x₁ x₂ x₃ x₅ x₆ z x₄;
   ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
   ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x₁ x₂ x₃ x₄ x₅);
