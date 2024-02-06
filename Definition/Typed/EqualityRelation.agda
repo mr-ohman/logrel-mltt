@@ -252,12 +252,20 @@ record EqRelSet : Set₁ where
     ~-cases : ∀ {t t′ u u′ v v′ A B C C′}
               → Γ ⊢ A
               → Γ ⊢ B
---              → Γ ⊢ C
               → Γ ⊢ C ≅ C′
               → Γ ⊢ t ~ t′ ∷ A ∪ B
               → Γ ⊢ u ≅ u′ ∷ A ▹▹ C
               → Γ ⊢ v ≅ v′ ∷ B ▹▹ C
               → Γ ⊢ cases C t u v ~ cases C′ t′ u′ v′ ∷ C
+
+    -- Truncation recursion congruence
+    ~-∥ₑ : ∀ {a a′ f f′ A B}
+              → Γ ⊢ A
+              → Γ ⊢ B
+              → Γ ⊢ B ≅ B′
+              → Γ ⊢ a ≅ a′ ∷ ∥ A ∥
+              → Γ ⊢ f ≅ f′ ∷ A ▹▹ ∥ B ∥
+              → Γ ⊢ ∥ₑ B a f ~ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
 
     -- Empty recursion congruence
     ~-Emptyrec : ∀ {n n′ F F′}

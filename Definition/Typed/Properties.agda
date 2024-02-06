@@ -85,6 +85,9 @@ wfEqTerm (injr-cong a b c) = wfEqTerm c
 wfEqTerm (cases-cong A B C t u v) = wfEqTerm t
 wfEqTerm (∪-β₁ _ _ _ t _ _) = wfTerm t
 wfEqTerm (∪-β₂ _ _ _ t _ _) = wfTerm t
+wfEqTerm (∥ᵢ-cong A t) = wfEqTerm t
+wfEqTerm (∥ₑ-cong A B a f) = wfEqTerm a
+wfEqTerm (∥-β A B a f) = wfTerm a
 
 wfEq : Γ ⊢ A ≡ B → ⊢ Γ
 wfEq (univ A≡B) = wfEqTerm A≡B
@@ -194,6 +197,8 @@ subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
 subsetTerm (cases-subst A B C u v x) = cases-cong A B (refl C) {--C--} (subsetTerm x) (refl u) (refl v)
 subsetTerm (∪-β₁ A B C t u v) = ∪-β₁ A B C t u v
 subsetTerm (∪-β₂ A B C t u v) = ∪-β₂ A B C t u v
+subsetTerm (∥ₑ-subst A B f a) = ∥ₑ-cong A (refl B) (subsetTerm a) (refl f)
+subsetTerm (∥-β A B a f) = ∥-β A B a f
 
 subset : Γ ⊢ A ⇒ B → Γ ⊢ A ≡ B
 subset (univ A⇒B) = univ (subsetTerm A⇒B)
@@ -223,6 +228,8 @@ redFirstTerm (Σ-β₂ F G x x₁) = sndⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (cases-subst A B C u v x) = casesⱼ (redFirstTerm x) u v C
 redFirstTerm (∪-β₁ A B C t u v) = casesⱼ (injlⱼ t B) u v C
 redFirstTerm (∪-β₂ A B C t u v) = casesⱼ (injrⱼ A t) u v C
+redFirstTerm (∥ₑ-subst A B f a) = ∥ₑⱼ (redFirstTerm a) f B
+redFirstTerm (∥-β A B a f) = ∥ₑⱼ (∥ᵢⱼ a) f B
 
 redFirst : Γ ⊢ A ⇒ B → Γ ⊢ A
 redFirst (univ A⇒B) = univ (redFirstTerm A⇒B)
@@ -238,6 +245,7 @@ redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
 
 -- No neutral terms are well-formed in an empty context
 
+{--
 noNe : ε ⊢ t ∷ A → Neutral t → ⊥
 noNe (conv ⊢t x) n = noNe ⊢t n
 noNe (var x₁ ()) (var x)
@@ -247,7 +255,8 @@ noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
 noNe (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesₙ neT) = noNe ⊢t neT
-noNe (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑₙ neT) = noNe ⊢a neT
+noNe (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑₙ {--neT--}) = {!!} --noNe ⊢a neT
+--}
 
 -- Neutrals do not weak head reduce
 
@@ -266,6 +275,8 @@ neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
 neRedTerm (cases-subst _ _ _ _ _ d) (casesₙ x) = neRedTerm d x
 neRedTerm (∪-β₁ A B C t u v) (casesₙ ())
 neRedTerm (∪-β₂ A B C t u v) (casesₙ ())
+neRedTerm (∥ₑ-subst A B f a) (∥ₑₙ x) = neRedTerm a x
+neRedTerm (∥-β A B a f) (∥ₑₙ ())
 
 neRed : (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
@@ -287,6 +298,8 @@ whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
 whnfRedTerm (cases-subst _ _ _ _ _ d) (ne (casesₙ x)) = neRedTerm d x
 whnfRedTerm (∪-β₁ A B C t u v) (ne (casesₙ ()))
 whnfRedTerm (∪-β₂ A B C t u v) (ne (casesₙ ()))
+whnfRedTerm (∥ₑ-subst A B f a) (ne (∥ₑₙ x)) = neRedTerm a x
+whnfRedTerm (∥-β A B a f) (ne (∥ₑₙ ()))
 
 whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
@@ -334,6 +347,8 @@ whrDetTerm (Emptyrec-subst x d) (Emptyrec-subst x₂ d′) rewrite whrDetTerm d 
 whrDetTerm (cases-subst _ _ _ _ _ x) (cases-subst _ _ _ _ _ y) rewrite whrDetTerm x y = PE.refl
 whrDetTerm (∪-β₁ _ _ _ _ _ _) (∪-β₁ _ _ _ _ _ _) = PE.refl
 whrDetTerm (∪-β₂ _ _ _ _ _ _) (∪-β₂ _ _ _ _ _ _) = PE.refl
+whrDetTerm (∥ₑ-subst A B f a) (∥ₑ-subst A′ B′ f′ a′) rewrite whrDetTerm a a′ = PE.refl
+whrDetTerm (∥-β A B a f) (∥-β A′ B′ f′ a') = PE.refl
 
 whrDetTerm (app-subst d x) (β-red x₁ x₂ x₃) = ⊥-elim (whnfRedTerm d lamₙ)
 whrDetTerm (β-red x x₁ x₂) (app-subst d x₃) = ⊥-elim (whnfRedTerm d lamₙ)
@@ -349,6 +364,8 @@ whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₁ A B C t u v) = ⊥-elim (whnfRed
 whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₂ A B C t u v) = ⊥-elim (whnfRedTerm x injrₙ)
 whrDetTerm (∪-β₁ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injlₙ)
 whrDetTerm (∪-β₂ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injrₙ)
+whrDetTerm (∥ₑ-subst A B f a) (∥-β A′ B′ a′ f′) = ⊥-elim (whnfRedTerm a ∥ᵢₙ)
+whrDetTerm (∥-β A B a f) (∥ₑ-subst A′ B′ f′ a′) = ⊥-elim (whnfRedTerm a′ ∥ᵢₙ)
 
 whrDet : (d : Γ ⊢ A ⇒ B) (d′ : Γ ⊢ A ⇒ B′) → B PE.≡ B′
 whrDet (univ x) (univ x₁) = whrDetTerm x x₁

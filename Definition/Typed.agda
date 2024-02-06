@@ -266,6 +266,7 @@ mutual
                   → Γ ⊢ fst p ≡ fst r ∷ F
                   → Γ ⊢ snd p ≡ snd r ∷ G [ fst p ]
                   → Γ ⊢ p ≡ r ∷ Σ F ▹ G
+    -- disjoint union
     injl-cong     : ∀ {t t' A B}
                   → Γ ⊢ A
                   → Γ ⊢ B
@@ -300,6 +301,24 @@ mutual
                   → Γ ⊢ u ∷ A ▹▹ C
                   → Γ ⊢ v ∷ B ▹▹ C
                   → Γ ⊢ cases C (injr t) u v ≡ v ∘ t ∷ C
+    -- truncation
+    ∥ᵢ-cong       : ∀ {t t' A}
+                  → Γ ⊢ A
+                  → Γ ⊢ t ≡ t' ∷ A
+                  → Γ ⊢ ∥ᵢ t ≡ ∥ᵢ t' ∷ ∥ A ∥
+    ∥ₑ-cong       : ∀ {a a′ f f′ A B B′}
+                  → Γ ⊢ A
+                  → Γ ⊢ B ≡ B′
+                  → Γ ⊢ a ≡ a′ ∷ ∥ A ∥
+                  → Γ ⊢ f ≡ f′ ∷ A ▹▹ ∥ B ∥
+                  → Γ ⊢ ∥ₑ B a f ≡ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
+    ∥-β           : ∀ {A B a f}
+                  → Γ ⊢ A
+                  → Γ ⊢ B
+                  → Γ ⊢ a ∷ A
+                  → Γ ⊢ f ∷ A ▹▹ ∥ B ∥
+                  → Γ ⊢ ∥ₑ B (∥ᵢ a) f ≡ f ∘ a ∷ ∥ B ∥
+    -- numbers
     suc-cong      : ∀ {m n}
                   → Γ ⊢ m ≡ n ∷ ℕ
                   → Γ ⊢ suc m ≡ suc n ∷ ℕ
@@ -368,6 +387,7 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ u ∷ G [ t ]
                  -- TODO(WN): Prove that 𝔍 ∷ G [ t ] is admissible
                  → Γ ⊢ snd (prod t u) ⇒ u ∷ G [ fst (prod t u) ]
+  -- disjoint union
   cases-subst    : ∀ {t t' u v A B C}
                  → Γ ⊢ A
                  → Γ ⊢ B
@@ -392,6 +412,20 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ u ∷ A ▹▹ C
                  → Γ ⊢ v ∷ B ▹▹ C
                  → Γ ⊢ cases C (injr t) u v ⇒ v ∘ t ∷ C
+  -- truncation
+  ∥ₑ-subst       : ∀ {a a' f A B}
+                 → Γ ⊢ A
+                 → Γ ⊢ B
+                 → Γ ⊢ f ∷ A ▹▹ ∥ B ∥
+                 → Γ ⊢ a ⇒ a' ∷ ∥ A ∥
+                 → Γ ⊢ ∥ₑ B a f ⇒ ∥ₑ B a' f ∷ ∥ B ∥
+  ∥-β            : ∀ {A B a f}
+                 → Γ ⊢ A
+                 → Γ ⊢ B
+                 → Γ ⊢ a ∷ A
+                 → Γ ⊢ f ∷ A ▹▹ ∥ B ∥
+                 → Γ ⊢ ∥ₑ B (∥ᵢ a) f ⇒ f ∘ a ∷ ∥ B ∥
+  -- numbers
   natrec-subst   : ∀ {z s n n′ F}
                  → Γ ∙ ℕ ⊢ F
                  → Γ     ⊢ z ∷ F [ zero ]

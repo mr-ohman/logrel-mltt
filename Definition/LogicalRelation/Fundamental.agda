@@ -1002,6 +1002,16 @@ mutual
                             (injrᵛ {A = A} {B = B} {t = t} [Γ] [A] [B] [t]) [u] [v])
                     (▹▹appᵛ {F = B} {G = C} {t = v} {u = t} [Γ] [B] [C] [B▹▹C] [v]′ [t])
                     (cases-βᵣᵛ {A = A} {B} {C} {t = t} {u = u} {v = v} [Γ] [C] [A] [B] [t] [u] [v])
+  fundamentalTermEq (∥ᵢ-cong {t} {t′} {A} ⊢A t≡t′)
+    with fundamentalTermEq t≡t′ | fundamental ⊢A
+  ... | [Γ] , modelsTermEq [A] [t] [t′] [t≡t′] | [Γ]₁ , [A]₁ =
+    let [∥A∥] = ∥ᵛ {F = A} [Γ] [A]
+    in  [Γ] , modelsTermEq [∥A∥]
+                (∥ᵢᵛ {A = A} {t}  [Γ] [A] [t])
+                (∥ᵢᵛ {A = A} {t′} [Γ] [A] [t′])
+                (∥ᵢ-congᵛ {A = A} {t} {t′} [Γ] [A] [t] [t′] [t≡t′])
+  fundamentalTermEq (∥ₑ-cong {a} {a′} {f} {f′} {A} {B} {B′} ⊢A B≡B′ a≡a′ f≡f′) = {!!}
+  fundamentalTermEq (∥-β {A} {B} {a} {f} ⊢A ⊢B ⊢a ⊢f) = {!!}
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
