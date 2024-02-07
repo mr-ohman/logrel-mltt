@@ -263,7 +263,7 @@ record EqRelSet : Set₁ where
               → Γ ⊢ A
               → Γ ⊢ B
               → Γ ⊢ B ≅ B′
-              → Γ ⊢ a ≅ a′ ∷ ∥ A ∥
+              → Γ ⊢ a ~ a′ ∷ ∥ A ∥
               → Γ ⊢ f ≅ f′ ∷ A ▹▹ ∥ B ∥
               → Γ ⊢ ∥ₑ B a f ~ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
 
