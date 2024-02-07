@@ -135,6 +135,48 @@ private
          (irrelevanceTerm [∥A∥] (∥-intr (∥-elim [∥A∥])) [a])
          (irrelevanceTerm [▹▹AB] (▹▹-intr (▹▹-elim [▹▹AB])) [f])
 
+:⇒*:-refl : ∀ {B}
+          → Γ ⊢ B
+          → Γ ⊢ ∥ B ∥ :⇒*: ∥ B ∥
+:⇒*:-refl {B} ⊢B = [ ∥ ⊢B ∥ⱼ , ∥ ⊢B ∥ⱼ , id ∥ ⊢B ∥ⱼ ]
+
+⇒*-refl : ∀ {B}
+        → Γ ⊢ B
+        → Γ ⊢ ∥ B ∥ ⇒* ∥ B ∥
+⇒*-refl {B} ⊢B = id ∥ ⊢B ∥ⱼ
+
+⊩-mon : ∀ {n} {Γ : Con Term n} {B l}
+      → Γ ⊩⟨ l ⟩ B
+      → {m : Nat} {ρ : Wk m n} {Δ : Con Term m} → ρ ∷ Δ ⊆ Γ → ⊢ Δ → Δ ⊩⟨ l ⟩ U.wk ρ B
+⊩-mon {n = n} {Γ = Γ} {B = B} {l = l} h {m} {ρ} {Δ} [ρ] ⊢Δ = wk [ρ] ⊢Δ h
+
+⊩∥ : ∀ {n} {Γ : Con Term n} {B l}
+     → Γ ⊩⟨ l ⟩ B
+     → Γ ⊩⟨ l ⟩ ∥ B ∥
+⊩∥ {n = n} {Γ = Γ} {B = B} {l = l} h =
+  ∥ᵣ (∥ᵣ B (:⇒*:-refl (escape h)) (escape h) (≅-∥-cong (escapeEq h (reflEq h))) (⊩-mon h))
+
+⊩≡∥ : ∀ {n} {Γ : Con Term n} {A B l}
+        ([A]   : Γ ⊩⟨ l ⟩ A)
+        ([B]   : Γ ⊩⟨ l ⟩ B)
+        ([∥A∥] : Γ ⊩⟨ l ⟩ ∥ A ∥)
+     → Γ ⊩⟨ l ⟩ A ≡ B / [A]
+     → Γ ⊩⟨ l ⟩ ∥ A ∥ ≡ ∥ B ∥ / [∥A∥]
+⊩≡∥ {n = n} {Γ = Γ} {A = A} {B = B} {l = l} [A] [B] [∥A∥] h =
+  irrelevanceEq′
+    PE.refl (⊩∥ [A]) [∥A∥]
+    (∥₌ B (⇒*-refl ⊢B) (≅-∥-cong (escapeEq [A] h)) q)
+  where
+  ⊢B : Γ ⊢ B
+  ⊢B = escape [B]
+
+  A≡B : Γ ⊢ A ≡ B
+  A≡B = ≅-eq (escapeEq [A] h)
+
+  q : {m : Nat} {ρ : Wk m n} {Δ : Con Term m} ([ρ] : ρ ∷ Δ ⊆ Γ) (⊢Δ : ⊢ Δ)
+    → Δ ⊩⟨ l ⟩ U.wk ρ A ≡ U.wk ρ B / (⊩-mon [A] [ρ] ⊢Δ)
+  q {m} {ρ} {Δ} [ρ] ⊢Δ = wkEq [ρ] ⊢Δ [A] h
+
 ∥ₑ-cong′ : ∀ {A B B′ a a′ f f′ l l′}
             ([B]    : Γ ⊩⟨ l ⟩ B)
             ([B′]   : Γ ⊩⟨ l ⟩ B′)
@@ -182,10 +224,10 @@ private
                                     [∥B∥] (appTermNd [A] [∥B∥] (▹▹-intr [▹▹AB]) ⊩f [pa]))
 
   [∥B′∥] : Γ ⊩⟨ l ⟩ ∥ B′ ∥
-  [∥B′∥] = {!!}
+  [∥B′∥] = ⊩∥ [B′]
 
   [∥B≡B′∥] : Γ ⊩⟨ l ⟩ ∥ B ∥ ≡ ∥ B′ ∥ / [∥B∥]
-  [∥B≡B′∥] = {!!}
+  [∥B≡B′∥] = ⊩≡∥ [B] [B′] [∥B∥] [B≡B′]
 
   [▹▹AB′] : Γ ⊩⟨ l ⟩▹▹ A ▹▹ ∥ B′ ∥
   [▹▹AB′] = ≡⊩▹▹ {Γ = Γ} {l} {A} {∥ B ∥} {∥ B′ ∥} [∥B′∥] [▹▹AB]
@@ -214,99 +256,91 @@ private
           [a≡a′]@(∥₂ₜ₌ p p′ d d′ p≅p′ e g (neNfₜ₌ neK neK′ k≡k)) [f≡f′]
   with ∥-PE-injectivity (whnfRed* (red D) ∥ₙ)
 ... | PE.refl =
-  {!!} --transEqTerm [C] [∥ₑt≡∥ₑp] (transEqTerm [C] [∥ₑp≡∥ₑp′] (symEqTerm [C] [∥ₑt′≡∥ₑp′]))
+  transEqTerm [∥B∥] [∥ₑa≡∥ₑp] (transEqTerm [∥B∥] [∥ₑp≡∥ₑp′] (symEqTerm [∥B∥] [∥ₑa′≡∥ₑp′]))
   where
   [A] : Γ ⊩⟨ l′ ⟩ A
   [A] = irrelevance′ (wk-id A) ([A'] id (wf ⊢A))
 
-{--
-  [u] : Γ ⊩⟨ l ⟩ u ∷ A ▹▹ C / ▹▹-intr [▹▹AC]
-  [u] = ⊩ₗ (▹▹-intr [▹▹AC]) [u≡u′]
+  [f] : Γ ⊩⟨ l ⟩ f ∷ A ▹▹ ∥ B ∥ / ▹▹-intr [▹▹AB]
+  [f] = ⊩ₗ (▹▹-intr [▹▹AB]) [f≡f′]
 
-  [v] : Γ ⊩⟨ l ⟩ v ∷ B ▹▹ C / ▹▹-intr [▹▹BC]
-  [v] = ⊩ₗ (▹▹-intr [▹▹BC]) [v≡v′]
+  [f′] : Γ ⊩⟨ l ⟩ f′ ∷ A ▹▹ ∥ B ∥ / ▹▹-intr [▹▹AB]
+  [f′] = ⊩ᵣ (▹▹-intr [▹▹AB]) [f≡f′]
 
-  [u′] : Γ ⊩⟨ l ⟩ u′ ∷ A ▹▹ C / ▹▹-intr [▹▹AC]
-  [u′] = ⊩ᵣ (▹▹-intr [▹▹AC]) [u≡u′]
-
-  [v′] : Γ ⊩⟨ l ⟩ v′ ∷ B ▹▹ C / ▹▹-intr [▹▹BC]
-  [v′] = ⊩ᵣ (▹▹-intr [▹▹BC]) [v≡v′]
-
-  nc : Neutral (∥ₑ C p u v)
+  nc : Neutral (∥ₑ B p f)
   nc = ∥ₑₙ neK
 
-  nc′ : Neutral (∥ₑ C′ p′ u′ v′)
+  nc′ : Neutral (∥ₑ B′ p′ f′)
   nc′ = ∥ₑₙ neK′
 
-  ⊢C : Γ ⊢ C
-  ⊢C = escape [C]
+  ⊢B : Γ ⊢ B
+  ⊢B = escape [B]
 
-  ⊢C≅C′ : Γ ⊢ C ≅ C′
-  ⊢C≅C′ = escapeEq [C] [C≡C′]
+  ⊢B≅B′ : Γ ⊢ B ≅ B′
+  ⊢B≅B′ = escapeEq [B] [B≡B′]
 
-  ⊢C≡C′ : Γ ⊢ C ≡ C′
-  ⊢C≡C′ = ≅-eq ⊢C≅C′
+  ⊢B≡B′ : Γ ⊢ B ≡ B′
+  ⊢B≡B′ = ≅-eq ⊢B≅B′
 
-  ⊢C≅C : Γ ⊢ C ≅ C
-  ⊢C≅C = ≅-trans ⊢C≅C′ (≅-sym ⊢C≅C′)
+  ⊢B≅B : Γ ⊢ B ≅ B
+  ⊢B≅B = ≅-trans ⊢B≅B′ (≅-sym ⊢B≅B′)
 
-  ⊢C′≅C′ : Γ ⊢ C′ ≅ C′
-  ⊢C′≅C′ = ≅-trans (≅-sym ⊢C≅C′) ⊢C≅C′
+  ⊢B′≅B′ : Γ ⊢ B′ ≅ B′
+  ⊢B′≅B′ = ≅-trans (≅-sym ⊢B≅B′) ⊢B≅B′
 
-  redc : Γ ⊢ ∥ₑ C t u v ⇒* ∥ₑ C p u v ∷ C
-  redc = ∥ₑ-subst* ⊢A ⊢B ⊢C (escapeTerm (▹▹-intr [▹▹AC]) [u]) (escapeTerm (▹▹-intr [▹▹BC]) [v]) (redₜ d)
+  redc : Γ ⊢ ∥ₑ B a f ⇒* ∥ₑ B p f ∷ ∥ B ∥
+  redc = ∥ₑ-subst* ⊢A ⊢B (escapeTerm (▹▹-intr [▹▹AB]) [f]) (redₜ d)
 
-  [▹▹AC′] : Γ ⊩⟨ l ⟩▹▹ A ▹▹ C′
-  [▹▹AC′] = ≡⊩▹▹ {Γ = Γ} {l} {A} {C} {C′} [C′] [▹▹AC]
+  [∥B′∥] : Γ ⊩⟨ l ⟩ ∥ B′ ∥
+  [∥B′∥] = ⊩∥ [B′]
 
-  [▹▹BC′] : Γ ⊩⟨ l ⟩▹▹ B ▹▹ C′
-  [▹▹BC′] = ≡⊩▹▹ {Γ = Γ} {l} {B} {C} {C′} [C′] [▹▹BC]
+  [∥B≡B′∥] : Γ ⊩⟨ l ⟩ ∥ B ∥ ≡ ∥ B′ ∥ / [∥B∥]
+  [∥B≡B′∥] = ⊩≡∥ [B] [B′] [∥B∥] [B≡B′]
 
-  [▹▹AC≡′] : Γ ⊩⟨ l ⟩ A ▹▹ C ≡ A ▹▹ C′ / ▹▹-intr [▹▹AC]
-  [▹▹AC≡′] = ⊩▹▹-cong [A] [C] [C′] [C≡C′] [▹▹AC]
+  ⊢B′ : Γ ⊢ B′
+  ⊢B′ = escape [B′]
 
-  [▹▹BC≡′] : Γ ⊩⟨ l ⟩ B ▹▹ C ≡ B ▹▹ C′ / ▹▹-intr [▹▹BC]
-  [▹▹BC≡′] = ⊩▹▹-cong [B] [C] [C′] [C≡C′] [▹▹BC]
+  ⊢∥B≡B′∥ : Γ ⊢ ∥ B ∥ ≡ ∥ B′ ∥
+  ⊢∥B≡B′∥ = ∥-cong ⊢B≡B′
 
-  ⊩u″ : Γ ⊩⟨ l ⟩ u′ ∷ A ▹▹ C′ / ▹▹-intr [▹▹AC′]
-  ⊩u″ = convTerm₁ (▹▹-intr [▹▹AC]) (▹▹-intr [▹▹AC′]) [▹▹AC≡′] [u′]
+  [▹▹AB′] : Γ ⊩⟨ l ⟩▹▹ A ▹▹ ∥ B′ ∥
+  [▹▹AB′] = ≡⊩▹▹ {Γ = Γ} {l} {A} {∥ B ∥} {∥ B′ ∥} [∥B′∥] [▹▹AB]
 
-  ⊩v″ : Γ ⊩⟨ l ⟩ v′ ∷ B ▹▹ C′ / ▹▹-intr [▹▹BC′]
-  ⊩v″ = convTerm₁ (▹▹-intr [▹▹BC]) (▹▹-intr [▹▹BC′]) [▹▹BC≡′] [v′]
+  [▹▹AB≡′] : Γ ⊩⟨ l ⟩ A ▹▹ ∥ B ∥ ≡ A ▹▹ ∥ B′ ∥ / ▹▹-intr [▹▹AB]
+  [▹▹AB≡′] = ⊩▹▹-cong [A] [∥B∥] [∥B′∥] [∥B≡B′∥] [▹▹AB]
 
-  redc′ : Γ ⊢ ∥ₑ C′ t′ u′ v′ ⇒* ∥ₑ C′ p′ u′ v′ ∷ C′
-  redc′ = ∥ₑ-subst* ⊢A ⊢B (escape [C′]) (escapeTerm (▹▹-intr [▹▹AC′]) ⊩u″) (escapeTerm (▹▹-intr [▹▹BC′]) ⊩v″) (redₜ d′)
+  ⊩f″ : Γ ⊩⟨ l ⟩ f′ ∷ A ▹▹ ∥ B′ ∥ / ▹▹-intr [▹▹AB′]
+  ⊩f″ = convTerm₁ (▹▹-intr [▹▹AB]) (▹▹-intr [▹▹AB′]) [▹▹AB≡′] [f′]
 
-  ⊢c : Γ ⊢ ∥ₑ C p u v ∷ C
+  redc′ : Γ ⊢ ∥ₑ B′ a′ f′ ⇒* ∥ₑ B′ p′ f′ ∷ ∥ B′ ∥
+  redc′ = ∥ₑ-subst* ⊢A ⊢B′ (escapeTerm (▹▹-intr [▹▹AB′]) ⊩f″) (redₜ d′)
+
+  ⊢c : Γ ⊢ ∥ₑ B p f ∷ ∥ B ∥
   ⊢c = redSecond*Term redc
 
-  ⊢c′ : Γ ⊢ ∥ₑ C′ p′ u′ v′ ∷ C′
+  ⊢c′ : Γ ⊢ ∥ₑ B′ p′ f′ ∷ ∥ B′ ∥
   ⊢c′ = redSecond*Term redc′
 
-  ⊢c″ : Γ ⊢ ∥ₑ C′ p′ u′ v′ ∷ C
-  ⊢c″ = conv ⊢c′ (sym ⊢C≡C′)
+  ⊢c″ : Γ ⊢ ∥ₑ B′ p′ f′ ∷ ∥ B ∥
+  ⊢c″ = conv ⊢c′ (sym ⊢∥B≡B′∥)
 
-  vc : Γ ⊩⟨ l ⟩ ∥ₑ C p u v ∷ C / [C]
-  vc = neuTerm [C] nc ⊢c (~-∥ₑ ⊢A ⊢B ⊢C≅C (~-trans k≡k (~-sym k≡k))
-                                  (escapeTermEq (▹▹-intr [▹▹AC]) (reflEqTerm (▹▹-intr [▹▹AC]) [u]))
-                                  (escapeTermEq (▹▹-intr [▹▹BC]) (reflEqTerm (▹▹-intr [▹▹BC]) [v])))
+  vc : Γ ⊩⟨ l ⟩ ∥ₑ B p f ∷ ∥ B ∥ / [∥B∥]
+  vc = neuTerm [∥B∥] nc ⊢c (~-∥ₑ ⊢A ⊢B ⊢B≅B (~-trans k≡k (~-sym k≡k))
+                                 (escapeTermEq (▹▹-intr [▹▹AB]) (reflEqTerm (▹▹-intr [▹▹AB]) [f])))
 
-  vc′ : Γ ⊩⟨ l ⟩ ∥ₑ C′ p′ u′ v′ ∷ C′ / [C′]
-  vc′ = neuTerm [C′] nc′ ⊢c′ (~-∥ₑ ⊢A ⊢B ⊢C′≅C′ (~-trans (~-sym k≡k) k≡k)
-                                      (escapeTermEq (▹▹-intr [▹▹AC′]) (reflEqTerm (▹▹-intr [▹▹AC′]) ⊩u″))
-                                      (escapeTermEq (▹▹-intr [▹▹BC′]) (reflEqTerm (▹▹-intr [▹▹BC′]) ⊩v″)))
+  vc′ : Γ ⊩⟨ l ⟩ ∥ₑ B′ p′ f′ ∷ ∥ B′ ∥ / [∥B′∥]
+  vc′ = neuTerm [∥B′∥] nc′ ⊢c′ (~-∥ₑ ⊢A ⊢B′ ⊢B′≅B′ (~-trans (~-sym k≡k) k≡k)
+                                     (escapeTermEq (▹▹-intr [▹▹AB′]) (reflEqTerm (▹▹-intr [▹▹AB′]) ⊩f″)))
 
-  [∥ₑt≡∥ₑp] : Γ ⊩⟨ l ⟩ ∥ₑ C t u v ≡ ∥ₑ C p u v ∷ C / [C]
-  [∥ₑt≡∥ₑp] = proj₂ (redSubst*Term redc [C] vc)
+  [∥ₑa≡∥ₑp] : Γ ⊩⟨ l ⟩ ∥ₑ B a f ≡ ∥ₑ B p f ∷ ∥ B ∥ / [∥B∥]
+  [∥ₑa≡∥ₑp] = proj₂ (redSubst*Term redc [∥B∥] vc)
 
-  [∥ₑt′≡∥ₑp′] : Γ ⊩⟨ l ⟩ ∥ₑ C′ t′ u′ v′ ≡ ∥ₑ C′ p′ u′ v′ ∷ C / [C]
-  [∥ₑt′≡∥ₑp′] = convEqTerm₂ [C] [C′] [C≡C′] (proj₂ (redSubst*Term redc′ [C′] vc′))
+  [∥ₑa′≡∥ₑp′] : Γ ⊩⟨ l ⟩ ∥ₑ B′ a′ f′ ≡ ∥ₑ B′ p′ f′ ∷ ∥ B ∥ / [∥B∥]
+  [∥ₑa′≡∥ₑp′] = convEqTerm₂ [∥B∥] [∥B′∥] [∥B≡B′∥] (proj₂ (redSubst*Term redc′ [∥B′∥] vc′))
 
-  [∥ₑp≡∥ₑp′] : Γ ⊩⟨ l ⟩ ∥ₑ C p u v ≡ ∥ₑ C′ p′ u′ v′ ∷ C / [C]
-  [∥ₑp≡∥ₑp′] = neuEqTerm [C] nc nc′ ⊢c ⊢c″
-                       (~-∥ₑ ⊢A ⊢B ⊢C≅C′ k≡k (escapeTermEq (▹▹-intr [▹▹AC]) [u≡u′])
-                                                (escapeTermEq (▹▹-intr [▹▹BC]) [v≡v′]))
---}
+  [∥ₑp≡∥ₑp′] : Γ ⊩⟨ l ⟩ ∥ₑ B p f ≡ ∥ₑ B′ p′ f′ ∷ ∥ B ∥ / [∥B∥]
+  [∥ₑp≡∥ₑp′] = neuEqTerm [∥B∥] nc nc′ ⊢c ⊢c″
+                         (~-∥ₑ ⊢A ⊢B ⊢B≅B′ k≡k (escapeTermEq (▹▹-intr [▹▹AB]) [f≡f′]))
 ∥ₑ-cong′ [B] [B′] [B≡B′] (emb 0<1 x) [∥B∥] [▹▹AB] [a≡a′] [f≡f′] =
   ∥ₑ-cong′ [B] [B′] [B≡B′] x [∥B∥] [▹▹AB] [a≡a′] [f≡f′]
 
