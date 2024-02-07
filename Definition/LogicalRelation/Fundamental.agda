@@ -1058,16 +1058,15 @@ mutual
                   [f′])))
          (∥ₑ-congᵛ {A = A} {B} {B′} {a = a} {a′ = a′} {f = f} {f′ = f′} [Γ] [A] [B] [∥B∥]
                    [B′] [B≡B′] [a≡a′] [f≡f′])
-  fundamentalTermEq {Γ = Γ} (∥-β {A} {B} {a} {f} ⊢A ⊢B ⊢a ⊢f)
-    with fundamental ⊢A
-       | fundamental ⊢B
+  fundamentalTermEq {Γ = Γ} (∥-β {A} {B} {a} {f} ⊢B ⊢a ⊢f)
+    with fundamental ⊢B
        | fundamentalTerm ⊢a
        | fundamentalTerm ⊢f
-  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂
+  ... | [Γ]₂ , [B]₂
       | [Γ]₃ , [A]₃ , [a]₃
       | [Γ]₄ , [A▹▹B]₄ , [f]₄ =
-    let [Γ]    = [Γ]₁
-        [A]    = S.irrelevance {A = A} [Γ]₁ [Γ] [A]₁
+    let [Γ]    = [Γ]₂
+        [A]    = S.irrelevance {A = A} [Γ]₃ [Γ] [A]₃
         [B]    = S.irrelevance {A = B} [Γ]₂ [Γ] [B]₂
         [∥B∥]  = ⊩ᵛ∥ {Γ = Γ} {A = B} [Γ] [B]
         [A▹▹B] = S.irrelevance {A = A ▹▹ ∥ B ∥} [Γ]₄ [Γ] [A▹▹B]₄

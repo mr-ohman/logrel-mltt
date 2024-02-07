@@ -2,7 +2,7 @@
 
 module Definition.Typed.Consequences.Inversion where
 
-open import Definition.Untyped hiding (_∷_; U≢∪; ℕ≢∪)
+open import Definition.Untyped hiding (_∷_; U≢∪; U≢∥)
 open import Definition.Typed
 open import Definition.Typed.Properties
 
@@ -59,6 +59,13 @@ inversion-∪ (x ∪ⱼ y) = x , y , refl (Uⱼ (wfTerm x))
 inversion-∪ (conv x x₁) = let a , b , c = inversion-∪ x
                           in  a , b , trans (sym x₁) c
 
+-- Inversion of ∥-types.
+inversion-∥ : ∀ {A C}
+            → Γ ⊢ ∥ A ∥ ∷ C → Γ ⊢ A ∷ U × Γ ⊢ C ≡ U
+inversion-∥ (∥ x ∥ⱼ) = x , refl (Uⱼ (wfTerm x))
+inversion-∥ (conv x x₁) = let a , c = inversion-∥ x
+                          in  a , trans (sym x₁) c
+
 -- Inversion of zero.
 inversion-zero : ∀ {C} → Γ ⊢ zero ∷ C → Γ ⊢ C ≡ ℕ
 inversion-zero (zeroⱼ x) = refl (ℕⱼ x)
@@ -82,6 +89,13 @@ inversion-injr : ∀ {t C} → Γ ⊢ injr t ∷ C → ∃₂ λ A B → Γ ⊢ 
 inversion-injr (injrⱼ {A₁} {B₁} {_} h x) = A₁ , B₁ , x , refl (h ∪ⱼ syntacticTerm x)
 inversion-injr (conv h x) with inversion-injr h
 ... | A , B , ⊢t , C≡ = A , B , ⊢t , trans (sym x) C≡
+
+-- Inversion of ∥ᵢ.
+inversion-∥ᵢ : ∀ {t C} → Γ ⊢ ∥ᵢ t ∷ C → ∃ λ A → Γ ⊢ t ∷ A × Γ ⊢ C ≡ ∥ A ∥
+inversion-∥ᵢ (∥ᵢⱼ {A₁} {_} h) = A₁ , h , refl ∥ syntacticTerm h ∥ⱼ
+inversion-∥ᵢ (conv h x) with inversion-∥ᵢ h
+... | A , ⊢t , C≡ =
+  A , ⊢t , trans (sym x) C≡
 
 -- Inversion of natural recursion.
 inversion-natrec : ∀ {c g n A C} → Γ ⊢ natrec C c g n ∷ A
@@ -138,6 +152,9 @@ whnfProduct x Σₙ =
 whnfProduct x ∪ₙ =
   let _ , _ , Σ≡U = inversion-∪ x
   in ⊥-elim (U≢Σ (sym Σ≡U))
+whnfProduct x ∥ₙ =
+  let _ , Σ≡U = inversion-∥ x
+  in ⊥-elim (U≢Σ (sym Σ≡U))
 whnfProduct x ℕₙ = ⊥-elim (U≢Σ (sym (inversion-ℕ x)))
 whnfProduct x Unitₙ = ⊥-elim (U≢Σ (sym (inversion-Unit x)))
 whnfProduct x Emptyₙ = ⊥-elim (U≢Σ (sym (inversion-Empty x)))
@@ -155,3 +172,6 @@ whnfProduct x injlₙ =
 whnfProduct x injrₙ =
   let A , B , ⊢t , C≡ = inversion-injr x
   in ⊥-elim (B≢∪ BΣ C≡)
+whnfProduct x ∥ᵢₙ =
+  let A , ⊢t , C≡ = inversion-∥ᵢ x
+  in ⊥-elim (B≢∥ BΣ C≡)

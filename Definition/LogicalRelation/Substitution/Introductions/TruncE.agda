@@ -58,7 +58,7 @@ private
               → Γ ⊢ ∥ₑ B a f ⇒* f ∘ x ∷ ∥ B ∥
 ∥ₑ-subst*ᵢ ⊢A ⊢B ⊢f ⊢x a⇒a′ ∥ᵢₙ =
   ∥ₑ-subst* ⊢A ⊢B ⊢f a⇒a′
-  ⇨∷* (∥-β ⊢A ⊢B ⊢x ⊢f
+  ⇨∷* (∥-β ⊢B ⊢x ⊢f
        ⇨ id (▹▹∘ⱼ ⊢f ⊢x))
 
 -- Reducibility of ∥ₑ with a specific typing derivation
@@ -116,7 +116,7 @@ private
   ⊢c = redSecond*Term redc
 
   vc : Γ ⊩⟨ l ⟩ ∥ₑ B p f ∷ ∥ B ∥ / [∥B∥]
-  vc = neuTerm [∥B∥] nc ⊢c (~-∥ₑ ⊢A (escape [B]) (escapeEq [B] (reflEq [B]))
+  vc = neuTerm [∥B∥] nc ⊢c (~-∥ₑ ⊢A (escapeEq [B] (reflEq [B]))
                                  (~-conv k≡k (sym ⊢∥≡))
                                  (escapeTermEq (▹▹-intr [▹▹AB]) (reflEqTerm (▹▹-intr [▹▹AB]) [f])))
 ∥ₑ′ {Γ = Γ} {a = a} {f = f} {l = l} [B] (emb 0<1 (noemb (∥ᵣ S D ⊢S A≡A [S]))) [∥B∥] [▹▹AB] [a] [f] =
@@ -348,11 +348,11 @@ private
   ⊢c″ = conv ⊢c′ (sym ⊢∥B≡B′∥)
 
   vc : Γ ⊩⟨ l ⟩ ∥ₑ B p f ∷ ∥ B ∥ / [∥B∥]
-  vc = neuTerm [∥B∥] nc ⊢c (~-∥ₑ ⊢A ⊢B ⊢B≅B (~-trans k≡k (~-sym k≡k))
+  vc = neuTerm [∥B∥] nc ⊢c (~-∥ₑ ⊢A ⊢B≅B (~-trans k≡k (~-sym k≡k))
                                  (escapeTermEq (▹▹-intr [▹▹AB]) (reflEqTerm (▹▹-intr [▹▹AB]) [f])))
 
   vc′ : Γ ⊩⟨ l ⟩ ∥ₑ B′ p′ f′ ∷ ∥ B′ ∥ / [∥B′∥]
-  vc′ = neuTerm [∥B′∥] nc′ ⊢c′ (~-∥ₑ ⊢A ⊢B′ ⊢B′≅B′ (~-trans (~-sym k≡k) k≡k)
+  vc′ = neuTerm [∥B′∥] nc′ ⊢c′ (~-∥ₑ ⊢A ⊢B′≅B′ (~-trans (~-sym k≡k) k≡k)
                                      (escapeTermEq (▹▹-intr [▹▹AB′]) (reflEqTerm (▹▹-intr [▹▹AB′]) ⊩f″)))
 
   [∥ₑa≡∥ₑp] : Γ ⊩⟨ l ⟩ ∥ₑ B a f ≡ ∥ₑ B p f ∷ ∥ B ∥ / [∥B∥]
@@ -363,7 +363,7 @@ private
 
   [∥ₑp≡∥ₑp′] : Γ ⊩⟨ l ⟩ ∥ₑ B p f ≡ ∥ₑ B′ p′ f′ ∷ ∥ B ∥ / [∥B∥]
   [∥ₑp≡∥ₑp′] = neuEqTerm [∥B∥] nc nc′ ⊢c ⊢c″
-                         (~-∥ₑ ⊢A ⊢B ⊢B≅B′ k≡k (escapeTermEq (▹▹-intr [▹▹AB]) [f≡f′]))
+                         (~-∥ₑ ⊢A ⊢B≅B′ k≡k (escapeTermEq (▹▹-intr [▹▹AB]) [f≡f′]))
 ∥ₑ-cong′ [B] [B′] [B≡B′] (emb 0<1 x) [∥B∥] [▹▹AB] [a≡a′] [f≡f′] =
   ∥ₑ-cong′ [B] [B′] [B≡B′] x [∥B∥] [▹▹AB] [a≡a′] [f≡f′]
 

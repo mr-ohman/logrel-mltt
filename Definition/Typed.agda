@@ -313,7 +313,6 @@ mutual
                   → Γ ⊢ f ≡ f′ ∷ A ▹▹ ∥ B ∥
                   → Γ ⊢ ∥ₑ B a f ≡ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
     ∥-β           : ∀ {A B a f}
-                  → Γ ⊢ A
                   → Γ ⊢ B
                   → Γ ⊢ a ∷ A
                   → Γ ⊢ f ∷ A ▹▹ ∥ B ∥
@@ -420,7 +419,6 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ a ⇒ a' ∷ ∥ A ∥
                  → Γ ⊢ ∥ₑ B a f ⇒ ∥ₑ B a' f ∷ ∥ B ∥
   ∥-β            : ∀ {A B a f}
-                 → Γ ⊢ A
                  → Γ ⊢ B
                  → Γ ⊢ a ∷ A
                  → Γ ⊢ f ∷ A ▹▹ ∥ B ∥

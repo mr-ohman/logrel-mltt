@@ -2,7 +2,8 @@
 
 module Definition.Typed.Consequences.Inequality where
 
-open import Definition.Untyped hiding (U≢ne; ℕ≢ne; B≢ne; U≢B; ℕ≢B; U≢∪; ℕ≢∪ ; Empty≢∪ ; Unit≢∪ ; ∪≢ne)
+open import Definition.Untyped
+  hiding (U≢ne; ℕ≢ne; B≢ne; U≢B; ℕ≢B; U≢∪; ℕ≢∪ ; Empty≢∪ ; Unit≢∪ ; ∪≢ne; U≢∥; ℕ≢∥ ; Empty≢∥ ; Unit≢∥ ; ∥≢ne)
 open import Definition.Typed
 open import Definition.Typed.Properties using (subset* ; wfEq ; whnfRed* ; idRed:*:)
 open import Definition.Typed.EqRelInstance
@@ -191,6 +192,24 @@ U≢∪ U≡∪ =
   let _ , ⊢W = syntacticEq U≡∪
   in  U≢∪-red (id ⊢W) U≡∪
 
+U≢∥′ : ∀ {B l l′}
+       ([U] : Γ ⊩′⟨ l ⟩U)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (Uᵣ [U]) (∥ᵣ [∥]) → ⊥
+U≢∥′ a b ()
+
+U≢∥-red : ∀ {C A} → Γ ⊢ C ⇒* ∥ A ∥ → Γ ⊢ U ≡ C → ⊥
+U≢∥-red {_} {Γ} {C} {A} D =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩U) (λ Γ l B → Γ ⊩′⟨ l ⟩∥ B) Uᵣ ∥ᵣ
+      (λ x → extractMaybeEmb (U-elim x))
+      (λ x → extractMaybeEmb (∥-elim′ D x))
+      U≢∥′
+
+U≢∥ : ∀ {A} → Γ ⊢ U ≡ ∥ A ∥ → ⊥
+U≢∥ U≡∥ =
+  let _ , ⊢W = syntacticEq U≡∥
+  in  U≢∥-red (id ⊢W) U≡∥
+
 ℕ≢∪′ : ∀ {A B l l′}
        ([ℕ] : Γ ⊩ℕ A)
        ([∪] : Γ ⊩′⟨ l′ ⟩∪ B)
@@ -209,6 +228,24 @@ U≢∪ U≡∪ =
   let _ , ⊢W = syntacticEq ℕ≡∪
   in  ℕ≢∪-red (id ⊢W) ℕ≡∪
 
+ℕ≢∥′ : ∀ {A B l l′}
+       ([ℕ] : Γ ⊩ℕ A)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (ℕᵣ [ℕ]) (∥ᵣ [∥]) → ⊥
+ℕ≢∥′ a b ()
+
+ℕ≢∥-red : ∀ {C A} → Γ ⊢ C ⇒* ∥ A ∥ → Γ ⊢ ℕ ≡ C → ⊥
+ℕ≢∥-red {_} {Γ} {C} {A} D =
+  A≢B (λ Γ l A → Γ ⊩ℕ A) (λ Γ l B → Γ ⊩′⟨ l ⟩∥ B) ℕᵣ ∥ᵣ
+      (λ x → extractMaybeEmb (ℕ-elim x))
+      (λ x → extractMaybeEmb (∥-elim′ D x))
+      ℕ≢∥′
+
+ℕ≢∥ : ∀ {A} → Γ ⊢ ℕ ≡ ∥ A ∥ → ⊥
+ℕ≢∥ ℕ≡∥ =
+  let _ , ⊢W = syntacticEq ℕ≡∥
+  in  ℕ≢∥-red (id ⊢W) ℕ≡∥
+
 B≢∪′ : ∀ W {A B l l′}
        ([W] : Γ ⊩′⟨ l ⟩B⟨ W ⟩ A)
        ([∪] : Γ ⊩′⟨ l′ ⟩∪ B)
@@ -226,6 +263,24 @@ B≢∪ : ∀ W {A B F G} → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ A ∪ B → ⊥
 B≢∪ W B≡∪ =
   let _ , ⊢W = syntacticEq B≡∪
   in  B≢∪-red W (id ⊢W) B≡∪
+
+B≢∥′ : ∀ W {A B l l′}
+       ([W] : Γ ⊩′⟨ l ⟩B⟨ W ⟩ A)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (Bᵣ W [W]) (∥ᵣ [∥]) → ⊥
+B≢∥′ W a b ()
+
+B≢∥-red : ∀ W {C A F G} → Γ ⊢ C ⇒* ∥ A ∥ → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ C → ⊥
+B≢∥-red {_} {Γ} W {C} {A} {F} {G} D =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩B⟨ W ⟩ A) (λ Γ l B → Γ ⊩′⟨ l ⟩∥ B) (Bᵣ W) ∥ᵣ
+      (λ x → extractMaybeEmb (B-elim W x))
+      (λ x → extractMaybeEmb (∥-elim′ D x))
+      (B≢∥′ W)
+
+B≢∥ : ∀ W {A F G} → Γ ⊢ ⟦ W ⟧ F ▹ G ≡ ∥ A ∥ → ⊥
+B≢∥ W B≡∥ =
+  let _ , ⊢W = syntacticEq B≡∥
+  in  B≢∥-red W (id ⊢W) B≡∥
 
 U≢ne′ : ∀ {K l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
@@ -312,6 +367,25 @@ Empty≢∪ Empty≡∪ =
   let ⊢Empty , ⊢∪ = syntacticEq Empty≡∪
   in  Empty≢∪-red (id ⊢Empty) (id ⊢∪) Empty≡∪
 
+Empty≢∥′ : ∀ {A B l l′}
+       ([Empty] : Γ ⊩Empty A)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (Emptyᵣ [Empty]) (∥ᵣ [∥]) → ⊥
+Empty≢∥′ a b ()
+
+Empty≢∥-red : ∀ {A B F} → Γ ⊢ A ⇒* Empty → Γ ⊢ B ⇒* ∥ F ∥ → Γ ⊢ A ≡ B → ⊥
+Empty≢∥-red D D′ =
+  A≢B (λ Γ l A → Γ ⊩Empty A)
+      (λ Γ l A → Γ ⊩′⟨ l ⟩∥ A) Emptyᵣ ∥ᵣ
+      (λ x → extractMaybeEmb (Empty-elim′ D x))
+      (λ x → extractMaybeEmb (∥-elim′ D′ x))
+      Empty≢∥′
+
+Empty≢∥ : ∀ {F} → Γ ⊢ Empty ≡ ∥ F ∥ → ⊥
+Empty≢∥ Empty≡∥ =
+  let ⊢Empty , ⊢∥ = syntacticEq Empty≡∥
+  in  Empty≢∥-red (id ⊢Empty) (id ⊢∥) Empty≡∥
+
 -- Unit and Π
 Unit≢B′ : ∀ {A B l l′} W
        ([Unit] : Γ ⊩Unit A)
@@ -349,6 +423,25 @@ Unit≢∪ : ∀ {F G} → Γ ⊢ Unit ≡ F ∪ G → ⊥
 Unit≢∪ Unit≡∪ =
   let ⊢Unit , ⊢∪ = syntacticEq Unit≡∪
   in  Unit≢∪-red (id ⊢Unit) (id ⊢∪) Unit≡∪
+
+Unit≢∥′ : ∀ {A B l l′}
+       ([Unit] : Γ ⊩Unit A)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (Unitᵣ [Unit]) (∥ᵣ [∥]) → ⊥
+Unit≢∥′ a b ()
+
+Unit≢∥-red : ∀ {A B F} → Γ ⊢ A ⇒* Unit → Γ ⊢ B ⇒* ∥ F ∥ → Γ ⊢ A ≡ B → ⊥
+Unit≢∥-red D D′ =
+  A≢B (λ Γ l A → Γ ⊩Unit A)
+      (λ Γ l A → Γ ⊩′⟨ l ⟩∥ A) Unitᵣ ∥ᵣ
+      (λ x → extractMaybeEmb (Unit-elim′ D x))
+      (λ x → extractMaybeEmb (∥-elim′ D′ x))
+      Unit≢∥′
+
+Unit≢∥ : ∀ {F} → Γ ⊢ Unit ≡ ∥ F ∥ → ⊥
+Unit≢∥ Unit≡∥ =
+  let ⊢Unit , ⊢∥ = syntacticEq Unit≡∥
+  in  Unit≢∥-red (id ⊢Unit) (id ⊢∥) Unit≡∥
 
 Unit≢Πⱼ : ∀ {Γ : Con Term n} {F G} → _
 Unit≢Πⱼ {Γ = Γ} {F} {G} = Unit≢Bⱼ {Γ = Γ} {F} {G} BΠ
@@ -453,6 +546,26 @@ B≢ne W neK W≡K =
 ∪≢ne neK ∪≡K =
   let ⊢∪ , ⊢K = syntacticEq ∪≡K
   in  ∪≢ne-red (id ⊢∪) (id ⊢K) neK ∪≡K
+
+∥≢ne′ : ∀ {A K l l′}
+       ([∥] : Γ ⊩′⟨ l ⟩∥ A)
+       ([K] : Γ ⊩ne K)
+     → ShapeView Γ l l′ _ _ (∥ᵣ [∥]) (ne [K]) → ⊥
+∥≢ne′ a b ()
+
+∥≢ne-red : ∀ {A B F K} → Γ ⊢ A ⇒* ∥ F ∥ → Γ ⊢ B ⇒* K → Neutral K
+         → Γ ⊢ A ≡ B → ⊥
+∥≢ne-red D D′ neK =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩∥ A)
+      (λ Γ l B → Γ ⊩ne B) ∥ᵣ ne
+      (λ x → extractMaybeEmb (∥-elim′ D x))
+      (λ x → extractMaybeEmb (ne-elim′ D′ neK x))
+      ∥≢ne′
+
+∥≢ne : ∀ {F K} → Neutral K → Γ ⊢ ∥ F ∥ ≡ K → ⊥
+∥≢ne neK ∥≡K =
+  let ⊢∥ , ⊢K = syntacticEq ∥≡K
+  in  ∥≢ne-red (id ⊢∥) (id ⊢K) neK ∥≡K
 
 -- Π and Σ
 Π≢Σ′ : ∀ {A B l l′}

@@ -261,7 +261,6 @@ record EqRelSet : Set₁ where
     -- Truncation recursion congruence
     ~-∥ₑ : ∀ {a a′ f f′ A B}
               → Γ ⊢ A
-              → Γ ⊢ B
               → Γ ⊢ B ≅ B′
               → Γ ⊢ a ~ a′ ∷ ∥ A ∥
               → Γ ⊢ f ≅ f′ ∷ A ▹▹ ∥ B ∥

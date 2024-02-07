@@ -259,8 +259,8 @@ mutual
   wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∥ₑ-cong {a} {a'} {f} {f'} {A} {B} {B'} ⊢A B≡B′ a≡a′ f≡f′) =
     ∥ₑ-cong (wk p ⊢Δ ⊢A) (wkEq p ⊢Δ B≡B′) (wkEqTerm p ⊢Δ a≡a′)
             (PE.subst (λ x → Δ ⊢ U.wk ρ f ≡ U.wk ρ f' ∷ x) (wk-▹▹ ρ A ∥ B ∥) (wkEqTerm p ⊢Δ f≡f′))
-  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∥-β {A} {B} {a} {f} ⊢A ⊢B ⊢a ⊢f) =
-    ∥-β (wk p ⊢Δ ⊢A) (wk p ⊢Δ ⊢B) (wkTerm p ⊢Δ ⊢a)
+  wkEqTerm {Δ = Δ} {ρ = ρ} p ⊢Δ (∥-β {A} {B} {a} {f} ⊢B ⊢a ⊢f) =
+    ∥-β (wk p ⊢Δ ⊢B) (wkTerm p ⊢Δ ⊢a)
         (PE.subst (λ x → Δ ⊢ U.wk ρ f ∷ x) (wk-▹▹ ρ A ∥ B ∥) (wkTerm p ⊢Δ ⊢f))
   wkEqTerm ρ ⊢Δ (suc-cong m≡n) = suc-cong (wkEqTerm ρ ⊢Δ m≡n)
   wkEqTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (natrec-cong {s = s} {s′ = s′} {F = F}
@@ -406,8 +406,8 @@ mutual
              (wk [ρ] ⊢Δ ⊢B)
              (PE.subst (λ x → Δ ⊢ U.wk ρ f ∷ x) (wk-▹▹ ρ A ∥ B ∥) (wkTerm [ρ] ⊢Δ ⊢f))
              (wkRedTerm [ρ] ⊢Δ a⇒a′)
-  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (∥-β {A = A} {B = B} {a = a} {f = f} ⊢A ⊢B ⊢a ⊢f) =
-    ∥-β (wk [ρ] ⊢Δ ⊢A) (wk [ρ] ⊢Δ ⊢B)
+  wkRedTerm {Δ = Δ} {ρ = ρ} [ρ] ⊢Δ (∥-β {A = A} {B = B} {a = a} {f = f} ⊢B ⊢a ⊢f) =
+    ∥-β (wk [ρ] ⊢Δ ⊢B)
         (wkTerm [ρ] ⊢Δ ⊢a)
         (PE.subst (λ x → Δ ⊢ U.wk ρ f ∷ x) (wk-▹▹ ρ A ∥ B ∥) (wkTerm [ρ] ⊢Δ ⊢f))
 

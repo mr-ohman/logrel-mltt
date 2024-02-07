@@ -46,6 +46,8 @@ neTypeEq (Emptyrecₙ neT) (Emptyrecⱼ x t∷A) (Emptyrecⱼ x₁ t∷B) =
   refl x₁
 neTypeEq (casesₙ neT) (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesⱼ ⊢t₁ ⊢u₁ ⊢v₁ ⊢C₁) =
   refl ⊢C
+neTypeEq (∥ₑₙ neT) (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑⱼ ⊢a₁ ⊢f₁ ⊢B₁) =
+  refl ∥ ⊢B₁ ∥ⱼ
 neTypeEq x (conv t∷A x₁) t∷B = let q = neTypeEq x t∷A t∷B
                                in  trans (sym x₁) q
 neTypeEq x t∷A (conv t∷B x₃) = let q = neTypeEq x t∷A t∷B
