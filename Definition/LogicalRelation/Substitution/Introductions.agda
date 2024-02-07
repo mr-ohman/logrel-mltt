@@ -23,3 +23,4 @@ open import Definition.LogicalRelation.Substitution.Introductions.Unit public
 open import Definition.LogicalRelation.Substitution.Introductions.Universe public
 open import Definition.LogicalRelation.Substitution.Introductions.Trunc public
 open import Definition.LogicalRelation.Substitution.Introductions.TruncI public
+open import Definition.LogicalRelation.Substitution.Introductions.TruncE public

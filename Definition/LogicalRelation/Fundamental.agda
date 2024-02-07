@@ -329,7 +329,19 @@ mutual
     [Γ] ,
     ∥ᵛ {F = A} [Γ] [A] ,
     ∥ᵢᵛ {A = A} {a} [Γ] [A] [a]
-  fundamentalTerm (∥ₑⱼ {A} {B} {a} {f} ⊢a ⊢f ⊢B) = {!!}
+  --
+  fundamentalTerm {Γ = Γ} (∥ₑⱼ {A} {B} {a} {f} ⊢a ⊢f ⊢B)
+    with fundamentalTerm ⊢a | fundamentalTerm ⊢f | fundamental ⊢B
+  ... | [Γ] , [∥A∥] , [a] | [Γ]₁ , [AB] , [f] | [Γ]₂ , [B] =
+    let [B]₁   = S.irrelevance {A = B} [Γ]₂ [Γ] [B]
+        [AB]₁  = S.irrelevance {A = A ▹▹ ∥ B ∥} [Γ]₁ [Γ] [AB]
+        [A]₁   = ⊩ᵛ▹▹ₗ {A = A} {B = ∥ B ∥} [Γ] [AB]₁
+        [∥B∥]₁ = ⊩ᵛ∥ {Γ = Γ} {A = B} [Γ] [B]₁
+        [a]₁   = S.irrelevanceTerm {A = ∥ A ∥} {t = a} [Γ] [Γ] [∥A∥] (∥ᵛ {F = A} [Γ] [A]₁) [a]
+        [f]₁   = S.irrelevanceTerm {A = A ▹▹ ∥ B ∥} {t = f} [Γ]₁ [Γ] [AB] (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A]₁ [∥B∥]₁) [f]
+    in [Γ] , [∥B∥]₁ ,
+       ∥ₑᵛ {A = A} {B} {a = a} {f = f} [Γ] [A]₁ [B]₁ [∥B∥]₁ [a]₁ [f]₁
+  --
   fundamentalTerm (zeroⱼ x) = valid x , ℕᵛ (valid x) , zeroᵛ {l = ¹} (valid x)
   fundamentalTerm (sucⱼ {n} t) with fundamentalTerm t
   fundamentalTerm (sucⱼ {n} t) | [Γ] , [ℕ] , [n] =
@@ -1010,8 +1022,64 @@ mutual
                 (∥ᵢᵛ {A = A} {t}  [Γ] [A] [t])
                 (∥ᵢᵛ {A = A} {t′} [Γ] [A] [t′])
                 (∥ᵢ-congᵛ {A = A} {t} {t′} [Γ] [A] [t] [t′] [t≡t′])
-  fundamentalTermEq (∥ₑ-cong {a} {a′} {f} {f′} {A} {B} {B′} ⊢A B≡B′ a≡a′ f≡f′) = {!!}
-  fundamentalTermEq (∥-β {A} {B} {a} {f} ⊢A ⊢B ⊢a ⊢f) = {!!}
+  fundamentalTermEq {Γ = Γ} (∥ₑ-cong {a} {a′} {f} {f′} {A} {B} {B′} ⊢A B≡B′ a≡a′ f≡f′)
+    with fundamental ⊢A
+       | fundamentalEq B≡B′
+       | fundamentalTermEq a≡a′
+       | fundamentalTermEq f≡f′
+  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂ , [B′]₂ , [B≡B′]₂
+      | [Γ]₃ , modelsTermEq [∥A∥]₃ [a]₃ [a′]₃ [a≡a′]₃
+      | [Γ]₄ , modelsTermEq [A▹▹B]₄ [f]₄ [f′]₄ [f≡f′]₄ =
+    let [Γ]    = [Γ]₁
+        [A]    = S.irrelevance {A = A} [Γ]₁ [Γ] [A]₁
+        [B]    = S.irrelevance {A = B} [Γ]₂ [Γ] [B]₂
+        [∥B∥]  = ⊩ᵛ∥ {Γ = Γ} {A = B} [Γ] [B]
+        [B′]   = S.irrelevance {A = B′} [Γ]₂ [Γ] [B′]₂
+        [∥B′∥] = ⊩ᵛ∥ {Γ = Γ} {A = B′} [Γ] [B′]
+        [a]    = S.irrelevanceTerm {A = ∥ A ∥} {t = a} [Γ]₃ [Γ] [∥A∥]₃ (∥ᵛ {F = A} [Γ] [A]) [a]₃
+        [f]    = S.irrelevanceTerm {A = A ▹▹ ∥ B ∥} {t = f} [Γ]₄ [Γ] [A▹▹B]₄ (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A] [∥B∥]) [f]₄
+        [a′]   = S.irrelevanceTerm {A = ∥ A ∥} {t = a′} [Γ]₃ [Γ] [∥A∥]₃ (∥ᵛ {F = A} [Γ] [A]) [a′]₃
+        [f′]   = S.irrelevanceTerm {A = A ▹▹ ∥ B ∥} {t = f′} [Γ]₄ [Γ] [A▹▹B]₄ (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A] [∥B∥]) [f′]₄
+        [B≡B′] = S.irrelevanceEq {A = B} {B = B′} [Γ]₂ [Γ] [B]₂ [B] [B≡B′]₂
+        [a≡a′] = S.irrelevanceEqTerm {A = ∥ A ∥} {t = a} {u = a′}  [Γ]₃ [Γ] [∥A∥]₃ (∥ᵛ {F = A} [Γ] [A]) [a≡a′]₃
+        [f≡f′] = S.irrelevanceEqTerm {A = A ▹▹ ∥ B ∥} {t = f} {u = f′} [Γ]₄ [Γ] [A▹▹B]₄ (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A] [∥B∥]) [f≡f′]₄
+    in [Γ] ,
+       modelsTermEq [∥B∥]
+         (∥ₑᵛ {A = A} {B} {a = a} {f = f} [Γ] [A] [B] [∥B∥] [a] [f])
+         (S.irrelevanceTerm″
+           {A = ∥ B′ ∥} {A′ = ∥ B ∥} {t = ∥ₑ B′ a′ f′} [Γ] [Γ] [∥B′∥] [∥B∥]
+           (⊩ᵛ-sym {A = ∥ B ∥} {B = ∥ B′ ∥} [Γ] [∥B∥] [∥B′∥] (⊩≡ᵛ∥ {Γ = Γ} {A = B} {B = B′} [Γ] [B] [B′] [∥B∥] [B≡B′]))
+           (∥ₑᵛ {A = A} {B′} {a = a′} {f = f′} [Γ] [A] [B′] [∥B′∥] [a′]
+                (S.irrelevanceTerm″ {A = A ▹▹ ∥ B ∥} {A′ = A ▹▹ ∥ B′ ∥} {t = f′} [Γ] [Γ]
+                  (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A] [∥B∥])
+                  (▹▹ᵛ {F = A} {∥ B′ ∥} [Γ] [A] [∥B′∥])
+                  (▹▹-congᵛ′ {A = A} {C = ∥ B ∥} {C′ = ∥ B′ ∥} [Γ] [A] [∥B∥] [∥B′∥]
+                             (⊩≡ᵛ∥ {Γ = Γ} {A = B} {B = B′} [Γ] [B] [B′] [∥B∥] [B≡B′]))
+                  [f′])))
+         (∥ₑ-congᵛ {A = A} {B} {B′} {a = a} {a′ = a′} {f = f} {f′ = f′} [Γ] [A] [B] [∥B∥]
+                   [B′] [B≡B′] [a≡a′] [f≡f′])
+  fundamentalTermEq {Γ = Γ} (∥-β {A} {B} {a} {f} ⊢A ⊢B ⊢a ⊢f)
+    with fundamental ⊢A
+       | fundamental ⊢B
+       | fundamentalTerm ⊢a
+       | fundamentalTerm ⊢f
+  ... | [Γ]₁ , [A]₁ | [Γ]₂ , [B]₂
+      | [Γ]₃ , [A]₃ , [a]₃
+      | [Γ]₄ , [A▹▹B]₄ , [f]₄ =
+    let [Γ]    = [Γ]₁
+        [A]    = S.irrelevance {A = A} [Γ]₁ [Γ] [A]₁
+        [B]    = S.irrelevance {A = B} [Γ]₂ [Γ] [B]₂
+        [∥B∥]  = ⊩ᵛ∥ {Γ = Γ} {A = B} [Γ] [B]
+        [A▹▹B] = S.irrelevance {A = A ▹▹ ∥ B ∥} [Γ]₄ [Γ] [A▹▹B]₄
+        [a]    = S.irrelevanceTerm {A = A} {t = a} [Γ]₃ [Γ] [A]₃ [A] [a]₃
+        [f]    = S.irrelevanceTerm {A = A ▹▹ ∥ B ∥} {t = f} [Γ]₄ [Γ] [A▹▹B]₄ (▹▹ᵛ {F = A} {∥ B ∥} [Γ] [A] [∥B∥]) [f]₄
+        [f]′   = S.irrelevanceTerm {A = A ▹▹ ∥ B ∥} {t = f} [Γ]₄ [Γ] [A▹▹B]₄ [A▹▹B] [f]₄
+    in [Γ] ,
+       modelsTermEq [∥B∥]
+         (∥ₑᵛ {A = A} {B} {a = ∥ᵢ a} {f = f} [Γ] [A] [B] [∥B∥]
+              (∥ᵢᵛ {A = A} {t = a} [Γ] [A] [a]) [f])
+         (▹▹appᵛ {F = A} {G = ∥ B ∥} {t = f} {u = a} [Γ] [A] [∥B∥] [A▹▹B] [f]′ [a])
+         (∥ₑ-βᵛ {A = A} {B} {a = a} {f = f} [Γ] [A] [B] [∥B∥] [a] [f])
 
 -- Fundamental theorem for substitutions.
 fundamentalSubst : (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ)
