@@ -137,13 +137,21 @@ decConv↓Term-∪ᵣ (∪₁-η x x₁ injlₙ injlₙ x₄) () r
 decConv↓Term-∪ᵣ (∪₂-η x x₁ injrₙ injrₙ x₄) () r
 decConv↓Term-∪ᵣ (∪₃-η x x₁ x₂) q r = r _ _ x₂
 
-decConv↓Term-∥ : ∀ {t u A B}
+decConv↓Term-∥ₗ : ∀ {t u A B}
                → Γ ⊢ t [conv↓] u ∷ ∥ A ∥
                → Γ ⊢ t ~ t ↓ ∥ B ∥
                → ((E : Term ℓ) → ¬ (Γ ⊢ t ~ u ↓ ∥ E ∥))
                → ⊥
-decConv↓Term-∥ (∥₁-η x x₁ ∥ᵢₙ ∥ᵢₙ x₄) () r
-decConv↓Term-∥ (∥₂-η x x₁) q r = r _ x₁
+decConv↓Term-∥ₗ (∥₁-η x x₁ ∥ᵢₙ ∥ᵢₙ x₄) () r
+decConv↓Term-∥ₗ (∥₂-η x x₁) q r = r _ x₁
+
+decConv↓Term-∥ᵣ : ∀ {t u A B}
+               → Γ ⊢ t [conv↓] u ∷ ∥ A ∥
+               → Γ ⊢ u ~ u ↓ ∥ B ∥
+               → ((E : Term ℓ) → ¬ (Γ ⊢ t ~ u ↓ ∥ E ∥))
+               → ⊥
+decConv↓Term-∥ᵣ (∥₁-η x x₁ ∥ᵢₙ ∥ᵢₙ x₄) () r
+decConv↓Term-∥ᵣ (∥₂-η x x₁) q r = r _ x₁
 
 -- Helper function for extensional equality of Unit.
 decConv↓Term-Unit : ∀ {t u}
