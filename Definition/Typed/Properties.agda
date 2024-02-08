@@ -245,7 +245,6 @@ redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
 
 -- No neutral terms are well-formed in an empty context
 
-{--
 noNe : ε ⊢ t ∷ A → Neutral t → ⊥
 noNe (conv ⊢t x) n = noNe ⊢t n
 noNe (var x₁ ()) (var x)
@@ -255,8 +254,7 @@ noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
 noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
 noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
 noNe (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesₙ neT) = noNe ⊢t neT
-noNe (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑₙ {--neT--}) = {!!} --noNe ⊢a neT
---}
+noNe (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑₙ neT) = noNe ⊢a neT
 
 -- Neutrals do not weak head reduce
 
