@@ -34,6 +34,9 @@ mutual
   ne~↑ (cases-cong ⊢C ⊢t ⊢u ⊢v) =
     let _ , q , w = ne~↓ ⊢t
     in  casesₙ q , casesₙ w
+  ne~↑ (∥ₑ-cong ⊢B ⊢a ⊢f) =
+    let _ , q , w = ne~↓ ⊢a
+    in  ∥ₑₙ q , ∥ₑₙ w
   ne~↑ (Emptyrec-cong x x₁) =
     let _ , q , w = ne~↓ x₁
     in  Emptyrecₙ q , Emptyrecₙ w
@@ -58,6 +61,7 @@ whnfConv↓ (ne x) = let _ , neA , neB = ne~↓ x
 whnfConv↓ (Π-cong x x₁ x₂) = Πₙ , Πₙ
 whnfConv↓ (Σ-cong x x₁ x₂) = Σₙ , Σₙ
 whnfConv↓ (∪-cong x₁ x₂) = ∪ₙ , ∪ₙ
+whnfConv↓ (∥-cong x) = ∥ₙ , ∥ₙ
 
 -- Extraction of WHNF from algorithmic equality of terms in WHNF.
 whnfConv↓Term : ∀ {t u A}
@@ -80,4 +84,6 @@ whnfConv↓Term (Σ-η _ _ pProd rProd _ _) = Σₙ , productWhnf pProd , produc
 whnfConv↓Term (∪₁-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionLWhnf pInj , injectionLWhnf rInj
 whnfConv↓Term (∪₂-η ⊢p ⊢r pInj rInj cnv) = ∪ₙ , injectionRWhnf pInj , injectionRWhnf rInj
 whnfConv↓Term (∪₃-η c₁ c₂ p~r) = ∪ₙ , ne (proj₁ (proj₂ (ne~↓ p~r))) , ne (proj₂ (proj₂ (ne~↓ p~r)))
+whnfConv↓Term (∥₁-η ⊢p ⊢r pi ri cnv) = ∥ₙ , TruncIWhnf pi , TruncIWhnf ri
+whnfConv↓Term (∥₂-η c₁ p~r) = ∥ₙ , ne (proj₁ (proj₂ (ne~↓ p~r))) , ne (proj₂ (proj₂ (ne~↓ p~r)))
 whnfConv↓Term (η-unit _ _ tWhnf uWhnf) = Unitₙ , tWhnf , uWhnf

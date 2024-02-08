@@ -183,6 +183,27 @@ record _⊢_~_∷_ (Γ : Con Term n) (k l A : Term n) : Set where
                               (convConvTerm u≡u′ (▹▹-cong ⊢A C≡ (refl ⊢C)))
                               (convConvTerm v≡v′ (▹▹-cong ⊢B D≡ (refl ⊢C))))
 
+~-∥ₑ : ∀ {A B B′ B₁ f f′ a a′}
+        → Γ ⊢ A
+        → Γ ⊢ B [conv↑] B′
+        → Γ ⊢ f [conv↑] f′ ∷ A ▹▹ ∥ B ∥
+        → Γ ⊢ ∥ A ∥ ≡ B₁
+        → Γ ⊢ a ~ a′ ↑ B₁
+        → Γ ⊢ ∥ₑ B a f ~ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
+~-∥ₑ {A = A} {B} {B′} {B₁} {f} {f′} {a} {a′} ⊢A B≡B′ f≡f′ ∥≡ a≡a′ =
+  let B≡           = soundnessConv↑ B≡B′
+      ⊢B , ⊢B′     = syntacticEq B≡
+      ⊢∥B∥         = ∥ ⊢B ∥ⱼ
+      ⊢∥A∥ , ⊢B₁   = syntacticEq ∥≡
+      B₂ , wB , rB = whNorm ⊢B₁
+      eB           = subset* (red rB)
+      D , ≡C       = ∥≡A (trans ∥≡ eB) wB
+      C≡           = ∥-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡C (trans ∥≡ eB))
+  in  ↑ (refl ⊢∥B∥)
+        (∥ₑ-cong B≡B′
+                 (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡C ([~] B₁ (red rB) wB a≡a′))
+                 (convConvTerm f≡f′ (▹▹-cong ⊢A C≡ (refl ⊢∥B∥))))
+
 -- Algorithmic equality instance of the generic equality relation.
 instance eqRelInstance : EqRelSet
 eqRelInstance = record {
@@ -257,6 +278,16 @@ eqRelInstance = record {
   ≅-injr-cong = λ x₁ x₂ x₃ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₃)
                              in liftConvTerm (∪₂-η (injrⱼ x₁ y₁) (injrⱼ x₁ y₂) injrₙ injrₙ x₃);
   ~-cases = λ x₁ x₂ x₃ (↑ z x₄) x₅ x₆ → ~-cases x₁ x₂ x₃ x₅ x₆ z x₄;
+  ≅-∥-cong = λ x → liftConv (∥-cong x);
+  ≅ₜ-∥-cong = λ x → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x)
+                        ⊢Γ = wfTerm F∷U
+                        F<>H = univConv↑ x
+                        F≡H = soundnessConv↑ F<>H
+                    in  liftConvTerm (univ ∥ F∷U ∥ⱼ ∥ H∷U ∥ⱼ
+                                           (∥-cong F<>H));
+  ≅-∥ᵢ-cong = λ x₁ x₂ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₂)
+                        in liftConvTerm (∥₁-η (∥ᵢⱼ y₁) (∥ᵢⱼ y₂) ∥ᵢₙ ∥ᵢₙ x₂);
+  ~-∥ₑ = λ x₁ x₂ (↑ z x₄) x₅ → ~-∥ₑ x₁ x₂ x₅ z x₄ ;
   ≅ₜ-zerorefl = liftConvTerm ∘ᶠ zero-refl;
   ≅-suc-cong = liftConvTerm ∘ᶠ suc-cong;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → liftConvTerm (η-eq x₁ x₂ x₃ x₄ x₅);

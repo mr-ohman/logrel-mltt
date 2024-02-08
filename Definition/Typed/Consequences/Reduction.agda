@@ -30,6 +30,7 @@ whNorm′ (ne′ K D neK K≡K) = K , ne neK , D
 whNorm′ (Πᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Π F ▹ G , Πₙ , D
 whNorm′ (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) = Σ F ▹ G , Σₙ , D
 whNorm′ (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) = F ∪ G , ∪ₙ , D
+whNorm′ (∥ᵣ′ F D ⊢F A≡A [F]) = ∥ F ∥ , ∥ₙ , D
 whNorm′ (emb 0<1 [A]) = whNorm′ [A]
 
 -- Well-formed types can all be reduced to WHNF.
@@ -65,6 +66,10 @@ whNormTerm′ (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) (∪₁ₜ p d p≡p pa 
 whNormTerm′ (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) (∪₂ₜ p d p≡p pa i x) =
   p , injectionRWhnf i , convRed:*: d (sym (subset* (red D)))
 whNormTerm′ (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) (∪₃ₜ p d p≡p (neNfₜ neK ⊢k k≡k)) =
+  p , ne neK , convRed:*: d (sym (subset* (red D)))
+whNormTerm′ (∥ᵣ′ F D ⊢F A≡A [F]) (∥₁ₜ p d p≡p pa i x) =
+  p , TruncIWhnf i , convRed:*: d (sym (subset* (red D)))
+whNormTerm′ (∥ᵣ′ F D ⊢F A≡A [F]) (∥₂ₜ p d p≡p (neNfₜ neK ⊢k k≡k)) =
   p , ne neK , convRed:*: d (sym (subset* (red D)))
 whNormTerm′ (emb 0<1 [A]) [a] = whNormTerm′ [A] [a]
 

@@ -137,6 +137,15 @@ mutual
         ⊢Γ = wf ⊢F
         ⊢A , ⊢≡AB = redSubst* D₂ (∪-intr (noemb (∪ᵣ A B (idRed:*: (⊢F ∪ⱼ ⊢G)) ⊢F ⊢G (refl (⊢F ∪ⱼ ⊢G)) [A] [B])))
     in  ∪₃-η (refl ⊢F) (refl ⊢G) t~u↓
+  lift~toConv↓′ (∥ᵣ′ A D ⊢A A≡A [A]) D₁ ([~] A₁ D₂ whnfB k~l)
+                rewrite PE.sym (whrDet* (red D , ∥ₙ) (D₁ , whnfB)) =
+    let neT , neU = ne~↑ k~l
+        t~u↓ = [~] A₁ D₂ ∥ₙ k~l
+        ⊢∥F∥ , ⊢t , ⊢u = syntacticEqTerm (soundness~↓ t~u↓)
+        ⊢F = syntactic∥ ⊢∥F∥
+        ⊢Γ = wf ⊢F
+        ⊢A , ⊢≡A = redSubst* D₂ (∥-intr (noemb (∥ᵣ A (idRed:*: ∥ ⊢F ∥ⱼ) ⊢F (refl ∥ ⊢F ∥ⱼ) [A])))
+    in  ∥₂-η (refl ⊢F) t~u↓
   lift~toConv↓′ (emb 0<1 [A]) D t~u = lift~toConv↓′ [A] D t~u
 
   -- Helper function for lifting from neutrals to generic terms.

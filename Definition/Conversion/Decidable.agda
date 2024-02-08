@@ -22,15 +22,15 @@ open import Definition.Conversion.Conversion
 open import Definition.Conversion.PreDecidable
 
 open import Definition.Typed.Consequences.Syntactic
-  using (syntacticEqTerm ; syntacticEq ; syntacticΣ ; syntactic∪ ; syntacticTerm)
+  using (syntacticEqTerm ; syntacticEq ; syntacticΣ ; syntactic∪ ; syntactic∥ ; syntacticTerm)
 open import Definition.Typed.Consequences.Substitution
   using (substTypeEq)
 open import Definition.Typed.Consequences.Injectivity
-  using (injectivity ; ∪-injectivity)
+  using (injectivity ; ∪-injectivity ; ∥-injectivity)
 open import Definition.Typed.Consequences.Reduction
   using (whNorm)
 open import Definition.Typed.Consequences.Equality
-  using (Π≡A ; Σ≡A ; ℕ≡A ; Empty≡A ; U≡A ; ∪≡A)
+  using (Π≡A ; Σ≡A ; ℕ≡A ; Empty≡A ; U≡A ; ∪≡A ; ∥≡A)
 open import Definition.Typed.Consequences.Inequality as IE
   using ()
 open import Definition.Typed.Consequences.NeTypeEq

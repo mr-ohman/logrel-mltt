@@ -54,6 +54,11 @@ mutual
                   → Γ ⊢ u [conv↑] u' ∷ A ▹▹ C
                   → Γ ⊢ v [conv↑] v' ∷ B ▹▹ C
                   → Γ ⊢ cases C t u v ~ cases C' t' u' v' ↑ C
+    ∥ₑ-cong    : ∀ {a a' f f' A B B'}
+                  → Γ ⊢ B [conv↑] B'
+                  → Γ ⊢ a ~ a' ↓ ∥ A ∥
+                  → Γ ⊢ f [conv↑] f' ∷ A ▹▹ ∥ B ∥
+                  → Γ ⊢ ∥ₑ B a f ~ ∥ₑ B' a' f' ↑ ∥ B ∥
     Emptyrec-cong : ∀ {k l F G}
                   → Γ ⊢ F [conv↑] G
                   → Γ ⊢ k ~ l ↓ Empty
@@ -104,6 +109,9 @@ mutual
                → Γ ⊢ A [conv↑] B
                → Γ ⊢ C [conv↑] D
                → Γ ⊢ A ∪ C [conv↓] B ∪ D
+    ∥-cong     : ∀ {A B}
+               → Γ ⊢ A [conv↑] B
+               → Γ ⊢ ∥ A ∥ [conv↓] ∥ B ∥
 
   -- Term equality.
   record _⊢_[conv↑]_∷_ (Γ : Con Term n) (t u A : Term n) : Set where
@@ -166,9 +174,6 @@ mutual
               → InjectionL p pa
               → InjectionL r ra
               → Γ ⊢ pa [conv↑] ra ∷ A
-              -- This could be:
-              -- → Γ ⊢ cases p (lam zero) (lam one) [conv↑] cases r (lam zero) (lam one) ∷ ℕ
-              -- → Γ ⊢ cases p Id Id [conv↑] cases r Id Id ∷ A
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
     ∪₂-η      : ∀ {p r pa ra A B}
               → Γ ⊢ p ∷ A ∪ B
@@ -177,21 +182,22 @@ mutual
               → InjectionR r ra
               → Γ ⊢ pa [conv↑] ra ∷ B
               → Γ ⊢ p [conv↓] r ∷ A ∪ B
-{--    ∪₃-η      : ∀ {p r A B C D}
---              → Γ ⊢ p ∷ A ∪ B -- needed?
---              → Γ ⊢ r ∷ A ∪ B -- needed?
-              → Γ ⊢ p ~ r ↓ C ∪ D
-              → Γ ⊢ A [conv↑] C
-              → Γ ⊢ B [conv↑] D
-              → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
-{--    ∪₃-η      : ∀ {p r A B}
-              → Γ ⊢ p ~ r ↓ A ∪ B
-              → Γ ⊢ p [conv↓] r ∷ A ∪ B--}
     ∪₃-η      : ∀ {p r A B C D}
               → Γ ⊢ A ≡ C
               → Γ ⊢ B ≡ D
               → Γ ⊢ p ~ r ↓ A ∪ B
               → Γ ⊢ p [conv↓] r ∷ C ∪ D
+    ∥₁-η      : ∀ {p r pa ra A}
+              → Γ ⊢ p ∷ ∥ A ∥
+              → Γ ⊢ r ∷ ∥ A ∥
+              → TruncI p pa
+              → TruncI r ra
+              → Γ ⊢ pa [conv↑] ra ∷ A
+              → Γ ⊢ p [conv↓] r ∷ ∥ A ∥
+    ∥₂-η      : ∀ {p r A B}
+              → Γ ⊢ A ≡ B
+              → Γ ⊢ p ~ r ↓ ∥ A ∥
+              → Γ ⊢ p [conv↓] r ∷ ∥ B ∥
     η-unit    : ∀ {k l}
               → Γ ⊢ k ∷ Unit
               → Γ ⊢ l ∷ Unit

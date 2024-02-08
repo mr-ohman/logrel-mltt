@@ -99,3 +99,26 @@ injectivity = B-injectivity BΠ
   let [AB] , _ , [AB≡CD] = reducibleEq ⊢AB≡CD
   in  ∪-injectivity′ (∪-elim [AB])
                      (irrelevanceEq [AB] (∪-intr (∪-elim [AB])) [AB≡CD])
+
+∥-injectivity′ : ∀ {A C l}
+                   ([∥A∥] : Γ ⊩⟨ l ⟩∥ ∥ A ∥)
+             → Γ ⊩⟨ l ⟩ ∥ A ∥ ≡ ∥ C ∥ / ∥-intr [∥A∥]
+             → Γ ⊢ A ≡ C
+∥-injectivity′ (noemb (∥ᵣ S D ⊢S A≡A [S])) (∥₌ S′ D′ A≡B [S≡S′]) =
+  let A≡A₁ = ∥-PE-injectivity (whnfRed* (red D) ∥ₙ)
+      C≡A′ = ∥-PE-injectivity (whnfRed* D′ ∥ₙ)
+      ⊢Γ     = wf ⊢S
+      [A]₁   = [S] id ⊢Γ
+      [A]′   = irrelevance′ (PE.trans (wk-id _) (PE.sym A≡A₁)) [A]₁
+      [A≡C]₁ = [S≡S′] id ⊢Γ
+      [A≡C]′ = irrelevanceEq″ (PE.trans (wk-id _) (PE.sym A≡A₁))
+                              (PE.trans (wk-id _) (PE.sym C≡A′))
+                              [A]₁ [A]′ [A≡C]₁
+  in  escapeEq [A]′ [A≡C]′
+∥-injectivity′ (emb 0<1 [A]) ⊢A = ∥-injectivity′ [A] ⊢A
+
+∥-injectivity : ∀ {A C} → Γ ⊢ ∥ A ∥ ≡ ∥ C ∥ → Γ ⊢ A ≡ C
+∥-injectivity ⊢A≡C =
+  let [A] , _ , [A≡C] = reducibleEq ⊢A≡C
+  in  ∥-injectivity′ (∥-elim [A])
+                     (irrelevanceEq [A] (∥-intr (∥-elim [A])) [A≡C])

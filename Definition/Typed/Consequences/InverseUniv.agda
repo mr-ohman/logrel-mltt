@@ -29,6 +29,7 @@ data UFull : Term n → Set where
   ∃Σ₂ : UFull G → UFull (Σ F ▹ G)
   ∃∪₁ : UFull A → UFull (A ∪ B)
   ∃∪₂ : UFull B → UFull (A ∪ B)
+  ∃∥  : UFull A → UFull (∥ A ∥)
 
 -- Terms cannot contain U.
 noU : ∀ {t A} → Γ ⊢ t ∷ A → ¬ (UFull t)
@@ -40,6 +41,7 @@ noU (Σⱼ t ▹ t₁) (∃Σ₁ ufull) = noU t ufull
 noU (Σⱼ t ▹ t₁) (∃Σ₂ ufull) = noU t₁ ufull
 noU (t ∪ⱼ t₁) (∃∪₁ ufull) = noU t ufull
 noU (t ∪ⱼ t₁) (∃∪₂ ufull) = noU t₁ ufull
+noU (∥ t ∥ⱼ) (∃∥ ufull) = noU t ufull
 noU (var x₁ x₂) ()
 noU (lamⱼ x t₁) ()
 noU (t ∘ⱼ t₁) ()
@@ -73,6 +75,11 @@ pilemΣ (inj₂ x) = inj₂ (λ x₁ → x (∃Σ₁ x₁)) , inj₂ (λ x₁ �
 ∪lem (inj₁ x) = inj₁ (λ x₁ → x (∃∪₁ x₁)) , inj₁ (λ x₁ → x (∃∪₂ x₁))
 ∪lem (inj₂ x) = inj₂ (λ x₁ → x (∃∪₁ x₁)) , inj₂ (λ x₁ → x (∃∪₂ x₁))
 
+∥lem : (¬ UFull ∥ A ∥) ⊎ (¬ UFull ∥ F ∥)
+      → (¬ UFull A) ⊎ (¬ UFull F)
+∥lem (inj₁ x) = inj₁ (λ x₁ → x (∃∥ x₁))
+∥lem (inj₂ x) = inj₂ (λ x₁ → x (∃∥ x₁))
+
 -- If type A does not contain U, then A can be a term of type U.
 inverseUniv : ∀ {A} → ¬ (UFull A) → Γ ⊢ A → Γ ⊢ A ∷ U
 inverseUniv q (ℕⱼ x) = ℕⱼ x
@@ -82,6 +89,7 @@ inverseUniv q (Uⱼ x) = ⊥-elim (q ∃U)
 inverseUniv q (Πⱼ A ▹ A₁) = Πⱼ inverseUniv (λ x → q (∃Π₁ x)) A ▹ inverseUniv (λ x → q (∃Π₂ x)) A₁
 inverseUniv q (Σⱼ A ▹ A₁) = Σⱼ inverseUniv (λ x → q (∃Σ₁ x)) A ▹ inverseUniv (λ x → q (∃Σ₂ x)) A₁
 inverseUniv q (A ∪ⱼ A₁) = inverseUniv (λ x → q (∃∪₁ x)) A ∪ⱼ inverseUniv (λ x → q (∃∪₂ x)) A₁
+inverseUniv q (∥ A ∥ⱼ) = ∥ inverseUniv (λ x → q (∃∥ x)) A ∥ⱼ
 inverseUniv q (univ x) = x
 
 -- If A is a neutral type, then A can be a term of U.
@@ -113,6 +121,9 @@ inverseUnivEq′ q (Σ-cong x A≡B A≡B₁) =
 inverseUnivEq′ q (∪-cong A≡B A≡B₁) =
   let w , e = ∪lem q
   in ∪-cong (inverseUnivEq′ w A≡B) (inverseUnivEq′ e A≡B₁)
+inverseUnivEq′ q (∥-cong A≡B) =
+  let w = ∥lem q
+  in ∥-cong (inverseUnivEq′ w A≡B)
 
 -- If A is a term of U, then the equality of types is an equality of terms of type U.
 inverseUnivEq : ∀ {A B} → Γ ⊢ A ∷ U → Γ ⊢ A ≡ B → Γ ⊢ A ≡ B ∷ U

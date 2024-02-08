@@ -136,6 +136,17 @@ stabilityRedTerm Γ≡Δ (∪-β₂ ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
            (stabilityTerm Γ≡Δ ⊢t)
            (stabilityTerm Γ≡Δ ⊢u)
            (stabilityTerm Γ≡Δ ⊢v)
+stabilityRedTerm Γ≡Δ (∥ₑ-subst ⊢A ⊢B ⊢f ⊢a) =
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+  in  ∥ₑ-subst (stability Γ≡Δ ⊢A)
+               (stability Γ≡Δ ⊢B)
+               (stabilityTerm Γ≡Δ ⊢f)
+               (stabilityRedTerm Γ≡Δ ⊢a)
+stabilityRedTerm Γ≡Δ (∥-β ⊢B ⊢a ⊢f) =
+  let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
+  in  ∥-β (stability Γ≡Δ ⊢B)
+          (stabilityTerm Γ≡Δ ⊢a)
+          (stabilityTerm Γ≡Δ ⊢f)
 
 -- Stability of type reductions.
 stabilityRed : ∀ {A B} → ⊢ Γ ≡ Δ → Γ ⊢ A ⇒ B → Δ ⊢ A ⇒ B
@@ -176,6 +187,10 @@ mutual
                (stability~↓ Γ≡Δ ⊢t)
                (stabilityConv↑Term Γ≡Δ ⊢u)
                (stabilityConv↑Term Γ≡Δ ⊢v)
+  stability~↑ Γ≡Δ (∥ₑ-cong ⊢B ⊢a ⊢f) =
+    ∥ₑ-cong (stabilityConv↑ Γ≡Δ ⊢B)
+            (stability~↓ Γ≡Δ ⊢a)
+            (stabilityConv↑Term Γ≡Δ ⊢f)
   stability~↑ Γ≡Δ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (stabilityConv↑ Γ≡Δ x₁)
                 (stability~↓ Γ≡Δ k~l)
@@ -225,6 +240,8 @@ mutual
   stabilityConv↓ Γ≡Δ (∪-cong A<>B A<>B₁) =
     ∪-cong (stabilityConv↑ Γ≡Δ A<>B)
            (stabilityConv↑ Γ≡Δ A<>B₁)
+  stabilityConv↓ Γ≡Δ (∥-cong A<>B) =
+    ∥-cong (stabilityConv↑ Γ≡Δ A<>B)
 
   -- Stability of algorithmic equality of terms.
   stabilityConv↑Term : ∀ {t u A}
@@ -276,6 +293,14 @@ mutual
   stabilityConv↓Term Γ≡Δ (∪₃-η c₁ c₂ p~r) =
     ∪₃-η (stabilityEq Γ≡Δ c₁)
          (stabilityEq Γ≡Δ c₂)
+         (stability~↓ Γ≡Δ p~r)
+  stabilityConv↓Term Γ≡Δ (∥₁-η ⊢p ⊢r pi ri cnv) =
+    ∥₁-η (stabilityTerm Γ≡Δ ⊢p)
+         (stabilityTerm Γ≡Δ ⊢r)
+         pi ri
+         (stabilityConv↑Term Γ≡Δ cnv)
+  stabilityConv↓Term Γ≡Δ (∥₂-η c₁ p~r) =
+    ∥₂-η (stabilityEq Γ≡Δ c₁)
          (stability~↓ Γ≡Δ p~r)
   stabilityConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]

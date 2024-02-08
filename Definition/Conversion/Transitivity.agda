@@ -80,6 +80,15 @@ mutual
                    (transConv↑Term (▹▹-cong (proj₁ (syntacticEq A≡)) A≡ A≡B) u<>u′ u<>u″)
                    (transConv↑Term (▹▹-cong (proj₁ (syntacticEq B≡)) B≡ A≡B) v<>v′ v<>v″) ,
         A≡B
+  trans~↑ (∥ₑ-cong B<>B′ a~a′ f<>f′) (∥ₑ-cong B<>B″ a~a″ f<>f″) =
+    let ⊢Γ = wf (proj₁ (syntacticEqTerm (soundness~↓ a~a′)))
+        A≡B = soundnessConv↑ B<>B′
+        a~a , ∥≡ = trans~↓ a~a′ a~a″
+        A≡ = ∥-injectivity ∥≡
+    in  ∥ₑ-cong (transConv↑ B<>B′ B<>B″)
+                 a~a
+                 (transConv↑Term (▹▹-cong (proj₁ (syntacticEq A≡)) A≡ (∥-cong A≡B)) f<>f′ f<>f″) ,
+        ∥-cong A≡B
   trans~↑ (Emptyrec-cong A<>B t~u) (Emptyrec-cong B<>C u~v) =
     let A≡B = soundnessConv↑ A<>B
         A<>C = transConv↑ A<>B B<>C
@@ -138,6 +147,8 @@ mutual
     Σ-cong x (transConv↑ x₁ x₄) (transConv↑′ (reflConEq (wf x) ∙ soundnessConv↑ x₁) x₂ x₅)
   transConv↓ (∪-cong x₁ x₂) (∪-cong x₄ x₅) =
     ∪-cong (transConv↑ x₁ x₄) (transConv↑ x₂ x₅)
+  transConv↓ (∥-cong x₁) (∥-cong x₂) =
+    ∥-cong (transConv↑ x₁ x₂)
   -- Refutable cases
   transConv↓ (U-refl x) (ne ([~] A D whnfB ()))
   transConv↓ (ℕ-refl x) (ne ([~] A D whnfB ()))
@@ -145,6 +156,7 @@ mutual
   transConv↓ (Π-cong x x₁ x₂) (ne ([~] A D whnfB ()))
   transConv↓ (Σ-cong x x₁ x₂) (ne ([~] A D whnfB ()))
   transConv↓ (∪-cong x₁ x₂) (ne ([~] A D whnfB ()))
+  transConv↓ (∥-cong x) (ne ([~] A D whnfB ()))
   transConv↓ (ne ([~] A₁ D whnfB ())) (U-refl x₁)
   transConv↓ (ne ([~] A₁ D whnfB ())) (ℕ-refl x₁)
   transConv↓ (ne ([~] A₁ D whnfB ())) (Empty-refl x₁)
@@ -248,6 +260,19 @@ mutual
     let ≡1 , ≡2 = trans~↓ x₃ x₈
     in  ∪₃-η x₁ x₂ ≡1
 
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ ∥ᵢₙ x₅) (∥₁-η x₆ x₇ ∥ᵢₙ x₉ x₁₀) =
+    let A≡ = ∥-injectivity A≡B
+    in  ∥₁-η x₁ (conv x₇ (sym A≡B)) x₃ x₉ (transConv↑Term A≡ x₅ x₁₀)
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (∥₂-η x₆ x₈) =
+    let n₁ , n₂ , n₃ = ne~↓ x₈
+    in  ⊥-elim (TruncI-Neutral x₄ n₂ PE.refl)
+  transConv↓Term A≡B (∥₂-η x₁ x₃) (∥₁-η x₆ x₇ x₈ x₉ x₁₀) =
+    let n₁ , n₂ , n₃ = ne~↓ x₃
+    in  ⊥-elim (TruncI-Neutral x₈ n₃ PE.refl)
+  transConv↓Term A≡B (∥₂-η x₁ x₃) (∥₂-η x₆ x₈) =
+    let ≡1 , ≡2 = trans~↓ x₃ x₈
+    in  ∥₂-η x₁ ≡1
+
   -- Refutable cases
   transConv↓Term A≡B (ℕ-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.ℕ≢ne x₂ A≡B)
   transConv↓Term A≡B (ℕ-ins x) (univ x₂ x₃ x₄) = ⊥-elim (WF.U≢ℕ (sym A≡B))
@@ -260,6 +285,8 @@ mutual
   transConv↓Term A≡B (ℕ-ins x) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
   transConv↓Term A≡B (ℕ-ins x) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
   transConv↓Term A≡B (ℕ-ins x) (∪₃-η _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
+  transConv↓Term A≡B (ℕ-ins x) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∥ A≡B)
+  transConv↓Term A≡B (ℕ-ins x) (∥₂-η _ _) = ⊥-elim (WF.ℕ≢∥ A≡B)
   -- Empty-ins
   transConv↓Term A≡B (Empty-ins x) (ne-ins t u x₂ x₃) = ⊥-elim (WF.Empty≢neⱼ x₂ A≡B)
   transConv↓Term A≡B (Empty-ins x) (univ x₂ x₃ x₄) = ⊥-elim (WF.U≢Emptyⱼ (sym A≡B))
@@ -272,6 +299,8 @@ mutual
   transConv↓Term A≡B (Empty-ins x₁) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.Empty≢∪ A≡B)
   transConv↓Term A≡B (Empty-ins x₁) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.Empty≢∪ A≡B)
   transConv↓Term A≡B (Empty-ins x₁) (∪₃-η _ _ _) = ⊥-elim (WF.Empty≢∪ A≡B)
+  transConv↓Term A≡B (Empty-ins x₁) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.Empty≢∥ A≡B)
+  transConv↓Term A≡B (Empty-ins x₁) (∥₂-η _ _) = ⊥-elim (WF.Empty≢∥ A≡B)
   -- ne-ins
   transConv↓Term A≡B (ne-ins t u x x₁) (ℕ-ins x₂) = ⊥-elim (WF.ℕ≢ne x (sym A≡B))
   transConv↓Term A≡B (ne-ins t u x x₁) (Empty-ins x₂) = ⊥-elim (WF.Empty≢neⱼ x (sym A≡B))
@@ -284,7 +313,9 @@ mutual
   transConv↓Term A≡B (ne-ins t u x x₁) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.∪≢ne x (sym A≡B))
   transConv↓Term A≡B (ne-ins t u x x₁) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.∪≢ne x (sym A≡B))
   transConv↓Term A≡B (ne-ins t u x x₁) (∪₃-η _ _ _) = ⊥-elim (WF.∪≢ne x (sym A≡B))
-  -- unigv
+  transConv↓Term A≡B (ne-ins t u x x₁) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.∥≢ne x (sym A≡B))
+  transConv↓Term A≡B (ne-ins t u x x₁) (∥₂-η _ _) = ⊥-elim (WF.∥≢ne x (sym A≡B))
+  -- univ
   transConv↓Term A≡B (univ x x₁ x₂) (ℕ-ins x₃) = ⊥-elim (WF.U≢ℕ A≡B)
   transConv↓Term A≡B (univ x x₁ x₂) (Empty-ins x₃) = ⊥-elim (WF.U≢Emptyⱼ A≡B)
   transConv↓Term A≡B (univ x x₁ x₂) (Unit-ins x₃) = ⊥-elim (WF.U≢Unitⱼ A≡B)
@@ -296,6 +327,8 @@ mutual
   transConv↓Term A≡B (univ x x₁ x₂) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.U≢∪ A≡B)
   transConv↓Term A≡B (univ x x₁ x₂) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.U≢∪ A≡B)
   transConv↓Term A≡B (univ x x₁ x₂) (∪₃-η _ _ _) = ⊥-elim (WF.U≢∪ A≡B)
+  transConv↓Term A≡B (univ x x₁ x₂) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.U≢∥ A≡B)
+  transConv↓Term A≡B (univ x x₁ x₂) (∥₂-η _ _) = ⊥-elim (WF.U≢∥ A≡B)
   -- suc-cong
   transConv↓Term A≡B (suc-cong x) (ℕ-ins ([~] A D whnfB ()))
   transConv↓Term A≡B (suc-cong x) (Empty-ins ([~] A D whnfB ()))
@@ -307,6 +340,8 @@ mutual
   transConv↓Term A≡B (suc-cong x) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
   transConv↓Term A≡B (suc-cong x) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
   transConv↓Term A≡B (suc-cong x) (∪₃-η _ _ _) = ⊥-elim (WF.ℕ≢∪ A≡B)
+  transConv↓Term A≡B (suc-cong x) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.ℕ≢∥ A≡B)
+  transConv↓Term A≡B (suc-cong x) (∥₂-η _ _) = ⊥-elim (WF.ℕ≢∥ A≡B)
   -- η-eq
   transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (ℕ-ins x₄) = ⊥-elim (WF.ℕ≢Π (sym A≡B))
   transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (Empty-ins x₄) = ⊥-elim (WF.Empty≢Πⱼ (sym A≡B))
@@ -319,6 +354,8 @@ mutual
   transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.B≢∪ BΠ A≡B)
   transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.B≢∪ BΠ A≡B)
   transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (∪₃-η _ _ _) = ⊥-elim (WF.B≢∪ BΠ A≡B)
+  transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.B≢∥ BΠ A≡B)
+  transConv↓Term A≡B (η-eq x₁ x₂ y y₁ x₃) (∥₂-η _ _) = ⊥-elim (WF.B≢∥ BΠ A≡B)
   -- Σ-η
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢Σ (sym A≡B))
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (Empty-ins x₇) = ⊥-elim (WF.Empty≢Σⱼ (sym A≡B))
@@ -331,6 +368,8 @@ mutual
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (∪₁-η _ _ _ _ _) = ⊥-elim (WF.B≢∪ BΣ A≡B)
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (∪₂-η _ _ _ _ _) = ⊥-elim (WF.B≢∪ BΣ A≡B)
   transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (∪₃-η _ _ _) = ⊥-elim (WF.B≢∪ BΣ A≡B)
+  transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (∥₁-η _ _ _ _ _) = ⊥-elim (WF.B≢∥ BΣ A≡B)
+  transConv↓Term A≡B (Σ-η x₁ x₂ x₃ x₄ x₅ x₆) (∥₂-η _ _) = ⊥-elim (WF.B≢∥ BΣ A≡B)
   -- ∪₁-η
   transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢∪ (sym A≡B))
   transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (Empty-ins x₇) = ⊥-elim (WF.Empty≢∪ (sym A≡B))
@@ -341,6 +380,8 @@ mutual
   transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (η-eq x₈ x₉ x₁₀ x₁₁ x₁₂) = ⊥-elim (WF.B≢∪ BΠ (sym A≡B))
   transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (Σ-η x₈ x₉ x₁₀ x₁₁ x₁₂ x₁₃) = ⊥-elim (WF.B≢∪ BΣ (sym A≡B))
   transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢∪ (sym A≡B))
+  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∥₁-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ A≡B)
+  transConv↓Term A≡B (∪₁-η x₁ x₂ x₃ x₄ x₅) (∥₂-η x₇ x₈) = ⊥-elim (WF.∪≢∥ A≡B)
   -- ∪₂-η
   transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢∪ (sym A≡B))
   transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (Empty-ins x₇) = ⊥-elim (WF.Empty≢∪ (sym A≡B))
@@ -351,6 +392,8 @@ mutual
   transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (η-eq x₈ x₉ x₁₀ x₁₁ x₁₂) = ⊥-elim (WF.B≢∪ BΠ (sym A≡B))
   transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (Σ-η x₈ x₉ x₁₀ x₁₁ x₁₂ x₁₃) = ⊥-elim (WF.B≢∪ BΣ (sym A≡B))
   transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢∪ (sym A≡B))
+  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∥₁-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ A≡B)
+  transConv↓Term A≡B (∪₂-η x₁ x₂ x₃ x₄ x₅) (∥₂-η x₇ x₈) = ⊥-elim (WF.∪≢∥ A≡B)
   -- ∪₃-η
   transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢∪ (sym A≡B))
   transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (Empty-ins x₇) = ⊥-elim (WF.Empty≢∪ (sym A≡B))
@@ -361,6 +404,34 @@ mutual
   transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (η-eq x₈ x₉ x₁₀ x₁₁ x₁₂) = ⊥-elim (WF.B≢∪ BΠ (sym A≡B))
   transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (Σ-η x₈ x₉ x₁₀ x₁₁ x₁₂ x₁₃) = ⊥-elim (WF.B≢∪ BΣ (sym A≡B))
   transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢∪ (sym A≡B))
+  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∥₁-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ A≡B)
+  transConv↓Term A≡B (∪₃-η x₁ x₂ x₃) (∥₂-η x₇ x₈) = ⊥-elim (WF.∪≢∥ A≡B)
+  -- ∥₁-η
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (Empty-ins x₇) = ⊥-elim (WF.Empty≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (Unit-ins x₇) = ⊥-elim (WF.Unit≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (ne-ins x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.∥≢ne x₉ A≡B)
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (univ x₇ x₈ x₉) = ⊥-elim (WF.U≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (suc-cong x₇) = ⊥-elim (WF.ℕ≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (η-eq x₈ x₉ x₁₀ x₁₁ x₁₂) = ⊥-elim (WF.B≢∥ BΠ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (Σ-η x₈ x₉ x₁₀ x₁₁ x₁₂ x₁₃) = ⊥-elim (WF.B≢∥ BΣ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (∪₁-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (∪₂-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₁-η x₁ x₂ x₃ x₄ x₅) (∪₃-η x₇ x₈ x₉) = ⊥-elim (WF.∪≢∥ (sym A≡B))
+  -- ∥₂-η
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (ℕ-ins x₇) = ⊥-elim (WF.ℕ≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (Empty-ins x₇) = ⊥-elim (WF.Empty≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (Unit-ins x₇) = ⊥-elim (WF.Unit≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (ne-ins x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.∥≢ne x₉ A≡B)
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (univ x₇ x₈ x₉) = ⊥-elim (WF.U≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (suc-cong x₇) = ⊥-elim (WF.ℕ≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (η-eq x₈ x₉ x₁₀ x₁₁ x₁₂) = ⊥-elim (WF.B≢∥ BΠ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (Σ-η x₈ x₉ x₁₀ x₁₁ x₁₂ x₁₃) = ⊥-elim (WF.B≢∥ BΣ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (η-unit x₇ x₈ x₉ x₁₀) = ⊥-elim (WF.Unit≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (∪₁-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (∪₂-η x₇ x₈ x₉ x₁₀ x₁₁) = ⊥-elim (WF.∪≢∥ (sym A≡B))
+  transConv↓Term A≡B (∥₂-η x₁ x₂) (∪₃-η x₇ x₈ x₉) = ⊥-elim (WF.∪≢∥ (sym A≡B))
 
 
 -- Transitivity of algorithmic equality of types of the same context.

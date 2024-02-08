@@ -45,6 +45,11 @@ abstract mutual
                (soundness~↓ ⊢t)
                (soundnessConv↑Term ⊢u)
                (soundnessConv↑Term ⊢v)
+  soundness~↑ (∥ₑ-cong {A = A} {B = B} ⊢B ⊢a ⊢f) =
+    ∥ₑ-cong (syntactic∥ (proj₁ (syntacticEqTerm (soundness~↓ ⊢a))))
+            (soundnessConv↑ ⊢B)
+            (soundness~↓ ⊢a)
+            (soundnessConv↑Term ⊢f)
   soundness~↑ (Emptyrec-cong x₁ k~l) =
     Emptyrec-cong (soundnessConv↑ x₁) (soundness~↓ k~l)
 
@@ -70,6 +75,8 @@ abstract mutual
     Σ-cong F (soundnessConv↑ c) (soundnessConv↑ c₁)
   soundnessConv↓ (∪-cong c c₁) =
     ∪-cong (soundnessConv↑ c) (soundnessConv↑ c₁)
+  soundnessConv↓ (∥-cong c) =
+    ∥-cong (soundnessConv↑ c)
 
   -- Algorithmic equality of terms is well-formed.
   soundnessConv↑Term : ∀ {a b A} → Γ ⊢ a [conv↑] b ∷ A → Γ ⊢ a ≡ b ∷ A
@@ -117,6 +124,15 @@ abstract mutual
         ⊢A∪B = proj₁ (syntacticEqTerm a≡b)
         ⊢A   = proj₁ (syntactic∪ ⊢A∪B)
         ⊢B   = proj₂ (syntactic∪ ⊢A∪B)
-    in  conv a≡b (∪-cong c₁ c₂) --( (refl ⊢A) (refl ⊢B))
- --conv a≡b (∪-cong (sym (soundnessConv↑ c₁)) (sym (soundnessConv↑ c₂)))
+    in  conv a≡b (∪-cong c₁ c₂)
+  soundnessConv↓Term (∥₁-η ⊢p ⊢r ∥ᵢₙ ∥ᵢₙ cnv) =
+    let ⊢∥A∥ = syntacticTerm ⊢p
+        ⊢A   = syntactic∥ ⊢∥A∥
+        p≡   = soundnessConv↑Term cnv
+    in  ∥ᵢ-cong ⊢A p≡
+  soundnessConv↓Term (∥₂-η c₁ p~r) =
+    let a≡b  = soundness~↓ p~r
+        ⊢∥A∥ = proj₁ (syntacticEqTerm a≡b)
+        ⊢A   = syntactic∥ ⊢∥A∥
+    in  conv a≡b (∥-cong c₁)
   soundnessConv↓Term (η-unit [a] [b] aUnit bUnit) = η-unit [a] [b]

@@ -282,6 +282,24 @@ B≢∥ W B≡∥ =
   let _ , ⊢W = syntacticEq B≡∥
   in  B≢∥-red W (id ⊢W) B≡∥
 
+∪≢∥′ : ∀ {A B l l′}
+       ([∪] : Γ ⊩′⟨ l ⟩∪ A)
+       ([∥] : Γ ⊩′⟨ l′ ⟩∥ B)
+     → ShapeView Γ l l′ _ _ (∪ᵣ [∪]) (∥ᵣ [∥]) → ⊥
+∪≢∥′ a b ()
+
+∪≢∥-red : ∀ {C A F G} → Γ ⊢ C ⇒* ∥ A ∥ → Γ ⊢ F ∪ G ≡ C → ⊥
+∪≢∥-red {_} {Γ} {C} {A} {F} {G} D =
+  A≢B (λ Γ l A → Γ ⊩′⟨ l ⟩∪ A) (λ Γ l B → Γ ⊩′⟨ l ⟩∥ B) ∪ᵣ ∥ᵣ
+      (λ x → extractMaybeEmb (∪-elim x))
+      (λ x → extractMaybeEmb (∥-elim′ D x))
+      ∪≢∥′
+
+∪≢∥ : ∀ {A F G} → Γ ⊢ F ∪ G ≡ ∥ A ∥ → ⊥
+∪≢∥ ∪≡∥ =
+  let _ , ⊢∪ = syntacticEq ∪≡∥
+  in  ∪≢∥-red (id ⊢∪) ∪≡∥
+
 U≢ne′ : ∀ {K l l′}
        ([U] : Γ ⊩′⟨ l ⟩U)
        ([K] : Γ ⊩ne K)

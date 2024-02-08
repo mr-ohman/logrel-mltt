@@ -78,6 +78,16 @@ mutual
                    (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡∪ t′~t)
                    (convConvTerm (symConv↑Term Γ≡Δ ⊢u) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq X≡)) X≡ C≡)))
                    (convConvTerm (symConv↑Term Γ≡Δ ⊢v) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq Y≡)) Y≡ C≡)))
+  sym~↑ Γ≡Δ (∥ₑ-cong ⊢B a~a′ ⊢f) =
+    let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , a′~a = sym~↓ Γ≡Δ a~a′
+        D , ≡∥ = ∥≡A A≡B whnfB
+        X≡ = ∥-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡∥ A≡B)
+        B≡ = soundnessConv↑ ⊢B
+    in  _ ,  ∥-cong B≡ ,
+        ∥ₑ-cong (symConv↑ Γ≡Δ ⊢B)
+                (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡∥ a′~a)
+                (convConvTerm (symConv↑Term Γ≡Δ ⊢f) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq X≡)) X≡ (∥-cong B≡))))
   sym~↑ Γ≡Δ (Emptyrec-cong x t~u) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
@@ -134,6 +144,8 @@ mutual
   symConv↓ Γ≡Δ (∪-cong A<>B A<>B₁) =
     ∪-cong (symConv↑ Γ≡Δ A<>B)
            (symConv↑ Γ≡Δ A<>B₁)
+  symConv↓ Γ≡Δ (∥-cong A<>B) =
+    ∥-cong (symConv↑ Γ≡Δ A<>B)
 
   -- Symmetry of algorithmic equality of terms.
   symConv↑Term : ∀ {t u A} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↑] u ∷ A → Δ ⊢ u [conv↑] t ∷ A
@@ -194,6 +206,17 @@ mutual
         A≡ , B≡ = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) z A≡B)
     in  ∪₃-η (stabilityEq Γ≡Δ (trans (sym A≡) c₁))
              (stabilityEq Γ≡Δ (trans (sym B≡) c₂))
+             (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) z u~t)
+  symConv↓Term Γ≡Δ (∥₁-η ⊢p ⊢r pi ri cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in  ∥₁-η Δ⊢r Δ⊢p ri pi Δc≡
+  symConv↓Term Γ≡Δ (∥₂-η c₁ t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        A′ , z = ∥≡A A≡B whnfB
+        A≡ = ∥-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) z A≡B)
+    in  ∥₂-η (stabilityEq Γ≡Δ (trans (sym A≡) c₁))
              (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) z u~t)
   symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]

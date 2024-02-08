@@ -108,6 +108,20 @@ mutual
     in  ∪₃-η (stabilityEq Γ≡Δ (trans c₁ C≡))
              (stabilityEq Γ≡Δ (trans c₂ D≡))
              (stability~↓ Γ≡Δ p~r)
+  convConv↓Term Γ≡Δ A≡B whnfB (∥₁-η ⊢p ⊢r pi ri cnv)
+    with ∥≡A A≡B whnfB
+  ... | C , PE.refl =
+    let C≡ = ∥-injectivity A≡B
+    in  ∥₁-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pi ri
+             (convConv↑Term Γ≡Δ C≡ cnv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∥₂-η c₁ p~r)
+    with ∥≡A A≡B whnfB
+  ... | C , PE.refl =
+    let C≡ = ∥-injectivity A≡B
+    in  ∥₂-η (stabilityEq Γ≡Δ (trans c₁ C≡))
+             (stability~↓ Γ≡Δ p~r)
   convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]

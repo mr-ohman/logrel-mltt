@@ -35,6 +35,7 @@ mutual
     natrecₙ   : {C : Term (1+ m)} {c g k : Term m}
                      → Nf C → Nf c → Nf g → NfNeutral k → NfNeutral (natrec C c g k)
     casesₙ    : {C t u v : Term m} → Nf C → NfNeutral t → Nf u → Nf v → NfNeutral (cases C t u v)
+    ∥ₑₙ       : {B a f : Term m}   → Nf B → NfNeutral a → Nf f → NfNeutral (∥ₑ B a f)
     Emptyrecₙ : {C k : Term m}     → Nf C → NfNeutral k → NfNeutral (Emptyrec C k)
 
   data Nf {m : Nat} : Term m → Set where
@@ -42,6 +43,7 @@ mutual
     Πₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Π A ▹ B)
     Σₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Σ A ▹ B)
     ∪ₙ     : {A B : Term m} → Nf A → Nf B → Nf (A ∪ B)
+    ∥ₙ     : {A : Term m} → Nf A → Nf (∥ A ∥)
     ℕₙ     : Nf ℕ
     Emptyₙ : Nf Empty
     Unitₙ  : Nf Unit
@@ -50,6 +52,7 @@ mutual
     prodₙ  : {t u : Term m} → Nf t → Nf u → Nf (prod t u)
     injlₙ  : {t : Term m} → Nf t → Nf (injl t)
     injrₙ  : {t : Term m} → Nf t → Nf (injr t)
+    ∥ᵢₙ    : {t : Term m} → Nf t → Nf (∥ᵢ t)
     zeroₙ  : Nf zero
     sucₙ   : {t : Term m} → Nf t → Nf (suc t)
     starₙ  : Nf star
@@ -91,6 +94,15 @@ mutual
     in  cases C′ t′ u′ v′ ,
         casesₙ nfC′ nfT′ nfU′ nfV′ ,
         cases-cong ⊢A ⊢B C≡C′ t≡t′ u≡u′ v≡v′
+  fullRedNe (∥ₑ-cong B ⊢a ⊢f) =
+    let B′ , nfB′ , B≡B′ = fullRed B
+        a′ , nfA′ , a≡a′ = fullRedNe~↓ ⊢a
+        f′ , nfF′ , f≡f′ = fullRedTerm ⊢f
+        ⊢∥ , _ , _       = syntacticEqTerm a≡a′
+        ⊢A               = syntactic∥ ⊢∥
+    in  ∥ₑ B′ a′ f′ ,
+        ∥ₑₙ nfB′ nfA′ nfF′ ,
+        ∥ₑ-cong ⊢A B≡B′ a≡a′ f≡f′
   fullRedNe (Emptyrec-cong C n) =
     let C′ , nfC′ , C≡C′ = fullRed C
         n′ , nfN′ , n≡n′ = fullRedNe~↓ n
@@ -128,6 +140,9 @@ mutual
     let F′ , nfF′ , F≡F′ = fullRed F
         G′ , nfG′ , G≡G′ = fullRed G
     in  F′ ∪ G′ , ∪ₙ nfF′ nfG′ , ∪-cong F≡F′ G≡G′
+  fullRedConv↓ (∥-cong F) =
+    let F′ , nfF′ , F≡F′ = fullRed F
+    in  ∥ F′ ∥ , ∥ₙ nfF′ , ∥-cong F≡F′
 
   fullRedTerm : ∀ {t A} → Γ ⊢ t [conv↑] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
   fullRedTerm ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
@@ -207,5 +222,15 @@ mutual
   fullRedTermConv↓ (∪₃-η c₁ c₂ ⊢p) =
     let u , nfU , ⊢u = fullRedNe~↓ ⊢p
     in  u , ne nfU , conv ⊢u (∪-cong c₁ c₂)
+  fullRedTermConv↓ (∥₁-η ⊢p ⊢r ∥ᵢₙ ∥ᵢₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∥                   = syntacticTerm ⊢p
+        ⊢A                   = syntactic∥ ⊢∥
+    in  ∥ᵢ pa′ ,
+        ∥ᵢₙ nfPa′ ,
+        ∥ᵢ-cong ⊢A pa≡pa′
+  fullRedTermConv↓ (∥₂-η c₁ ⊢p) =
+    let u , nfU , ⊢u = fullRedNe~↓ ⊢p
+    in  u , ne nfU , conv ⊢u (∥-cong c₁)
   fullRedTermConv↓ (η-unit ⊢t _ tUnit _) =
     star , starₙ , η-unit ⊢t (starⱼ (wfTerm ⊢t))
