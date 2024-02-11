@@ -126,7 +126,7 @@ cases-subst*ₗ : ∀ {A B C t t′ u v x}
               → Γ ⊢ cases C t u v ⇒* u ∘ x ∷ C
 cases-subst*ₗ ⊢A ⊢B ⊢C ⊢u ⊢v ⊢x t⇒t′ injlₙ =
   cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v t⇒t′
-  ⇨∷* (∪-β₁ ⊢A ⊢B ⊢C ⊢x ⊢u ⊢v
+  ⇨∷* (∪-β₁ ⊢B ⊢C ⊢x ⊢u ⊢v
        ⇨ id (▹▹∘ⱼ ⊢u ⊢x))
 
 cases-subst*ᵣ : ∀ {A B C t t′ u v x}
@@ -141,7 +141,7 @@ cases-subst*ᵣ : ∀ {A B C t t′ u v x}
               → Γ ⊢ cases C t u v ⇒* v ∘ x ∷ C
 cases-subst*ᵣ ⊢A ⊢B ⊢C ⊢u ⊢v ⊢x t⇒t′ injrₙ =
   cases-subst* ⊢A ⊢B ⊢C ⊢u ⊢v t⇒t′
-  ⇨∷* (∪-β₂ ⊢A ⊢B ⊢C ⊢x ⊢u ⊢v
+  ⇨∷* (∪-β₂ ⊢A ⊢C ⊢x ⊢u ⊢v
        ⇨ id (▹▹∘ⱼ ⊢v ⊢x))
 
 appTermNd : ∀ {Γ : Con Term n} {F G t u l l′ l″}
@@ -911,7 +911,7 @@ cases-βₗ′ {Γ = Γ} {A = A} {B = B} {C = C} {t} {u} {v} {l}
                                       (escapeTerm (▹▹-intr [▹▹AC]) [u])
                                       (escapeTerm (▹▹-intr [▹▹BC]) [v])
                                       (escapeTerm [A] [t])
-                                      (id (injlⱼ (escapeTerm [A] [t]) (escape [B]))) injlₙ)
+                                      (id (injlⱼ (escape [B]) (escapeTerm [A] [t]))) injlₙ)
                        [C] (appTermNd [A] [C] (▹▹-intr [▹▹AC]) [u] [t]))
 
 cases-βₗ″ : ∀ {A B C t u v l}

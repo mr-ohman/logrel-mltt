@@ -273,10 +273,10 @@ eqRelInstance = record {
                             F≡H = soundnessConv↑ F<>H
                         in  liftConvTerm (univ (F∷U ∪ⱼ G∷U) (H∷U ∪ⱼ E∷U)
                                                 (∪-cong F<>H G<>E));
-  ≅-injl-cong = λ x₁ x₂ x₃ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₃)
-                             in liftConvTerm (∪₁-η (injlⱼ y₁ x₂) (injlⱼ y₂ x₂) injlₙ injlₙ x₃);
-  ≅-injr-cong = λ x₁ x₂ x₃ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₃)
-                             in liftConvTerm (∪₂-η (injrⱼ x₁ y₁) (injrⱼ x₁ y₂) injrₙ injrₙ x₃);
+  ≅-injl-cong = λ x₁ x₂ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₂)
+                          in liftConvTerm (∪₁-η (injlⱼ x₁ y₁) (injlⱼ x₁ y₂) injlₙ injlₙ x₂);
+  ≅-injr-cong = λ x₁ x₂ → let y , y₁ , y₂ = syntacticEqTerm (soundnessConv↑Term x₂)
+                          in liftConvTerm (∪₂-η (injrⱼ x₁ y₁) (injrⱼ x₁ y₂) injrₙ injrₙ x₂);
   ~-cases = λ x₁ x₂ x₃ (↑ z x₄) x₅ x₆ → ~-cases x₁ x₂ x₃ x₅ x₆ z x₄;
   ≅-∥-cong = λ x → liftConv (∥-cong x);
   ≅ₜ-∥-cong = λ x → let _ , F∷U , H∷U = syntacticEqTerm (soundnessConv↑Term x)

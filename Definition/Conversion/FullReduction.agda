@@ -211,14 +211,14 @@ mutual
         ⊢A , ⊢B              = syntactic∪ ⊢∪
     in  injl pa′ ,
         injlₙ nfPa′ ,
-        injl-cong ⊢A ⊢B pa≡pa′
+        injl-cong ⊢B pa≡pa′
   fullRedTermConv↓ (∪₂-η ⊢p ⊢r injrₙ injrₙ ⊢pa) =
     let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
         ⊢∪                   = syntacticTerm ⊢p
         ⊢A , ⊢B              = syntactic∪ ⊢∪
     in  injr pa′ ,
         injrₙ nfPa′ ,
-        injr-cong ⊢A ⊢B pa≡pa′
+        injr-cong ⊢A pa≡pa′
   fullRedTermConv↓ (∪₃-η c₁ c₂ ⊢p) =
     let u , nfU , ⊢u = fullRedNe~↓ ⊢p
     in  u , ne nfU , conv ⊢u (∪-cong c₁ c₂)

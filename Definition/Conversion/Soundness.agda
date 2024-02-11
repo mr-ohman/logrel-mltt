@@ -113,12 +113,12 @@ abstract mutual
     let ⊢∪AB    = syntacticTerm ⊢p
         ⊢A , ⊢B = syntactic∪ ⊢∪AB
         p≡ = soundnessConv↑Term cnv
-    in  injl-cong ⊢A ⊢B p≡
+    in  injl-cong ⊢B p≡
   soundnessConv↓Term (∪₂-η ⊢p ⊢r injrₙ injrₙ cnv) =
     let ⊢∪AB    = syntacticTerm ⊢p
         ⊢A , ⊢B = syntactic∪ ⊢∪AB
         p≡ = soundnessConv↑Term cnv
-    in  injr-cong ⊢A ⊢B p≡
+    in  injr-cong ⊢A p≡
   soundnessConv↓Term (∪₃-η c₁ c₂ p~r) =
     let a≡b  = soundness~↓ p~r
         ⊢A∪B = proj₁ (syntacticEqTerm a≡b)

@@ -80,7 +80,7 @@ inversion-suc (conv x x₁) =
 
 -- Inversion of injl.
 inversion-injl : ∀ {t C} → Γ ⊢ injl t ∷ C → ∃₂ λ A B → Γ ⊢ t ∷ A × Γ ⊢ C ≡ A ∪ B
-inversion-injl (injlⱼ {A₁} {B₁} {_} h x) = A₁ , B₁ , h , refl (syntacticTerm h ∪ⱼ x)
+inversion-injl (injlⱼ {A₁} {B₁} {_} h x) = A₁ , B₁ , x , refl (syntacticTerm x ∪ⱼ h)
 inversion-injl (conv h x) with inversion-injl h
 ... | A , B , ⊢t , C≡ = A , B , ⊢t , trans (sym x) C≡
 

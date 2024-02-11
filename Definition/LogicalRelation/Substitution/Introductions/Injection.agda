@@ -45,13 +45,13 @@ injl′ {Γ = Γ} {A} {B} {t} {l} {l′} [A] [B] [t]
 ... | PE.refl , PE.refl =
   let ⊢t = escapeTerm [A] [t]
       ⊢Γ = wf ⊢A
-      ⊢inj = injlⱼ ⊢t ⊢B
+      ⊢inj = injlⱼ ⊢B ⊢t
   in  ∪₁ₜ (injl t)
-         (idRedTerm:*: ⊢inj)
-         (≅-injl-cong ⊢A ⊢B (escapeTermEq [A] (reflEqTerm [A] [t])))
-         t
-         injlₙ
-         (irrelevanceTerm′ (PE.sym (wk-id A)) [A] ([A]₁ id ⊢Γ) [t])
+          (idRedTerm:*: ⊢inj)
+          (≅-injl-cong ⊢B (escapeTermEq [A] (reflEqTerm [A] [t])))
+          t
+          injlₙ
+          (irrelevanceTerm′ (PE.sym (wk-id A)) [A] ([A]₁ id ⊢Γ) [t])
 injl′ {Γ = Γ} {A} {B} {t} {l} {l′} [B] [A] [t]
       [∪FG]@(emb 0<1 x) = injl′ [B] [A] [t] x
 
@@ -69,11 +69,11 @@ injr′ {Γ = Γ} {A} {B} {t} {l} {l′} [A] [B] [t]
       ⊢Γ = wf ⊢B
       ⊢inj = injrⱼ ⊢A ⊢t
   in  ∪₂ₜ (injr t)
-         (idRedTerm:*: ⊢inj)
-         (≅-injr-cong ⊢A ⊢B (escapeTermEq [B] (reflEqTerm [B] [t])))
-         t
-         injrₙ
-         (irrelevanceTerm′ (PE.sym (wk-id B)) [B] ([B]₁ id ⊢Γ) [t])
+          (idRedTerm:*: ⊢inj)
+          (≅-injr-cong ⊢A (escapeTermEq [B] (reflEqTerm [B] [t])))
+          t
+          injrₙ
+          (irrelevanceTerm′ (PE.sym (wk-id B)) [B] ([B]₁ id ⊢Γ) [t])
 injr′ {Γ = Γ} {A} {B} {t} {l} {l′} [B] [A] [t]
       [∪FG]@(emb 0<1 x) = injr′ [B] [A] [t] x
 
@@ -116,7 +116,7 @@ injl-cong′ {Γ = Γ} {A} {B} {t} {u} {l} {l′}
       ⊢inj    = escapeTerm (∪-intr [∪AB]) [inj]
       ⊢inj′   = escapeTerm (∪-intr [∪AB]) [inj']
   in ∪₁ₜ₌ (injl t) (injl u) (idRedTerm:*: ⊢inj) (idRedTerm:*: ⊢inj′)
-          (≅-injl-cong ⊢F ⊢G (escapeTermEq [A] [t≡u]))
+          (≅-injl-cong ⊢G (escapeTermEq [A] [t≡u]))
           [inj] [inj'] t u injlₙ injlₙ wk[t≡u]
 injl-cong′ [A] [B] [t] [u] [t≡u] (emb 0<1 x) =
   injl-cong′ [A] [B] [t] [u] [t≡u] x
@@ -142,7 +142,7 @@ injr-cong′ {Γ = Γ} {A} {B} {t} {u} {l} {l′}
       ⊢inj    = escapeTerm (∪-intr [∪AB]) [inj]
       ⊢inj′   = escapeTerm (∪-intr [∪AB]) [inj']
   in ∪₂ₜ₌ (injr t) (injr u) (idRedTerm:*: ⊢inj) (idRedTerm:*: ⊢inj′)
-          (≅-injr-cong ⊢F ⊢G (escapeTermEq [B] [t≡u]))
+          (≅-injr-cong ⊢F (escapeTermEq [B] [t≡u]))
           [inj] [inj'] t u injrₙ injrₙ wk[t≡u]
 injr-cong′ [A] [B] [t] [u] [t≡u] (emb 0<1 x) =
   injr-cong′ [A] [B] [t] [u] [t≡u] x

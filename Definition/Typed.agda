@@ -110,8 +110,8 @@ mutual
               → Γ ⊢ snd t ∷ G [ fst t ]
 
     injlⱼ     : ∀ {A B t}
-              → Γ ⊢ t ∷ A
               → Γ ⊢ B
+              → Γ ⊢ t ∷ A
               → Γ ⊢ injl t ∷ A ∪ B
     injrⱼ     : ∀ {A B t}
               → Γ ⊢ A
@@ -268,13 +268,11 @@ mutual
                   → Γ ⊢ p ≡ r ∷ Σ F ▹ G
     -- disjoint union
     injl-cong     : ∀ {t t' A B}
-                  → Γ ⊢ A
                   → Γ ⊢ B
                   → Γ ⊢ t ≡ t' ∷ A
                   → Γ ⊢ injl t ≡ injl t' ∷ A ∪ B
     injr-cong     : ∀ {t t' A B}
                   → Γ ⊢ A
-                  → Γ ⊢ B
                   → Γ ⊢ t ≡ t' ∷ B
                   → Γ ⊢ injr t ≡ injr t' ∷ A ∪ B
     cases-cong    : ∀ {t t' u u' v v' A B C C'}
@@ -286,7 +284,6 @@ mutual
                   → Γ ⊢ v ≡ v' ∷ B ▹▹ C
                   → Γ ⊢ cases C t u v ≡ cases C' t' u' v' ∷ C
     ∪-β₁          : ∀ {A B C t u v}
-                  → Γ ⊢ A
                   → Γ ⊢ B
                   → Γ ⊢ C -- necessary?
                   → Γ ⊢ t ∷ A
@@ -295,7 +292,6 @@ mutual
                   → Γ ⊢ cases C (injl t) u v ≡ u ∘ t ∷ C
     ∪-β₂          : ∀ {A B C t u v}
                   → Γ ⊢ A
-                  → Γ ⊢ B
                   → Γ ⊢ C -- necessary?
                   → Γ ⊢ t ∷ B
                   → Γ ⊢ u ∷ A ▹▹ C
@@ -396,7 +392,6 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ t ⇒ t' ∷ A ∪ B
                  → Γ ⊢ cases C t u v ⇒ cases C t' u v ∷ C
   ∪-β₁           : ∀ {A B C t u v}
-                 → Γ ⊢ A
                  → Γ ⊢ B
                  → Γ ⊢ C -- necessary?
                  → Γ ⊢ t ∷ A
@@ -405,7 +400,6 @@ data _⊢_⇒_∷_ (Γ : Con Term n) : Term n → Term n → Term n → Set wher
                  → Γ ⊢ cases C (injl t) u v ⇒ u ∘ t ∷ C
   ∪-β₂           : ∀ {A B C t u v}
                  → Γ ⊢ A
-                 → Γ ⊢ B
                  → Γ ⊢ C -- necessary?
                  → Γ ⊢ t ∷ B
                  → Γ ⊢ u ∷ A ▹▹ C

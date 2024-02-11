@@ -40,7 +40,7 @@ wfTerm (Σⱼ a ▹ a₁) = wfTerm a
 wfTerm (prodⱼ F G a a₁) = wfTerm a
 wfTerm (fstⱼ _ _ a) = wfTerm a
 wfTerm (sndⱼ _ _ a) = wfTerm a
-wfTerm (injlⱼ a _) = wfTerm a
+wfTerm (injlⱼ _ a) = wfTerm a
 wfTerm (injrⱼ _ a) = wfTerm a
 wfTerm (casesⱼ a _ _ _) = wfTerm a
 wfTerm (∥ᵢⱼ a) = wfTerm a
@@ -80,11 +80,11 @@ wfEqTerm (Σ-β₁ F G x x₁) = wfTerm x
 wfEqTerm (Σ-β₂ F G x x₁) = wfTerm x
 wfEqTerm (∪-cong a b) = wfEqTerm a
 wfEqTerm (∥-cong a) = wfEqTerm a
-wfEqTerm (injl-cong a b c) = wfEqTerm c
-wfEqTerm (injr-cong a b c) = wfEqTerm c
+wfEqTerm (injl-cong a b) = wfEqTerm b
+wfEqTerm (injr-cong a b) = wfEqTerm b
 wfEqTerm (cases-cong A B C t u v) = wfEqTerm t
-wfEqTerm (∪-β₁ _ _ _ t _ _) = wfTerm t
-wfEqTerm (∪-β₂ _ _ _ t _ _) = wfTerm t
+wfEqTerm (∪-β₁ _ _ t _ _) = wfTerm t
+wfEqTerm (∪-β₂ _ _ t _ _) = wfTerm t
 wfEqTerm (∥ᵢ-cong A t) = wfEqTerm t
 wfEqTerm (∥ₑ-cong A B a f) = wfEqTerm a
 wfEqTerm (∥-β B a f) = wfTerm a
@@ -98,85 +98,6 @@ wfEq (Π-cong F F≡H G≡E) = wf F
 wfEq (Σ-cong F x₁ x₂) = wf F
 wfEq (∪-cong x₁ x₂) = wfEq x₁
 wfEq (∥-cong x) = wfEq x
-
-{--
-mutual
-  eqTermₗ : Γ ⊢ t ≡ u ∷ A → Γ ⊢ t ∷ A
-  eqTermₗ (refl x) = x
-  eqTermₗ (sym h) = {!!}
-  eqTermₗ (trans h h₁) = eqTermₗ h
-  eqTermₗ (conv h x) = conv (eqTermₗ h) x
-  eqTermₗ (Π-cong x h h₁) = Πⱼ (eqTermₗ h) ▹ (eqTermₗ h₁)
-  eqTermₗ (Σ-cong x h h₁) = Σⱼ (eqTermₗ h) ▹ (eqTermₗ h₁)
-  eqTermₗ (∪-cong h h₁) = (eqTermₗ h) ∪ⱼ (eqTermₗ h₁)
-  eqTermₗ (app-cong h h₁) = (eqTermₗ h) ∘ⱼ (eqTermₗ h₁)
-  eqTermₗ (β-red x x₁ x₂) = (lamⱼ x x₁) ∘ⱼ x₂
-  eqTermₗ (η-eq x x₁ x₂ h) = x₁
-  eqTermₗ (fst-cong x x₁ h) = fstⱼ x x₁ (eqTermₗ h)
-  eqTermₗ (snd-cong x x₁ h) = sndⱼ x x₁ (eqTermₗ h)
-  eqTermₗ (Σ-β₁ x x₁ x₂ x₃) = fstⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
-  eqTermₗ (Σ-β₂ x x₁ x₂ x₃) = sndⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
-  eqTermₗ (Σ-η x x₁ x₂ x₃ h h₁) = x₂
-  eqTermₗ (injl-cong x x₁ h) = injlⱼ (eqTermₗ h) x₁
-  eqTermₗ (injr-cong x x₁ h) = injrⱼ x (eqTermₗ h)
-  eqTermₗ (cases-cong x x₁ x₂ h h₁ h₂) = casesⱼ (eqTermₗ h) (eqTermₗ h₁) (eqTermₗ h₂) (typeConvₗ x₂)
-  eqTermₗ (∪-β₁ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injlⱼ x₃ x₁) x₄ x₅ x₂
-  eqTermₗ (∪-β₂ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injrⱼ x x₃) x₄ x₅ x₂
-  eqTermₗ (suc-cong h) = sucⱼ (eqTermₗ h)
-  eqTermₗ (natrec-cong x h h₁ h₂) = natrecⱼ (typeConvₗ x) (eqTermₗ h) (eqTermₗ h₁) (eqTermₗ h₂)
-  eqTermₗ (natrec-zero x x₁ x₂) = natrecⱼ x x₁ x₂ (zeroⱼ (wfTerm x₁))
-  eqTermₗ (natrec-suc x x₁ x₂ x₃) = natrecⱼ x₁ x₂ x₃ (sucⱼ x)
-  eqTermₗ (Emptyrec-cong x h) = Emptyrecⱼ (typeConvₗ x) (eqTermₗ h)
-  eqTermₗ (η-unit x x₁) = x
-
-{--
-  eqTermᵣ : Γ ⊢ t ≡ u ∷ A → Γ ⊢ u ∷ A
-  eqTermᵣ (refl x) = x
-  eqTermᵣ (sym h) = {!!}
-  eqTermᵣ (trans h h₁) = ? --eqTermᵣ h
-  eqTermᵣ (conv h x) = conv (eqTermᵣ h) x
-  eqTermᵣ (Π-cong x h h₁) = Πⱼ (eqTermᵣ h) ▹ ? --(eqTermᵣ h₁)
-  eqTermᵣ (Σ-cong x h h₁) = Σⱼ (eqTermᵣ h) ▹ ? --(eqTermᵣ h₁)
-  eqTermᵣ (∪-cong h h₁) = (eqTermᵣ h) ∪ⱼ (eqTermᵣ h₁)
-  eqTermᵣ (app-cong h h₁) = ? --(eqTermᵣ h) ∘ⱼ (eqTermᵣ h₁)
-  eqTermᵣ (β-red x x₁ x₂) = (lamⱼ x x₁) ∘ⱼ x₂
-  eqTermᵣ (η-eq x x₁ x₂ h) = x₁
-  eqTermᵣ (fst-cong x x₁ h) = fstⱼ x x₁ (eqTermᵣ h)
-  eqTermᵣ (snd-cong x x₁ h) = sndⱼ x x₁ (eqTermᵣ h)
-  eqTermᵣ (Σ-β₁ x x₁ x₂ x₃) = fstⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
-  eqTermᵣ (Σ-β₂ x x₁ x₂ x₃) = sndⱼ x x₁ (prodⱼ x x₁ x₂ x₃)
-  eqTermᵣ (Σ-η x x₁ x₂ x₃ h h₁) = x₂
-  eqTermᵣ (injl-cong x x₁ h) = injlⱼ (eqTermᵣ h) x₁
-  eqTermᵣ (injr-cong x x₁ h) = injrⱼ x (eqTermᵣ h)
-  eqTermᵣ (cases-cong x x₁ x₂ h h₁ h₂) = casesⱼ (eqTermᵣ h) (eqTermᵣ h₁) (eqTermᵣ h₂) (typeConvₗ x₂)
-  eqTermᵣ (∪-β₁ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injlⱼ x₃ x₁) x₄ x₅ x₂
-  eqTermᵣ (∪-β₂ x x₁ x₂ x₃ x₄ x₅) = casesⱼ (injrⱼ x x₃) x₄ x₅ x₂
-  eqTermᵣ (suc-cong h) = sucⱼ (eqTermᵣ h)
-  eqTermᵣ (natrec-cong x h h₁ h₂) = natrecⱼ (typeConvₗ x) (eqTermᵣ h) (eqTermᵣ h₁) (eqTermᵣ h₂)
-  eqTermᵣ (natrec-zero x x₁ x₂) = natrecⱼ x x₁ x₂ (zeroⱼ (wfTerm x₁))
-  eqTermᵣ (natrec-suc x x₁ x₂ x₃) = natrecⱼ x₁ x₂ x₃ (sucⱼ x)
-  eqTermᵣ (Emptyrec-cong x h) = Emptyrecⱼ (typeConvₗ x) (eqTermᵣ h)
-  eqTermᵣ (η-unit x x₁) = x
---}
-
-  typeConvₗ : Γ ⊢ A ≡ B → Γ ⊢ A
-  typeConvₗ (univ x) = univ (eqTermₗ x)
-  typeConvₗ (refl x) = x
-  typeConvₗ (sym h) = typeConvᵣ h
-  typeConvₗ (trans h h₁) = typeConvₗ h
-  typeConvₗ (Π-cong x h h₁) = Πⱼ x ▹ (typeConvₗ h₁)
-  typeConvₗ (Σ-cong x h h₁) = Σⱼ x ▹ (typeConvₗ h₁)
-  typeConvₗ (∪-cong h h₁) = (typeConvₗ h) ∪ⱼ (typeConvₗ h₁)
-
-  typeConvᵣ : Γ ⊢ A ≡ B → Γ ⊢ B
-  typeConvᵣ (univ x) = univ {!!}
-  typeConvᵣ (refl x) = x
-  typeConvᵣ (sym h) = typeConvₗ h
-  typeConvᵣ (trans h h₁) = typeConvᵣ h₁
-  typeConvᵣ (Π-cong x h h₁) = Πⱼ {!typeConvᵣ x!} ▹ {!!}
-  typeConvᵣ (Σ-cong x h h₁) = {!!}
-  typeConvᵣ (∪-cong h h₁) = {!!}
---}
 
 -- Reduction is a subset of conversion
 
@@ -195,8 +116,8 @@ subsetTerm (snd-subst F G x) = snd-cong F G (subsetTerm x)
 subsetTerm (Σ-β₁ F G x x₁) = Σ-β₁ F G x x₁
 subsetTerm (Σ-β₂ F G x x₁) = Σ-β₂ F G x x₁
 subsetTerm (cases-subst A B C u v x) = cases-cong A B (refl C) {--C--} (subsetTerm x) (refl u) (refl v)
-subsetTerm (∪-β₁ A B C t u v) = ∪-β₁ A B C t u v
-subsetTerm (∪-β₂ A B C t u v) = ∪-β₂ A B C t u v
+subsetTerm (∪-β₁ B C t u v) = ∪-β₁ B C t u v
+subsetTerm (∪-β₂ A C t u v) = ∪-β₂ A C t u v
 subsetTerm (∥ₑ-subst A B f a) = ∥ₑ-cong A (refl B) (subsetTerm a) (refl f)
 subsetTerm (∥-β B a f) = ∥-β B a f
 
@@ -226,8 +147,8 @@ redFirstTerm (snd-subst F G x) = sndⱼ F G (redFirstTerm x)
 redFirstTerm (Σ-β₁ F G x x₁) = fstⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (Σ-β₂ F G x x₁) = sndⱼ F G (prodⱼ F G x x₁)
 redFirstTerm (cases-subst A B C u v x) = casesⱼ (redFirstTerm x) u v C
-redFirstTerm (∪-β₁ A B C t u v) = casesⱼ (injlⱼ t B) u v C
-redFirstTerm (∪-β₂ A B C t u v) = casesⱼ (injrⱼ A t) u v C
+redFirstTerm (∪-β₁ B C t u v) = casesⱼ (injlⱼ B t) u v C
+redFirstTerm (∪-β₂ A C t u v) = casesⱼ (injrⱼ A t) u v C
 redFirstTerm (∥ₑ-subst A B f a) = ∥ₑⱼ (redFirstTerm a) f B
 redFirstTerm (∥-β B a f) = ∥ₑⱼ (∥ᵢⱼ a) f B
 
@@ -271,8 +192,8 @@ neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
 neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
 neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
 neRedTerm (cases-subst _ _ _ _ _ d) (casesₙ x) = neRedTerm d x
-neRedTerm (∪-β₁ A B C t u v) (casesₙ ())
-neRedTerm (∪-β₂ A B C t u v) (casesₙ ())
+neRedTerm (∪-β₁ B C t u v) (casesₙ ())
+neRedTerm (∪-β₂ A C t u v) (casesₙ ())
 neRedTerm (∥ₑ-subst A B f a) (∥ₑₙ x) = neRedTerm a x
 neRedTerm (∥-β B a f) (∥ₑₙ ())
 
@@ -294,8 +215,8 @@ whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
 whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
 whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
 whnfRedTerm (cases-subst _ _ _ _ _ d) (ne (casesₙ x)) = neRedTerm d x
-whnfRedTerm (∪-β₁ A B C t u v) (ne (casesₙ ()))
-whnfRedTerm (∪-β₂ A B C t u v) (ne (casesₙ ()))
+whnfRedTerm (∪-β₁ B C t u v) (ne (casesₙ ()))
+whnfRedTerm (∪-β₂ A C t u v) (ne (casesₙ ()))
 whnfRedTerm (∥ₑ-subst A B f a) (ne (∥ₑₙ x)) = neRedTerm a x
 whnfRedTerm (∥-β B a f) (ne (∥ₑₙ ()))
 
@@ -343,8 +264,8 @@ whrDetTerm (natrec-zero x x₁ x₂) (natrec-zero x₃ x₄ x₅) = PE.refl
 whrDetTerm (natrec-suc x x₁ x₂ x₃) (natrec-suc x₄ x₅ x₆ x₇) = PE.refl
 whrDetTerm (Emptyrec-subst x d) (Emptyrec-subst x₂ d′) rewrite whrDetTerm d d′ = PE.refl
 whrDetTerm (cases-subst _ _ _ _ _ x) (cases-subst _ _ _ _ _ y) rewrite whrDetTerm x y = PE.refl
-whrDetTerm (∪-β₁ _ _ _ _ _ _) (∪-β₁ _ _ _ _ _ _) = PE.refl
-whrDetTerm (∪-β₂ _ _ _ _ _ _) (∪-β₂ _ _ _ _ _ _) = PE.refl
+whrDetTerm (∪-β₁ _ _ _ _ _) (∪-β₁ _ _ _ _ _) = PE.refl
+whrDetTerm (∪-β₂ _ _ _ _ _) (∪-β₂ _ _ _ _ _) = PE.refl
 whrDetTerm (∥ₑ-subst A B f a) (∥ₑ-subst A′ B′ f′ a′) rewrite whrDetTerm a a′ = PE.refl
 whrDetTerm (∥-β B a f) (∥-β B′ f′ a') = PE.refl
 
@@ -358,10 +279,10 @@ whrDetTerm (fst-subst _ _ x) (Σ-β₁ F G x₁ x₂) = ⊥-elim (whnfRedTerm x 
 whrDetTerm (snd-subst _ _ x) (Σ-β₂ F G x₁ x₂) = ⊥-elim (whnfRedTerm x prodₙ)
 whrDetTerm (Σ-β₁ F G x x₁) (fst-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
 whrDetTerm (Σ-β₂ F G x x₁) (snd-subst _ _ y) = ⊥-elim (whnfRedTerm y prodₙ)
-whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₁ A B C t u v) = ⊥-elim (whnfRedTerm x injlₙ)
-whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₂ A B C t u v) = ⊥-elim (whnfRedTerm x injrₙ)
-whrDetTerm (∪-β₁ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injlₙ)
-whrDetTerm (∪-β₂ A B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injrₙ)
+whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₁ B C t u v) = ⊥-elim (whnfRedTerm x injlₙ)
+whrDetTerm (cases-subst _ _ _ _ _ x) (∪-β₂ A C t u v) = ⊥-elim (whnfRedTerm x injrₙ)
+whrDetTerm (∪-β₁ B C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injlₙ)
+whrDetTerm (∪-β₂ A C t u v) (cases-subst _ _ _ _ _ x) = ⊥-elim (whnfRedTerm x injrₙ)
 whrDetTerm (∥ₑ-subst A B f a) (∥-β B′ a′ f′) = ⊥-elim (whnfRedTerm a ∥ᵢₙ)
 whrDetTerm (∥-β B a f) (∥ₑ-subst A′ B′ f′ a′) = ⊥-elim (whnfRedTerm a′ ∥ᵢₙ)
 

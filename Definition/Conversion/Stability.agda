@@ -120,18 +120,16 @@ stabilityRedTerm Γ≡Δ (cases-subst ⊢A ⊢B ⊢C ⊢u ⊢v ⊢t) =
                   (stabilityTerm Γ≡Δ ⊢u)
                   (stabilityTerm Γ≡Δ ⊢v)
                   (stabilityRedTerm Γ≡Δ ⊢t)
-stabilityRedTerm Γ≡Δ (∪-β₁ ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+stabilityRedTerm Γ≡Δ (∪-β₁ ⊢B ⊢C ⊢t ⊢u ⊢v) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
-  in  ∪-β₁ (stability Γ≡Δ ⊢A)
-           (stability Γ≡Δ ⊢B)
+  in  ∪-β₁ (stability Γ≡Δ ⊢B)
            (stability Γ≡Δ ⊢C)
            (stabilityTerm Γ≡Δ ⊢t)
            (stabilityTerm Γ≡Δ ⊢u)
            (stabilityTerm Γ≡Δ ⊢v)
-stabilityRedTerm Γ≡Δ (∪-β₂ ⊢A ⊢B ⊢C ⊢t ⊢u ⊢v) =
+stabilityRedTerm Γ≡Δ (∪-β₂ ⊢A ⊢C ⊢t ⊢u ⊢v) =
   let ⊢Γ , _ , _ = contextConvSubst Γ≡Δ
   in  ∪-β₂ (stability Γ≡Δ ⊢A)
-           (stability Γ≡Δ ⊢B)
            (stability Γ≡Δ ⊢C)
            (stabilityTerm Γ≡Δ ⊢t)
            (stabilityTerm Γ≡Δ ⊢u)

@@ -172,7 +172,6 @@ record EqRelSet : Set₁ where
 
     -- congruence for injl
     ≅-injl-cong : ∀ {p r F G}
-          → Γ ⊢ F -- needed?
           → Γ ⊢ G
           → Γ ⊢ p ≅ r ∷ F
           → Γ ⊢ injl p ≅ injl r ∷ F ∪ G
@@ -180,7 +179,6 @@ record EqRelSet : Set₁ where
     -- congruence for injr
     ≅-injr-cong : ∀ {p r F G}
           → Γ ⊢ F
-          → Γ ⊢ G -- needed?
           → Γ ⊢ p ≅ r ∷ G
           → Γ ⊢ injr p ≅ injr r ∷ F ∪ G
 
