@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe --lossy-unification #-}
+{-# OPTIONS --without-K --safe #-}
 
 module Definition.Conversion.Decidable where
 
