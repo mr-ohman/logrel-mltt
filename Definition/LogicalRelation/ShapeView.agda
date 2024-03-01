@@ -48,6 +48,15 @@ _⊩⟨_⟩ne_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
 _⊩⟨_⟩B⟨_⟩_ : (Γ : Con Term n) (l : TypeLevel) (W : BindingType) (A : Term n) → Set
 Γ ⊩⟨ l ⟩B⟨ W ⟩ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩B⟨ W ⟩ A)
 
+_⊩⟨_⟩▹▹_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
+Γ ⊩⟨ l ⟩▹▹ A = {--Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ A--} MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩▹▹ A)
+
+_⊩⟨_⟩∪_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
+Γ ⊩⟨ l ⟩∪ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩∪ A)
+
+_⊩⟨_⟩∥_ : (Γ : Con Term n) (l : TypeLevel) (A : Term n) → Set
+Γ ⊩⟨ l ⟩∥ A = MaybeEmb l (λ l′ → Γ ⊩′⟨ l′ ⟩∥ A)
+
 -- Construct a general reducible type from a specific
 
 U-intr : ∀ {l} → Γ ⊩⟨ l ⟩U → Γ ⊩⟨ l ⟩ U
@@ -74,6 +83,14 @@ B-intr : ∀ {A l} W → Γ ⊩⟨ l ⟩B⟨ W ⟩ A → Γ ⊩⟨ l ⟩ A
 B-intr W (noemb x) = Bᵣ W x
 B-intr W (emb 0<1 x) = emb 0<1 (B-intr W x)
 
+∪-intr : ∀ {A l} → Γ ⊩⟨ l ⟩∪ A → Γ ⊩⟨ l ⟩ A
+∪-intr (noemb x) = ∪ᵣ x
+∪-intr (emb 0<1 x) = emb 0<1 (∪-intr x)
+
+∥-intr : ∀ {A l} → Γ ⊩⟨ l ⟩∥ A → Γ ⊩⟨ l ⟩ A
+∥-intr (noemb x) = ∥ᵣ x
+∥-intr (emb 0<1 x) = emb 0<1 (∥-intr x)
+
 -- Construct a specific reducible type from a general with some criterion
 
 U-elim : ∀ {l} → Γ ⊩⟨ l ⟩ U → Γ ⊩⟨ l ⟩U
@@ -88,6 +105,10 @@ U-elim (ne′ K D neK K≡K) =
   ⊥-elim (U≢ne neK (whnfRed* (red D) Uₙ))
 U-elim (Bᵣ′ W F G D ⊢F ⊢G A≡A [F] [G] G-ext) =
   ⊥-elim (U≢B W (whnfRed* (red D) Uₙ))
+U-elim (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (U≢∪ (whnfRed* (red D) Uₙ))
+U-elim (∥ᵣ′ S D ⊢S A≡A [S]) =
+  ⊥-elim (U≢∥ (whnfRed* (red D) Uₙ))
 U-elim (emb 0<1 x) with U-elim x
 U-elim (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 U-elim (emb 0<1 x) | emb () x₁
@@ -104,6 +125,10 @@ U-elim (emb 0<1 x) | emb () x₁
 ... | ()
 ℕ-elim′ D (Unitᵣ D′) with whrDet* (D , ℕₙ) (red D′ , Unitₙ)
 ... | ()
+ℕ-elim′ x (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (ℕ≢∪ (whrDet* (x , ℕₙ) (red D , ∪ₙ)))
+ℕ-elim′ x (∥ᵣ′ S D ⊢S A≡A [S]) =
+  ⊥-elim (ℕ≢∥ (whrDet* (x , ℕₙ) (red D , ∥ₙ)))
 ℕ-elim′ D (emb 0<1 x) with ℕ-elim′ D x
 ℕ-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 ℕ-elim′ D (emb 0<1 x) | emb () x₂
@@ -123,6 +148,10 @@ Empty-elim′ D (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
   ⊥-elim (Empty≢B W (whrDet* (D , Emptyₙ) (red D′ , ⟦ W ⟧ₙ)))
 Empty-elim′ D (ℕᵣ D′) with whrDet* (D , Emptyₙ) (red D′ , ℕₙ)
 ... | ()
+Empty-elim′ x (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (Empty≢∪ (whrDet* (x , Emptyₙ) (red D , ∪ₙ)))
+Empty-elim′ x (∥ᵣ′ S D ⊢S A≡A [S]) =
+  ⊥-elim (Empty≢∥ (whrDet* (x , Emptyₙ) (red D , ∥ₙ)))
 Empty-elim′ D (emb 0<1 x) with Empty-elim′ D x
 Empty-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 Empty-elim′ D (emb 0<1 x) | emb () x₂
@@ -142,6 +171,10 @@ Unit-elim′ D (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
   ⊥-elim (Unit≢B W (whrDet* (D , Unitₙ) (red D′ , ⟦ W ⟧ₙ)))
 Unit-elim′ D (ℕᵣ D′) with whrDet* (D , Unitₙ) (red D′ , ℕₙ)
 ... | ()
+Unit-elim′ x (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (Unit≢∪ (whrDet* (x , Unitₙ) (red D , ∪ₙ)))
+Unit-elim′ x (∥ᵣ′ S D ⊢S A≡A [S]) =
+  ⊥-elim (Unit≢∥ (whrDet* (x , Unitₙ) (red D , ∥ₙ)))
 Unit-elim′ D (emb 0<1 x) with Unit-elim′ D x
 Unit-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 Unit-elim′ D (emb 0<1 x) | emb () x₂
@@ -158,6 +191,10 @@ ne-elim′ D neK (Unitᵣ D′) = ⊥-elim (Unit≢ne neK (whrDet* (red D′ , U
 ne-elim′ D neK (ne′ K D′ neK′ K≡K) = noemb (ne K D′ neK′ K≡K)
 ne-elim′ D neK (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
   ⊥-elim (B≢ne W neK (whrDet* (red D′ , ⟦ W ⟧ₙ) (D , ne neK)))
+ne-elim′ D neK (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (∪≢ne neK (whrDet* (red D₁ , ∪ₙ) (D , ne neK)))
+ne-elim′ D neK (∥ᵣ′ S D₁ ⊢S A≡A [S]) =
+  ⊥-elim (∥≢ne neK (whrDet* (red D₁ , ∥ₙ) (D , ne neK)))
 ne-elim′ D neK (emb 0<1 x) with ne-elim′ D neK x
 ne-elim′ D neK (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 ne-elim′ D neK (emb 0<1 x) | emb () x₂
@@ -184,6 +221,10 @@ B-elim′ BΠ D (Bᵣ′ BΠ F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
   noemb (Bᵣ F G D′ ⊢F ⊢G A≡A [F] [G] G-ext)
 B-elim′ BΣ D (Bᵣ′ BΣ F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
   noemb (Bᵣ F G D′ ⊢F ⊢G A≡A [F] [G] G-ext)
+B-elim′ W D (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (∪≢B W (whrDet* (red D₁ , ∪ₙ) (D , ⟦ W ⟧ₙ)))
+B-elim′ W D (∥ᵣ′ S D₁ ⊢S A≡A [S]) =
+  ⊥-elim (∥≢B W (whrDet* (red D₁ , ∥ₙ) (D , ⟦ W ⟧ₙ)))
 B-elim′ W D (emb 0<1 x) with B-elim′ W D x
 B-elim′ W D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
 B-elim′ W D (emb 0<1 x) | emb () x₂
@@ -196,6 +237,61 @@ B-elim W [Π] = B-elim′ W (id (escape [Π])) [Π]
 
 Σ-elim : ∀ {F G l} → Γ ⊩⟨ l ⟩ Σ F ▹ G → Γ ⊩⟨ l ⟩B⟨ BΣ ⟩ Σ F ▹ G
 Σ-elim [Σ] = B-elim′ BΣ (id (escape [Σ])) [Σ]
+
+▹▹-intr : ∀ {A l} → Γ ⊩⟨ l ⟩▹▹ A → Γ ⊩⟨ l ⟩ A
+▹▹-intr (noemb x) = Bᵣ BΠ x
+▹▹-intr (emb 0<1 x) = emb 0<1 (▹▹-intr x)
+
+▹▹-elim : ∀ {A B l} → Γ ⊩⟨ l ⟩ A ▹▹ B → Γ ⊩⟨ l ⟩▹▹ A ▹▹ B
+▹▹-elim h = Π-elim h
+
+∪-elim′ : ∀ {A F G l} → Γ ⊢ A ⇒* F ∪ G → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩∪ A
+∪-elim′ D (Uᵣ′ l′ l< ⊢Γ) =
+  ⊥-elim (U≢∪ (whrDet* (id (Uⱼ ⊢Γ) , Uₙ) (D , ∪ₙ)))
+∪-elim′ D (ℕᵣ D′) =
+  ⊥-elim (ℕ≢∪ (whrDet* (red D′ , ℕₙ) (D , ∪ₙ)))
+∪-elim′ D (Emptyᵣ D′) =
+  ⊥-elim (Empty≢∪ (whrDet* (red D′ , Emptyₙ) (D , ∪ₙ)))
+∪-elim′ D (Unitᵣ D′) =
+  ⊥-elim (Unit≢∪ (whrDet* (red D′ , Unitₙ) (D , ∪ₙ)))
+∪-elim′ D (ne′ K D′ neK K≡K) =
+  ⊥-elim (∪≢ne neK (whrDet* (D , ∪ₙ) (red D′ , ne neK)))
+∪-elim′ D (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
+  ⊥-elim (∪≢B W (whrDet* (D , ∪ₙ) (red D′ , ⟦ W ⟧ₙ)))
+∪-elim′ D (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A [S] [T]) =
+  noemb (∪ᵣ S T D₁ ⊢S ⊢T A≡A [S] [T])
+∪-elim′ D (∥ᵣ′ S D₁ ⊢S A≡A [S]) =
+  ⊥-elim (∥≢∪ (whrDet* (red D₁ , ∥ₙ) (D , ∪ₙ)))
+∪-elim′ D (emb 0<1 x) with ∪-elim′ D x
+∪-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+∪-elim′ D (emb 0<1 x) | emb () x₂
+
+∪-elim : ∀ {F G l} → Γ ⊩⟨ l ⟩ F ∪ G → Γ ⊩⟨ l ⟩∪ F ∪ G
+∪-elim [∪] = ∪-elim′ (id (escape [∪])) [∪]
+
+∥-elim′ : ∀ {A F l} → Γ ⊢ A ⇒* ∥ F ∥ → Γ ⊩⟨ l ⟩ A → Γ ⊩⟨ l ⟩∥ A
+∥-elim′ D (Uᵣ′ l′ l< ⊢Γ) =
+  ⊥-elim (U≢∥ (whrDet* (id (Uⱼ ⊢Γ) , Uₙ) (D , ∥ₙ)))
+∥-elim′ D (ℕᵣ D′) =
+  ⊥-elim (ℕ≢∥ (whrDet* (red D′ , ℕₙ) (D , ∥ₙ)))
+∥-elim′ D (Emptyᵣ D′) =
+  ⊥-elim (Empty≢∥ (whrDet* (red D′ , Emptyₙ) (D , ∥ₙ)))
+∥-elim′ D (Unitᵣ D′) =
+  ⊥-elim (Unit≢∥ (whrDet* (red D′ , Unitₙ) (D , ∥ₙ)))
+∥-elim′ D (ne′ K D′ neK K≡K) =
+  ⊥-elim (∥≢ne neK (whrDet* (D , ∥ₙ) (red D′ , ne neK)))
+∥-elim′ D (Bᵣ′ W F G D′ ⊢F ⊢G A≡A [F] [G] G-ext) =
+  ⊥-elim (∥≢B W (whrDet* (D , ∥ₙ) (red D′ , ⟦ W ⟧ₙ)))
+∥-elim′ D (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A [S] [T]) =
+  ⊥-elim (∥≢∪ (whrDet* (D , ∥ₙ) (red D₁ , ∪ₙ)))
+∥-elim′ D (∥ᵣ′ S D₁ ⊢S A≡A [S]) =
+  noemb (∥ᵣ S D₁ ⊢S A≡A [S])
+∥-elim′ D (emb 0<1 x) with ∥-elim′ D x
+∥-elim′ D (emb 0<1 x) | noemb x₁ = emb 0<1 (noemb x₁)
+∥-elim′ D (emb 0<1 x) | emb () x₂
+
+∥-elim : ∀ {F l} → Γ ⊩⟨ l ⟩ ∥ F ∥ → Γ ⊩⟨ l ⟩∥ ∥ F ∥
+∥-elim [∥] = ∥-elim′ (id (escape [∥])) [∥]
 
 -- Extract a type and a level from a maybe embedding
 extractMaybeEmb : ∀ {l ⊩⟨_⟩} → MaybeEmb l ⊩⟨_⟩ → ∃ λ l′ → ⊩⟨ l′ ⟩
@@ -211,7 +307,11 @@ data ShapeView (Γ : Con Term n) : ∀ l l′ A B (p : Γ ⊩⟨ l ⟩ A) (q : �
   ne  : ∀ {A B l l′} neA neB
       → ShapeView Γ l l′ A B (ne neA) (ne neB)
   Bᵥ : ∀ {A B l l′} W BA BB
-    → ShapeView Γ l l′ A B (Bᵣ W BA) (Bᵣ W BB)
+     → ShapeView Γ l l′ A B (Bᵣ W BA) (Bᵣ W BB)
+  ∪ᵥ : ∀ {A B l l′} uA uB
+     → ShapeView Γ l l′ A B (∪ᵣ uA) (∪ᵣ uB)
+  ∥ᵥ : ∀ {A B l l′} uA uB
+     → ShapeView Γ l l′ A B (∥ᵣ uA) (∥ᵣ uB)
   emb⁰¹ : ∀ {A B l p q}
         → ShapeView Γ ⁰ l A B p q
         → ShapeView Γ ¹ l A B (emb 0<1 p) q
@@ -231,6 +331,8 @@ goodCases (ne neA) (ne neB) A≡B = ne neA neB
 goodCases (Bᵣ BΠ ΠA) (Bᵣ BΠ ΠB) A≡B = Bᵥ BΠ ΠA ΠB
 goodCases (Bᵣ BΣ ΣA) (Bᵣ BΣ ΣB) A≡B = Bᵥ BΣ ΣA ΣB
 --goodCases (Σᵣ ΣA) (Σᵣ ΣB) A≡B = Σᵥ ΣA ΣB
+goodCases (∪ᵣ x₁) (∪ᵣ x₂) x = ∪ᵥ x₁ x₂
+goodCases (∥ᵣ x₁) (∥ᵣ x₂) x = ∥ᵥ x₁ x₂
 
 goodCases {l = l} [A] (emb 0<1 x) A≡B =
   emb¹⁰ (goodCases {l = l} {⁰} [A] x A≡B)
@@ -338,6 +440,80 @@ goodCases (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (ne′ K D₁ neK K�
           (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
   ⊥-elim (B≢ne BΣ neK (whrDet* (D′ , Σₙ) (red D₁ , ne neK)))
 
+-- ∪ cases
+goodCases (Uᵣ x₁) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) PE.refl =
+  ⊥-elim (U≢∪ (whnfRed* (red D) Uₙ))
+goodCases (ℕᵣ x₁) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) x =
+  ⊥-elim (ℕ≢∪ (whrDet* (x , ℕₙ) ((red D , ∪ₙ))))
+goodCases (Emptyᵣ x₁) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) x =
+  ⊥-elim (Empty≢∪ (whrDet* (x , Emptyₙ) (red D , ∪ₙ)))
+goodCases (Unitᵣ x₁) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) x =
+  ⊥-elim (Unit≢∪ (whrDet* (x , Unitₙ) (red D , ∪ₙ)))
+goodCases (ne′ K D₁ neK K≡K) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (ne₌ M D′ neM K≡M) =
+  ⊥-elim (∪≢ne neM (whrDet* (red D , ∪ₙ) (red D′ , ne neM)))
+goodCases (Πᵣ′ F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with whrDet* (red D , ∪ₙ) (D′ , Πₙ)
+... | ()
+goodCases (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A₁ [S] [T]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with whrDet* (red D₁ , ∪ₙ) (D′ , Σₙ)
+... | ()
+--
+goodCases (∪ᵣ x₁) (Uᵣ x₂) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′])
+   with whnfRed* D′ Uₙ
+... | ()
+goodCases (∪ᵣ x₁) (ℕᵣ x₂) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′])
+  with whrDet* (red x₂ , ℕₙ) (D′ , ∪ₙ)
+... | ()
+goodCases (∪ᵣ x₁) (Emptyᵣ x₂) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′])
+  with whrDet* (red x₂ , Emptyₙ) (D′ , ∪ₙ)
+... | ()
+goodCases (∪ᵣ x₁) (Unitᵣ x₂) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′])
+  with whrDet* (red x₂ , Unitₙ) (D′ , ∪ₙ)
+... | ()
+goodCases (∪ᵣ′ S T D₁ ⊢S ⊢T A≡A [S] [T]) (ne′ K D neK K≡K) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+  ⊥-elim (∪≢ne neK (whrDet* (D′ , ∪ₙ) (red D , ne neK)))
+goodCases (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (Bᵣ′ W F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+  ⊥-elim (∪≢B W (whrDet* (D′ , ∪ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+goodCases (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∥ᵣ′ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+  ⊥-elim (∥≢∪ (whrDet* (red D₁ , ∥ₙ) (D′ , ∪ₙ)))
+
+-- ∥ cases
+goodCases (Uᵣ x₁) (∥ᵣ′ S D ⊢S A≡A [S]) PE.refl =
+  ⊥-elim (U≢∥ (whnfRed* (red D) Uₙ))
+goodCases (ℕᵣ x₁) (∥ᵣ′ S D ⊢S A≡A [S]) x =
+  ⊥-elim (ℕ≢∥ (whrDet* (x , ℕₙ) ((red D , ∥ₙ))))
+goodCases (Emptyᵣ x₁) (∥ᵣ′ S D ⊢S A≡A [S]) x =
+  ⊥-elim (Empty≢∥ (whrDet* (x , Emptyₙ) (red D , ∥ₙ)))
+goodCases (Unitᵣ x₁) (∥ᵣ′ S D ⊢S A≡A [S]) x =
+  ⊥-elim (Unit≢∥ (whrDet* (x , Unitₙ) (red D , ∥ₙ)))
+goodCases (ne′ K D₁ neK K≡K) (∥ᵣ′ S D ⊢S A≡A [S]) (ne₌ M D′ neM K≡M) =
+  ⊥-elim (∥≢ne neM (whrDet* (red D , ∥ₙ) (red D′ , ne neM)))
+goodCases (Πᵣ′ F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) (∥ᵣ′ S D ⊢S A≡A [S]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with whrDet* (red D , ∥ₙ) (D′ , Πₙ)
+... | ()
+goodCases (Σᵣ′ F G D ⊢F ⊢G A≡A [F] [G] G-ext) (∥ᵣ′ S D₁ ⊢S A≡A₁ [S]) (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with whrDet* (red D₁ , ∥ₙ) (D′ , Σₙ)
+... | ()
+--
+goodCases (∥ᵣ x₁) (Uᵣ x₂) (∥₌ S′ D′ A≡B [S≡S′])
+   with whnfRed* D′ Uₙ
+... | ()
+goodCases (∥ᵣ x₁) (ℕᵣ x₂) (∥₌ S′ D′ A≡B [S≡S′])
+  with whrDet* (red x₂ , ℕₙ) (D′ , ∥ₙ)
+... | ()
+goodCases (∥ᵣ x₁) (Emptyᵣ x₂) (∥₌ S′ D′ A≡B [S≡S′])
+  with whrDet* (red x₂ , Emptyₙ) (D′ , ∥ₙ)
+... | ()
+goodCases (∥ᵣ x₁) (Unitᵣ x₂) (∥₌ S′ D′ A≡B [S≡S′])
+  with whrDet* (red x₂ , Unitₙ) (D′ , ∥ₙ)
+... | ()
+goodCases (∥ᵣ′ S D₁ ⊢S A≡A [S]) (∪ᵣ′ S₁ T D ⊢S₁ ⊢T A≡A₁ [S]₁ [T]) (∥₌ S′ D′ A≡B [S≡S′]) =
+  ⊥-elim (∥≢∪ (whrDet* (D′ , ∥ₙ) (red D , ∪ₙ)))
+goodCases (∥ᵣ′ S D₁ ⊢S A≡A [S]) (ne′ K D neK K≡K) (∥₌ S′ D′ A≡B [S≡S′]) =
+  ⊥-elim (∥≢ne neK (whrDet* (D′ , ∥ₙ) (red D , ne neK)))
+goodCases (∥ᵣ′ S D ⊢S A≡A [S]) (Bᵣ′ W F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) (∥₌ S′ D′ A≡B [S≡S′]) =
+  ⊥-elim (∥≢B W (whrDet* (D′ , ∥ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+
 -- Construct an shape view between two derivations of the same type
 goodCasesRefl : ∀ {l l′ A} ([A] : Γ ⊩⟨ l ⟩ A) ([A′] : Γ ⊩⟨ l′ ⟩ A)
               → ShapeView Γ l l′ A A [A] [A′]
@@ -359,7 +535,11 @@ data ShapeView₃ (Γ : Con Term n) : ∀ l l′ l″ A B C
   ne  : ∀ {A B C l l′ l″} neA neB neC
       → ShapeView₃ Γ l l′ l″ A B C (ne neA) (ne neB) (ne neC)
   Bᵥ : ∀ {A B C l l′ l″} W BA BB BC
-    → ShapeView₃ Γ l l′ l″ A B C (Bᵣ W BA) (Bᵣ W BB) (Bᵣ W BC)
+     → ShapeView₃ Γ l l′ l″ A B C (Bᵣ W BA) (Bᵣ W BB) (Bᵣ W BC)
+  ∪ᵥ : ∀ {A B C l l′ l″} uA uB uC
+     → ShapeView₃ Γ l l′ l″ A B C (∪ᵣ uA) (∪ᵣ uB) (∪ᵣ uC)
+  ∥ᵥ : ∀ {A B C l l′ l″} uA uB uC
+     → ShapeView₃ Γ l l′ l″ A B C (∥ᵣ uA) (∥ᵣ uB) (∥ᵣ uC)
   emb⁰¹¹ : ∀ {A B C l l′ p q r}
          → ShapeView₃ Γ ⁰ l l′ A B C p q r
          → ShapeView₃ Γ ¹ l l′ A B C (emb 0<1 p) q r
@@ -383,6 +563,8 @@ combine (Unitᵥ UnitA₁ UnitB₁) (Unitᵥ UnitA UnitB) = Unitᵥ UnitA₁ Uni
 combine (ne neA₁ neB₁) (ne neA neB) = ne neA₁ neB₁ neB
 combine (Bᵥ BΠ ΠA₁ ΠB₁) (Bᵥ BΠ ΠA ΠB) = Bᵥ BΠ ΠA₁ ΠB₁ ΠB
 combine (Bᵥ BΣ ΣA₁ ΣB₁) (Bᵥ BΣ ΣA ΣB) = Bᵥ BΣ ΣA₁ ΣB₁ ΣB
+combine (∪ᵥ uA₁ uB₁) (∪ᵥ uA uB) = ∪ᵥ uA₁ uB₁ uB
+combine (∥ᵥ uA₁ uB₁) (∥ᵥ uA uB) = ∥ᵥ uA₁ uB₁ uB
 combine (emb⁰¹ [AB]) [BC] = emb⁰¹¹ (combine [AB] [BC])
 combine (emb¹⁰ [AB]) [BC] = emb¹⁰¹ (combine [AB] [BC])
 combine [AB] (emb⁰¹ [BC]) = combine [AB] [BC]
@@ -400,6 +582,10 @@ combine (Uᵥ UA UB) (ne (ne K D neK K≡K) neB) =
   ⊥-elim (U≢ne neK (whnfRed* (red D) Uₙ))
 combine (Uᵥ UA UB) (Bᵥ W (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) BB) =
   ⊥-elim (U≢B W (whnfRed* (red D) Uₙ))
+combine (Uᵥ UA UB) (∪ᵥ (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) BB) =
+  ⊥-elim (U≢∪ (whnfRed* (red D) Uₙ))
+combine (Uᵥ UA UB) (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) BB) =
+  ⊥-elim (U≢∥ (whnfRed* (red D) Uₙ))
 
 -- ℕ ≡ _
 combine (ℕᵥ ℕA ℕB) (Uᵥ UA UB) with whnfRed* (red ℕB) Uₙ
@@ -412,6 +598,10 @@ combine (ℕᵥ ℕA ℕB) (ne (ne K D neK K≡K) neB) =
   ⊥-elim (ℕ≢ne neK (whrDet* (red ℕB , ℕₙ) (red D , ne neK)))
 combine (ℕᵥ ℕA ℕB) (Bᵥ W (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) BB) =
   ⊥-elim (ℕ≢B W (whrDet* (red ℕB , ℕₙ) (red D , ⟦ W ⟧ₙ)))
+combine (ℕᵥ ℕA ℕB) (∪ᵥ (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) BB) =
+  ⊥-elim (ℕ≢∪ (whrDet* (red ℕB , ℕₙ) (red D , ∪ₙ)))
+combine (ℕᵥ ℕA ℕB) (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) BB) =
+  ⊥-elim (ℕ≢∥ (whrDet* (red ℕB , ℕₙ) (red D , ∥ₙ)))
 
 -- Empty ≡ _
 combine (Emptyᵥ EmptyA EmptyB) (Uᵥ UA UB) with whnfRed* (red EmptyB) Uₙ
@@ -424,6 +614,10 @@ combine (Emptyᵥ EmptyA EmptyB) (ne (ne K D neK K≡K) neB) =
   ⊥-elim (Empty≢ne neK (whrDet* (red EmptyB , Emptyₙ) (red D , ne neK)))
 combine (Emptyᵥ EmptyA EmptyB) (Bᵥ W (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) BB) =
   ⊥-elim (Empty≢B W (whrDet* (red EmptyB , Emptyₙ) (red D , ⟦ W ⟧ₙ)))
+combine (Emptyᵥ EmptyA EmptyB) (∪ᵥ (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) BB) =
+  ⊥-elim (Empty≢∪ (whrDet* (red EmptyB , Emptyₙ) (red D , ∪ₙ)))
+combine (Emptyᵥ EmptyA EmptyB) (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) BB) =
+  ⊥-elim (Empty≢∥ (whrDet* (red EmptyB , Emptyₙ) (red D , ∥ₙ)))
 
 -- Unit ≡ _
 combine (Unitᵥ UnitA UnitB) (Uᵥ UA UB) with whnfRed* (red UnitB) Uₙ
@@ -436,6 +630,10 @@ combine (Unitᵥ UnitA UnitB) (ne (ne K D neK K≡K) neB) =
   ⊥-elim (Unit≢ne neK (whrDet* (red UnitB , Unitₙ) (red D , ne neK)))
 combine (Unitᵥ UnitA UnitB) (Bᵥ W (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext) BB) =
   ⊥-elim (Unit≢B W (whrDet* (red UnitB , Unitₙ) (red D , ⟦ W ⟧ₙ)))
+combine (Unitᵥ UnitA UnitB) (∪ᵥ (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T]) BB) =
+  ⊥-elim (Unit≢∪ (whrDet* (red UnitB , Unitₙ) (red D , ∪ₙ)))
+combine (Unitᵥ UnitA UnitB) (∥ᵥ (∥ᵣ S D ⊢S A≡A [S]) BB) =
+  ⊥-elim (Unit≢∥ (whrDet* (red UnitB , Unitₙ) (red D , ∥ₙ)))
 
 -- ne ≡ _
 combine (ne neA (ne K D neK K≡K)) (Uᵥ UA UB) =
@@ -448,6 +646,10 @@ combine (ne neA (ne K D neK K≡K)) (Unitᵥ UnA UnB) =
   ⊥-elim (Unit≢ne neK (whrDet* (red UnA , Unitₙ) (red D , ne neK)))
 combine (ne neA (ne K D neK K≡K)) (Bᵥ W (Bᵣ F G D₁ ⊢F ⊢G A≡A [F] [G] G-ext) BB) =
   ⊥-elim (B≢ne W neK (whrDet* (red D₁ , ⟦ W ⟧ₙ) (red D , ne neK)))
+combine (ne neA (ne K D neK K≡K)) (∪ᵥ (∪ᵣ S T D₁ ⊢S ⊢T A≡A [S] [T]) BB) =
+  ⊥-elim (∪≢ne neK (whrDet* (red D₁ , ∪ₙ) (red D , ne neK)))
+combine (ne neA (ne K D neK K≡K)) (∥ᵥ (∥ᵣ S D₁ ⊢S A≡A [S]) BB) =
+  ⊥-elim (∥≢ne neK (whrDet* (red D₁ , ∥ₙ) (red D , ne neK)))
 
 -- Π/Σ ≡ _
 combine (Bᵥ W BA (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)) (Uᵥ UA UB) =
@@ -466,3 +668,39 @@ combine (Bᵥ BΠ ΠA (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)) (Bᵥ BΣ (B�
 combine (Bᵥ BΣ ΣA (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)) (Bᵥ BΠ (Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext′) ΠA)
   with whrDet* (red D , Σₙ) (red D′ , Πₙ)
 ... | ()
+combine (Bᵥ W BA (Bᵣ F G D₁ ⊢F ⊢G A≡A [F] [G] G-ext)) (∪ᵥ (∪ᵣ S T D ⊢S ⊢T A≡A₁ [S] [T]) uB1) =
+  ⊥-elim (∪≢B W (whrDet* (red D , ∪ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+combine (Bᵥ W BA (Bᵣ F G D₁ ⊢F ⊢G A≡A [F] [G] G-ext)) (∥ᵥ (∥ᵣ S D ⊢S A≡A₁ [S]) uB1) =
+  ⊥-elim (∥≢B W (whrDet* (red D , ∥ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+
+-- ∪ ≡ _
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (ne (ne K D₁ neK K≡K) neB) =
+  ⊥-elim (∪≢ne neK (whrDet* (red D , ∪ₙ) (red D₁ , ne neK)))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (Uᵥ x y) =
+  ⊥-elim (U≢∪ (whnfRed* (red D) Uₙ))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (ℕᵥ x y) =
+  ⊥-elim (ℕ≢∪ (whrDet* (red x , ℕₙ) (red D , ∪ₙ)))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (Emptyᵥ x y) =
+  ⊥-elim (Empty≢∪ (whrDet* (red x , Emptyₙ) (red D , ∪ₙ)))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (Unitᵥ x y) =
+  ⊥-elim (Unit≢∪ (whrDet* (red x , Unitₙ) (red D , ∪ₙ)))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (Bᵥ W (Bᵣ F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) y) =
+  ⊥-elim (∪≢B W (whrDet* (red D , ∪ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+combine (∪ᵥ AA (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (∥ᵥ (∥ᵣ S₁ D₁ ⊢S₁ A≡A₁ [S]₁) y) =
+  ⊥-elim (∥≢∪ (whrDet* (red D₁ , ∥ₙ) (red D , ∪ₙ)))
+
+-- ∥ ≡ _
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (ne (ne K D₁ neK K≡K) neB) =
+  ⊥-elim (∥≢ne neK (whrDet* (red D , ∥ₙ) (red D₁ , ne neK)))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (Uᵥ x y) =
+  ⊥-elim (U≢∥ (whnfRed* (red D) Uₙ))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (ℕᵥ x y) =
+  ⊥-elim (ℕ≢∥ (whrDet* (red x , ℕₙ) (red D , ∥ₙ)))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (Emptyᵥ x y) =
+  ⊥-elim (Empty≢∥ (whrDet* (red x , Emptyₙ) (red D , ∥ₙ)))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (Unitᵥ x y) =
+  ⊥-elim (Unit≢∥ (whrDet* (red x , Unitₙ) (red D , ∥ₙ)))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (Bᵥ W (Bᵣ F G D₁ ⊢F ⊢G A≡A₁ [F] [G] G-ext) y) =
+  ⊥-elim (∥≢B W (whrDet* (red D , ∥ₙ) (red D₁ , ⟦ W ⟧ₙ)))
+combine (∥ᵥ AA (∥ᵣ S D ⊢S A≡A [S])) (∪ᵥ (∪ᵣ S₁ T D₁ ⊢S₁ ⊢T A≡A₁ [S]₁ [T]) y) =
+  ⊥-elim (∥≢∪ (whrDet* (red D , ∥ₙ) (red D₁ , ∪ₙ)))

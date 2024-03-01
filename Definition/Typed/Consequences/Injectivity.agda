@@ -68,3 +68,57 @@ injectivity = B-injectivity BΠ
 
 Σ-injectivity : ∀ {F G H E} → Γ ⊢ Σ F ▹ G ≡ Σ H ▹ E → Γ ⊢ F ≡ H × Γ ∙ F ⊢ G ≡ E
 Σ-injectivity = B-injectivity BΣ
+
+∪-injectivity′ : ∀ {A B C D l}
+                   ([AB] : Γ ⊩⟨ l ⟩∪ A ∪ B)
+             → Γ ⊩⟨ l ⟩ A ∪ B ≡ C ∪ D / ∪-intr [AB]
+             → Γ ⊢ A ≡ C
+             × Γ ⊢ B ≡ D
+∪-injectivity′ (noemb (∪ᵣ S T D ⊢S ⊢T A≡A [S] [T])) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+  let A≡A₁ , B≡B₁ = ∪-PE-injectivity (whnfRed* (red D) ∪ₙ)
+      C≡A′ , D≡B′ = ∪-PE-injectivity (whnfRed* D′ ∪ₙ)
+      ⊢Γ     = wf ⊢S
+      [A]₁   = [S] id ⊢Γ
+      [A]′   = irrelevance′ (PE.trans (wk-id _) (PE.sym A≡A₁)) [A]₁
+      [A≡C]₁ = [S≡S′] id ⊢Γ
+      [A≡C]′ = irrelevanceEq″ (PE.trans (wk-id _) (PE.sym A≡A₁))
+                              (PE.trans (wk-id _) (PE.sym C≡A′))
+                              [A]₁ [A]′ [A≡C]₁
+      [B]₁   = [T] id ⊢Γ
+      [B]′   = irrelevance′ (PE.trans (wk-id _) (PE.sym B≡B₁)) [B]₁
+      [B≡D]₁ = [T≡T′] id ⊢Γ
+      [B≡D]′ = irrelevanceEq″ (PE.trans (wk-id _) (PE.sym B≡B₁))
+                              (PE.trans (wk-id _) (PE.sym D≡B′))
+                              [B]₁ [B]′ [B≡D]₁
+  in  escapeEq [A]′ [A≡C]′ ,
+      escapeEq [B]′ [B≡D]′
+∪-injectivity′ (emb 0<1 [AB]) ⊢AB = ∪-injectivity′ [AB] ⊢AB
+
+∪-injectivity : ∀ {A B C D} → Γ ⊢ A ∪ B ≡ C ∪ D → Γ ⊢ A ≡ C × Γ ⊢ B ≡ D
+∪-injectivity ⊢AB≡CD =
+  let [AB] , _ , [AB≡CD] = reducibleEq ⊢AB≡CD
+  in  ∪-injectivity′ (∪-elim [AB])
+                     (irrelevanceEq [AB] (∪-intr (∪-elim [AB])) [AB≡CD])
+
+∥-injectivity′ : ∀ {A C l}
+                   ([∥A∥] : Γ ⊩⟨ l ⟩∥ ∥ A ∥)
+             → Γ ⊩⟨ l ⟩ ∥ A ∥ ≡ ∥ C ∥ / ∥-intr [∥A∥]
+             → Γ ⊢ A ≡ C
+∥-injectivity′ (noemb (∥ᵣ S D ⊢S A≡A [S])) (∥₌ S′ D′ A≡B [S≡S′]) =
+  let A≡A₁ = ∥-PE-injectivity (whnfRed* (red D) ∥ₙ)
+      C≡A′ = ∥-PE-injectivity (whnfRed* D′ ∥ₙ)
+      ⊢Γ     = wf ⊢S
+      [A]₁   = [S] id ⊢Γ
+      [A]′   = irrelevance′ (PE.trans (wk-id _) (PE.sym A≡A₁)) [A]₁
+      [A≡C]₁ = [S≡S′] id ⊢Γ
+      [A≡C]′ = irrelevanceEq″ (PE.trans (wk-id _) (PE.sym A≡A₁))
+                              (PE.trans (wk-id _) (PE.sym C≡A′))
+                              [A]₁ [A]′ [A≡C]₁
+  in  escapeEq [A]′ [A≡C]′
+∥-injectivity′ (emb 0<1 [A]) ⊢A = ∥-injectivity′ [A] ⊢A
+
+∥-injectivity : ∀ {A C} → Γ ⊢ ∥ A ∥ ≡ ∥ C ∥ → Γ ⊢ A ≡ C
+∥-injectivity ⊢A≡C =
+  let [A] , _ , [A≡C] = reducibleEq ⊢A≡C
+  in  ∥-injectivity′ (∥-elim [A])
+                     (irrelevanceEq [A] (∥-intr (∥-elim [A])) [A≡C])

@@ -53,3 +53,11 @@ syntacticΠ ΠFG | F≡F , G≡G = proj₁ (syntacticEq F≡F) , proj₁ (syntac
 syntacticΣ : ∀ {F G} → Γ ⊢ Σ F ▹ G → Γ ⊢ F × Γ ∙ F ⊢ G
 syntacticΣ ΣFG with Σ-injectivity (refl ΣFG)
 syntacticΣ ΣFG | F≡F , G≡G = proj₁ (syntacticEq F≡F) , proj₁ (syntacticEq G≡G)
+
+syntactic∪ : ∀ {A B} → Γ ⊢ A ∪ B → Γ ⊢ A × Γ ⊢ B
+syntactic∪ ∪AB with ∪-injectivity (refl ∪AB)
+syntactic∪ ∪AB | A≡A , B≡B = proj₁ (syntacticEq A≡A) , proj₁ (syntacticEq B≡B)
+
+syntactic∥ : ∀ {A} → Γ ⊢ ∥ A ∥ → Γ ⊢ A
+syntactic∥ ∥A∥ with ∥-injectivity (refl ∥A∥)
+syntactic∥ ∥A∥ | A≡A = proj₁ (syntacticEq A≡A)

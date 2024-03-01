@@ -8,7 +8,7 @@ open EqRelSet {{...}}
 open import Definition.Untyped as U hiding (wk ; _∷_)
 open import Definition.Untyped.Properties
 open import Definition.Typed
-open import Definition.Typed.Weakening using (_∷_⊆_)
+open import Definition.Typed.Weakening using (_∷_⊆_ ; id)
 open import Definition.Typed.Properties
 open import Definition.LogicalRelation
 open import Definition.LogicalRelation.ShapeView
@@ -32,6 +32,70 @@ private
     F : Term n
     G : Term (1+ n)
     Γ : Con Term n
+
+⊩▹▹ₗ : ∀ {Γ : Con Term n} {A B l}
+      → ⊢ Γ
+      → Γ ⊩⟨ l ⟩ A ▹▹ B
+      → Γ ⊩⟨ l ⟩ A
+⊩▹▹ₗ {n} {Γ} {A} {B} {l} ⊢Γ h with ▹▹-elim h
+⊩▹▹ₗ {n} {Γ} {A} {B} {l} ⊢Γ h | noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+... | PE.refl , PE.refl = irrelevance′ {Γ = Γ} (wk-id A) ([F] id ⊢Γ)
+⊩▹▹ₗ {n} {Γ} {A} {B} {.¹} ⊢Γ h | emb 0<1 (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+... | PE.refl , PE.refl = emb 0<1 (irrelevance′ (wk-id A) ([F] id ⊢Γ))
+
+⊩Πₗ : ∀ {Γ : Con Term n} {F G l}
+      → ⊢ Γ
+      → Γ ⊩⟨ l ⟩ Π F ▹ G
+      → Γ ⊩⟨ l ⟩ F
+⊩Πₗ {n} {Γ} {A} {B} {l} ⊢Γ h with Π-elim h
+⊩Πₗ {n} {Γ} {A} {B} {l} ⊢Γ h | noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+... | PE.refl , PE.refl = irrelevance′ {Γ = Γ} (wk-id A) ([F] id ⊢Γ)
+⊩Πₗ {n} {Γ} {A} {B} {.¹} ⊢Γ h | emb 0<1 (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+... | PE.refl , PE.refl = emb 0<1 (irrelevance′ (wk-id A) ([F] id ⊢Γ))
+
+⊩≡Πₗ′ : ∀ {Γ : Con Term n} {F G H E l}
+         ([F] : Γ ⊩⟨ l ⟩ F)
+         ([ΠFG] : Γ ⊩⟨ l ⟩B⟨ BΠ ⟩ Π F ▹ G)
+      → ⊢ Γ
+      → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / B-intr BΠ [ΠFG]
+      → Γ ⊩⟨ l ⟩ F ≡ H / [F]
+⊩≡Πₗ′ {n} {Γ} {F = F} {G = G} {H = H} {E = E} {l} [F]
+      (noemb (Bᵣ F₁ G₁ D ⊢F ⊢G A≡A [F]₁ [G] G-ext)) ⊢Γ
+      (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+     | B-PE-injectivity BΠ (whnfRed* D′ Πₙ)
+... | PE.refl , PE.refl | PE.refl , PE.refl =
+  irrelevanceEq″ {Γ = Γ} (wk-id F) (wk-id H) ([F]₁ id ⊢Γ) [F] ([F≡F′] id ⊢Γ)
+⊩≡Πₗ′ {n} {Γ} {F = F} {G = G} {H = H} {E = E} {.¹} [F]
+      (emb 0<1 (noemb (Bᵣ F₁ G₁ D ⊢F ⊢G A≡A [F]₁ [G] G-ext))) ⊢Γ
+      (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′])
+  with B-PE-injectivity BΠ (whnfRed* (red D) Πₙ)
+     | B-PE-injectivity BΠ (whnfRed* D′ Πₙ)
+... | PE.refl , PE.refl | PE.refl , PE.refl =
+  irrelevanceEq″ {Γ = Γ} (wk-id F) (wk-id H) ([F]₁ id ⊢Γ) [F] ([F≡F′] id ⊢Γ)
+
+⊩≡Πₗ : ∀ {Γ : Con Term n} {F G H E l}
+         ([F] : Γ ⊩⟨ l ⟩ F)
+         ([ΠFG] : Γ ⊩⟨ l ⟩ Π F ▹ G)
+      → ⊢ Γ
+      → Γ ⊩⟨ l ⟩ Π F ▹ G ≡ Π H ▹ E / [ΠFG]
+      → Γ ⊩⟨ l ⟩ F ≡ H / [F]
+⊩≡Πₗ {n} {Γ} {F = F} {G = G} {H = H} {E = E} {l} [F] [ΠFG] ⊢Γ h =
+  ⊩≡Πₗ′ [F] (B-elim BΠ [ΠFG]) ⊢Γ
+        (irrelevanceEq [ΠFG] (B-intr BΠ (B-elim BΠ [ΠFG])) h)
+
+⊩ᵛ▹▹ₗ : ∀ {Γ : Con Term n} {A B l} ([Γ] : ⊩ᵛ Γ)
+      → Γ ⊩ᵛ⟨ l ⟩ A ▹▹ B / [Γ]
+      → Γ ⊩ᵛ⟨ l ⟩ A / [Γ]
+⊩ᵛ▹▹ₗ {n} {Γ} {A} {B} {l} [Γ] h {k} {Δ} {σ} ⊢Δ [σ]
+  with h ⊢Δ [σ]
+... | ⊢AB , ⊢≡AB =
+  ⊩Πₗ ⊢Δ ⊢AB ,
+  λ {σ′} [σ′] [σ≡σ′] → ⊩≡Πₗ (⊩Πₗ ⊢Δ ⊢AB) ⊢AB ⊢Δ (⊢≡AB [σ′] [σ≡σ′])
 
 -- Validity of W.
 ⟦_⟧ᵛ : ∀ W {n} {Γ : Con Term n} {F G l}

@@ -78,7 +78,9 @@ mutual
   neuTerm (Unitᵣ [ ⊢A , ⊢B , D ]) neN n n~n =
     let A≡Unit  = subset* D
         n~n′ = ~-conv n~n A≡Unit
-    in  Unitₜ _ (idRedTerm:*: (conv n A≡Unit)) (ne neN)
+    in  Unitₜ _ (idRedTerm:*: (conv n A≡Unit))
+              (~-to-≅ₜ (~-conv n~n A≡Unit))
+              (ne (neNfₜ neN (conv n A≡Unit) (~-conv n~n A≡Unit)))
   neuTerm (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) neN n n~n =
     let A≡K = subset* D
     in  neₜ _ (idRedTerm:*: (conv n A≡K)) (neNfₜ neN (conv n A≡K)
@@ -138,6 +140,14 @@ mutual
     in  Σₜ _ (idRedTerm:*: ⊢n) (ne neN) (~-to-≅ₜ n~n)
            [fst]
            [snd]
+  neuTerm (∪ᵣ′ F G D ⊢F ⊢G A≡A [F] [G]) neN ⊢n n~n =
+    ∪₃ₜ _ (idRedTerm:*: (conv ⊢n (subset* (red D))))
+        (~-to-≅ₜ (~-conv n~n (subset* (red D))))
+        (neNfₜ neN (conv ⊢n (subset* (red D))) (~-conv n~n (subset* (red D))))
+  neuTerm (∥ᵣ′ F D ⊢F A≡A [F]) neN ⊢n n~n =
+    ∥₂ₜ _ (idRedTerm:*: (conv ⊢n (subset* (red D))))
+        (~-to-≅ₜ (~-conv n~n (subset* (red D))))
+        (neNfₜ neN (conv ⊢n (subset* (red D))) (~-conv n~n (subset* (red D))))
   neuTerm (emb 0<1 x) neN n = neuTerm x neN n
 
   -- Neutrally equal terms are of reducible equality.
@@ -166,7 +176,11 @@ mutual
             n≡n′ (ne (neNfₜ₌ neN neN′ n~n′₁))
   neuEqTerm (Unitᵣ [ ⊢A , ⊢B , D ]) neN neN′ n n′ n~n′ =
     let A≡Unit = subset* D
-    in  Unitₜ₌ (conv n A≡Unit) (conv n′ A≡Unit)
+    in  Unitₜ₌ _ _ (idRedTerm:*: (conv n A≡Unit)) (idRedTerm:*: (conv n′ A≡Unit))
+               (~-to-≅ₜ (~-conv n~n′ A≡Unit))
+               (ne (neNfₜ neN (conv n A≡Unit) (~-conv (~-trans n~n′ (~-sym n~n′)) A≡Unit)) ,
+                ne (neNfₜ neN′ (conv n′ A≡Unit) (~-conv (~-trans (~-sym n~n′) n~n′) A≡Unit)))
+ --(ne (neNfₜ₌ neN neN′ (~-conv n~n′ A≡Unit)))
   neuEqTerm (ne (ne K [ ⊢A , ⊢B , D ] neK K≡K)) neN neN′ n n′ n~n′ =
     let A≡K = subset* D
     in  neₜ₌ _ _ (idRedTerm:*: (conv n A≡K)) (idRedTerm:*: (conv n′ A≡K))
@@ -260,4 +274,20 @@ mutual
             (ne neN) (ne neN′) (~-to-≅ₜ n~n′Σ)
             (neuTerm [ΣFG] neN ⊢n n~n) (neuTerm [ΣFG] neN′ ⊢n′ n′~n′)
             [fstn] [fstn′] [fstn≡fstn′] [sndn≡sndn′]
+  neuEqTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN neN′ ⊢n ⊢n′ n~n′ =
+    ∪₃ₜ₌ _ _
+         (idRedTerm:*: (conv ⊢n (subset* D)))
+         (idRedTerm:*: (conv ⊢n′ (subset* D)))
+         (≅-conv (~-to-≅ₜ n~n′) (subset* D))
+         (neuTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN ⊢n (~-trans n~n′ (~-sym n~n′)))
+         (neuTerm (∪ᵣ′ F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G]) neN′ ⊢n′ (~-trans (~-sym n~n′) n~n′))
+         (neNfₜ₌ neN neN′ (~-conv n~n′ (subset* D)))
+  neuEqTerm (∥ᵣ′ F [ ⊢A , ⊢B , D ] ⊢F A≡A [F]) neN neN′ ⊢n ⊢n′ n~n′ =
+    ∥₂ₜ₌ _ _
+         (idRedTerm:*: (conv ⊢n (subset* D)))
+         (idRedTerm:*: (conv ⊢n′ (subset* D)))
+         (≅-conv (~-to-≅ₜ n~n′) (subset* D))
+         (neuTerm (∥ᵣ′ F [ ⊢A , ⊢B , D ] ⊢F A≡A [F]) neN ⊢n (~-trans n~n′ (~-sym n~n′)))
+         (neuTerm (∥ᵣ′ F [ ⊢A , ⊢B , D ] ⊢F A≡A [F]) neN′ ⊢n′ (~-trans (~-sym n~n′) n~n′))
+         (neNfₜ₌ neN neN′ (~-conv n~n′ (subset* D)))
   neuEqTerm (emb 0<1 x) neN neN′ n:≡:n′ = neuEqTerm x neN neN′ n:≡:n′

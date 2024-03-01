@@ -8,6 +8,8 @@ open EqRelSet {{...}}
 open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.LogicalRelation
+open import Definition.LogicalRelation.ShapeView
+open import Definition.LogicalRelation.Properties.Symmetry
 import Definition.LogicalRelation.Irrelevance as LR
 open import Definition.LogicalRelation.Substitution
 
@@ -132,6 +134,32 @@ irrelevanceTerm [Γ] [Γ]′ [A] [A]′ [t] ⊢Δ [σ]′ =
    ,  (λ [σ′] x → LR.irrelevanceEqTerm [σA] [σA]′ ((proj₂ ([t] ⊢Δ [σ]))
                     (irrelevanceSubst [Γ]′ [Γ] ⊢Δ ⊢Δ [σ′])
                     (irrelevanceSubstEq [Γ]′ [Γ] ⊢Δ ⊢Δ [σ]′ [σ] x)))
+
+-- Irrelevance that uses a conversion on the type
+irrelevanceTerm″ : ∀ {l A A′ t}
+                  ([Γ] [Γ′] : ⊩ᵛ Γ)
+                  ([A]  : Γ ⊩ᵛ⟨ l ⟩ A  / [Γ])
+                  ([A′] : Γ ⊩ᵛ⟨ l ⟩ A′ / [Γ′])
+                  ([A≡A′] : Γ ⊩ᵛ⟨ l ⟩ A ≡ A′ / [Γ] / [A])
+                → Γ ⊩ᵛ⟨ l ⟩ t ∷ A  / [Γ]  / [A]
+                → Γ ⊩ᵛ⟨ l ⟩ t ∷ A′ / [Γ′] / [A′]
+irrelevanceTerm″ {A = A} {A′} {t} [Γ] [Γ′] [A] [A′] [A≡A′] [t] {k} {Δ} {σ} ⊢Δ [σ′] =
+  convTerm₁ {A = subst σ A} {B = subst σ A′} {t = subst σ t}
+            (proj₁ ([A] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′])))
+            (proj₁ ([A′] ⊢Δ [σ′]))
+            ([A≡A′] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]))
+            (proj₁ ([t] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]))) ,
+  λ {σ″} [σ″] [σ≡σ″] →
+    convEqTermT₁ {A = subst σ A} {B = subst σ A′} {t = subst σ t} {u = subst σ″ t}
+                 {[A] = proj₁ ([A] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]))}
+                 {[B] = proj₁ ([A′] ⊢Δ [σ′])}
+                 (goodCases (proj₁ ([A] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′])))
+                            (proj₁ ([A′] ⊢Δ [σ′]))
+                            ([A≡A′] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′])))
+                 ([A≡A′] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]))
+                 (proj₂ ([t] ⊢Δ (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]))
+                        (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ″])
+                        (irrelevanceSubstEq [Γ′] [Γ] ⊢Δ ⊢Δ [σ′] (irrelevanceSubst [Γ′] [Γ] ⊢Δ ⊢Δ [σ′]) [σ≡σ″]))
 
 -- Irrelevance of valid terms with different derivations of
 -- contexts and types which are propositionally equal

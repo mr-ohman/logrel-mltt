@@ -13,6 +13,8 @@ open import Definition.LogicalRelation
 
 open import Tools.Nat
 open import Tools.Product
+open import Tools.Sum
+  using (_⊎_ ; inj₁ ; inj₂)
 import Tools.PropositionalEquality as PE
 
 private
@@ -28,6 +30,8 @@ escape (Emptyᵣ [ ⊢A , ⊢B , D ]) = ⊢A
 escape (Unitᵣ [ ⊢A , ⊢B , D ]) = ⊢A
 escape (ne′ K [ ⊢A , ⊢B , D ] neK K≡K) = ⊢A
 escape (Bᵣ′ W F G [ ⊢A , ⊢B , D ] ⊢F ⊢G A≡A [F] [G] G-ext) = ⊢A
+escape (∪ᵣ′ S T [ ⊢A , ⊢B , D ] ⊢S ⊢T A≡A [S] [T]) = ⊢A
+escape (∥ᵣ′ S [ ⊢A , ⊢B , D ] ⊢S A≡A [S]) = ⊢A
 escape (emb 0<1 A) = escape A
 
 -- Reducible type equality respect the equality relation.
@@ -43,6 +47,10 @@ escapeEq (ne′ K D neK K≡K) (ne₌ M D′ neM K≡M) =
 escapeEq (Bᵣ′ W F G D ⊢F ⊢G A≡A [F] [G] G-ext)
              (B₌ F′ G′ D′ A≡B [F≡F′] [G≡G′]) =
   ≅-red (red D) D′ ⟦ W ⟧ₙ ⟦ W ⟧ₙ A≡B
+escapeEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₌ S′ T′ D′ A≡B [S≡S′] [T≡T′]) =
+  ≅-red (red D) D′ ∪ₙ ∪ₙ A≡B
+escapeEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₌ S′ D′ A≡B [S≡S′]) =
+  ≅-red (red D) D′ ∥ₙ ∥ₙ A≡B
 escapeEq (emb 0<1 A) A≡B = escapeEq A A≡B
 
 -- Reducible terms are well-formed.
@@ -54,7 +62,7 @@ escapeTerm (ℕᵣ D) (ℕₜ n [ ⊢t , ⊢u , d ] t≡t prop) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (Emptyᵣ D) (Emptyₜ e [ ⊢t , ⊢u , d ] t≡t prop) =
   conv ⊢t (sym (subset* (red D)))
-escapeTerm (Unitᵣ D) (Unitₜ e [ ⊢t , ⊢u , d ] prop) =
+escapeTerm (Unitᵣ D) (Unitₜ e [ ⊢t , ⊢u , d ] k≡k prop) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (ne′ K D neK K≡K) (neₜ k [ ⊢t , ⊢u , d ] nf) =
   conv ⊢t (sym (subset* (red D)))
@@ -63,6 +71,10 @@ escapeTerm (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                (Σₜ p [ ⊢t , ⊢u , d ] pProd p≅p [fst] [snd]) =
+  conv ⊢t (sym (subset* (red D)))
+escapeTerm (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (p , [ ⊢t , ⊢u , d ] , b , c) =
+  conv ⊢t (sym (subset* (red D)))
+escapeTerm (∥ᵣ′ S D ⊢S A≡A [S]) (p , [ ⊢t , ⊢u , d ] , b , c) =
   conv ⊢t (sym (subset* (red D)))
 escapeTerm (emb 0<1 A) t = escapeTerm A t
 
@@ -80,7 +92,7 @@ escapeTermEq (Emptyᵣ D) (Emptyₜ₌ k k′ d d′ k≡k′ prop) =
   let natK , natK′ = esplit prop
   in  ≅ₜ-red (red D) (redₜ d) (redₜ d′) Emptyₙ
              (ne natK) (ne natK′) k≡k′
-escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ ⊢t ⊢u) =
+escapeTermEq {l} {Γ} {A} {t} {u} (Unitᵣ D) (Unitₜ₌ k k′ [ ⊢t , ⊢x , d ] [ ⊢u , ⊢y , e ] k≡k′ prop) =
   let t≅u = ≅ₜ-η-unit ⊢t ⊢u
       A≡Unit = subset* (red D)
   in  ≅-conv t≅u (sym A≡Unit)
@@ -94,4 +106,14 @@ escapeTermEq (Bᵣ′ BΠ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
 escapeTermEq (Bᵣ′ BΣ F G D ⊢F ⊢G A≡A [F] [G] G-ext)
                  (Σₜ₌ p r d d′ pProd rProd p≅r [t] [u] [fstp] [fstr] [fst≡] [snd≡]) =
   ≅ₜ-red (red D) (redₜ d) (redₜ d′) Σₙ (productWhnf pProd) (productWhnf rProd) p≅r
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₁ₜ₌ p r c d e f g pa ra i j x) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (injectionLWhnf i) (injectionLWhnf j) e
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₂ₜ₌ p r c d e f g pa ra i j x) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (injectionRWhnf i) (injectionRWhnf j) e
+escapeTermEq (∪ᵣ′ S T D ⊢S ⊢T A≡A [S] [T]) (∪₃ₜ₌ p r c d e f g (neNfₜ₌ neK neM k≡m)) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∪ₙ (ne neK) (ne neM) e
+escapeTermEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₁ₜ₌ p r c d e f g pa ra i j x) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∥ₙ (TruncIWhnf i) (TruncIWhnf j) e
+escapeTermEq (∥ᵣ′ S D ⊢S A≡A [S]) (∥₂ₜ₌ p r c d e f g (neNfₜ₌ neK neM k≡m)) =
+  ≅ₜ-red (red D) (redₜ c) (redₜ d) ∥ₙ (ne neK) (ne neM) e
 escapeTermEq (emb 0<1 A) t≡u = escapeTermEq A t≡u

@@ -148,6 +148,46 @@ record EqRelSet : Set₁ where
               → Γ ∙ F ⊢ G ≅ E ∷ U
               → Γ ⊢ Σ F ▹ G ≅ Σ H ▹ E ∷ U
 
+    -- ∪-congruence
+
+    ≅-∪-cong  : ∀ {F G H E}
+              → Γ ⊢ F ≅ H
+              → Γ ⊢ G ≅ E
+              → Γ ⊢ F ∪ G ≅ H ∪ E
+
+    ≅ₜ-∪-cong : ∀ {F G H E}
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ⊢ G ≅ E ∷ U
+              → Γ ⊢ F ∪ G ≅ H ∪ E ∷ U
+
+    -- ∥-congruence
+
+    ≅-∥-cong  : ∀ {F H}
+              → Γ ⊢ F ≅ H
+              → Γ ⊢ ∥ F ∥ ≅ ∥ H ∥
+
+    ≅ₜ-∥-cong : ∀ {F H}
+              → Γ ⊢ F ≅ H ∷ U
+              → Γ ⊢ ∥ F ∥ ≅ ∥ H ∥ ∷ U
+
+    -- congruence for injl
+    ≅-injl-cong : ∀ {p r F G}
+          → Γ ⊢ G
+          → Γ ⊢ p ≅ r ∷ F
+          → Γ ⊢ injl p ≅ injl r ∷ F ∪ G
+
+    -- congruence for injr
+    ≅-injr-cong : ∀ {p r F G}
+          → Γ ⊢ F
+          → Γ ⊢ p ≅ r ∷ G
+          → Γ ⊢ injr p ≅ injr r ∷ F ∪ G
+
+    -- congruence for ∥ᵢ
+    ≅-∥ᵢ-cong : ∀ {p r F}
+          → Γ ⊢ F -- needed?
+          → Γ ⊢ p ≅ r ∷ F
+          → Γ ⊢ ∥ᵢ p ≅ ∥ᵢ r ∷ ∥ F ∥
+
     -- Zero reflexivity
     ≅ₜ-zerorefl : ⊢ Γ → Γ ⊢ zero ≅ zero ∷ ℕ
 
@@ -205,6 +245,24 @@ record EqRelSet : Set₁ where
              → Γ     ⊢ s ≅ s′ ∷ Π ℕ ▹ (F ▹▹ F [ suc (var x0) ]↑)
              → Γ     ⊢ n ~ n′ ∷ ℕ
              → Γ     ⊢ natrec F z s n ~ natrec F′ z′ s′ n′ ∷ F [ n ]
+
+    -- Cases recursion congruence
+    ~-cases : ∀ {t t′ u u′ v v′ A B C C′}
+              → Γ ⊢ A
+              → Γ ⊢ B
+              → Γ ⊢ C ≅ C′
+              → Γ ⊢ t ~ t′ ∷ A ∪ B
+              → Γ ⊢ u ≅ u′ ∷ A ▹▹ C
+              → Γ ⊢ v ≅ v′ ∷ B ▹▹ C
+              → Γ ⊢ cases C t u v ~ cases C′ t′ u′ v′ ∷ C
+
+    -- Truncation recursion congruence
+    ~-∥ₑ : ∀ {a a′ f f′ A B}
+              → Γ ⊢ A
+              → Γ ⊢ B ≅ B′
+              → Γ ⊢ a ~ a′ ∷ ∥ A ∥
+              → Γ ⊢ f ≅ f′ ∷ A ▹▹ ∥ B ∥
+              → Γ ⊢ ∥ₑ B a f ~ ∥ₑ B′ a′ f′ ∷ ∥ B ∥
 
     -- Empty recursion congruence
     ~-Emptyrec : ∀ {n n′ F F′}

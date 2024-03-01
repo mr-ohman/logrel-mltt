@@ -362,7 +362,7 @@ wk-β↑ t = trans (wk-subst t) (sym (trans (subst-wk t)
 
 -- A specific equation on weakenings used for the reduction of natrec.
 
-wk-β-natrec : ∀ (ρ : Wk m n )G
+wk-β-natrec : ∀ (ρ : Wk m n) G
   → Π ℕ ▹ (Π wk (lift ρ) G ▹ wk (lift (lift ρ)) (wk1 (G [ suc (var x0) ]↑)))
   ≡ Π ℕ ▹ (wk (lift ρ) G ▹▹ wk (lift ρ) G [ suc (var x0) ]↑)
 wk-β-natrec ρ G =
@@ -372,6 +372,13 @@ wk-β-natrec ρ G =
        (trans (wk-subst G) (sym (trans (wk-subst (wk (lift ρ) G))
          (trans (subst-wk G)
                 (substVar-to-subst (λ { x0 → refl ; (x +1) → refl}) G)))))))
+
+wk-▹▹ : ∀ (ρ : Wk m n) A B
+  → wk ρ (A ▹▹ B)
+  ≡ wk ρ A ▹▹ wk ρ B
+wk-▹▹ ρ A B =
+  cong (λ x → Π wk ρ A ▹ x)
+       (trans (lift-wk1 ρ B) (sym (wk1-wk ρ B)))
 
 -- Composing a singleton substitution and a lifted substitution.
 -- sg u ∘ lift σ = cons id u ∘ lift σ = cons σ u

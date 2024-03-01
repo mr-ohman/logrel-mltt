@@ -5,6 +5,7 @@ module Definition.Conversion.Symmetry where
 open import Definition.Untyped hiding (_∷_)
 open import Definition.Typed
 open import Definition.Typed.Properties
+open import Definition.Typed.Weakening using (▹▹-cong)
 open import Definition.Conversion
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
@@ -66,6 +67,27 @@ mutual
                     (convConvTerm (symConv↑Term Γ≡Δ x₁) F[0]≡G[0])
                     (convConvTerm (symConv↑Term Γ≡Δ x₂) (sucCong F≡G))
                     (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) B≡ℕ u~t)
+  sym~↑ Γ≡Δ (cases-cong ⊢C t~t′ ⊢u ⊢v) =
+    let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , t′~t = sym~↓ Γ≡Δ t~t′
+        D , E , ≡∪ = ∪≡A A≡B whnfB
+        X≡ , Y≡ = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡∪ A≡B)
+        C≡ = soundnessConv↑ ⊢C
+    in  _ ,  C≡ ,
+        cases-cong (symConv↑ Γ≡Δ ⊢C)
+                   (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡∪ t′~t)
+                   (convConvTerm (symConv↑Term Γ≡Δ ⊢u) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq X≡)) X≡ C≡)))
+                   (convConvTerm (symConv↑Term Γ≡Δ ⊢v) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq Y≡)) Y≡ C≡)))
+  sym~↑ Γ≡Δ (∥ₑ-cong ⊢B a~a′ ⊢f) =
+    let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
+        B , whnfB , A≡B , a′~a = sym~↓ Γ≡Δ a~a′
+        D , ≡∥ = ∥≡A A≡B whnfB
+        X≡ = ∥-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) ≡∥ A≡B)
+        B≡ = soundnessConv↑ ⊢B
+    in  _ ,  ∥-cong B≡ ,
+        ∥ₑ-cong (symConv↑ Γ≡Δ ⊢B)
+                (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) ≡∥ a′~a)
+                (convConvTerm (symConv↑Term Γ≡Δ ⊢f) (stabilityEq Γ≡Δ (▹▹-cong (proj₁ (syntacticEq X≡)) X≡ (∥-cong B≡))))
   sym~↑ Γ≡Δ (Emptyrec-cong x t~u) =
     let ⊢Γ , ⊢Δ , _ = contextConvSubst Γ≡Δ
         B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
@@ -119,6 +141,11 @@ mutual
         _ , ⊢H = syntacticEq (stabilityEq Γ≡Δ F≡H)
     in  Σ-cong ⊢H (symConv↑ Γ≡Δ A<>B)
                   (symConv↑ (Γ≡Δ ∙ F≡H) A<>B₁)
+  symConv↓ Γ≡Δ (∪-cong A<>B A<>B₁) =
+    ∪-cong (symConv↑ Γ≡Δ A<>B)
+           (symConv↑ Γ≡Δ A<>B₁)
+  symConv↓ Γ≡Δ (∥-cong A<>B) =
+    ∥-cong (symConv↑ Γ≡Δ A<>B)
 
   -- Symmetry of algorithmic equality of terms.
   symConv↑Term : ∀ {t u A} → ⊢ Γ ≡ Δ → Γ ⊢ t [conv↑] u ∷ A → Δ ⊢ u [conv↑] t ∷ A
@@ -163,10 +190,38 @@ mutual
                                                     (soundnessConv↑Term fstConv))
         Δsnd≡ = convConvTerm Δsnd≡₁ ΔGfstt≡Gfstu
     in  Σ-η Δ⊢r Δ⊢p rProd pProd Δfst≡ Δsnd≡
+  symConv↓Term Γ≡Δ (∪₁-η ⊢p ⊢r pInj rInj cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in  ∪₁-η Δ⊢r Δ⊢p rInj pInj Δc≡
+  symConv↓Term Γ≡Δ (∪₂-η ⊢p ⊢r pInj rInj cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in  ∪₂-η Δ⊢r Δ⊢p rInj pInj Δc≡
+  symConv↓Term Γ≡Δ (∪₃-η c₁ c₂ t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        A′ , B′ , z = ∪≡A A≡B whnfB
+        A≡ , B≡ = ∪-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) z A≡B)
+    in  ∪₃-η (stabilityEq Γ≡Δ (trans (sym A≡) c₁))
+             (stabilityEq Γ≡Δ (trans (sym B≡) c₂))
+             (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) z u~t)
+  symConv↓Term Γ≡Δ (∥₁-η ⊢p ⊢r pi ri cnv) =
+    let Δ⊢p = stabilityTerm Γ≡Δ ⊢p
+        Δ⊢r = stabilityTerm Γ≡Δ ⊢r
+        Δc≡ = symConv↑Term Γ≡Δ cnv
+    in  ∥₁-η Δ⊢r Δ⊢p ri pi Δc≡
+  symConv↓Term Γ≡Δ (∥₂-η c₁ t~u) =
+    let B , whnfB , A≡B , u~t = sym~↓ Γ≡Δ t~u
+        A′ , z = ∥≡A A≡B whnfB
+        A≡ = ∥-injectivity (PE.subst (λ x → _ ⊢ _ ≡ x) z A≡B)
+    in  ∥₂-η (stabilityEq Γ≡Δ (trans (sym A≡) c₁))
+             (PE.subst (λ x → _ ⊢ _ ~ _ ↓ x) z u~t)
   symConv↓Term Γ≡Δ (η-unit [t] [u] tUnit uUnit) =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]
-    in  (η-unit [u] [t] uUnit tUnit)
+    in  η-unit [u] [t] uUnit tUnit
 
 symConv↓Term′ : ∀ {t u A} → Γ ⊢ t [conv↓] u ∷ A → Γ ⊢ u [conv↓] t ∷ A
 symConv↓Term′ tConvU =
