@@ -22,7 +22,7 @@ private
 univConv↓ : ∀ {A B}
           → Γ ⊢ A [conv↓] B ∷ U
           → Γ ⊢ A [conv↓] B
-univConv↓ (ne-ins t u () x)
+univConv↓ (ne-ins t u (gen .Ukind () _) x)
 univConv↓ (univ x x₁ x₂) = x₂
 
 -- Algorithmic equality of terms of type U are equal as types.

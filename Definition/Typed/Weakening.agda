@@ -48,16 +48,21 @@ wkIndex : ∀ {n} → ρ ∷ Δ ⊆ Γ →
 wkIndex id ⊢Δ i = PE.subst (λ x → _ ∷ x ∈ _) (PE.sym (wk-id _)) i
 wkIndex (step ρ) (⊢Δ ∙ A) i = PE.subst (λ x → _ ∷ x ∈ _)
                                        (wk1-wk _ _)
-                                       (there (wkIndex ρ ⊢Δ i))
-wkIndex (lift ρ) (⊢Δ ∙ A) (there i) = PE.subst (λ x → _ ∷ x ∈ _)
-                                               (wk1-wk≡lift-wk1 _ _)
-                                               (there (wkIndex ρ ⊢Δ i))
-wkIndex (lift ρ) ⊢Δ here =
+                                       (there PE.refl (wkIndex ρ ⊢Δ i))
+wkIndex (lift ρ) (⊢Δ ∙ A) (there x i) rewrite x = PE.subst (λ x → _ ∷ x ∈ _) (wk1-wk≡lift-wk1 _ _) (there PE.refl (wkIndex ρ ⊢Δ i))
+wkIndex (lift ρ) (⊢Δ ∙ A) (here x) rewrite x =
   let G = _
       n = _
-  in  PE.subst (λ x → n ∷ x ∈ G)
-               (wk1-wk≡lift-wk1 _ _)
-               here
+  in PE.subst (λ x → n ∷ x ∈ G) (wk1-wk≡lift-wk1 _ _) (here PE.refl)
+-- wkIndex (lift ρ) (⊢Δ ∙ A) (there i) = PE.subst (λ x → _ ∷ x ∈ _)
+--                                                (wk1-wk≡lift-wk1 _ _)
+--                                                (there (wkIndex ρ ⊢Δ i))
+-- wkIndex (lift ρ) ⊢Δ here =
+--   let G = _
+--       n = _
+--   in  PE.subst (λ x → n ∷ x ∈ G)
+--                (wk1-wk≡lift-wk1 _ _)
+--                here
 
 mutual
   wk : ρ ∷ Δ ⊆ Γ →

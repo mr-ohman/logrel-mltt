@@ -12,6 +12,7 @@ open import Definition.Typed.Consequences.Substitution
 open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
+import Tools.PropositionalEquality as PE
 
 private
   variable
@@ -29,4 +30,4 @@ sucCong F≡G | ⊢Γ ∙ ⊢ℕ =
              (Π-cong ⊢F F≡G
                      (wkEq (step id) (⊢Γ ∙ ⊢ℕ ∙ ⊢F)
                            (subst↑TypeEq F≡G
-                                         (refl (sucⱼ (var (⊢Γ ∙ ⊢ℕ) here))))))
+                                         (refl (sucⱼ (var (⊢Γ ∙ ⊢ℕ) (here PE.refl)))))))

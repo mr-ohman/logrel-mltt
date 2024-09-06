@@ -123,7 +123,7 @@ mutual
                  → ([Γ] : ⊩ᵛ Γ)
                  → ∃ λ ([A] : Γ ⊩ᵛ⟨ ¹ ⟩ A / [Γ])
                  → Γ ⊩ᵛ⟨ ¹ ⟩ var x ∷ A / [Γ] / [A]
-  fundamentalVar here (_∙_ {A = A} {l = l} [Γ] [A]) =
+  fundamentalVar (here x) (_∙_ {A = A} {l = l} [Γ] [A]) rewrite x =
     (λ ⊢Δ [σ] →
        let [σA]  = proj₁ ([A] ⊢Δ (proj₁ [σ]))
            [σA′] = maybeEmb (irrelevance′ (PE.sym (subst-wk A)) [σA])
@@ -138,7 +138,7 @@ mutual
          in  irrelevanceTerm′ (PE.sym (subst-wk A)) [σA] [σA′] (proj₂ [σ])
          ,   (λ [σ′] [σ≡σ′] → irrelevanceEqTerm′ (PE.sym (subst-wk A))
                                                  [σA] [σA′] (proj₂ [σ≡σ′])))
-  fundamentalVar (there {A = A} h) ([Γ] ∙ [B]) =
+  fundamentalVar (there {A = A} x h) ([Γ] ∙ [B]) rewrite x =
     (λ ⊢Δ [σ] →
        let [h]   = proj₁ (fundamentalVar h [Γ]) ⊢Δ (proj₁ [σ])
            [σA]  = proj₁ [h]

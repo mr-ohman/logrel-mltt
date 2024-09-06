@@ -32,8 +32,8 @@ Unitᵗᵛ : ([Γ] : ⊩ᵛ Γ)
     → Γ ⊩ᵛ⟨ ¹ ⟩ Unit ∷ U / [Γ] / Uᵛ [Γ]
 Unitᵗᵛ [Γ] ⊢Δ [σ] = let ⊢Unit  = Unitⱼ ⊢Δ
                         [Unit] = Unitᵣ (idRed:*: (Unitⱼ ⊢Δ))
-                    in  Uₜ Unit (idRedTerm:*: ⊢Unit) Unitₙ (≅ₜ-Unitrefl ⊢Δ) [Unit]
-                    ,   (λ x x₁ → Uₜ₌ Unit Unit (idRedTerm:*: ⊢Unit) (idRedTerm:*: ⊢Unit) Unitₙ Unitₙ
+                    in  Uₜ Unit (idRedTerm:*: ⊢Unit) Unitₙ′ (≅ₜ-Unitrefl ⊢Δ) [Unit]
+                    ,   (λ x x₁ → Uₜ₌ Unit Unit (idRedTerm:*: ⊢Unit) (idRedTerm:*: ⊢Unit) Unitₙ′ Unitₙ′
                                       (≅ₜ-Unitrefl ⊢Δ) [Unit] [Unit] (id (Unitⱼ ⊢Δ)))
 
 -- Validity of star.

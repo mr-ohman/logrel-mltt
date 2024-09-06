@@ -66,7 +66,7 @@ decConv↓Term-ℕ-ins : ∀ {t u}
                     → Γ ⊢ t ~ t ↓ ℕ
                     → Γ ⊢ t ~ u ↓ ℕ
 decConv↓Term-ℕ-ins (ℕ-ins x) t~t = x
-decConv↓Term-ℕ-ins (ne-ins x x₁ () x₃) t~t
+decConv↓Term-ℕ-ins (ne-ins x x₁ (gen .Natkind () _) x₃) t~t
 decConv↓Term-ℕ-ins (zero-refl x) ([~] A D whnfB ())
 decConv↓Term-ℕ-ins (suc-cong x) ([~] A D whnfB ())
 
@@ -76,20 +76,23 @@ decConv↓Term-Empty-ins : ∀ {t u}
                     → Γ ⊢ t ~ t ↓ Empty
                     → Γ ⊢ t ~ u ↓ Empty
 decConv↓Term-Empty-ins (Empty-ins x) t~t = x
-decConv↓Term-Empty-ins (ne-ins x x₁ () x₃) t~t
+decConv↓Term-Empty-ins (ne-ins x x₁ (gen .Emptykind () _) x₃) t~t
 
 -- Helper function for decidability for neutrals of a neutral type.
 decConv↓Term-ne-ins : ∀ {t u A}
                     → Neutral A
                     → Γ ⊢ t [conv↓] u ∷ A
                     → ∃ λ B → Γ ⊢ t ~ u ↓ B
-decConv↓Term-ne-ins () (ℕ-ins x)
-decConv↓Term-ne-ins () (Empty-ins x)
+decConv↓Term-ne-ins (gen .Natkind () _) (ℕ-ins x)
+decConv↓Term-ne-ins (gen .Emptykind () _) (Empty-ins x)
 decConv↓Term-ne-ins neA (ne-ins x x₁ x₂ x₃) = _ , x₃
-decConv↓Term-ne-ins () (univ x x₁ x₂)
-decConv↓Term-ne-ins () (zero-refl x)
-decConv↓Term-ne-ins () (suc-cong x)
-decConv↓Term-ne-ins () (η-eq x₁ x₂ x₃ x₄ x₅)
+decConv↓Term-ne-ins (gen .Ukind () _) (univ x x₁ x₂)
+decConv↓Term-ne-ins (gen .Natkind () _) (zero-refl x)
+decConv↓Term-ne-ins (gen .Natkind () _) (suc-cong x)
+decConv↓Term-ne-ins (gen .Pikind () _) (η-eq x₁ x₂ x₃ x₄ x₅)
+decConv↓Term-ne-ins (gen .Unitkind () _) (Unit-ins x)
+decConv↓Term-ne-ins (gen .Sigmakind () _) (Σ-η x x₁ x₂ x₃ x₄ x₅)
+decConv↓Term-ne-ins (gen .Unitkind () _) (η-unit x x₁ x₂ x₃)
 
 -- Helper function for decidability for impossibility of terms not being equal
 -- as neutrals when they are equal as terms and the first is a neutral.
@@ -99,7 +102,7 @@ decConv↓Term-ℕ : ∀ {t u}
                 → ¬ (Γ ⊢ t ~ u ↓ ℕ)
                 → ⊥
 decConv↓Term-ℕ (ℕ-ins x) t~t ¬u~u = ¬u~u x
-decConv↓Term-ℕ (ne-ins x x₁ () x₃) t~t ¬u~u
+decConv↓Term-ℕ (ne-ins x x₁ (gen .Natkind () _) x₃) t~t ¬u~u
 decConv↓Term-ℕ (zero-refl x) ([~] A D whnfB ()) ¬u~u
 decConv↓Term-ℕ (suc-cong x) ([~] A D whnfB ()) ¬u~u
 
@@ -568,7 +571,7 @@ mutual
                            → Dec (Γ ⊢ t [conv↓] u ∷ U)
           decConv↓Term-univ-helper x₁ x₃ (yes p) = yes (univ x₁ x₃ p)
           decConv↓Term-univ-helper x₁ x₃ (no ¬p) =
-            no (λ { (ne-ins x₆ x₇ () x₉)
+            no (λ { (ne-ins x₆ x₇ (gen .Ukind () _) x₉)
                   ; (univ x₆ x₇ x₈) → ¬p x₈ })
 
   decConv↓Term (suc-cong x) (suc-cong x₁) =
@@ -579,7 +582,7 @@ mutual
           decConv↓Term-suc-helper (yes p) = yes (suc-cong p)
           decConv↓Term-suc-helper (no ¬p) =
             no (λ { (ℕ-ins ([~] A D whnfB ()))
-                  ; (ne-ins x₂ x₃ () x₅)
+                  ; (ne-ins x₂ x₃ (gen .Natkind () _) x₅)
                   ; (suc-cong x₂) → ¬p x₂ })
 
   decConv↓Term (Σ-η ⊢t _ tProd _ fstConvT sndConvT)
@@ -609,9 +612,12 @@ mutual
                           → Dec (Γ ⊢ snd t [conv↑] snd u ∷ G [ fst t ])
                           → Dec (Γ ⊢ t [conv↓] u ∷ Σ F ▹ G)
                   decConv↓Term-Ση-helper′ ⊢t ⊢u tProd uProd P (yes Q) = yes (Σ-η ⊢t ⊢u tProd uProd P Q)
-                  decConv↓Term-Ση-helper′ ⊢t ⊢u tProd uProd P (no ¬Q) = no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q } )
+                  decConv↓Term-Ση-helper′ ⊢t ⊢u tProd uProd P (no ¬Q) =
+                    no (λ { (Σ-η _ _ _ _ _ Q) → ¬Q Q
+                          ; (ne-ins _ _ (gen .Sigmakind () _) _)} )
           decConv↓Term-Ση-helper ⊢t ⊢u tProd uProd sndConvT sndConvU (no ¬P) =
-            no (λ { (Σ-η _ _ _ _ P _) → ¬P P } )
+            no (λ { (Σ-η _ _ _ _ P _) → ¬P P
+                  ; (ne-ins _ _ (gen .Sigmakind () _) _) } )
 
   decConv↓Term (η-eq x₁ x₂ x₃ x₄ x₅) (η-eq x₇ x₈ x₉ x₁₀ x₁₁) =
     decConv↓Term-ηeq-helper x₂ x₇ x₄ x₁₀ (decConv↑Term x₅ x₁₁)
@@ -624,7 +630,7 @@ mutual
                           → Dec (Γ ⊢ t [conv↓] u ∷ Π F ▹ G)
           decConv↓Term-ηeq-helper x₂ x₇ x₄ x₁₀ (yes p) = yes (η-eq x₂ x₇ x₄ x₁₀ p)
           decConv↓Term-ηeq-helper x₂ x₇ x₄ x₁₀ (no ¬p) =
-            no (λ { (ne-ins x₁₂ x₁₃ () x₁₅)
+            no (λ { (ne-ins x₁₂ x₁₃ (gen .Pikind () _) x₁₅)
                   ; (η-eq x₁₃ x₁₄ x₁₅ x₁₆ x₁₇) → ¬p x₁₇ })
 
   -- False cases
@@ -635,11 +641,29 @@ mutual
   decConv↓Term  (zero-refl x) (ℕ-ins x₁) =
     no (λ x₂ → decConv↓Term-ℕ (symConv↓Term′ x₂) x₁ (λ { ([~] A D whnfB ()) }))
   decConv↓Term  (zero-refl x) (suc-cong x₁) =
-    no (λ { (ℕ-ins ([~] A D whnfB ())) ; (ne-ins x₂ x₃ () x₅) })
+    no (λ { (ℕ-ins ([~] A D whnfB ()))
+          ; (ne-ins x₂ x₃ (gen .Natkind () _) x₅) })
   decConv↓Term  (suc-cong x) (ℕ-ins x₁) =
     no (λ x₂ → decConv↓Term-ℕ (symConv↓Term′ x₂) x₁ (λ { ([~] A D whnfB ()) }))
   decConv↓Term  (suc-cong x) (zero-refl x₁) =
-    no (λ { (ℕ-ins ([~] A D whnfB ())) ; (ne-ins x₂ x₃ () x₅) })
+    no (λ { (ℕ-ins ([~] A D whnfB ()))
+          ; (ne-ins x₂ x₃ (gen .Natkind () _) x₅) })
+  decConv↓Term (ℕ-ins x) (ne-ins x₁ x₂ (gen .Natkind () _) x₄)
+  decConv↓Term (Empty-ins x) (ne-ins x₁ x₂ (gen .Emptykind () _) x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Natkind () _) x₃) (ℕ-ins x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Emptykind () _) x₃) (Empty-ins x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Unitkind () _) x₃) (Unit-ins x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Ukind () _) x₃) (univ x₄ x₅ x₆)
+  decConv↓Term (ne-ins x x₁ (gen .Natkind () _) x₃) (zero-refl x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Natkind () _) x₃) (suc-cong x₄)
+  decConv↓Term (ne-ins x x₁ (gen .Pikind () _) x₃) (η-eq x₄ x₅ x₆ x₇ x₈)
+  decConv↓Term (ne-ins x x₁ (gen .Sigmakind () _) x₃) (Σ-η x₄ x₅ x₆ x₇ x₈ x₉)
+  decConv↓Term (ne-ins x x₁ (gen .Unitkind () _) x₃) (η-unit x₄ x₅ x₆ x₇)
+  decConv↓Term (univ x x₁ x₂) (ne-ins x₃ x₄ (gen .Ukind () _) x₆)
+  decConv↓Term (zero-refl x) (ne-ins x₁ x₂ (gen .Natkind () _) x₄)
+  decConv↓Term (suc-cong x) (ne-ins x₁ x₂ (gen .Natkind () _) x₄)
+  decConv↓Term (η-eq x x₁ x₂ x₃ x₄) (ne-ins x₅ x₆ (gen .Pikind () _) x₈)
+  decConv↓Term (Σ-η x x₁ x₂ x₃ x₄ x₅) (ne-ins x₆ x₇ (gen .Sigmakind () _) x₉)
 
   -- Decidability of algorithmic equality of terms of equal types.
   decConv↑TermConv : ∀ {t u A B}

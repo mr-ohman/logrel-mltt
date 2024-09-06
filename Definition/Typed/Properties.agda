@@ -7,6 +7,8 @@ open import Definition.Typed
 
 open import Tools.Empty using (⊥; ⊥-elim)
 open import Tools.Nat
+open import Data.Fin renaming (zero to zz)
+open import Tools.Sum hiding (id)
 open import Tools.Product
 import Tools.PropositionalEquality as PE
 
@@ -137,65 +139,93 @@ redFirst* (A⇒A′ ⇨ A′⇒*B) = redFirst A⇒A′
 -- No neutral terms are well-formed in an empty context
 
 noNe : ε ⊢ t ∷ A → Neutral t → ⊥
-noNe (conv ⊢t x) n = noNe ⊢t n
-noNe (var x₁ ()) (var x)
-noNe (⊢t ∘ⱼ ⊢t₁) (∘ₙ neT) = noNe ⊢t neT
-noNe (fstⱼ _ _ ⊢t) (fstₙ neT) = noNe ⊢t neT
-noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
-noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
-noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
+noNe (t ∘ⱼ t₁) (∘ₙ x₁) = noNe t x₁
+noNe (t ∘ⱼ t₁) ∘⊥
+noNe (fstⱼ x₂ x₃ t) (fstₙ x₁) = noNe t x₁
+noNe (sndⱼ x₂ x₃ t) (sndₙ x₁) = noNe t x₁
+noNe (natrecⱼ x₂ t t₁ t₂) (natrecₙ x₁) = noNe t₂ x₁
+noNe (Emptyrecⱼ x₂ t) (Emptyrecₙ x₁) = noNe t x₁
+noNe (conv t x₂) (gen i x x₁) = noNe t (gen i x x₁)
+-- noNe (conv ⊢t x) n = noNe ⊢t n
+-- noNe (var x₁ ()) (var x)
+-- noNe (⊢t ∘ⱼ ⊢t₁) (∘ₙ neT) = noNe ⊢t neT
+-- noNe (fstⱼ _ _ ⊢t) (fstₙ neT) = noNe ⊢t neT
+-- noNe (sndⱼ _ _ ⊢t) (sndₙ neT) = noNe ⊢t neT
+-- noNe (natrecⱼ x ⊢t ⊢t₁ ⊢t₂) (natrecₙ neT) = noNe ⊢t₂ neT
+-- noNe (Emptyrecⱼ A ⊢e) (Emptyrecₙ neT) = noNe ⊢e neT
 
 -- Neutrals do not weak head reduce
 
 neRedTerm : (d : Γ ⊢ t ⇒ u ∷ A) (n : Neutral t) → ⊥
 neRedTerm (conv d x) n = neRedTerm d n
-neRedTerm (app-subst d x) (∘ₙ n) = neRedTerm d n
-neRedTerm (β-red x x₁ x₂) (∘ₙ ())
-neRedTerm (natrec-subst x x₁ x₂ d) (natrecₙ n₁) = neRedTerm d n₁
-neRedTerm (natrec-zero x x₁ x₂) (natrecₙ ())
-neRedTerm (natrec-suc x x₁ x₂ x₃) (natrecₙ ())
-neRedTerm (Emptyrec-subst x d) (Emptyrecₙ n₁) = neRedTerm d n₁
-neRedTerm (fst-subst _ _ d) (fstₙ n) = neRedTerm d n
-neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
-neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
-neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
+neRedTerm (app-subst d x) (∘ₙ x₂) = neRedTerm d x₂
+neRedTerm (app-subst d x) ∘⊥
+neRedTerm (β-red x x₁ x₂) (∘ₙ (gen .Lamkind () x₅))
+neRedTerm (β-red x x₁ x₂) ∘⊥
+neRedTerm (fst-subst x x₁ d) (fstₙ x₃) = neRedTerm d x₃
+neRedTerm (snd-subst x x₁ d) (sndₙ x₃) = neRedTerm d x₃
+neRedTerm (Σ-β₁ x x₁ x₂ x₃) (fstₙ (gen .Prodkind () x₆))
+neRedTerm (Σ-β₂ x x₁ x₂ x₃) (sndₙ (gen .Prodkind () x₆))
+neRedTerm (natrec-subst x x₁ x₂ d) (natrecₙ x₄) = neRedTerm d x₄
+neRedTerm (natrec-zero x x₁ x₂) (natrecₙ (gen .Zerokind () x₅))
+neRedTerm (natrec-suc x x₁ x₂ x₃) (natrecₙ (gen .Suckind () x₆))
+neRedTerm (Emptyrec-subst x d) (Emptyrecₙ x₂) = neRedTerm d x₂
+-- neRedTerm (conv d x) n = neRedTerm d n
+-- neRedTerm (app-subst d x) (∘ₙ n) = neRedTerm d n
+-- neRedTerm (β-red x x₁ x₂) (∘ₙ ())
+-- neRedTerm (natrec-subst x x₁ x₂ d) (natrecₙ n₁) = neRedTerm d n₁
+-- neRedTerm (natrec-zero x x₁ x₂) (natrecₙ ())
+-- neRedTerm (natrec-suc x x₁ x₂ x₃) (natrecₙ ())
+-- neRedTerm (Emptyrec-subst x d) (Emptyrecₙ n₁) = neRedTerm d n₁
+-- neRedTerm (fst-subst _ _ d) (fstₙ n) = neRedTerm d n
+-- neRedTerm (snd-subst _ _ d) (sndₙ n) = neRedTerm d n
+-- neRedTerm (Σ-β₁ F G x x₁) (fstₙ ())
+-- neRedTerm (Σ-β₂ F G x x₁) (sndₙ ())
 
 neRed : (d : Γ ⊢ A ⇒ B) (N : Neutral A) → ⊥
 neRed (univ x) N = neRedTerm x N
 
 -- Whnfs do not weak head reduce
 
+consRedTerm : (d : Γ ⊢ t ⇒ u ∷ A) (w : Construct t) → ⊥
+consRedTerm (conv d x₁) (cons i x) = consRedTerm d (cons i x)
+
 whnfRedTerm : (d : Γ ⊢ t ⇒ u ∷ A) (w : Whnf t) → ⊥
-whnfRedTerm (conv d x) w = whnfRedTerm d w
-whnfRedTerm (app-subst d x) (ne (∘ₙ x₁)) = neRedTerm d x₁
-whnfRedTerm (β-red x x₁ x₂) (ne (∘ₙ ()))
-whnfRedTerm (natrec-subst x x₁ x₂ d) (ne (natrecₙ x₃)) = neRedTerm d x₃
-whnfRedTerm (natrec-zero x x₁ x₂) (ne (natrecₙ ()))
-whnfRedTerm (natrec-suc x x₁ x₂ x₃) (ne (natrecₙ ()))
-whnfRedTerm (Emptyrec-subst x d) (ne (Emptyrecₙ x₂)) = neRedTerm d x₂
-whnfRedTerm (fst-subst _ _ d) (ne (fstₙ n)) = neRedTerm d n
-whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
-whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
-whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
+whnfRedTerm d (cons x) = consRedTerm d x
+whnfRedTerm d (ne x) = neRedTerm d x
+-- whnfRedTerm (conv d x) w = whnfRedTerm d w
+-- whnfRedTerm (app-subst d x) (ne (∘ₙ x₁)) = neRedTerm d x₁
+-- whnfRedTerm (β-red x x₁ x₂) (ne (∘ₙ ()))
+-- whnfRedTerm (natrec-subst x x₁ x₂ d) (ne (natrecₙ x₃)) = neRedTerm d x₃
+-- whnfRedTerm (natrec-zero x x₁ x₂) (ne (natrecₙ ()))
+-- whnfRedTerm (natrec-suc x x₁ x₂ x₃) (ne (natrecₙ ()))
+-- whnfRedTerm (Emptyrec-subst x d) (ne (Emptyrecₙ x₂)) = neRedTerm d x₂
+-- whnfRedTerm (fst-subst _ _ d) (ne (fstₙ n)) = neRedTerm d n
+-- whnfRedTerm (snd-subst _ _ d) (ne (sndₙ n)) = neRedTerm d n
+-- whnfRedTerm (Σ-β₁ F G x x₁) (ne (fstₙ ()))
+-- whnfRedTerm (Σ-β₂ F G x x₁) (ne (sndₙ ()))
 
 whnfRed : (d : Γ ⊢ A ⇒ B) (w : Whnf A) → ⊥
 whnfRed (univ x) w = whnfRedTerm x w
 
 whnfRed*Term : (d : Γ ⊢ t ⇒* u ∷ A) (w : Whnf t) → t PE.≡ u
-whnfRed*Term (id x) Uₙ = PE.refl
-whnfRed*Term (id x) Πₙ = PE.refl
-whnfRed*Term (id x) Σₙ = PE.refl
-whnfRed*Term (id x) ℕₙ = PE.refl
-whnfRed*Term (id x) Emptyₙ = PE.refl
-whnfRed*Term (id x) Unitₙ = PE.refl
-whnfRed*Term (id x) lamₙ = PE.refl
-whnfRed*Term (id x) prodₙ = PE.refl
-whnfRed*Term (id x) zeroₙ = PE.refl
-whnfRed*Term (id x) sucₙ = PE.refl
-whnfRed*Term (id x) starₙ = PE.refl
-whnfRed*Term (id x) (ne x₁) = PE.refl
-whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)
+whnfRed*Term (id x) w = PE.refl
+whnfRed*Term (x ⇨ d) (cons x₁) = ⊥-elim (consRedTerm x x₁)
 whnfRed*Term (x ⇨ d) (ne x₁) = ⊥-elim (neRedTerm x x₁)
+-- whnfRed*Term (id x) Uₙ = PE.refl
+-- whnfRed*Term (id x) Πₙ = PE.refl
+-- whnfRed*Term (id x) Σₙ = PE.refl
+-- whnfRed*Term (id x) ℕₙ = PE.refl
+-- whnfRed*Term (id x) Emptyₙ = PE.refl
+-- whnfRed*Term (id x) Unitₙ = PE.refl
+-- whnfRed*Term (id x) lamₙ = PE.refl
+-- whnfRed*Term (id x) prodₙ = PE.refl
+-- whnfRed*Term (id x) zeroₙ = PE.refl
+-- whnfRed*Term (id x) sucₙ = PE.refl
+-- whnfRed*Term (id x) starₙ = PE.refl
+-- whnfRed*Term (id x) (ne x₁) = PE.refl
+-- whnfRed*Term (conv x x₁ ⇨ d) w = ⊥-elim (whnfRedTerm x w)
+-- whnfRed*Term (x ⇨ d) (ne x₁) = ⊥-elim (neRedTerm x x₁)
 
 whnfRed* : (d : Γ ⊢ A ⇒* B) (w : Whnf A) → A PE.≡ B
 whnfRed* (id x) w = PE.refl
@@ -267,15 +297,19 @@ idRedTerm:*: t = [ t , t , id t ]
 UnotInA : Γ ⊢ U ∷ A → ⊥
 UnotInA (conv U∷U x) = UnotInA U∷U
 
-UnotInA[t] : t [ a ] PE.≡ U
+test : var zz [ a ] PE.≡ a
+test = PE.refl
+
+UnotInA[t] :
+           t [ a ] PE.≡ U
          → Γ ⊢ a ∷ A
          → Γ ∙ A ⊢ t ∷ B
          → ⊥
 UnotInA[t] () x₁ (ℕⱼ x₂)
 UnotInA[t] () x₁ (Emptyⱼ x₂)
 UnotInA[t] () x₁ (Πⱼ x₂ ▹ x₃)
-UnotInA[t] x₁ x₂ (var x₃ here) rewrite x₁ = UnotInA x₂
-UnotInA[t] () x₂ (var x₃ (there x₄))
+UnotInA[t] x₁ x₂ (var {A₁} {zz} x₃ h) rewrite x₁ = UnotInA x₂
+-- UnotInA[t] () x₂ (var x₃ (there x₄))
 UnotInA[t] () x₁ (lamⱼ x₂ x₃)
 UnotInA[t] () x₁ (x₂ ∘ⱼ x₃)
 UnotInA[t] () x₁ (zeroⱼ x₂)

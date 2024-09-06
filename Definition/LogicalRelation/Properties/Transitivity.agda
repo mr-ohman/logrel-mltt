@@ -141,10 +141,10 @@ mutual
                     → [Natural]-prop Γ k′ k″
                     → [Natural]-prop Γ k k″
   transNatural-prop (sucᵣ x) (sucᵣ x₁) = sucᵣ (transEqTermℕ x x₁)
-  transNatural-prop (sucᵣ x) (ne (neNfₜ₌ () neM k≡m))
+  transNatural-prop (sucᵣ x) (ne (neNfₜ₌ (gen .Suckind () _) neM k≡m))
   transNatural-prop zeroᵣ prop₁ = prop₁
   transNatural-prop prop zeroᵣ = prop
-  transNatural-prop (ne (neNfₜ₌ neK () k≡m)) (sucᵣ x₃)
+  transNatural-prop (ne (neNfₜ₌ neK (gen .Suckind () _) k≡m)) (sucᵣ x₃)
   transNatural-prop (ne [k≡k′]) (ne [k′≡k″]) =
     ne (transEqTermNe [k≡k′] [k′≡k″])
 

@@ -7,6 +7,8 @@ open import Definition.Untyped hiding (_∷_)
 open import Tools.Fin
 open import Tools.Nat
 open import Tools.Product
+open import Tools.List hiding (_∷_)
+import Tools.PropositionalEquality as PE
 
 infixl 30 _∙_
 infix 30 Πⱼ_▹_
@@ -16,6 +18,7 @@ infix 30 ⟦_⟧ⱼ_▹_
 
 private
   variable
+    dk : DynKind
     n m : Nat
     Γ  : Con Term n
     A B F : Term n
@@ -25,8 +28,15 @@ private
 
 -- Well-typed variables
 data _∷_∈_ : (x : Fin n) (A : Term n) (Γ : Con Term n) → Set where
-  here  :                       x0 ∷ wk1 A ∈ (Γ ∙ A)
-  there : (h : x ∷ A ∈ Γ) → (x +1) ∷ wk1 A ∈ (Γ ∙ B)
+  here  : {A′ : Term (1+ n)} → A′ PE.≡ wk1 A →                        x0 ∷ A′ ∈ Γ ∙ A
+  there : {A′ : Term (1+ n)} → A′ PE.≡ wk1 A → (h : x ∷ A ∈ Γ)  → (x +1) ∷ A′ ∈ Γ ∙ B
+
+-- data ⊢′ (⊢T′ : ∀ n → Con (DynTerm dk) n → DynTerm dk n → Set) : Con (DynTerm dk) n → Set where
+--   ε   : ⊢′ ⊢T′ ε
+--   _∙_ : ∀ {Γ : Con (DynTerm dk) n} {A : DynTerm dk n}
+--       → ⊢′ ⊢T′ Γ
+--       → ⊢T′ _ Γ A
+--       → ⊢′ ⊢T′ (Γ ∙ A)
 
 mutual
   -- Well-formed context

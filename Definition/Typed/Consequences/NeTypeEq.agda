@@ -19,8 +19,8 @@ private
 
 -- Helper function for the same variable instance of a context have equal types.
 varTypeEq′ : ∀ {n R T} → n ∷ R ∈ Γ → n ∷ T ∈ Γ → R PE.≡ T
-varTypeEq′ here here = PE.refl
-varTypeEq′ (there n∷R) (there n∷T) rewrite varTypeEq′ n∷R n∷T = PE.refl
+varTypeEq′ (here PE.refl) (here PE.refl) = PE.refl
+varTypeEq′ (there PE.refl n∷R) (there PE.refl n∷T) rewrite varTypeEq′ n∷R n∷T = PE.refl
 
 -- The same variable instance of a context have equal types.
 varTypeEq : ∀ {x A B} → Γ ⊢ A → Γ ⊢ B → x ∷ A ∈ Γ → x ∷ B ∈ Γ → Γ ⊢ A ≡ B
@@ -30,6 +30,7 @@ varTypeEq A B x∷A x∷B rewrite varTypeEq′ x∷A x∷B = refl A
 neTypeEq : ∀ {t A B} → Neutral t → Γ ⊢ t ∷ A → Γ ⊢ t ∷ B → Γ ⊢ A ≡ B
 neTypeEq (var x) (var x₁ x₂) (var x₃ x₄) =
   varTypeEq (syntacticTerm (var x₃ x₂)) (syntacticTerm (var x₃ x₄)) x₂ x₄
+neTypeEq ∘⊥ (t∷A ∘ⱼ t∷A₁) (t∷B ∘ⱼ t∷B₁)
 neTypeEq (∘ₙ neT) (t∷A ∘ⱼ t∷A₁) (t∷B ∘ⱼ t∷B₁) with neTypeEq neT t∷A t∷B
 ... | q = let w = proj₂ (injectivity q)
           in  substTypeEq w (refl t∷A₁)

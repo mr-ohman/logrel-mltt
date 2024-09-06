@@ -24,6 +24,7 @@ open import Tools.Nat
 open import Tools.Product
 open import Tools.Sum using (_⊎_; inj₁; inj₂)
 open import Tools.Unit
+import Tools.PropositionalEquality as PE
 
 -- Preliminaries
 ---------------------------------------------------------------------------
@@ -43,8 +44,8 @@ private
 -- Numerals
 
 data Numeral {m : Nat} : Term m → Set where
-  zeroₙ : Numeral zero
-  sucₙ  : Numeral t → Numeral (suc t)
+  zeroₙ′ : Numeral zero
+  sucₙ′  : Numeral t → Numeral (suc t)
 
 -- Negative types
 ---------------------------------------------------------------------------
@@ -154,9 +155,9 @@ data NegativeContext : Con Ty m → Set where
 -- Lemma: Any entry in negative context is a negative type (needs weakening).
 
 lookupNegative : ⊢ Γ → NegativeContext Γ → (x ∷ A ∈ Γ) → NegativeType Γ A
-lookupNegative ⊢Γ∙A            (nΓ ∙ nA) here
+lookupNegative ⊢Γ∙A            (nΓ ∙ nA) (here PE.refl)
   = wkNeg (step id) ⊢Γ∙A nA
-lookupNegative ⊢Γ∙A@(⊢Γ ∙ Γ⊢A) (nΓ ∙ nA) (there h)
+lookupNegative ⊢Γ∙A@(⊢Γ ∙ Γ⊢A) (nΓ ∙ nA) (there PE.refl h)
   = wkNeg (step id) ⊢Γ∙A (lookupNegative ⊢Γ nΓ h)
 
 -- Main results
@@ -169,12 +170,13 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   -- Lemma: A neutral has negative type in a consistent negative context.
 
   neNeg : (d : Γ ⊢ u ∷ A) (n : NfNeutral u) → NegativeType Γ A
-  neNeg (var ⊢Γ h       ) (var _           ) = lookupNegative ⊢Γ nΓ h
-  neNeg (d ∘ⱼ ⊢t        ) (∘ₙ n _          ) = appNeg (neNeg d n) (refl (syntacticTerm d)) ⊢t
-  neNeg (fstⱼ ⊢A A⊢B d  ) (fstₙ n          ) = fstNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B))
-  neNeg (sndⱼ ⊢A A⊢B d  ) (sndₙ n          ) = sndNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)
-  neNeg (natrecⱼ _ _ _ d) (natrecₙ _ _ _ n ) = ⊥-elim (¬negℕ (neNeg d n) ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
-  neNeg (Emptyrecⱼ _ d  ) (Emptyrecₙ _ _   ) = ⊥-elim (consistent d)
+  neNeg (var ⊢Γ h       ) (var _            ) = lookupNegative ⊢Γ nΓ h
+  neNeg (d ∘ⱼ ⊢t        ) (∘ₙf n _          ) = appNeg (neNeg d n) (refl (syntacticTerm d)) ⊢t
+  neNeg (d ∘ⱼ ⊢t        ) (∘⊥f              )
+  neNeg (fstⱼ ⊢A A⊢B d  ) (fstₙf n          ) = fstNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B))
+  neNeg (sndⱼ ⊢A A⊢B d  ) (sndₙf n          ) = sndNeg (neNeg d n) (refl (Σⱼ ⊢A ▹ A⊢B)) (fstⱼ ⊢A A⊢B d)
+  neNeg (natrecⱼ _ _ _ d) (natrecₙf _ _ _ n ) = ⊥-elim (¬negℕ (neNeg d n) ⊢ℕ) where ⊢ℕ = refl (ℕⱼ (wfTerm d))
+  neNeg (Emptyrecⱼ _ d  ) (Emptyrecₙf _ _   ) = ⊥-elim (consistent d)
   neNeg (conv d c       ) n                  = conv (neNeg d n) c
 
   -- Lemma: A normal form of type ℕ is a numeral in a consistent negative context.
@@ -188,8 +190,8 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   nfN d (ne n) c = ⊥-elim (¬negℕ (neNeg d n) c)
 
   -- Case: numerals.
-  nfN (zeroⱼ x) zeroₙ   c = zeroₙ
-  nfN (sucⱼ d) (sucₙ n) c = sucₙ (nfN d n c)
+  nfN (zeroⱼ x) zeroₙf   c = zeroₙ′
+  nfN (sucⱼ d) (sucₙf n) c = sucₙ′ (nfN d n c)
 
   -- Case: conversion.
   nfN (conv d c) n c' = nfN d n (trans c c')
@@ -197,16 +199,16 @@ module Main (nΓ : NegativeContext Γ) (consistent : ∀{t} → Γ ⊢ t ∷ Emp
   -- Impossible cases: type is not ℕ.
 
   -- * Canonical types
-  nfN (Πⱼ _ ▹ _)      (Πₙ _ _)    c = ⊥-elim (U≢ℕ c)
-  nfN (Σⱼ _ ▹ _)      (Σₙ _ _)    c = ⊥-elim (U≢ℕ c)
-  nfN (ℕⱼ _)           ℕₙ         c = ⊥-elim (U≢ℕ c)
-  nfN (Emptyⱼ _)       Emptyₙ     c = ⊥-elim (U≢ℕ c)
-  nfN (Unitⱼ _)        Unitₙ      c = ⊥-elim (U≢ℕ c)
+  nfN (Πⱼ _ ▹ _)      (Πₙf _ _)    c = ⊥-elim (U≢ℕ c)
+  nfN (Σⱼ _ ▹ _)      (Σₙf _ _)    c = ⊥-elim (U≢ℕ c)
+  nfN (ℕⱼ _)           ℕₙf         c = ⊥-elim (U≢ℕ c)
+  nfN (Emptyⱼ _)       Emptyₙf     c = ⊥-elim (U≢ℕ c)
+  nfN (Unitⱼ _)        Unitₙf      c = ⊥-elim (U≢ℕ c)
 
   -- * Canonical forms
-  nfN (lamⱼ _ _)      (lamₙ _)    c = ⊥-elim (ℕ≢Π (sym c))
-  nfN (prodⱼ _ _ _ _) (prodₙ _ _) c = ⊥-elim (ℕ≢Σ (sym c))
-  nfN (starⱼ _)       starₙ       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
+  nfN (lamⱼ _ _)      (lamₙf _)    c = ⊥-elim (ℕ≢Π (sym c))
+  nfN (prodⱼ _ _ _ _) (prodₙf _ _) c = ⊥-elim (ℕ≢Σ (sym c))
+  nfN (starⱼ _)       starₙf       c = ⊥-elim (ℕ≢Unitⱼ (sym c))
   -- q.e.d
 
 

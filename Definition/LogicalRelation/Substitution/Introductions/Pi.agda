@@ -109,7 +109,7 @@ private
   ,  (λ {σ′} [σ′] [σ≡σ′] →
         let var0 = var (⊢Δ ∙ ⊢F [σ])
                        (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F))
-                                 (wk-subst F) here)
+                                 (wk-subst F) (here PE.refl))
             [wk1σ] = wk1SubstS [Γ] ⊢Δ (⊢F [σ]) [σ]
             [wk1σ′] = wk1SubstS [Γ] ⊢Δ (⊢F [σ]) [σ′]
             [wk1σ≡wk1σ′] = wk1SubstSEq [Γ] ⊢Δ (⊢F [σ]) [σ] [σ≡σ′]
@@ -271,7 +271,7 @@ Wᵗᵛ {Γ = Γ} {F} {G} W [Γ] [F] [U] [Fₜ] [Gₜ] {Δ = Δ} {σ = σ} ⊢Δ
              [wk1σ′] = wk1SubstS [Γ] ⊢Δ ⊢F [σ′]
              var0 = conv (var (⊢Δ ∙ ⊢F)
                          (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F))
-                                   (wk-subst F) here))
+                                   (wk-subst F) (here PE.refl)))
                     (≅-eq (escapeEq (proj₁ ([F] (⊢Δ ∙ ⊢F) [wk1σ]))
                                         (proj₂ ([F] (⊢Δ ∙ ⊢F) [wk1σ]) [wk1σ′]
                                                (wk1SubstSEq [Γ] ⊢Δ ⊢F [σ] [σ≡σ′]))))

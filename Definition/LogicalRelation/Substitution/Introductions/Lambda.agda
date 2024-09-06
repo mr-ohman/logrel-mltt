@@ -64,11 +64,11 @@ lamᵛ {Γ = Γ} {F} {G} {t} {l} [Γ] [F] [G] [t] {k} {Δ = Δ} {σ = σ} ⊢Δ 
                               (wkSingleSubstId (subst (liftSubst σ) G))
                               (β-red ⊢wk1F (T.wkTerm (lift (step id))
                                                      (⊢Δ ∙ ⊢F ∙ ⊢wk1F) ⊢t)
-                                                     (var (⊢Δ ∙ ⊢F) here))
+                                                     (var (⊢Δ ∙ ⊢F) (here PE.refl)))
             _ , Bᵣ F′ G′ D′ ⊢F′ ⊢G′ A≡A′ [F]′ [G]′ G-ext =
               extractMaybeEmb (Π-elim (proj₁ ([ΠFG] ⊢Δ [σ])))
-        in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lamⱼ ⊢F ⊢t)) lamₙ
-               (≅-η-eq ⊢F (lamⱼ ⊢F ⊢t) (lamⱼ ⊢F ⊢t) lamₙ lamₙ
+        in  Πₜ (lam (subst (liftSubst σ) t)) (idRedTerm:*: (lamⱼ ⊢F ⊢t)) lamₙ′
+               (≅-η-eq ⊢F (lamⱼ ⊢F ⊢t) (lamⱼ ⊢F ⊢t) lamₙ′ lamₙ′
                        (escapeTermEq [σG]
                          (reflEqTerm [σG]
                            (proj₁ (redSubstTerm β-red′ [σG] wk1t[0])))))
@@ -165,8 +165,8 @@ lamᵛ {Γ = Γ} {F} {G} {t} {l} [Γ] [F] [G] [t] {k} {Δ = Δ} {σ = σ} ⊢Δ 
              ⊢t = escapeTerm [G]₁ (proj₁ ([t] (⊢Δ ∙ ⊢F) [liftσ]))
              ⊢t′ = escapeTerm [G]₁′ (proj₁ ([t] (⊢Δ ∙ ⊢F′) [liftσ′]))
              neuVar = neuTerm ([F]′ (step id) (⊢Δ ∙ ⊢F))
-                              (var x0) (var (⊢Δ ∙ ⊢F) here)
-                              (~-var (var (⊢Δ ∙ ⊢F) here))
+                              (var x0) (var (⊢Δ ∙ ⊢F) (here PE.refl))
+                              (~-var (var (⊢Δ ∙ ⊢F) (here PE.refl)))
              σlamt∘a≡σ′lamt∘a : ∀ {ℓ} {ρ : Wk ℓ k} {Δ₁ a} → ([ρ] : ρ ∷ Δ₁ ⊆ Δ) (⊢Δ₁ : ⊢ Δ₁)
                  → ([a] : Δ₁ ⊩⟨ l ⟩ a ∷ U.wk ρ (subst σ F) / [F]′ [ρ] ⊢Δ₁)
                  → Δ₁ ⊩⟨ l ⟩ U.wk ρ (subst σ (lam t)) ∘ a
@@ -266,12 +266,12 @@ lamᵛ {Γ = Γ} {F} {G} {t} {l} [Γ] [F] [G] [t] {k} {Δ = Δ} {σ = σ} ⊢Δ 
                  (idRedTerm:*: (conv (lamⱼ ⊢F′ ⊢t′)
                                      (sym (≅-eq (escapeEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                                               [σΠFG≡σ′ΠFG])))))
-                 lamₙ lamₙ
+                 lamₙ′ lamₙ′
                  (≅-η-eq ⊢F (lamⱼ ⊢F ⊢t)
                       (conv (lamⱼ ⊢F′ ⊢t′)
                             (sym (≅-eq (escapeEq (proj₁ ([ΠFG] ⊢Δ [σ]))
                                               [σΠFG≡σ′ΠFG]))))
-                      lamₙ lamₙ
+                      lamₙ′ lamₙ′
                       (escapeTermEq
                         (proj₁ ([G] (⊢Δ ∙ ⊢F) [liftσ]))
                         (irrelevanceEqTerm′
@@ -313,7 +313,7 @@ lamᵛ {Γ = Γ} {F} {G} {t} {l} [Γ] [F] [G] [t] {k} {Δ = Δ} {σ = σ} ⊢Δ 
       _ , Bᵣ F′ G′ D′ ⊢F ⊢G A≡A [F]′ [G]′ G-ext = extractMaybeEmb (Π-elim [σΠFG])
       [σF] = proj₁ ([F] ⊢Δ [σ])
       [wk1F] = wk (step id) (⊢Δ ∙ ⊢F) [σF]
-      var0′ = var (⊢Δ ∙ ⊢F) here
+      var0′ = var (⊢Δ ∙ ⊢F) (here PE.refl)
       var0 = neuTerm [wk1F] (var x0) var0′ (~-var var0′)
       var0≡0 = neuEqTerm [wk1F] (var x0) (var x0) var0′ var0′ (~-var var0′)
       [σG]′ = [G]′ (step id) (⊢Δ ∙ ⊢F) var0

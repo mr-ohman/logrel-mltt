@@ -39,8 +39,8 @@ injectivity′ W (noemb (Bᵣ F G D ⊢F ⊢G A≡A [F] [G] G-ext))
       ⊢Γ = wf ⊢F
       [F]₁ = [F] id ⊢Γ
       [F]′ = irrelevance′ (PE.trans (wk-id _) (PE.sym F≡F₁)) [F]₁
-      [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var x0) (var (⊢Γ ∙ ⊢F) here)
-                      (refl (var (⊢Γ ∙ ⊢F) here))
+      [x∷F] = neuTerm ([F] (step id) (⊢Γ ∙ ⊢F)) (var x0) (var (⊢Γ ∙ ⊢F) (here PE.refl))
+                      (refl (var (⊢Γ ∙ ⊢F) (here PE.refl)))
       [G]₁ = [G] (step id) (⊢Γ ∙ ⊢F) [x∷F]
       [G]′ = PE.subst₂ (λ x y → _ ∙ y ⊩⟨ _ ⟩ x)
                        (PE.trans (wkSingleSubstId _) (PE.sym G≡G₁))

@@ -32,6 +32,6 @@ Emptyᵗᵛ : ([Γ] : ⊩ᵛ Γ)
     → Γ ⊩ᵛ⟨ ¹ ⟩ Empty ∷ U / [Γ] / Uᵛ [Γ]
 Emptyᵗᵛ [Γ] ⊢Δ [σ] = let ⊢Empty  = Emptyⱼ ⊢Δ
                          [Empty] = Emptyᵣ (idRed:*: (Emptyⱼ ⊢Δ))
-                 in  Uₜ Empty (idRedTerm:*: ⊢Empty) Emptyₙ (≅ₜ-Emptyrefl ⊢Δ) [Empty]
-                 ,   (λ x x₁ → Uₜ₌ Empty Empty (idRedTerm:*: ⊢Empty) (idRedTerm:*: ⊢Empty) Emptyₙ Emptyₙ
+                 in  Uₜ Empty (idRedTerm:*: ⊢Empty) Emptyₙ′ (≅ₜ-Emptyrefl ⊢Δ) [Empty]
+                 ,   (λ x x₁ → Uₜ₌ Empty Empty (idRedTerm:*: ⊢Empty) (idRedTerm:*: ⊢Empty) Emptyₙ′ Emptyₙ′
                                    (≅ₜ-Emptyrefl ⊢Δ) [Empty] [Empty] (id (Emptyⱼ ⊢Δ)))

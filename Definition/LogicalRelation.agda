@@ -131,14 +131,14 @@ mutual
 
 -- Natural extraction from term WHNF property
 natural : ∀ {n} → Natural-prop Γ n → Natural n
-natural (sucᵣ x) = sucₙ
-natural zeroᵣ = zeroₙ
+natural (sucᵣ x) = sucₙ′
+natural zeroᵣ = zeroₙ′
 natural (ne (neNfₜ neK ⊢k k≡k)) = ne neK
 
 -- Natural extraction from term equality WHNF property
 split : ∀ {a b} → [Natural]-prop Γ a b → Natural a × Natural b
-split (sucᵣ x) = sucₙ , sucₙ
-split zeroᵣ = zeroₙ , zeroₙ
+split (sucᵣ x) = sucₙ′ , sucₙ′
+split zeroᵣ = zeroₙ′ , zeroₙ′
 split (ne (neNfₜ₌ neK neM k≡m)) = ne neK , ne neM
 
 -- Reducibility of Empty

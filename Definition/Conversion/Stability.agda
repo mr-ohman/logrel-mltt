@@ -35,7 +35,7 @@ mutual
         Δ⊢B = stability Γ≡Δ ⊢B
     in  ⊢Γ ∙ ⊢A , ⊢Δ ∙ Δ⊢B
         , (wk1Subst′ ⊢Γ ⊢Δ Δ⊢B [σ]
-        , conv (var (⊢Δ ∙ Δ⊢B) here)
+        , conv (var (⊢Δ ∙ Δ⊢B) (here PE.refl))
                (PE.subst (λ x → _ ⊢ _ ≡ x)
                          (wk1-tailId A)
                          (wkEq (step id) (⊢Δ ∙ Δ⊢B) (stabilityEq Γ≡Δ (sym A≡B)))))

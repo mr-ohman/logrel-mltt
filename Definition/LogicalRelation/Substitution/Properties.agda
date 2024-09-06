@@ -125,7 +125,7 @@ liftSubstS {σ = σ} {F = F} {Δ = Δ} [Γ] ⊢Δ [F] [σ] =
   let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ]
       var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F))
-                                     (wk-subst F) here)
+                                     (wk-subst F) (here PE.refl))
   in  [tailσ] , neuTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var x0)
                         var0 (~-var var0)
 
@@ -141,7 +141,7 @@ liftSubstSEq {σ = σ} {σ′ = σ′} {F = F} {Δ = Δ} [Γ] ⊢Δ [F] [σ] [σ
   let ⊢F = escape (proj₁ ([F] ⊢Δ [σ]))
       [tailσ] = wk1SubstS {F = subst σ F} [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ]
       [tailσ≡σ′] = wk1SubstSEq [Γ] ⊢Δ (escape (proj₁ ([F] ⊢Δ [σ]))) [σ] [σ≡σ′]
-      var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) here)
+      var0 = var (⊢Δ ∙ ⊢F) (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F)) (wk-subst F) (here PE.refl))
   in  [tailσ≡σ′] , neuEqTerm (proj₁ ([F] (⊢Δ ∙ ⊢F) [tailσ])) (var x0) (var x0)
                          var0 var0 (~-var var0)
 
@@ -171,7 +171,7 @@ mutual
                                   (wk-subst A)
                                   (PE.subst (λ x → x0 ∷ wk1 (subst idSubst A)
                                                      ∈ (Γ ∙ x))
-                                            (subst-id A) here))
+                                            (subst-id A) (here PE.refl)))
     in  [tailσ]
     ,   neuTerm (proj₁ ([A] ⊢Γ∙A [tailσ]))
                 (var x0)

@@ -31,8 +31,8 @@ private
     → Γ ⊩ᵛ⟨ ¹ ⟩ ℕ ∷ U / [Γ] / Uᵛ [Γ]
 ℕᵗᵛ [Γ] ⊢Δ [σ] = let ⊢ℕ  = ℕⱼ ⊢Δ
                      [ℕ] = ℕᵣ (idRed:*: (ℕⱼ ⊢Δ))
-                 in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕₙ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
-                 ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕₙ ℕₙ
+                 in  Uₜ ℕ (idRedTerm:*: ⊢ℕ) ℕₙ′ (≅ₜ-ℕrefl ⊢Δ) [ℕ]
+                 ,   (λ x x₁ → Uₜ₌ ℕ ℕ (idRedTerm:*: ⊢ℕ) (idRedTerm:*: ⊢ℕ) ℕₙ′ ℕₙ′
                                    (≅ₜ-ℕrefl ⊢Δ) [ℕ] [ℕ] (id (ℕⱼ ⊢Δ)))
 
 -- Validity of zero.

@@ -102,7 +102,7 @@ liftSubst′ {σ = σ} {F} {Γ} {Δ} ⊢Γ ⊢Δ ⊢F [σ] =
   let ⊢Δ∙F = ⊢Δ ∙ substitution ⊢F [σ] ⊢Δ
   in  wkSubst′ ⊢Γ ⊢Δ ⊢Δ∙F (step id) [σ]
   ,   var ⊢Δ∙F (PE.subst (λ x → x0 ∷ x ∈ (Δ ∙ subst σ F))
-                         (wk-subst F) here)
+                         (wk-subst F) (here PE.refl))
 
 -- Well-formed identity substitution.
 idSubst′ : (⊢Γ : ⊢ Γ)
@@ -110,7 +110,7 @@ idSubst′ : (⊢Γ : ⊢ Γ)
 idSubst′ ε = id
 idSubst′ (_∙_ {Γ = Γ} {A} ⊢Γ ⊢A) =
   wk1Subst′ ⊢Γ ⊢Γ ⊢A (idSubst′ ⊢Γ)
-  , PE.subst (λ x → Γ ∙ A ⊢ _ ∷ x) (wk1-tailId A) (var (⊢Γ ∙ ⊢A) here)
+  , PE.subst (λ x → Γ ∙ A ⊢ _ ∷ x) (wk1-tailId A) (var (⊢Γ ∙ ⊢A) (here PE.refl))
 
 -- Well-formed substitution composition.
 substComp′ : ∀ {Γ Δ Δ′} (⊢Γ : ⊢ Γ) (⊢Δ : ⊢ Δ) (⊢Δ′ : ⊢ Δ′)

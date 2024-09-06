@@ -80,8 +80,8 @@ prod′ {Γ = Γ} {F} {G} {t} {u} {l} {l′} {l″} [F] [t] [Gt] [u]
       [sndRefl] = transEqTerm [Gfst]′ [sndprod≡u] (symEqTerm [Gfst]′ [sndprod≡u])
   in  Σₜ (prod t u)
          (idRedTerm:*: ⊢prod)
-         prodₙ
-         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod prodₙ prodₙ
+         prodₙ′
+         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod prodₙ′ prodₙ′
                 (escapeTermEq [F] [fstRefl])
                 (escapeTermEq [Gfst]′ [sndRefl]))
          [fstprod]′
@@ -219,8 +219,8 @@ prod-cong′ {Γ = Γ} {F} {G} {t} {t′} {u} {u′} {l} {l′}
          (prod t′ u′)
          (idRedTerm:*: ⊢prod)
          (idRedTerm:*: ⊢prod′)
-         prodₙ prodₙ
-         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod′ prodₙ prodₙ
+         prodₙ′ prodₙ′
+         (≅-Σ-η ⊢F ⊢G ⊢prod ⊢prod′ prodₙ′ prodₙ′
                 (escapeTermEq [F] [fst≡fst′])
                 (escapeTermEq [Gfst] [snd≡snd′]))
          [prod] [prod′]

@@ -106,7 +106,7 @@ inversion-star (conv x x₁) = trans (sym x₁) (inversion-star x)
 
 -- Inversion of products in WHNF.
 whnfProduct : ∀ {p F G} → Γ ⊢ p ∷ Σ F ▹ G → Whnf p → Product p
-whnfProduct x prodₙ = prodₙ
+whnfProduct x prodₙ = prodₙ′
 whnfProduct x (ne pNe) = ne pNe
 
 whnfProduct x Uₙ = ⊥-elim (inversion-U x)
@@ -127,3 +127,8 @@ whnfProduct x sucₙ =
   let _ , A≡ℕ = inversion-suc x
   in  ⊥-elim (ℕ≢Σ (sym A≡ℕ))
 whnfProduct x starₙ = ⊥-elim (Unit≢Σⱼ (sym (inversion-star x)))
+whnfProduct x (cons (cons Emptyreckind ()))
+whnfProduct x (cons (cons Appkind ()))
+whnfProduct x (cons (cons Fstkind ()))
+whnfProduct x (cons (cons Sndkind ()))
+whnfProduct x (cons (cons Natreckind ()))
