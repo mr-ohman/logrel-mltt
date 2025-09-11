@@ -31,3 +31,50 @@ It is compatible with Agda version ≥ 2.6.1 and the
 [matching standard library](https://wiki.portal.chalmers.se/agda/Libraries/StandardLibrary).
 The full list of tested Agda versions can be found in the
 [continuous integration script](.github/workflows/agda-ci.yml).
+
+
+## Forks
+
+This formalization has been used as basis of further formalization projects, including the following:
+
+### Decidability of typechecking in a dependently-typed programming language with sigma types
+
+Wojciech Nawrocki (2020), MPhil thesis at the University of Cambridge.
+
+- Code: https://github.com/Vtec234/logrel-mltt
+- [Thesis PDF](https://voidma.in/assets/papers/2020nawrocki_decidability_typechecking_dependently_typed_programming_language_sigma_types.pdf)
+
+### A type theory with definitional proof-irrelevance
+
+Gaëtan Gilbert (2019), PhD thesis at Mines ParisTech.
+
+- Code: https://github.com/SkySkimmer/logrel-tt (vanished, probably moved to https://github.com/CoqHott/logrel-mltt/tree/sprop)
+- [Thesis](https://theses.hal.science/tel-03236271)
+
+### Observational Equality: Now For Good
+
+Loïc Pujet, Nicolas Tabareau, POPL 2022
+
+- Code: [A Logical Relation for Observational Type Theory in Agda](https://github.com/CoqHott/logrel-mltt)
+- [Paper](https://hal.inria.fr/hal-03367052)
+
+### Impredicative Observational Equality
+
+Loïc Pujet, Nicolas Tabareau, POPL 2023
+
+- Code: https://github.com/CoqHott/logrel-mltt/tree/impredicativity-SProp-POPL
+- [Paper](https://dl.acm.org/doi/pdf/10.1145/3571739)
+
+### A Graded Modal Dependent Type Theory with a Universe and Erasure, Formalized
+
+Andreas Abel, Nils Anders Danielsson, Oskar Eriksson, ICFP 2023.
+
+- Code: https://github.com/graded-type-theory/graded-type-theory/releases/tag/icfp23
+- [Paper](https://dl.acm.org/doi/10.1145/3607862)
+
+### Graded Modal Type Theory, Formalized
+
+Oskar Eriksson (2025), Licentiate Thesis at Gothenburg University.
+
+- Code:  https://github.com/graded-type-theory/graded-type-theory/releases/tag/lic2025
+- [Thesis](https://gupea.ub.gu.se/handle/2077/86472)
