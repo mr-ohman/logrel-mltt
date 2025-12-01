@@ -2,6 +2,7 @@
 -- (we do not assume uniqueness of identity proofs).
 
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 module Tools.PropositionalEquality where
 

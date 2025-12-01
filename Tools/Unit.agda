@@ -1,6 +1,7 @@
 -- The unit type; also used as proposition ``Truth''.
 
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 module Tools.Unit where
 

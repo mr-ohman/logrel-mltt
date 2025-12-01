@@ -34,18 +34,25 @@ mutual
     sndₙ      : {p : Term m}       → NfNeutral p        → NfNeutral (snd p)
     natrecₙ   : {C : Term (1+ m)} {c g k : Term m}
                      → Nf C → Nf c → Nf g → NfNeutral k → NfNeutral (natrec C c g k)
+    casesₙ    : {C t u v : Term m} → Nf C → NfNeutral t → Nf u → Nf v → NfNeutral (cases C t u v)
+    ∥ₑₙ       : {B a f : Term m}   → Nf B → NfNeutral a → Nf f → NfNeutral (∥ₑ B a f)
     Emptyrecₙ : {C k : Term m}     → Nf C → NfNeutral k → NfNeutral (Emptyrec C k)
 
   data Nf {m : Nat} : Term m → Set where
     Uₙ     : Nf U
     Πₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Π A ▹ B)
     Σₙ     : {A : Term m} {B : Term (1+ m)} → Nf A → Nf B → Nf (Σ A ▹ B)
+    ∪ₙ     : {A B : Term m} → Nf A → Nf B → Nf (A ∪ B)
+    ∥ₙ     : {A : Term m} → Nf A → Nf (∥ A ∥)
     ℕₙ     : Nf ℕ
     Emptyₙ : Nf Empty
     Unitₙ  : Nf Unit
 
     lamₙ   : {t : Term (1+ m)} → Nf t → Nf (lam t)
     prodₙ  : {t u : Term m} → Nf t → Nf u → Nf (prod t u)
+    injlₙ  : {t : Term m} → Nf t → Nf (injl t)
+    injrₙ  : {t : Term m} → Nf t → Nf (injr t)
+    ∥ᵢₙ    : {t : Term m} → Nf t → Nf (∥ᵢ t)
     zeroₙ  : Nf zero
     sucₙ   : {t : Term m} → Nf t → Nf (suc t)
     starₙ  : Nf star
@@ -77,6 +84,25 @@ mutual
         n′ , nfN′ , n≡n′ = fullRedNe~↓ n
     in  natrec C′ z′ s′ n′ , natrecₙ nfC′ nfZ′ nfS′ nfN′
      ,  natrec-cong C≡C′ z≡z′ s≡s′ n≡n′
+  fullRedNe (cases-cong C ⊢t ⊢u ⊢v) =
+    let C′ , nfC′ , C≡C′ = fullRed C
+        t′ , nfT′ , t≡t′ = fullRedNe~↓ ⊢t
+        u′ , nfU′ , u≡u′ = fullRedTerm ⊢u
+        v′ , nfV′ , v≡v′ = fullRedTerm ⊢v
+        ⊢∪ , _ , _       = syntacticEqTerm t≡t′
+        ⊢A , ⊢B          = syntactic∪ ⊢∪
+    in  cases C′ t′ u′ v′ ,
+        casesₙ nfC′ nfT′ nfU′ nfV′ ,
+        cases-cong ⊢A ⊢B C≡C′ t≡t′ u≡u′ v≡v′
+  fullRedNe (∥ₑ-cong B ⊢a ⊢f) =
+    let B′ , nfB′ , B≡B′ = fullRed B
+        a′ , nfA′ , a≡a′ = fullRedNe~↓ ⊢a
+        f′ , nfF′ , f≡f′ = fullRedTerm ⊢f
+        ⊢∥ , _ , _       = syntacticEqTerm a≡a′
+        ⊢A               = syntactic∥ ⊢∥
+    in  ∥ₑ B′ a′ f′ ,
+        ∥ₑₙ nfB′ nfA′ nfF′ ,
+        ∥ₑ-cong ⊢A B≡B′ a≡a′ f≡f′
   fullRedNe (Emptyrec-cong C n) =
     let C′ , nfC′ , C≡C′ = fullRed C
         n′ , nfN′ , n≡n′ = fullRedNe~↓ n
@@ -110,6 +136,13 @@ mutual
     let F′ , nfF′ , F≡F′ = fullRed F
         G′ , nfG′ , G≡G′ = fullRed G
     in  Σ F′ ▹ G′ , Σₙ nfF′ nfG′ , Σ-cong ⊢F F≡F′ G≡G′
+  fullRedConv↓ (∪-cong F G) =
+    let F′ , nfF′ , F≡F′ = fullRed F
+        G′ , nfG′ , G≡G′ = fullRed G
+    in  F′ ∪ G′ , ∪ₙ nfF′ nfG′ , ∪-cong F≡F′ G≡G′
+  fullRedConv↓ (∥-cong F) =
+    let F′ , nfF′ , F≡F′ = fullRed F
+    in  ∥ F′ ∥ , ∥ₙ nfF′ , ∥-cong F≡F′
 
   fullRedTerm : ∀ {t A} → Γ ⊢ t [conv↑] t ∷ A → ∃ λ u → Nf u × Γ ⊢ t ≡ u ∷ A
   fullRedTerm ([↑]ₜ B t′ u′ D d d′ whnfB whnft′ whnfu′ t<>u)
@@ -172,5 +205,32 @@ mutual
         snd≡sndprod = trans snd≡snd′ (sym sndprod≡snd′)
     in  prod fst′ snd′ , prodₙ nfFst′ nfSnd′
       , Σ-η ⊢F ⊢G ⊢t ⊢prod fst≡fstprod snd≡sndprod
+  fullRedTermConv↓ (∪₁-η ⊢p ⊢r injlₙ injlₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∪                   = syntacticTerm ⊢p
+        ⊢A , ⊢B              = syntactic∪ ⊢∪
+    in  injl pa′ ,
+        injlₙ nfPa′ ,
+        injl-cong ⊢B pa≡pa′
+  fullRedTermConv↓ (∪₂-η ⊢p ⊢r injrₙ injrₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∪                   = syntacticTerm ⊢p
+        ⊢A , ⊢B              = syntactic∪ ⊢∪
+    in  injr pa′ ,
+        injrₙ nfPa′ ,
+        injr-cong ⊢A pa≡pa′
+  fullRedTermConv↓ (∪₃-η c₁ c₂ ⊢p) =
+    let u , nfU , ⊢u = fullRedNe~↓ ⊢p
+    in  u , ne nfU , conv ⊢u (∪-cong c₁ c₂)
+  fullRedTermConv↓ (∥₁-η ⊢p ⊢r ∥ᵢₙ ∥ᵢₙ ⊢pa) =
+    let pa′ , nfPa′ , pa≡pa′ = fullRedTerm ⊢pa
+        ⊢∥                   = syntacticTerm ⊢p
+        ⊢A                   = syntactic∥ ⊢∥
+    in  ∥ᵢ pa′ ,
+        ∥ᵢₙ nfPa′ ,
+        ∥ᵢ-cong ⊢A pa≡pa′
+  fullRedTermConv↓ (∥₂-η c₁ ⊢p) =
+    let u , nfU , ⊢u = fullRedNe~↓ ⊢p
+    in  u , ne nfU , conv ⊢u (∥-cong c₁)
   fullRedTermConv↓ (η-unit ⊢t _ tUnit _) =
     star , starₙ , η-unit ⊢t (starⱼ (wfTerm ⊢t))

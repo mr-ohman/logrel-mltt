@@ -42,6 +42,23 @@ mutual
                           (PE.subst (λ x → Δ ⊢ U.wk ρ h [conv↑] U.wk ρ g ∷ x)
                                     (wk-β-natrec _ F) (wkConv↑Term [ρ] ⊢Δ x₂))
                           (wk~↓ [ρ] ⊢Δ t~u))
+  wk~↑ {ρ = ρ} {Δ = Δ} [ρ] ⊢Δ (cases-cong {t} {t′} {u} {u′} {v} {v′} {A} {B} {C} {C′} ⊢C ⊢t ⊢u ⊢v) =
+    cases-cong {A = U.wk ρ A} {B = U.wk ρ B} {C = U.wk ρ C} {C' = U.wk ρ C′}
+               (wkConv↑ [ρ] ⊢Δ ⊢C)
+               (wk~↓ [ρ] ⊢Δ ⊢t)
+               (PE.subst (λ x → Δ ⊢ U.wk ρ u [conv↑] U.wk ρ u′ ∷ x)
+                         (wk-▹▹ ρ A C)
+                         (wkConv↑Term [ρ] ⊢Δ ⊢u))
+               (PE.subst (λ x → Δ ⊢ U.wk ρ v [conv↑] U.wk ρ v′ ∷ x)
+                         (wk-▹▹ ρ B C)
+                         (wkConv↑Term [ρ] ⊢Δ ⊢v))
+  wk~↑ {ρ = ρ} {Δ = Δ} [ρ] ⊢Δ (∥ₑ-cong {a} {a′} {f} {f′} {A} {B} {B′} ⊢B ⊢a ⊢f) =
+    ∥ₑ-cong {A = U.wk ρ A} {B = U.wk ρ B} {B' = U.wk ρ B′}
+            (wkConv↑ [ρ] ⊢Δ ⊢B)
+            (wk~↓ [ρ] ⊢Δ ⊢a)
+            (PE.subst (λ x → Δ ⊢ U.wk ρ f [conv↑] U.wk ρ f′ ∷ x)
+                      (wk-▹▹ ρ A ∥ B ∥)
+                      (wkConv↑Term [ρ] ⊢Δ ⊢f))
   wk~↑ {ρ} {Δ = Δ} [ρ] ⊢Δ (Emptyrec-cong {k} {l} {F} {G} x t~u) =
     Emptyrec-cong (wkConv↑ [ρ] ⊢Δ x) (wk~↓ [ρ] ⊢Δ t~u)
 
@@ -75,6 +92,10 @@ mutual
   wkConv↓ ρ ⊢Δ (Σ-cong x A<>B A<>B₁) =
     let ⊢ρF = wk ρ ⊢Δ x
     in  Σ-cong ⊢ρF (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ (lift ρ) (⊢Δ ∙ ⊢ρF) A<>B₁)
+  wkConv↓ ρ ⊢Δ (∪-cong A<>B A<>B₁) =
+    ∪-cong (wkConv↑ ρ ⊢Δ A<>B) (wkConv↑ ρ ⊢Δ A<>B₁)
+  wkConv↓ ρ ⊢Δ (∥-cong A<>B) =
+    ∥-cong (wkConv↑ ρ ⊢Δ A<>B)
 
   -- Weakening of algorithmic equality of terms.
   wkConv↑Term : ∀ {t u A Γ Δ} ([ρ] : ρ ∷ Δ ⊆ Γ) → ⊢ Δ
@@ -121,6 +142,28 @@ mutual
         (PE.subst (λ x → _ ⊢ _ [conv↑] _ ∷ x)
                   (wk-β G)
                   (wkConv↑Term [ρ] ⊢Δ sndConv))
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₁-η {A = A} {B = B} ⊢p ⊢r pInj rInj cnv) =
+    ∪₁-η (wkTerm [ρ] ⊢Δ ⊢p)
+         (wkTerm [ρ] ⊢Δ ⊢r)
+         (wkInjectionL ρ pInj)
+         (wkInjectionL ρ rInj)
+         (wkConv↑Term [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₂-η {A = A} {B = B} ⊢p ⊢r pInj rInj cnv) =
+    ∪₂-η (wkTerm [ρ] ⊢Δ ⊢p)
+         (wkTerm [ρ] ⊢Δ ⊢r)
+         (wkInjectionR ρ pInj)
+         (wkInjectionR ρ rInj)
+         (wkConv↑Term [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∪₃-η {A = A} {B = B} {C = C} {D = D} c₁ c₂ cnv) =
+    ∪₃-η (wkEq [ρ] ⊢Δ c₁) (wkEq [ρ] ⊢Δ c₂) (wk~↓ [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∥₁-η {A = A} ⊢p ⊢r pi ri cnv) =
+    ∥₁-η (wkTerm [ρ] ⊢Δ ⊢p)
+         (wkTerm [ρ] ⊢Δ ⊢r)
+         (wkTruncI ρ pi)
+         (wkTruncI ρ ri)
+         (wkConv↑Term [ρ] ⊢Δ cnv)
+  wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (∥₂-η {A = A} {B = B} c₁ cnv) =
+    ∥₂-η (wkEq [ρ] ⊢Δ c₁) (wk~↓ [ρ] ⊢Δ cnv)
   wkConv↓Term {ρ = ρ} [ρ] ⊢Δ (η-unit [t] [u] tWhnf uWhnf) =
     η-unit (wkTerm [ρ] ⊢Δ [t]) (wkTerm [ρ] ⊢Δ [u])
            (wkWhnf ρ tWhnf) (wkWhnf ρ uWhnf)

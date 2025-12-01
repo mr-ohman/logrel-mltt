@@ -1,4 +1,5 @@
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 module Definition.Typed.Reduction where
 

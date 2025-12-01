@@ -7,6 +7,7 @@ open import Definition.Typed
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Injectivity
 open import Definition.Typed.Consequences.Substitution
+open import Definition.Typed.Consequences.Inversion
 
 open import Tools.Nat
 open import Tools.Product
@@ -43,7 +44,18 @@ neTypeEq (natrecₙ neT) (natrecⱼ x t∷A t∷A₁ t∷A₂) (natrecⱼ x₁ t
   refl (substType x₁ t∷B₂)
 neTypeEq (Emptyrecₙ neT) (Emptyrecⱼ x t∷A) (Emptyrecⱼ x₁ t∷B) =
   refl x₁
+neTypeEq (casesₙ neT) (casesⱼ ⊢t ⊢u ⊢v ⊢C) (casesⱼ ⊢t₁ ⊢u₁ ⊢v₁ ⊢C₁) =
+  refl ⊢C
+neTypeEq (∥ₑₙ neT) (∥ₑⱼ ⊢a ⊢f ⊢B) (∥ₑⱼ ⊢a₁ ⊢f₁ ⊢B₁) =
+  refl ∥ ⊢B₁ ∥ⱼ
 neTypeEq x (conv t∷A x₁) t∷B = let q = neTypeEq x t∷A t∷B
                                in  trans (sym x₁) q
 neTypeEq x t∷A (conv t∷B x₃) = let q = neTypeEq x t∷A t∷B
                                in  trans q x₃
+
+typeEqVar : ∀ {x A B}
+          → x ∷ A ∈ Γ
+          → Γ ⊢ var x ∷ B
+          → Γ ⊢ A ≡ B
+typeEqVar {_} {_} {x} {A} {B} i ⊢x@(var x₁ x₂) rewrite varTypeEq′ i x₂ = refl (syntacticTerm ⊢x)
+typeEqVar {_} {_} {x} {A} {B} i (conv ⊢x x₁) = trans (typeEqVar i ⊢x) x₁

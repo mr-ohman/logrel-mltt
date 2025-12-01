@@ -1,4 +1,5 @@
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 open import Definition.Typed.EqualityRelation
 

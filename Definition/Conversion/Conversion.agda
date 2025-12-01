@@ -10,6 +10,7 @@ open import Definition.Typed.Properties
 open import Definition.Conversion
 open import Definition.Conversion.Stability
 open import Definition.Conversion.Soundness
+open import Definition.Conversion.Whnf using (ne~↑ ; ne~↓)
 open import Definition.Typed.Consequences.Syntactic
 open import Definition.Typed.Consequences.Substitution
 open import Definition.Typed.Consequences.Injectivity
@@ -84,14 +85,52 @@ mutual
             rProd
             (convConv↑Term Γ≡Δ F≡ fstConv)
             (convConv↑Term Γ≡Δ (substTypeEq G≡ (refl ⊢fst)) sndConv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₁-η ⊢p ⊢r pInj rInj cnv)
+    with ∪≡A A≡B whnfB
+  ... | C , D , PE.refl =
+    let C≡ , D≡ = ∪-injectivity A≡B
+    in  ∪₁-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pInj rInj
+             (convConv↑Term Γ≡Δ C≡ cnv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₂-η ⊢p ⊢r pInj rInj cnv)
+    with ∪≡A A≡B whnfB
+  ... | C , D , PE.refl =
+    let C≡ , D≡ = ∪-injectivity A≡B
+    in  ∪₂-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pInj rInj
+             (convConv↑Term Γ≡Δ D≡ cnv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∪₃-η c₁ c₂ p~r)
+    with ∪≡A A≡B whnfB
+  ... | C , D , PE.refl =
+    let C≡ , D≡ = ∪-injectivity A≡B
+    in  ∪₃-η (stabilityEq Γ≡Δ (trans c₁ C≡))
+             (stabilityEq Γ≡Δ (trans c₂ D≡))
+             (stability~↓ Γ≡Δ p~r)
+  convConv↓Term Γ≡Δ A≡B whnfB (∥₁-η ⊢p ⊢r pi ri cnv)
+    with ∥≡A A≡B whnfB
+  ... | C , PE.refl =
+    let C≡ = ∥-injectivity A≡B
+    in  ∥₁-η (stabilityTerm Γ≡Δ (conv ⊢p A≡B))
+             (stabilityTerm Γ≡Δ (conv ⊢r A≡B))
+             pi ri
+             (convConv↑Term Γ≡Δ C≡ cnv)
+  convConv↓Term Γ≡Δ A≡B whnfB (∥₂-η c₁ p~r)
+    with ∥≡A A≡B whnfB
+  ... | C , PE.refl =
+    let C≡ = ∥-injectivity A≡B
+    in  ∥₂-η (stabilityEq Γ≡Δ (trans c₁ C≡))
+             (stability~↓ Γ≡Δ p~r)
   convConv↓Term Γ≡Δ A≡B whnfB (η-unit [t] [u] tUnit uUnit) rewrite Unit≡A A≡B whnfB =
     let [t] = stabilityTerm Γ≡Δ [t]
         [u] = stabilityTerm Γ≡Δ [u]
     in  η-unit [t] [u] tUnit uUnit
 
 -- Conversion of algorithmic equality with the same context.
-convConvTerm : ∀ {t u A B}
-              → Γ ⊢ t [conv↑] u ∷ A
-              → Γ ⊢ A ≡ B
-              → Γ ⊢ t [conv↑] u ∷ B
-convConvTerm t<>u A≡B = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u
+abstract
+  convConvTerm : ∀ {t u A B}
+               → Γ ⊢ t [conv↑] u ∷ A
+               → Γ ⊢ A ≡ B
+               → Γ ⊢ t [conv↑] u ∷ B
+  convConvTerm t<>u A≡B = convConv↑Term (reflConEq (wfEq A≡B)) A≡B t<>u

@@ -1,4 +1,5 @@
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 module Definition.Typed.EqRelInstance where
 
@@ -47,6 +48,13 @@ eqRelInstance = record {
   ≅ₜ-Π-cong = Π-cong;
   ≅-Σ-cong = Σ-cong;
   ≅ₜ-Σ-cong = Σ-cong;
+  ≅-∪-cong = ∪-cong;
+  ≅ₜ-∪-cong = ∪-cong;
+  ≅-injl-cong = injl-cong;
+  ≅-injr-cong = injr-cong;
+  ≅-∥-cong = ∥-cong;
+  ≅ₜ-∥-cong = ∥-cong;
+  ≅-∥ᵢ-cong = ∥ᵢ-cong;
   ≅ₜ-zerorefl = refl ∘ᶠ zeroⱼ;
   ≅-suc-cong = suc-cong;
   ≅-η-eq = λ x x₁ x₂ x₃ x₄ x₅ → η-eq x x₁ x₂ x₅;
@@ -56,4 +64,6 @@ eqRelInstance = record {
   ~-fst = fst-cong;
   ~-snd = snd-cong;
   ~-natrec = natrec-cong;
+  ~-cases = cases-cong;
+  ~-∥ₑ = ∥ₑ-cong;
   ~-Emptyrec = Emptyrec-cong }

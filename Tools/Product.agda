@@ -2,6 +2,7 @@
 -- cartesian product (also used as conjunction).
 
 {-# OPTIONS --without-K --safe #-}
+{-# OPTIONS --cubical-compatible #-}
 
 module Tools.Product where
 
